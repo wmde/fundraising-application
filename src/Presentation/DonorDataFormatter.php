@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation;
 
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
@@ -32,6 +33,13 @@ class DonorDataFormatter {
 		return [
 			'isAnonymous' => true
 		];
+	}
+
+	public function getAddressType( Donation $donation ): string {
+		if ( $donation->getDonor() === null ) {
+			return DonorName::PERSON_ANONYMOUS;
+		}
+		return $donation->getDonor()->getName()->getPersonType();
 	}
 
 	public function getBankTransferCode( PaymentMethod $paymentMethod ): string {

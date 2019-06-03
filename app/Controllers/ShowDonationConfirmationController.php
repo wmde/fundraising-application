@@ -33,6 +33,7 @@ class ShowDonationConfirmationController {
 			throw new AccessDeniedException( 'access_denied_donation_confirmation' );
 		}
 
+		$ffFactory->getTranslationCollector()->addTranslationFile($ffFactory->getI18nDirectory() . '/messages/paymentTypes.json' );
 		$httpResponse = new Response(
 			$ffFactory->newDonationConfirmationPresenter()->present(
 				$responseModel->getDonation(),

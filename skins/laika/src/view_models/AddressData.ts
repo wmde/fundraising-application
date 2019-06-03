@@ -1,3 +1,5 @@
+// TODO Possibly throw this file away
+
 export interface PrivateDonorName {
     salutation: string,
     firstName: string,
