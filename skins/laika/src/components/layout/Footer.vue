@@ -12,20 +12,7 @@
 							</div>
 						</div>
 						<div class="level-item">
-							<div class="bank-data-content">
-								<p><strong>Kontoinhaber:</strong> Wikimedia Foerdergesellschaft</p>
-								<p>
-									<strong>{{ $t( 'iban')  }}:</strong>
-									<span
-											class="spacer"
-											v-for="( ibanPartial, index ) in formatIban()"
-											:key="index">{{ ibanPartial }}</span>
-								</p>
-								<p><strong>{{ $t( 'bic')  }}:</strong> {{ $t( 'operator_account_bic')  }}</p>
-								<p>Bank für Sozialwirtschaft</p>
-								<p><strong>{{ $t( 'account_number')  }}:</strong> {{ $t( 'operator_account_number')  }}</p>
-								<p><strong>{{ $t( 'blz')  }}:</strong> {{ $t( 'operator_account_blz')  }}</p>
-							</div>
+							<BankData></BankData>
 						</div>
 					</div>
 				</div>
@@ -43,9 +30,11 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+import BankData from "@/components/BankData.vue";
 export default {
 	name: 'Footer',
+	components: { BankData },
 	props: [ 'assetsPath' ],
 	data: function () {
 		return {
@@ -56,11 +45,6 @@ export default {
 				{ id: 'supporters_list', url: '/page/Unterst%C3%BCtzerliste' },
 			],
 		};
-	},
-	methods: {
-		formatIban: function () {
-			return this.$t( 'operator_account_iban' ).split( ' ' );
-		},
 	},
 };
 </script>
