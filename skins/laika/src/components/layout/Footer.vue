@@ -22,7 +22,7 @@
 							<ul class="list-menu">
 								<li v-for="( link, index ) in footerMenu" :key="index">
 									<a :href="link.url" :key="link.id">
-										<span>{{ $t( 'footer_menu_' + link.id ) }}</span>
+										{{ $t( 'footer_menu_' + link.id ) }}
 									</a>
 								</li>
 							</ul>
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import BankData from "@/components/BankData.vue";
+import BankData from '@/components/BankData.vue';
 export default {
 	name: 'Footer',
 	components: { BankData },

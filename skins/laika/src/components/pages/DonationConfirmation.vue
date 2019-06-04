@@ -7,8 +7,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import DonationSummary from "@/components/pages/donation_confirmation/DonationSummary.vue";
-import MembershipInfo from "@/components/pages/donation_confirmation/MembershipInfo.vue";
+import DonationSummary from '@/components/pages/donation_confirmation/DonationSummary.vue';
+import MembershipInfo from '@/components/pages/donation_confirmation/MembershipInfo.vue';
 
 export default Vue.extend( {
 	name: 'DonationConfirmation',
@@ -17,7 +17,7 @@ export default Vue.extend( {
 		MembershipInfo,
 	},
 	props: [
-		'confirmationData'
+		'confirmationData',
 	],
 } );
 </script>

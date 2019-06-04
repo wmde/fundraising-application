@@ -14,8 +14,6 @@ Vue.use( VueI18n );
 
 const pageData = new PageDataInitializer<any>( '#app' );
 
-console.log ( pageData );
-
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
 	messages: {
