@@ -1,6 +1,6 @@
 <template>
 	<div class="has-background-bright columns">
-		<div class="column is-two-thirds is-half-desktop">
+		<div class="column is-half">
 			<div class="donation-summary">
 				<span class="payment-summary" v-html="getSummary()"></span>
 				<span class="payment-email" v-html="getEmail()"></span>
@@ -8,7 +8,9 @@
 				<BankData v-if="isBankDataVisible" :bank-transfer-code="confirmationData.donation.bankTransferCode"></BankData>
 			</div>
 		</div>
-		<div class="column is-one-third is-half-desktop">Abc</div>
+		<div class="column is-half donation-links">
+			<a href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
+		</div>
 	</div>
 </template>
 
@@ -125,13 +127,16 @@
 <style lang="scss">
 	@import "../../../scss/custom";
 
-	.donation-summary {
-		> span {
-			display: block;
-		}
-		.bank-data-content {
-			p {
-				line-height: 2em;
+	.donation {
+		&-summary {
+			> span {
+				display: block;
+			}
+
+			.bank-data-content {
+				p {
+					line-height: 2em;
+				}
 			}
 		}
 	}

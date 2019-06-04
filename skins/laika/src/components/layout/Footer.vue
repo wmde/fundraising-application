@@ -2,7 +2,7 @@
 	<div class="footer has-background-footer">
 		<div class="container">
 			<div class="columns">
-				<div class="column is-two-thirds is-half-desktop">
+				<div class="column is-two-thirds">
 					<div class="level">
 						<div class="level-left">
 							<div class="logo-footer">
@@ -16,14 +16,18 @@
 						</div>
 					</div>
 				</div>
-				<div class="column is-one-third is-half-desktop">
-					<ul class="list-menu">
-						<li v-for="( link, index ) in footerMenu" :key="index">
-							<a :href="link.url" :key="link.id">
-								<span>{{ $t( 'footer_menu_' + link.id ) }}</span>
-							</a>
-						</li>
-					</ul>
+				<div class="column is-one-third">
+					<div class="level">
+						<div class="level-item">
+							<ul class="list-menu">
+								<li v-for="( link, index ) in footerMenu" :key="index">
+									<a :href="link.url" :key="link.id">
+										<span>{{ $t( 'footer_menu_' + link.id ) }}</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

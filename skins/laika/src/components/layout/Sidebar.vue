@@ -1,5 +1,5 @@
 <template>
-	<aside class="column is-one-third is-half-desktop">
+	<aside class="column is-one-third">
 		<p>{{ $t('sidebar_data_encryption_notice') }}</p>
 		<br>
 		<p><strong>{{ $t('sidebar_getintouch_headline') }}</strong></p>
