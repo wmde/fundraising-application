@@ -26,7 +26,7 @@ export default Vue.extend( {
 	methods: {
 		validatePaymentData(): void {
 			this.$store.dispatch( action( NS_PAYMENT, markEmptyValuesAsInvalid ) );
-		}
+		},
 	},
 } );
 </script>

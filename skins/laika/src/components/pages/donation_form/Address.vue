@@ -115,7 +115,7 @@ export default Vue.extend( {
 		},
 		...mapGetters( NS_ADDRESS, [
 			'addressType',
-			'addressTypeIsNotAnon',																																																																																																						
+			'addressTypeIsNotAnon',
 		] ),
 	},
 	methods: {
@@ -127,7 +127,7 @@ export default Vue.extend( {
 		},
 		validateInput( formData: FormData, fieldName: string ) {
 			this.$store.dispatch( action( NS_ADDRESS, validateInput ), formData[ fieldName ] );
-		}
+		},
 	},
 } );
 </script>

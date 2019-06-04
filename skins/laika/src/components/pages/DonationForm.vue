@@ -55,29 +55,28 @@ export default Vue.extend( {
 	data: function () {
 		return {
 			currentFormComponent: 'Payment',
-			buttonsVisibility: { 
-				previous: false, 
-				next: true, 
-				submit: false, 
+			buttonsVisibility: {
+				previous: false,
+				next: true,
+				submit: false,
 			},
 		};
 	},
 	computed: {
 		currentProperties: {
-			get() {
-				if ( this.$data.currentFormComponent === 'Payment' ) {
-					return {
-						validateAmountUrl: this.$props.validateAmountUrl,
-						paymentAmounts: this.$props.paymentAmounts,
-						paymentIntervals: this.$props.paymentIntervals,
-						paymentTypes: this.$props.paymentTypes,
-					};
-				} else if ( this.$data.currentFormComponent === 'AddressForm' ) {
+			get(): object {
+				if ( this.$data.currentFormComponent === 'AddressForm' ) {
 					return {
 						validateAddressUrl: this.$props.validateAddressUrl,
 						countries: this.$props.addressCountries,
 					};
 				}
+				return {
+					validateAmountUrl: this.$props.validateAmountUrl,
+					paymentAmounts: this.$props.paymentAmounts,
+					paymentIntervals: this.$props.paymentIntervals,
+					paymentTypes: this.$props.paymentTypes,
+				};
 			},
 		},
 	},
@@ -86,7 +85,7 @@ export default Vue.extend( {
 			this.$data.currentFormComponent = newComponent;
 			this.scrollToTop();
 		},
-		scrollToTop(): void {
+		scrollToTop: function (): void {
 			window.scrollTo( 0, 0 );
 		},
 		next(): void {
@@ -102,7 +101,7 @@ export default Vue.extend( {
 			this.$data.buttonsVisibility.submit = false;
 		},
 		submit() {
-			//TODO
+			// TODO
 		},
 	},
 } );
