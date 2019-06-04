@@ -5,7 +5,7 @@
 			<component
 				:is="currentFormComponent"
 				v-bind="currentProperties"
-				v-on:change-component="changeCurrentFormComponent( $event )">
+				v-on:change-component="changeCurrentFormComponent( $event ); scrollToTop()">
 			</component>
 		</keep-alive>
 		</form>
@@ -16,6 +16,7 @@
 import Vue from 'vue';
 import Payment from '@/components/pages/donation_form/Payment.vue';
 import AddressForm from '@/components/pages/donation_form/Address.vue';
+Vue.prototype.scrollTo = window.scrollTo;
 
 export default Vue.extend( {
 	name: 'DonationForm',
@@ -59,6 +60,9 @@ export default Vue.extend( {
 		changeCurrentFormComponent( newComponent: string ) {
 			this.$data.currentFormComponent = newComponent;
 		},
+		scrollToTop() {
+			window.scrollTo( 0, 0 );
+		}
 	},
 } );
 </script>
