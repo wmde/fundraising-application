@@ -161,16 +161,25 @@ class MailTemplates {
 						'membershipType' => 'active',
 						'paymentIntervalInMonths' => 12,
 						'paymentType' => 'BEZ',
+						'hasReceiptEnabled' => true
+					],
+					'direct_debit_active_yearly_receipt_optout' => [
+						'membershipType' => 'active',
+						'paymentIntervalInMonths' => 12,
+						'paymentType' => 'BEZ',
+						'hasReceiptEnabled' => false
 					],
 					'direct_debit_sustaining_quarterly' => [
 						'membershipType' => 'sustaining',
 						'paymentIntervalInMonths' => 3,
 						'paymentType' => 'BEZ',
+						'hasReceiptEnabled' => true
 					],
 					'paypal_sustaining_monthly' => [
 						'membershipType' => 'sustaining',
 						'paymentIntervalInMonths' => 1,
 						'paymentType' => 'PPL',
+						'hasReceiptEnabled' => true
 					]
 				]
 			],

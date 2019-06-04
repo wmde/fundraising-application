@@ -43,6 +43,7 @@ class UpdateAddressController {
 		}
 
 		$this->addPostalParams( $request, $params );
+		$this->addReceiptParams( $request, $params );
 
 		$request->assertNoNullFields()->freeze();
 		return $request;
@@ -69,6 +70,31 @@ class UpdateAddressController {
 			->setPostcode( $params->get( 'postcode', '' ) )
 			->setCity( $params->get( 'city', '' ) )
 			->setCountry( $params->get( 'country', 'DE' ) );
+	}
+
+	private function addReceiptParams( ChangeAddressRequest $request, ParameterBag $params ) {
+		if ( ! $params->get( 'receiptOptOut', '' ) ) {
+			$request->setIsOptOutOnly( false );
+			$request->setDonationReceipt( false );
+			return;
+		}
+		$request->setDonationReceipt( false );
+		$request->setIsOptOutOnly( $this->isOptOutOnly( $params ) );
+	}
+
+	private function isOptOutOnly( ParameterBag $params ): bool {
+		$requirePostalFields = [ 'street', 'postcode', 'city' ];
+		$requiredNameFiels = $params->get( 'addressType', '' ) == 'person' ?
+			[ 'firstName', 'lastName' ] : [ 'company' ];
+		$requiredFields = array_merge( $requiredNameFiels, $requirePostalFields );
+		$allFieldsAreEmpty = true;
+		foreach( $requiredFields as $field ) {
+			if ( $params->get( $field, '' ) !== '' ) {
+				$allFieldsAreEmpty = false;
+				break;
+			}
+		}
+		return $allFieldsAreEmpty;
 	}
 
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex, {StoreOptions, GetterTree, ActionTree, MutationTree, ActionContext } from 'vuex';
 import {Helper} from './mixins/helper';
-import {AddressState, InputField, Payload, ValidationResult, Validity} from './types';
+import {AddressState, FormData, InputField, Payload, ValidationResult, Validity} from './types';
 
 const VALIDATE_INPUT: string = 'VALIDATE_INPUT';
 const MARK_EMPTY_FIELD_INVALID: string = 'MARK_EMPTY_FIELD_INVALID';
@@ -34,7 +34,10 @@ const state: AddressState = {
 
 export const mutations: MutationTree<AddressState> = {
 	[VALIDATE_INPUT](state, field: InputField) {
-		if (field.value === '' && field.optionalField) {
+		if ( typeof field.value === "boolean" ) {
+			state.form[field.name] = Validity.VALID
+		}
+		else if (field.value === '' && field.optionalField) {
 			state.form[field.name] = Validity.INCOMPLETE
 		}
 		else {
@@ -78,10 +81,18 @@ export const actions: ActionTree<AddressState, any> = {
 		commit('VALIDATE_INPUT', field);
 	},
 	storeAddressFields(context: ActionContext<AddressState, any>, payload: Payload) {
+		if ( payload.receiptOptOut && Helper.allFieldsAreEmpty( payload.formData, ['country', 'addressType'] ) ) {
+			return Promise.resolve();
+		}
+
 		context.commit('MARK_EMPTY_FIELD_INVALID', payload.formData);
 		if ( context.getters.allFieldsAreValid ) {
 			context.commit('BEGIN_ADDRESS_VALIDATION');
-			const postData = Helper.formatPostData(payload.formData);
+			const postData = Object.assign(
+				{},
+				Helper.formatPostData(payload.formData),
+				{ receiptOptOut: payload.receiptOptOut }
+			);
 			return payload.transport.postData(payload.validateAddressURL, postData)
 				.then( (validationResult: ValidationResult) => {
 					context.commit('FINISH_ADDRESS_VALIDATION', validationResult);

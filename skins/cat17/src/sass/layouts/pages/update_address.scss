@@ -10,7 +10,9 @@
             }
         }
         label {
-            font-size: 12px;
+            @include bkp(md) {
+                font-size: 12px;
+            }
             cursor: auto;
         }
         ::placeholder {
@@ -41,6 +43,12 @@
             margin-bottom: 16px;
             line-height: 16px;
             font-size: 12px;
+        }
+        .wrap-check label {
+            margin-bottom: 0;
+        }
+        .explanation  {
+            margin-bottom: 30px;
         }
         // This class is needed in order to go around the css rules coming from jcf components
         // which set elements to absolute and have some !important rules.

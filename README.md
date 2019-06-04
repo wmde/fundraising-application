@@ -105,7 +105,7 @@ change that, you have to pass the environment variable to `make`, `docker` and `
 
 For `docker-compose` you can either put create a file called `.env` in the application directory and, with the contents of
 
-    APP_ENV=prod     
+    APP_ENV=prod
 
 Alternatively, or if you want to override the defaults in the `.env` file, you set the variable in your shell like this:
 
@@ -122,7 +122,7 @@ Valid environment names are
 * `uat` - user acceptance testing
 * `prod` - production
 
-*Note:** PHPUnit tests are always run in the `test` environment configuration, regardless of `APP_ENV`!
+**Note:** PHPUnit tests are always run in the `test` environment configuration, regardless of `APP_ENV`!
 
 ## Running the tests
 

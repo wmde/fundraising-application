@@ -80,6 +80,34 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	public function testOptingOutWithEmptyFields_serverShowsAConfirmationPage(): void {
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$this->setDefaultSkin( $factory, 'cat17' );
+
+				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+
+				$factory->getEntityManager()->persist( $donation );
+				$factory->getEntityManager()->flush();
+
+				$addressToken = $donation->getAddressChange()->getCurrentIdentifier();
+
+				$client->request(
+					Request::METHOD_POST,
+					self::PATH . '/' . $addressToken,
+					[
+						'receiptOptOut' => '1'
+					]
+				);
+
+				$response = $client->getResponse();
+				$this->assertTrue( $response->isOk() );
+				$this->assertSame( 1, $client->getCrawler()->filter( '.page-address-update-success' )->count(), 'Confirmation page should be shown' );
+			}
+		);
+	}
+
 	private function setDefaultSkin( FunFunFactory $factory, string $skinName ): void {
 		$factory->setCampaignConfigurationLoader(
 			new OverridingCampaignConfigurationLoader(

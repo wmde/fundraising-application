@@ -7,11 +7,11 @@ NPM_FLAGS     := --prefer-offline
 DOCKER_FLAGS  := --interactive --tty
 TEST_DIR      :=
 REDUX_LOG     :=
-UNIQUE_APP_CONTAINER := $(shell uuidgen)-app
 MIGRATION_VERSION :=
 APP_ENV       := dev
 DOCKER_IMAGE  := wikimediade/fundraising-frontend
 
+NODE_IMAGE    := node:10
 
 .DEFAULT_GOAL := ci
 
@@ -27,7 +27,7 @@ down_app:
 install-js:
 	-mkdir -p $(TMPDIR)/home
 	-echo "node:x:$(current_user):$(current_group)::/var/nodehome:/bin/bash" > $(TMPDIR)/passwd
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd node:10 npm install $(NPM_FLAGS)
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm install $(NPM_FLAGS)
 
 install-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume /tmp:/tmp --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer install $(COMPOSER_FLAGS)
@@ -35,16 +35,8 @@ install-php:
 update-js:
 	-mkdir -p $(TMPDIR)/home
 	-echo "node:x:$(current_user):$(current_group)::/var/nodehome:/bin/bash" > $(TMPDIR)/passwd
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/cat17:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd node:10 npm update $(NPM_FLAGS)
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/10h16:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd node:10 npm update $(NPM_FLAGS)
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/laika:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd node:10 npm update $(NPM_FLAGS)
-
-audit-js:
-	-mkdir -p $(TMPDIR)/home
-	-echo "node:x:$(current_user):$(current_group)::/var/nodehome:/bin/bash" > $(TMPDIR)/passwd
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/cat17:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd node:10 npm audit fix $(NPM_FLAGS)
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/10h16:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd node:10 npm audit fix $(NPM_FLAGS)
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/laika:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd node:10 npm audit fix $(NPM_FLAGS)
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/cat17:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm update $(NPM_FLAGS)
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/10h16:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm update $(NPM_FLAGS)
 
 update-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update $(COMPOSER_FLAGS)
@@ -53,15 +45,15 @@ default-config:
 	cp -i build/app/config.dev.json app/config
 
 js:
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 -e REDUX_LOG=$(REDUX_LOG) node:10 npm run build-assets
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 node:10 npm run copy-assets
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 -e REDUX_LOG=$(REDUX_LOG) $(NODE_IMAGE) npm run build-assets
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 $(NODE_IMAGE) npm run copy-assets
 
 watch-js:
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data/skins/cat17 -e NO_UPDATE_NOTIFIER=1 -e REDUX_LOG=$(REDUX_LOG) node:10 npm run watch
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data/skins/cat17 -e NO_UPDATE_NOTIFIER=1 -e REDUX_LOG=$(REDUX_LOG) $(NODE_IMAGE) npm run watch
 
 clear:
 	rm -rf var/cache/
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app rm -rf var/cache/
+	docker-compose run --rm --no-deps --name $@ app rm -rf var/cache/
 
 # n alias to avoid frequent typo
 clean: clear
@@ -76,41 +68,41 @@ setup-db:
 	docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
 
 covers:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/covers-validator
+	docker-compose run --rm --no-deps --name $@ app ./vendor/bin/covers-validator
 
 phpunit:
-	docker-compose run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpunit $(TEST_DIR)
+	docker-compose run --rm --name $@ app ./vendor/bin/phpunit $(TEST_DIR)
 
 phpunit-with-coverage:
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app_debug ./vendor/bin/phpunit --dump-xdebug-filter var/xdebug-filter.php
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app_debug ./vendor/bin/phpunit --prepend var/xdebug-filter.php --configuration=phpunit.xml.dist --coverage-clover coverage.clover --printer="PHPUnit\TextUI\ResultPrinter"
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm --name $@ app_debug ./vendor/bin/phpunit --dump-xdebug-filter var/xdebug-filter.php
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm --name $@ app_debug ./vendor/bin/phpunit --prepend var/xdebug-filter.php --configuration=phpunit.xml.dist --coverage-clover coverage.clover --printer="PHPUnit\TextUI\ResultPrinter"
 
 phpunit-system:
-	docker-compose run --rm --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpunit tests/System/
+	docker-compose run --rm --name $@ app ./vendor/bin/phpunit tests/System/
 
 cs:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpcs
+	docker-compose run --rm --no-deps --name $@ app ./vendor/bin/phpcs
 
 fix-cs:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpcbf
+	docker-compose run --rm --no-deps --name $@ app ./vendor/bin/phpcbf
 
 stan:
 	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):stan analyse --level=1 --no-progress cli/ src/ tests/
 
 validate-app-config:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:config app/config/config.dist.json app/config/config.test.json
+	docker-compose run --rm --no-deps --name $@ app ./console app:validate:config app/config/config.dist.json app/config/config.test.json
 
 validate-campaign-config:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns $(APP_ENV)
+	docker-compose run --rm --no-deps --name $@ app ./console app:validate:campaigns $(APP_ENV)
 
 validate-campaign-utilization:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./console app:validate:campaigns:utilization
+	docker-compose run --rm --no-deps --name $@ app ./console app:validate:campaigns:utilization
 
 phpmd:
-	docker-compose run --rm --no-deps --name $(UNIQUE_APP_CONTAINER)-$@ app ./vendor/bin/phpmd src/ text phpmd.xml
+	docker-compose run --rm --no-deps --name $@ app ./vendor/bin/phpmd src/ text phpmd.xml
 
 npm-ci:
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/code -w /code -e NO_UPDATE_NOTIFIER=1 node:10 npm run ci
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/code -w /code -e NO_UPDATE_NOTIFIER=1 $(NODE_IMAGE) npm run ci
 
 migration-execute:
 	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:execute $(MIGRATION_VERSION) --up --configuration=vendor/wmde/fundraising-store/migrations.yml

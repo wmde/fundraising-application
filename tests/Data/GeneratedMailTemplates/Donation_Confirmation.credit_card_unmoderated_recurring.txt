@@ -1,13 +1,23 @@
-mail_introduction_female_formal
+mail_introduction_female_lastname_informal
 
-donation_confirmation/payment_intro
-donation_confirmation/paymenttype_externaldonation_confirmation/payment_interval_recurring
+donation_confirmation/payment_introdonation_confirmation/paymenttype_externaldonation_confirmation/payment_interval_recurring
 
 donation_confirmation/receipt_support donation_confirmation/receipt_opted_out
 
 donation_confirmation/greetings
 
-donation_confirmation/creditcard_interval_notice
-
 name_head_of_suborganization
 title_head_of_suborganization
+
+donation_confirmation/creditcard_interval_notice
+
+---------------------------------------------------------------------------
+wikimedia_vision
+<https://spenden.wikimedia.de/>
+---------------------------------------------------------------------------
+
+address_of_suborganization
+
+tax_id_suborganization_verbose
+
+donation_confirmation/number

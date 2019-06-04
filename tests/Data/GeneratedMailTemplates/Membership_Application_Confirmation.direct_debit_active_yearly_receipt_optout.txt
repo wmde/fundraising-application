@@ -1,6 +1,10 @@
-mail_introduction_male_formal
+mail_introduction_male_informal
 
-membership_application_cancellation_confirmation
+membership_application_confirmation/intro
+
+membership_application_confirmation/contact membership_application_confirmation/receipt
+
+membership_application_confirmation/outro
 
 name_head_of_organization
 title_head_of_organization
@@ -8,7 +12,7 @@ address_of_organization
 
 ---------------------------------------------------------------------------
 wikimedia_vision
-<https://spenden.wikimedia.de/>
+<https://www.wikimedia.de/>
 ---------------------------------------------------------------------------
 
 address_of_organization
