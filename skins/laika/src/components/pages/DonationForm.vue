@@ -37,6 +37,13 @@
 import Vue from 'vue';
 import Payment from '@/components/pages/donation_form/Payment.vue';
 import AddressForm from '@/components/pages/donation_form/Address.vue';
+import { mapGetters } from 'vuex';
+import { action } from '@/store/util';
+import {
+	NS_PAYMENT,
+	NS_ADDRESS,
+} from '@/store/namespaces';
+import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
 
 export default Vue.extend( {
 	name: 'DonationForm',
@@ -89,10 +96,13 @@ export default Vue.extend( {
 			window.scrollTo( 0, 0 );
 		},
 		next(): void {
-			this.changeCurrentFormComponent( 'AddressForm' );
-			this.$data.buttonsVisibility.next = false;
-			this.$data.buttonsVisibility.previous = true;
-			this.$data.buttonsVisibility.submit = true;
+			this.$store.dispatch( action( NS_PAYMENT, markEmptyValuesAsInvalid ) );
+			if ( this.$store.getters[ NS_PAYMENT + '/paymentDataIsValid' ] ) {
+				this.changeCurrentFormComponent( 'AddressForm' );
+				this.$data.buttonsVisibility.next = false;
+				this.$data.buttonsVisibility.previous = true;
+				this.$data.buttonsVisibility.submit = true;
+			}
 		},
 		previous(): void {
 			this.changeCurrentFormComponent( 'Payment' );
