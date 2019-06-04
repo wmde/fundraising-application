@@ -11,14 +11,6 @@
 			<email></email>
 		</div>
 		<newsletter-opt-in></newsletter-opt-in>
-		<div class="level has-margin-top-36">
-			<div class="level-left">
-        		<b-button class="level-item" @click="previous()" type="is-primary is-main">{{ $t('donation_section_back') }}</b-button>
-			</div>
-			<div class="level-right">
-        		<b-button class="level-item" @click="submit()" type="is-primary is-main">{{ $t('donation_banner_anchor') }}</b-button>
-        	</div>
-        </div>
 	</div>
 </template>
 
@@ -135,12 +127,6 @@ export default Vue.extend( {
 		},
 		validateInput( formData: FormData, fieldName: string ) {
 			this.$store.dispatch( action( NS_ADDRESS, validateInput ), formData[ fieldName ] );
-		},
-		previous() {
-			this.$emit( 'change-component', 'Payment' );
-		},
-		submit() {
-			//TODO
 		}
 	},
 } );
