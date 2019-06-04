@@ -2,9 +2,10 @@
 	<div class="has-background-bright columns">
 		<div class="column is-two-thirds is-half-desktop">
 			<div class="donation-summary">
-				<span class="payment-summary" v-html="getSummary"></span>
-				<span class="payment-email" v-html="getEmail"></span>
-				<span class="payment-notice" v-html="getPaymentNotice"></span>
+				<span class="payment-summary" v-html="getSummary()"></span>
+				<span class="payment-email" v-html="getEmail()"></span>
+				<span class="payment-notice" v-html="getPaymentNotice()"></span>
+				<BankData v-if="isBankDataVisible" :bank-transfer-code="confirmationData.donation.bankTransferCode"></BankData>
 			</div>
 		</div>
 		<div class="column is-one-third is-half-desktop">Abc</div>
@@ -13,99 +14,81 @@
 
 <script lang="js">
 	import Vue from 'vue';
-
-	const addressTypeRenderers = {
-		'person': ( address ) => { return new PrivateDonorRenderer( address ) },
-		'firma': ( address ) => { return new CompanyDonorRenderer( address ) },
-		'anonym': ( address ) => { return new AnonymousDonorRenderer( address ) },
-	};
+	import BankData from "@/components/BankData.vue";
 
 	class PrivateDonorRenderer {
-		constructor ( address ) {
-			this.address = address;
-		}
-		getPersonTypeString() {
+		static getPersonTypeMessageKey() {
 			return 'donation_confirmation_topbox_donor_type_person'
 		}
-		getAddressString() {
-			return this.address.salutation + ' ' + this.address.fullName + ', '
-				+ this.address.streetAddress + ', ' + this.address.postalCode + ' ' + this.address.city;
+		static getAddressString( address ) {
+			return address.salutation + ' ' + address.fullName + ', '
+				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city;
 		}
 	}
 	class CompanyDonorRenderer {
-		constructor ( address ) {
-			this.address = address;
-		}
-		getPersonTypeString() {
+		static getPersonTypeMessageKey() {
 			return 'donation_confirmation_topbox_donor_type_company'
 		}
-		getAddressString() {
-			return this.address.salutation + ' ' + this.address.fullName + ', '
-				+ this.address.streetAddress + ', ' + this.address.postalCode + ' ' + this.address.city;
+		static getAddressString( address ) {
+			return address.salutation + ' ' + address.fullName + ', '
+				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city;
 		}
 	}
 	class AnonymousDonorRenderer {
-		constructor ( address ) {
-			this.address = address;
-		}
-		getPersonTypeString() {
+		static getPersonTypeMessageKey() {
 			return 'donation_confirmation_topbox_donor_type_anonymous';
 		}
-		getAddressString() {
+		static getAddressString() {
 			return '';
 		}
 	}
 
-	const paymentTypeRenderers = {
-		'UEB': ( donation ) => { return new BankTransferRenderer( donation ) },
-		'BEZ': ( donation ) => { return new DirectDebitRenderer( donation ) },
-		'PPL': ( donation ) => { return new EmptyRenderer( donation ) },
-		'MCP': ( donation ) => { return new EmptyRenderer( donation ) },
-		'SUB': ( donation ) => { return new EmptyRenderer( donation ) },
+	const addressTypeRenderers = {
+		'person': PrivateDonorRenderer,
+		'firma': CompanyDonorRenderer,
+		'anonym': AnonymousDonorRenderer,
 	};
 
 	class BankTransferRenderer {
-		constructor ( donation ) {
-			this.donation = donation;
-		}
-		getPaymentString() {
+		static getPaymentString() {
 			return 'donation_confirmation_subhead_bank_transfer';
 		}
 	}
 
 	class DirectDebitRenderer {
-		constructor ( donation ) {
-			this.donation = donation;
-		}
-		getPaymentString() {
+		static getPaymentString() {
 			return 'donation_confirmation_subhead_direct_debit';
 		}
 	}
 
 	class EmptyRenderer {
-		constructor ( donation ) {
-			this.donation = donation;
-		}
-		getPaymentString() {
+		static getPaymentString() {
 			return '';
 		}
 	}
 
+	const paymentTypeRenderers = {
+		'UEB': BankTransferRenderer,
+		'BEZ': DirectDebitRenderer,
+		'PPL': EmptyRenderer,
+		'MCP': EmptyRenderer,
+		'SUB': EmptyRenderer,
+	};
 
 	export default Vue.extend( {
 		name: 'DonationSummary',
+		components: { BankData },
 		props: [
 			'confirmationData'
 		],
-		computed: {
+		methods: {
 			getSummary: function() {
-				console.log(this.confirmationData.addressType);
-				const addressTypeRenderer = addressTypeRenderers[ this.confirmationData.addressType ]( this.confirmationData.address );
+				const addressTypeRenderer = addressTypeRenderers[ this.confirmationData.addressType ];
 				let intervalString = this.$t( 'donation_payment_interval_' + this.confirmationData.donation.interval );
 				let amountString = this.confirmationData.donation.amount.toFixed( 2 ).replace( '.', ',' );
 				let paymentTypeString = this.$t( this.confirmationData.donation.paymentType );
-				let personTypeString = this.$t( addressTypeRenderer.getPersonTypeString() );
-				let addressString = addressTypeRenderer.getAddressString();
+				let personTypeString = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );
+				let addressString = addressTypeRenderer.getAddressString( this.confirmationData.address );
 
 				return this.$t(
 					'donation_confirmation_topbox_summary',
@@ -125,12 +108,15 @@
 				return this.$t( 'donation_confirmation_topbox_email', { email: this.confirmationData.address.email } )
 			},
 			getPaymentNotice: function() {
-				const addressTypeRenderer = paymentTypeRenderers[ this.confirmationData.donation.paymentType ]( this.confirmationData.donation );
-				const paymentString = addressTypeRenderer.getPaymentString();
+				const paymentTypeRenderer = paymentTypeRenderers[ this.confirmationData.donation.paymentType ];
+				const paymentString = paymentTypeRenderer.getPaymentString( this.confirmationData.donation );
 				if ( paymentString === '' ) {
 					return ''
 				}
 				return this.$t( paymentString );
+			},
+			isBankDataVisible: function() {
+				return this.confirmationData.donation.paymentType === 'UEB';
 			}
 		}
 	} );
@@ -142,6 +128,11 @@
 	.donation-summary {
 		> span {
 			display: block;
+		}
+		.bank-data-content {
+			p {
+				line-height: 2em;
+			}
 		}
 	}
 	.payment {
