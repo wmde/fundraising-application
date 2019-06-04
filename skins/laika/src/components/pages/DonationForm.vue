@@ -1,22 +1,42 @@
 <template>
-	<div class="column is-full">
-		<form>
+	<form class="column is-full">
 		<keep-alive>
 			<component
 				:is="currentFormComponent"
-				v-bind="currentProperties"
-				v-on:change-component="changeCurrentFormComponent( $event ); scrollToTop()">
+				v-bind="currentProperties">
 			</component>
 		</keep-alive>
-		</form>
-	</div>
+		<div class="level has-margin-top-36">
+			<div class="level-left">
+				<b-button class="level-item"
+					v-if="buttonsVisibility.next"
+					@click="next()"
+					type="is-primary is-main">
+					{{ $t('donation_section_continue') }}
+				</b-button>
+				<b-button class="level-item"
+					v-if="buttonsVisibility.previous"
+					@click="previous()"
+					type="is-primary is-main">
+					{{ $t('donation_section_back') }}
+				</b-button>
+			</div>
+			<div class="level-right">
+				<b-button class="level-item"
+					v-if="buttonsVisibility.submit"
+					@click="submit()"
+					type="is-primary is-main">
+					{{ $t('donation_banner_anchor') }}
+				</b-button>
+			</div>
+		</div>
+	</form>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import Payment from '@/components/pages/donation_form/Payment.vue';
 import AddressForm from '@/components/pages/donation_form/Address.vue';
-Vue.prototype.scrollTo = window.scrollTo;
 
 export default Vue.extend( {
 	name: 'DonationForm',
@@ -35,6 +55,11 @@ export default Vue.extend( {
 	data: function () {
 		return {
 			currentFormComponent: 'Payment',
+			buttonsVisibility: { 
+				previous: false, 
+				next: true, 
+				submit: false, 
+			},
 		};
 	},
 	computed: {
@@ -57,12 +82,28 @@ export default Vue.extend( {
 		},
 	},
 	methods: {
-		changeCurrentFormComponent( newComponent: string ) {
+		changeCurrentFormComponent( newComponent: string ): void {
 			this.$data.currentFormComponent = newComponent;
+			this.scrollToTop();
 		},
-		scrollToTop() {
+		scrollToTop(): void {
 			window.scrollTo( 0, 0 );
-		}
+		},
+		next(): void {
+			this.changeCurrentFormComponent( 'AddressForm' );
+			this.$data.buttonsVisibility.next = false;
+			this.$data.buttonsVisibility.previous = true;
+			this.$data.buttonsVisibility.submit = true;
+		},
+		previous(): void {
+			this.changeCurrentFormComponent( 'Payment' );
+			this.$data.buttonsVisibility.next = true;
+			this.$data.buttonsVisibility.previous = false;
+			this.$data.buttonsVisibility.submit = false;
+		},
+		submit() {
+			//TODO
+		},
 	},
 } );
 </script>
