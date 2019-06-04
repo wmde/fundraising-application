@@ -14,8 +14,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter
  *
- * @licence GNU GPL v2+
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @license GNU GPL v2+
  */
 class DonationConfirmationHtmlPresenterTest extends TestCase {
 
@@ -74,7 +73,8 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			'urls' => [
 				'testUrl' => 'https://example.com/',
 				'addComment' => '/such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'
-			]
+			],
+			'addressType' => 'anonym'
 
 		];
 	}

@@ -16,15 +16,15 @@
 	</div>
 </template>
 <script>
-	export default {
-		name: 'BankData',
-		props: [
-			'bankTransferCode'
-		],
-		methods: {
-			formatIban: function () {
-				return this.$t( 'operator_account_iban' ).split( ' ' );
-			},
+export default {
+	name: 'BankData',
+	props: [
+		'bankTransferCode',
+	],
+	methods: {
+		formatIban: function () {
+			return this.$t( 'operator_account_iban' ).split( ' ' );
 		},
-	};
+	},
+};
 </script>
