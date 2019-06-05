@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "buefy": "^0.7.6",
-    "bulma-helpers": "^0.3.7",
+    "buefy": "^0.7.7",
+    "bulma-helpers": "^0.3.8",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
     "vue-i18n": "^8.11.2",
