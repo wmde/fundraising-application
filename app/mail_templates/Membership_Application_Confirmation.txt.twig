@@ -1,4 +1,4 @@
-{%- set formattedAmount = membershipFee|number_format(2, ',', '.') -%}
+{%- set formattedAmount = membershipFee|number_format(2, ',', '.') ~ ' Euro' -%}
 {% if membershipType == 'sustaining' %}
 {$- greeting_generator.createInformalLastnameGreeting( salutation, lastName )|raw $}
 {% else %}
