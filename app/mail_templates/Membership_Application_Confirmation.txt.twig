@@ -1,4 +1,4 @@
-{%- set formattedAmount = membershipFee|localizedcurrency('EUR', 'de_DE') -%}
+{%- set formattedAmount = membershipFee|number_format(2, ',', '.') -%}
 {% if membershipType == 'sustaining' %}
 {$- greeting_generator.createInformalLastnameGreeting( salutation, lastName )|raw $}
 {% else %}
@@ -7,11 +7,12 @@
 
 {$ mail_content('membership_application_confirmation/intro', {
     'formatted_amount': formattedAmount,
-    'donation_interval': paymentIntervalInMonths|trans({}, 'paymentIntervals')
+    'donation_interval': paymentIntervalInMonths|trans({}, 'paymentIntervals'),
+	'membership_type': membershipType|trans({}, 'membershipTypes'),
 }) $}
 
 {$ mail_content('membership_application_confirmation/contact', {
-    'membership_type': membershipType|trans( {}, 'membershipTypes' ),
+    'membership_type': membershipType|trans({}, 'membershipTypes'),
 }) $} {% if hasReceiptEnabled == false %} {$- mail_content('membership_application_confirmation/receipt') $} {% endif %}
 
 
