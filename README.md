@@ -46,7 +46,7 @@ The application can now be reached at http://localhost:8082/index.php, debug inf
 ## Configuration
 
 The web and CLI entry points of the application check for the `APP_ENV` environment variable. 
-If it not set, the application assumes the value `development`. Each environment must have a corresponding configuration
+If it not set, the application assumes the value `dev`. Each environment must have a corresponding configuration
 file in `app/config`, following the name pattern of `config.ENVIRONMENTNAME.json`. See the section "Running in different 
 environments" below to see how to set `APP_ENV`.
 
@@ -173,7 +173,8 @@ Out of the box, the database should be in a usable state for local development. 
 schema, you must provide a migration script for the production database. Store the migration scripts in the `migrations` directory of
 the [FundraisingStore repository](https://github.com/wmde/FundraisingStore/tree/master/migrations).
 
-To test you migration in your Docker development environment, deploy the changes in FundraisingStore to the FundraisingFrontend repository and run the `make migration` command.
+To test you migration in your Docker development environment, deploy the changes in FundraisingStore to the 
+FundraisingFrontend repository and run the `make migration` command.
 
 To execute a specific script, run the following command and add the version number of the migration script you want to use.
 As an example, executing `migrations/Version20180612000000.php` would look like this:
@@ -197,6 +198,9 @@ vendor/wmde/fundraising-store/vendor/doctrine/migrations/bin/doctrine-migrations
 ```
 
 Have a look the the [deployment documentation](deployment/README.md) on how to run the migrations on the server.
+
+**Note:** If you're getting errors that the a configuration file was nor found, make sure to set `APP_ENV` to the right value.
+See section "Running in different environments" in this document.
 
 ### Accessing the database from a Docker image
 
