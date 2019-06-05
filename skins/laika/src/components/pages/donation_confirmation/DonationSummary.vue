@@ -86,7 +86,7 @@ export default Vue.extend( {
 	methods: {
 		getSummary: function () {
 			const addressTypeRenderer = addressTypeRenderers[ this.confirmationData.addressType ];
-			let intervalString = this.$t( 'donation_payment_interval_' + this.confirmationData.donation.interval );
+			let intervalString = this.$t( 'donation_form_payment_interval_' + this.confirmationData.donation.interval );
 			let amountString = this.confirmationData.donation.amount.toFixed( 2 ).replace( '.', ',' );
 			let paymentTypeString = this.$t( this.confirmationData.donation.paymentType );
 			let personTypeString = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );

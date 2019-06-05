@@ -6,7 +6,7 @@
 			v-model="newsletterOptIn"
 			@change.native="setNewsletterOptIn()">
 		</b-checkbox>
-		<label for="newsletter">{{ $t( 'donation_sendinfo_label' ) }}</label>
+		<label for="newsletter">{{ $t( 'donation_form_newsletter_label' ) }}</label>
 	</div>
 </template>
 

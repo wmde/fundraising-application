@@ -1,14 +1,14 @@
 <template>
     <fieldset>
-		<label for="email" class="subtitle">{{ $t( 'email_label' ) }}</label>
+		<label for="email" class="subtitle">{{ $t( 'donation_form_email_label' ) }}</label>
 		<b-input type="text"
 			id="email"
 			name="email"
-			:placeholder="$t( 'email_label' )"
+			:placeholder="$t( 'donation_form_email_placeholder' )"
 			v-model="emailValue"
 			@blur="validateEmail">
 		</b-input>
-		<span v-if="emailHasError" class="help is-danger">{{ $t( 'form_email_error' ) }}</span>
+		<span v-if="emailHasError" class="help is-danger">{{ $t( 'donation_form_email_error' ) }}</span>
     </fieldset>
 </template>
 
