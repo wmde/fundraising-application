@@ -1,6 +1,6 @@
 <template>
 	<fieldset>
-		<legend class="title is-size-5">{{ $t('donation_form_amount_title') }}</legend>
+		<legend class="title is-size-5">{{ $t('donation_form_payment_amount_title') }}</legend>
 		<div class="amount-wrapper">
 			<div class="amount-selector is-form-input" v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
 				<input type="radio"
@@ -22,12 +22,12 @@
 							v-model="amountCustomValue"
 							@blur="customAmountEntered(); clearSelectedAmount()"
 							maxlength="9"
-							:placeholder="$t('custom_amount')">
-					<label for="amount-custom" class="is-sr-only">{{ $t('payment_amount_legend') }}</label>
+							:placeholder="$t('donation_form_custom_placeholder')">
+					<label for="amount-custom" class="is-sr-only">{{ $t('donation_form_payment_amount_legend') }}</label>
 				</div>
 			</div>
 		</div>
-		<span class="help is-danger" v-if="hasErrors">{{ $t('donation_form_amount_error') }}</span>
+		<span class="help is-danger" v-if="hasErrors">{{ $t('donation_form_payment_amount_error') }}</span>
 	</fieldset>
 </template>
 

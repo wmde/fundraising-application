@@ -207,7 +207,7 @@ use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 /**
- * @licence GNU GPL v2+
+ * @license GNU GPL v2+
  */
 class FunFunFactory implements ServiceProviderInterface {
 
@@ -1842,10 +1842,17 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new CampaignCollection( ...$this->getCampaigns() );
 	}
 
+	/**
+	 * TranslationCollector is currently only used by the Laika Vue-based frontend
+	 * In the future, the desired solution would be to use laika_messages.json exclusively
+	 * for front-end related strings and any backend strings would be separated into individual files
+	 * to avoid unnecessary strings being loaded on the client side
+	 * @see https://phabricator.wikimedia.org/T225105
+	 */
 	public function getTranslationCollector(): TranslationsCollector {
 		return $this->createSharedObject( TranslationsCollector::class, function (): TranslationsCollector {
 			$translationsCollector = new TranslationsCollector( new SimpleFileFetcher() );
-			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/messages.json' );
+			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/messages_laika.json' );
 			return $translationsCollector;
 		} );
 	}

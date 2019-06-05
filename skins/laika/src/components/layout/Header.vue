@@ -23,7 +23,7 @@
                         :key="index"
                         :href="link.url"
                         v-bind:class="[{ 'active': link.id === pageIdentifier }, 'navbar-item']">
-                        {{ $t( 'menu_item_' + link.localeId ) }}
+                        {{ $t( 'header_menu_item_' + link.localeId ) }}
                     </a>
                 </div>
             </div>

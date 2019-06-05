@@ -1,6 +1,6 @@
 <template>
     <fieldset class="has-margin-top-36">
-        <legend class="title is-size-5">{{ $t('donation_form_interval_title') }}</legend>
+        <legend class="title is-size-5">{{ $t('donation_form_payment_interval_title') }}</legend>
         <div>
             <div class="wrap-radio" v-for="interval in paymentIntervals" :key="'interval-' + interval">
                 <b-radio :class="{ 'is-active': selectedInterval === interval }"
@@ -10,7 +10,7 @@
                        v-model="selectedInterval"
                        :native-value="interval"
                        @change.native="setInterval">
-                    {{ $t( 'donation_payment_interval_' + interval.toString() ) }}
+                    {{ $t( 'donation_form_payment_interval_' + interval.toString() ) }}
                 </b-radio>
             </div>
         </div>
