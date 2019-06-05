@@ -8,13 +8,13 @@
 		</keep-alive>
 		<div class="level has-margin-top-36">
 			<div class="level-left">
-				<b-button class="level-item"
+				<b-button id="next" class="level-item"
 					v-if="buttonsVisibility.next"
 					@click="next()"
 					type="is-primary is-main">
 					{{ $t('donation_section_continue') }}
 				</b-button>
-				<b-button class="level-item"
+				<b-button id="previous" class="level-item"
 					v-if="buttonsVisibility.previous"
 					@click="previous()"
 					type="is-primary is-main">
@@ -22,7 +22,7 @@
 				</b-button>
 			</div>
 			<div class="level-right">
-				<b-button class="level-item"
+				<b-button id="submit" class="level-item"
 					v-if="buttonsVisibility.submit"
 					@click="submit()"
 					type="is-primary is-main">
@@ -92,7 +92,7 @@ export default Vue.extend( {
 			this.$data.currentFormComponent = newComponent;
 			this.scrollToTop();
 		},
-		scrollToTop: function (): void {
+		scrollToTop(): void {
 			window.scrollTo( 0, 0 );
 		},
 		next(): void {
