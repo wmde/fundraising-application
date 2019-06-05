@@ -1,5 +1,5 @@
 <template>
-    <div class="has-background-bright columns has-margin-top-36">
+    <div class="membership-benefits-wrapper has-background-bright columns has-margin-top-36 has-padding-18">
         <div class="column is-half">
             <h2 class="title is-size-5">{{ $t( 'membership_call_to_action_title' ) }}</h2>
             <p>{{ $t( 'membership_call_to_action_line_1' ) }}</p>
@@ -20,4 +20,8 @@ export default Vue.extend( {
 
 <style lang="scss">
     @import "../../../scss/custom";
+    .membership-benefits-wrapper {
+        border: 1px solid $fun-color-primary-light;
+        border-radius: 2px;
+    }
 </style>

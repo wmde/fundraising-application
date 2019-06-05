@@ -1,5 +1,5 @@
 <template>
-	<div class="has-background-bright columns">
+	<div class="donation-summary-wrapper has-background-bright columns has-padding-18">
 		<div class="column is-half">
 			<div class="donation-summary">
 				<span class="payment-summary" v-html="getSummary()"></span>
@@ -129,6 +129,10 @@ export default Vue.extend( {
 
 	.donation {
 		&-summary {
+			&-wrapper {
+				border: 1px solid $fun-color-gray-mid;
+				border-radius: 2px;
+			}
 			> span {
 				display: block;
 			}
