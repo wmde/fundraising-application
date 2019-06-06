@@ -8,8 +8,18 @@
 				<BankData v-if="isBankDataVisible" :bank-transfer-code="confirmationData.donation.bankTransferCode"></BankData>
 			</div>
 		</div>
-		<div class="column is-half donation-links">
-			<a href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
+		<div class="column is-half">
+			<div class="donation-links">
+				<a href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
+				<div v-if="confirmationData.donation.paymentType === 'BEZ'">
+					<a href="#">{{ $t( 'donation_confirmation_comment_button' ) }}</a>
+					<form class="has-margin-top-18" :action="confirmationData.urls.cancelDonation" method="post">
+						<a href="javascript:" onclick="parentNode.submit();">{{ $t( 'donation_confirmation_cancel_button' ) }}</a>
+						<input type="hidden" name="sid" :value="confirmationData.donation.id" />
+						<input type="hidden" name="utoken" :value="confirmationData.donation.updateToken">
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -141,6 +151,13 @@ export default Vue.extend( {
 				p {
 					line-height: 2em;
 				}
+			}
+		}
+		&-links {
+			border-left: 1px solid $fun-color-gray-light-solid;
+			padding: 0 0 18px 18px;
+			& > a {
+				display: block;
 			}
 		}
 	}
