@@ -5,7 +5,13 @@
 				<span class="payment-summary" v-html="getSummary()"></span>
 				<span class="payment-email" v-html="getEmail()"></span>
 				<span class="payment-notice" v-html="getPaymentNotice()"></span>
-				<BankData v-if="isBankDataVisible" :bank-transfer-code="confirmationData.donation.bankTransferCode"></BankData>
+
+				<div v-if="isBankDataVisible()">
+					<BankData :bank-transfer-code="confirmationData.donation.bankTransferCode"></BankData>
+					<div class="has-margin-top-18"
+						v-html="$t( 'donation_confirmation_reminder_bank_transfer', { bankTransferCode: confirmationData.donation.bankTransferCode } )">
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="column is-half">
@@ -63,13 +69,13 @@ const addressTypeRenderers = {
 
 class BankTransferRenderer {
 	static getPaymentString() {
-		return 'donation_confirmation_subhead_bank_transfer';
+		return 'donation_confirmation_payment_bank_transfer';
 	}
 }
 
 class DirectDebitRenderer {
 	static getPaymentString() {
-		return 'donation_confirmation_subhead_direct_debit';
+		return 'donation_confirmation_payment_direct_debit';
 	}
 }
 
