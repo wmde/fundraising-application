@@ -12,13 +12,13 @@
 					v-if="buttonsVisibility.next"
 					@click="next()"
 					type="is-primary is-main">
-					{{ $t('donation_section_continue') }}
+					{{ $t('donation_form_section_continue') }}
 				</b-button>
 				<b-button id="previous" class="level-item"
 					v-if="buttonsVisibility.previous"
 					@click="previous()"
 					type="is-primary is-main">
-					{{ $t('donation_section_back') }}
+					{{ $t('donation_form_section_back') }}
 				</b-button>
 			</div>
 			<div class="level-right">
@@ -26,7 +26,7 @@
 					v-if="buttonsVisibility.submit"
 					@click="submit()"
 					type="is-primary is-main">
-					{{ $t('donation_banner_anchor') }}
+					{{ $t('donation_form_finalize') }}
 				</b-button>
 			</div>
 		</div>
