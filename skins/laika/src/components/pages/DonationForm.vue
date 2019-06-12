@@ -7,6 +7,7 @@
 			</component>
 		</keep-alive>
 		<submit-values :trackingData="trackingData"></submit-values>
+		<donation-review v-if="donationFormIsValid"></donation-review>
 		<div class="level has-margin-top-36">
 			<div class="level-left">
 				<b-button id="next" class="level-item"
@@ -39,6 +40,7 @@ import Vue from 'vue';
 import Payment from '@/components/pages/donation_form/Payment.vue';
 import AddressForm from '@/components/pages/donation_form/Address.vue';
 import SubmitValues from '@/components/pages/donation_form/SubmitValues.vue';
+import DonationReview from '@/components/pages/donation_form/DonationReview.vue';
 import { action } from '@/store/util';
 import { TrackingData } from '@/view_models/SubmitValues';
 import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
@@ -51,6 +53,7 @@ export default Vue.extend( {
 	components: {
 		Payment,
 		AddressForm,
+		DonationReview,
 		SubmitValues,
 	},
 	props: {
@@ -87,6 +90,12 @@ export default Vue.extend( {
 					paymentIntervals: this.$props.paymentIntervals,
 					paymentTypes: this.$props.paymentTypes,
 				};
+			},
+		},
+		donationFormIsValid: {
+			get(): boolean {
+				return this.$store.getters[ NS_PAYMENT + '/paymentDataIsValid' ] &&
+                    this.$store.getters[ NS_ADDRESS + '/allFieldsAreValid' ];
 			},
 		},
 	},

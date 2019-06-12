@@ -25,7 +25,7 @@ export default function (): Module<AddressState, any> {
 		},
 		validity: {
 			salutation: Validity.INCOMPLETE,
-			title: Validity.INCOMPLETE,
+			title: Validity.VALID,
 			firstName: Validity.INCOMPLETE,
 			lastName: Validity.INCOMPLETE,
 			companyName: Validity.VALID,
