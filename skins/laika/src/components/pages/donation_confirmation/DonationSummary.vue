@@ -39,7 +39,7 @@ class PrivateDonorRenderer {
 	static getPersonTypeMessageKey() {
 		return 'donation_confirmation_topbox_donor_type_person';
 	}
-	static getAddressString( address ) {
+	static renderAddress( address ) {
 		return address.salutation + ' ' + address.fullName + ', '
 				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city;
 	}
@@ -48,7 +48,7 @@ class CompanyDonorRenderer {
 	static getPersonTypeMessageKey() {
 		return 'donation_confirmation_topbox_donor_type_company';
 	}
-	static getAddressString( address ) {
+	static renderAddress( address ) {
 		return address.salutation + ' ' + address.fullName + ', '
 				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city;
 	}
@@ -57,7 +57,7 @@ class AnonymousDonorRenderer {
 	static getPersonTypeMessageKey() {
 		return 'donation_confirmation_topbox_donor_type_anonymous';
 	}
-	static getAddressString() {
+	static renderAddress() {
 		return '';
 	}
 }
@@ -116,20 +116,20 @@ export default Vue.extend( {
 	methods: {
 		getSummary: function () {
 			const addressTypeRenderer = addressTypeRenderers[ this.confirmationData.addressType ];
-			let intervalString = this.$t( 'donation_form_payment_interval_' + this.confirmationData.donation.interval );
-			let amountString = this.confirmationData.donation.amount.toFixed( 2 ).replace( '.', ',' );
-			let paymentTypeString = this.$t( this.confirmationData.donation.paymentType );
-			let personTypeString = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );
-			let addressString = addressTypeRenderer.getAddressString( this.confirmationData.address );
+			const interval = this.$t( 'donation_form_payment_interval_' + this.confirmationData.donation.interval );
+			const formattedAmount = this.confirmationData.donation.amount.toFixed( 2 ).replace( '.', ',' );
+			const paymentType = this.$t( this.confirmationData.donation.paymentType );
+			const personType = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );
+			const address = addressTypeRenderer.renderAddress( this.confirmationData.address );
 
 			return this.$t(
 				'donation_confirmation_topbox_summary',
 				{
-					interval: intervalString,
-					formattedAmount: amountString,
-					paymentType: paymentTypeString,
-					personType: personTypeString,
-					address: addressString,
+					interval,
+					formattedAmount,
+					paymentType,
+					personType,
+					address,
 				}
 			);
 		},
