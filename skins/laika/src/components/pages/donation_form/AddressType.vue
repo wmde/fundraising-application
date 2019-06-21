@@ -4,7 +4,7 @@
 		<div>
 			<b-radio type="radio"
 					id="personal"
-					name="addressType"
+					name="addressTypeInternal"
 					v-model="type"
 					:native-value="AddressTypeModel.PERSON"
 					@change.native="setAddressType()">{{ $t( 'donation_form_addresstype_option_private' ) }}
@@ -13,7 +13,7 @@
 		<div>
 			<b-radio type="radio"
 					id="company"
-					name="addressType"
+					name="addressTypeInternal"
 					v-model="type"
 					:native-value="AddressTypeModel.COMPANY"
 					@change.native="setAddressType()">
@@ -23,7 +23,7 @@
 		<div>
 			<b-radio type="radio"
 					id="anonymous"
-					name="addressType"
+					name="addressTypeInternal"
 					v-model="type"
 					:native-value="AddressTypeModel.ANON"
 					@change.native="setAddressType()">

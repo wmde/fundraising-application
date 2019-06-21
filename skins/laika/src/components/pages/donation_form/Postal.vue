@@ -4,7 +4,6 @@
 		<label for="street" class="subtitle has-margin-top-36">{{ $t( 'donation_form_street_label' ) }}</label>
 		<b-input type="text"
 				id="street"
-				name="street"
 				:placeholder="$t('donation_form_street_placeholder')"
 				v-model="formData.street.value"
 				@blur="$emit('field-changed', 'street'); displayStreetWarning()">
@@ -16,7 +15,6 @@
 		<label for="post-code" class="subtitle has-margin-top-36">{{ $t( 'donation_form_zip_label' ) }}</label>
 		<b-input type="text"
 				id="post-code"
-				name="postcode"
 				v-model="formData.postcode.value"
 				:placeholder="$t('donation_form_zip_placeholder')"
 				@blur="$emit('field-changed', 'postcode')">
@@ -27,7 +25,6 @@
 		<label for="city" class="subtitle has-margin-top-36">{{ $t( 'donation_form_city_label' ) }}</label>
 		<b-input type="text"
 				id="city"
-				name="city"
 				:placeholder="$t('donation_form_city_placeholder')"
 				v-model="formData.city.value"
 				@blur="$emit('field-changed', 'city')">

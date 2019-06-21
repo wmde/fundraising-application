@@ -6,7 +6,7 @@
 			<div>
 				<b-radio type="radio"
 						id="salutation-mr"
-						name="salutation"
+						name="salutationInternal"
 						:native-value="$t( 'donation_form_salutation_option_mr' ) "
 						v-model="formData.salutation.value"
 						@input="$emit('field-changed', 'salutation')">
@@ -16,7 +16,7 @@
 			<div>
 				<b-radio type="radio"
 						id="salutation-mrs"
-						name="salutation"
+						name="salutationInternal"
 						:native-value="$t( 'donation_form_salutation_option_mrs' ) "
 						v-model="formData.salutation.value"
 						@input="$emit('field-changed', 'salutation')">
@@ -45,7 +45,6 @@
 					type="text"
 					id="first-name"
 					v-model="formData.firstName.value"
-					name="firstName"
 					:placeholder="$t( 'donation_form_firstname_placeholder' )"
 					@blur="$emit('field-changed', 'firstName')">
 			</b-input>
@@ -56,7 +55,6 @@
 			<b-input type="text"
 					id="last-name"
 					v-model="formData.lastName.value"
-					name="lastName"
 					:placeholder="$t( 'donation_form_lastname_placeholder' )"
 					@blur="$emit('field-changed', 'lastName')">
 			</b-input>
@@ -67,7 +65,6 @@
 		<label for="company-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_companyname_label' ) }}</label>
 		<b-input type="text"
 				id="company-name"
-				name="company"
 				:placeholder="$t( 'donation_form_companyname_placeholder' )"
 				v-model="formData.companyName.value"
 				@blur="$emit('field-changed', 'companyName')">

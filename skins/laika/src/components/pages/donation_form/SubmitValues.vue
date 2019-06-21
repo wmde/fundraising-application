@@ -47,7 +47,7 @@ export default Vue.extend( {
 			payment: ( state: Payment ) => state.values,
 			formattedAmount: ( state: Payment ) => {
 				// endpoint expects a German-formatted decimal number
-				const strAmount = new String( state.values.amount );
+				const strAmount = String( state.values.amount );
 				return [
 					strAmount.slice( 0, -2 ),
 					',',

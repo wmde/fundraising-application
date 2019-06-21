@@ -1,11 +1,12 @@
 <template>
-	<form class="column is-full">
+	<form class="column is-full" ref="form" action="/donation/add" method="post">
 		<keep-alive>
 			<component
 				ref="currentPage"
 				:is="currentFormComponent"
 				v-on:next-page="changePageIndex( 1 )"
 				v-on:previous-page="changePageIndex( -1 )"
+				v-on:submit-donation="submitDonationForm"
 				v-bind="currentProperties">
 			</component>
 		</keep-alive>
@@ -73,6 +74,9 @@ export default Vue.extend( {
 		},
 		scrollToTop(): void {
 			window.scrollTo( 0, 0 );
+		},
+		submitDonationForm(): void {
+			( this.$refs.form as HTMLFormElement ).submit()
 		},
 	},
 } );

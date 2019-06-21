@@ -88,6 +88,7 @@ export default Vue.extend( {
 	methods: {
 		submit() {
 			// TODO validate address, then submit form
+			this.$emit( 'submit-donation' );
 		},
 	},
 } );
