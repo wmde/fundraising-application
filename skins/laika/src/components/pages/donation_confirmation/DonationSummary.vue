@@ -2,6 +2,7 @@
 	<div class="donation-summary-wrapper has-background-bright columns has-padding-18">
 		<div class="column is-half">
 			<div class="donation-summary">
+				<span class="intro">{{ $t( 'donation_confirmation_topbox_intro' ) }}</span>
 				<span class="payment-summary" v-html="getSummary()"></span>
 				<span class="payment-email" v-html="getEmail()"></span>
 				<span class="payment-notice" v-html="getPaymentNotice()"></span>
@@ -17,8 +18,8 @@
 		<div class="column is-half">
 			<div class="donation-links">
 				<a href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
-				<div v-if="confirmationData.donation.paymentType === 'BEZ'">
-					<a href="#">{{ $t( 'donation_confirmation_comment_button' ) }}</a>
+				<a :href="donationCommentUrl" v-if="donationCanBeCommented">{{ $t( 'donation_confirmation_comment_button' ) }}</a>
+				<div v-if="donationCanBeCanceled">
 					<form class="has-margin-top-18" :action="confirmationData.urls.cancelDonation" method="post">
 						<a href="javascript:" onclick="parentNode.submit();">{{ $t( 'donation_confirmation_cancel_button' ) }}</a>
 						<input type="hidden" name="sid" :value="confirmationData.donation.id" />
@@ -99,6 +100,19 @@ export default Vue.extend( {
 	props: [
 		'confirmationData',
 	],
+	computed: {
+		donationCanBeCanceled() {
+			return this.confirmationData.donation.paymentType === 'BEZ';
+		},
+		donationCanBeCommented() {
+			return this.confirmationData.donation.paymentType !== 'UEB';
+		},
+		donationCommentUrl() {
+			const donation = this.confirmationData.donation;
+			return `/add-comment?donationId=${donation.id}&accessToken=${donation.accessToken}}&updateToken=${donation.updateToken}`;
+
+		}
+	},
 	methods: {
 		getSummary: function () {
 			const addressTypeRenderer = addressTypeRenderers[ this.confirmationData.addressType ];
@@ -148,6 +162,9 @@ export default Vue.extend( {
 			&-wrapper {
 				border: 1px solid $fun-color-gray-mid;
 				border-radius: 2px;
+			}
+			.intro {
+				margin-bottom: 18px;
 			}
 			> span {
 				display: block;
