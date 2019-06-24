@@ -19,7 +19,6 @@ class DonationFormPresenter {
 	private $template;
 	private $amountFormatter;
 	private $isCustomDonationAmountValidator;
-	private $urlGenerator;
 
 	public function __construct(
 		TwigTemplate $template,
@@ -46,7 +45,9 @@ class DonationFormPresenter {
 			],
 			'tracking' => [
 				'bannerImpressionCount' => $trackingInfo->getSingleBannerImpressionCount(),
-				'impressionCount' => $trackingInfo->getTotalImpressionCount()
+				'impressionCount' => $trackingInfo->getTotalImpressionCount(),
+				'trackingSource' => $trackingInfo->getSource(),
+				'tracking' => $trackingInfo->getTracking()
 			],
 			'urls' => $urlEndpoints
 		] );

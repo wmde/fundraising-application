@@ -6,6 +6,7 @@
 				v-bind="currentProperties">
 			</component>
 		</keep-alive>
+		<submit-values :trackingData="trackingData"></submit-values>
 		<div class="level has-margin-top-36">
 			<div class="level-left">
 				<b-button id="next" class="level-item"
@@ -37,19 +38,20 @@
 import Vue from 'vue';
 import Payment from '@/components/pages/donation_form/Payment.vue';
 import AddressForm from '@/components/pages/donation_form/Address.vue';
-import { mapGetters } from 'vuex';
+import SubmitValues from "@/components/pages/donation_form/SubmitValues.vue";
 import { action } from '@/store/util';
-import {
-	NS_PAYMENT,
-	NS_ADDRESS,
-} from '@/store/namespaces';
+import { TrackingData } from "@/view_models/SubmitValues";
 import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
+import {
+	NS_PAYMENT
+} from '@/store/namespaces';
 
 export default Vue.extend( {
 	name: 'DonationForm',
 	components: {
 		Payment,
 		AddressForm,
+		SubmitValues
 	},
 	props: {
 		validateAddressUrl: String,
@@ -58,6 +60,7 @@ export default Vue.extend( {
 		paymentIntervals: Array as () => Array<Number>,
 		paymentTypes: Array as () => Array<String>,
 		addressCountries: Array as () => Array<String>,
+		trackingData: Object as () => TrackingData,
 	},
 	data: function () {
 		return {

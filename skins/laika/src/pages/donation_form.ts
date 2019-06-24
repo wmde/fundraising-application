@@ -17,7 +17,8 @@ Vue.use( VueI18n );
 interface DonationAmountModel {
 	presetAmounts: Array<string>,
 	paymentTypes: Array<string>,
-	paymentIntervals: Array<number>
+	paymentIntervals: Array<number>,
+	tracking: Array<number>,
 	urls: any
 }
 
@@ -30,7 +31,7 @@ const i18n = new VueI18n( {
 		[ DEFAULT_LOCALE ]: pageData.messages,
 	},
 } );
-
+console.log (pageData)
 new Vue( {
 	store,
 	i18n,
@@ -49,6 +50,7 @@ new Vue( {
 				paymentIntervals: pageData.applicationVars.paymentIntervals,
 				paymentTypes: pageData.applicationVars.paymentTypes,
 				addressCountries: COUNTRIES,
+				trackingData: pageData.applicationVars.tracking,
 			},
 		} ),
 		h( Sidebar, {
