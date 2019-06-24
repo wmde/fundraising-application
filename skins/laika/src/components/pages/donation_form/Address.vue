@@ -4,8 +4,8 @@
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
 			<address-type></address-type>
 		</div>
-		<name :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :address-type="addressType"></name>
-		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :validate-input="validateInput" :countries="countries"></postal>
+		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
+		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<div class="has-margin-top-36">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
 			<email></email>
@@ -23,10 +23,9 @@ import Email from '@/components/pages/donation_form/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { mapGetters } from 'vuex';
 import { AddressValidity, FormData } from '@/view_models/Address';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressFields, validateInput } from '@/store/address/actionTypes';
+import {setAddressField, setAddressFields, validateInput} from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 
 export default Vue.extend( {
@@ -125,9 +124,10 @@ export default Vue.extend( {
 				formData: this.$data.formData,
 			} );
 		},
-		validateInput( formData: FormData, fieldName: string ) {
-			this.$store.dispatch( action( NS_ADDRESS, validateInput ), formData[ fieldName ] );
-		},
+		onFieldChange( fieldName: string ) {
+			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.formData[ fieldName ] );
+			this.$store.dispatch( action( NS_ADDRESS, validateInput ), this.formData[ fieldName ] );
+		}
 	},
 } );
 </script>

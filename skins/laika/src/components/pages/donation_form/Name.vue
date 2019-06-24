@@ -9,7 +9,7 @@
 						name="salutation"
 						:native-value="$t( 'donation_form_salutation_option_mr' ) "
 						v-model="formData.salutation.value"
-						@blur="validateInput(formData, 'salutation')">
+						@input="$emit('field-changed', 'salutation')">
 					{{ $t( 'donation_form_salutation_option_mr' ) }}
 				</b-radio>
 			</div>
@@ -19,7 +19,7 @@
 						name="salutation"
 						:native-value="$t( 'donation_form_salutation_option_mrs' ) "
 						v-model="formData.salutation.value"
-						@blur="validateInput(formData, 'salutation')">
+						@input="$emit('field-changed', 'salutation')">
 					{{ $t( 'donation_form_salutation_option_mrs' ) }}
 				</b-radio>
 			</div>
@@ -31,7 +31,7 @@
 					v-model="formData.title.value"
 					id="title"
 					name="title"
-					@blur="validateInput(formData, 'title')">
+					@input="$emit('field-changed', 'title')">
 				<option value="">{{ $t( 'donation_form_academic_title_option_none' ) }}</option>
 				<option value="Dr.">Dr.</option>
 				<option value="Prof.">Prof.</option>
@@ -47,7 +47,7 @@
 					v-model="formData.firstName.value"
 					name="firstName"
 					:placeholder="$t( 'donation_form_firstname_placeholder' )"
-					@blur="validateInput(formData, 'firstName')">
+					@blur="$emit('field-changed', 'firstName')">
 			</b-input>
 			<span v-if="showError.firstName" class="help is-danger">{{ $t( 'donation_form_firstname_error' ) }}</span>
 		</div>
@@ -58,7 +58,7 @@
 					v-model="formData.lastName.value"
 					name="lastName"
 					:placeholder="$t( 'donation_form_lastname_placeholder' )"
-					@blur="validateInput(formData, 'lastName')">
+					@blur="$emit('field-changed', 'lastName')">
 			</b-input>
 			<span v-if="showError.lastName" class="help is-danger">{{ $t( 'donation_form_lastname_error' ) }}</span>
 		</div>
@@ -70,7 +70,7 @@
 				name="company"
 				:placeholder="$t( 'donation_form_companyname_placeholder' )"
 				v-model="formData.companyName.value"
-				@blur="validateInput(formData, 'companyName')">
+				@blur="$emit('field-changed', 'companyName')">
 		</b-input>
 		<span v-if="showError.companyName" class="help is-danger">{{ $t( 'donation_form_companyname_error' )  }}</span>
 	</div>
@@ -87,7 +87,6 @@ export default Vue.extend( {
 	props: {
 		showError: Object as () => AddressValidity,
 		formData: Object as () => FormData,
-		validateInput: Function,
 		addressType: Number as () => AddressTypeModel,
 	},
 	computed: {
