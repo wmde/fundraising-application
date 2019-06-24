@@ -5,7 +5,7 @@ import {
 	setAddressFields,
 	setAddressType,
 	setEmail,
-	setNewsletterOptIn,
+	setNewsletterOptIn, setAddressField,
 } from '@/store/address/actionTypes';
 import { AddressState, InputField, Payload } from '@/view_models/Address';
 import { Helper } from '@/store/util';
@@ -15,6 +15,9 @@ import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 export const actions = {
 	[ validateInput ]( context: ActionContext<AddressState, any>, field: InputField ) {
 		context.commit( 'VALIDATE_INPUT', field );
+	},
+	[ setAddressField ]( context: ActionContext<AddressState, any>, field: InputField ) {
+		context.commit( 'SET_ADDRESS_FIELD', field );
 	},
 	[ setAddressFields ]( context: ActionContext<AddressState, any>, payload: Payload ) {
 		context.commit( 'MARK_EMPTY_FIELD_INVALID', payload.formData );

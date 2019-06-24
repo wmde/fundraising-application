@@ -7,6 +7,7 @@ import {
 	BEGIN_ADDRESS_VALIDATION,
 	FINISH_ADDRESS_VALIDATION,
 	SET_ADDRESS_TYPE,
+	SET_ADDRESS_FIELD,
 	SET_ADDRESS_FIELDS,
 	SET_EMAIL,
 	SET_NEWSLETTER_OPTIN,
@@ -57,6 +58,9 @@ export const mutations: MutationTree<AddressState> = {
 				state.values[ fieldName.name ] = fieldName.value;
 			}
 		} );
+	},
+	[ SET_ADDRESS_FIELD ]( state: AddressState, field: InputField ) {
+		state.values[ field.name ] = field.value;
 	},
 	[ SET_EMAIL ]( state: AddressState, email ) {
 		state.values.email = email;
