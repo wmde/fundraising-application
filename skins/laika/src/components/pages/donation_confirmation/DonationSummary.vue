@@ -109,9 +109,8 @@ export default Vue.extend( {
 		},
 		donationCommentUrl() {
 			const donation = this.confirmationData.donation;
-			return `/add-comment?donationId=${donation.id}&accessToken=${donation.accessToken}}&updateToken=${donation.updateToken}`;
-
-		}
+			return `/add-comment?donationId=${donation.id}&accessToken=${donation.accessToken}&updateToken=${donation.updateToken}`;
+		},
 	},
 	methods: {
 		getSummary: function () {
