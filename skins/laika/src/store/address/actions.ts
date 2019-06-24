@@ -31,10 +31,11 @@ export const actions = {
 				data: bodyFormData,
 				headers: { 'Content-Type': 'multipart/form-data' },
 			} ).then( ( validationResult: AxiosResponse<ValidationResponse> ) => {
-				context.commit( 'FINISH_ADDRESS_VALIDATION', validationResult );
+				context.commit( 'FINISH_ADDRESS_VALIDATION', validationResult.data );
+				return validationResult.data;
 			} );
 		}
-		return Promise.resolve( true );
+		return Promise.resolve( { status: 'ERR', messages: [] } );
 	},
 	[ setAddressType ]( context: ActionContext<AddressState, any>, type: AddressTypeModel ) {
 		context.commit( 'SET_ADDRESS_TYPE', type );

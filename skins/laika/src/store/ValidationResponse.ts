@@ -1,4 +1,4 @@
-// These types encapusaltes the types of JSOn responses that come from the server when calling a validation route
+// These types encapsulate the JSON responses that come from the server when calling a validation route
 
 export interface SuccessResponse {
     status: 'OK';
