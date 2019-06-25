@@ -14,9 +14,9 @@ class PrivateDonorRenderer {
 	static getPersonTypeMessageKey() {
 		return 'donation_confirmation_topbox_donor_type_person';
 	}
-	static renderAddress( address ) {
+	static renderAddress( address, country ) {
 		return address.salutation + ' ' + address.fullName + ', '
-				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city;
+				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city + ', ' + country;
 	}
 	static canRender( address ) {
 		return address.salutation && address.firstName && address.lastName && address.streetAddress && address.postalCode && address.city;
@@ -26,9 +26,9 @@ class CompanyDonorRenderer {
 	static getPersonTypeMessageKey() {
 		return 'donation_confirmation_topbox_donor_type_company';
 	}
-	static renderAddress( address ) {
+	static renderAddress( address, country ) {
 		return address.salutation + ' ' + address.fullName + ', '
-				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city;
+				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city + ', ' + country;
 	}
 	static canRender( address ) {
 		return address.salutation && address.fullName && address.streetAddress && address.postalCode && address.city;
@@ -68,7 +68,7 @@ export default Vue.extend( {
 			const personType = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );
 			let address = this.$t( 'donation_confirmation_address_missing' );
 			if ( addressTypeRenderer.canRender( this.address ) ) {
-				address = addressTypeRenderer.renderAddress( this.address );
+				address = addressTypeRenderer.renderAddress( this.address, this.$t( 'donation_form_country_option_' + this.address.countryCode ) );
 			}
 
 			return this.$t(

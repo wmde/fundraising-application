@@ -26,6 +26,7 @@ class DonorDataFormatter {
 				'streetAddress' => $donation->getDonor()->getPhysicalAddress()->getStreetAddress(),
 				'postalCode' => $donation->getDonor()->getPhysicalAddress()->getPostalCode(),
 				'city' => $donation->getDonor()->getPhysicalAddress()->getCity(),
+				'countryCode' => $donation->getDonor()->getPhysicalAddress()->getCountryCode(),
 				'email' => $donation->getDonor()->getEmailAddress()
 			];
 		}

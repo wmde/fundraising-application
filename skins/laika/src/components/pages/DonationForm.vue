@@ -121,6 +121,7 @@ export default Vue.extend( {
 					fullName: this.$store.getters[ NS_ADDRESS + '/fullName' ],
 					streetAddress: this.$store.state[ NS_ADDRESS ].values.street,
 					postalCode: this.$store.state[ NS_ADDRESS ].values.postcode,
+					countryCode: this.$store.state[ NS_ADDRESS ].values.country,
 				};
 			},
 		},
