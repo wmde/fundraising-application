@@ -4,12 +4,12 @@
 		<div>
 			<div v-for="paymentType in paymentTypes" :key="paymentType">
 				<b-radio :class="{ 'is-active': selectedType === paymentType }"
-						type="radio"
-						:id="'payment-' + paymentType.toLowerCase()"
-						name="payment"
-						v-model="selectedType"
-						:native-value="paymentType"
-						@change.native="setType">
+						 type="radio"
+						 :id="'payment-' + paymentType.toLowerCase()"
+						 name="payment"
+						 v-model="selectedType"
+						 :native-value="paymentType"
+						 @change.native="setType">
 					{{ $t( paymentType ) }}
 				</b-radio>
 			</div>

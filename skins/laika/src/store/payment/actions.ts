@@ -8,11 +8,21 @@ import {
 	setAmount,
 	setInterval,
 	setType,
+	setBankId,
+	setAccountId,
 } from '@/store/payment/actionTypes';
 import {
-	MARK_EMPTY_AMOUNT_INVALID, MARK_EMPTY_FIELDS_INVALID,
-	SET_AMOUNT_VALIDITY, SET_TYPE_VALIDITY,
-	SET_AMOUNT, SET_INTERVAL, SET_TYPE,
+	MARK_EMPTY_AMOUNT_INVALID,
+	MARK_EMPTY_FIELDS_INVALID,
+	SET_AMOUNT_VALIDITY,
+	SET_TYPE_VALIDITY,
+	SET_AMOUNT,
+	SET_INTERVAL,
+	SET_TYPE,
+	SET_BANK_ACCOUNT_ID,
+	SET_BANK_ACCOUNT_ID_VALIDITY,
+	SET_BANK_ID,
+	SET_BANK_ID_VALIDITY,
 } from '@/store/payment/mutationTypes';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { Validity } from '@/view_models/Validity';
@@ -59,5 +69,13 @@ export const actions = {
 	[ setType ]( context: ActionContext<Payment, any>, payload: TypeData ): void {
 		context.commit( SET_TYPE, payload );
 		context.commit( SET_TYPE_VALIDITY );
+	},
+	[ setAccountId ]( context: ActionContext<Payment, any>, payload: TypeData ): void {
+		context.commit( SET_BANK_ACCOUNT_ID, payload );
+		context.commit( SET_BANK_ACCOUNT_ID_VALIDITY );
+	},
+	[ setBankId ]( context: ActionContext<Payment, any>, payload: TypeData ): void {
+		context.commit( SET_BANK_ID, payload );
+		context.commit( SET_BANK_ID_VALIDITY );
 	},
 };

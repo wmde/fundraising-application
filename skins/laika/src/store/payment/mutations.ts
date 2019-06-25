@@ -4,11 +4,15 @@ import { Validity } from '@/view_models/Validity';
 import {
 	MARK_EMPTY_AMOUNT_INVALID,
 	MARK_EMPTY_FIELDS_INVALID,
-	SET_AMOUNT_VALIDITY,
-	SET_TYPE_VALIDITY,
 	SET_AMOUNT,
+	SET_AMOUNT_VALIDITY,
+	SET_BANK_ACCOUNT_ID,
+	SET_BANK_ACCOUNT_ID_VALIDITY,
+	SET_BANK_ID,
+	SET_BANK_ID_VALIDITY,
 	SET_INTERVAL,
 	SET_TYPE,
+	SET_TYPE_VALIDITY,
 } from '@/store/payment/mutationTypes';
 
 export const mutations: MutationTree<Payment> = {
@@ -39,5 +43,17 @@ export const mutations: MutationTree<Payment> = {
 	},
 	[ SET_TYPE ]( state: Payment, type ) {
 		state.values.type = type;
+	},
+	[ SET_BANK_ACCOUNT_ID ]( state: Payment, accountId ) {
+		state.values.accountId = accountId;
+	},
+	[ SET_BANK_ACCOUNT_ID_VALIDITY ]( state: Payment, validity: Validity ) {
+		state.validity.accountId = validity;
+	},
+	[ SET_BANK_ID ]( state: Payment, bankId ) {
+		state.values.bankId = bankId;
+	},
+	[ SET_BANK_ID_VALIDITY ]( state: Payment, validity: Validity ) {
+		state.validity.bankId = validity;
 	},
 };

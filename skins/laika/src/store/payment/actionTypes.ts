@@ -4,3 +4,5 @@ export const markEmptyValuesAsInvalid = 'markEmptyValuesAsInvalid';
 export const setAmount = 'setAmount';
 export const setInterval = 'setInterval';
 export const setType = 'setType';
+export const setAccountId = 'setAccountId';
+export const setBankId = 'setBankId';

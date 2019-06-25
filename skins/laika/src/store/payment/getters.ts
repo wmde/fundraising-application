@@ -9,6 +9,12 @@ export const getters: GetterTree<Payment, any> = {
 	typeIsValid: function ( state: Payment ): boolean {
 		return state.validity.type !== Validity.INVALID;
 	},
+	accountIsValid: function ( state: Payment ): boolean {
+		return state.validity.accountId !== Validity.INVALID;
+	},
+	bankIsValid: function ( state: Payment ): boolean {
+		return state.validity.bankId !== Validity.INVALID;
+	},
 	paymentDataIsValid: function ( state: Payment ): boolean {
 		for ( const prop in state.validity ) {
 			if ( state.validity[ prop ] !== Validity.VALID ) {
@@ -16,6 +22,9 @@ export const getters: GetterTree<Payment, any> = {
 			}
 		}
 		return true;
+	},
+	typeIsDirectDebit: function ( state: Payment ): boolean {
+		return state.values.type === 'BEZ';
 	},
 	isExternalPayment: ( state: Payment ): boolean => {
 		const externalPaymentTypes = [ 'PPL', 'MCP', 'SUB' ];

@@ -28,3 +28,8 @@ export interface InitialPaymentValues {
     paymentIntervalInMonths: string,
     isCustomAmount: boolean,
 }
+
+export interface BankAccountData {
+    accountId: string
+    bankId: string
+}
