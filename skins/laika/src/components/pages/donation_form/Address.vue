@@ -25,7 +25,7 @@ import { mapGetters } from 'vuex';
 import { AddressValidity, FormData } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import {setAddressField, setAddressFields, validateInput} from '@/store/address/actionTypes';
+import { setAddressField, setAddressFields } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 
 export default Vue.extend( {
@@ -126,8 +126,7 @@ export default Vue.extend( {
 		},
 		onFieldChange( fieldName: string ) {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.formData[ fieldName ] );
-			this.$store.dispatch( action( NS_ADDRESS, validateInput ), this.formData[ fieldName ] );
-		}
+		},
 	},
 } );
 </script>
