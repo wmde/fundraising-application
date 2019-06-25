@@ -1,7 +1,7 @@
 <template>
 	<div class="column is-full">
 		<donation-summary :confirmation-data="confirmationData"></donation-summary>
-		<membership-info></membership-info>
+		<membership-info :confirmation-data="confirmationData"></membership-info>
 	</div>
 </template>
 

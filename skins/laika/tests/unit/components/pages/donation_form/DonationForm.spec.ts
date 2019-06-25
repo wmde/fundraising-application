@@ -24,7 +24,7 @@ describe( 'DonationForm', () => {
 			.mockReturnValueOnce( true )
 			.mockReturnValueOnce( true )
 			.mockReturnValueOnce( true )
-			.mockReturnValueOnce( false )
+			.mockReturnValueOnce( false ),
 	};
 	beforeEach( () => {
 		global.window.scrollTo = jest.fn();
