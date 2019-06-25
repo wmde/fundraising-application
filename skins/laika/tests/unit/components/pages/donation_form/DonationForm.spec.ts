@@ -40,6 +40,7 @@ describe( 'DonationForm', () => {
 				validateAmountUrl: 'https://example.com/amount-check',
 				validateAddressUrl: 'https://example.com/address-check',
 				addressCountries: [ 'DE' ],
+				trackingData: { bannerImpressionCount: 0, impressionCount: 0 },
 			},
 			store: new Vuex.Store( {
 				actions,

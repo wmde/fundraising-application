@@ -19,7 +19,6 @@ class DonationFormPresenter {
 	private $template;
 	private $amountFormatter;
 	private $isCustomDonationAmountValidator;
-	private $urlGenerator;
 
 	public function __construct(
 		TwigTemplate $template,

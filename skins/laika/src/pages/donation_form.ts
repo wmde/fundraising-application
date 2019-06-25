@@ -17,7 +17,8 @@ Vue.use( VueI18n );
 interface DonationAmountModel {
 	presetAmounts: Array<string>,
 	paymentTypes: Array<string>,
-	paymentIntervals: Array<number>
+	paymentIntervals: Array<number>,
+	tracking: Array<number>,
 	urls: any
 }
 
@@ -49,6 +50,7 @@ new Vue( {
 				paymentIntervals: pageData.applicationVars.paymentIntervals,
 				paymentTypes: pageData.applicationVars.paymentTypes,
 				addressCountries: COUNTRIES,
+				trackingData: pageData.applicationVars.tracking,
 			},
 		} ),
 		h( Sidebar, {
