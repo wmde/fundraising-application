@@ -5,6 +5,7 @@ import DonationForm from '@/components/pages/DonationForm.vue';
 import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
 import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 declare global {
 	namespace NodeJS {
@@ -19,12 +20,26 @@ describe( 'DonationForm', () => {
 		'payment/markEmptyValuesAsInvalid': jest.fn(),
 	};
 	const getters = {
-		'payment/paymentDataIsValid': jest.fn()
-			.mockReturnValueOnce( true )
-			.mockReturnValueOnce( true )
-			.mockReturnValueOnce( true )
-			.mockReturnValueOnce( true )
-			.mockReturnValueOnce( false ),
+		'payment/paymentDataIsValid': jest.fn(),
+		'address/fullName': jest.fn().mockReturnValue( 'Prof. Dr. Alfons Knochensäger' ),
+	};
+	// The minimum required state for the computed properties of DonationForm
+	const state = {
+		payment: {
+			values: {
+				amount: '2349',
+				interval: '0',
+				type: 'PPL',
+			},
+		},
+		address: {
+			addressType: AddressTypeModel.PERSON,
+			values: {
+				street: 'Am Weier',
+				city: 'Hintertupfingen',
+				postcode: '87741',
+			},
+		},
 	};
 	beforeEach( () => {
 		global.window.scrollTo = jest.fn();
@@ -43,6 +58,7 @@ describe( 'DonationForm', () => {
 				trackingData: { bannerImpressionCount: 0, impressionCount: 0 },
 			},
 			store: new Vuex.Store( {
+				state,
 				actions,
 				getters,
 			} ),
@@ -52,6 +68,7 @@ describe( 'DonationForm', () => {
 			stubs: {
 				Payment: '<div class="i-am-payment" />',
 				AddressForm: '<div class="i-am-address-form" />',
+				DonationSummary: '<div class="i-am-summary" />',
 			},
 		} );
 	} );
@@ -61,21 +78,27 @@ describe( 'DonationForm', () => {
 	} );
 
 	it( 'shows next button on Payment page', () => {
-		expect( wrapper.html() ).toContain( '<button type="button" id="next" class="button level-item is-primary is-main">' );
+		expect( wrapper.find( 'button#next' ).exists() ).toBe( true );
+		expect( wrapper.find( 'button#previous' ).exists() ).toBe( false );
+		expect( wrapper.find( 'button#submit' ).exists() ).toBe( false );
 	} );
 
 	it( 'loads Address component on the next page', () => {
+		getters['payment/paymentDataIsValid'].mockReturnValueOnce( true );
 		wrapper.find( '#next' ).trigger( 'click' );
 		expect( wrapper.contains( '.i-am-address-form' ) ).toBe( true );
 	} );
 
 	it( 'shows previous and submit button on Address page', () => {
+		getters['payment/paymentDataIsValid'].mockReturnValueOnce( true );
 		wrapper.find( '#next' ).trigger( 'click' );
-		expect( wrapper.html() ).toContain( '<button type="button" id="previous" class="button level-item is-primary is-main">' );
-		expect( wrapper.html() ).toContain( '<button type="button" id="submit" class="button level-item is-primary is-main">' );
+		expect( wrapper.find( 'button#next' ).exists() ).toBe( false );
+		expect( wrapper.find( 'button#previous' ).exists() ).toBe( true );
+		expect( wrapper.find( 'button#submit' ).exists() ).toBe( true );
 	} );
 
 	it( 'loads Payment component on the previous page', () => {
+		getters['payment/paymentDataIsValid'].mockReturnValueOnce( true );
 		wrapper.find( '#next' ).trigger( 'click' );
 		wrapper.find( '#previous' ).trigger( 'click' );
 		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
@@ -85,14 +108,26 @@ describe( 'DonationForm', () => {
 		const store = wrapper.vm.$store;
 		store.dispatch = jest.fn();
 		const expectedAction = action( NS_PAYMENT, markEmptyValuesAsInvalid );
+		getters['payment/paymentDataIsValid'].mockReturnValueOnce( true );
 		wrapper.find( '#next' ).trigger( 'click' );
 		expect( store.dispatch ).toHaveBeenCalledWith( expectedAction );
 	} );
 
 	it( 'doesn\'t load the next page if there are validation errors', () => {
+		getters['payment/paymentDataIsValid'].mockReturnValueOnce( false );
 		wrapper.find( '#next' ).trigger( 'click' );
 		expect( wrapper.contains( '.i-am-address-form' ) ).toBe( false );
 		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
+	} );
+
+	it( 'shows the donation summary on the address page', () => {
+		getters['payment/paymentDataIsValid'].mockReturnValueOnce( true );
+		wrapper.find( '#next' ).trigger( 'click' );
+		expect( wrapper.contains( '.i-am-summary' ) ).toBe( true );
+	} );
+
+	it( 'hides the donation summary on the payment page', () => {
+		expect( wrapper.contains( '.i-am-summary' ) ).toBe( false );
 	} );
 
 } );

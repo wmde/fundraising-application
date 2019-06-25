@@ -12,4 +12,13 @@ export const getters: GetterTree<AddressState, any> = {
 	},
 	addressType: ( state: AddressState ): AddressTypeModel => state.addressType,
 	addressTypeIsNotAnon: ( state: AddressState, getters ): boolean => getters.addressType !== AddressTypeModel.ANON,
+	fullName: ( state: AddressState ): string => {
+		// Duplicating code from DonorName PHP class
+		const address = state.values;
+		const nonEmpty = ( v: string ): boolean => !!v;
+		const companyName = state.addressType === AddressTypeModel.COMPANY ? address.companyName : '';
+		// remove ternary operator in the following line when we implement contact person, https://phabricator.wikimedia.org/T220366
+		const privateName = state.addressType === AddressTypeModel.PERSON ? [ address.title, address.firstName, address.lastName ].filter( nonEmpty ).join( ' ' ) : '';
+		return [ companyName, privateName ].filter( nonEmpty ).join( ', ' );
+	},
 };

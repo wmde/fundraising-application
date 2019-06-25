@@ -6,8 +6,8 @@
 				v-bind="currentProperties">
 			</component>
 		</keep-alive>
+		<donation-summary v-if="showSummary" :payment="paymentSummary" :address-type="addressType" :address="addressSummary"></donation-summary>
 		<submit-values :trackingData="trackingData"></submit-values>
-		<donation-review v-if="donationFormIsValid"></donation-review>
 		<div class="level has-margin-top-36">
 			<div class="level-left">
 				<b-button id="next" class="level-item"
@@ -37,23 +37,25 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import DonationSummary from '@/components/DonationSummary.vue';
 import Payment from '@/components/pages/donation_form/Payment.vue';
 import AddressForm from '@/components/pages/donation_form/Address.vue';
 import SubmitValues from '@/components/pages/donation_form/SubmitValues.vue';
-import DonationReview from '@/components/pages/donation_form/DonationReview.vue';
 import { action } from '@/store/util';
 import { TrackingData } from '@/view_models/SubmitValues';
 import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
 import {
+	NS_ADDRESS,
 	NS_PAYMENT,
 } from '@/store/namespaces';
+import { addressTypeName } from '@/view_models/AddressTypeModel';
 
 export default Vue.extend( {
 	name: 'DonationForm',
 	components: {
 		Payment,
 		AddressForm,
-		DonationReview,
+		DonationSummary,
 		SubmitValues,
 	},
 	props: {
@@ -76,6 +78,11 @@ export default Vue.extend( {
 		};
 	},
 	computed: {
+		showSummary: {
+			get(): boolean {
+				return this.$data.currentFormComponent === 'AddressForm';
+			},
+		},
 		currentProperties: {
 			get(): object {
 				if ( this.$data.currentFormComponent === 'AddressForm' ) {
@@ -92,10 +99,29 @@ export default Vue.extend( {
 				};
 			},
 		},
-		donationFormIsValid: {
-			get(): boolean {
-				return this.$store.getters[ NS_PAYMENT + '/paymentDataIsValid' ] &&
-                    this.$store.getters[ NS_ADDRESS + '/allFieldsAreValid' ];
+		paymentSummary: {
+			get(): object {
+				const payment = this.$store.state[ NS_PAYMENT ].values;
+				return {
+					interval: payment.interval,
+					amount: Number( payment.amount ),
+					paymentType: payment.type,
+				};
+			},
+		},
+		addressType: {
+			get(): string {
+				return addressTypeName( this.$store.state[ NS_ADDRESS ].addressType );
+			},
+		},
+		addressSummary: {
+			get(): object {
+				return {
+					...this.$store.state[ NS_ADDRESS ].values,
+					fullName: this.$store.getters[ NS_ADDRESS + '/fullName' ],
+					streetAddress: this.$store.state[ NS_ADDRESS ].values.street,
+					postalCode: this.$store.state[ NS_ADDRESS ].values.postcode,
+				};
 			},
 		},
 	},
