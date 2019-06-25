@@ -31,7 +31,7 @@ const i18n = new VueI18n( {
 		[ DEFAULT_LOCALE ]: pageData.messages,
 	},
 } );
-console.log (pageData)
+
 new Vue( {
 	store,
 	i18n,

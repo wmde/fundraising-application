@@ -38,12 +38,12 @@
 import Vue from 'vue';
 import Payment from '@/components/pages/donation_form/Payment.vue';
 import AddressForm from '@/components/pages/donation_form/Address.vue';
-import SubmitValues from "@/components/pages/donation_form/SubmitValues.vue";
+import SubmitValues from '@/components/pages/donation_form/SubmitValues.vue';
 import { action } from '@/store/util';
-import { TrackingData } from "@/view_models/SubmitValues";
+import { TrackingData } from '@/view_models/SubmitValues';
 import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
 import {
-	NS_PAYMENT
+	NS_PAYMENT,
 } from '@/store/namespaces';
 
 export default Vue.extend( {
@@ -51,7 +51,7 @@ export default Vue.extend( {
 	components: {
 		Payment,
 		AddressForm,
-		SubmitValues
+		SubmitValues,
 	},
 	props: {
 		validateAddressUrl: String,

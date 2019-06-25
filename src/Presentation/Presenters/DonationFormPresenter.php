@@ -45,9 +45,7 @@ class DonationFormPresenter {
 			],
 			'tracking' => [
 				'bannerImpressionCount' => $trackingInfo->getSingleBannerImpressionCount(),
-				'impressionCount' => $trackingInfo->getTotalImpressionCount(),
-				'trackingSource' => $trackingInfo->getSource(),
-				'tracking' => $trackingInfo->getTracking()
+				'impressionCount' => $trackingInfo->getTotalImpressionCount()
 			],
 			'urls' => $urlEndpoints
 		] );
