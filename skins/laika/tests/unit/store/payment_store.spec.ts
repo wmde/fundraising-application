@@ -7,6 +7,7 @@ import { markEmptyAmountAsInvalid, markEmptyValuesAsInvalid } from '@/store/paym
 import { SET_AMOUNT, SET_AMOUNT_VALIDITY } from '@/store/payment/mutationTypes';
 import each from 'jest-each';
 import moxios from 'moxios';
+import PaymentType from '@/components/pages/donation_form/PaymentType.vue';
 
 function newMinimalStore( overrides: Object ): Payment {
 	return Object.assign(
@@ -88,6 +89,29 @@ describe( 'Payment', () => {
 				) ).toBe( isValid );
 			},
 		);
+	} );
+
+	describe( 'Getters/isExternalPayment', () => {
+		const externalPaymentTypes = [ 'PPL', 'MCP', 'SUB' ];
+		const nonExternalPaymentTypes = [ 'UEB', 'BEZ' ];
+
+		each( externalPaymentTypes ).it( 'returns true for external payments', ( paymentType ) => {
+			expect( getters.isExternalPayment(
+				newMinimalStore( { values: { type: paymentType } } ),
+				null,
+				null,
+				null
+			) ).toBe( true );
+		} );
+
+		each( nonExternalPaymentTypes ).it( 'returns false for non-external payments', ( paymentType ) => {
+			expect( getters.isExternalPayment(
+				newMinimalStore( { values: { type: paymentType } } ),
+				null,
+				null,
+				null
+			) ).toBe( false );
+		} );
 	} );
 
 	describe( 'Actions/markEmptyAmountAsInvalid', () => {
