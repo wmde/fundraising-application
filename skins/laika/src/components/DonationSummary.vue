@@ -1,6 +1,6 @@
 <template>
 	<div class="donation-summary">
-		<div class="intro">{{ $t( 'donation_confirmation_topbox_intro' ) }}</div>
+		<div class="intro title is-size-5">{{ $t( 'donation_confirmation_review_headline' ) }}</div>
 		<div class="payment-summary" v-html="getSummary()"></div>
 		<div class="payment-email" v-html="getEmail()"></div>
 	</div>
@@ -66,7 +66,7 @@ export default Vue.extend( {
 			const formattedAmount = this.payment.amount.toFixed( 2 ).replace( '.', ',' );
 			const paymentType = this.$t( this.payment.paymentType );
 			const personType = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );
-			let address = this.$t( 'donation_confirmation_address_missing' );
+			let address = this.$t( 'donation_confirmation_review_address_missing' );
 			if ( addressTypeRenderer.canRender( this.address ) ) {
 				address = addressTypeRenderer.renderAddress( this.address, this.$t( 'donation_form_country_option_' + this.address.countryCode ) );
 			}
@@ -89,7 +89,7 @@ export default Vue.extend( {
 			if ( this.address.email ) {
 				return this.$t( 'donation_confirmation_topbox_email', { email: this.address.email } );
 			}
-			return this.$t( 'donation_confirmation_email_missing' );
+			return this.$t( 'donation_confirmation_review_email_missing' );
 		},
 	},
 } );
