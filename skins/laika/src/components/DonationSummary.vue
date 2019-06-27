@@ -27,11 +27,11 @@ class CompanyDonorRenderer {
 		return 'donation_confirmation_topbox_donor_type_company';
 	}
 	static renderAddress( address, country ) {
-		return address.salutation + ' ' + address.fullName + ', '
+		return address.fullName + ', '
 				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city + ', ' + country;
 	}
 	static canRender( address ) {
-		return address.salutation && address.fullName && address.streetAddress && address.postalCode && address.city;
+		return address.fullName && address.streetAddress && address.postalCode && address.city;
 	}
 }
 class AnonymousDonorRenderer {
