@@ -10,11 +10,16 @@ export default function (): Module<Payment, any> {
 		validity: {
 			amount: Validity.INCOMPLETE,
 			type: Validity.INCOMPLETE,
+			accountId: Validity.INCOMPLETE,
+			bankId: Validity.INCOMPLETE
 		},
 		values: {
 			amount: '', // amount in cents
 			interval: '0',
 			type: '',
+			iban: '',
+			bic: '',
+			bankName: '',
 		},
 	};
 

@@ -5,58 +5,90 @@
 		<div v-bind:class="[{ 'is-invalid': accountIsValid }]">
 			<label for="iban" class="subtitle has-margin-top-18">{{ $t( 'donation_form_payment_bankdata_iban_label' ) }}</label>
 			<b-input class="is-medium"
-					 type="text"
-					 id="iban"
-					 v-model="accountId"
-					 name="iban"
-					 :placeholder="$t( 'donation_form_payment_bankdata_iban_placeholder' )"
-					 @blur="setAccountId">
+					type="text"
+					id="iban"
+					v-model="accountId"
+					name="iban"
+					:placeholder="$t( 'donation_form_payment_bankdata_iban_placeholder' )"
+					@blur="validate">
 			</b-input>
 		</div>
 		<div v-bind:class="[{ 'is-invalid': accountIsValid }]">
 			<label for="bic" class="subtitle has-margin-top-36">{{ $t( 'donation_form_payment_bankdata_bic_label' ) }}</label>
 			<b-input class="is-medium"
-					 type="text"
-					 id="bic"
-					 v-model="bankId"
-					 name="bic"
-					 :placeholder="$t( 'donation_form_payment_bankdata_bic_placeholder' )"
-					 @blur="setBankId">
+					type="text"
+					id="bic"
+					v-model="bankId"
+					name="bic"
+					:placeholder="$t( 'donation_form_payment_bankdata_bic_placeholder' )"
+					@blur="validate">
 			</b-input>
+			<span>{{ getBankName }}</span>
 		</div>
 	</fieldset>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { BankAccountData } from '@/view_models/Payment';
+import { BankAccountData, BankAccountRequest } from '@/view_models/Payment';
+import { setBankData } from '@/store/payment/actionTypes';
 import { NS_PAYMENT } from '@/store/namespaces';
 import { action } from '@/store/util';
-import { setAccountId, setBankId } from '@/store/payment/actionTypes';
+import { mapGetters } from "vuex";
 
 export default Vue.extend( {
 	name: 'PaymentBankData',
 	data: function (): BankAccountData {
 		return { accountId: '', bankId: '' };
 	},
+	props: {
+		validateBankDataUrl: String,
+		validateLegacyBankDataUrl: String,
+	},
 	computed: {
-		accountIsValid: {
-			get: function (): boolean {
-				return !this.$store.getters[ 'payment/accountIsValid' ];
-			},
-		},
-		bankIsValid: {
-			get: function (): boolean {
-				return !this.$store.getters[ 'payment/bankIsValid' ];
-			},
-		},
+		...mapGetters([
+			'accountIsValid',
+			'bankIsValid',
+			'getBankName',
+		])
 	},
 	methods: {
-		setAccountId(): void {
-			this.$store.dispatch( action( NS_PAYMENT, setAccountId ), this.$data.accountId );
+		validate() {
+			if ( this.isAccountIdEmpty() ) {
+				return;
+			}
+			if ( this.looksLikeIban() ) {
+				this.$store.dispatch(
+					action( NS_PAYMENT, setBankData ),
+					{
+						validationUrl: this.validateBankDataUrl,
+						requestParams: { iban: this.$data.accountId },
+					} as BankAccountRequest
+				);
+			} else {
+				this.$store.dispatch(
+					action( NS_PAYMENT, setBankData ),
+					{
+						validationUrl: this.validateLegacyBankDataUrl,
+						requestParams:  { accountNumber: this.$data.accountId, bankCode: this.$data.bankId },
+					} as BankAccountRequest
+				);
+			}
 		},
-		setBankId(): void {
-			this.$store.dispatch( action( NS_PAYMENT, setBankId ), this.$data.bankId );
+		isAccountIdEmpty: function () {
+			return this.$data.accountId === '';
+		},
+		isBankIdEmpty: function () {
+			return this.bankId === '';
+		},
+		looksLikeIban: function () {
+			return /^[A-Z]{2}([0-9\s]+)?$/.test( this.$data.accountId );
+		},
+		looksLikeBankAccountNumber: function () {
+			return /^\d+$/.test( this.$data.accountId );
+		},
+		looksLikeGermanIban() {
+			return /^DE+([0-9\s]+)?$/.test( this.$data.accountId );
 		},
 	},
 } );

@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { addressTypeName } from '../../../../view_models/AddressTypeModel';
+import { addressTypeName } from '@/view_models/AddressTypeModel';
 import { NS_ADDRESS, NS_PAYMENT } from '@/store/namespaces';
 import AddressFields from '@/components/pages/donation_form/Address.vue';
 import DonationSummary from '@/components/DonationSummary.vue';
@@ -49,6 +49,8 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
+		validateBankDataUrl: String,
+		validateLegacyBankDataUrl: String,
 		countries: Array as () => Array<String>,
 		trackingData: Object as () => TrackingData,
 	},

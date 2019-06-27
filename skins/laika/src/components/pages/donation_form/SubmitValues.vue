@@ -21,7 +21,8 @@
 
 		<!-- TODO: Receipt opt-out, see https://phabricator.wikimedia.org/T226263 -->
 
-		<!-- TODO: Bank data, if necessary -->
+		<input type="hidden" name="iban" :value="address.email">
+		<input type="hidden" name="bic" :value="address.email">
 
 		<input type="hidden" name="impCount" :value="trackingData.bannerImpressionCount">
 		<input type="hidden" name="bImpCount" :value="trackingData.impressionCount">

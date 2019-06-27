@@ -1,6 +1,6 @@
 <template>
 	<div id="addressForm" class="column is-full">
-		<payment-bank-data v-if="isDirectDebit"></payment-bank-data>
+		<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
 		<address-type v-on:address-type="setAddressType( $event )"></address-type>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
@@ -39,7 +39,7 @@ export default Vue.extend( {
 		ReceiptOptOut,
 		Email,
 		NewsletterOptIn,
-		PaymentBankData
+		PaymentBankData,
 	},
 	data: function (): { formData: FormData } {
 		return {
@@ -103,6 +103,8 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
+		validateBankDataUrl: String,
+		validateLegacyBankDataUrl: String,
 		countries: Array as () => Array<String>,
 	},
 	computed: {

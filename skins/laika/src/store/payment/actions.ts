@@ -1,28 +1,33 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
-import { Payment, TypeData, IntervalData, InitialPaymentValues } from '@/view_models/Payment';
+import {
+	BankAccountRequest,
+	BankAccountResponse,
+	IntervalData,
+	Payment,
+	TypeData,
+	InitialPaymentValues
+} from '@/view_models/Payment';
+
 import {
 	initializePayment,
 	markEmptyAmountAsInvalid,
 	markEmptyValuesAsInvalid,
 	setAmount,
+	setBankData,
 	setInterval,
 	setType,
-	setBankId,
-	setAccountId,
 } from '@/store/payment/actionTypes';
 import {
 	MARK_EMPTY_AMOUNT_INVALID,
 	MARK_EMPTY_FIELDS_INVALID,
-	SET_AMOUNT_VALIDITY,
-	SET_TYPE_VALIDITY,
 	SET_AMOUNT,
+	SET_AMOUNT_VALIDITY,
+	SET_BANK_ACCOUNT_ID_VALIDITY,
+	SET_BANKDATA,
 	SET_INTERVAL,
 	SET_TYPE,
-	SET_BANK_ACCOUNT_ID,
-	SET_BANK_ACCOUNT_ID_VALIDITY,
-	SET_BANK_ID,
-	SET_BANK_ID_VALIDITY,
+	SET_TYPE_VALIDITY,
 } from '@/store/payment/mutationTypes';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { Validity } from '@/view_models/Validity';
@@ -70,12 +75,21 @@ export const actions = {
 		context.commit( SET_TYPE, payload );
 		context.commit( SET_TYPE_VALIDITY );
 	},
-	[ setAccountId ]( context: ActionContext<Payment, any>, payload: TypeData ): void {
-		context.commit( SET_BANK_ACCOUNT_ID, payload );
-		context.commit( SET_BANK_ACCOUNT_ID_VALIDITY );
-	},
-	[ setBankId ]( context: ActionContext<Payment, any>, payload: TypeData ): void {
-		context.commit( SET_BANK_ID, payload );
-		context.commit( SET_BANK_ID_VALIDITY );
+	[ setBankData ]( context: ActionContext<Payment, any>, payload: BankAccountRequest ): void {
+		axios( payload.validationUrl, {
+			method: 'get',
+			headers: { 'Content-Type': 'multipart/form-data' },
+			params: payload.requestParams,
+		} ).then( ( validationResult: AxiosResponse<BankAccountResponse> ) => {
+			const validity = validationResult.data.status === 'ERR' ? Validity.INVALID : Validity.VALID;
+			context.commit( SET_BANK_ACCOUNT_ID_VALIDITY, validity );
+			if ( validity === Validity.VALID ) {
+				context.commit( SET_BANKDATA, {
+					accountId: validationResult.data.iban,
+					bankId: validationResult.data.bic,
+					bankname: validationResult.data.bankName
+				} );
+			}
+		} );
 	},
 };
