@@ -17,4 +17,8 @@ export const getters: GetterTree<Payment, any> = {
 		}
 		return true;
 	},
+	isExternalPayment: ( state: Payment ): boolean => {
+		const externalPaymentTypes = [ 'PPL', 'MCP', 'SUB' ];
+		return externalPaymentTypes.indexOf( state.values.type ) > -1;
+	},
 };

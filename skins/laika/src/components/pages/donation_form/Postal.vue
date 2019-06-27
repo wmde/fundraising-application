@@ -7,7 +7,7 @@
 				name="street"
 				:placeholder="$t('donation_form_street_placeholder')"
 				v-model="formData.street.value"
-				@blur="validateInput(formData, 'street'); displayStreetWarning()">
+				@blur="$emit('field-changed', 'street'); displayStreetWarning()">
 		</b-input>
 		<span v-if="showError.street" class="help is-danger">{{ $t('donation_form_street_error') }}</span>
 		<span v-if="showWarning" class="help is-warning">{{ $t('donation_form_street_number_warning') }}</span>
@@ -19,7 +19,7 @@
 				name="postcode"
 				v-model="formData.postcode.value"
 				:placeholder="$t('donation_form_zip_placeholder')"
-				@blur="validateInput(formData, 'postcode')">
+				@blur="$emit('field-changed', 'postcode')">
 		</b-input>
 		<span v-if="showError.postcode" class="help is-danger">{{ $t('donation_form_zip_error') }}</span>
 	</div>
@@ -30,7 +30,7 @@
 				name="city"
 				:placeholder="$t('donation_form_city_placeholder')"
 				v-model="formData.city.value"
-				@blur="validateInput(formData, 'city')">
+				@blur="$emit('field-changed', 'city')">
 		</b-input>
 		<span v-if="showError.city" class="help is-danger">{{ $t('donation_form_city_error') }}</span>
 	</div>
@@ -41,7 +41,7 @@
 				v-model="formData.country.value"
 				id="country"
 				name="country"
-				@blur="validateInput(formData, 'title')">
+				@blur="$emit('field-changed', 'country')">
 			<option v-for="(countryCode, index) in countries"
 					:value="countryCode"
 					:key="index">{{ $t('donation_form_country_option_' + countryCode ) }}
@@ -61,7 +61,6 @@ export default Vue.extend( {
 	props: {
 		showError: Object as () => AddressValidity,
 		formData: Object as () => FormData,
-		validateInput: Function,
 		countries: Array as () => Array<String>,
 	},
 	data() {
@@ -73,6 +72,7 @@ export default Vue.extend( {
 		displayStreetWarning() {
 			this.showWarning = /^\D+$/.test( this.formData.street.value );
 		},
+
 	},
 } );
 </script>

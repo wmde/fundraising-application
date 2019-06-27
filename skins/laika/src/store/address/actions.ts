@@ -1,11 +1,10 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
 import {
-	validateInput,
 	setAddressFields,
 	setAddressType,
 	setEmail,
-	setNewsletterOptIn,
+	setNewsletterOptIn, setAddressField,
 } from '@/store/address/actionTypes';
 import { AddressState, InputField, Payload } from '@/view_models/Address';
 import { Helper } from '@/store/util';
@@ -13,7 +12,8 @@ import { ValidationResponse } from '@/store/ValidationResponse';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 export const actions = {
-	[ validateInput ]( context: ActionContext<AddressState, any>, field: InputField ) {
+	[ setAddressField ]( context: ActionContext<AddressState, any>, field: InputField ) {
+		context.commit( 'SET_ADDRESS_FIELD', field );
 		context.commit( 'VALIDATE_INPUT', field );
 	},
 	[ setAddressFields ]( context: ActionContext<AddressState, any>, payload: Payload ) {
