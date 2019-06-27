@@ -1,6 +1,6 @@
 <template>
 	<div class="donation-summary">
-		<div class="intro title is-size-5">{{ $t( 'donation_confirmation_review_headline' ) }}</div>
+		<div class="intro"><slot></slot></div>
 		<div class="payment-summary" v-html="getSummary()"></div>
 		<div class="payment-email" v-html="getEmail()"></div>
 	</div>

@@ -3,7 +3,9 @@
 		<address-fields v-bind="$props"></address-fields>
 		<div class="column">
 			<div class="summary-wrapper">
-				<donation-summary :payment="paymentSummary" :address-type="addressType" :address="addressSummary"></donation-summary>
+				<donation-summary :payment="paymentSummary" :address-type="addressType" :address="addressSummary">
+					<div class="title is-size-5">{{ $t( 'donation_confirmation_review_headline' ) }}</div>
+				</donation-summary>
 				<submit-values :tracking-data="{}"></submit-values>
 				<div class="level has-margin-top-36">
 					<div class="level-left">

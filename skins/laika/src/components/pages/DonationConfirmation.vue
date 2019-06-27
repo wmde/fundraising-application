@@ -4,7 +4,9 @@
 
 			<div class="column is-half">
 				<donation-summary :address="confirmationData.address" :address-type="confirmationData.addressType"
-					:payment="confirmationData.donation"></donation-summary>
+					:payment="confirmationData.donation">
+					{{ $t( 'donation_confirmation_topbox_intro' ) }}
+				</donation-summary>
 				<payment-notice :payment="confirmationData.donation"></payment-notice>
 				<div v-if="showBankTransferCode">
 					<BankData :bank-transfer-code="confirmationData.donation.bankTransferCode"></BankData>
