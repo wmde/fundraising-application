@@ -56,7 +56,7 @@ export default Vue.extend( {
 			},
 		} ),
 		...mapState( NS_ADDRESS, {
-            address: (state: AddressState) => state.values,
+			address: ( state: AddressState ) => state.values,
 			addressType: ( state: AddressState ) => {
 				const addressTypeNames = new Map<number, string>( [
 					[ AddressTypeModel.ANON, 'anonym' ],

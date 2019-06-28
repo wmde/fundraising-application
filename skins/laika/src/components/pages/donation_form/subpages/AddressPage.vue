@@ -1,6 +1,6 @@
 <template>
 	<div class="address-page">
-		<address-fields v-bind="$props"></address-fields>
+		<address-fields v-bind="$props" ref="address"></address-fields>
 		<div class="column">
 			<div class="summary-wrapper">
 				<donation-summary :payment="paymentSummary" :address-type="addressType" :address="addressSummary">
@@ -87,8 +87,13 @@ export default Vue.extend( {
 	},
 	methods: {
 		submit() {
-			// TODO validate address, then submit form
-			this.$emit( 'submit-donation' );
+			( this.$refs.address as any ).validateForm().then( () => {
+				if ( this.$store.getters[ NS_ADDRESS + '/requiredFieldsAreValid' ] ) {
+					this.$emit( 'submit-donation' );
+					return;
+				}
+				// TODO: Talk to UX about notifying users about validation errors that are outside visible field
+			} );
 		},
 	},
 } );

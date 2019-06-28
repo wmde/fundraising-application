@@ -3,7 +3,7 @@ import { Validity } from '@/view_models/Validity';
 import { Helper } from '@/store/util';
 import {
 	VALIDATE_INPUT,
-	MARK_EMPTY_FIELD_INVALID,
+	MARK_EMPTY_FIELDS_INVALID,
 	BEGIN_ADDRESS_VALIDATION,
 	FINISH_ADDRESS_VALIDATION,
 	SET_ADDRESS_TYPE,
@@ -13,11 +13,7 @@ import {
 	SET_NEWSLETTER_OPTIN,
 } from '@/store/address/mutationTypes';
 import { AddressState, InputField } from '@/view_models/Address';
-const ADDRESS_FIELD_VALIDATOR_NAMES: Array<string> = [
-	'addressType',
-	'companyName',
-	'street', 'postcode', 'city', 'country',
-];
+import { REQUIRED_FIELDS } from '@/store/address/constants';
 
 export const mutations: MutationTree<AddressState> = {
 	[ VALIDATE_INPUT ]( state: AddressState, field: InputField ) {
@@ -27,11 +23,10 @@ export const mutations: MutationTree<AddressState> = {
 			state.validity[ field.name ] = Helper.inputIsValid( field.value, field.pattern );
 		}
 	},
-	[ MARK_EMPTY_FIELD_INVALID ]( state: AddressState, payload ) {
-		Object.keys( payload ).forEach( ( field: string ) => {
-			const fieldName = payload[ field ];
-			if ( !fieldName.optionalField && state.validity[ fieldName.name ] === Validity.INCOMPLETE ) {
-				state.validity[ fieldName.name ] = Validity.INVALID;
+	[ MARK_EMPTY_FIELDS_INVALID ]( state: AddressState ) {
+		REQUIRED_FIELDS[ state.addressType ].forEach( ( fieldName: string ) => {
+			if ( state.validity[ fieldName ] === Validity.INCOMPLETE ) {
+				state.validity[ fieldName ] = Validity.INVALID;
 			}
 		} );
 	},
@@ -39,14 +34,15 @@ export const mutations: MutationTree<AddressState> = {
 		state.isValidating = true;
 	},
 	[ FINISH_ADDRESS_VALIDATION ]( state: AddressState, payload ) {
-		if ( payload.status === 'ERR' ) {
-			ADDRESS_FIELD_VALIDATOR_NAMES.forEach( name => {
-				if ( payload.messages[ name ] ) {
-					state.validity[ name ] = Validity.INVALID;
-				}
-			} );
-		}
 		state.isValidating = false;
+		if ( payload.status === 'OK' ) {
+			return;
+		}
+		REQUIRED_FIELDS[ state.addressType ].forEach( name => {
+			if ( payload.messages[ name ] ) {
+				state.validity[ name ] = Validity.INVALID;
+			}
+		} );
 	},
 	[ SET_ADDRESS_TYPE ]( state: AddressState, type ) {
 		state.addressType = type;

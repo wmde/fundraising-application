@@ -22,10 +22,10 @@ import Postal from '@/components/pages/donation_form/Postal.vue';
 import Email from '@/components/pages/donation_form/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { mapGetters } from 'vuex';
-import { AddressValidity, FormData } from '@/view_models/Address';
+import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField, setAddressFields } from '@/store/address/actionTypes';
+import { setAddressField, validateAddress } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 
 export default Vue.extend( {
@@ -118,13 +118,10 @@ export default Vue.extend( {
 		] ),
 	},
 	methods: {
-		validateForm() {
-			return this.$store.dispatch( action( NS_ADDRESS, setAddressFields ), {
-				validateAddressUrl: this.$props.validateAddressUrl,
-				formData: this.$data.formData,
-			} );
+		validateForm(): Promise<ValidationResult> {
+			return this.$store.dispatch( action( NS_ADDRESS, validateAddress ), this.$props.validateAddressUrl );
 		},
-		onFieldChange( fieldName: string ) {
+		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.formData[ fieldName ] );
 		},
 	},

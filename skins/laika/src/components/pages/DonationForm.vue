@@ -76,7 +76,7 @@ export default Vue.extend( {
 			window.scrollTo( 0, 0 );
 		},
 		submitDonationForm(): void {
-			( this.$refs.form as HTMLFormElement ).submit()
+			( this.$refs.form as HTMLFormElement ).submit();
 		},
 	},
 } );
