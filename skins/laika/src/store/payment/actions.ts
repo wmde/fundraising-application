@@ -1,12 +1,13 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
-import { Payment, AmountData, TypeData, IntervalData } from '@/view_models/Payment';
+import { Payment, TypeData, IntervalData, InitialPaymentValues } from '@/view_models/Payment';
 import {
+	initializePayment,
 	markEmptyAmountAsInvalid,
+	markEmptyValuesAsInvalid,
 	setAmount,
 	setInterval,
 	setType,
-	markEmptyValuesAsInvalid,
 } from '@/store/payment/actionTypes';
 import {
 	MARK_EMPTY_AMOUNT_INVALID, MARK_EMPTY_FIELDS_INVALID,
@@ -17,6 +18,21 @@ import { ValidationResponse } from '@/store/ValidationResponse';
 import { Validity } from '@/view_models/Validity';
 
 export const actions = {
+	[ initializePayment ]( context: ActionContext<Payment, any>, initialValues: InitialPaymentValues ): Promise<boolean> {
+		let amountIsFilled = false, paymentIsFilled = false;
+		if ( initialValues.amount !== '0' ) {
+			context.commit( SET_AMOUNT, initialValues.amount );
+			amountIsFilled = true;
+		}
+
+		if ( initialValues.type !== '' ) {
+			context.commit( SET_TYPE, initialValues.type );
+			paymentIsFilled = true;
+		}
+		context.commit( SET_INTERVAL, initialValues.paymentIntervalInMonths );
+
+		return Promise.resolve( amountIsFilled && paymentIsFilled );
+	},
 	[ markEmptyAmountAsInvalid ]( context: ActionContext<Payment, any> ): void {
 		context.commit( MARK_EMPTY_AMOUNT_INVALID );
 	},

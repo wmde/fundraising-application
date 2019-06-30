@@ -21,3 +21,10 @@ export interface IntervalData {
 export interface TypeData {
     selectedType: string
 }
+
+export interface InitialPaymentValues {
+    amount: string,
+    type: string,
+    paymentIntervalInMonths: string,
+    isCustomAmount: boolean,
+}

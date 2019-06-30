@@ -7,6 +7,9 @@ import { createStore } from '@/store/donation_store';
 
 import Component from '@/components/pages/DonationForm.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
+import { action } from '@/store/util';
+import { NS_PAYMENT } from '@/store/namespaces';
+import { initializePayment, setAmount } from '@/store/payment/actionTypes';
 
 const PAGE_IDENTIFIER = 'donation-form',
 	COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
@@ -15,6 +18,7 @@ Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
 interface DonationAmountModel {
+	initialFormValues: any,
 	presetAmounts: Array<string>,
 	paymentTypes: Array<string>,
 	paymentIntervals: Array<number>,
@@ -32,29 +36,40 @@ const i18n = new VueI18n( {
 	},
 } );
 
-new Vue( {
-	store,
-	i18n,
-	render: h => h( App, {
-		props: {
-			assetsPath: pageData.assetsPath,
-			pageIdentifier: PAGE_IDENTIFIER,
-		},
-	},
-	[
-		h( Component, {
+store.dispatch( action( NS_PAYMENT, initializePayment ), {
+	// convert German-Formatted amount, see DonationFormPresenter
+	amount: pageData.applicationVars.initialFormValues.amount.replace( ',', '' ).replace( '^000$', '0' ),
+	type: pageData.applicationVars.initialFormValues.paymentType,
+	paymentIntervalInMonths: pageData.applicationVars.initialFormValues.paymentIntervalInMonths,
+	isCustomAmount: pageData.applicationVars.initialFormValues.isCustomAmount,
+} ).then( paymentDataComplete => {
+
+	new Vue( {
+		store,
+		i18n,
+		render: h => h( App, {
 			props: {
-				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
-				validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
-				paymentAmounts: pageData.applicationVars.presetAmounts,
-				paymentIntervals: pageData.applicationVars.paymentIntervals,
-				paymentTypes: pageData.applicationVars.paymentTypes,
-				addressCountries: COUNTRIES,
-				trackingData: pageData.applicationVars.tracking,
+				assetsPath: pageData.assetsPath,
+				pageIdentifier: PAGE_IDENTIFIER,
 			},
-		} ),
-		h( Sidebar, {
-			slot: 'sidebar',
-		} ),
-	] ),
-} ).$mount( '#app' );
+		},
+		[
+			h( Component, {
+				props: {
+					validateAddressUrl: pageData.applicationVars.urls.validateAddress,
+					validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
+					paymentAmounts: pageData.applicationVars.presetAmounts,
+					paymentIntervals: pageData.applicationVars.paymentIntervals,
+					paymentTypes: pageData.applicationVars.paymentTypes,
+					addressCountries: COUNTRIES,
+					trackingData: pageData.applicationVars.tracking,
+					startPage: paymentDataComplete ? 'AddressPage' : 'PaymentPage',
+				},
+			} ),
+			h( Sidebar, {
+				slot: 'sidebar',
+			} ),
+		] ),
+	} ).$mount( '#app' );
+
+} );
