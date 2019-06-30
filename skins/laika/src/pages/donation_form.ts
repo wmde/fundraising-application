@@ -38,7 +38,7 @@ const i18n = new VueI18n( {
 
 store.dispatch( action( NS_PAYMENT, initializePayment ), {
 	// convert German-Formatted amount, see DonationFormPresenter
-	amount: pageData.applicationVars.initialFormValues.amount.replace( ',', '' ).replace( '^000$', '0' ),
+	amount: pageData.applicationVars.initialFormValues.amount.replace( ',', '' ).replace( /^000$/, '0' ),
 	type: pageData.applicationVars.initialFormValues.paymentType,
 	paymentIntervalInMonths: pageData.applicationVars.initialFormValues.paymentIntervalInMonths,
 	isCustomAmount: pageData.applicationVars.initialFormValues.isCustomAmount,
@@ -58,7 +58,7 @@ store.dispatch( action( NS_PAYMENT, initializePayment ), {
 				props: {
 					validateAddressUrl: pageData.applicationVars.urls.validateAddress,
 					validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
-					paymentAmounts: pageData.applicationVars.presetAmounts,
+					paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
 					paymentIntervals: pageData.applicationVars.paymentIntervals,
 					paymentTypes: pageData.applicationVars.paymentTypes,
 					addressCountries: COUNTRIES,

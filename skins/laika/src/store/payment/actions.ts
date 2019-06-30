@@ -33,11 +33,11 @@ export const actions = {
 
 		return Promise.resolve( amountIsFilled && paymentIsFilled );
 	},
-	[ markEmptyAmountAsInvalid ]( context: ActionContext<Payment, any> ): void {
-		context.commit( MARK_EMPTY_AMOUNT_INVALID );
-	},
 	[ markEmptyValuesAsInvalid ]( context: ActionContext<Payment, any> ): void {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
+	},
+	[ markEmptyAmountAsInvalid ]( context: ActionContext<Payment, any> ): void {
+		context.commit( MARK_EMPTY_AMOUNT_INVALID );
 	},
 	[ setAmount ]( context: ActionContext<Payment, any>, payload: any ): void {
 		context.commit( SET_AMOUNT, payload.amountValue );

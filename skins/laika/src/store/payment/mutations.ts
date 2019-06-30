@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { Payment, AmountData } from '@/view_models/Payment';
+import { Payment } from '@/view_models/Payment';
 import { Validity } from '@/view_models/Validity';
 import {
 	MARK_EMPTY_AMOUNT_INVALID,
