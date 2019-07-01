@@ -9,15 +9,6 @@ export const getters: GetterTree<Payment, any> = {
 	typeIsValid: function ( state: Payment ): boolean {
 		return state.validity.type !== Validity.INVALID;
 	},
-	accountIsValid: function ( state: Payment ): boolean {
-		return state.validity.accountId !== Validity.INVALID;
-	},
-	bankIsValid: function ( state: Payment ): boolean {
-		return state.validity.bankId !== Validity.INVALID;
-	},
-	getBankName: function ( state: Payment ): string {
-		return state.values.bankName;
-	},
 	paymentDataIsValid: function ( state: Payment ): boolean {
 		for ( const prop in state.validity ) {
 			if ( state.validity[ prop ] !== Validity.VALID ) {

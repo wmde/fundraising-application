@@ -19,7 +19,7 @@ export interface IntervalData {
 }
 
 export interface TypeData {
-    selectedType: string
+    selectedType: string,
 }
 
 export interface InitialPaymentValues {
@@ -27,23 +27,4 @@ export interface InitialPaymentValues {
     type: string,
     paymentIntervalInMonths: string,
     isCustomAmount: boolean,
-}
-
-export interface BankAccountData {
-    accountId: string
-    bankId: string
-}
-
-export interface BankAccountRequest {
-    validationUrl: string
-    requestParams: object
-}
-
-export interface BankAccountResponse {
-    status: string
-    bic: string
-    iban: string
-    account: string
-    bankCode: string
-    bankName: string
 }

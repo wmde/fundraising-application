@@ -6,8 +6,6 @@ import {
 	MARK_EMPTY_FIELDS_INVALID,
 	SET_AMOUNT,
 	SET_AMOUNT_VALIDITY,
-	SET_BANK_ACCOUNT_ID_VALIDITY,
-	SET_BANKDATA,
 	SET_INTERVAL,
 	SET_TYPE,
 	SET_TYPE_VALIDITY,
@@ -41,13 +39,5 @@ export const mutations: MutationTree<Payment> = {
 	},
 	[ SET_TYPE ]( state: Payment, type ) {
 		state.values.type = type;
-	},
-	[ SET_BANKDATA ]( state: Payment, bankData: any ) {
-		state.values.accountId = bankData.accountId;
-		state.values.bankId = bankData.bankId;
-		state.values.bankName = bankData.bankname;
-	},
-	[ SET_BANK_ACCOUNT_ID_VALIDITY ]( state: Payment, validity: Validity ) {
-		state.validity.accountId = validity;
 	},
 };

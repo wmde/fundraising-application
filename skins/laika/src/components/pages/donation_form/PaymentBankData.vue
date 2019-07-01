@@ -18,7 +18,7 @@
 			<b-input class="is-medium"
 					type="text"
 					id="bic"
-					v-model="bankId"
+					v-model="bankIdentifier"
 					name="bic"
 					:placeholder="$t( 'donation_form_payment_bankdata_bic_placeholder' )"
 					@blur="validate">
@@ -30,9 +30,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { BankAccountData, BankAccountRequest } from '@/view_models/Payment';
-import { setBankData } from '@/store/payment/actionTypes';
-import { NS_PAYMENT } from '@/store/namespaces';
+import { BankAccountData, BankAccountRequest } from '@/view_models/BankAccount';
+import { setBankData } from '@/store/bankdata/actionTypes';
+import { NS_BANKDATA } from '@/store/namespaces';
 import { action } from '@/store/util';
 import { mapGetters } from "vuex";
 
@@ -46,7 +46,18 @@ export default Vue.extend( {
 		validateLegacyBankDataUrl: String,
 	},
 	computed: {
-		...mapGetters([
+		bankIdentifier: {
+			get: function (): string {
+				if ( this.looksLikeGermanIban() ) {
+					return this.$store.getters[ 'bankdata/getBankId' ];
+				}
+				return this.$data.bankId;
+			},
+			set: function ( bankId: string ) {
+				this.$data.bankId = bankId;
+			}
+		},
+		...mapGetters( NS_BANKDATA, [
 			'accountIsValid',
 			'bankIsValid',
 			'getBankName',
@@ -59,7 +70,7 @@ export default Vue.extend( {
 			}
 			if ( this.looksLikeIban() ) {
 				this.$store.dispatch(
-					action( NS_PAYMENT, setBankData ),
+					action( NS_BANKDATA, setBankData ),
 					{
 						validationUrl: this.validateBankDataUrl,
 						requestParams: { iban: this.$data.accountId },
@@ -67,7 +78,7 @@ export default Vue.extend( {
 				);
 			} else {
 				this.$store.dispatch(
-					action( NS_PAYMENT, setBankData ),
+					action( NS_BANKDATA, setBankData ),
 					{
 						validationUrl: this.validateLegacyBankDataUrl,
 						requestParams:  { accountNumber: this.$data.accountId, bankCode: this.$data.bankId },

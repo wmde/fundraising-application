@@ -1,8 +1,6 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
 import {
-	BankAccountRequest,
-	BankAccountResponse,
 	IntervalData,
 	Payment,
 	TypeData,
@@ -14,7 +12,6 @@ import {
 	markEmptyAmountAsInvalid,
 	markEmptyValuesAsInvalid,
 	setAmount,
-	setBankData,
 	setInterval,
 	setType,
 } from '@/store/payment/actionTypes';
@@ -23,8 +20,6 @@ import {
 	MARK_EMPTY_FIELDS_INVALID,
 	SET_AMOUNT,
 	SET_AMOUNT_VALIDITY,
-	SET_BANK_ACCOUNT_ID_VALIDITY,
-	SET_BANKDATA,
 	SET_INTERVAL,
 	SET_TYPE,
 	SET_TYPE_VALIDITY,
@@ -74,22 +69,5 @@ export const actions = {
 	[ setType ]( context: ActionContext<Payment, any>, payload: TypeData ): void {
 		context.commit( SET_TYPE, payload );
 		context.commit( SET_TYPE_VALIDITY );
-	},
-	[ setBankData ]( context: ActionContext<Payment, any>, payload: BankAccountRequest ): void {
-		axios( payload.validationUrl, {
-			method: 'get',
-			headers: { 'Content-Type': 'multipart/form-data' },
-			params: payload.requestParams,
-		} ).then( ( validationResult: AxiosResponse<BankAccountResponse> ) => {
-			const validity = validationResult.data.status === 'ERR' ? Validity.INVALID : Validity.VALID;
-			context.commit( SET_BANK_ACCOUNT_ID_VALIDITY, validity );
-			if ( validity === Validity.VALID ) {
-				context.commit( SET_BANKDATA, {
-					accountId: validationResult.data.iban,
-					bankId: validationResult.data.bic,
-					bankname: validationResult.data.bankName
-				} );
-			}
-		} );
 	},
 };
