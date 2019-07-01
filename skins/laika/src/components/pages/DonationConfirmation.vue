@@ -9,7 +9,7 @@
 				</donation-summary>
 				<payment-notice :payment="confirmationData.donation"></payment-notice>
 				<div v-if="showBankTransferCode">
-					<BankData :bank-transfer-code="confirmationData.donation.bankTransferCode"></BankData>
+					<bank-data :bank-transfer-code="confirmationData.donation.bankTransferCode"></bank-data>
 					<div class="has-margin-top-18"
 						v-html="$t( 'donation_confirmation_reminder_bank_transfer', { bankTransferCode: confirmationData.donation.bankTransferCode } )">
 					</div>
@@ -17,7 +17,7 @@
 			</div>
 
 			<div class="column is-half">
-				<SummaryLinks :confirmation-data="confirmationData"/>
+				<summary-links :confirmation-data="confirmationData"/>
 			</div>
 		</div>
 		<membership-info :confirmation-data="confirmationData"></membership-info>

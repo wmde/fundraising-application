@@ -12,7 +12,7 @@
 							</div>
 						</div>
 						<div class="level-item">
-							<BankData></BankData>
+							<bank-data></bank-data>
 						</div>
 					</div>
 				</div>
