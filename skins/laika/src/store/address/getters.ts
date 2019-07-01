@@ -2,12 +2,13 @@ import { GetterTree } from 'vuex';
 import { AddressState } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { REQUIRED_FIELDS } from '@/store/address/constants';
 
 export const getters: GetterTree<AddressState, any> = {
 	invalidFields: ( state: AddressState ): Array<string> => {
-		return Object.keys( state.validity ).filter( field => state.validity[ field ] !== Validity.VALID );
+		return REQUIRED_FIELDS[ state.addressType ].filter( fieldName => state.validity[ fieldName ] !== Validity.VALID );
 	},
-	allFieldsAreValid: ( state: AddressState, getters: GetterTree<AddressState, any> ): boolean => {
+	requiredFieldsAreValid: ( state: AddressState, getters: GetterTree<AddressState, any> ): boolean => {
 		return getters.invalidFields.length === 0;
 	},
 	addressType: ( state: AddressState ): AddressTypeModel => state.addressType,

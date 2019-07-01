@@ -3,7 +3,6 @@
 		<label for="email" class="subtitle">{{ $t( 'donation_form_email_label' ) }}</label>
 		<b-input type="text"
 			id="email"
-			name="email"
 			:placeholder="$t( 'donation_form_email_placeholder' )"
 			v-model="emailValue"
 			@blur="validateEmail">
