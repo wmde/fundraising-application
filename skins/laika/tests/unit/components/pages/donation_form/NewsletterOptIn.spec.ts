@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils';
-import Vuex, { Store } from 'vuex';
+import Vuex from 'vuex';
 import Buefy from 'buefy';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { createStore } from '@/store/donation_store';

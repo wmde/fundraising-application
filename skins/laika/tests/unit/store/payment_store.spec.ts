@@ -6,8 +6,6 @@ import { Validity } from '@/view_models/Validity';
 import {
 	initializePayment,
 	markEmptyAmountAsInvalid,
-	markEmptyValuesAsInvalid,
-	setAmount,
 } from '@/store/payment/actionTypes';
 import { SET_AMOUNT, SET_AMOUNT_VALIDITY, SET_INTERVAL, SET_TYPE } from '@/store/payment/mutationTypes';
 import each from 'jest-each';
