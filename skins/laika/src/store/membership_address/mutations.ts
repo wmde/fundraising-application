@@ -11,9 +11,10 @@ import {
 	SET_ADDRESS_FIELDS,
 	SET_EMAIL,
 	SET_NEWSLETTER_OPTIN,
-} from '@/store/address/mutationTypes';
+	SET_RECEIPT_OPTOUT,
+} from '@/store/membership_address/mutationTypes';
 import { AddressState, InputField } from '@/view_models/Address';
-import { REQUIRED_FIELDS } from '@/store/address/constants';
+import { REQUIRED_FIELDS } from '@/store/membership_address/constants';
 
 export const mutations: MutationTree<AddressState> = {
 	[ VALIDATE_INPUT ]( state: AddressState, field: InputField ) {
@@ -64,5 +65,8 @@ export const mutations: MutationTree<AddressState> = {
 	},
 	[ SET_NEWSLETTER_OPTIN ]( state: AddressState, optIn ) {
 		state.newsletterOptIn = optIn;
+	},
+	[ SET_RECEIPT_OPTOUT ]( state: AddressState, optOut ) {
+		state.receiptOptOut = optOut;
 	},
 };
