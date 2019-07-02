@@ -9,7 +9,7 @@ import Vue from 'vue';
 import MembershipType from '@/components/pages/membership_form//MembershipType.vue';
 
 export default Vue.extend( {
-    name: 'AddressPage',
+	name: 'AddressPage',
 	components: {
 		MembershipType,
 	},

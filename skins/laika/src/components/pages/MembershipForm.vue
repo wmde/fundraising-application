@@ -29,7 +29,6 @@ export default Vue.extend( {
 		validateAddressUrl: String,
 		validateAmountUrl: String,
 		paymentAmounts: Array as () => Array<String>,
-		paymentIntervals: Array as () => Array<Number>,
 		paymentTypes: Array as () => Array<String>,
 		addressCountries: Array as () => Array<String>,
 		trackingData: Object as () => TrackingData,

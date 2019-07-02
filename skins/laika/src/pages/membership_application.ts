@@ -17,7 +17,6 @@ Vue.use( VueI18n );
 interface MembershipAmountModel {
 	presetAmounts: Array<string>,
 	paymentTypes: Array<string>,
-	paymentIntervals: Array<number>,
 	tracking: Array<number>,
 	urls: any
 }
@@ -47,7 +46,6 @@ new Vue( {
 				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
 				validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
 				paymentAmounts: pageData.applicationVars.presetAmounts,
-				paymentIntervals: pageData.applicationVars.paymentIntervals,
 				paymentTypes: pageData.applicationVars.paymentTypes,
 				addressCountries: COUNTRIES,
 				trackingData: pageData.applicationVars.tracking,
