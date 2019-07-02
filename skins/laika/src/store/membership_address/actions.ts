@@ -7,6 +7,7 @@ import {
 	setNewsletterOptIn,
 	setAddressField,
 	setReceiptOptOut,
+	setDate,
 } from '@/store/membership_address/actionTypes';
 import { AddressState, InputField, Payload } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
@@ -45,6 +46,9 @@ export const actions = {
 	},
 	[ setEmail ]( context: ActionContext<AddressState, any>, email: string ) {
 		context.commit( 'SET_EMAIL', email );
+	},
+	[ setDate ]( context: ActionContext<AddressState, any>, date: string ) {
+		context.commit( 'SET_DATE', date );
 	},
 	[ setNewsletterOptIn ]( context: ActionContext<AddressState, any>, optIn: boolean ) {
 		context.commit( 'SET_NEWSLETTER_OPTIN', optIn );
