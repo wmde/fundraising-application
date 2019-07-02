@@ -28,7 +28,7 @@ import Email from '@/components/pages/donation_form/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
-import { NS_ADDRESS } from '@/store/namespaces';
+import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 
@@ -36,9 +36,9 @@ export default Vue.extend( {
 	name: 'Address',
 	components: {
 		Name,
-        Postal,
-        DateOfBirth,
-        ReceiptOptOut,
+		Postal,
+		DateOfBirth,
+		ReceiptOptOut,
 		AddressType,
 		Email,
 		NewsletterOptIn,
@@ -110,29 +110,25 @@ export default Vue.extend( {
 	computed: {
 		fieldErrors: {
 			get: function (): AddressValidity {
-                /*uncomment when membership store is developed
 				return Object.keys( this.formData ).reduce( ( validity: AddressValidity, fieldName: string ) => {
 					if ( !this.formData[ fieldName ].optionalField ) {
-						validity[ fieldName ] = this.$store.state.address.validity[ fieldName ] === Validity.INVALID;
+						validity[ fieldName ] = this.$store.state.membership_address.validity[ fieldName ] === Validity.INVALID;
 					}
 					return validity;
                 }, ( {} as AddressValidity ) );
-                */
 			},
-        },
-        ...mapGetters( NS_ADDRESS, [
+		},
+		...mapGetters( NS_MEMBERSHIP_ADDRESS, [
 			'addressType',
 		] ),
 	},
 	methods: {
-        /* uncomment when membership store is developed
 		validateForm(): Promise<ValidationResult> {
-			return this.$store.dispatch( action( NS_ADDRESS, validateAddress ), this.$props.validateAddressUrl );
+			return this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, validateAddress ), this.$props.validateAddressUrl );
 		},
 		onFieldChange( fieldName: string ): void {
-			//this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.formData[ fieldName ] );
+			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.formData[ fieldName ] );
         },
-        */
 	},
 } );
 </script>

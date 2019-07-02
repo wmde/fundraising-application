@@ -15,7 +15,7 @@ export default Vue.extend( {
 	name: 'AddressPage',
 	components: {
 		MembershipType,
-		AddressFields
+		AddressFields,
 	},
 	props: {
 		validateAddressUrl: String,
