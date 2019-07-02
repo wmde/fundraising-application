@@ -1296,16 +1296,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.6.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "dc784032a3f6f4e7a4b882e272b771f6fe4c37cf"
+                "reference": "239400de7a173fe9901b9ac7c06497751f00727a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/dc784032a3f6f4e7a4b882e272b771f6fe4c37cf",
-                "reference": "dc784032a3f6f4e7a4b882e272b771f6fe4c37cf",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/239400de7a173fe9901b9ac7c06497751f00727a",
+                "reference": "239400de7a173fe9901b9ac7c06497751f00727a",
                 "shasum": ""
             },
             "require": {
@@ -1363,7 +1363,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2019-06-30T00:37:05+00:00"
+            "time": "2019-07-01T23:21:34+00:00"
         },
         {
             "name": "jeroen/file-fetcher",
@@ -8114,12 +8114,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "aecbf3a7ea6eb03f39bf73c45c62b68a1157d872"
+                "reference": "219929de64103278448da837b277c1276d0abc89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/aecbf3a7ea6eb03f39bf73c45c62b68a1157d872",
-                "reference": "aecbf3a7ea6eb03f39bf73c45c62b68a1157d872",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/219929de64103278448da837b277c1276d0abc89",
+                "reference": "219929de64103278448da837b277c1276d0abc89",
                 "shasum": ""
             },
             "require-dev": {
@@ -8152,7 +8152,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-06-26T22:43:40+00:00"
+            "time": "2019-07-02T12:15:59+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

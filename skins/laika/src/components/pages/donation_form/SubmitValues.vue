@@ -4,6 +4,8 @@
 		<input type="hidden" name="zahlweise" :value="payment.type">
 		<input type="hidden" name="periode" :value="payment.interval">
 		<input type="hidden" name="betrag" :value="formattedAmount">
+		<input v-if="isBankData" type="hidden" name="iban" :value="bankdata.iban">
+		<input v-if="isBankData" type="hidden" name="bic" :value="bankdata.bic">
 
 		<input type="hidden" name="addressType" :value="addressType">
 
@@ -21,9 +23,6 @@
 
 		<!-- TODO: Receipt opt-out, see https://phabricator.wikimedia.org/T226263 -->
 
-		<input type="hidden" name="iban" :value="address.email">
-		<input type="hidden" name="bic" :value="address.email">
-
 		<input type="hidden" name="impCount" :value="trackingData.bannerImpressionCount">
 		<input type="hidden" name="bImpCount" :value="trackingData.impressionCount">
 
@@ -33,10 +32,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapState } from 'vuex';
-import { NS_ADDRESS, NS_PAYMENT } from '@/store/namespaces';
+import { NS_ADDRESS, NS_BANKDATA, NS_PAYMENT } from '@/store/namespaces';
 import { Payment } from '@/view_models/Payment';
 import { AddressState } from '@/view_models/Address';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { BankAccount } from '@/view_models/BankAccount';
 
 export default Vue.extend( {
 	name: 'SubmitValues',
@@ -55,6 +55,9 @@ export default Vue.extend( {
 					strAmount.slice( -2 ),
 				].join( '' );
 			},
+			isBankData: ( state: Payment ) => {
+				return state.values.type === 'BEZ';
+			}
 		} ),
 		...mapState( NS_ADDRESS, {
 			address: ( state: AddressState ) => state.values,
@@ -71,6 +74,9 @@ export default Vue.extend( {
 				return addressTypeNames.get( state.addressType );
 			},
 			newsletterOptIn: ( state: AddressState ) => state.newsletterOptIn,
+		} ),
+		...mapState( NS_BANKDATA, {
+			bankdata: ( state: BankAccount ) => state.values,
 		} ),
 	},
 } );
