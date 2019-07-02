@@ -2,28 +2,32 @@
 	<fieldset class="has-margin-bottom-36">
 		<legend class="title is-size-5">{{ $t( 'donation_form_payment_bankdata_title' ) }}</legend>
 		<span>{{ $t( 'donation_form_payment_bankdata_legend' ) }}</span>
-		<div v-bind:class="[{ 'is-invalid': accountIsValid }]">
-			<label for="iban" class="subtitle has-margin-top-18">{{ $t( 'donation_form_payment_bankdata_iban_label' ) }}</label>
+		<div v-bind:class="[{ 'is-invalid': bankDataIsInvalid }]">
+			<label for="iban" class="subtitle has-margin-top-18">{{ $t( labels.iban ) }}</label>
 			<b-input class="is-medium"
 					type="text"
 					id="iban"
 					v-model="accountId"
 					name="iban"
-					:placeholder="$t( 'donation_form_payment_bankdata_iban_placeholder' )"
+					:placeholder="$t( 'donation_form_payment_bankdata_account_iban_placeholder' )"
 					@blur="validate">
 			</b-input>
 		</div>
-		<div v-bind:class="[{ 'is-invalid': accountIsValid }]">
-			<label for="bic" class="subtitle has-margin-top-36">{{ $t( 'donation_form_payment_bankdata_bic_label' ) }}</label>
+		<div v-bind:class="[{ 'is-invalid': bankDataIsInvalid }]">
+			<label for="bic" class="subtitle has-margin-top-36">{{ $t( labels.bic ) }}</label>
 			<b-input class="is-medium"
 					type="text"
 					id="bic"
 					v-model="bankIdentifier"
 					name="bic"
-					:placeholder="$t( 'donation_form_payment_bankdata_bic_placeholder' )"
+					:disabled="isBankIdDisabled"
+					:placeholder="$t( labels.bicPlaceholder )"
 					@blur="validate">
 			</b-input>
+		</div>
+		<div>
 			<span>{{ getBankName }}</span>
+			<span v-if="bankDataIsInvalid" class="help is-danger">{{ $t( 'donation_form_payment_bankdata_error' ) }}</span>
 		</div>
 	</fieldset>
 </template>
@@ -46,6 +50,9 @@ export default Vue.extend( {
 		validateLegacyBankDataUrl: String,
 	},
 	computed: {
+		isBankIdDisabled(): boolean {
+			return this.looksLikeGermanIban();
+		},
 		bankIdentifier: {
 			get: function (): string {
 				if ( this.looksLikeGermanIban() ) {
@@ -57,9 +64,36 @@ export default Vue.extend( {
 				this.$data.bankId = bankId;
 			}
 		},
+		labels() {
+			if ( this.looksLikeGermanIban() ) {
+				return {
+					iban: 'donation_form_payment_bankdata_account_iban_label',
+					bic: 'donation_form_payment_bankdata_bank_bic_label',
+					bicPlaceholder: 'donation_form_payment_bankdata_bank_bic_german_placeholder',
+				};
+			}
+			if ( this.looksLikeIban() ) {
+				return {
+					iban: 'donation_form_payment_bankdata_account_iban_label',
+					bic: 'donation_form_payment_bankdata_bank_bic_label',
+					bicPlaceholder: 'donation_form_payment_bankdata_bank_bic_placeholder',
+				};
+			}
+			if ( this.looksLikeBankAccountNumber() ) {
+				return {
+					iban: 'donation_form_payment_bankdata_account_legacy_label',
+					bic: 'donation_form_payment_bankdata_bank_legacy_label',
+					bicPlaceholder: 'donation_form_payment_bankdata_bank_legacy_placeholder',
+				};
+			}
+			return {
+				iban: 'donation_form_payment_bankdata_account_default_label',
+				bic: 'donation_form_payment_bankdata_bank_default_label',
+				bicPlaceholder: 'donation_form_payment_bankdata_bank_bic_placeholder',
+			};
+		},
 		...mapGetters( NS_BANKDATA, [
-			'accountIsValid',
-			'bankIsValid',
+			'bankDataIsInvalid',
 			'getBankName',
 		])
 	},
