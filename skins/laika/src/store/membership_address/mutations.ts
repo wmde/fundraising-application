@@ -10,6 +10,7 @@ import {
 	SET_ADDRESS_FIELD,
 	SET_ADDRESS_FIELDS,
 	SET_EMAIL,
+	SET_DATE,
 	SET_NEWSLETTER_OPTIN,
 	SET_RECEIPT_OPTOUT,
 } from '@/store/membership_address/mutationTypes';
@@ -62,6 +63,10 @@ export const mutations: MutationTree<AddressState> = {
 	[ SET_EMAIL ]( state: AddressState, email ) {
 		state.values.email = email;
 		state.validity.email = Validity.VALID;
+	},
+	[ SET_DATE ]( state: AddressState, date ) {
+		state.values.date = date;
+		state.validity.date = Validity.VALID;
 	},
 	[ SET_NEWSLETTER_OPTIN ]( state: AddressState, optIn ) {
 		state.newsletterOptIn = optIn;

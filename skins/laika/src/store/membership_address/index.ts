@@ -23,6 +23,7 @@ export default function (): Module<AddressState, any> {
 			city: '',
 			country: 'DE',
 			email: '',
+			date: '',
 		},
 		validity: {
 			salutation: Validity.INCOMPLETE,
@@ -35,6 +36,7 @@ export default function (): Module<AddressState, any> {
 			city: Validity.INCOMPLETE,
 			country: Validity.VALID,
 			email: Validity.INCOMPLETE,
+			date: Validity.VALID,
 			addressType: Validity.VALID,
 		},
 	};
