@@ -6,13 +6,13 @@
 		</div>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-		<date-of-birth></date-of-birth>
-        <receipt-opt-out></receipt-opt-out>
+		<date-of-birth/>
+        <receipt-opt-out/>
         <div class="has-margin-top-36">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
 			<email></email>
 		</div>
-		<newsletter-opt-in></newsletter-opt-in>
+		<newsletter-opt-in/>
 	</div>
 </template>
 
@@ -115,7 +115,7 @@ export default Vue.extend( {
 						validity[ fieldName ] = this.$store.state.membership_address.validity[ fieldName ] === Validity.INVALID;
 					}
 					return validity;
-                }, ( {} as AddressValidity ) );
+				}, ( {} as AddressValidity ) );
 			},
 		},
 		...mapGetters( NS_MEMBERSHIP_ADDRESS, [
@@ -128,7 +128,7 @@ export default Vue.extend( {
 		},
 		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.formData[ fieldName ] );
-        },
+		},
 	},
 } );
 </script>
