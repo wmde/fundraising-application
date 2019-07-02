@@ -27,7 +27,7 @@ export const actions = {
 				context.commit( SET_BANKNAME, validationResult.data.bankName );
 				context.commit( SET_BANKDATA, {
 					accountId: validationResult.data.iban,
-					bankId: validationResult.data.bic
+					bankId: validationResult.data.bic,
 				} );
 			} else {
 				context.commit( SET_BANKNAME, '' );

@@ -38,7 +38,7 @@ import { BankAccountData, BankAccountRequest } from '@/view_models/BankAccount';
 import { setBankData } from '@/store/bankdata/actionTypes';
 import { NS_BANKDATA } from '@/store/namespaces';
 import { action } from '@/store/util';
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default Vue.extend( {
 	name: 'PaymentBankData',
@@ -62,7 +62,7 @@ export default Vue.extend( {
 			},
 			set: function ( bankId: string ) {
 				this.$data.bankId = bankId;
-			}
+			},
 		},
 		labels() {
 			if ( this.looksLikeGermanIban() ) {
@@ -95,7 +95,7 @@ export default Vue.extend( {
 		...mapGetters( NS_BANKDATA, [
 			'bankDataIsInvalid',
 			'getBankName',
-		])
+		] ),
 	},
 	methods: {
 		validate() {
@@ -115,7 +115,7 @@ export default Vue.extend( {
 					action( NS_BANKDATA, setBankData ),
 					{
 						validationUrl: this.validateLegacyBankDataUrl,
-						requestParams:  { accountNumber: this.$data.accountId, bankCode: this.$data.bankId },
+						requestParams: { accountNumber: this.$data.accountId, bankCode: this.$data.bankId },
 					} as BankAccountRequest
 				);
 			}
