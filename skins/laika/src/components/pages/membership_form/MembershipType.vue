@@ -1,6 +1,6 @@
 <template>
     <fieldset class="has-margin-top-36">
-        <legend class="title is-size-5">{{ $t('membership_type_legend') }}</legend>
+        <legend class="title is-size-5">{{ $t('membership_membershiptype_legend') }}</legend>
         <div>
             <b-radio :class="{ 'is-active': selectedType === 'sustaining' }"
                     type="radio"
@@ -9,7 +9,8 @@
                     v-model="selectedType"
                     native-value="sustaining"
                     @change.native="setType">
-                {{ $t( 'membership_membershiptype_option_sustaining' ) }}
+                <span>{{ $t( 'membership_membershiptype_option_sustaining' ) }}</span>
+                <p class="has-text-dark-lighter">{{ $t( 'membership_membershiptype_option_sustaining_legend' ) }}</p>
             </b-radio>
             <b-radio :class="{ 'is-active': selectedType === 'active' }"
                     type="radio"
@@ -19,6 +20,7 @@
                     native-value="active"
                     @change.native="setType">
                 {{ $t( 'membership_membershiptype_option_active' ) }}
+                <p class="has-text-dark-lighter">{{ $t( 'membership_membershiptype_option_active_legend' ) }}</p>
             </b-radio>
         </div>
     </fieldset>
@@ -44,5 +46,6 @@ export default Vue.extend( {
 <style lang="scss" scoped>
     .b-radio.radio {
         margin-left: 0;
+        height: 6.5em;
     }
 </style>
