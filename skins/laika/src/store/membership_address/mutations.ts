@@ -14,28 +14,28 @@ import {
 	SET_NEWSLETTER_OPTIN,
 	SET_RECEIPT_OPTOUT,
 } from '@/store/membership_address/mutationTypes';
-import { AddressState, InputField } from '@/view_models/Address';
+import { MembershipAddressState, InputField } from '@/view_models/Address';
 import { REQUIRED_FIELDS } from '@/store/membership_address/constants';
 
-export const mutations: MutationTree<AddressState> = {
-	[ VALIDATE_INPUT ]( state: AddressState, field: InputField ) {
+export const mutations: MutationTree<MembershipAddressState> = {
+	[ VALIDATE_INPUT ]( state: MembershipAddressState, field: InputField ) {
 		if ( field.value === '' && field.optionalField ) {
 			state.validity[ field.name ] = Validity.INCOMPLETE;
 		} else {
 			state.validity[ field.name ] = Helper.inputIsValid( field.value, field.pattern );
 		}
 	},
-	[ MARK_EMPTY_FIELDS_INVALID ]( state: AddressState ) {
+	[ MARK_EMPTY_FIELDS_INVALID ]( state: MembershipAddressState ) {
 		REQUIRED_FIELDS[ state.addressType ].forEach( ( fieldName: string ) => {
 			if ( state.validity[ fieldName ] === Validity.INCOMPLETE ) {
 				state.validity[ fieldName ] = Validity.INVALID;
 			}
 		} );
 	},
-	[ BEGIN_ADDRESS_VALIDATION ]( state: AddressState ) {
+	[ BEGIN_ADDRESS_VALIDATION ]( state: MembershipAddressState ) {
 		state.isValidating = true;
 	},
-	[ FINISH_ADDRESS_VALIDATION ]( state: AddressState, payload ) {
+	[ FINISH_ADDRESS_VALIDATION ]( state: MembershipAddressState, payload ) {
 		state.isValidating = false;
 		if ( payload.status === 'OK' ) {
 			return;
@@ -46,10 +46,10 @@ export const mutations: MutationTree<AddressState> = {
 			}
 		} );
 	},
-	[ SET_ADDRESS_TYPE ]( state: AddressState, type ) {
+	[ SET_ADDRESS_TYPE ]( state: MembershipAddressState, type ) {
 		state.addressType = type;
 	},
-	[ SET_ADDRESS_FIELDS ]( state: AddressState, fields ) {
+	[ SET_ADDRESS_FIELDS ]( state: MembershipAddressState, fields ) {
 		Object.keys( fields ).forEach( ( field: string ) => {
 			const fieldName = fields[ field ];
 			if ( state.validity[ fieldName.name ] !== Validity.INVALID ) {
@@ -57,21 +57,21 @@ export const mutations: MutationTree<AddressState> = {
 			}
 		} );
 	},
-	[ SET_ADDRESS_FIELD ]( state: AddressState, field: InputField ) {
+	[ SET_ADDRESS_FIELD ]( state: MembershipAddressState, field: InputField ) {
 		state.values[ field.name ] = field.value;
 	},
-	[ SET_EMAIL ]( state: AddressState, email ) {
+	[ SET_EMAIL ]( state: MembershipAddressState, email ) {
 		state.values.email = email;
 		state.validity.email = Validity.VALID;
 	},
-	[ SET_DATE ]( state: AddressState, date ) {
+	[ SET_DATE ]( state: MembershipAddressState, date ) {
 		state.values.date = date;
 		state.validity.date = Validity.VALID;
 	},
-	[ SET_NEWSLETTER_OPTIN ]( state: AddressState, optIn ) {
+	[ SET_NEWSLETTER_OPTIN ]( state: MembershipAddressState, optIn ) {
 		state.newsletterOptIn = optIn;
 	},
-	[ SET_RECEIPT_OPTOUT ]( state: AddressState, optOut ) {
+	[ SET_RECEIPT_OPTOUT ]( state: MembershipAddressState, optOut ) {
 		state.receiptOptOut = optOut;
 	},
 };
