@@ -74,7 +74,6 @@ describe('Name.vue', () => {
 		});
 		let salutation = wrapper.find('#salutation');
 		salutation.setValue('Herr');
-		salutation.trigger('blur');
 		expect(props.validateInput.mock.calls.length).toBe(1);
 		expect(props.validateInput.mock.calls[0][0].salutation.value).toBe('Herr');
 	});
@@ -87,7 +86,6 @@ describe('Name.vue', () => {
 		});
 		let salutation = wrapper.find('#salutation');
 		salutation.setValue('');
-		salutation.trigger('blur');
 		expect(props.validateInput.mock.calls.length).toBe(1);
 		expect(props.validateInput.mock.calls[0][0].salutation.value).toBe('');
 	});

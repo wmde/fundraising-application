@@ -18,6 +18,7 @@
 					v-model="salutation"
 					name="salutation"
 					data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'
+					@change="updateJcfDropdown('salutation')"
 					@blur="updateJcfDropdown('salutation')">
 				<option hidden class="hideme" value="">{{ messages.salutation_label }}</option>
 				<option value="Herr">{{ messages.salutation_option_mr }}</option>
@@ -31,6 +32,7 @@
 					v-model="title"
 					name="title"
 					data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'
+					@change="updateJcfDropdown('salutation')"
 					@blur="updateJcfDropdown('title')">
 				<option value="">{{ messages.title_option_none }}</option>
 				<option value="Dr.">Dr.</option>
