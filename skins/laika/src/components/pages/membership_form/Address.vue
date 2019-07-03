@@ -12,7 +12,6 @@
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
 			<email></email>
 		</div>
-		<newsletter-opt-in/>
 	</div>
 </template>
 
@@ -25,7 +24,6 @@ import Postal from '@/components/pages/donation_form/Postal.vue';
 import DateOfBirth from '@/components/pages/donation_form/DateOfBirth.vue';
 import ReceiptOptOut from '@/components/pages/donation_form/ReceiptOptOut.vue';
 import Email from '@/components/pages/donation_form/Email.vue';
-import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
@@ -41,7 +39,6 @@ export default Vue.extend( {
 		ReceiptOptOut,
 		AddressType,
 		Email,
-		NewsletterOptIn,
 	},
 	data: function (): { formData: FormData } {
 		return {

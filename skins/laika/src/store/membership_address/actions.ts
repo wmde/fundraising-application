@@ -4,7 +4,6 @@ import {
 	validateAddress,
 	setAddressType,
 	setEmail,
-	setNewsletterOptIn,
 	setAddressField,
 	setReceiptOptOut,
 	setDate,
@@ -49,9 +48,6 @@ export const actions = {
 	},
 	[ setDate ]( context: ActionContext<MembershipAddressState, any>, date: string ) {
 		context.commit( 'SET_DATE', date );
-	},
-	[ setNewsletterOptIn ]( context: ActionContext<MembershipAddressState, any>, optIn: boolean ) {
-		context.commit( 'SET_NEWSLETTER_OPTIN', optIn );
 	},
 	[ setReceiptOptOut ]( context: ActionContext<MembershipAddressState, any>, optOut: boolean ) {
 		context.commit( 'SET_RECEIPT_OPTOUT', optOut );

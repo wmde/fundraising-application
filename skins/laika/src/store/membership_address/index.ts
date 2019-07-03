@@ -10,7 +10,6 @@ export default function (): Module<MembershipAddressState, any> {
 	const state: MembershipAddressState = {
 		isValidating: false,
 		addressType: AddressTypeModel.PERSON,
-		newsletterOptIn: false,
 		receiptOptOut: false,
 		values: {
 			salutation: '',
