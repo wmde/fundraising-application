@@ -331,9 +331,7 @@ describe( 'Payment', () => {
 				request.respondWith( {
 					status: 200,
 					response: {
-						'data': {
-							'status': 'OK',
-						},
+						'status': 'OK',
 					},
 				} ).then( function () {
 					expect( context.commit ).toHaveBeenCalledWith(
