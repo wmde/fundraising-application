@@ -6,6 +6,9 @@ export const getters: GetterTree<BankAccount, any> = {
 	bankDataIsInvalid: function ( state: BankAccount ): boolean {
 		return state.validity.bankdata === Validity.INVALID;
 	},
+	bankDataIsValid: function ( state: BankAccount ): boolean {
+		return state.validity.bankdata === Validity.VALID;
+	},
 	getBankName: function ( state: BankAccount ): string {
 		return state.values.bankName;
 	},

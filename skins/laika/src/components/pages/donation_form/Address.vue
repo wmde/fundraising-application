@@ -120,7 +120,7 @@ export default Vue.extend( {
 		},
 		isDirectDebit: {
 			get: function (): boolean {
-				return this.$store.getters[ 'payment/typeIsDirectDebit' ];
+				return this.$store.getters[ 'payment/isDirectDebitPayment' ];
 			},
 		},
 		...mapGetters( NS_ADDRESS, [

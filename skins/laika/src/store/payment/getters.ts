@@ -17,7 +17,7 @@ export const getters: GetterTree<Payment, any> = {
 		}
 		return true;
 	},
-	typeIsDirectDebit: function ( state: Payment ): boolean {
+	isDirectDebitPayment: function ( state: Payment ): boolean {
 		return state.values.type === 'BEZ';
 	},
 	isExternalPayment: ( state: Payment ): boolean => {

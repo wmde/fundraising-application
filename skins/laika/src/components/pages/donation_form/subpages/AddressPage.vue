@@ -34,7 +34,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { addressTypeName } from '@/view_models/AddressTypeModel';
-import { NS_ADDRESS, NS_PAYMENT } from '@/store/namespaces';
+import { NS_ADDRESS, NS_BANKDATA, NS_PAYMENT } from '@/store/namespaces';
 import AddressFields from '@/components/pages/donation_form/Address.vue';
 import DonationSummary from '@/components/DonationSummary.vue';
 import SubmitValues from '@/components/pages/donation_form/SubmitValues.vue';
@@ -91,10 +91,13 @@ export default Vue.extend( {
 		submit() {
 			( this.$refs.address as any ).validateForm().then( () => {
 				if ( this.$store.getters[ NS_ADDRESS + '/requiredFieldsAreValid' ] ) {
+					if ( this.$store.getters[ NS_PAYMENT + '/isDirectDebitPayment' ] &&
+						!this.$store.getters[ NS_BANKDATA + '/bankDataIsValid' ] ) {
+						return;
+					}
 					this.$emit( 'submit-donation' );
 					return;
 				}
-				// TODO: Talk to UX about notifying users about validation errors that are outside visible field
 			} );
 		},
 	},
