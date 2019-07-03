@@ -9,7 +9,7 @@
 		<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
 		<div class="has-margin-top-36">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
-			<email></email>
+			<email v-on:email="setEmail( $event )"></email>
 		</div>
 		<newsletter-opt-in></newsletter-opt-in>
 	</div>
@@ -27,7 +27,7 @@ import { mapGetters } from 'vuex';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
+import { setAddressField, validateAddress, setReceiptOptOut, setAddressType, setEmail } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 
 export default Vue.extend( {
@@ -132,6 +132,9 @@ export default Vue.extend( {
 		},
 		setAddressType( addressType ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
+		},
+		setEmail( email ): void {
+			this.$store.dispatch( action( NS_ADDRESS, setEmail ), email );
 		}
 	},
 } );
