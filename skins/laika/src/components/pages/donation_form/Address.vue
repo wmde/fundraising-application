@@ -6,6 +6,7 @@
 		</div>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
+		<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
 		<div class="has-margin-top-36">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
 			<email></email>
@@ -19,13 +20,14 @@ import Vue from 'vue';
 import AddressType from '@/components/shared/AddressType.vue';
 import Name from '@/components/shared/Name.vue';
 import Postal from '@/components/shared/Postal.vue';
+import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import Email from '@/components/shared/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { mapGetters } from 'vuex';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress } from '@/store/address/actionTypes';
+import { setAddressField, validateAddress, setReceiptOptOut } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 
 export default Vue.extend( {
@@ -34,6 +36,7 @@ export default Vue.extend( {
 		Name,
 		Postal,
 		AddressType,
+		ReceiptOptOut,
 		Email,
 		NewsletterOptIn,
 	},
@@ -124,6 +127,9 @@ export default Vue.extend( {
 		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.formData[ fieldName ] );
 		},
+		setReceiptOptedOut( optedOut ): void {
+			this.$store.dispatch( action( NS_ADDRESS, setReceiptOptOut ), optedOut );
+		}
 	},
 } );
 </script>

@@ -7,7 +7,7 @@
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<date-of-birth/>
-        <receipt-opt-out/>
+        <receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
         <div class="has-margin-top-36">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
 			<email></email>
@@ -27,7 +27,7 @@ import Email from '@/components/shared/Email.vue';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress } from '@/store/membership_address/actionTypes';
+import { setAddressField, validateAddress, setReceiptOptOut } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 
 export default Vue.extend( {
@@ -126,6 +126,9 @@ export default Vue.extend( {
 		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.formData[ fieldName ] );
 		},
+		setReceiptOptedOut( optedOut ): void {
+			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setReceiptOptOut ), optedOut );
+		}
 	},
 } );
 </script>
