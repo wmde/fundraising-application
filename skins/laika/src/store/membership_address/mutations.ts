@@ -11,7 +11,6 @@ import {
 	SET_ADDRESS_FIELDS,
 	SET_EMAIL,
 	SET_DATE,
-	SET_NEWSLETTER_OPTIN,
 	SET_RECEIPT_OPTOUT,
 } from '@/store/membership_address/mutationTypes';
 import { MembershipAddressState, InputField } from '@/view_models/Address';
@@ -67,9 +66,6 @@ export const mutations: MutationTree<MembershipAddressState> = {
 	[ SET_DATE ]( state: MembershipAddressState, date ) {
 		state.values.date = date;
 		state.validity.date = Validity.VALID;
-	},
-	[ SET_NEWSLETTER_OPTIN ]( state: MembershipAddressState, optIn ) {
-		state.newsletterOptIn = optIn;
 	},
 	[ SET_RECEIPT_OPTOUT ]( state: MembershipAddressState, optOut ) {
 		state.receiptOptOut = optOut;

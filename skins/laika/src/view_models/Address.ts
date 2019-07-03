@@ -35,7 +35,6 @@ export interface AddressState {
 export interface MembershipAddressState {
     isValidating: boolean,
     addressType: AddressTypeModel,
-    newsletterOptIn: boolean,
     receiptOptOut: boolean,
     values: FormValues,
     validity: FormValidity,
