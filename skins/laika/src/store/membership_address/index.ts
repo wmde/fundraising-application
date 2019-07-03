@@ -1,13 +1,13 @@
 import { Module } from 'vuex';
-import { AddressState } from '@/view_models/Address';
+import { MembershipAddressState } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { actions } from '@/store/membership_address/actions';
 import { getters } from '@/store/membership_address/getters';
 import { mutations } from '@/store/membership_address/mutations';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
-export default function (): Module<AddressState, any> {
-	const state: AddressState = {
+export default function (): Module<MembershipAddressState, any> {
+	const state: MembershipAddressState = {
 		isValidating: false,
 		addressType: AddressTypeModel.PERSON,
 		newsletterOptIn: false,
