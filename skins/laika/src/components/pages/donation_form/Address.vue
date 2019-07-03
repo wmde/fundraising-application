@@ -16,10 +16,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import AddressType from '@/components/pages/donation_form/AddressType.vue';
-import Name from '@/components/pages/donation_form/Name.vue';
-import Postal from '@/components/pages/donation_form/Postal.vue';
-import Email from '@/components/pages/donation_form/Email.vue';
+import AddressType from '@/components/shared/AddressType.vue';
+import Name from '@/components/shared/Name.vue';
+import Postal from '@/components/shared/Postal.vue';
+import Email from '@/components/shared/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { mapGetters } from 'vuex';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';

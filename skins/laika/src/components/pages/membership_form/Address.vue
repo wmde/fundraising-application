@@ -18,16 +18,16 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
-import AddressType from '@/components/pages/donation_form/AddressType.vue';
-import Name from '@/components/pages/donation_form/Name.vue';
-import Postal from '@/components/pages/donation_form/Postal.vue';
-import DateOfBirth from '@/components/pages/donation_form/DateOfBirth.vue';
-import ReceiptOptOut from '@/components/pages/donation_form/ReceiptOptOut.vue';
-import Email from '@/components/pages/donation_form/Email.vue';
+import AddressType from '@/components/shared/AddressType.vue';
+import Name from '@/components/shared/Name.vue';
+import Postal from '@/components/shared/Postal.vue';
+import DateOfBirth from '@/components/pages/membership_form/DateOfBirth.vue';
+import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
+import Email from '@/components/shared/Email.vue';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress } from '@/store/address/actionTypes';
+import { setAddressField, validateAddress } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 
 export default Vue.extend( {
