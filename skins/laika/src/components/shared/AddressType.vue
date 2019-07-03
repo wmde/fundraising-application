@@ -56,7 +56,7 @@ export default Vue.extend( {
 	},
 	methods: {
 		setAddressType: function () {
-			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), this.type );
+			this.$emit('addressType', this.$data.type );
 		},
 	},
 } );

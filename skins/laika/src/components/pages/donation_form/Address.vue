@@ -2,7 +2,7 @@
 	<div id="addressForm" class="column is-full">
 		<div class="has-margin-top-18">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
-			<address-type></address-type>
+			<address-type v-on:address-type="setAddressType( $event )"></address-type>
 		</div>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
@@ -27,7 +27,7 @@ import { mapGetters } from 'vuex';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress, setReceiptOptOut } from '@/store/address/actionTypes';
+import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 
 export default Vue.extend( {
@@ -129,6 +129,9 @@ export default Vue.extend( {
 		},
 		setReceiptOptedOut( optedOut ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setReceiptOptOut ), optedOut );
+		},
+		setAddressType( addressType ): void {
+			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
 		}
 	},
 } );

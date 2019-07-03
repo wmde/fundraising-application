@@ -2,7 +2,7 @@
 	<div id="addressForm" class="column is-full">
 		<div class="has-margin-top-18">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
-			<address-type></address-type>
+			<address-type v-on:address-type="setAddressType( $event )"></address-type><address-type></address-type>
 		</div>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
@@ -27,7 +27,7 @@ import Email from '@/components/shared/Email.vue';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress, setReceiptOptOut } from '@/store/membership_address/actionTypes';
+import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 
 export default Vue.extend( {
@@ -128,6 +128,9 @@ export default Vue.extend( {
 		},
 		setReceiptOptedOut( optedOut ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setReceiptOptOut ), optedOut );
+		},
+		setAddressType( addressType ): void {
+			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressType ), addressType );
 		}
 	},
 } );
