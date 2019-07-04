@@ -56,7 +56,7 @@ export default Vue.extend( {
 		bankIdentifier: {
 			get: function (): string {
 				if ( this.looksLikeGermanIban() ) {
-					return this.$store.getters[ 'bankdata/getBankId' ];
+					return this.$store.getters[ NS_BANKDATA + '/getBankId' ];
 				}
 				return this.$data.bankId;
 			},

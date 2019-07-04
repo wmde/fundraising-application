@@ -4,8 +4,8 @@
 		<input type="hidden" name="zahlweise" :value="payment.type">
 		<input type="hidden" name="periode" :value="payment.interval">
 		<input type="hidden" name="betrag" :value="formattedAmount">
-		<input v-if="isBankData" type="hidden" name="iban" :value="bankdata.iban">
-		<input v-if="isBankData" type="hidden" name="bic" :value="bankdata.bic">
+		<input type="hidden" name="iban" :value="bankdata.iban">
+		<input type="hidden" name="bic" :value="bankdata.bic">
 
 		<input type="hidden" name="addressType" :value="addressType">
 
@@ -54,9 +54,6 @@ export default Vue.extend( {
 					',',
 					strAmount.slice( -2 ),
 				].join( '' );
-			},
-			isBankData: ( state: Payment ) => {
-				return state.values.type === 'BEZ';
 			},
 		} ),
 		...mapState( NS_ADDRESS, {
