@@ -7,7 +7,7 @@ import createBankData from '@/store/bankdata';
 import {
 	NS_PAYMENT,
 	NS_ADDRESS,
-	NS_BANKDATA
+	NS_BANKDATA,
 } from './namespaces';
 
 Vue.use( Vuex );

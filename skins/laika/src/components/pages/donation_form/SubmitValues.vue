@@ -57,7 +57,7 @@ export default Vue.extend( {
 			},
 			isBankData: ( state: Payment ) => {
 				return state.values.type === 'BEZ';
-			}
+			},
 		} ),
 		...mapState( NS_ADDRESS, {
 			address: ( state: AddressState ) => state.values,
