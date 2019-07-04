@@ -2,7 +2,7 @@
 	<div id="addressForm" class="column is-full">
 		<div class="has-margin-top-18">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
-			<address-type v-on:address-type="setAddressType( $event )"></address-type><address-type></address-type>
+			<address-type v-on:address-type="setAddressType( $event )"></address-type>
 		</div>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
@@ -25,6 +25,7 @@ import DateOfBirth from '@/components/pages/membership_form/DateOfBirth.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import Email from '@/components/shared/Email.vue';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, setReceiptOptOut, setAddressType, setEmail } from '@/store/membership_address/actionTypes';
@@ -124,17 +125,17 @@ export default Vue.extend( {
 			return this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, validateAddress ), this.$props.validateAddressUrl );
 		},
 		onFieldChange( fieldName: string ): void {
-			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.formData[ fieldName ] );
+			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
 		},
-		setReceiptOptedOut( optedOut ): void {
+		setReceiptOptedOut( optedOut: boolean ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setReceiptOptOut ), optedOut );
 		},
-		setAddressType( addressType ): void {
+		setAddressType( addressType: AddressTypeModel ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressType ), addressType );
 		},
-		setEmail( email ): void {
+		setEmail( email: string ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setEmail ), email );
-		}
+		},
 	},
 } );
 </script>

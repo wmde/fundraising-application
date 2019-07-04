@@ -31,7 +31,7 @@ export default Vue.extend( {
 	},
 	methods: {
 		setReceiptOptOut: function () {
-			this.$emit( 'optedOut', this.optedOut );	
+			this.$emit( 'optedOut', this.optedOut );
 		},
 	},
 } );

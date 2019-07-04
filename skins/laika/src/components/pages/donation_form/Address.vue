@@ -25,6 +25,7 @@ import Email from '@/components/shared/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { mapGetters } from 'vuex';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, setReceiptOptOut, setAddressType, setEmail } from '@/store/address/actionTypes';
@@ -125,17 +126,17 @@ export default Vue.extend( {
 			return this.$store.dispatch( action( NS_ADDRESS, validateAddress ), this.$props.validateAddressUrl );
 		},
 		onFieldChange( fieldName: string ): void {
-			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.formData[ fieldName ] );
+			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
 		},
-		setReceiptOptedOut( optedOut ): void {
+		setReceiptOptedOut( optedOut: boolean ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setReceiptOptOut ), optedOut );
 		},
-		setAddressType( addressType ): void {
+		setAddressType( addressType: AddressTypeModel ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
 		},
-		setEmail( email ): void {
+		setEmail( email: string ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setEmail ), email );
-		}
+		},
 	},
 } );
 </script>
