@@ -28,7 +28,7 @@ export default Vue.extend( {
 	},
 	methods: {
 		setEmail: function () {
-			this.$store.dispatch( action( NS_ADDRESS, setEmail ), this.$data.emailValue );
+			this.$emit( 'email', this.$data.emailValue );
 		},
 		validateEmail: function () {
 			this.emailHasError = !this.emailIsValid();

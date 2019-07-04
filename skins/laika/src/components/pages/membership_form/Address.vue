@@ -2,15 +2,15 @@
 	<div id="addressForm" class="column is-full">
 		<div class="has-margin-top-18">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
-			<address-type></address-type>
+			<address-type v-on:address-type="setAddressType( $event )"></address-type>
 		</div>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<date-of-birth/>
-        <receipt-opt-out/>
+        <receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
         <div class="has-margin-top-36">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
-			<email></email>
+			<email v-on:email="setEmail( $event )"></email>
 		</div>
 	</div>
 </template>
@@ -18,16 +18,17 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
-import AddressType from '@/components/pages/donation_form/AddressType.vue';
-import Name from '@/components/pages/donation_form/Name.vue';
-import Postal from '@/components/pages/donation_form/Postal.vue';
-import DateOfBirth from '@/components/pages/donation_form/DateOfBirth.vue';
-import ReceiptOptOut from '@/components/pages/donation_form/ReceiptOptOut.vue';
-import Email from '@/components/pages/donation_form/Email.vue';
+import AddressType from '@/components/shared/AddressType.vue';
+import Name from '@/components/shared/Name.vue';
+import Postal from '@/components/shared/Postal.vue';
+import DateOfBirth from '@/components/pages/membership_form/DateOfBirth.vue';
+import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
+import Email from '@/components/shared/Email.vue';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress } from '@/store/address/actionTypes';
+import { setAddressField, validateAddress, setReceiptOptOut, setAddressType, setEmail } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 
 export default Vue.extend( {
@@ -124,7 +125,16 @@ export default Vue.extend( {
 			return this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, validateAddress ), this.$props.validateAddressUrl );
 		},
 		onFieldChange( fieldName: string ): void {
-			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.formData[ fieldName ] );
+			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
+		},
+		setReceiptOptedOut( optedOut: boolean ): void {
+			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setReceiptOptOut ), optedOut );
+		},
+		setAddressType( addressType: AddressTypeModel ): void {
+			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressType ), addressType );
+		},
+		setEmail( email: string ): void {
+			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setEmail ), email );
 		},
 	},
 } );

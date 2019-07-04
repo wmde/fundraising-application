@@ -1,6 +1,6 @@
 import { mount, createLocalVue } from '@vue/test-utils';
-import Vuex, { Store } from 'vuex';
-import Email from '@/components/pages/donation_form/Email.vue';
+import Vuex from 'vuex';
+import Email from '@/components/shared/Email.vue';
 import { createStore } from '@/store/donation_store';
 import { action } from '@/store/util';
 import { NS_ADDRESS } from '@/store/namespaces';
@@ -54,8 +54,8 @@ describe( 'Email', () => {
 		const hasError = wrapper.vm.$data.emailHasError;
 		expect( hasError ).toBe( false );
 	} );
-
-	it( 'sends email to store if it is has valid format', () => {
+	//Move this test to the file with unit tests for the Address component once it exists
+	it.skip( 'sends email to store if it is has valid format', () => {
 		const wrapper = mount( Email, {
 			localVue,
 			store: createStore(),
@@ -71,4 +71,5 @@ describe( 'Email', () => {
 		email.trigger( 'blur' );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, 'abc@def.ghi' );
 	} );
+
 } );
