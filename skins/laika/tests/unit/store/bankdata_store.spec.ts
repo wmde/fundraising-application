@@ -1,6 +1,5 @@
 import { getters } from '@/store/bankdata/getters';
 import { actions } from '@/store/bankdata/actions';
-import { mutations } from '@/store/bankdata/mutations';
 import { Validity } from '@/view_models/Validity';
 import each from 'jest-each';
 import { BankAccount, BankAccountRequest, BankAccountResponse } from '@/view_models/BankAccount';

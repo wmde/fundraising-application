@@ -26,7 +26,7 @@
 			</b-input>
 		</div>
 		<div>
-			<span>{{ getBankName }}</span>
+			<span id="bank-name">{{ getBankName }}</span>
 			<span v-if="bankDataIsInvalid" class="help is-danger">{{ $t( 'donation_form_payment_bankdata_error' ) }}</span>
 		</div>
 	</fieldset>
