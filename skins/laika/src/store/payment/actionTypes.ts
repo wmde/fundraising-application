@@ -1,3 +1,4 @@
+export const initializePayment = 'initializePayment';
 export const markEmptyAmountAsInvalid = 'markEmptyAmountAsInvalid';
 export const markEmptyValuesAsInvalid = 'markEmptyValuesAsInvalid';
 export const setAmount = 'setAmount';

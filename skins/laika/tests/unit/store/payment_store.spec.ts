@@ -3,11 +3,15 @@ import { actions } from '@/store/payment/actions';
 import { mutations } from '@/store/payment/mutations';
 import { Payment } from '@/view_models/Payment';
 import { Validity } from '@/view_models/Validity';
-import { markEmptyAmountAsInvalid, markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
-import { SET_AMOUNT, SET_AMOUNT_VALIDITY } from '@/store/payment/mutationTypes';
+import {
+	initializePayment,
+	markEmptyAmountAsInvalid,
+	markEmptyValuesAsInvalid,
+	setAmount,
+} from '@/store/payment/actionTypes';
+import { SET_AMOUNT, SET_AMOUNT_VALIDITY, SET_INTERVAL, SET_TYPE } from '@/store/payment/mutationTypes';
 import each from 'jest-each';
 import moxios from 'moxios';
-import PaymentType from '@/components/pages/donation_form/PaymentType.vue';
 
 function newMinimalStore( overrides: Object ): Payment {
 	return Object.assign(
@@ -112,6 +116,89 @@ describe( 'Payment', () => {
 				null
 			) ).toBe( false );
 		} );
+	} );
+
+	describe( 'Actions/initializePayment', () => {
+		it( 'does not commit empty amount', () => {
+			const commit = jest.fn();
+			const action = actions[ initializePayment ] as any;
+			const initialPayment = {
+				amount: '0',
+				type: 'BEZ',
+				paymentIntervalInMonths: 12,
+			};
+			action( { commit }, initialPayment );
+			expect( commit ).not.toBeCalledWith( SET_AMOUNT, '0' );
+		} );
+
+		it( 'commits amount when amount is set', () => {
+			const commit = jest.fn();
+			const action = actions[ initializePayment ] as any;
+			const initialPayment = {
+				amount: '2399',
+				type: 'BEZ',
+				paymentIntervalInMonths: 12,
+			};
+			action( { commit }, initialPayment );
+			expect( commit ).toBeCalledWith( SET_AMOUNT, '2399' );
+		} );
+
+		it( 'does not commit empty payment type', () => {
+			const commit = jest.fn();
+			const action = actions[ initializePayment ] as any;
+			const initialPayment = {
+				amount: '123',
+				type: '',
+				paymentIntervalInMonths: 12,
+			};
+			action( { commit }, initialPayment );
+			expect( commit ).not.toBeCalledWith( SET_TYPE, '' );
+		} );
+
+		it( 'commits payment type when it is set', () => {
+			const commit = jest.fn();
+			const action = actions[ initializePayment ] as any;
+			const initialPayment = {
+				amount: '2399',
+				type: 'BEZ',
+				paymentIntervalInMonths: 12,
+			};
+			action( { commit }, initialPayment );
+			expect( commit ).toBeCalledWith( SET_TYPE, 'BEZ' );
+		} );
+
+		it( 'commits interval', () => {
+			const commit = jest.fn();
+			const action = actions[ initializePayment ] as any;
+			const initialPayment = {
+				amount: '2399',
+				type: 'BEZ',
+				paymentIntervalInMonths: '12',
+			};
+			action( { commit }, initialPayment );
+			expect( commit ).toBeCalledWith( SET_INTERVAL, '12' );
+		} );
+
+		const paymentAndAmountCases = [
+			[ '', '', false ],
+			[ '0', 'BEZ', false ],
+			[ '1234', '', false ],
+			[ '4200', 'PPL', true ],
+		];
+
+		each( paymentAndAmountCases ).it( 'resolves true when amount and payment type are set (test index %#)',
+			( amount, type, expectedResolution ) => {
+				const commit = jest.fn();
+				const action = actions[ initializePayment ] as any;
+				const initialPayment = {
+					amount,
+					type,
+					paymentIntervalInMonths: '0',
+				};
+				expect.assertions( 1 );
+				return expect( action( { commit }, initialPayment ) ).resolves.toBe( expectedResolution );
+			} );
+
 	} );
 
 	describe( 'Actions/markEmptyAmountAsInvalid', () => {

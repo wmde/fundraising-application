@@ -14,7 +14,7 @@ describe( 'PaymentAmount', () => {
 	it( 'sends new amount to store when amount is selected', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
-				paymentAmounts: [ 5, 10, 100, 299 ],
+				paymentAmounts: [ 500, 1000, 10000, 29900 ],
 				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
@@ -38,7 +38,7 @@ describe( 'PaymentAmount', () => {
 	it( 'clears custom amount when amount is selected', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
-				paymentAmounts: [ 5, 10, 100, 299 ],
+				paymentAmounts: [ 500, 1000, 10000, 29900 ],
 				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
@@ -54,13 +54,15 @@ describe( 'PaymentAmount', () => {
 		customAmountInput.trigger( 'blur' );
 		wrapper.find( '#amount-29900' ).trigger( 'click' );
 
-		expect( wrapper.vm.$data.amountCustomValue ).toBe( '' );
+		// Can't access (computed) property on generic Vue instance,
+		// see https://github.com/vuejs/vue-test-utils/issues/255
+		expect( ( wrapper.vm as any ).customAmount ).toBe( '' );
 	} );
 
 	it( 'sends cent amount to store when custom amount is entered', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
-				paymentAmounts: [ 5 ],
+				paymentAmounts: [ 500 ],
 				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
@@ -86,7 +88,7 @@ describe( 'PaymentAmount', () => {
 	it( 'converts custom amounts with decimal point to cent amounts', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
-				paymentAmounts: [ 5 ],
+				paymentAmounts: [ 500 ],
 				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
@@ -112,7 +114,7 @@ describe( 'PaymentAmount', () => {
 	it( 'converts custom amounts with comma to cent amounts', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
-				paymentAmounts: [ 5 ],
+				paymentAmounts: [ 500 ],
 				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
@@ -138,7 +140,7 @@ describe( 'PaymentAmount', () => {
 	it( 'cuts off cent fractions from custom amounts', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
-				paymentAmounts: [ 5 ],
+				paymentAmounts: [ 500 ],
 				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
@@ -164,7 +166,7 @@ describe( 'PaymentAmount', () => {
 	it( 'sends empty string to store when custom amount is invalid', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
-				paymentAmounts: [ 5 ],
+				paymentAmounts: [ 500 ],
 				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
@@ -187,46 +189,53 @@ describe( 'PaymentAmount', () => {
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
 	} );
 
-	it( 'does not send empty custom amount', () => {
+	it( 'does not trigger an amount check when amount is selected and custom amount is empty', () => {
 		const wrapper = mount( PaymentAmount, {
+			propsData: {
+				paymentAmounts: [ 500, 1000, 10000, 29900 ],
+			},
 			store: createStore(),
 			mocks: {
 				$t: () => {},
 			},
 		} );
+		wrapper.find( '#amount-29900' ).trigger( 'click' );
+
 		const store = wrapper.vm.$store;
-		store.dispatch = jest.fn();
+		store.dispatch = jest.fn().mockResolvedValue( null );
 
 		const customAmountInput = wrapper.find( '#amount-custom' );
 		customAmountInput.setValue( '' );
 		customAmountInput.trigger( 'blur' );
-		const forbiddenAction = action( NS_PAYMENT, setAmount );
+		const forbiddenAction = action( NS_PAYMENT, markEmptyAmountAsInvalid );
 
-		expect( store.dispatch ).not.toBeCalledWith( forbiddenAction, expect.anything() );
+		expect( store.dispatch ).not.toBeCalledWith( forbiddenAction );
 	} );
 
-	it( 'triggers an amount check in the store when custom value is empty', () => {
+	it( 'triggers an amount check in the store when custom value is empty and no amount is selected', () => {
 		const wrapper = mount( PaymentAmount, {
+			propsData: {
+				paymentAmounts: [ 500, 1000, 10000, 29900 ],
+			},
 			store: createStore(),
 			mocks: {
 				$t: () => {},
 			},
 		} );
 		const store = wrapper.vm.$store;
-		store.dispatch = jest.fn();
+		store.dispatch = jest.fn().mockResolvedValue( null );
 
 		const customAmountInput = wrapper.find( '#amount-custom' );
 		customAmountInput.setValue( '' );
 		customAmountInput.trigger( 'blur' );
 		const expectedAction = action( NS_PAYMENT, markEmptyAmountAsInvalid );
-
-		expect( store.dispatch ).toBeCalledWith( expectedAction );
+		return expect( store.dispatch ).toBeCalledWith( expectedAction );
 	} );
 
 	it( 'clears selected amount when custom amount is entered', () => {
 		const wrapper = mount( PaymentAmount, {
 			propsData: {
-				paymentAmounts: [ 5, 10, 100, 299 ],
+				paymentAmounts: [ 500, 1000, 10000, 29900 ],
 				validateAmountUrl: 'https://example.com/amount-check',
 			},
 			store: createStore(),
@@ -243,7 +252,7 @@ describe( 'PaymentAmount', () => {
 		customAmountInput.setValue( '1998' );
 		customAmountInput.trigger( 'blur' );
 
-		expect( wrapper.vm.$data.amountValue ).toBe( '' );
+		expect( ( wrapper.vm as any ).selectedAmount ).toBe( '' );
 	} );
 
 } );

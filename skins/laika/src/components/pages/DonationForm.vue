@@ -33,11 +33,20 @@ export default Vue.extend( {
 		paymentTypes: Array as () => Array<String>,
 		addressCountries: Array as () => Array<String>,
 		trackingData: Object as () => TrackingData,
+		startPage: {
+			type: String,
+			default: () => 'PaymentPage',
+		},
 	},
 	data: function () {
+		const pages = [ 'PaymentPage', 'AddressPage' ];
+		const currentPageIndex = pages.indexOf( this.$props.startPage );
+		if ( currentPageIndex < 0 ) {
+			throw new Error( `Unknown initial page name '${this.$props.startPage}'. Valid page names are: ${pages.join( ', ' )}` );
+		}
 		return {
-			pages: [ 'PaymentPage', 'AddressPage' ],
-			currentPageIndex: 0,
+			pages,
+			currentPageIndex,
 		};
 	},
 	computed: {

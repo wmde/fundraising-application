@@ -4,24 +4,24 @@
 		<div class="amount-wrapper">
 			<div class="amount-selector is-form-input" v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
 				<input type="radio"
-					:id="'amount-' + toCents( amount )"
+					:id="'amount-' + amount "
 					name="amount-grp"
-					v-model="amountValue"
-					:value="toCents( amount )"
-					@change="amountSelected()"
+					:value="amount"
+					:checked="amount == selectedAmount"
+					@change="amountSelected( amount )"
 					class="is-sr-only">
-				<label class="has-border-rounded" :for="'amount-' + toCents( amount )">
+				<label class="has-border-rounded" :for="'amount-' + amount ">
 					<span>{{ amount | formatAmount }}€</span>
 				</label>
 			</div>
 			<div class="amount-custom-wrapper">
 				<div class="amount-custom is-form-input">
-					<input v-bind:class="[amountCustomValue ? 'is-valid' : '', 'input', 'is-large', 'input-amount', 'has-border-rounded' ]"
+					<input v-bind:class="[customAmount ? 'is-valid' : '', 'input', 'is-large', 'input-amount', 'has-border-rounded' ]"
 							type="text"
 							id="amount-custom"
-							v-model="amountCustomValue"
-							@blur="customAmountEntered(); clearSelectedAmount()"
+							@blur="customAmountEntered"
 							maxlength="9"
+							:value="customAmount"
 							:placeholder="$t('donation_form_custom_placeholder')">
 					<label for="amount-custom" class="is-sr-only">{{ $t('donation_form_payment_amount_legend') }}</label>
 				</div>
@@ -37,15 +37,10 @@ import { AmountData } from '@/view_models/Payment';
 import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
 import { markEmptyAmountAsInvalid, setAmount } from '@/store/payment/actionTypes';
+import { mapState } from 'vuex';
 
 export default Vue.extend( {
 	name: 'PaymentAmount',
-	data: function (): AmountData {
-		return {
-			amountValue: '',
-			amountCustomValue: '',
-		};
-	},
 	props: [ 'paymentAmounts', 'validateAmountUrl' ],
 	computed: {
 		hasErrors: {
@@ -53,42 +48,52 @@ export default Vue.extend( {
 				return !this.$store.getters[ 'payment/amountIsValid' ];
 			},
 		},
+		...mapState( {
+			selectedAmount: function ( state: any ) {
+				const amount = state[ NS_PAYMENT ].values.amount;
+				const amountFound = this.$props.paymentAmounts.indexOf( Number( amount ) );
+				return amountFound > -1 ? amount : '';
+			},
+			customAmount: function ( state: any ): string {
+				const amount = state[ NS_PAYMENT ].values.amount;
+				const amountFound = this.$props.paymentAmounts.indexOf( Number( amount ) );
+				if ( amountFound > -1 || amount === '0' || amount === '' ) {
+					return '';
+				}
+				// Format German number
+				return String( ( Number( amount ) / 100 ).toFixed( 2 ) ).replace( /\./, ',' );
+			},
+		} ),
 	},
 	filters: {
-		formatAmount: ( amount: string ) => Number( amount ).toFixed( 0 ),
+		formatAmount: ( amount: string ) => ( Number( amount ) / 100 ).toFixed( 0 ),
 	},
 	methods: {
-		toCents: ( amount: string ) => Math.trunc( Number( amount ) * 100 ),
-		amountSelected() {
-			this.sendAmountToStore( this.$data.amountValue );
-			this.clearCustomAmount();
-			this.markEmptyAmountAsInvalid();
+		toCents: ( amount: string ): number => Math.trunc( Number( amount ) * 100 ),
+		amountSelected( amount: number ) {
+			this.sendAmountToStore( amount );
 		},
-		customAmountEntered() {
-			const englishDecimalAmount = this.$data.amountCustomValue.replace( /,/, '.' );
-			if ( englishDecimalAmount !== '' ) {
-				this.sendAmountToStore( this.toCents( englishDecimalAmount ) );
-				this.clearSelectedAmount();
-			} else {
-				this.markEmptyAmountAsInvalid();
+		customAmountEntered( evt: Event ) {
+			const amount = ( evt.target as HTMLInputElement ).value.trim();
+			if ( amount === '' ) {
+				// can't access computed props through this.$props here
+				if ( ( this as any ).selectedAmount !== '' ) {
+					return;
+				}
+
+				this.$store.dispatch( action( NS_PAYMENT, markEmptyAmountAsInvalid ) );
+				return;
 			}
+			const englishDecimalAmount = amount.replace( /,/, '.' );
+			this.sendAmountToStore( this.toCents( englishDecimalAmount ) );
 		},
-		sendAmountToStore( amount: number ) {
+		sendAmountToStore( amount: number ): Promise<null> {
 			const amountValue = isNaN( amount ) ? '' : amount.toString();
 			const payload = {
 				amountValue,
 				validateAmountUrl: this.$props.validateAmountUrl,
 			};
-			this.$store.dispatch( action( NS_PAYMENT, setAmount ), payload );
-		},
-		markEmptyAmountAsInvalid() {
-			this.$store.dispatch( action( NS_PAYMENT, markEmptyAmountAsInvalid ) );
-		},
-		clearSelectedAmount() {
-			this.amountValue = '';
-		},
-		clearCustomAmount() {
-			this.amountCustomValue = '';
+			return this.$store.dispatch( action( NS_PAYMENT, setAmount ), payload );
 		},
 	},
 } );

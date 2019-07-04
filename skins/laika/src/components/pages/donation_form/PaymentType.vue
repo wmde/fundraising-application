@@ -36,14 +36,28 @@ export default Vue.extend( {
 	computed: {
 		hasErrors: {
 			get: function (): boolean {
-				return !this.$store.getters[ 'payment/typeIsValid' ];
+				return !this.$store.getters[ NS_PAYMENT + '/typeIsValid' ];
 			},
 		},
 	},
 	methods: {
 		setType(): void {
-			this.$store.dispatch( action( NS_PAYMENT, setType ), this.$data.selectedType );
+			this.$store.dispatch( action( NS_PAYMENT, setType ), this.selectedType );
 		},
+	},
+	// workaround for Buefy state update, recommendation taken from https://github.com/buefy/buefy/issues/698
+	mounted: function () {
+		// Update on mount, since "mounted" is be called after the store was already updated
+		// when we skip the payment page
+		const currentStorePaymentType = this.$store.state[ NS_PAYMENT ].values.type;
+		if ( currentStorePaymentType !== this.selectedType ) {
+			this.selectedType = currentStorePaymentType;
+		}
+		this.$store.watch(
+			( state: any ) => state[ NS_PAYMENT ].values.type,
+			( newType ) => { this.selectedType = newType;
+			}
+		);
 	},
 } );
 </script>

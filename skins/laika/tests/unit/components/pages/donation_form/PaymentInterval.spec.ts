@@ -36,4 +36,21 @@ describe( 'PaymentInterval', () => {
 		expect( store.dispatch ).toBeCalledWith( expectedAction, YEARLY );
 	} );
 
+	it( 'updates the selected interval when the store changes', () => {
+		const wrapper = mount( PaymentInterval, {
+			localVue,
+			propsData: {
+				paymentIntervals: testIntervals,
+			},
+			store: createStore(),
+			mocks: {
+				$t: () => {},
+			},
+		} );
+		const store = wrapper.vm.$store;
+		store.dispatch( action( NS_PAYMENT, setInterval ), 6 );
+
+		expect( wrapper.vm.$data.selectedInterval ).toBe( 6 );
+	} );
+
 } );

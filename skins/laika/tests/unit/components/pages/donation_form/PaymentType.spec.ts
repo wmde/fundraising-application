@@ -5,7 +5,7 @@ import PaymentType from '@/components/pages/donation_form/PaymentType.vue';
 import { createStore } from '@/store/donation_store';
 import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
-import { setType } from '@/store/payment/actionTypes';
+import { setInterval, setType } from '@/store/payment/actionTypes';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -33,6 +33,23 @@ describe( 'PaymentType', () => {
 		const expectedAction = action( NS_PAYMENT, setType );
 
 		expect( store.dispatch ).toBeCalledWith( expectedAction, 'BTC' );
+	} );
+
+	it( 'updates the selected type when the store changes', () => {
+		const wrapper = mount( PaymentType, {
+			localVue,
+			propsData: {
+				paymentTypes: testPaymentMethods,
+			},
+			store: createStore(),
+			mocks: {
+				$t: () => {},
+			},
+		} );
+		const store = wrapper.vm.$store;
+		store.dispatch( action( NS_PAYMENT, setType ), 'PPL' );
+
+		expect( wrapper.vm.$data.selectedType ).toBe( 'PPL' );
 	} );
 
 } );
