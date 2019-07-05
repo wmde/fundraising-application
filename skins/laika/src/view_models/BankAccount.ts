@@ -20,10 +20,5 @@ export interface BankAccountRequest {
 }
 
 export interface BankAccountResponse {
-    status: string
-    bic: string
-    iban: string
-    account: string
-    bankCode: string
-    bankName: string
+    [key: string]: string
 }
