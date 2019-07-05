@@ -4,7 +4,7 @@ import {
 	validateAddress,
 	setAddressType,
 	setEmail,
-	setNewsletterOptIn, setAddressField,
+	setNewsletterOptIn, setReceiptOptOut, setAddressField,
 } from '@/store/address/actionTypes';
 import { AddressState, InputField } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
@@ -46,6 +46,9 @@ export const actions = {
 	},
 	[ setNewsletterOptIn ]( context: ActionContext<AddressState, any>, optIn: boolean ) {
 		context.commit( 'SET_NEWSLETTER_OPTIN', optIn );
+	},
+	[ setReceiptOptOut ]( context: ActionContext<AddressState, any>, optOut: boolean ) {
+		context.commit( 'SET_RECEIPT_OPTOUT', optOut );
 	},
 
 };
