@@ -11,6 +11,7 @@ export default function (): Module<AddressState, any> {
 		isValidating: false,
 		addressType: AddressTypeModel.PERSON,
 		newsletterOptIn: false,
+		receiptOptOut: false,
 		values: {
 			salutation: '',
 			title: '',
