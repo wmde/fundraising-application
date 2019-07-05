@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import AddressType from '@/components/shared/AddressType.vue';
+import AddressType from '@/components/pages/donation_form/AddressType.vue';
 import Name from '@/components/shared/Name.vue';
 import Postal from '@/components/shared/Postal.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
