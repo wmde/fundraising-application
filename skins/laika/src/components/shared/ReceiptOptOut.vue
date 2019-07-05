@@ -18,9 +18,6 @@
 
 <script>
 import Vue from 'vue';
-import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { action } from '@/store/util';
-import { setReceiptOptOut } from '@/store/membership_address/actionTypes';
 
 export default Vue.extend( {
 	name: 'ReceiptOptOut',
