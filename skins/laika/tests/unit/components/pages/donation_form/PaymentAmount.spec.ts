@@ -1,5 +1,5 @@
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
-import Vuex, { Store } from 'vuex';
+import { mount, createLocalVue } from '@vue/test-utils';
+import Vuex from 'vuex';
 import PaymentAmount from '@/components/pages/donation_form/PaymentAmount.vue';
 import { createStore } from '@/store/donation_store';
 import { action } from '@/store/util';

@@ -19,7 +19,7 @@ export interface IntervalData {
 }
 
 export interface TypeData {
-    selectedType: string
+    selectedType: string,
 }
 
 export interface InitialPaymentValues {

@@ -54,7 +54,7 @@ describe( 'Email', () => {
 		const hasError = wrapper.vm.$data.emailHasError;
 		expect( hasError ).toBe( false );
 	} );
-	//Move this test to the file with unit tests for the Address component once it exists
+	// Move this test to the file with unit tests for the Address component once it exists
 	it.skip( 'sends email to store if it is has valid format', () => {
 		const wrapper = mount( Email, {
 			localVue,

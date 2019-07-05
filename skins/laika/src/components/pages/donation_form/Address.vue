@@ -1,9 +1,7 @@
 <template>
 	<div id="addressForm" class="column is-full">
-		<div class="has-margin-top-18">
-			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
-			<address-type v-on:address-type="setAddressType( $event )"></address-type>
-		</div>
+		<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
+		<address-type v-on:address-type="setAddressType( $event )"></address-type>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
@@ -30,6 +28,7 @@ import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, setReceiptOptOut, setAddressType, setEmail } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
+import PaymentBankData from '@/components/pages/donation_form/PaymentBankData.vue';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -40,6 +39,7 @@ export default Vue.extend( {
 		ReceiptOptOut,
 		Email,
 		NewsletterOptIn,
+		PaymentBankData,
 	},
 	data: function (): { formData: FormData } {
 		return {
@@ -103,6 +103,8 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
+		validateBankDataUrl: String,
+		validateLegacyBankDataUrl: String,
 		countries: Array as () => Array<String>,
 	},
 	computed: {
@@ -114,6 +116,11 @@ export default Vue.extend( {
 					}
 					return validity;
 				}, ( {} as AddressValidity ) );
+			},
+		},
+		isDirectDebit: {
+			get: function (): boolean {
+				return this.$store.getters[ 'payment/isDirectDebitPayment' ];
 			},
 		},
 		...mapGetters( NS_ADDRESS, [

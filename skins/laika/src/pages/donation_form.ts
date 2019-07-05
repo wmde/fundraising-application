@@ -51,6 +51,13 @@ store.dispatch( action( NS_PAYMENT, initializePayment ), {
 			props: {
 				assetsPath: pageData.assetsPath,
 				pageIdentifier: PAGE_IDENTIFIER,
+				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
+				validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
+				paymentAmounts: pageData.applicationVars.presetAmounts,
+				paymentIntervals: pageData.applicationVars.paymentIntervals,
+				paymentTypes: pageData.applicationVars.paymentTypes,
+				addressCountries: COUNTRIES,
+				trackingData: pageData.applicationVars.tracking,
 			},
 		},
 		[
@@ -58,6 +65,8 @@ store.dispatch( action( NS_PAYMENT, initializePayment ), {
 				props: {
 					validateAddressUrl: pageData.applicationVars.urls.validateAddress,
 					validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
+					validateBankDataUrl: pageData.applicationVars.urls.validateIban,
+					validateLegacyBankDataUrl: pageData.applicationVars.urls.convertBankData,
 					paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
 					paymentIntervals: pageData.applicationVars.paymentIntervals,
 					paymentTypes: pageData.applicationVars.paymentTypes,

@@ -6,7 +6,7 @@ import {
 	setEmail,
 	setNewsletterOptIn, setAddressField,
 } from '@/store/address/actionTypes';
-import { AddressState, InputField, Payload } from '@/view_models/Address';
+import { AddressState, InputField } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { MARK_EMPTY_FIELDS_INVALID } from '@/store/address/mutationTypes';

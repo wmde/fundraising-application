@@ -1,6 +1,12 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
-import { Payment, TypeData, IntervalData, InitialPaymentValues } from '@/view_models/Payment';
+import {
+	IntervalData,
+	Payment,
+	TypeData,
+	InitialPaymentValues,
+} from '@/view_models/Payment';
+
 import {
 	initializePayment,
 	markEmptyAmountAsInvalid,
@@ -10,9 +16,13 @@ import {
 	setType,
 } from '@/store/payment/actionTypes';
 import {
-	MARK_EMPTY_AMOUNT_INVALID, MARK_EMPTY_FIELDS_INVALID,
-	SET_AMOUNT_VALIDITY, SET_TYPE_VALIDITY,
-	SET_AMOUNT, SET_INTERVAL, SET_TYPE,
+	MARK_EMPTY_AMOUNT_INVALID,
+	MARK_EMPTY_FIELDS_INVALID,
+	SET_AMOUNT,
+	SET_AMOUNT_VALIDITY,
+	SET_INTERVAL,
+	SET_TYPE,
+	SET_TYPE_VALIDITY,
 } from '@/store/payment/mutationTypes';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { Validity } from '@/view_models/Validity';

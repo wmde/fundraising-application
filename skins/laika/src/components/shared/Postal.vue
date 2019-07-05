@@ -50,7 +50,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { AddressValidity, FormData } from '@/view_models/Address';
 
 export default Vue.extend( {

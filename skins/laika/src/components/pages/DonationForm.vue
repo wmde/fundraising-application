@@ -1,5 +1,9 @@
 <template>
+
 	<form class="column is-full" ref="form" action="/donation/add" method="post">
+		<div class="column is-full">
+			<h1 class="title is-size-1">{{ $t( 'donation_form_section_headline' ) }}</h1>
+		</div>
 		<keep-alive>
 			<component
 				ref="currentPage"
@@ -28,6 +32,8 @@ export default Vue.extend( {
 	props: {
 		validateAddressUrl: String,
 		validateAmountUrl: String,
+		validateBankDataUrl: String,
+		validateLegacyBankDataUrl: String,
 		paymentAmounts: Array as () => Array<String>,
 		paymentIntervals: Array as () => Array<Number>,
 		paymentTypes: Array as () => Array<String>,
@@ -60,6 +66,8 @@ export default Vue.extend( {
 				if ( this.currentFormComponent === 'AddressPage' ) {
 					return {
 						validateAddressUrl: this.$props.validateAddressUrl,
+						validateBankDataUrl: this.$props.validateBankDataUrl,
+						validateLegacyBankDataUrl: this.$props.validateLegacyBankDataUrl,
 						countries: this.$props.addressCountries,
 						trackingData: this.$props.trackingData,
 					};
