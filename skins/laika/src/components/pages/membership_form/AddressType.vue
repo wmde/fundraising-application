@@ -1,6 +1,6 @@
 <template>
 	<fieldset>
-		<legend class="subtitle">{{ $t( 'donation_form_section_address_header_type' ) }}</legend>
+		<legend class="subtitle">{{ $t( 'membership_section_address_header_type' ) }}</legend>
 		<div>
 			<b-radio type="radio"
 					id="personal"
@@ -20,25 +20,12 @@
 				{{ $t( 'donation_form_addresstype_option_company' ) }}
 			</b-radio>
 		</div>
-		<div>
-			<b-radio type="radio"
-					id="anonymous"
-					name="addressTypeInternal"
-					v-model="type"
-					:native-value="AddressTypeModel.ANON"
-					@change.native="setAddressType()">
-				{{ $t( 'donation_form_addresstype_option_anonymous' ) }}
-			</b-radio>
-		</div>
     </fieldset>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
-import { NS_ADDRESS } from '@/store/namespaces';
-import { action } from '@/store/util';
-import { setAddressType } from '@/store/address/actionTypes';
 
 export default Vue.extend( {
 	name: 'AddressType',
