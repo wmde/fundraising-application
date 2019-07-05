@@ -8,7 +8,7 @@ import { BankAccount } from '@/view_models/BankAccount';
 export default function (): Module<BankAccount, any> {
 	const state: BankAccount = {
 		validity: {
-			bankdata: Validity.INCOMPLETE
+			bankdata: Validity.INCOMPLETE,
 		},
 		values: {
 			iban: '',

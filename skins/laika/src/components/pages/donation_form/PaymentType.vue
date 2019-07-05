@@ -54,9 +54,10 @@ export default Vue.extend( {
 			this.selectedType = currentStorePaymentType;
 		}
 		this.$store.watch(
-				( state: any ) => state[ NS_PAYMENT ].values.type,
-				( newType ) => { this.selectedType = newType;
-				}
+			( state: any ) => state[ NS_PAYMENT ].values.type,
+			( newType ) => {
+				this.selectedType = newType;
+			}
 		);
 	},
 } );

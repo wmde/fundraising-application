@@ -4,10 +4,10 @@ import Buefy from 'buefy';
 import BankData from '@/components/pages/donation_form/PaymentBankData.vue';
 import { createStore } from '@/store/donation_store';
 import { NS_BANKDATA } from '@/store/namespaces';
-import { action } from "@/store/util";
-import { setBankData } from "@/store/bankdata/actionTypes";
-import { BankAccountRequest } from "@/view_models/BankAccount";
-import {SET_BANKNAME} from "@/store/bankdata/mutationTypes";
+import { action } from '@/store/util';
+import { setBankData } from '@/store/bankdata/actionTypes';
+import { BankAccountRequest } from '@/view_models/BankAccount';
+import { SET_BANKNAME } from '@/store/bankdata/mutationTypes';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -86,15 +86,15 @@ describe( 'BankData', () => {
 
 		wrapper.setData( { accountId: 'DE12345605171238489890' } );
 		iban.trigger( 'blur' );
-		expect( bic.element.getAttribute('disabled') ).toMatch( 'disabled' );
+		expect( bic.element.getAttribute( 'disabled' ) ).toMatch( 'disabled' );
 
 		wrapper.setData( { accountId: 'AT12345605171238489890' } );
 		iban.trigger( 'blur' );
-		expect( bic.element.getAttribute('disabled') ).toBeNull();
+		expect( bic.element.getAttribute( 'disabled' ) ).toBeNull();
 
 		wrapper.setData( { accountId: '34560517' } );
 		iban.trigger( 'blur' );
-		expect( bic.element.getAttribute('disabled') ).toBeNull();
+		expect( bic.element.getAttribute( 'disabled' ) ).toBeNull();
 	} );
 
 	it( 'renders changes from the store in the input fields', () => {
@@ -108,7 +108,7 @@ describe( 'BankData', () => {
 
 		const iban = wrapper.find( '#iban' );
 		const bic = wrapper.find( '#bic' );
-		wrapper.setData( { accountId: 'AT12345605171238489890',  bankId: 'ABCDDEFFXXX' } );
+		wrapper.setData( { accountId: 'AT12345605171238489890', bankId: 'ABCDDEFFXXX' } );
 		expect( ( ( <HTMLInputElement> iban.element ).value ) ).toMatch( 'AT12345605171238489890' );
 		expect( ( ( <HTMLInputElement> bic.element ).value ) ).toMatch( 'ABCDDEFFXXX' );
 	} );
@@ -122,7 +122,7 @@ describe( 'BankData', () => {
 			},
 		} );
 		const store = wrapper.vm.$store;
-		store.commit( NS_BANKDATA + "/SET_BANKNAME", 'Test Bank' );
+		store.commit( NS_BANKDATA + '/SET_BANKNAME', 'Test Bank' );
 		const iban = wrapper.find( '#bank-name' );
 		expect( iban.text() ).toMatch( 'Test Bank' );
 	} );
@@ -132,7 +132,7 @@ describe( 'BankData', () => {
 			localVue,
 			store: createStore(),
 			mocks: {
-				$t: ( key: string ) => key
+				$t: ( key: string ) => key,
 			},
 		} );
 
@@ -146,11 +146,11 @@ describe( 'BankData', () => {
 			localVue,
 			store: createStore(),
 			mocks: {
-				$t: ( key: string ) => key
+				$t: ( key: string ) => key,
 			},
 		} );
 
-		wrapper.setData( { accountId: 'DE12345605171238489890',  bankId: 'ABCDDEFFXXX' } );
+		wrapper.setData( { accountId: 'DE12345605171238489890', bankId: 'ABCDDEFFXXX' } );
 		const bankDataLabels = wrapper.findAll( 'label' );
 		expect( bankDataLabels.at( 0 ).text() ).toMatch( 'donation_form_payment_bankdata_account_iban_label' );
 		expect( bankDataLabels.at( 1 ).text() ).toMatch( 'donation_form_payment_bankdata_bank_bic_label' );
@@ -161,11 +161,11 @@ describe( 'BankData', () => {
 			localVue,
 			store: createStore(),
 			mocks: {
-				$t: ( key: string ) => key
+				$t: ( key: string ) => key,
 			},
 		} );
 
-		wrapper.setData( { accountId: '34560517',  bankId: '50010517' } );
+		wrapper.setData( { accountId: '34560517', bankId: '50010517' } );
 		const bankDataLabels = wrapper.findAll( 'label' );
 		expect( bankDataLabels.at( 0 ).text() ).toMatch( 'donation_form_payment_bankdata_account_legacy_label' );
 		expect( bankDataLabels.at( 1 ).text() ).toMatch( 'donation_form_payment_bankdata_bank_legacy_label' );

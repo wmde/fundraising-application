@@ -4,7 +4,7 @@ import {
 	IntervalData,
 	Payment,
 	TypeData,
-	InitialPaymentValues
+	InitialPaymentValues,
 } from '@/view_models/Payment';
 
 import {
