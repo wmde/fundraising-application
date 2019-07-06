@@ -6,7 +6,8 @@ import { action } from '@/store/util';
 
 import Payment from '@/components/pages/donation_form/Payment.vue';
 import { NS_PAYMENT } from '@/store/namespaces';
-import { setAmount } from '@/store/payment/actionTypes';
+import { setAmount, setInterval } from '@/store/payment/actionTypes';
+import PaymentInterval from '@/components/shared/PaymentInterval.vue';
 import AmountSelection from '@/components/shared/AmountSelection.vue';
 
 const localVue = createLocalVue();
@@ -38,5 +39,27 @@ describe( 'Payment', () => {
 		wrapper.find( AmountSelection ).vm.$emit( 'amount-selected', '1500' );
 
 		expect( store.dispatch ).toBeCalledWith( action( NS_PAYMENT, setAmount ), expectedPayload );
+	} );
+
+	it( 'sends interval to store when interval selection emits event ', () => {
+		const wrapper = shallowMount( Payment, {
+			localVue,
+			propsData: {
+				paymentAmounts: [ 5 ],
+				paymentIntervals: [ 0, 1, 3, 6, 12 ],
+				paymentTypes: [ 'BEZ', 'PPL', 'UEB', 'BTC' ],
+				validateAmountUrl: 'https://example.com/amount-check',
+			},
+			store: createStore(),
+			mocks: {
+				$t: jest.fn(),
+			},
+		} );
+		const store = wrapper.vm.$store;
+		store.dispatch = jest.fn();
+
+		wrapper.find( PaymentInterval ).vm.$emit( 'interval-selected', 6 );
+
+		expect( store.dispatch ).toBeCalledWith( action( NS_PAYMENT, setInterval ), 6 );
 	} );
 } );

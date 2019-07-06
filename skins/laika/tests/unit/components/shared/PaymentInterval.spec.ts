@@ -1,11 +1,8 @@
 import { createLocalVue, mount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Buefy from 'buefy';
-import PaymentInterval from '@/components/pages/donation_form/PaymentInterval.vue';
+import PaymentInterval from '@/components/shared/PaymentInterval.vue';
 import { createStore } from '@/store/donation_store';
-import { action } from '@/store/util';
-import { NS_PAYMENT } from '@/store/namespaces';
-import { setInterval } from '@/store/payment/actionTypes';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -16,10 +13,11 @@ const testIntervals: Array<number> = [ 0, 1, 3, 6, YEARLY ];
 
 describe( 'PaymentInterval', () => {
 
-	it( 'sends new interval to store when it is selected', () => {
+	it( 'emits new interval when it is selected', () => {
 		const wrapper = mount( PaymentInterval, {
 			localVue,
 			propsData: {
+				currentInterval: '0',
 				paymentIntervals: testIntervals,
 			},
 			store: createStore(),
@@ -27,16 +25,14 @@ describe( 'PaymentInterval', () => {
 				$t: () => {},
 			},
 		} );
-		const store = wrapper.vm.$store;
-		store.dispatch = jest.fn();
 
 		wrapper.find( `#interval-${YEARLY}` ).trigger( 'click' );
-		const expectedAction = action( NS_PAYMENT, setInterval );
 
-		expect( store.dispatch ).toBeCalledWith( expectedAction, YEARLY );
+		expect( wrapper.emitted( 'interval-selected' ) ).toBeTruthy();
+		expect( wrapper.emitted( 'interval-selected' )[ 0 ] ).toEqual( [ String( YEARLY ) ] );
 	} );
 
-	it( 'updates the selected interval when the store changes', () => {
+	it( 'updates the selected interval when the incoming property changes', () => {
 		const wrapper = mount( PaymentInterval, {
 			localVue,
 			propsData: {
@@ -47,10 +43,11 @@ describe( 'PaymentInterval', () => {
 				$t: () => {},
 			},
 		} );
-		const store = wrapper.vm.$store;
-		store.dispatch( action( NS_PAYMENT, setInterval ), 6 );
 
-		expect( wrapper.vm.$data.selectedInterval ).toBe( 6 );
+		// explicitly simulate a prop change from outside of the wrapper
+		wrapper.setProps( { currentInterval: '6' } );
+
+		expect( wrapper.vm.$data.selectedInterval ).toBe( '6' );
 	} );
 
 } );
