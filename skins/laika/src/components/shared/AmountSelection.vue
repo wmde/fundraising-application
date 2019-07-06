@@ -1,6 +1,6 @@
 <template>
 	<fieldset>
-		<legend class="title is-size-5">{{ $t('donation_form_payment_amount_title') }}</legend>
+		<legend class="title is-size-5">{{ title }}</legend>
 		<div class="amount-wrapper">
 			<div class="amount-selector is-form-input" v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
 				<input type="radio"
@@ -27,35 +27,40 @@
 				</div>
 			</div>
 		</div>
-		<span class="help is-danger" v-if="hasErrors">{{ $t('donation_form_payment_amount_error') }}</span>
+		<span class="help is-danger" v-if="error !== ''">{{ error }}</span>
 	</fieldset>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { AmountData } from '@/view_models/Payment';
-import { action } from '@/store/util';
-import { NS_PAYMENT } from '@/store/namespaces';
-import { markEmptyAmountAsInvalid, setAmount } from '@/store/payment/actionTypes';
-import { mapState } from 'vuex';
 
 export default Vue.extend( {
-	name: 'PaymentAmount',
-	props: [ 'paymentAmounts', 'validateAmountUrl' ],
+	name: 'AmountSelection',
+	props: {
+		amount: String,
+		paymentAmounts: Array,
+		title: String,
+		error: {
+			type: String,
+			default: '',
+		},
+	},
 	computed: {
 		hasErrors: {
 			get: function (): boolean {
 				return !this.$store.getters[ 'payment/amountIsValid' ];
 			},
 		},
-		...mapState( {
-			selectedAmount: function ( state: any ) {
-				const amount = state[ NS_PAYMENT ].values.amount;
+		selectedAmount: {
+			get: function (): string {
+				const amount = this.$props.amount;
 				const amountFound = this.$props.paymentAmounts.indexOf( Number( amount ) );
 				return amountFound > -1 ? amount : '';
 			},
-			customAmount: function ( state: any ): string {
-				const amount = state[ NS_PAYMENT ].values.amount;
+		},
+		customAmount: {
+			get: function (): string {
+				const amount = this.$props.amount;
 				const amountFound = this.$props.paymentAmounts.indexOf( Number( amount ) );
 				if ( amountFound > -1 || amount === '0' || amount === '' ) {
 					return '';
@@ -63,7 +68,7 @@ export default Vue.extend( {
 				// Format German number
 				return String( ( Number( amount ) / 100 ).toFixed( 2 ) ).replace( /\./, ',' );
 			},
-		} ),
+		},
 	},
 	filters: {
 		formatAmount: ( amount: string ) => ( Number( amount ) / 100 ).toFixed( 0 ),
@@ -71,7 +76,7 @@ export default Vue.extend( {
 	methods: {
 		toCents: ( amount: string ): number => Math.trunc( Number( amount ) * 100 ),
 		amountSelected( amount: number ) {
-			this.sendAmountToStore( amount );
+			this.$emit( 'amount-selected', String( amount ) );
 		},
 		customAmountEntered( evt: Event ) {
 			const amount = ( evt.target as HTMLInputElement ).value.trim();
@@ -81,26 +86,21 @@ export default Vue.extend( {
 					return;
 				}
 
-				this.$store.dispatch( action( NS_PAYMENT, markEmptyAmountAsInvalid ) );
+				this.$emit( 'amount-selected', '' );
 				return;
 			}
-			const englishDecimalAmount = amount.replace( /,/, '.' );
-			this.sendAmountToStore( this.toCents( englishDecimalAmount ) );
-		},
-		sendAmountToStore( amount: number ): Promise<null> {
-			const amountValue = isNaN( amount ) ? '' : amount.toString();
-			const payload = {
-				amountValue,
-				validateAmountUrl: this.$props.validateAmountUrl,
-			};
-			return this.$store.dispatch( action( NS_PAYMENT, setAmount ), payload );
+			const englishDecimalAmount = Number( amount.replace( /,/, '.' ) );
+			if ( isNaN( englishDecimalAmount ) ) {
+				this.$emit( 'amount-selected', '' );
+			}
+			this.$emit( 'amount-selected', String( Math.trunc( englishDecimalAmount * 100 ) ) );
 		},
 	},
 } );
 </script>
 
 <style lang="scss">
-	@import "../../../scss/custom";
+	@import "../../scss/custom";
 
 	.amount {
 		&-wrapper {
