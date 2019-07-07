@@ -13,7 +13,13 @@
 				:title="$t('donation_form_payment_interval_title')"
 				v-on:interval-selected="sendIntervalToStore"
 		></payment-interval>
-		<payment-type :payment-types="paymentTypes"></payment-type>
+		<payment-type
+				:current-type="type"
+				:payment-types="paymentTypes"
+				:error="typeIsValid ? '' : $t('donation_form_payment_type_error')"
+				:title="$t('donation_form_payment_type_title')"
+				v-on:payment-type-selected="sendTypeToStore"
+		></payment-type>
 	</div>
 </template>
 
@@ -24,7 +30,7 @@ import PaymentInterval from '@/components/shared/PaymentInterval.vue';
 import PaymentType from '@/components/pages/donation_form/PaymentType.vue';
 import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
-import { setAmount, setInterval } from '@/store/payment/actionTypes';
+import { setAmount, setInterval, setType } from '@/store/payment/actionTypes';
 import { mapGetters, mapState } from 'vuex';
 
 export default Vue.extend( {
@@ -39,8 +45,9 @@ export default Vue.extend( {
 		...mapState( {
 			amount: ( state: any ) => state[ NS_PAYMENT ].values.amount,
 			interval: ( state: any ) => state[ NS_PAYMENT ].values.interval,
+			type: ( state: any ) => state[ NS_PAYMENT ].values.type,
 		} ),
-		...mapGetters( NS_PAYMENT, [ 'amountIsValid' ] ),
+		...mapGetters( NS_PAYMENT, [ 'amountIsValid', 'typeIsValid' ] ),
 	},
 	methods: {
 		sendAmountToStore( amountValue: string ): Promise<null> {
@@ -52,6 +59,9 @@ export default Vue.extend( {
 		},
 		sendIntervalToStore( interval: string ): void {
 			this.$store.dispatch( action( NS_PAYMENT, setInterval ), interval );
+		},
+		sendTypeToStore( paymentType: string ): void {
+			this.$store.dispatch( action( NS_PAYMENT, setType ), paymentType );
 		},
 	},
 } );
