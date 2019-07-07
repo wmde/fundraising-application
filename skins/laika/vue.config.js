@@ -29,7 +29,7 @@ module.exports = {
 		funds_usage: 'src/pages/funds_usage.ts',
 		membership_application: 'src/pages/membership_application.ts',
 		membership_application_cancellation_confirmation: 'src/pages/membership_application_cancellation_confirmation.ts',
-		membership_application_confirmation: 'src/pages/membership_application_cancellation_confirmation.ts',
+		membership_application_confirmation: 'src/pages/membership_application_confirmation.ts',
 		page_not_found: 'src/pages/page_not_found.ts',
 		subscription_confirmation: 'src/pages/subscription_confirmation.ts',
 		system_message: 'src/pages/system_message.ts',

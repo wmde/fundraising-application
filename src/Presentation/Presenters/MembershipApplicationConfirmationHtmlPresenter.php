@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use DateTime;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
+use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
@@ -16,23 +17,24 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
- * @licence GNU GPL v2+
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @license GNU GPL v2+
  */
 class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationConfirmationPresenter {
 
 	private $template;
 	private $bankDataGenerator;
 	private $html = '';
+	private $urlGenerator;
 
 	/**
 	 * @var \Exception|null
 	 */
 	private $exception = null;
 
-	public function __construct( TwigTemplate $template, BankDataGenerator $bankDataGenerator ) {
+	public function __construct( TwigTemplate $template, BankDataGenerator $bankDataGenerator, UrlGenerator $urlGenerator ) {
 		$this->template = $template;
 		$this->bankDataGenerator = $bankDataGenerator;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	public function presentConfirmation( Application $application, string $updateToken ): void {
@@ -63,7 +65,16 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'bankData' => $this->getBankDataArguments( $membershipApplication->getPayment()->getPaymentMethod() ),
 			'payPalData' => $this->getPayPalDataArguments(
 				$membershipApplication->getPayment()->getPaymentMethod()
-			)
+			),
+			'urls' => [
+				'cancelMembership'  => $this->urlGenerator->generateRelativeUrl(
+					'CancelMembership',
+					[
+						'donationId' => $membershipApplication->getId(),
+						'updateToken' => $updateToken,
+					]
+				)
+			]
 		];
 	}
 

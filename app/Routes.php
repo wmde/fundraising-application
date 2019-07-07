@@ -43,6 +43,7 @@ class Routes {
 
 	public const ADD_COMMENT_PAGE = 'AddCommentPage';
 	public const CANCEL_DONATION = 'cancel-donation';
+	public const CANCEL_MEMBERSHIP = 'CancelMembership';
 	public const CONFIRM_SUBSCRIPTION = 'confirm-subscription';
 	public const CONVERT_BANKDATA = 'generate-iban';
 	public const GET_IN_TOUCH = 'contact';
@@ -464,7 +465,7 @@ class Routes {
 						->cancelApplication( $cancellationRequest )
 				);
 			}
-		);
+		)->bind( self::CANCEL_MEMBERSHIP );
 
 		$app->match(
 			'show-donation-confirmation',
@@ -611,6 +612,7 @@ class Routes {
 			'validateMembershipFee' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_MEMBERSHIP_FEE ),
 			'convertBankData' => $urlGenerator->generateAbsoluteUrl( self::CONVERT_BANKDATA ),
 			'cancelDonation' => $urlGenerator->generateAbsoluteUrl( self::CANCEL_DONATION ),
+			'cancelMembership' => $urlGenerator->generateAbsoluteUrl( self::CANCEL_MEMBERSHIP )
 		];
 	}
 }
