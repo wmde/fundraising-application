@@ -7,7 +7,13 @@ import {
 	initializePayment,
 	markEmptyAmountAsInvalid,
 } from '@/store/payment/actionTypes';
-import { SET_AMOUNT, SET_AMOUNT_VALIDITY, SET_INTERVAL, SET_TYPE } from '@/store/payment/mutationTypes';
+import {
+	SET_AMOUNT,
+	SET_AMOUNT_VALIDITY,
+	SET_INTERVAL,
+	SET_TYPE,
+	SET_TYPE_VALIDITY,
+} from '@/store/payment/mutationTypes';
 import each from 'jest-each';
 import moxios from 'moxios';
 
@@ -129,7 +135,7 @@ describe( 'Payment', () => {
 			expect( commit ).not.toBeCalledWith( SET_AMOUNT, '0' );
 		} );
 
-		it( 'commits amount when amount is set', () => {
+		it( 'commits amount and sets it to valid when amount is set', () => {
 			const commit = jest.fn();
 			const action = actions[ initializePayment ] as any;
 			const initialPayment = {
@@ -139,6 +145,7 @@ describe( 'Payment', () => {
 			};
 			action( { commit }, initialPayment );
 			expect( commit ).toBeCalledWith( SET_AMOUNT, '2399' );
+			expect( commit ).toBeCalledWith( SET_AMOUNT_VALIDITY, Validity.VALID );
 		} );
 
 		it( 'does not commit empty payment type', () => {
@@ -153,7 +160,7 @@ describe( 'Payment', () => {
 			expect( commit ).not.toBeCalledWith( SET_TYPE, '' );
 		} );
 
-		it( 'commits payment type when it is set', () => {
+		it( 'commits payment type and set it to valid when payment type is set', () => {
 			const commit = jest.fn();
 			const action = actions[ initializePayment ] as any;
 			const initialPayment = {
@@ -163,6 +170,7 @@ describe( 'Payment', () => {
 			};
 			action( { commit }, initialPayment );
 			expect( commit ).toBeCalledWith( SET_TYPE, 'BEZ' );
+			expect( commit ).toBeCalledWith( SET_TYPE_VALIDITY, Validity.VALID );
 		} );
 
 		it( 'commits interval', () => {
