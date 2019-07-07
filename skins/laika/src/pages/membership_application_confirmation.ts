@@ -4,20 +4,16 @@ import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
 
-import Component from '@/components/pages/Placeholder.vue';
-import Sidebar from '@/components/layout/Sidebar.vue';
+import Component from '@/components/pages/MembershipConfirmation.vue';
 
-const PAGE_IDENTIFIER = 'membership-application-confirmation';
+const PAGE_IDENTIFIER = 'membership-application-confirmation',
+	IS_FULLWIDTH_PAGE = true;
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
-interface ErrorModel {
-	message: string
-}
-
-const pageData = new PageDataInitializer<ErrorModel>( '#app' );
-
+const pageData = new PageDataInitializer<any>( '#app' );
+console.log(pageData.applicationVars);
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
 	messages: {
@@ -31,12 +27,14 @@ new Vue( {
 		props: {
 			assetsPath: pageData.assetsPath,
 			pageIdentifier: PAGE_IDENTIFIER,
+			isFullWidth: IS_FULLWIDTH_PAGE,
 		},
 	},
 	[
-		h( Component, {} ),
-		h( Sidebar, {
-			slot: 'sidebar',
+		h( Component, {
+			props: {
+				confirmationData: pageData.applicationVars,
+			},
 		} ),
 	] ),
 } ).$mount( '#app' );
