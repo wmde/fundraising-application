@@ -17,12 +17,4 @@ export default Vue.extend( {
 
 <style lang="scss">
 	@import "../../../scss/custom";
-
-	.donation-links {
-		border-left: 1px solid $fun-color-gray-light-solid;
-		padding: 0 0 18px 18px;
-		& > a {
-			display: block;
-		}
-	}
 </style>
