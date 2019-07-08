@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils';
-import AddressType from '@/components/pages/donation_form/AddressType.vue';
+import AddressType from '@/components/pages/membership_form/AddressType.vue';
 import Buefy from 'buefy';
 
 const localVue = createLocalVue();
@@ -19,8 +19,6 @@ describe( 'AddressType.vue', () => {
 		company.trigger( 'change' );
 		const person = wrapper.find( '#personal' );
 		person.trigger( 'change' );
-		const anon = wrapper.find( '#anonymous' );
-		anon.trigger( 'change' );
-		expect( wrapper.emitted( event ) ).toHaveLength( 3 );
+		expect( wrapper.emitted( event ) ).toHaveLength( 2 );
 	} );
 } );
