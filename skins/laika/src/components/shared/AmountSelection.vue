@@ -2,12 +2,16 @@
 	<fieldset>
 		<legend class="title is-size-5">{{ title }}</legend>
 		<div class="amount-wrapper">
-			<div class="amount-selector is-form-input" v-for="amount in paymentAmounts" :key="'amount-' + toCents( amount )">
+			<div v-for="amount in paymentAmounts"
+				:key="'amount-' + toCents( amount )"
+				:class="['amount-selector', 'is-form-input', amount < minimumAmount ? 'inactive' : '']"
+				>
 				<input type="radio"
 					:id="'amount-' + amount "
 					name="amount-grp"
 					:value="amount"
 					:checked="amount == selectedAmount"
+					:disabled="amount < minimumAmount"
 					@change="amountSelected( amount )"
 					class="is-sr-only">
 				<label class="has-border-rounded" :for="'amount-' + amount ">
@@ -16,7 +20,7 @@
 			</div>
 			<div class="amount-custom-wrapper">
 				<div class="amount-custom is-form-input">
-					<input v-bind:class="[customAmount ? 'is-valid' : '', 'input', 'is-large', 'input-amount', 'has-border-rounded' ]"
+					<input :class="[customAmount ? 'is-valid' : '', 'input', 'is-large', 'input-amount', 'has-border-rounded' ]"
 							type="text"
 							id="amount-custom"
 							@blur="customAmountEntered"
@@ -38,6 +42,10 @@ export default Vue.extend( {
 	name: 'AmountSelection',
 	props: {
 		amount: String,
+		minimumAmount: {
+			type: Number,
+			default: 0,
+		},
 		paymentAmounts: Array,
 		title: String,
 		error: {
@@ -129,6 +137,10 @@ export default Vue.extend( {
 				color: $fun-color-bright;
 				font-weight: bold;
 				background-color: $fun-color-primary;
+			}
+			&.inactive label {
+				color: $fun-color-gray-mid;
+				cursor: default;
 			}
 		}
 		&-custom {

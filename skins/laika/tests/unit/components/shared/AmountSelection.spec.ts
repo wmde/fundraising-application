@@ -197,4 +197,30 @@ describe( 'AmountSelection', () => {
 
 		expect( ( wrapper.vm as any ).customAmount ).toBe( '' );
 	} );
+
+	it( 'prevents amount selection for choices that are below minimum amount', () => {
+		const wrapper = mount( AmountSelection, {
+			propsData: {
+				amount: '',
+				minimumAmount: 1000,
+				paymentAmounts: [ 500, 1000, 10000, 29900 ],
+				validateAmountUrl: 'https://example.com/amount-check',
+			},
+			mocks: {
+				$t: () => {},
+			},
+		} );
+
+		const belowChoice = wrapper.find( '#amount-500' );
+
+		expect( belowChoice.element.getAttribute( 'disabled' ) ).toBeTruthy();
+		expect( belowChoice.element.parentElement!.className ).toContain( 'inactive' );
+
+		[ 1000, 10000, 29900 ].forEach( amount => {
+			const aboveChoice = wrapper.find( `#amount-${amount}` );
+			expect( aboveChoice.element.getAttribute( 'disabled' ) ).toBeFalsy();
+			expect( aboveChoice.element.parentElement!.className ).not.toContain( 'inactive' );
+		} );
+
+	} );
 } );
