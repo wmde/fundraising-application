@@ -15,7 +15,7 @@ const testPaymentMethods = [ 'BEZ', 'PPL', 'UEB', 'BTC' ];
 
 describe( 'PaymentType', () => {
 
-	it( 'sends new payment type to store when it is selected', () => {
+	it( 'emits new payment type when it is selected', () => {
 		const wrapper = mount( PaymentType, {
 			localVue,
 			propsData: {
@@ -26,16 +26,14 @@ describe( 'PaymentType', () => {
 				$t: () => {},
 			},
 		} );
-		const store = wrapper.vm.$store;
-		store.dispatch = jest.fn();
 
 		wrapper.find( '#payment-btc' ).trigger( 'click' );
-		const expectedAction = action( NS_PAYMENT, setType );
 
-		expect( store.dispatch ).toBeCalledWith( expectedAction, 'BTC' );
+		expect( wrapper.emitted( 'payment-type-selected' ) ).toBeTruthy();
+		expect( wrapper.emitted( 'payment-type-selected' )[ 0 ] ).toEqual( [ 'BTC' ] );
 	} );
 
-	it( 'updates the selected type when the store changes', () => {
+	it( 'updates the selected type when the property changes', () => {
 		const wrapper = mount( PaymentType, {
 			localVue,
 			propsData: {
@@ -46,8 +44,9 @@ describe( 'PaymentType', () => {
 				$t: () => {},
 			},
 		} );
-		const store = wrapper.vm.$store;
-		store.dispatch( action( NS_PAYMENT, setType ), 'PPL' );
+
+		// explicitly simulate a prop change from outside of the wrapper
+		wrapper.setProps( { currentType: 'PPL' } );
 
 		expect( wrapper.vm.$data.selectedType ).toBe( 'PPL' );
 	} );
