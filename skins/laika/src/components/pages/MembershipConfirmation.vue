@@ -21,7 +21,7 @@
 import Vue from 'vue';
 import MembershipSummary from '@/components/pages/membership_confirmation/MembershipSummary.vue';
 import SummaryLinks from '@/components/pages/membership_confirmation/SummaryLinks.vue';
-import {AddressTypeModel} from "@/view_models/AddressTypeModel";
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 export default Vue.extend( {
 	name: 'MembershipConfirmation',
@@ -35,10 +35,10 @@ export default Vue.extend( {
 	computed: {
 		addressType: {
 			get(): number {
-				return this.confirmationData.address.salutation === 'Firma'? AddressTypeModel.COMPANY : AddressTypeModel.PERSON;
+				return this.confirmationData.address.salutation === 'Firma' ? AddressTypeModel.COMPANY : AddressTypeModel.PERSON;
 			},
 		},
-	}
+	},
 } );
 </script>
 

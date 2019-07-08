@@ -98,7 +98,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'streetAddress' => $applicant->getPhysicalAddress()->getStreetAddress(),
 			'postalCode' => $applicant->getPhysicalAddress()->getPostalCode(),
 			'city' => $applicant->getPhysicalAddress()->getCity(),
-			'email' => $applicant->getEmailAddress(),
+			'email' => $applicant->getEmailAddress()->getFullAddress(),
+			'countryCode' => $applicant->getPhysicalAddress()->getCountryCode()
 		];
 	}
 

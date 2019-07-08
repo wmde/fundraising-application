@@ -1,43 +1,31 @@
 <template>
 	<div class="donation-summary">
-		<div class="intro"><slot></slot></div>
 		<div class="payment-summary" v-html="getSummary()"></div>
 		<div class="payment-email" v-html="getEmail()"></div>
+		<div class="has-margin-top-18">{{ $t( 'membership_confirmation_success_text' ) }}</div>
 	</div>
 </template>
 
 <script lang="js">
 import Vue from 'vue';
-import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 class PrivateDonorRenderer {
-	static getPersonTypeMessageKey() {
-		return 'donation_confirmation_topbox_donor_type_person';
-	}
 	static renderAddress( address, country ) {
 		return address.salutation + ' ' + address.fullName + ', '
 				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city + ', ' + country;
 	}
-	static canRender( address ) {
-		return address.salutation && address.firstName && address.lastName && address.streetAddress && address.postalCode && address.city;
-	}
 }
 class CompanyDonorRenderer {
-	static getPersonTypeMessageKey() {
-		return 'donation_confirmation_topbox_donor_type_company';
-	}
 	static renderAddress( address, country ) {
 		return address.fullName + ', '
 				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city + ', ' + country;
 	}
-	static canRender( address ) {
-		return address.fullName && address.streetAddress && address.postalCode && address.city;
-	}
 }
 
 const addressTypeRenderers = {
-	[ addressTypeName( AddressTypeModel.PERSON ) ]: PrivateDonorRenderer,
-	[ addressTypeName( AddressTypeModel.COMPANY ) ]: CompanyDonorRenderer,
+	[ AddressTypeModel.PERSON ]: PrivateDonorRenderer,
+	[ AddressTypeModel.COMPANY ]: CompanyDonorRenderer,
 };
 
 export default Vue.extend( {
@@ -50,23 +38,20 @@ export default Vue.extend( {
 	methods: {
 		getSummary: function () {
 			const addressTypeRenderer = addressTypeRenderers[ this.addressType ];
-			const interval = this.$t( 'donation_form_payment_interval_' + this.membershipApplication.interval );
-			const formattedAmount = parseFloat( this.membershipApplication.membershipFee ).toFixed( 2 ).replace( '.', ',' );
-			const paymentType = this.$t( this.membershipApplication.paymentType );
-			const personType = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );
-			let address = this.$t( 'donation_confirmation_review_address_missing' );
-			if ( addressTypeRenderer.canRender( this.address ) ) {
-				address = addressTypeRenderer.renderAddress( this.address, this.$t( 'donation_form_country_option_' + this.address.countryCode ) );
-			}
+			const interval = this.$t( 'donation_form_payment_interval_' + this.membershipApplication.paymentIntervalInMonths );
+			const formattedAmountMonthly = parseFloat( this.membershipApplication.membershipFee ).toFixed( 2 ).replace( '.', ',' );
+			const formattedAmountYearly = parseFloat( this.membershipApplication.membershipFee * 12 ).toFixed( 2 ).replace( '.', ',' );
+			const personType = this.$t( this.membershipApplication.membershipType );
+			const address = addressTypeRenderer.renderAddress( this.address, this.$t( 'donation_form_country_option_' + this.address.countryCode ) );
 
 			return this.$t(
-				'donation_confirmation_topbox_summary',
+				'membership_confirmation_data_text',
 				{
-					interval,
-					formattedAmount,
-					paymentType,
-					personType,
-					address,
+					paymentInterval: interval,
+					membershipType: personType,
+					membershipFee: formattedAmountMonthly,
+					membershipFeeYearly: formattedAmountYearly,
+					address: address,
 				}
 			);
 		},
@@ -82,12 +67,4 @@ export default Vue.extend( {
 
 <style lang="scss">
 	@import "../../../scss/custom";
-
-	.donation {
-		&-summary {
-			.intro {
-				margin-bottom: 18px;
-			}
-		}
-	}
 </style>
