@@ -53,7 +53,7 @@ export default Vue.extend( {
 	},
 	methods: {
 		setAddressType: function () {
-			this.$emit( 'addressType', this.$data.type );
+			this.$emit( 'address-type', this.$data.type );
 		},
 	},
 } );
