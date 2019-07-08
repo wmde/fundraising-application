@@ -7,10 +7,12 @@ import {
 	setAddressField,
 	setReceiptOptOut,
 	setDate,
+	setMembershipType,
 } from '@/store/membership_address/actionTypes';
 import { MembershipAddressState, InputField, Payload } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
 import { MARK_EMPTY_FIELDS_INVALID } from '@/store/membership_address/mutationTypes';
 
 export const actions = {
@@ -51,6 +53,9 @@ export const actions = {
 	},
 	[ setReceiptOptOut ]( context: ActionContext<MembershipAddressState, any>, optOut: boolean ) {
 		context.commit( 'SET_RECEIPT_OPTOUT', optOut );
+	},
+	[ setMembershipType ]( context: ActionContext<MembershipAddressState, any>, type: MembershipTypeModel ) {
+		context.commit( 'SET_MEMBERSHIP_TYPE', type );
 	},
 
 };

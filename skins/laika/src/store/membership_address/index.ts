@@ -5,11 +5,13 @@ import { actions } from '@/store/membership_address/actions';
 import { getters } from '@/store/membership_address/getters';
 import { mutations } from '@/store/membership_address/mutations';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
 
 export default function (): Module<MembershipAddressState, any> {
 	const state: MembershipAddressState = {
 		isValidating: false,
 		addressType: AddressTypeModel.PERSON,
+		membershipType: MembershipTypeModel.SUSTAINING,
 		receiptOptOut: false,
 		values: {
 			salutation: '',

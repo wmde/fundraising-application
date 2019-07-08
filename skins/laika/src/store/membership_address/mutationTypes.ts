@@ -8,3 +8,4 @@ export const SET_ADDRESS_FIELD: string = 'SET_ADDRESS_FIELD';
 export const SET_EMAIL: string = 'SET_EMAIL';
 export const SET_DATE: string = 'SET_DATE';
 export const SET_RECEIPT_OPTOUT: string = 'SET_RECEIPT_OPTOUT';
+export const SET_MEMBERSHIP_TYPE: string = 'SET_MEMBERSHIP_TYPE';

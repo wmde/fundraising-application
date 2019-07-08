@@ -2,6 +2,7 @@ import { GetterTree } from 'vuex';
 import { MembershipAddressState } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
 import { REQUIRED_FIELDS } from '@/store/address/constants';
 
 export const getters: GetterTree<MembershipAddressState, any> = {
@@ -12,6 +13,7 @@ export const getters: GetterTree<MembershipAddressState, any> = {
 		return getters.invalidFields.length === 0;
 	},
 	addressType: ( state: MembershipAddressState ): AddressTypeModel => state.addressType,
+	membershipType: ( state: MembershipAddressState ): MembershipTypeModel => state.membershipType,
 	fullName: ( state: MembershipAddressState ): string => {
 		// Duplicating code from DonorName PHP class
 		const address = state.values;
