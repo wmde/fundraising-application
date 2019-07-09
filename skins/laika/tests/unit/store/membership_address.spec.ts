@@ -53,7 +53,7 @@ function newMinimalStore( overrides: Object ): MembershipAddressState {
 			},
 			validity: {
 				salutation: Validity.INCOMPLETE,
-				title: Validity.VALID,
+				title: Validity.INCOMPLETE,
 				firstName: Validity.INCOMPLETE,
 				lastName: Validity.INCOMPLETE,
 				companyName: Validity.INCOMPLETE,
@@ -403,6 +403,197 @@ describe( 'MembershipAddress', () => {
 				'SET_MEMBERSHIP_TYPE',
 				choice
 			);
+		} );
+	} );
+
+	describe( 'Mutations/VALIDATE_INPUT', () => {
+		it( 'sets validity to incomplete for optional unfilled fields', () => {
+			const inputField = {
+					name: 'title',
+					value: '',
+					pattern: '',
+					optionalField: true,
+				},
+				store = newMinimalStore( {} );
+			mutations.VALIDATE_INPUT( store, inputField );
+			expect( store.validity.title ).toStrictEqual( Validity.INCOMPLETE );
+		} );
+
+		it( 'sets validity to valid for correctly filled fields', () => {
+			const inputField = {
+					name: 'firstName',
+					value: 'Testina',
+					pattern: '^.+$',
+					optionalField: false,
+				},
+				store = newMinimalStore( {} );
+			mutations.VALIDATE_INPUT( store, inputField );
+			expect( store.validity.firstName ).toStrictEqual( Validity.VALID );
+		} );
+
+		it( 'sets validity to invalid for incorrectly filled fields', () => {
+			const inputField = {
+					name: 'postcode',
+					value: '666666',
+					pattern: '^[0-9]{4,5}$',
+					optionalField: false,
+				},
+				store = newMinimalStore( {} );
+			mutations.VALIDATE_INPUT( store, inputField );
+			expect( store.validity.postcode ).toStrictEqual( Validity.INVALID );
+		} );
+	} );
+	describe( 'Mutations/MARK_EMPTY_FIELD_INVALID', () => {
+		it( 'sets validity to invalid for empty mandatory fields', () => {
+			const fakeFormData = {
+					firstName: {
+						name: 'firstName',
+						value: '',
+						pattern: '^.+$',
+						optionalField: false,
+					},
+					lastName: {
+						name: 'lastName',
+						value: '',
+						pattern: '^.+$',
+						optionalField: false,
+					},
+				},
+				store = newMinimalStore( {} );
+			expect( store.validity.firstName ).toStrictEqual( Validity.INCOMPLETE );
+			expect( store.validity.lastName ).toStrictEqual( Validity.INCOMPLETE );
+			mutations.MARK_EMPTY_FIELDS_INVALID( store, fakeFormData );
+			expect( store.validity.firstName ).toStrictEqual( Validity.INVALID );
+			expect( store.validity.lastName ).toStrictEqual( Validity.INVALID );
+		} );
+	} );
+
+	describe( 'Mutations/BEGIN_ADDRESS_VALIDATION', () => {
+		it( 'sets validation flag to true', () => {
+			const store = newMinimalStore( {} );
+			mutations.BEGIN_ADDRESS_VALIDATION( store, null );
+			expect( store.isValidating ).toBe( true );
+		} );
+	} );
+
+	describe( 'Mutations/FINISH_ADDRESS_VALIDATION', () => {
+		it( 'sets validation flag to false if there are no errors after the server responds', () => {
+			const store = newMinimalStore( {} ),
+				resp = {
+					status: 'OK',
+					messages: {},
+				};
+			mutations.FINISH_ADDRESS_VALIDATION( store, resp );
+			expect( store.isValidating ).toBe( false );
+		} );
+
+		it( 'sets validity to invalid for the appropriate form fields according to the response from the server', () => {
+			const store = newMinimalStore( {} ),
+				resp = {
+					status: 'ERR',
+					messages: {
+						postcode: 'error',
+						street: 'error',
+					},
+				};
+			expect( store.validity.postcode ).toStrictEqual( Validity.INCOMPLETE );
+			expect( store.validity.street ).toStrictEqual( Validity.INCOMPLETE );
+
+			mutations.FINISH_ADDRESS_VALIDATION( store, resp );
+
+			expect( store.validity.postcode ).toStrictEqual( Validity.INVALID );
+			expect( store.validity.street ).toStrictEqual( Validity.INVALID );
+		} );
+
+	} );
+
+	describe( 'Mutations/SET_ADDRESS_TYPE', () => {
+		it( 'sets address type', () => {
+			const store = newMinimalStore( {} );
+			mutations.SET_ADDRESS_TYPE( store, AddressTypeModel.COMPANY );
+			expect( store.addressType ).toBe( AddressTypeModel.COMPANY );
+		} );
+	} );
+
+	describe( 'Mutations/SET_ADDRESS_FIELDS', () => {
+		it( 'sets address fields values in store', () => {
+			const store = newMinimalStore( {} );
+			const fields = {
+				firstName: {
+					name: 'firstName',
+					value: 'foo bar',
+					pattern: '^.+$',
+					optionalField: false,
+				},
+				lastName: {
+					name: 'lastName',
+					value: 'should be forbidden',
+					pattern: '^.+$',
+					optionalField: false,
+				},
+				street: {
+					name: 'street',
+					value: 'because it makes no sense',
+					pattern: '^.+$',
+					optionalField: false,
+				},
+			};
+			mutations.SET_ADDRESS_FIELDS( store, fields );
+			expect( store.values.firstName ).toBe( 'foo bar' );
+			expect( store.values.lastName ).toBe( 'should be forbidden' );
+			expect( store.values.street ).toBe( 'because it makes no sense' );
+		} );
+	} );
+
+	describe( 'Mutations/SET_ADDRESS_FIELD', () => {
+		it( 'sets field value in store', () => {
+			const store = newMinimalStore( {} );
+			const field = {
+				name: 'firstName',
+				value: 'Amazing',
+				pattern: '^.+$',
+				optionalField: false,
+			};
+			mutations.SET_ADDRESS_FIELD( store, field );
+			expect( store.values.firstName ).toBe( 'Amazing' );
+		} );
+	} );
+
+	describe( 'Mutations/SET_EMAIL', () => {
+		it( 'sets email value and validity', () => {
+			const store = newMinimalStore( {} );
+			const email = 'java.is.the.same.as.javascript@friendly.recruiter.com';
+			mutations.SET_EMAIL( store, email );
+			expect( store.values.email ).toBe( email );
+			expect( store.validity.email ).toBe( Validity.VALID );
+		} );
+	} );
+
+	describe( 'Mutations/SET_DATE', () => {
+		it( 'sets date of birth value and validity', () => {
+			const store = newMinimalStore( {} );
+			const date = '01.01.2001';
+			mutations.SET_DATE( store, date );
+			expect( store.values.date ).toBe( date );
+			expect( store.validity.date ).toBe( Validity.VALID );
+		} );
+	} );
+
+	describe( 'Mutations/SET_RECEIPT_OPTOUT', () => {
+		it( 'sets receipt opt out choice', () => {
+			const store = newMinimalStore( {} );
+			const choice = true;
+			mutations.SET_RECEIPT_OPTOUT( store, choice );
+			expect( store.receiptOptOut ).toBe( choice );
+		} );
+	} );
+
+	describe( 'Mutations/SET_MEMBERSHIP_TYPE', () => {
+		it( 'sets receipt opt out choice', () => {
+			const store = newMinimalStore( {} );
+			const choice = MembershipTypeModel.ACTIVE;
+			mutations.SET_MEMBERSHIP_TYPE( store, choice );
+			expect( store.membershipType ).toBe( choice );
 		} );
 	} );
 
