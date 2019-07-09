@@ -69,14 +69,15 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 				'postalCode' => '1234',
 				'city' => 'Berlin',
 				'email' => 'jeroendedauw@gmail.com',
-				'countryCode' => 'DE'
+				'countryCode' => 'DE',
+				'applicantType' => 'person'
 			],
 			'bankData' => [],
 			'payPalData' => [
 				'firstPaymentDate' => '01.02.2021'
 			],
 			'urls' => [
-				'cancelMembership' => '/such.a.url/CancelMembership?updateToken=update_token'
+				'cancelMembership' => '/such.a.url/cancel-membership-application?updateToken=update_token'
 			]
 		];
 	}

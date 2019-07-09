@@ -8,6 +8,7 @@ use DateTime;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
+use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
@@ -68,9 +69,9 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			),
 			'urls' => [
 				'cancelMembership'  => $this->urlGenerator->generateRelativeUrl(
-					'CancelMembership',
+					'cancel-membership-application',
 					[
-						'donationId' => $membershipApplication->getId(),
+						'id' => $membershipApplication->getId(),
 						'updateToken' => $updateToken,
 					]
 				)
@@ -99,7 +100,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'postalCode' => $applicant->getPhysicalAddress()->getPostalCode(),
 			'city' => $applicant->getPhysicalAddress()->getCity(),
 			'email' => $applicant->getEmailAddress()->getFullAddress(),
-			'countryCode' => $applicant->getPhysicalAddress()->getCountryCode()
+			'countryCode' => $applicant->getPhysicalAddress()->getCountryCode(),
+			'applicantType' => $applicant->isPrivatePerson() ? ApplicantName::PERSON_PRIVATE : ApplicantName::PERSON_COMPANY
 		];
 	}
 

@@ -1,7 +1,9 @@
 <template>
 	<div class="donation-links">
-		<a href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
-		<a :href="confirmationData.urls.cancelMembership">{{ $t( 'membership_confirmation_cancel_button' ) }}</a>
+		<ul>
+			<li><a href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a></li>
+			<li><a :href="confirmationData.urls.cancelMembership">{{ $t( 'membership_confirmation_cancel_button' ) }}</a></li>
+		</ul>
 	</div>
 </template>
 <script lang="ts">
