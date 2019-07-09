@@ -43,7 +43,7 @@ class Routes {
 
 	public const ADD_COMMENT_PAGE = 'AddCommentPage';
 	public const CANCEL_DONATION = 'cancel-donation';
-	public const CANCEL_MEMBERSHIP = 'CancelMembership';
+	public const CANCEL_MEMBERSHIP = 'cancel-membership-application';
 	public const CONFIRM_SUBSCRIPTION = 'confirm-subscription';
 	public const CONVERT_BANKDATA = 'generate-iban';
 	public const GET_IN_TOUCH = 'contact';
