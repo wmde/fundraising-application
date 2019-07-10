@@ -93,6 +93,6 @@ describe( 'Name.vue', () => {
 			event = 'field-changed',
 			first = wrapper.find( '#first-name' );
 		first.trigger( 'blur' );
-		expect( wrapper.emitted( event ) ).toHaveLength( 1 );
+		expect( wrapper.emitted( event )[ 0 ] ).toEqual( [ 'firstName' ] );
 	} );
 } );

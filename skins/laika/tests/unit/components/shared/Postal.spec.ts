@@ -106,6 +106,6 @@ describe( 'Postal.vue', () => {
 			event = 'field-changed',
 			field = wrapper.find( '#city' );
 		field.trigger( 'blur' );
-		expect( wrapper.emitted( event ) ).toHaveLength( 1 );
+		expect( wrapper.emitted( event )[ 0 ] ).toEqual( [ 'city' ] );
 	} );
 } );
