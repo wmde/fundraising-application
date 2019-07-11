@@ -7,7 +7,6 @@ import { NS_BANKDATA } from '@/store/namespaces';
 import { action } from '@/store/util';
 import { setBankData } from '@/store/bankdata/actionTypes';
 import { BankAccountRequest } from '@/view_models/BankAccount';
-import { SET_BANKNAME } from '@/store/bankdata/mutationTypes';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );

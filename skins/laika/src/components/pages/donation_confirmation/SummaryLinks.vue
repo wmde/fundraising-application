@@ -1,9 +1,9 @@
 <template>
 	<div class="donation-links">
-		<a href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
-		<a :href="donationCommentUrl" v-if="donationCanBeCommented">{{ $t( 'donation_confirmation_comment_button' )
+		<a id="print-link" href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
+		<a id="comment-link" :href="donationCommentUrl" v-if="donationCanBeCommented">{{ $t( 'donation_confirmation_comment_button' )
 			}}</a>
-		<div v-if="donationCanBeCanceled">
+		<div id="cancel-link" v-if="donationCanBeCanceled">
 			<form class="has-margin-top-18" :action="confirmationData.urls.cancelDonation" method="post">
 				<a href="javascript:" onclick="parentNode.submit();">{{ $t( 'donation_confirmation_cancel_button' )
 					}}</a>
