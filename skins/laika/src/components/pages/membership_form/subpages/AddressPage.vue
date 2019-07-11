@@ -1,6 +1,6 @@
 <template>
     <div class="column is-full">
-        <membership-type></membership-type>
+        <membership-type v-if="showMembershipTypeOption"></membership-type>
 		<address-fields v-bind="$props" ref="address"></address-fields>
     </div>
 </template>
@@ -21,6 +21,7 @@ export default Vue.extend( {
 		validateAddressUrl: String,
 		countries: Array as () => Array<String>,
 		trackingData: Object as () => TrackingData,
+		showMembershipTypeOption: Boolean,
 	},
 } );
 </script>
