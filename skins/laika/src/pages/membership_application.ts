@@ -20,6 +20,7 @@ interface MembershipAmountModel {
 	tracking: Array<number>,
 	urls: any,
 	showMembershipTypeOption: Boolean,
+	initialFormValues: Object,
 }
 
 const pageData = new PageDataInitializer<MembershipAmountModel>( '#app' );
@@ -51,6 +52,7 @@ new Vue( {
 				addressCountries: COUNTRIES,
 				trackingData: pageData.applicationVars.tracking,
 				showMembershipTypeOption: pageData.applicationVars.showMembershipTypeOption,
+				initialFormValues: pageData.applicationVars.initialFormValues,
 			},
 		} ),
 		h( Sidebar, {

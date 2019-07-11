@@ -55,6 +55,7 @@ export default Vue.extend( {
 						countries: this.$props.addressCountries,
 						trackingData: this.$props.trackingData,
 						showMembershipTypeOption: this.$props.showMembershipTypeOption,
+						initialFormValues: this.$props.initialFormValues,
 					};
 				}
 				return {
