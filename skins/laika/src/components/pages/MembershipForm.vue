@@ -32,6 +32,8 @@ export default Vue.extend( {
 		paymentTypes: Array as () => Array<String>,
 		addressCountries: Array as () => Array<String>,
 		trackingData: Object as () => TrackingData,
+		showMembershipTypeOption: Boolean,
+		initialFormValues: Object,
 	},
 	data: function () {
 		return {
@@ -52,6 +54,7 @@ export default Vue.extend( {
 						validateAddressUrl: this.$props.validateAddressUrl,
 						countries: this.$props.addressCountries,
 						trackingData: this.$props.trackingData,
+						showMembershipTypeOption: this.$props.showMembershipTypeOption,
 					};
 				}
 				return {

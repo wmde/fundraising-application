@@ -18,7 +18,8 @@ interface MembershipAmountModel {
 	presetAmounts: Array<string>,
 	paymentTypes: Array<string>,
 	tracking: Array<number>,
-	urls: any
+	urls: any,
+	showMembershipTypeOption: Boolean,
 }
 
 const pageData = new PageDataInitializer<MembershipAmountModel>( '#app' );
@@ -49,6 +50,7 @@ new Vue( {
 				paymentTypes: pageData.applicationVars.paymentTypes,
 				addressCountries: COUNTRIES,
 				trackingData: pageData.applicationVars.tracking,
+				showMembershipTypeOption: pageData.applicationVars.showMembershipTypeOption,
 			},
 		} ),
 		h( Sidebar, {
