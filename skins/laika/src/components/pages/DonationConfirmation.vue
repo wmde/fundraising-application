@@ -8,7 +8,7 @@
 					<div class="title is-size-5">{{ $t( 'donation_confirmation_topbox_intro' ) }}</div>
 				</donation-summary>
 				<payment-notice :payment="confirmationData.donation"></payment-notice>
-				<div v-if="showBankTransferCode">
+				<div id="bank-data" v-if="showBankTransferCode">
 					<bank-data :bank-transfer-code="confirmationData.donation.bankTransferCode"></bank-data>
 					<div class="has-margin-top-18"
 						v-html="$t( 'donation_confirmation_reminder_bank_transfer', { bankTransferCode: confirmationData.donation.bankTransferCode } )">
