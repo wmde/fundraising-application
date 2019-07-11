@@ -18,6 +18,7 @@
                     name="type"
                     v-model="selectedType"
                     :native-value="MembershipTypeModel.ACTIVE"
+                    :disabled="isActiveTypeDisabled"
                     @change.native="setType">
                 {{ $t( 'membership_membershiptype_option_active' ) }}
                 <p class="has-text-dark-lighter">{{ $t( 'membership_membershiptype_option_active_legend' ) }}</p>
@@ -29,9 +30,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { setMembershipType } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
+import { mapGetters } from 'vuex';
 
 export default Vue.extend( {
 	name: 'MembershipType',
@@ -44,6 +47,22 @@ export default Vue.extend( {
 		MembershipTypeModel: {
 			get: function () {
 				return MembershipTypeModel;
+			},
+		},
+		AddressTypeModel: {
+			get: function () {
+				return AddressTypeModel;
+			},
+		},
+		...mapGetters( NS_MEMBERSHIP_ADDRESS, [ 'addressType' ] ),
+		isActiveTypeDisabled: {
+			get: function () {
+				if ( this.$store.getters[ NS_MEMBERSHIP_ADDRESS + '/addressType' ] === AddressTypeModel.COMPANY ) {
+					this.$data.selectedType = MembershipTypeModel.SUSTAINING;
+					this.setType();
+					return true;
+				}
+				return false;
 			},
 		},
 	},
