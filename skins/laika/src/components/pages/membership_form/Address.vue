@@ -104,6 +104,7 @@ export default Vue.extend( {
 	props: {
 		validateAddressUrl: String,
 		countries: Array as () => Array<String>,
+		initialFormValues: Object,
 	},
 	computed: {
 		fieldErrors: {
@@ -119,6 +120,14 @@ export default Vue.extend( {
 		...mapGetters( NS_MEMBERSHIP_ADDRESS, [
 			'addressType',
 		] ),
+	},
+	mounted() {
+		const initialFormValues = this.$props.initialFormValues;
+		if ( initialFormValues !== undefined ) {
+			Object.keys( this.$data.formData ).forEach( ( fieldName: string ) => {
+				this.formData[ fieldName ].value = initialFormValues[ fieldName ];
+			} );
+		}
 	},
 	methods: {
 		validateForm(): Promise<ValidationResult> {
