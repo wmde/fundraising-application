@@ -1,7 +1,8 @@
 <template>
 	<div id="addressForm" class="column is-full">
 		<div class="has-margin-top-18">
-			<address-type v-on:address-type="setAddressType( $event )"></address-type>
+			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
+			<address-type :initial-value="addressTypeFromName(initialFormValues.addressType)" v-on:address-type="setAddressType( $event )"></address-type>
 		</div>
 		<h1 class="has-margin-top-36 title is-size-5">{{ $t( 'donation_form_section_address_title' ) }}</h1>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
@@ -9,8 +10,8 @@
 		<date-of-birth/>
         <receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
         <div class="has-margin-top-36">
-			<h1 class="title is-size-5">{{ $t( 'donation_form_section_email_title' ) }}</h1>
-			<email v-on:email="setEmail( $event )"></email>
+			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
+			<email :initial-value="initialFormValues.email" v-on:email="setEmail( $event )"></email>
 		</div>
 	</div>
 </template>
@@ -25,7 +26,7 @@ import DateOfBirth from '@/components/pages/membership_form/DateOfBirth.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import Email from '@/components/shared/Email.vue';
 import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel, addressTypeFromName } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, setReceiptOptOut, setAddressType, setEmail } from '@/store/membership_address/actionTypes';
@@ -115,6 +116,11 @@ export default Vue.extend( {
 					}
 					return validity;
 				}, ( {} as AddressValidity ) );
+			},
+		},
+		addressTypeFromName: {
+			get: function () {
+				return addressTypeFromName;
 			},
 		},
 		...mapGetters( NS_MEMBERSHIP_ADDRESS, [

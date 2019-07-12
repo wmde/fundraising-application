@@ -13,18 +13,18 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { NS_ADDRESS } from '@/store/namespaces';
-import { action } from '@/store/util';
-import { setEmail } from '@/store/address/actionTypes';
 
 export default Vue.extend( {
 	name: 'Email',
 	data: function () {
 		return {
-			emailValue: '',
+			emailValue: this.$props.initialValue,
 			emailPattern: /^[^@]+@.+$/,
 			emailHasError: false,
 		};
+	},
+	props: {
+		initialValue: String,
 	},
 	methods: {
 		setEmail: function () {

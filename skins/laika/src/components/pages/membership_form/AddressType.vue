@@ -31,8 +31,11 @@ export default Vue.extend( {
 	name: 'AddressType',
 	data: function () {
 		return {
-			type: AddressTypeModel.PERSON,
+			type: this.$props.initialValue !== '' ? this.$props.initialValue : AddressTypeModel.PERSON,
 		};
+	},
+	props: {
+		initialValue: Number as () => AddressTypeModel,
 	},
 	computed: {
 		AddressTypeModel: {
