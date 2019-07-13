@@ -1,7 +1,7 @@
 <template>
 	<div class="donation-summary">
 		<div class="payment-summary" v-html="getSummary()"></div>
-		<div class="payment-email" v-html="getEmail()"></div>
+		<div class="payment-email">{{ $t( 'donation_confirmation_topbox_email', { email: this.address.email } ) }}</div>
 		<div class="has-margin-top-18">{{ $t( 'membership_confirmation_success_text' ) }}</div>
 	</div>
 </template>
@@ -53,12 +53,6 @@ export default Vue.extend( {
 					address: address,
 				}
 			);
-		},
-		getEmail: function () {
-			if ( this.address.email ) {
-				return this.$t( 'donation_confirmation_topbox_email', { email: this.address.email } );
-			}
-			return this.$t( 'donation_confirmation_review_email_missing' );
 		},
 	},
 } );
