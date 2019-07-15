@@ -1,6 +1,7 @@
 <template>
 	<fieldset>
 		<legend class="title is-size-5">{{ title }}</legend>
+		<legend class="form-caption has-margin-bottom-18" v-if="caption">{{ caption }}</legend>
 		<div class="amount-wrapper">
 			<div v-for="amount in paymentAmounts"
 				:key="'amount-' + toCents( amount )"
@@ -49,6 +50,10 @@ export default Vue.extend( {
 		paymentAmounts: Array,
 		title: String,
 		error: {
+			type: String,
+			default: '',
+		},
+		caption: {
 			type: String,
 			default: '',
 		},

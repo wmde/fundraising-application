@@ -1,6 +1,6 @@
 <template>
 	<fieldset>
-		<legend class="title is-size-5">{{ $t( 'membership_section_address_header_type' ) }}</legend>
+		<legend class="title is-size-5">{{ $t( 'membership_form_section_address_header_type' ) }}</legend>
 		<div>
 			<b-radio type="radio"
 					id="personal"

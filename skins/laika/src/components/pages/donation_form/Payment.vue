@@ -8,12 +8,14 @@
 				v-on:amount-selected="sendAmountToStore"
 		></amount-selection>
 		<payment-interval
+				class="has-margin-top-36"
 				:payment-intervals="paymentIntervals"
 				:current-interval="interval"
 				:title="$t('donation_form_payment_interval_title')"
 				v-on:interval-selected="sendIntervalToStore"
 		></payment-interval>
 		<payment-type
+				class="has-margin-top-36"
 				:current-type="type"
 				:payment-types="paymentTypes"
 				:error="typeIsValid ? '' : $t('donation_form_payment_type_error')"

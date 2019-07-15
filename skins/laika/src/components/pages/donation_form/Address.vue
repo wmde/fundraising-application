@@ -28,7 +28,7 @@ import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, setReceiptOptOut, setAddressType, setEmail } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
-import PaymentBankData from '@/components/pages/donation_form/PaymentBankData.vue';
+import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 
 export default Vue.extend( {
 	name: 'Address',

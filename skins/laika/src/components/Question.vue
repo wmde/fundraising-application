@@ -51,3 +51,25 @@ export default Vue.extend( {
 	},
 } );
 </script>
+
+<style lang="scss">
+@import "../scss/custom";
+
+.accordion {
+	border: 1px solid $fun-color-gray-light-transparency;
+	padding: 1.4rem;
+	box-sizing: content-box;
+	&-heading {
+		padding: 1.4rem;
+		border-bottom: 2px solid $fun-color-gray-light-transparency;
+		cursor: pointer;
+	}
+	&-content {
+		padding-top: 2.8rem;
+		padding-right: 0.6rem;
+	}
+	h3 {
+		cursor: pointer;
+	}
+}
+</style>

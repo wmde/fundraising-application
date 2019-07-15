@@ -1,6 +1,6 @@
 <template>
     <fieldset class="has-margin-top-36">
-        <legend class="title is-size-5">{{ $t('membership_membershiptype_legend') }}</legend>
+        <legend class="title is-size-5">{{ $t('membership_form_membershiptype_legend') }}</legend>
         <div>
             <b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.SUSTAINING }"
                     type="radio"
@@ -9,8 +9,8 @@
                     v-model="selectedType"
                     :native-value="MembershipTypeModel.SUSTAINING"
                     @change.native="setType">
-                <span>{{ $t( 'membership_membershiptype_option_sustaining' ) }}</span>
-                <p class="has-text-dark-lighter">{{ $t( 'membership_membershiptype_option_sustaining_legend' ) }}</p>
+                <span>{{ $t( 'membership_form_membershiptype_option_sustaining' ) }}</span>
+                <p class="has-text-dark-lighter">{{ $t( 'membership_form_membershiptype_option_sustaining_legend' ) }}</p>
             </b-radio>
             <b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.ACTIVE }"
                     type="radio"
@@ -20,8 +20,8 @@
                     :native-value="MembershipTypeModel.ACTIVE"
                     :disabled="isActiveTypeDisabled"
                     @change.native="setType">
-                {{ $t( 'membership_membershiptype_option_active' ) }}
-                <p class="has-text-dark-lighter">{{ $t( 'membership_membershiptype_option_active_legend' ) }}</p>
+                {{ $t( 'membership_form_membershiptype_option_active' ) }}
+                <p class="has-text-dark-lighter">{{ $t( 'membership_form_membershiptype_option_active_legend' ) }}</p>
             </b-radio>
         </div>
     </fieldset>

@@ -27,9 +27,9 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
-		validateAmountUrl: String,
+		validateFeeUrl: String,
 		paymentAmounts: Array as () => Array<String>,
-		paymentTypes: Array as () => Array<String>,
+		paymentIntervals: Array as () => Array<String>,
 		addressCountries: Array as () => Array<String>,
 		trackingData: Object as () => TrackingData,
 		showMembershipTypeOption: Boolean,
@@ -59,10 +59,9 @@ export default Vue.extend( {
 					};
 				}
 				return {
-					validateAmountUrl: this.$props.validateAmountUrl,
+					validateFeeUrl: this.$props.validateFeeUrl,
 					paymentAmounts: this.$props.paymentAmounts,
 					paymentIntervals: this.$props.paymentIntervals,
-					paymentTypes: this.$props.paymentTypes,
 				};
 			},
 		},

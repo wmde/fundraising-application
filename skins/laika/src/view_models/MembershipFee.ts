@@ -20,5 +20,4 @@ export interface IntervalData {
 export interface SetFeePayload {
 	feeValue: string,
 	validateFeeUrl: string
-
 }
