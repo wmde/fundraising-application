@@ -8,6 +8,9 @@ const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
 
+const testAccessToken = 'a839bc8045aba4c8b600bc0477dbbf10';
+const testId = 123;
+
 describe( 'MembershipInfo', () => {
 	it( 'renders access token and donation ID in membership application URL', () => {
 		const wrapper = mount( MembershipInfo, {
@@ -15,8 +18,8 @@ describe( 'MembershipInfo', () => {
 			propsData: {
 				confirmationData: {
 					donation: {
-						id: 1,
-						accessToken: 'a839bc8045aba4c8b600bc0477dbbf10',
+						id: testId,
+						accessToken: testAccessToken,
 					},
 				},
 			},
@@ -27,6 +30,10 @@ describe( 'MembershipInfo', () => {
 		} );
 
 		let href = wrapper.find( '#membership-application-url' ).element.attributes.getNamedItem( 'href' );
-		expect( href!.value ).toMatch( 'apply-for-membership?donationId=1&donationAccessToken=a839bc8045aba4c8b600bc0477dbbf10&type=sustaining' );
+		expect( href!.value ).toMatch(
+			'apply-for-membership?donationId=' + testId +
+			'&donationAccessToken=' + testAccessToken +
+			'&type=sustaining'
+		);
 	} );
 } );
