@@ -2,7 +2,7 @@
 	<div id="addressForm" class="column is-full">
 		<div class="has-margin-top-18">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
-			<address-type :initial-value="addressTypeFromName(initialFormValues.addressType)" v-on:address-type="setAddressType( $event )"></address-type>
+			<address-type :initial-value="initialFormValues.addressType | addressTypeFromName" v-on:address-type="setAddressType( $event )"></address-type>
 		</div>
 		<h1 class="has-margin-top-36 title is-size-5">{{ $t( 'donation_form_section_address_title' ) }}</h1>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
@@ -118,14 +118,12 @@ export default Vue.extend( {
 				}, ( {} as AddressValidity ) );
 			},
 		},
-		addressTypeFromName: {
-			get: function () {
-				return addressTypeFromName;
-			},
-		},
 		...mapGetters( NS_MEMBERSHIP_ADDRESS, [
 			'addressType',
 		] ),
+	},
+	filters: {
+		addressTypeFromName,
 	},
 	mounted() {
 		const initialFormValues = this.$props.initialFormValues;

@@ -56,13 +56,14 @@ export default Vue.extend( {
 		},
 		...mapGetters( NS_MEMBERSHIP_ADDRESS, [ 'addressType' ] ),
 		isActiveTypeDisabled: {
-			get: function () {
+			get: function (): boolean {
+				return this.$store.getters[ NS_MEMBERSHIP_ADDRESS + '/addressType' ] === AddressTypeModel.COMPANY;
+			},
+			set: function (): void {
 				if ( this.$store.getters[ NS_MEMBERSHIP_ADDRESS + '/addressType' ] === AddressTypeModel.COMPANY ) {
 					this.$data.selectedType = MembershipTypeModel.SUSTAINING;
 					this.setType();
-					return true;
 				}
-				return false;
 			},
 		},
 	},
