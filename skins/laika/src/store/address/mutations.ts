@@ -19,7 +19,7 @@ import { REQUIRED_FIELDS } from '@/store/address/constants';
 export const mutations: MutationTree<AddressState> = {
 	[ VALIDATE_INPUT ]( state: AddressState, field: InputField ) {
 		if ( field.value === '' && field.optionalField ) {
-			state.validity[ field.name ] = Validity.INCOMPLETE;
+			state.validity[ field.name ] = Validity.VALID;
 		} else {
 			state.validity[ field.name ] = Helper.inputIsValid( field.value, field.pattern );
 		}
