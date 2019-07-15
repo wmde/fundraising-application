@@ -36,7 +36,7 @@ class ApplyForMembershipController {
 		$params = [
 			'urls' => Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
 		];
-		$params['showMembershipTypeOption'] = ( $httpRequest->query->get( 'type' ) === 'sustaining' ? false : true );
+		$params['showMembershipTypeOption'] = $httpRequest->query->get( 'type' ) !== 'sustaining';
 
 		$useCase = $ffFactory->newGetDonationUseCase( $httpRequest->query->get( 'donationAccessToken', '' ) );
 		$responseModel = $useCase->showConfirmation(
