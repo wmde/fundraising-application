@@ -43,6 +43,9 @@ export default Vue.extend( {
 			}
 		},
 		dateIsValid: function () {
+			if ( this.$data.date === '' ) {
+				return true;
+			}
 			return this.datePattern.test( this.$data.date );
 		},
 	},
