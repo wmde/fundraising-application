@@ -59,12 +59,6 @@ export default Vue.extend( {
 			get: function (): boolean {
 				return this.$store.getters[ NS_MEMBERSHIP_ADDRESS + '/addressType' ] === AddressTypeModel.COMPANY;
 			},
-			set: function (): void {
-				if ( this.$store.getters[ NS_MEMBERSHIP_ADDRESS + '/addressType' ] === AddressTypeModel.COMPANY ) {
-					this.$data.selectedType = MembershipTypeModel.SUSTAINING;
-					this.setType();
-				}
-			},
 		},
 	},
 	methods: {
