@@ -35,7 +35,7 @@ export default Vue.extend( {
 		};
 	},
 	props: {
-		initialValue: Number as () => AddressTypeModel,
+		initialValue: [ Number as () => AddressTypeModel, String ],
 	},
 	computed: {
 		AddressTypeModel: {

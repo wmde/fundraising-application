@@ -33,7 +33,7 @@ export default Vue.extend( {
 		addressCountries: Array as () => Array<String>,
 		trackingData: Object as () => TrackingData,
 		showMembershipTypeOption: Boolean,
-		initialFormValues: Object,
+		initialFormValues: [ Object, String ],
 	},
 	data: function () {
 		return {

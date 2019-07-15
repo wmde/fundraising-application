@@ -22,7 +22,7 @@ export default Vue.extend( {
 		countries: Array as () => Array<String>,
 		trackingData: Object as () => TrackingData,
 		showMembershipTypeOption: Boolean,
-		initialFormValues: Object,
+		initialFormValues: [ Object, String ],
 	},
 } );
 </script>
