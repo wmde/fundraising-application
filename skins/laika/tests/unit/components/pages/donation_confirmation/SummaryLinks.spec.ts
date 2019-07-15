@@ -8,6 +8,10 @@ const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
 
+const testAccessToken = 'a839bc8045aba4c8b600bc0477dbbf10';
+const testUpdateToken = '16a9e7a092959b9507e86a0c94dfbb9c';
+const testId = '123';
+
 describe( 'SummaryLinks', () => {
 	it( 'allows donations to be commented if the payment method is not UEB', () => {
 		const wrapper = mount( MembershipInfo, {
@@ -15,13 +19,13 @@ describe( 'SummaryLinks', () => {
 			propsData: {
 				confirmationData: {
 					donation: {
-						id: 1,
-						accessToken: 'a839bc8045aba4c8b600bc0477dbbf10',
-						updateToken: '16a9e7a092959b9507e86a0c94dfbb9c',
+						id: testId,
+						accessToken: testAccessToken,
+						updateToken: testUpdateToken,
 						paymentType: 'BEZ',
 					},
 					urls: {
-						cancelDonation: 'cancel-donation?id=1&updateToken=16a9e7a092959b9507e86a0c94dfbb9c',
+						cancelDonation: 'cancel-donation?id=' + testId + '&updateToken=' + testUpdateToken,
 					},
 				},
 			},
@@ -33,7 +37,7 @@ describe( 'SummaryLinks', () => {
 
 		let href = wrapper.find( '#comment-link' ).element.attributes.getNamedItem( 'href' );
 		expect( href!.value ).toMatch(
-			'/add-comment?donationId=1&accessToken=a839bc8045aba4c8b600bc0477dbbf10&updateToken=16a9e7a092959b9507e86a0c94dfbb9c'
+			'/add-comment?donationId=' + testId + '&accessToken=' + testAccessToken + '&updateToken=' + testUpdateToken
 		);
 	} );
 
@@ -43,13 +47,13 @@ describe( 'SummaryLinks', () => {
 			propsData: {
 				confirmationData: {
 					donation: {
-						id: 1,
-						accessToken: 'a839bc8045aba4c8b600bc0477dbbf10',
-						updateToken: '16a9e7a092959b9507e86a0c94dfbb9c',
+						id: testId,
+						accessToken: testAccessToken,
+						updateToken: testUpdateToken,
 						paymentType: 'UEB',
 					},
 					urls: {
-						cancelDonation: 'cancel-donation?id=1&updateToken=16a9e7a092959b9507e86a0c94dfbb9c',
+						cancelDonation: 'cancel-donation?id=' + testId + '&updateToken=' + testUpdateToken,
 					},
 				},
 			},
@@ -68,9 +72,9 @@ describe( 'SummaryLinks', () => {
 			propsData: {
 				confirmationData: {
 					donation: {
-						id: 1,
-						accessToken: 'a839bc8045aba4c8b600bc0477dbbf10',
-						updateToken: '16a9e7a092959b9507e86a0c94dfbb9c',
+						id: testId,
+						accessToken: testAccessToken,
+						updateToken: testUpdateToken,
 						paymentType: 'BEZ',
 					},
 					urls: {
@@ -88,8 +92,8 @@ describe( 'SummaryLinks', () => {
 		expect( wrapper.find( '#cancel-link form' ).element.getAttribute( 'action' ) ).toMatch( 'cancel-donation' );
 		let hiddenFormFields = wrapper.findAll( '#cancel-link input' );
 		expect( hiddenFormFields.length ).toBe( 2 );
-		expect( hiddenFormFields.at( 0 ).element.getAttribute( 'value' ) ).toBe( '1' );
-		expect( hiddenFormFields.at( 1 ).element.getAttribute( 'value' ) ).toBe( '16a9e7a092959b9507e86a0c94dfbb9c' );
+		expect( hiddenFormFields.at( 0 ).element.getAttribute( 'value' ) ).toBe( testId );
+		expect( hiddenFormFields.at( 1 ).element.getAttribute( 'value' ) ).toBe( testUpdateToken );
 	} );
 
 	it( 'prevents donations from being cancelled if the payment method is not BEZ', () => {
@@ -99,8 +103,8 @@ describe( 'SummaryLinks', () => {
 				confirmationData: {
 					donation: {
 						id: 1,
-						accessToken: 'a839bc8045aba4c8b600bc0477dbbf10',
-						updateToken: '16a9e7a092959b9507e86a0c94dfbb9c',
+						accessToken: testAccessToken,
+						updateToken: testUpdateToken,
 						paymentType: 'UEB',
 					},
 					urls: {

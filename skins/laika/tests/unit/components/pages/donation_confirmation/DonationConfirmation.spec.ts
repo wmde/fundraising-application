@@ -8,6 +8,8 @@ const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
 
+const testBankTransferCode = 'XW-XLK-M3F-Z';
+
 function getDefaultConfirmationData(): any {
 	return {
 		addressType: 'person',
@@ -25,7 +27,7 @@ function getDefaultConfirmationData(): any {
 		donation: {
 			accessToken: 'a839bc8045aba4c8b600bc0477dbbf10',
 			amount: 12.35,
-			bankTransferCode: 'XW-XLK-M3F-Z',
+			bankTransferCode: testBankTransferCode,
 			id: 1,
 			interval: 0,
 			optsIntoDonationReceipt: true,
@@ -50,7 +52,7 @@ describe( 'DonationConfirmation', () => {
 			},
 		} );
 
-		expect( wrapper.find( '#bank-data' ).html() ).toContain( 'XW-XLK-M3F-Z' );
+		expect( wrapper.find( '#bank-data' ).html() ).toContain( testBankTransferCode );
 	} );
 
 	it( 'does not display the bank data element for other payment methods', () => {
