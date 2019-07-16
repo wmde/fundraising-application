@@ -54,22 +54,5 @@ describe( 'Email', () => {
 		const hasError = wrapper.vm.$data.emailHasError;
 		expect( hasError ).toBe( false );
 	} );
-	// Move this test to the file with unit tests for the Address component once it exists
-	it.skip( 'sends email to store if it is has valid format', () => {
-		const wrapper = mount( Email, {
-			localVue,
-			store: createStore(),
-			mocks: {
-				$t: () => { },
-			},
-		} );
-		const store = wrapper.vm.$store;
-		store.dispatch = jest.fn();
-		const expectedAction = action( NS_ADDRESS, setEmail );
-		const email = wrapper.find( '#email' );
-		wrapper.setData( { emailValue: 'abc@def.ghi' } );
-		email.trigger( 'blur' );
-		expect( store.dispatch ).toBeCalledWith( expectedAction, 'abc@def.ghi' );
-	} );
 
 } );
