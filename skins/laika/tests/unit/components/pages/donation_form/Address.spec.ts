@@ -47,12 +47,10 @@ describe( 'Address.vue', () => {
 	it( 'renders Bank Data component only if payment is direct debit', () => {
 		expect( wrapper.contains( PaymentBankData ) ).toBe( false );
 		// Stub payment option direct debit (BEZ) being selected
-		let comp = wrapper.vm.$options.computed;
-		if ( comp !== undefined ) {
-			if ( typeof comp.isDirectDebit === 'function' ) {
-				comp.isDirectDebit = jest.fn( () => true );
-				expect( wrapper.contains( PaymentBankData ) ).toBe( true );
-			}
+		const comp = wrapper.vm.$options!.computed;
+		if ( typeof comp.isDirectDebit === 'function' ) {
+			comp.isDirectDebit = jest.fn( () => true );
+			expect( wrapper.contains( PaymentBankData ) ).toBe( true );
 		}
 	} );
 

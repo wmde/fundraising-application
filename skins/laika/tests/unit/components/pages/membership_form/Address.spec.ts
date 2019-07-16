@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import { mount, shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Buefy from 'buefy';
 import Address from '@/components/pages/membership_form/Address.vue';
@@ -11,7 +11,7 @@ import DateOfBirth from '@/components/pages/membership_form/DateOfBirth.vue';
 import { createStore } from '@/store/membership_store';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { setAddressField, setReceiptOptOut, setAddressType, setEmail } from '@/store/address/actionTypes';
+import { setAddressField, setReceiptOptOut, setAddressType, setEmail } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 
 const localVue = createLocalVue();
@@ -96,15 +96,15 @@ describe( 'Address.vue', () => {
 		expect( store.dispatch ).toBeCalledWith( expectedAction, email );
 	} );
 
-	it('populates form data if initial data is available', () => {
+	it( 'populates form data if initial data is available', () => {
 		const firstName = 'Testina',
 			lastName = 'Testinson',
 			title = 'Prof Dr.';
-		wrapper = mount(Address, {
+		wrapper = mount( Address, {
 			localVue,
 			propsData: {
 				validateAddressUrl: 'validate-address',
-				countries: ['DE'],
+				countries: [ 'DE' ],
 				initialFormValues: {
 					firstName: firstName,
 					lastName: lastName,
@@ -115,28 +115,10 @@ describe( 'Address.vue', () => {
 			mocks: {
 				$t: () => { },
 			},
-		});
-		expect(wrapper.vm.$data.formData.firstName.value).toBe(firstName);
-		expect(wrapper.vm.$data.formData.lastName.value).toBe(lastName);
-		expect(wrapper.vm.$data.formData.title.value).toBe(title);
-	});
-
-	it.skip('passes down preset address type if initial data for it is available', () => {
-		wrapper = mount(Address, {
-			localVue,
-			propsData: {
-				validateAddressUrl: 'validate-address',
-				countries: ['DE'],
-				initialFormValues: {
-					addressType: 'firma'
-				},
-			},
-			store: createStore(),
-			mocks: {
-				$t: () => { },
-			},
-		});
-		expect(wrapper.find( AddressType ).attributes('initial-value')).toBe( AddressTypeModel.COMPANY )
-	});
+		} );
+		expect( wrapper.vm.$data.formData.firstName.value ).toBe( firstName );
+		expect( wrapper.vm.$data.formData.lastName.value ).toBe( lastName );
+		expect( wrapper.vm.$data.formData.title.value ).toBe( title );
+	} );
 
 } );
