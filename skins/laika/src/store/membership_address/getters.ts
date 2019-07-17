@@ -14,6 +14,7 @@ export const getters: GetterTree<MembershipAddressState, any> = {
 	},
 	addressType: ( state: MembershipAddressState ): AddressTypeModel => state.addressType,
 	membershipType: ( state: MembershipAddressState ): MembershipTypeModel => state.membershipType,
+	email: ( state: MembershipAddressState ): String => state.values.email,
 	fullName: ( state: MembershipAddressState ): string => {
 		// Duplicating code from DonorName PHP class
 		const address = state.values;
