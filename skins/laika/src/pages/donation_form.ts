@@ -40,7 +40,7 @@ store.dispatch( action( NS_PAYMENT, initializePayment ), {
 	// convert German-Formatted amount, see DonationFormPresenter
 	amount: pageData.applicationVars.initialFormValues.amount.replace( ',', '' ).replace( /^000$/, '0' ),
 	type: pageData.applicationVars.initialFormValues.paymentType,
-	paymentIntervalInMonths: pageData.applicationVars.initialFormValues.paymentIntervalInMonths,
+	paymentIntervalInMonths: String( pageData.applicationVars.initialFormValues.paymentIntervalInMonths ),
 	isCustomAmount: pageData.applicationVars.initialFormValues.isCustomAmount,
 } ).then( paymentDataComplete => {
 

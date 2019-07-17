@@ -8,7 +8,7 @@
 						:id="'interval-' + interval"
 						name="interval"
 						v-model="selectedInterval"
-						:native-value="interval"
+						:native-value="interval.toString()"
 						@change.native="setInterval">
 					{{ $t( 'donation_form_payment_interval_' + interval.toString() ) }}
 				</b-radio>
@@ -39,7 +39,7 @@ export default Vue.extend( {
 		},
 	},
 	watch: {
-		currentInterval: function ( newInterval ) {
+		currentInterval: function ( newInterval: string ): void {
 			this.selectedInterval = newInterval;
 		},
 	},
