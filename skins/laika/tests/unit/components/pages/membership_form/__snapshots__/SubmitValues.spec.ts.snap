@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubmitValues.vue renders input fields 1`] = `
+<span
+  class="submit-values"
+>
+  <input
+    name="membership_type"
+    type="hidden"
+    value="sustaining"
+  />
+   
+  <input
+    name="payment_type"
+    type="hidden"
+    value="BEZ"
+  />
+   
+  <input
+    name="membership_fee_interval"
+    type="hidden"
+    value="6"
+  />
+   
+  <input
+    name="membership_fee"
+    type="hidden"
+    value="23,49"
+  />
+   
+  <input
+    name="iban"
+    type="hidden"
+    value="DE12500105170648489890"
+  />
+   
+  <input
+    name="bic"
+    type="hidden"
+    value="INGDDEFFXXX"
+  />
+   
+  <input
+    name="adresstyp"
+    type="hidden"
+    value="person"
+  />
+   
+  <input
+    name="anrede"
+    type="hidden"
+    value="Herr"
+  />
+   
+  <input
+    name="titel"
+    type="hidden"
+    value="Dr."
+  />
+   
+  <input
+    name="vorname"
+    type="hidden"
+    value="Victor"
+  />
+   
+  <input
+    name="nachname"
+    type="hidden"
+    value="van Doom"
+  />
+   
+  <input
+    name="firma"
+    type="hidden"
+  />
+   
+  <input
+    name="strasse"
+    type="hidden"
+    value="Untere Straße 5"
+  />
+   
+  <input
+    name="postcode"
+    type="hidden"
+    value="08114"
+  />
+   
+  <input
+    name="ort"
+    type="hidden"
+    value="Haasenstadt"
+  />
+   
+  <input
+    name="country"
+    type="hidden"
+    value="DE"
+  />
+   
+  <input
+    name="email"
+    type="hidden"
+    value="doom@untergang.biz"
+  />
+   
+  <input
+    name="donationReceipt"
+    type="hidden"
+    value="1"
+  />
+</span>
+`;

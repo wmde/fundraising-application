@@ -1,6 +1,7 @@
 <template>
 	<div class="payment-page">
 		<payment v-bind="$props"></payment>
+		<submit-values></submit-values>
 		<div class="level has-margin-top-36">
 			<div class="level-left">
 				<b-button id="previous-btn" class="level-item"
@@ -24,12 +25,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import Payment from '@/components/pages/membership_form/Payment.vue';
+import SubmitValues from '@/components/pages/membership_form/SubmitValues.vue';
 import { NS_BANKDATA, NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 
 export default Vue.extend( {
 	name: 'PaymentPage',
 	components: {
 		Payment,
+		SubmitValues,
 	},
 	props: {
 		validateFeeUrl: String,
