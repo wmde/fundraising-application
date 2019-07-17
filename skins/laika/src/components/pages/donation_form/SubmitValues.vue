@@ -19,8 +19,8 @@
 		<input type="hidden" name="city" :value="address.city">
 		<input type="hidden" name="country" :value="address.country">
 		<input type="hidden" name="email" :value="address.email">
-		<input type="hidden" name="info" :value="newsletterOptIn ? '1' : ''">
-		<input type="hidden" name="info" :value="receiptOptOut ? '0' : '1'">
+		<input type="hidden" name="info" :value="newsletterOptIn">
+		<input type="hidden" name="donationReceipt" :value="receiptOptIn">
 
 		<input type="hidden" name="impCount" :value="trackingData.bannerImpressionCount">
 		<input type="hidden" name="bImpCount" :value="trackingData.impressionCount">
@@ -60,8 +60,8 @@ export default Vue.extend( {
 			addressType: ( state: AddressState ) => {
 				return addressTypeName( state.addressType );
 			},
-			newsletterOptIn: ( state: AddressState ) => state.newsletterOptIn,
-			receiptOptOut: ( state: AddressState ) => state.receiptOptOut,
+			newsletterOptIn: ( state: AddressState ) => state.newsletterOptIn  ? '1' : '',
+			receiptOptIn: ( state: AddressState ) => state.receiptOptOut  ? '0' : '1',
 		} ),
 		...mapState( NS_BANKDATA, {
 			bankdata: ( state: BankAccount ) => state.values,
