@@ -2,8 +2,7 @@
 	<div id="addressForm" class="column is-full">
 		<div class="has-margin-top-18">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
-			<address-type :initial-value="initialFormValues !== '' ? ( initialFormValues.addressType | addressTypeFromName ) : ''"
-			v-on:address-type="setAddressType( $event )"/>
+			<address-type :initial-value="addressType" v-on:address-type="setAddressType( $event )"/>
 		</div>
 		<h1 class="has-margin-top-36 title is-size-5">{{ $t( 'donation_form_section_address_title' ) }}</h1>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
@@ -12,8 +11,7 @@
         <receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
         <div class="has-margin-top-36">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
-			<email :initial-value="initialFormValues !== '' ? initialFormValues.email : ''"
-				v-on:email="setEmail( $event )"/>
+			<email :initial-value="email" v-on:email="setEmail( $event )"/>
 		</div>
 	</div>
 </template>
@@ -122,10 +120,8 @@ export default Vue.extend( {
 		},
 		...mapGetters( NS_MEMBERSHIP_ADDRESS, [
 			'addressType',
+			'email',
 		] ),
-	},
-	filters: {
-		addressTypeFromName,
 	},
 	mounted() {
 		const initialFormValues = this.$props.initialFormValues;
