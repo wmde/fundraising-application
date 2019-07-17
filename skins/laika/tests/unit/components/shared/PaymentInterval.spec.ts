@@ -29,7 +29,7 @@ describe( 'PaymentInterval', () => {
 		wrapper.find( `#interval-${YEARLY}` ).trigger( 'click' );
 
 		expect( wrapper.emitted( 'interval-selected' ) ).toBeTruthy();
-		expect( wrapper.emitted( 'interval-selected' )[ 0 ] ).toEqual( [ YEARLY ] );
+		expect( wrapper.emitted( 'interval-selected' )[ 0 ] ).toEqual( [ String( YEARLY ) ] );
 	} );
 
 	it( 'updates the selected interval when the incoming property changes', () => {
