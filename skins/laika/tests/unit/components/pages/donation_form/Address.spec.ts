@@ -7,7 +7,7 @@ import Postal from '@/components/shared/Postal.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import AddressType from '@/components/pages/donation_form/AddressType.vue';
 import Email from '@/components/shared/Email.vue';
-import PaymentBankData from '@/components/pages/donation_form/PaymentBankData.vue';
+import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { createStore } from '@/store/donation_store';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
