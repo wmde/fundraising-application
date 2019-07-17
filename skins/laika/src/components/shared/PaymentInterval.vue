@@ -1,5 +1,5 @@
 <template>
-	<fieldset class="has-margin-top-36">
+	<fieldset>
 		<legend class="title is-size-5">{{ title }}</legend>
 		<div>
 			<div class="wrap-radio" v-for="interval in paymentIntervals" :key="'interval-' + interval">
@@ -35,7 +35,7 @@ export default Vue.extend( {
 	},
 	methods: {
 		setInterval(): void {
-			this.$emit( 'interval-selected', String( this.$data.selectedInterval ) );
+			this.$emit( 'interval-selected', this.$data.selectedInterval );
 		},
 	},
 	watch: {

@@ -16,7 +16,7 @@ Vue.use( VueI18n );
 
 interface MembershipAmountModel {
 	presetAmounts: Array<string>,
-	paymentTypes: Array<string>,
+	paymentIntervals: Array<string>,
 	tracking: Array<number>,
 	urls: any,
 	showMembershipTypeOption: Boolean,
@@ -46,13 +46,13 @@ new Vue( {
 		h( Component, {
 			props: {
 				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
-				validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
-				paymentAmounts: pageData.applicationVars.presetAmounts,
-				paymentTypes: pageData.applicationVars.paymentTypes,
+				validateFeeUrl: pageData.applicationVars.urls.validateMembershipFee,
+				paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
 				addressCountries: COUNTRIES,
 				trackingData: pageData.applicationVars.tracking,
 				showMembershipTypeOption: pageData.applicationVars.showMembershipTypeOption,
 				initialFormValues: pageData.applicationVars.initialFormValues !== undefined ? pageData.applicationVars.initialFormValues : '',
+				paymentIntervals: pageData.applicationVars.paymentIntervals,
 			},
 		} ),
 		h( Sidebar, {

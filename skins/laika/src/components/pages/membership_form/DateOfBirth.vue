@@ -1,13 +1,13 @@
 <template>
     <fieldset>
-		<label for="birthDate" class="subtitle has-margin-top-36">{{ $t( 'membership_birth_date_label' ) }}</label>
+		<label for="birthDate" class="subtitle has-margin-top-36">{{ $t( 'membership_form_birth_date_label' ) }}</label>
 		<b-input type="text"
 			id="birthDate"
-			:placeholder="$t( 'membership_birth_date_placeholder' )"
+			:placeholder="$t( 'membership_form_birth_date_placeholder' )"
 			v-model="date"
 			@blur="validateDate">
 		</b-input>
-		<span v-if="dateHasError" class="help is-danger">{{ $t( 'membership_birth_date_error' ) }}</span>
+		<span v-if="dateHasError" class="help is-danger">{{ $t( 'membership_form_birth_date_error' ) }}</span>
     </fieldset>
 </template>
 

@@ -1411,6 +1411,8 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
+			// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
+			'paymentIntervals' => [1, 3, 6, 12],
 			'messages' => $this->getMessages()
 		] );
 	}

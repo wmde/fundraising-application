@@ -15,7 +15,7 @@ export interface AmountData {
 }
 
 export interface IntervalData {
-    selectedInterval: Number
+    selectedInterval: String
 }
 
 export interface TypeData {

@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import Vuex, { StoreOptions } from 'vuex';
 import createAddress from '@/store/membership_address';
+import createBankData from '@/store/bankdata';
 import createPayment from '@/store/membership_fee';
 import {
+	NS_BANKDATA,
 	NS_MEMBERSHIP_ADDRESS,
 	NS_MEMBERSHIP_FEE,
 } from './namespaces';
@@ -14,7 +16,7 @@ export function createStore() {
 		modules: {
 			[ NS_MEMBERSHIP_ADDRESS ]: createAddress(),
 			[ NS_MEMBERSHIP_FEE ]: createPayment(),
-
+			[ NS_BANKDATA ]: createBankData(),
 		},
 		strict: process.env.NODE_ENV !== 'production',
 	};

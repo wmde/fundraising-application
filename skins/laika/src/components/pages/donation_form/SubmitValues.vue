@@ -34,7 +34,7 @@ import { mapState } from 'vuex';
 import { NS_ADDRESS, NS_BANKDATA, NS_PAYMENT } from '@/store/namespaces';
 import { Payment } from '@/view_models/Payment';
 import { AddressState } from '@/view_models/Address';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel, addressTypeName, AddressTypeNames } from '@/view_models/AddressTypeModel';
 import { BankAccount } from '@/view_models/BankAccount';
 
 export default Vue.extend( {
@@ -58,16 +58,7 @@ export default Vue.extend( {
 		...mapState( NS_ADDRESS, {
 			address: ( state: AddressState ) => state.values,
 			addressType: ( state: AddressState ) => {
-				const addressTypeNames = new Map<number, string>( [
-					[ AddressTypeModel.ANON, 'anonym' ],
-					[ AddressTypeModel.PERSON, 'person' ],
-					[ AddressTypeModel.COMPANY, 'firma' ],
-				] );
-				// poor man's type check to protect against future extensions of AddressTypeModel, e.g. https://phabricator.wikimedia.org/T220367
-				if ( !addressTypeNames.has( state.addressType ) ) {
-					throw new Error( 'Unknown address type: ' + state.addressType );
-				}
-				return addressTypeNames.get( state.addressType );
+				return addressTypeName( state.addressType );
 			},
 			newsletterOptIn: ( state: AddressState ) => state.newsletterOptIn,
 			receiptOptOut: ( state: AddressState ) => state.receiptOptOut,

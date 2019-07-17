@@ -12,11 +12,10 @@ import {
 	SET_FEE_VALIDITY,
 	SET_INTERVAL,
 	SET_INTERVAL_VALIDITY,
-	SET_TYPE,
-	SET_TYPE_VALIDITY,
 } from '@/store/membership_fee/mutationTypes';
 import each from 'jest-each';
 import moxios from 'moxios';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 function newMinimalStore( overrides: Object ): MembershipFee {
 	return Object.assign(
@@ -144,23 +143,6 @@ describe( 'MembershipFee', () => {
 		} );
 	} );
 
-	describe( 'Actions/setType', () => {
-		it( 'commits to mutation [SET_TYPE] and [SET_TYPE_VALIDITY]', () => {
-			const context = {
-				commit: jest.fn(),
-			};
-			const action = actions.setType as any;
-			action( context, 'BEZ' );
-			expect( context.commit ).toBeCalledWith(
-				'SET_TYPE',
-				'BEZ'
-			);
-			expect( context.commit ).toBeCalledWith(
-				'SET_TYPE_VALIDITY'
-			);
-		} );
-	} );
-
 	describe( 'Actions/setFee', () => {
 		beforeEach( function () {
 			moxios.install();
@@ -173,6 +155,16 @@ describe( 'MembershipFee', () => {
 		it( 'commits to mutation [SET_FEE]', () => {
 			const context = {
 					commit: jest.fn(),
+					state: {
+						values: {
+							interval: 12,
+						},
+					},
+					rootState: {
+						membership_address: { // eslint-disable-line camelcase
+							addressType: AddressTypeModel.PERSON,
+						},
+					},
 				},
 				payload = {
 					feeValue: '2500',
@@ -193,14 +185,25 @@ describe( 'MembershipFee', () => {
 		it( 'sends a post request for fee validation', () => {
 			const context = {
 					commit: jest.fn(),
+					state: {
+						values: {
+							interval: 12,
+						},
+					},
+					rootState: {
+						membership_address: { // eslint-disable-line camelcase
+							addressType: AddressTypeModel.PERSON,
+						},
+					},
 				},
 				payload = {
 					feeValue: '2500',
 					validateFeeUrl: '/validation-fee-url',
 				},
 				bodyFormData = new FormData();
-			bodyFormData.append( 'amount', '25.00' ); // Yes, the API endpoint expects "amount", not "fee"
-
+			bodyFormData.append( 'amount', '25.00' );
+			bodyFormData.append( 'paymentIntervalInMonths', '12' );
+			bodyFormData.append( 'addressType', 'person' );
 			const action = actions.setFee as any;
 			action( context, payload );
 
@@ -214,6 +217,16 @@ describe( 'MembershipFee', () => {
 		it( 'commits to mutation [SET_FEE_VALIDITY] after server side validation', ( done ) => {
 			const context = {
 					commit: jest.fn(),
+					state: {
+						values: {
+							interval: 12,
+						},
+					},
+					rootState: {
+						membership_address: { // eslint-disable-line camelcase
+							addressType: AddressTypeModel.PERSON,
+						},
+					},
 				},
 				payload = {
 					feeValue: '2500',

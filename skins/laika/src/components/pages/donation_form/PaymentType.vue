@@ -1,5 +1,5 @@
 <template>
-	<fieldset class="has-margin-top-36">
+	<fieldset>
 		<legend class="title is-size-5">{{ title }}</legend>
 		<div>
 			<div v-for="paymentType in paymentTypes" :key="paymentType">
