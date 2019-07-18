@@ -74,7 +74,6 @@ new Vue( {
 				validateLegacyBankDataUrl: pageData.applicationVars.urls.convertBankData,
 				paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
 				addressCountries: COUNTRIES,
-				trackingData: pageData.applicationVars.tracking,
 				showMembershipTypeOption: pageData.applicationVars.showMembershipTypeOption,
 				initialFormValues: pageData.applicationVars.initialFormValues !== undefined ? pageData.applicationVars.initialFormValues : '',
 				paymentIntervals: pageData.applicationVars.paymentIntervals,
