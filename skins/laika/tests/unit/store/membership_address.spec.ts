@@ -22,6 +22,7 @@ import {
 	SET_DATE,
 	SET_RECEIPT_OPTOUT,
 	SET_MEMBERSHIP_TYPE,
+	SET_MEMBERSHIP_TYPE_VALIDITY,
 } from '@/store/membership_address/mutationTypes';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
@@ -352,6 +353,26 @@ describe( 'MembershipAddress', () => {
 				type
 			);
 		} );
+		it( 'commits to mutation [SET_MEMBERSHIP_TYPE_VALIDITY] with invalid when address type is comapany and membership type is active', () => {
+			const context = {
+					commit: jest.fn(),
+					getters: {
+						membershipType: MembershipTypeModel.ACTIVE,
+					},
+					state: newMinimalStore( {
+						validity: {
+							membershipType: MembershipTypeModel.ACTIVE,
+						},
+					} ),
+				},
+				action = actions.setAddressType as any,
+				type = AddressTypeModel.COMPANY;
+			action( context, type );
+			expect( context.commit ).toBeCalledWith(
+				'SET_MEMBERSHIP_TYPE_VALIDITY',
+				Validity.INVALID
+			);
+		} );
 	} );
 
 	describe( 'Actions/setEmail', () => {
@@ -394,7 +415,7 @@ describe( 'MembershipAddress', () => {
 	} );
 
 	describe( 'Actions/setMembershipType', () => {
-		it( 'commits to mutation [SET_MEMBERSHIP_TYPE] with the chosen membership type', () => {
+		it( 'commits to mutation [SET_MEMBERSHIP_TYPE] with the chosen membership type and to [SET_MEMBERSHIP_TYPE_VALIDITY]', () => {
 			const commit = jest.fn(),
 				action = actions.setMembershipType as any,
 				choice = MembershipTypeModel.ACTIVE;
@@ -402,6 +423,10 @@ describe( 'MembershipAddress', () => {
 			expect( commit ).toBeCalledWith(
 				'SET_MEMBERSHIP_TYPE',
 				choice
+			);
+			expect( commit ).toBeCalledWith(
+				'SET_MEMBERSHIP_TYPE_VALIDITY',
+				Validity.VALID
 			);
 		} );
 	} );
@@ -589,11 +614,20 @@ describe( 'MembershipAddress', () => {
 	} );
 
 	describe( 'Mutations/SET_MEMBERSHIP_TYPE', () => {
-		it( 'sets receipt opt out choice', () => {
+		it( 'sets membership type choice', () => {
 			const store = newMinimalStore( {} );
 			const choice = MembershipTypeModel.ACTIVE;
 			mutations.SET_MEMBERSHIP_TYPE( store, choice );
 			expect( store.membershipType ).toBe( choice );
+		} );
+	} );
+
+	describe( 'Mutations/SET_MEMBERSHIP_TYPE_VALIDITY', () => {
+		it( 'sets receipt opt out choice', () => {
+			const store = newMinimalStore( {} );
+			const choice = Validity.INVALID;
+			mutations.SET_MEMBERSHIP_TYPE_VALIDITY( store, choice );
+			expect( store.validity.membershipType ).toBe( choice );
 		} );
 	} );
 
