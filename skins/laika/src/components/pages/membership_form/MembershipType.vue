@@ -23,6 +23,7 @@
                 {{ $t( 'membership_form_membershiptype_option_active' ) }}
                 <p class="has-text-dark-lighter">{{ $t( 'membership_form_membershiptype_option_active_legend' ) }}</p>
             </b-radio>
+            <span v-if="activeTypeSelectedAndDisabled" class="help is-danger">{{ $t( 'membership_form_membershiptype_error' ) }}</span>
         </div>
     </fieldset>
 </template>
@@ -44,6 +45,11 @@ export default Vue.extend( {
 		};
 	},
 	computed: {
+        activeTypeSelectedAndDisabled: {
+            get: function() {
+                return this.$data.selectedType === MembershipTypeModel.ACTIVE  && this.isActiveTypeDisabled;
+            }
+        },
 		MembershipTypeModel: {
 			get: function () {
 				return MembershipTypeModel;
