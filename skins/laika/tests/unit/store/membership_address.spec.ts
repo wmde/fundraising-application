@@ -346,7 +346,7 @@ describe( 'MembershipAddress', () => {
 			const commit = jest.fn(),
 				action = actions.setAddressType as any,
 				type = AddressTypeModel.COMPANY;
-			action( { commit }, type );
+			action( { commit, getters }, type );
 			expect( commit ).toBeCalledWith(
 				'SET_ADDRESS_TYPE',
 				type

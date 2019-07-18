@@ -39,6 +39,7 @@ export default function (): Module<MembershipAddressState, any> {
 			email: Validity.INCOMPLETE,
 			date: Validity.VALID,
 			addressType: Validity.VALID,
+			membershipType: Validity.VALID,
 		},
 	};
 

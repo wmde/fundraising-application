@@ -1,5 +1,4 @@
 import { MutationTree } from 'vuex';
-import { Validity } from '@/view_models/Validity';
 import { Helper } from '@/store/util';
 import {
 	VALIDATE_INPUT,
@@ -13,9 +12,13 @@ import {
 	SET_DATE,
 	SET_RECEIPT_OPTOUT,
 	SET_MEMBERSHIP_TYPE,
+	SET_MEMBERSHIP_TYPE_VALIDITY,
 } from '@/store/membership_address/mutationTypes';
-import { MembershipAddressState, InputField } from '@/view_models/Address';
 import { REQUIRED_FIELDS } from '@/store/membership_address/constants';
+import { Validity } from '@/view_models/Validity';
+import { MembershipAddressState, InputField } from '@/view_models/Address';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
 
 export const mutations: MutationTree<MembershipAddressState> = {
 	[ VALIDATE_INPUT ]( state: MembershipAddressState, field: InputField ) {
@@ -46,7 +49,7 @@ export const mutations: MutationTree<MembershipAddressState> = {
 			}
 		} );
 	},
-	[ SET_ADDRESS_TYPE ]( state: MembershipAddressState, type ) {
+	[ SET_ADDRESS_TYPE ]( state: MembershipAddressState, type: AddressTypeModel ) {
 		state.addressType = type;
 	},
 	[ SET_ADDRESS_FIELDS ]( state: MembershipAddressState, fields ) {
@@ -71,7 +74,10 @@ export const mutations: MutationTree<MembershipAddressState> = {
 	[ SET_RECEIPT_OPTOUT ]( state: MembershipAddressState, optOut ) {
 		state.receiptOptOut = optOut;
 	},
-	[ SET_MEMBERSHIP_TYPE ]( state: MembershipAddressState, type ) {
+	[ SET_MEMBERSHIP_TYPE ]( state: MembershipAddressState, type: MembershipTypeModel ) {
 		state.membershipType = type;
+	},
+	[ SET_MEMBERSHIP_TYPE_VALIDITY ]( state: MembershipAddressState, validity: Validity ) {
+		state.validity.membershipType = validity;
 	},
 };

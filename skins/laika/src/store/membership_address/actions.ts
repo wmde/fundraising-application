@@ -14,6 +14,7 @@ import { ValidationResponse } from '@/store/ValidationResponse';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
 import { MARK_EMPTY_FIELDS_INVALID } from '@/store/membership_address/mutationTypes';
+import { Validity } from '@/view_models/Validity';
 
 export const actions = {
 	[ setAddressField ]( context: ActionContext<MembershipAddressState, any>, field: InputField ) {
@@ -44,6 +45,9 @@ export const actions = {
 	},
 	[ setAddressType ]( context: ActionContext<MembershipAddressState, any>, type: AddressTypeModel ) {
 		context.commit( 'SET_ADDRESS_TYPE', type );
+		if ( type === AddressTypeModel.COMPANY && context.getters.membershipType === MembershipTypeModel.ACTIVE ) {
+			context.commit( 'SET_MEMBERSHIP_TYPE_VALIDITY', Validity.INVALID );
+		}
 	},
 	[ setEmail ]( context: ActionContext<MembershipAddressState, any>, email: string ) {
 		context.commit( 'SET_EMAIL', email );
@@ -56,6 +60,7 @@ export const actions = {
 	},
 	[ setMembershipType ]( context: ActionContext<MembershipAddressState, any>, type: MembershipTypeModel ) {
 		context.commit( 'SET_MEMBERSHIP_TYPE', type );
+		context.commit( 'SET_MEMBERSHIP_TYPE_VALIDITY', Validity.VALID );
 	},
 
 };
