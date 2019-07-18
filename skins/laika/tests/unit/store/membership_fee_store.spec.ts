@@ -1,7 +1,7 @@
 import { getters } from '@/store/membership_fee/getters';
 import { actions } from '@/store/membership_fee/actions';
 import { mutations } from '@/store/membership_fee/mutations';
-import { MembershipFee } from '@/view_models/MembershipFee';
+import { IntervalData, MembershipFee } from '@/view_models/MembershipFee';
 import { Validity } from '@/view_models/Validity';
 import {
 	markEmptyFeeAsInvalid,
@@ -130,14 +130,21 @@ describe( 'MembershipFee', () => {
 		it( 'commits to mutation [SET_INTERVAL] and [SET_INTERVAL_VALIDITY]', () => {
 			const context = {
 				commit: jest.fn(),
+				state: {
+					values: {
+						fee: ''
+					},
+				},
 			};
 			const action = actions.setInterval as any;
-			action( context, 3 );
-			expect( context.commit ).toBeCalledWith(
+			action( context, { selectedInterval: '3', validateFeeUrl: '' } as IntervalData );
+			expect( context.commit ).toHaveBeenNthCalledWith(
+				1,
 				'SET_INTERVAL',
-				3
+				'3'
 			);
-			expect( context.commit ).toBeCalledWith(
+			expect( context.commit ).toHaveBeenNthCalledWith(
+				2,
 				'SET_INTERVAL_VALIDITY'
 			);
 		} );

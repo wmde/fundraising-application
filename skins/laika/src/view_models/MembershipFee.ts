@@ -14,10 +14,11 @@ export interface TypeData {
 }
 
 export interface IntervalData {
-	selectedInterval: Number
+	selectedInterval: string,
+	validateFeeUrl: string,
 }
 
 export interface SetFeePayload {
 	feeValue: string,
-	validateFeeUrl: string
+	validateFeeUrl: string,
 }

@@ -22,7 +22,34 @@ import {
 } from '@/store/membership_fee/mutationTypes';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { Validity } from '@/view_models/Validity';
-import { addressTypeName } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+
+function isNonNumeric( value: string ) {
+	return value === '' || isNaN( Number( value ) );
+}
+
+function postFeeData( context: ActionContext<MembershipFee, any>, validateFeeUrl: string, amount: string, interval: string, addressType: AddressTypeModel ) {
+	const bodyFormData = new FormData();
+	bodyFormData.append( 'amount', amount );
+	bodyFormData.append( 'paymentIntervalInMonths', interval );
+	bodyFormData.append( 'addressType', addressTypeName( addressType ) );
+	axios( validateFeeUrl, {
+		method: 'post',
+		data: bodyFormData,
+		headers: { 'Content-Type': 'multipart/form-data' },
+	} ).then( ( validationResult: AxiosResponse<ValidationResponse> ) => {
+		const validity = validationResult.data.status === 'ERR' ?
+			Validity.INVALID : Validity.VALID;
+		context.commit( SET_FEE_VALIDITY, validity );
+	} );
+}
+
+function validateFeeDataRemotely( context: ActionContext<MembershipFee, any>, validateFeeUrl: string, feeValue: string, interval: string ) {
+	const feeAmount = ( Number( feeValue ) / 100 ).toFixed( 2 );
+	const paymentInterval = interval;
+	const addressType = context.rootState.membership_address.addressType;
+	postFeeData( context, validateFeeUrl, feeAmount, paymentInterval, addressType );
+}
 
 export const actions = {
 	[ markEmptyValuesAsInvalid ]( context: ActionContext<MembershipFee, any> ): void {
@@ -33,22 +60,22 @@ export const actions = {
 	},
 	[ setFee ]( context: ActionContext<MembershipFee, any>, payload: SetFeePayload ): void {
 		context.commit( SET_FEE, payload.feeValue );
-		const bodyFormData = new FormData();
-		bodyFormData.append( 'amount', ( Number( payload.feeValue ) / 100 ).toFixed( 2 ) );
-		bodyFormData.append( 'paymentIntervalInMonths', context.state.values.interval );
-		bodyFormData.append( 'addressType', addressTypeName( context.rootState.membership_address.addressType ) );
-		axios( payload.validateFeeUrl, {
-			method: 'post',
-			data: bodyFormData,
-			headers: { 'Content-Type': 'multipart/form-data' },
-		} ).then( ( validationResult: AxiosResponse<ValidationResponse> ) => {
-			const validity = validationResult.data.status === 'ERR' ?
-				Validity.INVALID : Validity.VALID;
-			context.commit( SET_FEE_VALIDITY, validity );
-		} );
+		if ( isNonNumeric( payload.feeValue ) ) {
+			context.commit( SET_FEE_VALIDITY, Validity.INVALID );
+			return;
+		}
+		if ( isNonNumeric( context.state.values.interval ) ) {
+			context.commit( SET_INTERVAL_VALIDITY );
+			return;
+		}
+		validateFeeDataRemotely( context, payload.validateFeeUrl, payload.feeValue, context.state.values.interval );
 	},
 	[ setInterval ]( context: ActionContext<MembershipFee, any>, payload: IntervalData ): void {
-		context.commit( SET_INTERVAL, payload );
+		context.commit( SET_INTERVAL, payload.selectedInterval );
 		context.commit( SET_INTERVAL_VALIDITY );
+		if ( isNonNumeric( context.state.values.fee ) ) {
+			return;
+		}
+		validateFeeDataRemotely( context, payload.validateFeeUrl, context.state.values.fee, context.state.values.interval );
 	},
 };
