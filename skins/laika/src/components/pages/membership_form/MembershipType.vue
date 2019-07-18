@@ -12,10 +12,10 @@
                 <span>{{ $t( 'membership_form_membershiptype_option_sustaining' ) }}</span>
                 <p class="has-text-dark-lighter">{{ $t( 'membership_form_membershiptype_option_sustaining_legend' ) }}</p>
             </b-radio>
-            <b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.ACTIVE }"
-                    type="radio"
+            <b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.ACTIVE && !isActiveTypeDisabled }"
                     id="active"
                     name="type"
+                    :type="isActiveTypeDisabled ? 'is-gray-dark' : ''"
                     v-model="selectedType"
                     :native-value="MembershipTypeModel.ACTIVE"
                     :disabled="isActiveTypeDisabled"
@@ -69,8 +69,11 @@ export default Vue.extend( {
 } );
 </script>
 <style lang="scss" scoped>
+@import "../../../scss/custom.scss";
     .b-radio.radio {
-        margin-left: 0;
         height: 6.5em;
+        &+.radio{
+            margin-left: 0;
+        }
     }
 </style>
