@@ -8,6 +8,7 @@ import {
 	SET_ADDRESS_TYPE,
 	SET_ADDRESS_FIELD,
 	SET_ADDRESS_FIELDS,
+	SET_ADDRESS_FIELD_VALIDITY,
 	SET_EMAIL,
 	SET_DATE,
 	SET_RECEIPT_OPTOUT,
@@ -62,6 +63,9 @@ export const mutations: MutationTree<MembershipAddressState> = {
 	},
 	[ SET_ADDRESS_FIELD ]( state: MembershipAddressState, field: InputField ) {
 		state.values[ field.name ] = field.value;
+	},
+	[ SET_ADDRESS_FIELD_VALIDITY ]( state: MembershipAddressState, payload: { name: string, validity: Validity } ) {
+		state.validity[ payload.name ] = payload.validity;
 	},
 	[ SET_EMAIL ]( state: MembershipAddressState, email ) {
 		state.values.email = email;

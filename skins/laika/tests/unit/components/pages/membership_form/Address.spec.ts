@@ -1,4 +1,4 @@
-import { mount, shallowMount, createLocalVue } from '@vue/test-utils';
+import { mount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Buefy from 'buefy';
 import Address from '@/components/pages/membership_form/Address.vue';
@@ -9,9 +9,15 @@ import AddressType from '@/components/pages/membership_form/AddressType.vue';
 import Email from '@/components/shared/Email.vue';
 import DateOfBirth from '@/components/pages/membership_form/DateOfBirth.vue';
 import { createStore } from '@/store/membership_store';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { setAddressField, setReceiptOptOut, setAddressType, setEmail } from '@/store/membership_address/actionTypes';
+import {
+	setAddressField,
+	setReceiptOptOut,
+	setAddressType,
+	setEmail,
+	initializeAddress,
+} from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 
 const localVue = createLocalVue();
@@ -26,7 +32,6 @@ describe( 'Address.vue', () => {
 			propsData: {
 				validateAddressUrl: 'validate-address',
 				countries: [ 'DE' ],
-				initialFormValues: '',
 			},
 			store: createStore(),
 			mocks: {
@@ -96,25 +101,29 @@ describe( 'Address.vue', () => {
 		expect( store.dispatch ).toBeCalledWith( expectedAction, email );
 	} );
 
-	it( 'populates form data if initial data is available', () => {
+	it( 'populates form data if initial data is available', async () => {
 		const firstName = 'Testina',
 			lastName = 'Testinson',
 			title = 'Prof Dr.';
-		wrapper = mount( Address, {
-			localVue,
-			propsData: {
-				validateAddressUrl: 'validate-address',
-				countries: [ 'DE' ],
-				initialFormValues: {
-					firstName: firstName,
-					lastName: lastName,
-					title: title,
+		const store = createStore();
+		await store.dispatch( action( NS_MEMBERSHIP_ADDRESS, initializeAddress ), {
+			addressType: addressTypeName( AddressTypeModel.PERSON ),
+			email: 'playthatfunkymusic@example.com',
+			firstName,
+			lastName,
+			title,
+		} ).then( () => {
+			wrapper = mount( Address, {
+				localVue,
+				propsData: {
+					validateAddressUrl: 'validate-address',
+					countries: [ 'DE' ],
 				},
-			},
-			store: createStore(),
-			mocks: {
-				$t: () => { },
-			},
+				store,
+				mocks: {
+					$t: () => { },
+				},
+			} );
 		} );
 		expect( wrapper.vm.$data.formData.firstName.value ).toBe( firstName );
 		expect( wrapper.vm.$data.formData.lastName.value ).toBe( lastName );

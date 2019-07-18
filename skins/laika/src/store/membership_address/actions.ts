@@ -1,6 +1,7 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
 import {
+	initializeAddress,
 	validateAddress,
 	setAddressType,
 	setEmail,
@@ -9,14 +10,29 @@ import {
 	setDate,
 	setMembershipType,
 } from '@/store/membership_address/actionTypes';
-import { MembershipAddressState, InputField, Payload } from '@/view_models/Address';
+import { MembershipAddressState, InputField, InitialMembershipAddress } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
-import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import { addressTypeFromName, AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
 import { MARK_EMPTY_FIELDS_INVALID } from '@/store/membership_address/mutationTypes';
 import { Validity } from '@/view_models/Validity';
 
 export const actions = {
+	[ initializeAddress ]( context: ActionContext<MembershipAddressState, any>, initialData: InitialMembershipAddress ) {
+		context.commit( 'SET_EMAIL', initialData.email );
+		context.commit( 'SET_ADDRESS_TYPE', addressTypeFromName( initialData.addressType ) );
+		Object.entries( initialData ).forEach( ( [ name, value ] ) => {
+			if ( name === 'addressType' || name === 'email' ) {
+				return;
+			}
+			if ( !value ) {
+				return;
+			}
+			context.commit( 'SET_ADDRESS_FIELD', { name, value } );
+			// We consider all non-empty values valid because they come from the donation and were validated there
+			context.commit( 'SET_ADDRESS_FIELD_VALIDITY', { name, validity: Validity.VALID } );
+		} );
+	},
 	[ setAddressField ]( context: ActionContext<MembershipAddressState, any>, field: InputField ) {
 		context.commit( 'SET_ADDRESS_FIELD', field );
 		context.commit( 'VALIDATE_INPUT', field );

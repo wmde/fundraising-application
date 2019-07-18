@@ -31,7 +31,6 @@ export default Vue.extend( {
 		validateAddressUrl: String,
 		countries: Array as () => Array<String>,
 		showMembershipTypeOption: Boolean,
-		initialFormValues: [ Object, String ],
 	},
 	methods: {
 		next() {

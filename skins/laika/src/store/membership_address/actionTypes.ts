@@ -1,3 +1,4 @@
+export const initializeAddress = 'initializeAddress';
 export const validateAddress = 'validateAddress';
 export const setAddressField = 'setAddressField';
 export const setAddressType = 'setAddressType';

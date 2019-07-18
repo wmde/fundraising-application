@@ -43,6 +43,20 @@ export interface MembershipAddressState {
     validity: FormValidity,
 }
 
+export interface InitialMembershipAddress {
+    addressType: string,
+    salutation: string,
+    title: string,
+    firstName: string,
+    lastName: string,
+    companyName: string,
+    street: string,
+    city: string,
+    postcode: string,
+    country: string,
+    email: string,
+}
+
 export interface InputField {
     name: string,
     value: string,

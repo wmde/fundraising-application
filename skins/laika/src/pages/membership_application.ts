@@ -4,13 +4,13 @@ import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
 import { createStore } from '@/store/membership_store';
-import { AddressTypeModel, addressTypeFromName } from '@/view_models/AddressTypeModel';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { setAddressType, setEmail } from '@/store/membership_address/actionTypes';
+import { initializeAddress } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 
 import Component from '@/components/pages/MembershipForm.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
+import { InitialMembershipAddress } from '@/view_models/Address';
 
 const PAGE_IDENTIFIER = 'membership-application',
 	COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
@@ -18,37 +18,16 @@ const PAGE_IDENTIFIER = 'membership-application',
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
-interface initialFormValues {
-	addressType: string,
-	city: string,
-	companyName: string,
-	country: string,
-	email: string,
-	firstName: string,
-	lastName: string,
-	postcode: string,
-	salutation: string,
-	street: string,
-	title: string,
-
-}
 interface MembershipAmountModel {
 	presetAmounts: Array<string>,
 	paymentIntervals: Array<string>,
 	tracking: Array<number>,
 	urls: any,
 	showMembershipTypeOption: Boolean,
-	initialFormValues: initialFormValues,
+	initialFormValues: InitialMembershipAddress,
 }
 
 const pageData = new PageDataInitializer<MembershipAmountModel>( '#app' );
-const store = createStore();
-if ( pageData.applicationVars.initialFormValues !== undefined ) {
-	const initialAddressType: AddressTypeModel = addressTypeFromName( pageData.applicationVars.initialFormValues.addressType );
-	store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressType ), initialAddressType );
-	store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setEmail ), pageData.applicationVars.initialFormValues.email );
-}
-
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
 	messages: {
@@ -56,31 +35,40 @@ const i18n = new VueI18n( {
 	},
 } );
 
-new Vue( {
-	store,
-	i18n,
-	render: h => h( App, {
-		props: {
-			assetsPath: pageData.assetsPath,
-			pageIdentifier: PAGE_IDENTIFIER,
-		},
-	},
-	[
-		h( Component, {
+const store = createStore();
+
+function initializePage(): void {
+	new Vue( {
+		store,
+		i18n,
+		render: h => h( App, {
 			props: {
-				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
-				validateFeeUrl: pageData.applicationVars.urls.validateMembershipFee,
-				validateBankDataUrl: pageData.applicationVars.urls.validateIban,
-				validateLegacyBankDataUrl: pageData.applicationVars.urls.convertBankData,
-				paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
-				addressCountries: COUNTRIES,
-				showMembershipTypeOption: pageData.applicationVars.showMembershipTypeOption,
-				initialFormValues: pageData.applicationVars.initialFormValues !== undefined ? pageData.applicationVars.initialFormValues : '',
-				paymentIntervals: pageData.applicationVars.paymentIntervals,
+				assetsPath: pageData.assetsPath,
+				pageIdentifier: PAGE_IDENTIFIER,
 			},
-		} ),
-		h( Sidebar, {
-			slot: 'sidebar',
-		} ),
-	] ),
-} ).$mount( '#app' );
+		},
+		[
+			h( Component, {
+				props: {
+					validateAddressUrl: pageData.applicationVars.urls.validateAddress,
+					validateFeeUrl: pageData.applicationVars.urls.validateMembershipFee,
+					validateBankDataUrl: pageData.applicationVars.urls.validateIban,
+					validateLegacyBankDataUrl: pageData.applicationVars.urls.convertBankData,
+					paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
+					addressCountries: COUNTRIES,
+					showMembershipTypeOption: pageData.applicationVars.showMembershipTypeOption,
+					paymentIntervals: pageData.applicationVars.paymentIntervals,
+				},
+			} ),
+			h( Sidebar, {
+				slot: 'sidebar',
+			} ),
+		] ),
+	} ).$mount( '#app' );
+}
+
+if ( pageData.applicationVars.initialFormValues !== undefined ) {
+	store.dispatch( action( NS_MEMBERSHIP_ADDRESS, initializeAddress ), pageData.applicationVars.initialFormValues ).then( initializePage );
+} else {
+	initializePage();
+}

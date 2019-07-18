@@ -34,7 +34,6 @@ export default Vue.extend( {
 		paymentIntervals: Array as () => Array<String>,
 		addressCountries: Array as () => Array<String>,
 		showMembershipTypeOption: Boolean,
-		initialFormValues: [ Object, String ],
 	},
 	data: function () {
 		return {
@@ -55,7 +54,6 @@ export default Vue.extend( {
 						validateAddressUrl: this.$props.validateAddressUrl,
 						countries: this.$props.addressCountries,
 						showMembershipTypeOption: this.$props.showMembershipTypeOption,
-						initialFormValues: this.$props.initialFormValues,
 					};
 				}
 				return {
