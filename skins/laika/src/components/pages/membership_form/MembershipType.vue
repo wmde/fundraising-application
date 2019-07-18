@@ -45,11 +45,11 @@ export default Vue.extend( {
 		};
 	},
 	computed: {
-        activeTypeSelectedAndDisabled: {
-            get: function() {
-                return this.$data.selectedType === MembershipTypeModel.ACTIVE  && this.isActiveTypeDisabled;
-            }
-        },
+		activeTypeSelectedAndDisabled: {
+			get: function () {
+				return ( this as any ).selectedType === MembershipTypeModel.ACTIVE && ( this as any ).isActiveTypeDisabled;
+			},
+		},
 		MembershipTypeModel: {
 			get: function () {
 				return MembershipTypeModel;
@@ -63,7 +63,7 @@ export default Vue.extend( {
 		...mapGetters( NS_MEMBERSHIP_ADDRESS, [ 'addressType' ] ),
 		isActiveTypeDisabled: {
 			get: function (): boolean {
-				return this.$store.getters[ NS_MEMBERSHIP_ADDRESS + '/addressType' ] === AddressTypeModel.COMPANY;
+				return ( this as any ).addressType === AddressTypeModel.COMPANY;
 			},
 		},
 	},
