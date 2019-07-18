@@ -60,8 +60,8 @@ export default Vue.extend( {
 			addressType: ( state: AddressState ) => {
 				return addressTypeName( state.addressType );
 			},
-			newsletterOptIn: ( state: AddressState ) => state.newsletterOptIn  ? '1' : '',
-			receiptOptIn: ( state: AddressState ) => state.receiptOptOut  ? '0' : '1',
+			newsletterOptIn: ( state: AddressState ) => state.newsletterOptIn ? '1' : '',
+			receiptOptIn: ( state: AddressState ) => state.receiptOptOut ? '0' : '1',
 		} ),
 		...mapState( NS_BANKDATA, {
 			bankdata: ( state: BankAccount ) => state.values,
