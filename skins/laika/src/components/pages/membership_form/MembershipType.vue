@@ -3,13 +3,12 @@
         <legend class="title is-size-5">{{ $t('membership_form_membershiptype_legend') }}</legend>
         <div>
             <b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.SUSTAINING }"
-                    type="radio"
                     id="sustaining"
                     name="type"
                     v-model="selectedType"
                     :native-value="MembershipTypeModel.SUSTAINING"
                     @change.native="setType">
-                <span>{{ $t( 'membership_form_membershiptype_option_sustaining' ) }}</span>
+                {{ $t( 'membership_form_membershiptype_option_sustaining' ) }}
                 <p class="has-text-dark-lighter">{{ $t( 'membership_form_membershiptype_option_sustaining_legend' ) }}</p>
             </b-radio>
             <b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.ACTIVE && !isActiveTypeDisabled }"

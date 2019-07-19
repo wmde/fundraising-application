@@ -4,8 +4,7 @@
 		<fieldset class="has-margin-top-36">
 			<legend class="subtitle">{{ $t( 'donation_form_salutation_label' ) }}</legend>
 			<div>
-				<b-radio type="radio"
-						id="salutation-mr"
+				<b-radio id="salutation-mr"
 						name="salutationInternal"
 						:native-value="$t( 'donation_form_salutation_option_mr' ) "
 						v-model="formData.salutation.value"
@@ -14,8 +13,7 @@
 				</b-radio>
 			</div>
 			<div>
-				<b-radio type="radio"
-						id="salutation-mrs"
+				<b-radio id="salutation-mrs"
 						name="salutationInternal"
 						:native-value="$t( 'donation_form_salutation_option_mrs' ) "
 						v-model="formData.salutation.value"

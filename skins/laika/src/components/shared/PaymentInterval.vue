@@ -4,7 +4,6 @@
 		<div>
 			<div class="wrap-radio" v-for="interval in paymentIntervals" :key="'interval-' + interval">
 				<b-radio :class="{ 'is-active': selectedInterval === interval }"
-						type="radio"
 						:id="'interval-' + interval"
 						name="interval"
 						v-model="selectedInterval"

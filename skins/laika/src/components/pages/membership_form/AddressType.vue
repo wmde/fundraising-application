@@ -2,8 +2,7 @@
 	<fieldset>
 		<legend class="title is-size-5">{{ $t( 'membership_form_section_address_header_type' ) }}</legend>
 		<div>
-			<b-radio type="radio"
-					id="personal"
+			<b-radio id="personal"
 					name="addressTypeInternal"
 					v-model="type"
 					:native-value="AddressTypeModel.PERSON"
@@ -11,8 +10,7 @@
 			</b-radio>
 		</div>
 		<div>
-			<b-radio type="radio"
-					id="company"
+			<b-radio id="company"
 					name="addressTypeInternal"
 					v-model="type"
 					:native-value="AddressTypeModel.COMPANY"
