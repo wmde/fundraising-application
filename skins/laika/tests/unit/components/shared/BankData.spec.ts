@@ -79,6 +79,8 @@ describe( 'BankData', () => {
 				$t: () => {},
 			},
 		} );
+		const store = wrapper.vm.$store;
+		store.dispatch = jest.fn();
 
 		const iban = wrapper.find( '#iban' );
 		const bic = wrapper.find( '#bic' );
