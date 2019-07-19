@@ -623,7 +623,7 @@ describe( 'MembershipAddress', () => {
 	} );
 
 	describe( 'Mutations/SET_MEMBERSHIP_TYPE_VALIDITY', () => {
-		it( 'sets receipt opt out choice', () => {
+		it( 'sets membership type validity', () => {
 			const store = newMinimalStore( {} );
 			const choice = Validity.INVALID;
 			mutations.SET_MEMBERSHIP_TYPE_VALIDITY( store, choice );
