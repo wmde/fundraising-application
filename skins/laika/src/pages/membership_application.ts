@@ -70,6 +70,8 @@ new Vue( {
 			props: {
 				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
 				validateFeeUrl: pageData.applicationVars.urls.validateMembershipFee,
+				validateBankDataUrl: pageData.applicationVars.urls.validateIban,
+				validateLegacyBankDataUrl: pageData.applicationVars.urls.convertBankData,
 				paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
 				addressCountries: COUNTRIES,
 				trackingData: pageData.applicationVars.tracking,
