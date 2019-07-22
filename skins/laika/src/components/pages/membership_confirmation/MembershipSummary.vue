@@ -1,5 +1,6 @@
 <template>
 	<div class="donation-summary">
+		<slot></slot>
 		<div class="payment-summary" v-html="getSummary()"></div>
 		<div class="payment-email">{{ $t( 'donation_confirmation_topbox_email', { email: this.address.email } ) }}</div>
 		<div class="has-margin-top-18">{{ $t( 'membership_confirmation_success_text' ) }}</div>
@@ -39,7 +40,8 @@ export default Vue.extend( {
 			const addressTypeRenderer = addressTypeRenderers[ this.address.applicantType ];
 			const interval = this.$t( 'donation_form_payment_interval_' + this.membershipApplication.paymentIntervalInMonths );
 			const formattedAmountMonthly = parseFloat( this.membershipApplication.membershipFee ).toFixed( 2 ).replace( '.', ',' );
-			const formattedAmountYearly = parseFloat( this.membershipApplication.membershipFee * 12 ).toFixed( 2 ).replace( '.', ',' );
+			const amountYearly = parseFloat( this.membershipApplication.membershipFee ) * 12 / parseFloat( this.membershipApplication.paymentIntervalInMonths );
+			const formattedAmountYearly = amountYearly.toFixed( 2 ).replace( '.', ',' );
 			const membershipType = this.$t( this.membershipApplication.membershipType );
 			const address = addressTypeRenderer.renderAddress( this.address, this.$t( 'donation_form_country_option_' + this.address.countryCode ) );
 

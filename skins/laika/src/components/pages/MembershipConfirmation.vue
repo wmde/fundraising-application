@@ -5,7 +5,7 @@
 			<div class="column is-half">
 				<membership-summary :address="confirmationData.address"
 									:membershipApplication="confirmationData.membershipApplication">
-					<div class="title is-size-5">{{ $t( 'donation_confirmation_topbox_intro' ) }}</div>
+					<div class="title is-size-5">{{ $t( 'membership_confirmation_thanks_text' ) }}</div>
 				</membership-summary>
 			</div>
 
