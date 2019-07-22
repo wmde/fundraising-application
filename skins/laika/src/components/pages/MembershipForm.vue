@@ -1,5 +1,5 @@
 <template>
-    <form class="column is-full" ref="form" action="/apply-for-membership" method="post">
+	<form class="column is-full" ref="form" action="/apply-for-membership" method="post">
 		<keep-alive>
 			<component
 				ref="currentPage"
@@ -27,6 +27,8 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
+		validateBankDataUrl: String,
+		validateLegacyBankDataUrl: String,
 		validateFeeUrl: String,
 		paymentAmounts: Array as () => Array<String>,
 		paymentIntervals: Array as () => Array<String>,
@@ -62,6 +64,8 @@ export default Vue.extend( {
 					validateFeeUrl: this.$props.validateFeeUrl,
 					paymentAmounts: this.$props.paymentAmounts,
 					paymentIntervals: this.$props.paymentIntervals,
+					validateBankDataUrl: this.$props.validateBankDataUrl,
+					validateLegacyBankDataUrl: this.$props.validateLegacyBankDataUrl,
 				};
 			},
 		},

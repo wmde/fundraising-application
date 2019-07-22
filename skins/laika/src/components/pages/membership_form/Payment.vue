@@ -16,6 +16,11 @@
 				:error="feeIsValid ? '' : $t('donation_form_payment_amount_error')"
 				v-on:amount-selected="sendAmountToStore"
 		></amount-selection>
+		<payment-bank-data
+			class="has-margin-top-36"
+			:validateBankDataUrl="validateBankDataUrl"
+			:validateLegacyBankDataUrl="validateLegacyBankDataUrl"
+		></payment-bank-data>
 	</div>
 </template>
 
@@ -23,6 +28,8 @@
 import Vue from 'vue';
 import AmountSelection from '@/components/shared/AmountSelection.vue';
 import PaymentInterval from '@/components/shared/PaymentInterval.vue';
+import PaymentBankData from '@/components/shared/PaymentBankData.vue';
+
 import { action } from '@/store/util';
 import { NS_MEMBERSHIP_ADDRESS, NS_MEMBERSHIP_FEE } from '@/store/namespaces';
 import { mapGetters, mapState } from 'vuex';
@@ -34,8 +41,15 @@ export default Vue.extend( {
 	components: {
 		AmountSelection,
 		PaymentInterval,
+		PaymentBankData,
 	},
-	props: [ 'validateFeeUrl', 'paymentAmounts', 'paymentIntervals' ],
+	props: {
+		validateFeeUrl: String,
+		paymentAmounts: Array as () => Array<Number>,
+		paymentIntervals: Array as () => Array<String>,
+		validateBankDataUrl: String,
+		validateLegacyBankDataUrl: String,
+	},
 	computed: {
 		...mapState( {
 			fee: ( state: any ) => state[ NS_MEMBERSHIP_FEE ].values.fee,
