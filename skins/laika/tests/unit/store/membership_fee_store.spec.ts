@@ -127,12 +127,19 @@ describe( 'MembershipFee', () => {
 	} );
 
 	describe( 'Actions/setInterval', () => {
+		beforeEach( function () {
+			moxios.install();
+		} );
+
+		afterEach( function () {
+			moxios.uninstall();
+		} );
 		it( 'commits to mutation [SET_INTERVAL] and [SET_INTERVAL_VALIDITY]', () => {
 			const context = {
 				commit: jest.fn(),
 				state: {
 					values: {
-						fee: ''
+						fee: '',
 					},
 				},
 			};
@@ -147,6 +154,45 @@ describe( 'MembershipFee', () => {
 				2,
 				'SET_INTERVAL_VALIDITY'
 			);
+		} );
+
+		it( 'checks the validity of the fee if the fee has been set', ( done ) => {
+			const context = {
+					commit: jest.fn(),
+					state: {
+						values: {
+							fee: '2000',
+							interval: '6',
+						},
+					},
+					rootState: {
+						membership_address: { // eslint-disable-line camelcase
+							addressType: AddressTypeModel.PERSON,
+						},
+					},
+				},
+				payload = {
+					selectedInterval: '6',
+					validateFeeUrl: '/validation-fee-url',
+				} as IntervalData;
+
+			moxios.stubRequest( payload.validateFeeUrl, {
+				status: 200,
+				responseText: 'OK',
+			} );
+
+			const action = actions.setInterval as any;
+			action( context, payload );
+
+			moxios.wait( function () {
+				const request = moxios.requests.mostRecent();
+				let bodyFormData = new FormData();
+				bodyFormData.append( 'amount', '20.00' );
+				bodyFormData.append( 'paymentIntervalInMonths', '6' );
+				bodyFormData.append( 'addressType', 'person' );
+				expect( request.config.data ).toStrictEqual( bodyFormData );
+				done();
+			} );
 		} );
 	} );
 
@@ -219,6 +265,59 @@ describe( 'MembershipFee', () => {
 				expect( request.config.method ).toBe( 'post' );
 				expect( request.config.data ).toStrictEqual( bodyFormData );
 			} );
+		} );
+
+		it( 'commits INVALID validity to [SET_FEE] if a non-numeric fee is supplied', () => {
+			const context = {
+					commit: jest.fn(),
+					state: {
+						values: {
+							interval: 12,
+						},
+					},
+					rootState: {
+						membership_address: { // eslint-disable-line camelcase
+							addressType: AddressTypeModel.PERSON,
+						},
+					},
+				},
+				payload = {
+					feeValue: '2500Blah',
+					validateFeeUrl: '/validation-fee-url',
+				};
+			const action = actions.setFee as any;
+			action( context, payload );
+			expect( context.commit ).toHaveBeenCalledWith(
+				SET_FEE_VALIDITY,
+				Validity.INVALID
+			);
+		} );
+
+		it( 'commits INVALID validity to [SET_INTERVAL_VALIDITY] if a non-numeric interval is set in the state', () => {
+			const context = {
+					commit: jest.fn(),
+					state: {
+						values: {
+							interval: undefined,
+						},
+					},
+					rootState: {
+						membership_address: { // eslint-disable-line camelcase
+							addressType: AddressTypeModel.PERSON,
+						},
+					},
+				},
+				payload = {
+					feeValue: '2500',
+					validateFeeUrl: '/validation-fee-url',
+				};
+			const action = actions.setFee as any;
+			action( context, payload );
+			expect( context.commit ).toHaveBeenNthCalledWith(
+				2,
+				SET_INTERVAL_VALIDITY,
+			);
+			expect( moxios.requests.mostRecent() ).toBe( undefined );
 		} );
 
 		it( 'commits to mutation [SET_FEE_VALIDITY] after server side validation', ( done ) => {
