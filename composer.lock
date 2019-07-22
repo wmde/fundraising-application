@@ -3163,7 +3163,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -5274,7 +5274,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette Finder: find files and directories with an intuitive API.",
+            "description": "🔍 Nette Finder: find files and directories with an intuitive API.",
             "homepage": "https://nette.org",
             "keywords": [
                 "filesystem",
@@ -5334,7 +5334,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette NEON: encodes and decodes NEON file format.",
+            "description": "🍸 Nette NEON: encodes and decodes NEON file format.",
             "homepage": "http://ne-on.org",
             "keywords": [
                 "export",
@@ -8116,12 +8116,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "c7a3f4c6a555ee1f110d80e02619696dffbfd6e7"
+                "reference": "766d53d1ce7d267295c88f45512cf68f6c5fbeb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/c7a3f4c6a555ee1f110d80e02619696dffbfd6e7",
-                "reference": "c7a3f4c6a555ee1f110d80e02619696dffbfd6e7",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/766d53d1ce7d267295c88f45512cf68f6c5fbeb3",
+                "reference": "766d53d1ce7d267295c88f45512cf68f6c5fbeb3",
                 "shasum": ""
             },
             "require-dev": {
@@ -8154,7 +8154,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-07-18T13:49:42+00:00"
+            "time": "2019-07-22T17:19:51+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

@@ -29,6 +29,16 @@ const addressTypeRenderers = {
 	[ addressTypeName( AddressTypeModel.COMPANY ) ]: CompanyApplicantRenderer,
 };
 
+class YearlyAmountRenderer {
+	static renderAmount( amount, interval, currencyTranslation, intervalTranslation ) {
+		if ( interval === 12 ) {
+			return '';
+		}
+		const formattedAmount = amount.toFixed( 2 ).replace( '.', ',' );
+		return `(${formattedAmount} ${currencyTranslation} ${intervalTranslation})`;
+	}
+}
+
 export default Vue.extend( {
 	name: 'MembershipSummary',
 	props: [
@@ -37,11 +47,17 @@ export default Vue.extend( {
 	],
 	methods: {
 		getSummary: function () {
+			const numericInterval = parseInt( this.membershipApplication.paymentIntervalInMonths, 10 );
 			const addressTypeRenderer = addressTypeRenderers[ this.address.applicantType ];
 			const interval = this.$t( 'donation_form_payment_interval_' + this.membershipApplication.paymentIntervalInMonths );
 			const formattedAmountMonthly = parseFloat( this.membershipApplication.membershipFee ).toFixed( 2 ).replace( '.', ',' );
-			const amountYearly = parseFloat( this.membershipApplication.membershipFee ) * 12 / parseFloat( this.membershipApplication.paymentIntervalInMonths );
-			const formattedAmountYearly = amountYearly.toFixed( 2 ).replace( '.', ',' );
+			const amountYearly = parseFloat( this.membershipApplication.membershipFee ) * 12 / numericInterval;
+			const formattedAmountYearly = YearlyAmountRenderer.renderAmount(
+				amountYearly,
+				numericInterval,
+				this.$t( 'currency_name' ),
+				this.$t( 'donation_form_payment_interval_yearly' )
+			);
 			const membershipType = this.$t( this.membershipApplication.membershipType );
 			const address = addressTypeRenderer.renderAddress( this.address, this.$t( 'donation_form_country_option_' + this.address.countryCode ) );
 

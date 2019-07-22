@@ -54,6 +54,10 @@ const yearlyPayment = {
 	paymentIntervalInMonths: 12,
 };
 
+const mockTranslate = function ( key: string, params?: Object ) {
+	return key + ( params ? ': ' + JSON.stringify( params, null, 2 ) : '' );
+};
+
 describe( 'MembershipSummary', () => {
 	it( 'renders personal membership confirmation data', () => {
 		const wrapper = mount( MembershipSummary, {
@@ -64,11 +68,14 @@ describe( 'MembershipSummary', () => {
 			},
 			store: createStore(),
 			mocks: {
-				$t: ( key: string, params: Object ) => params,
+				$t: mockTranslate,
 			},
 		} );
 
-		expect( wrapper.find( '.payment-summary' ).text() ).toContain( 'Herr Prof. Dr. Testy MacTest, Tempelhofer Ufer 26, 10963 Berlin' );
+		expect( wrapper.find( '.payment-summary' ).text() ).toContain(
+			'Herr Prof. Dr. Testy MacTest, Tempelhofer Ufer 26, 10963 Berlin, donation_form_country_option_DE'
+		);
+		expect( wrapper.find( '.payment-email' ).text() ).toContain( 'testperson@wikimedia.de' );
 	} );
 
 	it( 'renders company membership confirmation data', () => {
@@ -80,12 +87,18 @@ describe( 'MembershipSummary', () => {
 			},
 			store: createStore(),
 			mocks: {
-				$t: ( key: string, params: Object ) => params,
+				$t: mockTranslate,
 			},
 		} );
 
-		expect( wrapper.find( '.payment-summary' ).text() ).toContain( 'Test Company, Teststreet 123, 12345 Company City,' );
+		expect( wrapper.find( '.payment-summary' ).text() ).toContain(
+			'Test Company, Teststreet 123, 12345 Company City, donation_form_country_option_DE'
+		);
+		expect( wrapper.find( '.payment-email' ).text() ).toContain( 'testcompany@wikimedia.de' );
 	} );
+
+	// If the backslashes below are put in correctly, they will get double-escaped and won't match
+	/* eslint-disable no-useless-escape */
 
 	it( 'renders monthly payments', () => {
 		const wrapper = mount( MembershipSummary, {
@@ -96,12 +109,12 @@ describe( 'MembershipSummary', () => {
 			},
 			store: createStore(),
 			mocks: {
-				$t: ( key: string, params: Object ) => params,
+				$t: mockTranslate,
 			},
 		} );
 
-		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '"membershipFee": "15,00"' );
-		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '"membershipFeeYearly": "180,00"' );
+		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFee\": \"15,00\"' );
+		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFeeYearly\": \"(180,00 currency_name donation_form_payment_interval_yearly)\"' );
 	} );
 
 	it( 'renders quarterly payments', () => {
@@ -113,12 +126,12 @@ describe( 'MembershipSummary', () => {
 			},
 			store: createStore(),
 			mocks: {
-				$t: ( key: string, params: Object ) => params,
+				$t: mockTranslate,
 			},
 		} );
 
-		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '"membershipFee": "45,00"' );
-		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '"membershipFeeYearly": "180,00"' );
+		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFee\": \"45,00\"' );
+		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFeeYearly\": \"(180,00 currency_name donation_form_payment_interval_yearly)\"' );
 	} );
 
 	it( 'renders yearly payments', () => {
@@ -130,11 +143,13 @@ describe( 'MembershipSummary', () => {
 			},
 			store: createStore(),
 			mocks: {
-				$t: ( key: string, params: Object ) => params,
+				$t: mockTranslate,
 			},
 		} );
 
-		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '"membershipFee": "180,00"' );
-		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '"membershipFeeYearly": "180,00"' );
+		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFee\": \"180,00\"' );
+		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFeeYearly\": \"\"' );
 	} );
+
+	/* eslint-enable no-useless-escape */
 } );
