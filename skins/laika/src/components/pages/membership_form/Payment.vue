@@ -34,7 +34,7 @@ import { action } from '@/store/util';
 import { NS_MEMBERSHIP_ADDRESS, NS_MEMBERSHIP_FEE } from '@/store/namespaces';
 import { mapGetters, mapState } from 'vuex';
 import { setFee, setInterval } from '@/store/membership_fee/actionTypes';
-import { SetFeePayload } from '@/view_models/MembershipFee';
+import { IntervalData, SetFeePayload } from '@/view_models/MembershipFee';
 
 export default Vue.extend( {
 	name: 'Payment',
@@ -75,7 +75,11 @@ export default Vue.extend( {
 			return this.$store.dispatch( action( NS_MEMBERSHIP_FEE, setFee ), payload );
 		},
 		sendIntervalToStore( interval: string ): void {
-			this.$store.dispatch( action( NS_MEMBERSHIP_FEE, setInterval ), interval );
+			const payload = {
+				selectedInterval: interval,
+				validateFeeUrl: this.validateFeeUrl,
+			} as IntervalData;
+			this.$store.dispatch( action( NS_MEMBERSHIP_FEE, setInterval ), payload );
 		},
 	},
 } );

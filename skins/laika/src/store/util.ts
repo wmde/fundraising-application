@@ -23,4 +23,8 @@ export const Helper = {
 			return accumulator;
 		}, {} );
 	},
+	isNonNumeric( value: string ): boolean {
+		return value === '' || isNaN( Number( value ) );
+	},
+
 };
