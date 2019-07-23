@@ -51,6 +51,7 @@ export const actions = {
 	},
 	[ markBankDataAsIncomplete ]( context: ActionContext<BankAccount, any> ): void {
 		context.commit( MARK_BANKDATA_INCOMPLETE );
+		context.commit( SET_BANKNAME, '' );
 	},
 	[ markBankDataAsInvalid ]( context: ActionContext<BankAccount, any> ): void {
 		context.commit( SET_BANK_DATA_VALIDITY, Validity.INVALID );

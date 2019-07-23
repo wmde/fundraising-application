@@ -5,7 +5,12 @@ import BankData from '@/components/shared/PaymentBankData.vue';
 import { createStore } from '@/store/donation_store';
 import { NS_BANKDATA } from '@/store/namespaces';
 import { action } from '@/store/util';
-import { initializeBankData, setBankData } from '@/store/bankdata/actionTypes';
+import {
+	initializeBankData,
+	markBankDataAsIncomplete,
+	markBankDataAsInvalid,
+	setBankData,
+} from '@/store/bankdata/actionTypes';
 import { BankAccountRequest } from '@/view_models/BankAccount';
 
 const localVue = createLocalVue();
@@ -96,6 +101,78 @@ describe( 'BankData', () => {
 		wrapper.setData( { accountId: '34560517' } );
 		iban.trigger( 'blur' );
 		expect( bic.element.getAttribute( 'disabled' ) ).toBeNull();
+	} );
+
+	it( 'marks invalid bank account IDs as invalid', () => {
+		const wrapper = mount( BankData, {
+			localVue,
+			propsData: {
+				validateBankDataUrl: '/check-iban',
+				validateLegacyBankDataUrl: '/generate-iban',
+			},
+			store: createStore(),
+			mocks: {
+				$t: () => {},
+			},
+		} );
+		const store = wrapper.vm.$store;
+		store.dispatch = jest.fn();
+
+		const iban = wrapper.find( '#iban' );
+		wrapper.setData( { accountId: 'DE123456051ABCINVALID' } );
+		iban.trigger( 'blur' );
+
+		const expectedAction = action( NS_BANKDATA, markBankDataAsInvalid );
+		expect( store.dispatch ).toBeCalledWith( expectedAction );
+	} );
+
+	it( 'marks bank account data as incomplete if foreign IBAN without BIC is entered', () => {
+		const wrapper = mount( BankData, {
+			localVue,
+			propsData: {
+				validateBankDataUrl: '/check-iban',
+				validateLegacyBankDataUrl: '/generate-iban',
+			},
+			store: createStore(),
+			mocks: {
+				$t: () => {},
+			},
+		} );
+		const store = wrapper.vm.$store;
+		store.dispatch = jest.fn();
+
+		const iban = wrapper.find( '#iban' );
+		wrapper.setData( { accountId: 'AT12345605171238489890' } );
+		iban.trigger( 'blur' );
+
+		const expectedAction = action( NS_BANKDATA, markBankDataAsIncomplete );
+		expect( store.dispatch ).toBeCalledWith( expectedAction );
+	} );
+
+	it( 'marks bank account data as incomplete if valid IBAN is removed', () => {
+		const wrapper = mount( BankData, {
+			localVue,
+			propsData: {
+				validateBankDataUrl: '/check-iban',
+				validateLegacyBankDataUrl: '/generate-iban',
+			},
+			store: createStore(),
+			mocks: {
+				$t: () => {},
+			},
+		} );
+		const store = wrapper.vm.$store;
+		store.dispatch = jest.fn();
+
+		const iban = wrapper.find( '#iban' );
+		wrapper.setData( { accountId: 'DE12345605171238489890' } );
+		iban.trigger( 'blur' );
+
+		wrapper.setData( { accountId: '' } );
+		iban.trigger( 'blur' );
+
+		const expectedAction = action( NS_BANKDATA, markBankDataAsIncomplete );
+		expect( store.dispatch ).toHaveBeenNthCalledWith( 2, expectedAction );
 	} );
 
 	it( 'renders changes from the store in the input fields', () => {

@@ -102,7 +102,7 @@ export default Vue.extend( {
 	},
 	methods: {
 		validate() {
-			if ( !this.looksLikeValidAccountNumber() ) {
+			if ( !this.isAccountIdEmpty() && !this.looksLikeValidAccountNumber() ) {
 				this.$store.dispatch( ( action( NS_BANKDATA, markBankDataAsInvalid ) ) );
 				return;
 			}
