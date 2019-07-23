@@ -9,10 +9,7 @@
 		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<date-of-birth/>
         <receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
-        <div class="has-margin-top-36">
-			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
-			<email :initial-value="email" v-on:email="setEmail( $event )"/>
-		</div>
+		<email :initial-value="email" v-on:email="setEmail( $event )"/>
 	</div>
 </template>
 

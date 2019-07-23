@@ -5,10 +5,7 @@
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
-		<div class="has-margin-top-36">
-			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
-			<email v-on:email="setEmail( $event )"></email>
-		</div>
+		<email v-on:email="setEmail( $event )"></email>
 		<newsletter-opt-in></newsletter-opt-in>
 	</div>
 </template>
