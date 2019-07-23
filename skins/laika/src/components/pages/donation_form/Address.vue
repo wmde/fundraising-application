@@ -1,7 +1,7 @@
 <template>
 	<div id="addressForm" class="column is-full">
 		<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
-		<address-type v-on:address-type="setAddressType( $event )" :isDirectDebit="isDirectDebit"></address-type>
+		<address-type v-on:address-type="setAddressType( $event )" :disabledAddressTypes="disabledAddressTypes"></address-type>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
@@ -122,6 +122,11 @@ export default Vue.extend( {
 			get: function (): boolean {
 				return this.$store.getters[ 'payment/isDirectDebitPayment' ];
 			},
+		},
+		disabledAddressTypes: {
+			get: function (): Array<AddressTypeModel> {
+				return this.$store.getters[ 'payment/isDirectDebitPayment' ] ? [ AddressTypeModel.ANON ] : [];
+			}
 		},
 		...mapGetters( NS_ADDRESS, [
 			'addressType',

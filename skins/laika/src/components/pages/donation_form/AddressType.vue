@@ -22,7 +22,7 @@
 			<b-radio id="anonymous"
 					name="addressTypeInternal"
 					v-model="type"
-					:disabled="this.isDirectDebit"
+					:disabled="this.disabledAddressTypes.includes( AddressTypeModel.ANON )"
 					:native-value="AddressTypeModel.ANON"
 					@change.native="setAddressType()">
 				{{ $t( 'donation_form_addresstype_option_anonymous' ) }}
@@ -43,7 +43,7 @@ export default Vue.extend( {
 		};
 	},
 	props: {
-		isDirectDebit: Boolean,
+		disabledAddressTypes: Array,
 	},
 	computed: {
 		AddressTypeModel: {
@@ -53,12 +53,13 @@ export default Vue.extend( {
 		},
 	},
 	watch: {
-		isDirectDebit:
+		disabledAddressTypes:
 		{
-			handler: function ( isDirectDebit ) {
-				if ( isDirectDebit && this.$data.type === AddressTypeModel.ANON ) {
-					this.$data.type = AddressTypeModel.PERSON;
-					this.setAddressType();
+			handler: function ( disabledAddressTypes ) {
+				const $this = ( this as any );
+				if ( disabledAddressTypes.includes( $this.$data.type ) ) {
+					$this.$data.type = AddressTypeModel.PERSON;
+					$this.setAddressType();
 				}
 			},
 			deep: true,
