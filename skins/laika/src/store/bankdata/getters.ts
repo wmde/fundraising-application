@@ -12,6 +12,9 @@ export const getters: GetterTree<BankAccount, any> = {
 	getBankName: function ( state: BankAccount ): string {
 		return state.values.bankName;
 	},
+	getAccountId: function ( state: BankAccount ): string {
+		return state.values.iban;
+	},
 	getBankId: function ( state: BankAccount ): string {
 		return state.values.bic;
 	},

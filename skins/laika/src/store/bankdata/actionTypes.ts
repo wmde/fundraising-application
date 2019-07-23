@@ -1,2 +1,3 @@
-export const setBankData = 'setBankData';
+export const initializeBankData = 'initializeBankData';
 export const markEmptyValuesAsInvalid = 'markEmptyFieldsAsInvalid';
+export const setBankData = 'setBankData';

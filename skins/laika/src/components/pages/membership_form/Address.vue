@@ -124,12 +124,14 @@ export default Vue.extend( {
 		] ),
 	},
 	mounted() {
-		const initialFormValues = this.$props.initialFormValues;
-		if ( initialFormValues !== undefined ) {
-			Object.keys( this.$data.formData ).forEach( ( fieldName: string ) => {
-				this.formData[ fieldName ].value = initialFormValues[ fieldName ];
-			} );
-		}
+		Object.entries( this.$store.state[ NS_MEMBERSHIP_ADDRESS ].values ).forEach( ( entry ) => {
+			const name: string = entry[ 0 ];
+			const value: string = entry[ 1 ] as string;
+			if ( !this.formData[ name ] ) {
+				return;
+			}
+			this.formData[ name ].value = value;
+		} );
 	},
 	methods: {
 		validateForm(): Promise<ValidationResult> {

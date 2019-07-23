@@ -43,7 +43,10 @@ import { mapGetters } from 'vuex';
 export default Vue.extend( {
 	name: 'PaymentBankData',
 	data: function (): BankAccountData {
-		return { accountId: '', bankId: '' };
+		return {
+			accountId: this.$store.getters[ NS_BANKDATA + '/getAccountId' ],
+			bankId: this.$store.getters[ NS_BANKDATA + '/getBankId' ],
+		};
 	},
 	props: {
 		validateBankDataUrl: String,

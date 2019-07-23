@@ -30,9 +30,7 @@ export default Vue.extend( {
 	props: {
 		validateAddressUrl: String,
 		countries: Array as () => Array<String>,
-		trackingData: Object as () => TrackingData,
 		showMembershipTypeOption: Boolean,
-		initialFormValues: [ Object, String ],
 	},
 	methods: {
 		next() {
