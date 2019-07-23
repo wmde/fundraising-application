@@ -23,6 +23,13 @@ function newMinimalStore( overrides: Object ): BankAccount {
 }
 
 describe( 'BankData', () => {
+
+	const testIban = 'DE12345605171238489890',
+		testBIC = 'ABCDDEFFXXX',
+		testAccount = '34560517',
+		testBankCode = '50010517',
+		testBankName = 'Cool Bank 3000';
+
 	describe( 'Getters/bankDataIsInvalid', () => {
 		it( 'does not return invalid bank data on initalization', () => {
 			expect( getters.bankDataIsInvalid(
@@ -148,12 +155,6 @@ describe( 'BankData', () => {
 			moxios.uninstall();
 		} );
 
-		const testIban = 'DE12345605171238489890',
-			testBIC = 'ABCDDEFFXXX',
-			testAccount = '34560517',
-			testBankCode = '50010517',
-			testBankName = 'Cool Bank 3000';
-
 		it( 'commits to mutations [SET_BANK_DATA_VALIDITY], [SET_BANKNAME], [SET_BANKDATA]', ( done ) => {
 			const context = {
 					commit: jest.fn(),
@@ -239,6 +240,29 @@ describe( 'BankData', () => {
 		};
 	}
 
+	describe( 'Actions/initializeBankData', () => {
+		it( 'commits the data to the internal state', () => {
+			const context = {
+					commit: jest.fn(),
+				},
+				payload = {
+					accountId: testIban,
+					bankId: testBIC,
+					bankName: testBankName,
+				},
+				action = actions.initializeBankData as any;
+
+			action( context, payload );
+
+			expect( context.commit ).toHaveBeenCalledWith( 'SET_BANKDATA', {
+				accountId: testIban,
+				bankId: testBIC,
+			} );
+			expect( context.commit ).toHaveBeenCalledWith( 'SET_BANKNAME', testBankName );
+			expect( context.commit ).toHaveBeenCalledWith( 'SET_BANK_DATA_VALIDITY', Validity.VALID );
+		} );
+	} );
+
 	describe( 'mutations/MARK_EMPTY_FIELDS_INVALID', () => {
 
 		it( 'marks validity as invalid when validity is INCOMPLETE', () => {
@@ -261,5 +285,4 @@ describe( 'BankData', () => {
 		} );
 
 	} );
-
 } );

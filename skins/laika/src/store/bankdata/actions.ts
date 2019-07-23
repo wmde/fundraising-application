@@ -1,11 +1,12 @@
 import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
 import {
-	BankAccount,
+	BankAccount, BankAccountData,
 	BankAccountRequest,
 	BankAccountResponse,
 } from '@/view_models/BankAccount';
 import {
+	initializeBankData,
 	markEmptyValuesAsInvalid,
 	setBankData,
 } from '@/store/bankdata/actionTypes';
@@ -35,6 +36,14 @@ export const actions = {
 				context.commit( SET_BANKNAME, '' );
 			}
 		} );
+	},
+	[ initializeBankData ]( context: ActionContext<BankAccount, any>, payload: BankAccountData & { bankName: string} ): void {
+		context.commit( SET_BANKDATA, {
+			accountId: payload.accountId,
+			bankId: payload.bankId,
+		} );
+		context.commit( SET_BANKNAME, payload.bankName );
+		context.commit( SET_BANK_DATA_VALIDITY, Validity.VALID );
 	},
 	[ markEmptyValuesAsInvalid ]( context: ActionContext<BankAccount, any> ): void {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
