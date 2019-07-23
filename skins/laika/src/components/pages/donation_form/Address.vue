@@ -123,7 +123,7 @@ export default Vue.extend( {
 		disabledAddressTypes: {
 			get: function (): Array<AddressTypeModel> {
 				return this.$store.getters[ 'payment/isDirectDebitPayment' ] ? [ AddressTypeModel.ANON ] : [];
-			}
+			},
 		},
 		...mapGetters( NS_ADDRESS, [
 			'addressType',

@@ -35,7 +35,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { BankAccountData, BankAccountRequest } from '@/view_models/BankAccount';
-import { setBankData } from '@/store/bankdata/actionTypes';
+import { markBankDataAsIncomplete, markBankDataAsInvalid, setBankData } from '@/store/bankdata/actionTypes';
 import { NS_BANKDATA } from '@/store/namespaces';
 import { action } from '@/store/util';
 import { mapGetters } from 'vuex';
@@ -102,7 +102,12 @@ export default Vue.extend( {
 	},
 	methods: {
 		validate() {
-			if ( this.isAccountIdEmpty() ) {
+			if ( !this.looksLikeValidAccountNumber() ) {
+				this.$store.dispatch( ( action( NS_BANKDATA, markBankDataAsInvalid ) ) );
+				return;
+			}
+			if ( this.isAccountIdEmpty() || ( !this.looksLikeGermanIban() && this.isBankIdEmpty() ) ) {
+				this.$store.dispatch( action( NS_BANKDATA, markBankDataAsIncomplete ) );
 				return;
 			}
 			if ( this.looksLikeIban() ) {
@@ -116,10 +121,10 @@ export default Vue.extend( {
 			} else {
 				this.$store.dispatch(
 					action( NS_BANKDATA, setBankData ),
-					{
-						validationUrl: this.validateLegacyBankDataUrl,
-						requestParams: { accountNumber: this.$data.accountId, bankCode: this.$data.bankId },
-					} as BankAccountRequest
+						{
+							validationUrl: this.validateLegacyBankDataUrl,
+							requestParams: { accountNumber: this.$data.accountId, bankCode: this.$data.bankId },
+						} as BankAccountRequest
 				);
 			}
 		},
@@ -137,6 +142,9 @@ export default Vue.extend( {
 		},
 		looksLikeGermanIban() {
 			return /^DE+([0-9\s]+)?$/.test( this.$data.accountId );
+		},
+		looksLikeValidAccountNumber() {
+			return this.looksLikeIban() || this.looksLikeBankAccountNumber();
 		},
 	},
 } );

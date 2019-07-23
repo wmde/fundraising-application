@@ -6,11 +6,12 @@ import {
 	BankAccountResponse,
 } from '@/view_models/BankAccount';
 import {
-	initializeBankData,
+	initializeBankData, markBankDataAsIncomplete, markBankDataAsInvalid,
 	markEmptyValuesAsInvalid,
 	setBankData,
 } from '@/store/bankdata/actionTypes';
 import {
+	MARK_BANKDATA_INCOMPLETE,
 	MARK_EMPTY_FIELDS_INVALID,
 	SET_BANK_DATA_VALIDITY,
 	SET_BANKDATA, SET_BANKNAME,
@@ -47,5 +48,12 @@ export const actions = {
 	},
 	[ markEmptyValuesAsInvalid ]( context: ActionContext<BankAccount, any> ): void {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
+	},
+	[ markBankDataAsIncomplete ]( context: ActionContext<BankAccount, any> ): void {
+		context.commit( MARK_BANKDATA_INCOMPLETE );
+	},
+	[ markBankDataAsInvalid ]( context: ActionContext<BankAccount, any> ): void {
+		context.commit( SET_BANK_DATA_VALIDITY, Validity.INVALID );
+		context.commit( SET_BANKNAME, '' );
 	},
 };
