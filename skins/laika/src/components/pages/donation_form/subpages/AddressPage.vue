@@ -39,6 +39,8 @@ import AddressFields from '@/components/pages/donation_form/Address.vue';
 import DonationSummary from '@/components/DonationSummary.vue';
 import SubmitValues from '@/components/pages/donation_form/SubmitValues.vue';
 import { TrackingData } from '@/view_models/SubmitValues';
+import { action } from '@/store/util';
+import { markEmptyValuesAsInvalid } from '@/store/bankdata/actionTypes';
 
 export default Vue.extend( {
 	name: 'AddressPage',
@@ -89,7 +91,13 @@ export default Vue.extend( {
 	},
 	methods: {
 		submit() {
-			( this.$refs.address as any ).validateForm().then( () => {
+			const validationCalls = [
+				( this.$refs.address as any ).validateForm(),
+			];
+			if ( this.$store.getters[ NS_PAYMENT + '/isDirectDebitPayment' ] ) {
+				validationCalls.push( this.$store.dispatch( action( NS_BANKDATA, markEmptyValuesAsInvalid ) ) );
+			}
+			Promise.all( validationCalls ).then( () => {
 				if ( this.$store.getters[ NS_ADDRESS + '/requiredFieldsAreValid' ] ) {
 					if ( this.$store.getters[ NS_PAYMENT + '/isDirectDebitPayment' ] &&
 						!this.$store.getters[ NS_BANKDATA + '/bankDataIsValid' ] ) {
