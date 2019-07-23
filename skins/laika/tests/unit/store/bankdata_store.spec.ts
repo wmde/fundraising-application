@@ -4,6 +4,7 @@ import { Validity } from '@/view_models/Validity';
 import each from 'jest-each';
 import { BankAccount, BankAccountRequest, BankAccountResponse } from '@/view_models/BankAccount';
 import moxios from 'moxios';
+import { mutations } from '@/store/bankdata/mutations';
 
 function newMinimalStore( overrides: Object ): BankAccount {
 	return Object.assign(
@@ -211,4 +212,54 @@ describe( 'BankData', () => {
 			} );
 		} );
 	} );
+
+	describe( 'actions/markEmptyFieldsAsInvalid', () => {
+		it( 'commits MARK_EMPTY_FIELDS_INVALID', () => {
+			const context = {
+					commit: jest.fn(),
+				},
+				action = actions.markEmptyFieldsAsInvalid as any;
+			action( context );
+
+			expect( context.commit ).toHaveBeenCalledWith( 'MARK_EMPTY_FIELDS_INVALID' );
+		} );
+	} );
+
+	function getState( overrides = {} ) {
+		return {
+			validity: {
+				bankdata: Validity.INCOMPLETE,
+			},
+			values: {
+				iban: '',
+				bic: '',
+				bankName: '',
+			},
+			...overrides,
+		};
+	}
+
+	describe( 'mutations/MARK_EMPTY_FIELDS_INVALID', () => {
+
+		it( 'marks validity as invalid when validity is INCOMPLETE', () => {
+			const state = getState();
+			mutations.MARK_EMPTY_FIELDS_INVALID( state );
+			expect( state.validity.bankdata ).toBe( Validity.INVALID );
+		} );
+
+		it( 'marks keeps validity validity is VALID', () => {
+			const state = getState( { validity: { bankdata: Validity.VALID } } );
+			mutations.MARK_EMPTY_FIELDS_INVALID( state );
+			expect( state.validity.bankdata ).toBe( Validity.VALID );
+
+		} );
+
+		it( 'marks keeps validity validity is INVALID', () => {
+			const state = getState( { validity: { bankdata: Validity.INVALID } } );
+			mutations.MARK_EMPTY_FIELDS_INVALID( state );
+			expect( state.validity.bankdata ).toBe( Validity.INVALID );
+		} );
+
+	} );
+
 } );

@@ -6,9 +6,11 @@ import {
 	BankAccountResponse,
 } from '@/view_models/BankAccount';
 import {
+	markEmptyValuesAsInvalid,
 	setBankData,
 } from '@/store/bankdata/actionTypes';
 import {
+	MARK_EMPTY_FIELDS_INVALID,
 	SET_BANK_DATA_VALIDITY,
 	SET_BANKDATA, SET_BANKNAME,
 } from '@/store/bankdata/mutationTypes';
@@ -33,5 +35,8 @@ export const actions = {
 				context.commit( SET_BANKNAME, '' );
 			}
 		} );
+	},
+	[ markEmptyValuesAsInvalid ]( context: ActionContext<BankAccount, any> ): void {
+		context.commit( MARK_EMPTY_FIELDS_INVALID );
 	},
 };
