@@ -1,6 +1,7 @@
 <template>
 	<div class="payment-page">
 		<payment v-bind="$props"></payment>
+		<submit-values></submit-values>
 		<div class="level has-margin-top-36">
 			<div class="level-left">
 				<b-button id="previous-btn" class="level-item"
@@ -24,12 +25,17 @@
 <script lang="ts">
 import Vue from 'vue';
 import Payment from '@/components/pages/membership_form/Payment.vue';
-import { NS_BANKDATA, NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
+import SubmitValues from '@/components/pages/membership_form/SubmitValues.vue';
+import { NS_BANKDATA, NS_MEMBERSHIP_FEE } from '@/store/namespaces';
+import { action } from '@/store/util';
+import { markEmptyValuesAsInvalid as markEmptyFeeValuesAsInvalid } from '@/store/membership_fee/actionTypes';
+import { markEmptyValuesAsInvalid as markemptyBankDataValuesAsInvalid } from '@/store/bankdata/actionTypes';
 
 export default Vue.extend( {
 	name: 'PaymentPage',
 	components: {
 		Payment,
+		SubmitValues,
 	},
 	props: {
 		validateFeeUrl: String,
@@ -40,11 +46,13 @@ export default Vue.extend( {
 	},
 	methods: {
 		submit() {
-			( this.$refs.address as any ).validateForm().then( () => {
-				if ( this.$store.getters[ NS_MEMBERSHIP_ADDRESS + '/requiredFieldsAreValid' ] &&
-						this.$store.getters[ NS_BANKDATA + '/bankDataIsValid' ] ) {
+			Promise.all( [
+				this.$store.dispatch( action( NS_MEMBERSHIP_FEE, markEmptyFeeValuesAsInvalid ) ),
+				this.$store.dispatch( action( NS_BANKDATA, markemptyBankDataValuesAsInvalid ) ),
+			] ).then( () => {
+				if ( this.$store.getters[ NS_MEMBERSHIP_FEE + '/paymentDataIsValid' ] &&
+					this.$store.getters[ NS_BANKDATA + '/bankDataIsValid' ] ) {
 					this.$emit( 'submit-membership' );
-					return;
 				}
 			} );
 		},

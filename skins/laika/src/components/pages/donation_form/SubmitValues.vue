@@ -34,7 +34,7 @@ import { mapState } from 'vuex';
 import { NS_ADDRESS, NS_BANKDATA, NS_PAYMENT } from '@/store/namespaces';
 import { Payment } from '@/view_models/Payment';
 import { AddressState } from '@/view_models/Address';
-import { AddressTypeModel, addressTypeName, AddressTypeNames } from '@/view_models/AddressTypeModel';
+import { addressTypeName } from '@/view_models/AddressTypeModel';
 import { BankAccount } from '@/view_models/BankAccount';
 
 export default Vue.extend( {
