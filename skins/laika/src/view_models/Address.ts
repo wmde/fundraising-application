@@ -43,7 +43,7 @@ export interface MembershipAddressState {
     validity: FormValidity,
 }
 
-export interface InitialMembershipAddress {
+export interface InitialMembershipData {
     addressType: string,
     salutation: string,
     title: string,
@@ -55,6 +55,9 @@ export interface InitialMembershipAddress {
     postcode: string,
     country: string,
     email: string,
+    iban?: string
+    bic?: string,
+    bankname?: string
 }
 
 export interface InputField {

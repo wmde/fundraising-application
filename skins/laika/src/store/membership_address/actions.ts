@@ -10,7 +10,7 @@ import {
 	setDate,
 	setMembershipType,
 } from '@/store/membership_address/actionTypes';
-import { MembershipAddressState, InputField, InitialMembershipAddress } from '@/view_models/Address';
+import { MembershipAddressState, InputField, InitialMembershipData } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { addressTypeFromName, AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
@@ -18,7 +18,7 @@ import { MARK_EMPTY_FIELDS_INVALID } from '@/store/membership_address/mutationTy
 import { Validity } from '@/view_models/Validity';
 
 export const actions = {
-	[ initializeAddress ]( context: ActionContext<MembershipAddressState, any>, initialData: InitialMembershipAddress ) {
+	[ initializeAddress ]( context: ActionContext<MembershipAddressState, any>, initialData: InitialMembershipData ) {
 		context.commit( 'SET_EMAIL', initialData.email );
 		context.commit( 'SET_ADDRESS_TYPE', addressTypeFromName( initialData.addressType ) );
 		Object.entries( initialData ).forEach( ( [ name, value ] ) => {

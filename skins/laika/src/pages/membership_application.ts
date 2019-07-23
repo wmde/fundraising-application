@@ -4,13 +4,14 @@ import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
 import { createStore } from '@/store/membership_store';
-import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
+import { NS_BANKDATA, NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { initializeAddress } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 
 import Component from '@/components/pages/MembershipForm.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
-import { InitialMembershipAddress } from '@/view_models/Address';
+import { InitialMembershipData } from '@/view_models/Address';
+import { initializeBankData } from '@/store/bankdata/actionTypes';
 
 const PAGE_IDENTIFIER = 'membership-application',
 	COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
@@ -24,7 +25,7 @@ interface MembershipAmountModel {
 	tracking: Array<number>,
 	urls: any,
 	showMembershipTypeOption: Boolean,
-	initialFormValues: InitialMembershipAddress,
+	initialFormValues: InitialMembershipData,
 }
 
 const pageData = new PageDataInitializer<MembershipAmountModel>( '#app' );
@@ -68,7 +69,22 @@ function initializePage(): void {
 }
 
 if ( pageData.applicationVars.initialFormValues !== undefined ) {
-	store.dispatch( action( NS_MEMBERSHIP_ADDRESS, initializeAddress ), pageData.applicationVars.initialFormValues ).then( initializePage );
+	const initializationCalls = [
+		store.dispatch( action( NS_MEMBERSHIP_ADDRESS, initializeAddress ), pageData.applicationVars.initialFormValues ),
+	];
+	if ( pageData.applicationVars.initialFormValues.iban ) {
+		initializationCalls.push(
+			store.dispatch(
+				action( NS_BANKDATA, initializeBankData ),
+				{
+					accountId: pageData.applicationVars.initialFormValues.iban,
+					bankId: pageData.applicationVars.initialFormValues.bic || '',
+					bankName: pageData.applicationVars.initialFormValues.bankname || '',
+				}
+			)
+		);
+	}
+	Promise.all( initializationCalls ).then( initializePage );
 } else {
 	initializePage();
 }

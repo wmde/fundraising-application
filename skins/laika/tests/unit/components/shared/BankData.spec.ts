@@ -5,7 +5,7 @@ import BankData from '@/components/shared/PaymentBankData.vue';
 import { createStore } from '@/store/donation_store';
 import { NS_BANKDATA } from '@/store/namespaces';
 import { action } from '@/store/util';
-import { setBankData } from '@/store/bankdata/actionTypes';
+import { initializeBankData, setBankData } from '@/store/bankdata/actionTypes';
 import { BankAccountRequest } from '@/view_models/BankAccount';
 
 const localVue = createLocalVue();
@@ -170,5 +170,29 @@ describe( 'BankData', () => {
 		const bankDataLabels = wrapper.findAll( 'label' );
 		expect( bankDataLabels.at( 0 ).text() ).toMatch( 'donation_form_payment_bankdata_account_legacy_label' );
 		expect( bankDataLabels.at( 1 ).text() ).toMatch( 'donation_form_payment_bankdata_bank_legacy_label' );
+	} );
+
+	it( 'puts initial values form the store in the fields', () => {
+		const store = createStore();
+		return store.dispatch( action( NS_BANKDATA, initializeBankData ), {
+			accountId: 'DE12345605171238489890',
+			bankId: 'ABCDDEFFXXX',
+			bankName: 'Cool Bank',
+		} ).then( () => {
+			const wrapper = mount( BankData, {
+				localVue,
+				store,
+				mocks: {
+					$t: ( key: string ) => key,
+				},
+			} );
+			const iban = wrapper.find( '#iban' );
+			const bic = wrapper.find( '#bic' );
+			const bankName = wrapper.find( '#bank-name' );
+
+			expect( ( ( <HTMLInputElement> iban.element ).value ) ).toMatch( 'DE12345605171238489890' );
+			expect( ( ( <HTMLInputElement> bic.element ).value ) ).toMatch( 'ABCDDEFFXXX' );
+			expect( ( ( <HTMLElement> bankName.element ).textContent ) ).toMatch( 'Cool Bank' );
+		} );
 	} );
 } );
