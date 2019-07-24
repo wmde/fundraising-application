@@ -2,21 +2,23 @@
 	<div class="payment-page">
 		<payment v-bind="$props"></payment>
 		<submit-values></submit-values>
-		<div class="level has-margin-top-36">
-			<div class="level-left">
-				<b-button id="previous-btn" class="level-item"
-					@click="$emit( 'previous-page' )"
-					type="is-primary is-main"
-					outlined>
-					{{ $t('donation_form_section_back') }}
-				</b-button>
-			</div>
-			<div class="level-right">
-				<b-button id="submit-btn" class="level-item"
-					@click="submit"
-					type="is-primary is-main">
-					{{ $t('donation_form_finalize') }}
-				</b-button>
+		<div class="summary-wrapper">
+			<div class="level has-margin-top-36">
+				<div class="level-item">
+					<b-button id="previous-btn" class="level-item"
+						@click="$emit( 'previous-page' )"
+						type="is-primary is-main"
+						outlined>
+						{{ $t('donation_form_section_back') }}
+					</b-button>
+				</div>
+				<div class="level-item">
+					<b-button id="submit-btn" class="level-item"
+						@click="submit"
+						type="is-primary is-main">
+						{{ $t('membership_form_finalize') }}
+					</b-button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -59,7 +61,3 @@ export default Vue.extend( {
 	},
 } );
 </script>
-
-<style scoped>
-
-</style>

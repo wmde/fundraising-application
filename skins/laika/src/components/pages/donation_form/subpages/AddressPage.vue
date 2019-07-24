@@ -8,7 +8,7 @@
 				</donation-summary>
 				<submit-values :tracking-data="{}"></submit-values>
 				<div class="level has-margin-top-36">
-					<div class="level-left">
+					<div class="level-item">
 						<b-button id="previous-btn" class="level-item"
 								@click="$emit( 'previous-page' )"
 								type="is-primary is-main"
@@ -16,7 +16,7 @@
 							{{ $t('donation_form_section_back') }}
 						</b-button>
 					</div>
-					<div class="level-right">
+					<div class="level-item">
 						<b-button id="submit-btn" class="level-item"
 								@click="submit"
 								type="is-primary is-main">
@@ -111,16 +111,3 @@ export default Vue.extend( {
 	},
 } );
 </script>
-
-<style lang="scss" scoped>
-	@import "../../../../scss/custom";
-
-	.summary-wrapper {
-		border: 2px solid $fun-color-gray-light-solid;
-		padding: 18px;
-	}
-
-	.external-notice {
-		color: $fun-color-dark-lighter;
-	}
-</style>
