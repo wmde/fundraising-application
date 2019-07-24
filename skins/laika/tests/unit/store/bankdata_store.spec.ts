@@ -10,6 +10,7 @@ import { MARK_BANKDATA_INCOMPLETE } from '@/store/bankdata/mutationTypes';
 function newMinimalStore( overrides: Object ): BankAccount {
 	return Object.assign(
 		{
+			isValidating: false,
 			validity: {
 				bankdata: Validity.INCOMPLETE,
 			},
@@ -156,7 +157,7 @@ describe( 'BankData', () => {
 			moxios.uninstall();
 		} );
 
-		it( 'commits to mutations [SET_BANK_DATA_VALIDITY], [SET_BANKNAME], [SET_BANKDATA]', ( done ) => {
+		it( 'commits to mutations [SET_BANK_DATA_VALIDITY], [SET_BANKNAME], [SET_BANKDATA], [SET_IS_VALIDATING]', ( done ) => {
 			const context = {
 					commit: jest.fn(),
 				},
@@ -180,9 +181,11 @@ describe( 'BankData', () => {
 						bankName: testBankName,
 					} as BankAccountResponse,
 				} ).then( function () {
-					expect( context.commit ).toHaveBeenNthCalledWith( 1, 'SET_BANK_DATA_VALIDITY', Validity.VALID );
-					expect( context.commit ).toHaveBeenNthCalledWith( 2, 'SET_BANKNAME', testBankName );
-					expect( context.commit ).toHaveBeenNthCalledWith( 3, 'SET_BANKDATA', { accountId: testIban, bankId: testBIC } );
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_BANK_DATA_VALIDITY', Validity.VALID );
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_BANKNAME', testBankName );
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_BANKDATA', { accountId: testIban, bankId: testBIC } );
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_IS_VALIDATING', true );
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_IS_VALIDATING', false );
 					done();
 				} );
 			} );
@@ -207,8 +210,8 @@ describe( 'BankData', () => {
 						status: 'ERR',
 					} as BankAccountResponse,
 				} ).then( function () {
-					expect( context.commit ).toHaveBeenNthCalledWith( 1, 'SET_BANK_DATA_VALIDITY', Validity.INVALID );
-					expect( context.commit ).toHaveBeenNthCalledWith( 2, 'SET_BANKNAME', '' );
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_BANK_DATA_VALIDITY', Validity.INVALID );
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_BANKNAME', '' );
 					done();
 				} );
 			} );
@@ -255,6 +258,7 @@ describe( 'BankData', () => {
 
 	function getState( overrides = {} ) {
 		return {
+			isValidating: false,
 			validity: {
 				bankdata: Validity.INCOMPLETE,
 			},

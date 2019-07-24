@@ -7,6 +7,7 @@ import { mutations } from '@/store/payment/mutations';
 
 export default function (): Module<Payment, any> {
 	const state: Payment = {
+		isValidating: false,
 		validity: {
 			amount: Validity.INCOMPLETE,
 			type: Validity.INCOMPLETE,

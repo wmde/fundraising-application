@@ -19,6 +19,13 @@ export function createStore() {
 			[ NS_BANKDATA ]: createBankData(),
 		},
 		strict: process.env.NODE_ENV !== 'production',
+		getters: {
+			isValidating: function ( state ): boolean {
+				return state[ NS_MEMBERSHIP_FEE ].isValidating ||
+					state[ NS_MEMBERSHIP_ADDRESS ].isValidating ||
+					state[ NS_BANKDATA ].isValidating;
+			},
+		},
 	};
 
 	return new Vuex.Store<any>( storeBundle );

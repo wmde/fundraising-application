@@ -9,6 +9,7 @@ import {
 	SET_INTERVAL,
 	SET_TYPE,
 	SET_TYPE_VALIDITY,
+	SET_IS_VALIDATING,
 } from '@/store/payment/mutationTypes';
 
 export const mutations: MutationTree<Payment> = {
@@ -39,5 +40,8 @@ export const mutations: MutationTree<Payment> = {
 	},
 	[ SET_TYPE ]( state: Payment, type ) {
 		state.values.type = type;
+	},
+	[ SET_IS_VALIDATING ]( state: Payment, isValidating: boolean ) {
+		state.isValidating = isValidating;
 	},
 };

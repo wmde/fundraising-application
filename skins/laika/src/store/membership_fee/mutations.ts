@@ -8,6 +8,7 @@ import {
 	SET_FEE_VALIDITY,
 	SET_INTERVAL,
 	SET_INTERVAL_VALIDITY,
+	SET_IS_VALIDATING,
 	SET_TYPE,
 	SET_TYPE_VALIDITY,
 } from '@/store/membership_fee/mutationTypes';
@@ -44,5 +45,8 @@ export const mutations: MutationTree<MembershipFee> = {
 	},
 	[ SET_TYPE ]( state: MembershipFee, type ) {
 		state.values.type = type;
+	},
+	[ SET_IS_VALIDATING ]( state: MembershipFee, isValidating ) {
+		state.values.isValidating = isValidating;
 	},
 };
