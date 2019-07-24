@@ -4,7 +4,7 @@
 		<address-type v-on:address-type="setAddressType( $event )" :disabledAddressTypes="disabledAddressTypes"></address-type>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-		<email v-on:email="setEmail( $event )" :show-error="fieldErrors"></email>
+		<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
 		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
 		<newsletter-opt-in></newsletter-opt-in>
 	</div>
@@ -23,7 +23,7 @@ import { AddressValidity, FormData, ValidationResult } from '@/view_models/Addre
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress, setReceiptOptOut, setAddressType, setEmail } from '@/store/address/actionTypes';
+import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 
@@ -148,9 +148,6 @@ export default Vue.extend( {
 		},
 		setAddressType( addressType: AddressTypeModel ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
-		},
-		setEmail( email: string ): void {
-			this.$store.dispatch( action( NS_ADDRESS, setEmail ), email );
 		},
 	},
 } );

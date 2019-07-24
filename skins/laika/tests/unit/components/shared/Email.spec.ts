@@ -2,9 +2,6 @@ import { mount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Email from '@/components/shared/Email.vue';
 import { createStore } from '@/store/donation_store';
-import { action } from '@/store/util';
-import { NS_ADDRESS } from '@/store/namespaces';
-import { setEmail } from '@/store/address/actionTypes';
 import Buefy from 'buefy';
 
 const localVue = createLocalVue();
@@ -18,56 +15,18 @@ describe( 'Email', () => {
 			localVue,
 			store: createStore(),
 			mocks: {
-				$t: () => { },
+				$t: ( key: string ) => key,
 			},
 			propsData: {
-				showError: {
-					email: false,
+				showError: true,
+				formData: {
+					email: {
+						value: 'notanemail',
+					},
 				},
 			},
 		} );
-		const email = wrapper.find( '#email' );
-		wrapper.setData( { emailValue: 'abc@' } );
-		email.trigger( 'blur' );
-		const hasError = wrapper.vm.$data.emailHasError;
-		expect( hasError ).toBe( true );
+		const errorElement = wrapper.find( '.help.is-danger' );
+		expect( errorElement.text() ).toMatch( 'donation_form_email_error' );
 	} );
-
-	it( 'shows an error if the email field is still empty on blur', () => {
-		const wrapper = mount( Email, {
-			localVue,
-			store: createStore(),
-			mocks: {
-				$t: () => { },
-			},
-			propsData: {
-				showError: {
-					email: false,
-				},
-			},
-		} );
-		const email = wrapper.find( '#email' );
-		wrapper.setData( { emailValue: '' } );
-		email.trigger( 'blur' );
-		const hasError = wrapper.vm.$data.emailHasError;
-		expect( hasError ).toBe( true );
-	} );
-
-	it( 'does not show an error on initial render even though the field is empty', () => {
-		const wrapper = mount( Email, {
-			localVue,
-			store: createStore(),
-			mocks: {
-				$t: () => { },
-			},
-			propsData: {
-				showError: {
-					email: false,
-				},
-			},
-		} );
-		const hasError = wrapper.vm.$data.emailHasError;
-		expect( hasError ).toBe( false );
-	} );
-
 } );

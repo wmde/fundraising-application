@@ -2,34 +2,22 @@ import { getters } from '@/store/membership_address/getters';
 import { actions } from '@/store/membership_address/actions';
 import { mutations } from '@/store/membership_address/mutations';
 import {
-	validateAddress,
-	setAddressType,
-	setEmail,
-	setAddressField,
-	setReceiptOptOut,
-	setDate,
-	setMembershipType,
-} from '@/store/membership_address/actionTypes';
-import {
 	VALIDATE_INPUT,
 	MARK_EMPTY_FIELDS_INVALID,
 	BEGIN_ADDRESS_VALIDATION,
 	FINISH_ADDRESS_VALIDATION,
 	SET_ADDRESS_TYPE,
 	SET_ADDRESS_FIELD,
-	SET_ADDRESS_FIELDS,
-	SET_EMAIL,
 	SET_DATE,
 	SET_RECEIPT_OPTOUT,
 	SET_MEMBERSHIP_TYPE,
 	SET_MEMBERSHIP_TYPE_VALIDITY,
 } from '@/store/membership_address/mutationTypes';
-import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
 import { MembershipAddressState } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { REQUIRED_FIELDS } from '@/store/address/constants';
-import each from 'jest-each';
 import moxios from 'moxios';
 
 function newMinimalStore( overrides: Object ): MembershipAddressState {
@@ -375,19 +363,6 @@ describe( 'MembershipAddress', () => {
 		} );
 	} );
 
-	describe( 'Actions/setEmail', () => {
-		it( 'commits to mutation [SET_EMAIL] with the entered email', () => {
-			const commit = jest.fn(),
-				action = actions.setEmail as any,
-				email = 'email@email.com';
-			action( { commit }, email );
-			expect( commit ).toBeCalledWith(
-				'SET_EMAIL',
-				email
-			);
-		} );
-	} );
-
 	describe( 'Actions/setDate', () => {
 		it( 'commits to mutation [SET_DATE] with the entered birth date', () => {
 			const commit = jest.fn(),
@@ -581,16 +556,6 @@ describe( 'MembershipAddress', () => {
 			};
 			mutations.SET_ADDRESS_FIELD( store, field );
 			expect( store.values.firstName ).toBe( 'Amazing' );
-		} );
-	} );
-
-	describe( 'Mutations/SET_EMAIL', () => {
-		it( 'sets email value and validity', () => {
-			const store = newMinimalStore( {} );
-			const email = 'java.is.the.same.as.javascript@friendly.recruiter.com';
-			mutations.SET_EMAIL( store, email );
-			expect( store.values.email ).toBe( email );
-			expect( store.validity.email ).toBe( Validity.VALID );
 		} );
 	} );
 
