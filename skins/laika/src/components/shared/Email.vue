@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { AddressValidity } from "@/view_models/Address";
+import { AddressValidity } from '@/view_models/Address';
 
 export default Vue.extend( {
 	name: 'Email',

@@ -20,6 +20,11 @@ describe( 'Email', () => {
 			mocks: {
 				$t: () => { },
 			},
+			propsData: {
+				showError: {
+					email: false,
+				},
+			},
 		} );
 		const email = wrapper.find( '#email' );
 		wrapper.setData( { emailValue: 'abc@' } );
@@ -35,6 +40,11 @@ describe( 'Email', () => {
 			mocks: {
 				$t: () => { },
 			},
+			propsData: {
+				showError: {
+					email: false,
+				},
+			},
 		} );
 		const email = wrapper.find( '#email' );
 		wrapper.setData( { emailValue: '' } );
@@ -49,6 +59,11 @@ describe( 'Email', () => {
 			store: createStore(),
 			mocks: {
 				$t: () => { },
+			},
+			propsData: {
+				showError: {
+					email: false,
+				},
 			},
 		} );
 		const hasError = wrapper.vm.$data.emailHasError;
