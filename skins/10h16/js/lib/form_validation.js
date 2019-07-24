@@ -87,12 +87,13 @@ var jQuery = require( 'jquery' ),
 		validationUrl: '',
 		sendFunction: null,
 		validate: function ( formValues ) {
-			var postData;
+			var amountInCents, postData;
 			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
 				return { status: ValidationStates.INCOMPLETE };
 			}
+			amountInCents = Math.trunc( parseFloat( String( formValues.amount ).replace( ',', '.' ) ) * 100 );
 			postData = {
-				amount: formValues.amount,
+				amount: amountInCents,
 				paymentType: formValues.paymentType
 			};
 			return jQueryDeferredToPromise( this.sendFunction( this.validationUrl, postData, null, 'json' ) );

@@ -19,7 +19,7 @@ test( 'Amount validation sends values to server', function ( t ) {
 	t.ok( postFunctionSpy.calledOnce, 'data is sent once' );
 	callParameters = postFunctionSpy.getCall( 0 ).args;
 	t.equal( callParameters[ 0 ], 'http://spenden.wikimedia.org/validate-amount', 'validation calls configured URL' );
-	t.deepEqual( callParameters[ 1 ], { amount: 23, paymentType: 'BEZ' }, 'validation sends only necessary data' );
+	t.deepEqual( callParameters[ 1 ], { amount: 2300, paymentType: 'BEZ' }, 'validation sends only necessary data' );
 	t.equal( callParameters[ 3 ], 'json', 'validation expects JSON data' );
 	validationResult.then( function ( resultData ) {
 		t.deepEqual( resultData, positiveResult, 'validation function returns promise result' );
