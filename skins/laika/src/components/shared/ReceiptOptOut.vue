@@ -9,9 +9,6 @@
 		<label class="news" for="donation_receipt">
             {{  $t( 'receipt_opt_out' ) }}
         </label>
-        <div class="explanation">
-            {{ $t( 'receipt_opt_out_explanation' ) }}
-        </div>
     </div>
 
 </template>
