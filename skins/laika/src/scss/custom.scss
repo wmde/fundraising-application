@@ -64,6 +64,13 @@
 	top: 3px;
 }
 
+// No such feature in Bulma as of August 2019, if you see this comment, check if Bulma has adedd this natively
+.is-hidden-print {
+	@media print {
+		display: none !important;
+	}
+}
+
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
 

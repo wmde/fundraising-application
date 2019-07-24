@@ -3163,7 +3163,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -8116,12 +8116,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "766d53d1ce7d267295c88f45512cf68f6c5fbeb3"
+                "reference": "f7fcefec8fb80c5261d64a7053d083edf0b6f202"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/766d53d1ce7d267295c88f45512cf68f6c5fbeb3",
-                "reference": "766d53d1ce7d267295c88f45512cf68f6c5fbeb3",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f7fcefec8fb80c5261d64a7053d083edf0b6f202",
+                "reference": "f7fcefec8fb80c5261d64a7053d083edf0b6f202",
                 "shasum": ""
             },
             "require-dev": {
@@ -8154,7 +8154,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-07-22T17:19:51+00:00"
+            "time": "2019-07-24T14:36:21+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

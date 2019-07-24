@@ -1,5 +1,5 @@
 <template>
-    <div class="membership-benefits-wrapper has-background-bright columns has-margin-top-36 has-padding-18">
+    <div class="is-hidden-print membership-benefits-wrapper has-background-bright columns has-margin-top-36 has-padding-18">
         <div class="column is-half">
             <h2 class="title is-size-5">{{ $t( 'donation_confirmation_membership_call_to_action_title' ) }}</h2>
             <p>{{ $t( 'donation_confirmation_membership_call_to_action_text' ) }}</p>

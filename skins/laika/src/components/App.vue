@@ -16,7 +16,7 @@
 				</Content>
 			</div>
 		</main>
-		<footer>
+		<footer class="is-hidden-print">
 			<Footer :assets-path="assetsPath"></Footer>
 		</footer>
 	</div>
