@@ -1,15 +1,13 @@
 <template>
-    <div class="has-margin-top-18">
-        <b-checkbox type="checkbox" class="is-inline-checkbox"
+	<div class="has-margin-top-18">
+		<b-checkbox type="checkbox" class="is-inline-checkbox"
 			id="donation_receipt"
 			name="receiptOptOut"
 			v-model="optedOut"
-            @change.native="setReceiptOptOut()">
+			@change.native="setReceiptOptOut()">
+			{{ $t( 'receipt_opt_out' ) }}
 		</b-checkbox>
-		<label class="news" for="donation_receipt">
-            {{  $t( 'receipt_opt_out' ) }}
-        </label>
-    </div>
+	</div>
 
 </template>
 
