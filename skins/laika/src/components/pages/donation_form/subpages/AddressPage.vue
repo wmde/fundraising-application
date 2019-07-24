@@ -7,8 +7,8 @@
 					<div class="title is-size-5">{{ $t( 'donation_confirmation_review_headline' ) }}</div>
 				</donation-summary>
 				<submit-values :tracking-data="{}"></submit-values>
-				<div class="level has-margin-top-36">
-					<div class="level-item">
+				<div class="columns has-margin-top-36">
+					<div class="column">
 						<b-button id="previous-btn" class="level-item"
 								@click="$emit( 'previous-page' )"
 								type="is-primary is-main"
@@ -16,7 +16,7 @@
 							{{ $t('donation_form_section_back') }}
 						</b-button>
 					</div>
-					<div class="level-item">
+					<div class="column">
 						<b-button id="submit-btn" class="level-item"
 								@click="submit"
 								type="is-primary is-main">

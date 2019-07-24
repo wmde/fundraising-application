@@ -4,8 +4,8 @@
 		<address-type v-on:address-type="setAddressType( $event )" :disabledAddressTypes="disabledAddressTypes"></address-type>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
 		<email v-on:email="setEmail( $event )" :show-error="fieldErrors"></email>
+		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
 		<newsletter-opt-in></newsletter-opt-in>
 	</div>
 </template>

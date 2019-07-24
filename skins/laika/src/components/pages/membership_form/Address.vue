@@ -8,8 +8,8 @@
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<date-of-birth/>
-        <receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
 		<email :initial-value="email" :show-error="fieldErrors" v-on:email="setEmail( $event )"/>
+		<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
 	</div>
 </template>
 

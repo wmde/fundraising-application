@@ -83,13 +83,8 @@
 	border: 2px solid $fun-color-gray-light-solid;
 	padding: 18px;
 	@include until($widescreen) {
-		.level {
-			flex-wrap: wrap;
-		}
-		.level-item, button {
+		button.is-main {
 			width: 100%;
-		}
-		button {
 			margin: 5px 0;
 		}
 	}
