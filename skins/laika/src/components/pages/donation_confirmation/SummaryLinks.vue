@@ -1,5 +1,5 @@
 <template>
-	<div class="donation-links">
+	<div class="donation-links is-hidden-print">
 		<a id="print-link" href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
 		<a id="comment-link" :href="donationCommentUrl" v-if="donationCanBeCommented">{{ $t( 'donation_confirmation_comment_button' )
 			}}</a>

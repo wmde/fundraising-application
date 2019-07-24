@@ -3,14 +3,14 @@
 		<div class="donation-summary-wrapper has-background-bright columns has-padding-18">
 			<div class="column is-half">
 				<donation-summary :address="confirmationData.address" :address-type="confirmationData.addressType"
-								  :payment="confirmationData.donation">
+								:payment="confirmationData.donation">
 					<div class="title is-size-5">{{ $t( 'donation_confirmation_topbox_intro' ) }}</div>
 				</donation-summary>
 				<payment-notice :payment="confirmationData.donation"></payment-notice>
 				<div id="bank-data" v-if="showBankTransferCode">
 					<bank-data :bank-transfer-code="confirmationData.donation.bankTransferCode"></bank-data>
 					<div class="has-margin-top-18"
-						 v-html="$t( 'donation_confirmation_reminder_bank_transfer', { bankTransferCode: confirmationData.donation.bankTransferCode } )">
+						v-html="$t( 'donation_confirmation_reminder_bank_transfer', { bankTransferCode: confirmationData.donation.bankTransferCode } )">
 					</div>
 				</div>
 				<div id="newsletter-optin" class="has-margin-top-18" v-if="hasOptedIntoNewsletter">
