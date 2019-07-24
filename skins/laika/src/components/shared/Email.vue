@@ -7,12 +7,13 @@
 			v-model="emailValue"
 			@blur="validateEmail">
 		</b-input>
-		<span v-if="emailHasError" class="help is-danger">{{ $t( 'donation_form_email_error' ) }}</span>
+		<span v-if="showError.email || emailHasError" class="help is-danger">{{ $t( 'donation_form_email_error' ) }}</span>
     </fieldset>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import { AddressValidity } from "@/view_models/Address";
 
 export default Vue.extend( {
 	name: 'Email',
@@ -25,6 +26,7 @@ export default Vue.extend( {
 	},
 	props: {
 		initialValue: String,
+		showError: Object as () => AddressValidity,
 	},
 	methods: {
 		setEmail: function () {

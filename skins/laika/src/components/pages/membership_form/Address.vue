@@ -9,7 +9,7 @@
 		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<date-of-birth/>
         <receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
-		<email :initial-value="email" v-on:email="setEmail( $event )"/>
+		<email :initial-value="email" :show-error="fieldErrors" v-on:email="setEmail( $event )"/>
 	</div>
 </template>
 
@@ -94,6 +94,12 @@ export default Vue.extend( {
 					name: 'country',
 					value: 'DE',
 					pattern: '',
+					optionalField: false,
+				},
+				email: {
+					name: 'email',
+					value: '',
+					pattern: '^[^@]+@.+$',
 					optionalField: false,
 				},
 			},

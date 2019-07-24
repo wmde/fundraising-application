@@ -5,7 +5,7 @@
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
-		<email v-on:email="setEmail( $event )"></email>
+		<email v-on:email="setEmail( $event )" :show-error="fieldErrors"></email>
 		<newsletter-opt-in></newsletter-opt-in>
 	</div>
 </template>
@@ -93,6 +93,12 @@ export default Vue.extend( {
 					name: 'country',
 					value: 'DE',
 					pattern: '',
+					optionalField: false,
+				},
+				email: {
+					name: 'email',
+					value: '',
+					pattern: '^[^@]+@.+$',
 					optionalField: false,
 				},
 			},
