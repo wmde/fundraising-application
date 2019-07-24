@@ -33,12 +33,25 @@ export default Vue.extend( {
 	},
 	methods: {
 		next() {
-			this.$store.dispatch( action( NS_PAYMENT, markEmptyValuesAsInvalid ) ).then( () => {
-				if ( this.$store.getters[ NS_PAYMENT + '/paymentDataIsValid' ] ) {
-					this.$emit( 'next-page' );
+			const triggerNextWhenValid = () => {
+				this.$store.dispatch( action( NS_PAYMENT, markEmptyValuesAsInvalid ) ).then( () => {
+					if ( this.$store.getters[ NS_PAYMENT + '/paymentDataIsValid' ] ) {
+						this.$emit( 'next-page' );
+					}
+				} );
+			};
+			if ( !this.$store.getters.isValidating ) {
+				return triggerNextWhenValid();
+			}
+			const unwatch = this.$store.watch(
+				( state, getters ) => getters.isValidating,
+				( isValidating ) => {
+					if ( !isValidating ) {
+						triggerNextWhenValid();
+						unwatch();
+					}
 				}
-			} );
-
+			);
 		},
 	},
 } );
