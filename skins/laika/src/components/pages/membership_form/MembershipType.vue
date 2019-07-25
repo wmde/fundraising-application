@@ -1,30 +1,30 @@
 <template>
-    <fieldset class="has-margin-top-36 column is-full">
-        <legend class="title is-size-5">{{ $t('membership_form_membershiptype_legend') }}</legend>
-        <div>
-            <b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.SUSTAINING }"
-                    id="sustaining"
-                    name="type"
-                    v-model="selectedType"
-                    :native-value="MembershipTypeModel.SUSTAINING"
-                    @change.native="setType">
-                {{ $t( 'membership_form_membershiptype_option_sustaining' ) }}
-                <p class="has-text-dark-lighter">{{ $t( 'membership_form_membershiptype_option_sustaining_legend' ) }}</p>
-            </b-radio>
-            <b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.ACTIVE && !isActiveTypeDisabled }"
-                    id="active"
-                    name="type"
-                    :type="isActiveTypeDisabled ? 'is-gray-dark' : ''"
-                    v-model="selectedType"
-                    :native-value="MembershipTypeModel.ACTIVE"
-                    :disabled="isActiveTypeDisabled"
-                    @change.native="setType">
-                {{ $t( 'membership_form_membershiptype_option_active' ) }}
-                <p class="has-text-dark-lighter">{{ $t( 'membership_form_membershiptype_option_active_legend' ) }}</p>
-            </b-radio>
-            <span v-if="activeTypeSelectedAndDisabled" class="help is-danger">{{ $t( 'membership_form_membershiptype_error' ) }}</span>
-        </div>
-    </fieldset>
+	<fieldset class="has-margin-top-36 column is-full">
+		<legend class="title is-size-5">{{ $t('membership_form_membershiptype_legend') }}</legend>
+		<div>
+			<b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.SUSTAINING }"
+					id="sustaining"
+					name="type"
+					v-model="selectedType"
+					:native-value="MembershipTypeModel.SUSTAINING"
+					@change.native="setType">
+				{{ $t( 'membership_form_membershiptype_option_sustaining' ) }}
+				<p class="has-text-dark-lighter">{{ $t( 'membership_form_membershiptype_option_sustaining_legend' ) }}</p>
+			</b-radio>
+			<b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.ACTIVE && !isActiveTypeDisabled }"
+					id="active"
+					name="type"
+					:type="isActiveTypeDisabled ? 'is-gray-dark' : ''"
+					v-model="selectedType"
+					:native-value="MembershipTypeModel.ACTIVE"
+					:disabled="isActiveTypeDisabled"
+					@change.native="setType">
+				{{ $t( 'membership_form_membershiptype_option_active' ) }}
+				<p class="has-text-dark-lighter">{{ $t( 'membership_form_membershiptype_option_active_legend' ) }}</p>
+			</b-radio>
+			<span v-if="activeTypeSelectedAndDisabled" class="help is-danger">{{ $t( 'membership_form_membershiptype_error' ) }}</span>
+		</div>
+	</fieldset>
 </template>
 
 <script lang="ts">
@@ -75,10 +75,10 @@ export default Vue.extend( {
 </script>
 <style lang="scss" scoped>
 @import "../../../scss/custom.scss";
-    .b-radio.radio {
-        height: 6.5em;
-        &+.radio{
-            margin-left: 0;
-        }
-    }
+	.b-radio.radio {
+		height: 6.5em;
+		&+.radio{
+			margin-left: 0;
+		}
+	}
 </style>

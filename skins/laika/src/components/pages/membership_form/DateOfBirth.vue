@@ -1,5 +1,5 @@
 <template>
-    <fieldset>
+	<fieldset>
 		<label for="birthDate" class="subtitle has-margin-top-36">{{ $t( 'membership_form_birth_date_label' ) }}</label>
 		<b-input type="text"
 			id="birthDate"
@@ -8,7 +8,7 @@
 			@blur="validateDate">
 		</b-input>
 		<span v-if="dateHasError" class="help is-danger">{{ $t( 'membership_form_birth_date_error' ) }}</span>
-    </fieldset>
+	</fieldset>
 </template>
 
 <script lang="ts">

@@ -1,34 +1,34 @@
 <template>
-    <div class="navbar is-fixed-top has-background-bright has-shadow">
-        <div class="container">
-            <div class="navbar-brand">
-                <a class="navbar-item" href="/">
-                    <img :src="assetsPath + '/images/logo-horizontal-wikimedia.svg'" alt="Wikimedia Deutschland"
-                         width="144" height="29">
-                </a>
-                <a role="button"
-                   aria-label="menu"
-                   aria-expanded="false"
-                   @click="showNavbarBurger = !showNavbarBurger"
-                   v-bind:class="[{ 'is-active': showNavbarBurger }, 'navbar-burger']">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                </a>
-            </div>
-            <div id="navMenu" v-bind:class="[{ 'is-active': showNavbarBurger }, 'navbar-menu']"
-                 @click="showNavbarBurger = !showNavbarBurger">
-                <div class="navbar-start">
-                    <a v-for="( link, index ) in headerMenu"
-                        :key="index"
-                        :href="link.url"
-                        v-bind:class="[{ 'active': link.id === pageIdentifier }, 'navbar-item']">
-                        {{ $t( 'header_menu_item_' + link.localeId ) }}
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="navbar is-fixed-top has-background-bright has-shadow">
+		<div class="container">
+			<div class="navbar-brand">
+				<a class="navbar-item" href="/">
+					<img :src="assetsPath + '/images/logo-horizontal-wikimedia.svg'" alt="Wikimedia Deutschland"
+						width="144" height="29">
+				</a>
+				<a role="button"
+					aria-label="menu"
+					aria-expanded="false"
+					@click="showNavbarBurger = !showNavbarBurger"
+					v-bind:class="[{ 'is-active': showNavbarBurger }, 'navbar-burger']">
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+					<span aria-hidden="true"></span>
+				</a>
+			</div>
+			<div id="navMenu" v-bind:class="[{ 'is-active': showNavbarBurger }, 'navbar-menu']"
+				@click="showNavbarBurger = !showNavbarBurger">
+				<div class="navbar-start">
+					<a v-for="( link, index ) in headerMenu"
+						:key="index"
+						:href="link.url"
+						v-bind:class="[{ 'active': link.id === pageIdentifier }, 'navbar-item']">
+						{{ $t( 'header_menu_item_' + link.localeId ) }}
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script type="ts">
@@ -52,25 +52,25 @@ export default Vue.extend( {
 </script>
 
 <style lang="scss">
-    @import "../../scss/variables";
-    .navbar {
-        &-item {
-            border-bottom: 2px solid $fun-color-bright;
-        }
-        &-menu {
-            .navbar-item {
-                &:hover {
-                    border-bottom: 2px solid $fun-color-primary;
-                }
-                &:active {
-                    background-color: $fun-color-primary-lightest;
-                }
-                &.active {
-                    border-bottom: 2px solid $fun-color-primary;
-                    color: $fun-color-primary;
-                    font-weight: bold;
-                }
-            }
-        }
-    }
+	@import "../../scss/variables";
+	.navbar {
+		&-item {
+			border-bottom: 2px solid $fun-color-bright;
+		}
+		&-menu {
+			.navbar-item {
+				&:hover {
+					border-bottom: 2px solid $fun-color-primary;
+				}
+				&:active {
+					background-color: $fun-color-primary-lightest;
+				}
+				&.active {
+					border-bottom: 2px solid $fun-color-primary;
+					color: $fun-color-primary;
+					font-weight: bold;
+				}
+			}
+		}
+	}
 </style>

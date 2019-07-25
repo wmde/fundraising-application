@@ -18,7 +18,7 @@
 				{{ $t( 'donation_form_addresstype_option_company' ) }}
 			</b-radio>
 		</div>
-    </fieldset>
+	</fieldset>
 </template>
 
 <script lang="ts">
