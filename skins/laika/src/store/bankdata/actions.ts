@@ -14,12 +14,13 @@ import {
 	MARK_BANKDATA_INCOMPLETE,
 	MARK_EMPTY_FIELDS_INVALID,
 	SET_BANK_DATA_VALIDITY,
-	SET_BANKDATA, SET_BANKNAME,
+	SET_BANKDATA, SET_BANKNAME, SET_IS_VALIDATING,
 } from '@/store/bankdata/mutationTypes';
 import { Validity } from '@/view_models/Validity';
 
 export const actions = {
 	[ setBankData ]( context: ActionContext<BankAccount, any>, payload: BankAccountRequest ): void {
+		context.commit( SET_IS_VALIDATING, true );
 		axios( payload.validationUrl, {
 			method: 'get',
 			headers: { 'Content-Type': 'multipart/form-data' },
@@ -36,6 +37,7 @@ export const actions = {
 			} else {
 				context.commit( SET_BANKNAME, '' );
 			}
+			context.commit( SET_IS_VALIDATING, false );
 		} );
 	},
 	[ initializeBankData ]( context: ActionContext<BankAccount, any>, payload: BankAccountData & { bankName: string} ): void {

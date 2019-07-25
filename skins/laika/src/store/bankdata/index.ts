@@ -7,6 +7,7 @@ import { BankAccount } from '@/view_models/BankAccount';
 
 export default function (): Module<BankAccount, any> {
 	const state: BankAccount = {
+		isValidating: false,
 		validity: {
 			bankdata: Validity.INCOMPLETE,
 		},

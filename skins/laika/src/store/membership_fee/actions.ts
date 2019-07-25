@@ -19,6 +19,7 @@ import {
 	SET_FEE_VALIDITY,
 	SET_INTERVAL,
 	SET_INTERVAL_VALIDITY,
+	SET_IS_VALIDATING,
 } from '@/store/membership_fee/mutationTypes';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { Validity } from '@/view_models/Validity';
@@ -42,6 +43,7 @@ export const actions = {
 			context.commit( SET_INTERVAL_VALIDITY );
 			return;
 		}
+		context.commit( SET_IS_VALIDATING, true );
 		validateFeeDataRemotely(
 			context,
 			payload.validateFeeUrl,
@@ -49,6 +51,7 @@ export const actions = {
 			context.state.values.interval
 		).then( ( validationResult: ValidationResponse ) => {
 			context.commit( SET_FEE_VALIDITY, validationResult.status === 'ERR' ? Validity.INVALID : Validity.VALID );
+			context.commit( SET_IS_VALIDATING, false );
 		} );
 	},
 	[ setInterval ]( context: ActionContext<MembershipFee, any>, payload: IntervalData ): void {
@@ -57,6 +60,7 @@ export const actions = {
 		if ( Helper.isNonNumeric( context.state.values.fee ) ) {
 			return;
 		}
+		context.commit( SET_IS_VALIDATING, true );
 		validateFeeDataRemotely(
 			context,
 			payload.validateFeeUrl,
@@ -64,6 +68,7 @@ export const actions = {
 			context.state.values.interval
 		).then( ( validationResult: ValidationResponse ) => {
 			context.commit( SET_FEE_VALIDITY, validationResult.status === 'ERR' ? Validity.INVALID : Validity.VALID );
+			context.commit( SET_IS_VALIDATING, false );
 		} );
 	},
 };

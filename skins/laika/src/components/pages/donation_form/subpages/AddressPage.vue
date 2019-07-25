@@ -41,6 +41,7 @@ import SubmitValues from '@/components/pages/donation_form/SubmitValues.vue';
 import { TrackingData } from '@/view_models/SubmitValues';
 import { action } from '@/store/util';
 import { markEmptyValuesAsInvalid } from '@/store/bankdata/actionTypes';
+import { waitForServerValidationToFinish } from '@/wait_for_server_validation';
 
 export default Vue.extend( {
 	name: 'AddressPage',
@@ -98,14 +99,16 @@ export default Vue.extend( {
 				validationCalls.push( this.$store.dispatch( action( NS_BANKDATA, markEmptyValuesAsInvalid ) ) );
 			}
 			Promise.all( validationCalls ).then( () => {
-				if ( this.$store.getters[ NS_ADDRESS + '/requiredFieldsAreValid' ] ) {
-					if ( this.$store.getters[ NS_PAYMENT + '/isDirectDebitPayment' ] &&
-						!this.$store.getters[ NS_BANKDATA + '/bankDataIsValid' ] ) {
-						return;
+				// We need to wait for the asynchronous bank data validation, that might still be going on
+				waitForServerValidationToFinish( this.$store ).then( () => {
+					if ( this.$store.getters[ NS_ADDRESS + '/requiredFieldsAreValid' ] ) {
+						if ( this.$store.getters[ NS_PAYMENT + '/isDirectDebitPayment' ] &&
+							!this.$store.getters[ NS_BANKDATA + '/bankDataIsValid' ] ) {
+							return;
+						}
+						this.$emit( 'submit-donation' );
 					}
-					this.$emit( 'submit-donation' );
-					return;
-				}
+				} );
 			} );
 		},
 	},

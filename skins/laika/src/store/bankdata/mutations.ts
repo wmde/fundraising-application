@@ -7,6 +7,7 @@ import {
 	SET_BANK_DATA_VALIDITY,
 	SET_BANKDATA,
 	SET_BANKNAME,
+	SET_IS_VALIDATING,
 } from '@/store/bankdata/mutationTypes';
 
 export const mutations: MutationTree<BankAccount> = {
@@ -19,6 +20,9 @@ export const mutations: MutationTree<BankAccount> = {
 	},
 	[ SET_BANK_DATA_VALIDITY ]( state: BankAccount, validity: Validity ) {
 		state.validity.bankdata = validity;
+	},
+	[ SET_IS_VALIDATING ]( state: BankAccount, isValidating: boolean ) {
+		state.isValidating = isValidating;
 	},
 	[ MARK_EMPTY_FIELDS_INVALID ]( state: BankAccount ) {
 		if ( state.validity.bankdata === Validity.INCOMPLETE ) {

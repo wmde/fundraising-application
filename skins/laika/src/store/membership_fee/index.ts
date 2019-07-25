@@ -7,6 +7,7 @@ import { mutations } from '@/store/membership_fee/mutations';
 
 export default function (): Module<Payment, any> {
 	const state: Payment = {
+		isValidating: false,
 		validity: {
 			fee: Validity.INCOMPLETE,
 			interval: Validity.INCOMPLETE,

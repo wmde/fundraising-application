@@ -1,6 +1,7 @@
 import { Validity } from './Validity';
 
 export interface BankAccount {
+    isValidating: boolean,
     validity: {
         [key: string]: Validity
     },

@@ -20,6 +20,7 @@ import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 function newMinimalStore( overrides: Object ): MembershipFee {
 	return Object.assign(
 		{
+			isValidating: false,
 			validity: {
 				fee: Validity.INCOMPLETE,
 				type: Validity.INCOMPLETE,
@@ -134,7 +135,7 @@ describe( 'MembershipFee', () => {
 		afterEach( function () {
 			moxios.uninstall();
 		} );
-		it( 'commits to mutation [SET_INTERVAL] and [SET_INTERVAL_VALIDITY]', () => {
+		it( 'commits to mutation [SET_INTERVAL], [SET_INTERVAL_VALIDITY]', () => {
 			const context = {
 				commit: jest.fn(),
 				state: {
@@ -358,6 +359,43 @@ describe( 'MembershipFee', () => {
 				} );
 			} );
 		} );
+
+		it( 'commits to mutation [SET_IS_VALIDATING] when doing server side validation', ( done ) => {
+			const context = {
+					commit: jest.fn(),
+					state: {
+						values: {
+							interval: 12,
+						},
+					},
+					rootState: {
+						membership_address: { // eslint-disable-line camelcase
+							addressType: AddressTypeModel.PERSON,
+						},
+					},
+				},
+				payload = {
+					feeValue: '2500',
+					validateFeeUrl: '/validation-fee-url',
+				},
+				action = actions.setFee as any;
+
+			action( context, payload );
+
+			moxios.wait( function () {
+				let request = moxios.requests.mostRecent();
+				request.respondWith( {
+					status: 200,
+					response: {
+						'status': 'OK',
+					},
+				} ).then( function () {
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_IS_VALIDATING', true );
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_IS_VALIDATING', false );
+					done();
+				} );
+			} );
+		} );
 	} );
 
 	describe( 'Mutations/MARK_EMPTY_FEE_INVALID', () => {
@@ -414,6 +452,16 @@ describe( 'MembershipFee', () => {
 			expect( store.values.type ).toStrictEqual( 'UEB' );
 			mutations.SET_TYPE( store, 'BEZ' );
 			expect( store.values.type ).toStrictEqual( 'BEZ' );
+		} );
+	} );
+
+	describe( 'Mutations/SET_IS_VALIDATING', () => {
+		it( 'mutates validation state', () => {
+			const store = newMinimalStore( {} );
+			mutations.SET_IS_VALIDATING( store, true );
+			expect( store.values.isValidating ).toStrictEqual( true );
+			mutations.SET_IS_VALIDATING( store, false );
+			expect( store.values.isValidating ).toStrictEqual( false );
 		} );
 	} );
 } );

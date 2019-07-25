@@ -20,6 +20,7 @@ import moxios from 'moxios';
 function newMinimalStore( overrides: Object ): Payment {
 	return Object.assign(
 		{
+			isValidating: false,
 			validity: {
 				amount: Validity.INCOMPLETE,
 				type: Validity.INCOMPLETE,
@@ -322,7 +323,7 @@ describe( 'Payment', () => {
 			} );
 		} );
 
-		it( 'commits to mutation [SET_AMOUNT_VALIDITY] after server side validation', ( done ) => {
+		it( 'commits to mutation [SET_AMOUNT_VALIDITY] and [SET_IS_VALIDATING] on server side validation', ( done ) => {
 			const context = {
 					commit: jest.fn(),
 				},
@@ -346,6 +347,8 @@ describe( 'Payment', () => {
 						'SET_AMOUNT_VALIDITY',
 						Validity.VALID
 					);
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_IS_VALIDATING', true );
+					expect( context.commit ).toHaveBeenCalledWith( 'SET_IS_VALIDATING', false );
 					done();
 				} );
 			} );
