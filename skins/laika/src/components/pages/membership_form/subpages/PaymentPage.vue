@@ -32,6 +32,7 @@ import { NS_BANKDATA, NS_MEMBERSHIP_FEE } from '@/store/namespaces';
 import { action } from '@/store/util';
 import { markEmptyValuesAsInvalid as markEmptyFeeValuesAsInvalid } from '@/store/membership_fee/actionTypes';
 import { markEmptyValuesAsInvalid as markemptyBankDataValuesAsInvalid } from '@/store/bankdata/actionTypes';
+import { waitForServerValidationToFinish } from '@/wait_for_server_validation';
 
 export default Vue.extend( {
 	name: 'PaymentPage',
@@ -48,15 +49,18 @@ export default Vue.extend( {
 	},
 	methods: {
 		submit() {
-			Promise.all( [
-				this.$store.dispatch( action( NS_MEMBERSHIP_FEE, markEmptyFeeValuesAsInvalid ) ),
-				this.$store.dispatch( action( NS_BANKDATA, markemptyBankDataValuesAsInvalid ) ),
-			] ).then( () => {
-				if ( this.$store.getters[ NS_MEMBERSHIP_FEE + '/paymentDataIsValid' ] &&
-					this.$store.getters[ NS_BANKDATA + '/bankDataIsValid' ] ) {
-					this.$emit( 'submit-membership' );
-				}
+			waitForServerValidationToFinish( this.$store ).then( () => {
+				return Promise.all( [
+					this.$store.dispatch( action( NS_MEMBERSHIP_FEE, markEmptyFeeValuesAsInvalid ) ),
+					this.$store.dispatch( action( NS_BANKDATA, markemptyBankDataValuesAsInvalid ) ),
+				] ).then( () => {
+					if ( this.$store.getters[ NS_MEMBERSHIP_FEE + '/paymentDataIsValid' ] &&
+						this.$store.getters[ NS_BANKDATA + '/bankDataIsValid' ] ) {
+						this.$emit( 'submit-membership' );
+					}
+				} );
 			} );
+
 		},
 	},
 } );
