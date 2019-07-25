@@ -2,7 +2,7 @@
     <div class="column is-full">
         <membership-type v-if="showMembershipTypeOption"></membership-type>
 		<address-fields v-bind="$props" ref="address"></address-fields>
-		<div class="level has-margin-top-36">
+		<div class="level column is-full has-margin-top-36">
 			<div class="level-left">
 				<b-button id="next" class="level-item"
 						@click="next()"
