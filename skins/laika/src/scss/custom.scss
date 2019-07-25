@@ -90,6 +90,17 @@
 	}
 }
 
+.error-wrapper {
+	border: 2px solid $fun-color-error;
+	padding: 18px;
+	@include until($widescreen) {
+		button.is-main {
+			width: 100%;
+			margin: 5px 0;
+		}
+	}
+}
+
 .external-notice {
 	color: $fun-color-dark-lighter;
 }
