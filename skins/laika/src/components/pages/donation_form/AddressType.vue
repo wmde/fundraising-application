@@ -22,6 +22,7 @@
 			<b-radio id="anonymous"
 					name="addressTypeInternal"
 					v-model="type"
+					:disabled="this.disabledAddressTypes.includes( AddressTypeModel.ANON )"
 					:native-value="AddressTypeModel.ANON"
 					@change.native="setAddressType()">
 				{{ $t( 'donation_form_addresstype_option_anonymous' ) }}
@@ -41,11 +42,27 @@ export default Vue.extend( {
 			type: AddressTypeModel.PERSON,
 		};
 	},
+	props: {
+		disabledAddressTypes: Array,
+	},
 	computed: {
 		AddressTypeModel: {
 			get: function () {
 				return AddressTypeModel;
 			},
+		},
+	},
+	watch: {
+		disabledAddressTypes:
+		{
+			handler: function ( disabledAddressTypes ) {
+				const $this = ( this as any );
+				if ( disabledAddressTypes.includes( $this.$data.type ) ) {
+					$this.$data.type = AddressTypeModel.PERSON;
+					$this.setAddressType();
+				}
+			},
+			deep: true,
 		},
 	},
 	methods: {

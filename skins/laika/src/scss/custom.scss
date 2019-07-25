@@ -79,4 +79,20 @@
 @import "~buefy/src/scss/buefy";
 @import "~bulma-helpers/sass/helpers/spacing/margin-padding";
 
+.summary-wrapper {
+	border: 2px solid $fun-color-gray-light-solid;
+	padding: 18px;
+	@include until($widescreen) {
+		button.is-main {
+			width: 100%;
+			margin: 5px 0;
+		}
+	}
+}
+
+.external-notice {
+	color: $fun-color-dark-lighter;
+}
+
+
 @import "overrides";

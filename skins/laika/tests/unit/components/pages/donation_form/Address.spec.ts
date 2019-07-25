@@ -11,9 +11,10 @@ import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { createStore } from '@/store/donation_store';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
-import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField, setReceiptOptOut, setAddressType, setEmail } from '@/store/address/actionTypes';
+import { NS_ADDRESS, NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
+import { setAddressField, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
+import { SET_ADDRESS_FIELD } from '@/store/membership_address/mutationTypes';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -106,11 +107,17 @@ describe( 'Address.vue', () => {
 
 	it( 'sets email in store when it receives email event', () => {
 		const store = wrapper.vm.$store;
+		const testEmail = 'test@wikimedia.de';
 		store.dispatch = jest.fn();
-		const expectedAction = action( NS_ADDRESS, setEmail );
-		const email = 'britney@toxic.com';
-		wrapper.find( Email ).vm.$emit( 'email', email );
-		expect( store.dispatch ).toBeCalledWith( expectedAction, email );
+		wrapper.vm.$data.formData.email.value = testEmail;
+		const expectedAction = action( NS_ADDRESS, setAddressField );
+		wrapper.find( Email ).vm.$emit( 'field-changed', 'email' );
+		expect( store.dispatch ).toBeCalledWith( expectedAction, {
+			'name': 'email',
+			'optionalField': false,
+			'pattern': '^[^@]+@.+$',
+			'value': testEmail,
+		} );
 	} );
 
 } );

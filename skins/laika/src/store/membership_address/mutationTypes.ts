@@ -6,7 +6,6 @@ export const SET_ADDRESS_TYPE: string = 'SET_ADDRESS_TYPE';
 export const SET_ADDRESS_FIELDS: string = 'SET_ADDRESS_FIELDS';
 export const SET_ADDRESS_FIELD: string = 'SET_ADDRESS_FIELD';
 export const SET_ADDRESS_FIELD_VALIDITY: string = 'SET_ADDRESS_FIELD_VALIDITY';
-export const SET_EMAIL: string = 'SET_EMAIL';
 export const SET_DATE: string = 'SET_DATE';
 export const SET_RECEIPT_OPTOUT: string = 'SET_RECEIPT_OPTOUT';
 export const SET_MEMBERSHIP_TYPE: string = 'SET_MEMBERSHIP_TYPE';

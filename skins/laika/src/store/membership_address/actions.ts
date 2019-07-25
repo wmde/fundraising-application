@@ -4,7 +4,6 @@ import {
 	initializeAddress,
 	validateAddress,
 	setAddressType,
-	setEmail,
 	setAddressField,
 	setReceiptOptOut,
 	setDate,
@@ -19,10 +18,9 @@ import { Validity } from '@/view_models/Validity';
 
 export const actions = {
 	[ initializeAddress ]( context: ActionContext<MembershipAddressState, any>, initialData: InitialMembershipData ) {
-		context.commit( 'SET_EMAIL', initialData.email );
 		context.commit( 'SET_ADDRESS_TYPE', addressTypeFromName( initialData.addressType ) );
 		Object.entries( initialData ).forEach( ( [ name, value ] ) => {
-			if ( name === 'addressType' || name === 'email' ) {
+			if ( name === 'addressType' ) {
 				return;
 			}
 			if ( !value ) {
@@ -64,9 +62,6 @@ export const actions = {
 		if ( type === AddressTypeModel.COMPANY && context.getters.membershipType === MembershipTypeModel.ACTIVE ) {
 			context.commit( 'SET_MEMBERSHIP_TYPE_VALIDITY', Validity.INVALID );
 		}
-	},
-	[ setEmail ]( context: ActionContext<MembershipAddressState, any>, email: string ) {
-		context.commit( 'SET_EMAIL', email );
 	},
 	[ setDate ]( context: ActionContext<MembershipAddressState, any>, date: string ) {
 		context.commit( 'SET_DATE', date );

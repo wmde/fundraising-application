@@ -21,6 +21,7 @@
 					{{ $t( 'donation_form_salutation_option_mrs' ) }}
 				</b-radio>
 			</div>
+			<span v-if="showError.salutation" class="help is-danger"> {{ $t( 'donation_form_salutation_error' ) }}</span>
 		</fieldset>
 		<div class="has-margin-top-36">
 			<label for="title" class="subtitle">{{ $t( 'donation_form_academic_title_label' ) }}</label>
@@ -36,7 +37,6 @@
 				<option value="Prof. Dr.">Prof. Dr.</option>
 			</b-select>
 		</div>
-		<span v-if="showError.salutation" class="help is-danger"> {{ $t( 'donation_form_salutation_error' ) }}</span>
 		<div v-bind:class="[{ 'is-invalid': showError.firstName }]">
 			<label for="first-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_firstname_label' ) }}</label>
 			<b-input class="is-medium"

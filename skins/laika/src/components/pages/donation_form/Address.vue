@@ -1,14 +1,11 @@
 <template>
 	<div id="addressForm" class="column is-full">
 		<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
-		<address-type v-on:address-type="setAddressType( $event )"></address-type>
+		<address-type v-on:address-type="setAddressType( $event )" :disabledAddressTypes="disabledAddressTypes"></address-type>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
+		<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
 		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
-		<div class="has-margin-top-36">
-			<h1 class="title is-size-1">{{ $t( 'donation_form_section_email_title' ) }}</h1>
-			<email v-on:email="setEmail( $event )"></email>
-		</div>
 		<newsletter-opt-in></newsletter-opt-in>
 	</div>
 </template>
@@ -26,7 +23,7 @@ import { AddressValidity, FormData, ValidationResult } from '@/view_models/Addre
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress, setReceiptOptOut, setAddressType, setEmail } from '@/store/address/actionTypes';
+import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 
@@ -98,6 +95,12 @@ export default Vue.extend( {
 					pattern: '',
 					optionalField: false,
 				},
+				email: {
+					name: 'email',
+					value: '',
+					pattern: '^[^@]+@.+$',
+					optionalField: false,
+				},
 			},
 		};
 	},
@@ -123,6 +126,11 @@ export default Vue.extend( {
 				return this.$store.getters[ 'payment/isDirectDebitPayment' ];
 			},
 		},
+		disabledAddressTypes: {
+			get: function (): Array<AddressTypeModel> {
+				return this.$store.getters[ 'payment/isDirectDebitPayment' ] ? [ AddressTypeModel.ANON ] : [];
+			},
+		},
 		...mapGetters( NS_ADDRESS, [
 			'addressType',
 			'addressTypeIsNotAnon',
@@ -140,9 +148,6 @@ export default Vue.extend( {
 		},
 		setAddressType( addressType: AddressTypeModel ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
-		},
-		setEmail( email: string ): void {
-			this.$store.dispatch( action( NS_ADDRESS, setEmail ), email );
 		},
 	},
 } );

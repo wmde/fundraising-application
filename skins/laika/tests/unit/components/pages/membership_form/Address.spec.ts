@@ -15,7 +15,6 @@ import {
 	setAddressField,
 	setReceiptOptOut,
 	setAddressType,
-	setEmail,
 	initializeAddress,
 } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
@@ -94,11 +93,17 @@ describe( 'Address.vue', () => {
 
 	it( 'sets email in store when it receives email event', () => {
 		const store = wrapper.vm.$store;
+		const testEmail = 'test@wikimedia.de';
 		store.dispatch = jest.fn();
-		const expectedAction = action( NS_MEMBERSHIP_ADDRESS, setEmail );
-		const email = 'britney@toxic.com';
-		wrapper.find( Email ).vm.$emit( 'email', email );
-		expect( store.dispatch ).toBeCalledWith( expectedAction, email );
+		wrapper.vm.$data.formData.email.value = testEmail;
+		const expectedAction = action( NS_MEMBERSHIP_ADDRESS, setAddressField );
+		wrapper.find( Email ).vm.$emit( 'field-changed', 'email' );
+		expect( store.dispatch ).toBeCalledWith( expectedAction, {
+			'name': 'email',
+			'optionalField': false,
+			'pattern': '^[^@]+@.+$',
+			'value': testEmail,
+		} );
 	} );
 
 	it( 'populates form data if initial data is available', async () => {

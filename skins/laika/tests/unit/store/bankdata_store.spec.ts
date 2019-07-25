@@ -5,6 +5,7 @@ import each from 'jest-each';
 import { BankAccount, BankAccountRequest, BankAccountResponse } from '@/view_models/BankAccount';
 import moxios from 'moxios';
 import { mutations } from '@/store/bankdata/mutations';
+import { MARK_BANKDATA_INCOMPLETE } from '@/store/bankdata/mutationTypes';
 
 function newMinimalStore( overrides: Object ): BankAccount {
 	return Object.assign(
@@ -214,7 +215,7 @@ describe( 'BankData', () => {
 		} );
 	} );
 
-	describe( 'actions/markEmptyFieldsAsInvalid', () => {
+	describe( 'actions/markEmptyValuesAsInvalid', () => {
 		it( 'commits MARK_EMPTY_FIELDS_INVALID', () => {
 			const context = {
 					commit: jest.fn(),
@@ -223,6 +224,32 @@ describe( 'BankData', () => {
 			action( context );
 
 			expect( context.commit ).toHaveBeenCalledWith( 'MARK_EMPTY_FIELDS_INVALID' );
+		} );
+	} );
+
+	describe( 'actions/markBankDataAsIncomplete', () => {
+		it( 'commits MARK_BANKDATA_INCOMPLETE', () => {
+			const context = {
+					commit: jest.fn(),
+				},
+				action = actions.markBankDataAsIncomplete as any;
+			action( context );
+
+			expect( context.commit ).toHaveBeenNthCalledWith( 1, 'MARK_BANKDATA_INCOMPLETE' );
+			expect( context.commit ).toHaveBeenNthCalledWith( 2, 'SET_BANKNAME', '' );
+		} );
+	} );
+
+	describe( 'actions/markBankDataAsInvalid', () => {
+		it( 'commits SET_BANK_DATA_VALIDITY as invalid and SET_BANKNAME with an empty string', () => {
+			const context = {
+					commit: jest.fn(),
+				},
+				action = actions.markBankDataAsInvalid as any;
+			action( context );
+
+			expect( context.commit ).toHaveBeenNthCalledWith( 1, 'SET_BANK_DATA_VALIDITY', Validity.INVALID );
+			expect( context.commit ).toHaveBeenNthCalledWith( 2, 'SET_BANKNAME', '' );
 		} );
 	} );
 
