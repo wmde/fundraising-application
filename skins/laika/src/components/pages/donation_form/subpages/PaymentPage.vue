@@ -19,6 +19,7 @@ import Payment from '@/components/pages/donation_form/Payment.vue';
 import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
 import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
+import { waitForServerValidationToFinish } from '@/wait_for_server_validation';
 
 export default Vue.extend( {
 	name: 'PaymentPage',
@@ -33,25 +34,13 @@ export default Vue.extend( {
 	},
 	methods: {
 		next() {
-			const triggerNextWhenValid = () => {
+			return waitForServerValidationToFinish( this.$store ).then( () => {
 				this.$store.dispatch( action( NS_PAYMENT, markEmptyValuesAsInvalid ) ).then( () => {
 					if ( this.$store.getters[ NS_PAYMENT + '/paymentDataIsValid' ] ) {
 						this.$emit( 'next-page' );
 					}
 				} );
-			};
-			if ( !this.$store.getters.isValidating ) {
-				return triggerNextWhenValid();
-			}
-			const unwatch = this.$store.watch(
-				( state, getters ) => getters.isValidating,
-				( isValidating ) => {
-					if ( !isValidating ) {
-						triggerNextWhenValid();
-						unwatch();
-					}
-				}
-			);
+			} );
 		},
 	},
 } );

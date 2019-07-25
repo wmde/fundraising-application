@@ -2,6 +2,7 @@ import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
 import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
 import { createLocalVue, mount } from '@vue/test-utils';
+import Vue from 'vue';
 import Vuex from 'vuex';
 import Buefy from 'buefy';
 import PaymentPage from '@/components/pages/donation_form/subpages/PaymentPage.vue';
@@ -14,6 +15,7 @@ describe( 'DonationForm', () => {
 	};
 	const getters = {
 		'payment/paymentDataIsValid': jest.fn(),
+		'isValidating': () => false,
 	};
 	beforeEach( () => {
 		global.window.scrollTo = jest.fn();
@@ -47,7 +49,7 @@ describe( 'DonationForm', () => {
 		const expectedAction = action( NS_PAYMENT, markEmptyValuesAsInvalid );
 		getters[ 'payment/paymentDataIsValid' ].mockReturnValueOnce( true );
 		wrapper.find( '#next' ).trigger( 'click' );
-		expect( store.dispatch ).toHaveBeenCalledWith( expectedAction );
+		return Vue.nextTick().then( () => expect( store.dispatch ).toHaveBeenCalledWith( expectedAction ) );
 	} );
 
 	it( 'doesn\'t load the next page if there are validation errors', () => {
