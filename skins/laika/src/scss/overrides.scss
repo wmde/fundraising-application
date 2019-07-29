@@ -9,10 +9,6 @@
 	}
 }
 
-.input {
-	max-width: 300px;
-}
-
 .is-danger, .is-warning .help {
 	font-size: 1em;
 }
@@ -35,8 +31,7 @@
 	}
 }
 
-// Necessary to keep input field icons within the bounds of the input fields
-.field {
+.input, .field {
 	max-width: 300px;
 }
 
