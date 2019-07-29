@@ -32,6 +32,7 @@ module.exports = {
 		membership_application_confirmation: 'src/pages/membership_application_confirmation.ts',
 		page_not_found: 'src/pages/page_not_found.ts',
 		subscription_confirmation: 'src/pages/subscription_confirmation.ts',
+		static_page: 'src/pages/static_page.ts',
 		system_message: 'src/pages/system_message.ts',
 		update_address: 'src/pages/update_address.ts',
 		warning_page: 'src/pages/warning_page.ts',
