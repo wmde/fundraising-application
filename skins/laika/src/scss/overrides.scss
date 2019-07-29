@@ -13,7 +13,7 @@
 	max-width: 300px;
 }
 
-.is-danger, .is-warning {
+.is-danger, .is-warning .help {
 	font-size: 1em;
 }
 
@@ -33,6 +33,11 @@
 	.check {
 		font-size: 12px;
 	}
+}
+
+// Necessary to keep input field icons within the bounds of the input fields
+.field {
+	max-width: 300px;
 }
 
 .input {

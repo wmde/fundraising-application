@@ -39,3 +39,38 @@
 	url('/skins/laika/fonts/Open-Sans-italic.ttf') format('truetype'),
 	url('/skins/laika/fonts/Open-Sans.svg#OpenSans') format('svg');
 }
+
+@font-face {
+	font-family: 'Icons';
+	font-weight: normal;
+	font-style: normal;
+	src: url('/skins/laika/fonts/fontello.eot');
+	src: url('/skins/laika/fonts/fontello.eot?#iefix') format('embedded-opentype'),
+	url('/skins/laika/fonts/fontello.woff2') format('woff2'),
+	url('/skins/laika/fonts/fontello.woff') format('woff'),
+	url('/skins/laika/fonts/fontello.ttf') format('truetype'),
+	url('/skins/laika/fonts/fontello.svg#fontello') format('svg');
+}
+
+$icon-error: '\e800'; /* Error triangle */
+$icon-warning: '\f0f3'; /* Warning Bell */
+
+.mdi:before {
+	font: normal normal normal 18px/48px "Icons";
+	speak: none;
+	width: 1em;
+	text-align: center;
+	text-transform: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	position: relative;
+	top: 3px;
+}
+
+.mdi-alert-circle:before {
+	content: $icon-error;
+}
+
+.mdi-alert:before {
+	content: $icon-warning;
+}
