@@ -9,11 +9,7 @@
 	}
 }
 
-.input {
-	max-width: 300px;
-}
-
-.is-danger, .is-warning {
+.is-danger, .is-warning .help {
 	font-size: 1em;
 }
 
@@ -33,6 +29,10 @@
 	.check {
 		font-size: 12px;
 	}
+}
+
+.input, .field {
+	max-width: 300px;
 }
 
 .input {
@@ -62,7 +62,7 @@
 	&.is-valid {
 		background-color: $fun-color-bright;
 		border-color: $fun-color-primary;
-		border-bottom-width: 2px;
+		box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color;
 	}
 	&.is-invalid {
 		background-color: $fun-color-bright;

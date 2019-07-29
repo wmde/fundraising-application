@@ -60,8 +60,14 @@ $size-8: 1.0rem;
 
 $input-color: $fun-color-dark-lighter;
 $input-shadow: none;
-$input-focus-border-color: $fun-color-off-bright;
-$input-focus-box-shadow-size: 0;
+$input-focus-border-color: $fun-color-primary;
+$input-focus-box-shadow-color: $fun-color-primary;
+$input-focus-box-shadow-size: 0 1px 0 0;
+
+$input-disabled-color: $fun-color-dark-lighter;
+$input-disabled-background-color: $fun-color-gray-light-solid;
+$input-disabled-border-color: $fun-color-gray-mid;
+$input-disabled-placeholder-color: $fun-color-dark-lighter;
 
 $text: $fun-color-dark;
 $family-primary: "Open Sans",Helvetica,Arial,sans-serif;

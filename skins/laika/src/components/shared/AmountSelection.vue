@@ -105,6 +105,7 @@ export default Vue.extend( {
 			const englishDecimalAmount = Number( amount.replace( /,/, '.' ) );
 			if ( isNaN( englishDecimalAmount ) ) {
 				this.$emit( 'amount-selected', '' );
+				return;
 			}
 			this.$emit( 'amount-selected', String( Math.trunc( englishDecimalAmount * 100 ) ) );
 		},

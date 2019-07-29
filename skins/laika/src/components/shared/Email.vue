@@ -1,12 +1,14 @@
 <template>
     <fieldset class="has-margin-top-36">
 		<label for="email" class="subtitle">{{ $t( 'donation_form_email_label' ) }}</label>
-		<b-input type="text"
-			id="email"
-			:placeholder="$t( 'donation_form_email_placeholder' )"
-			v-model="formData.email.value"
-			@blur="$emit('field-changed', 'email')">
-		</b-input>
+		<b-field :type="{ 'is-danger': showError }">
+			<b-input type="text"
+				id="email"
+				:placeholder="$t( 'donation_form_email_placeholder' )"
+				v-model="formData.email.value"
+				@blur="$emit('field-changed', 'email')">
+			</b-input>
+		</b-field>
 		<span v-if="showError" class="help is-danger">{{ $t( 'donation_form_email_error' ) }}</span>
     </fieldset>
 </template>

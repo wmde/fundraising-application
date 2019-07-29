@@ -39,34 +39,40 @@
 		</div>
 		<div v-bind:class="[{ 'is-invalid': showError.firstName }]">
 			<label for="first-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_firstname_label' ) }}</label>
-			<b-input class="is-medium"
-					type="text"
-					id="first-name"
-					v-model="formData.firstName.value"
-					:placeholder="$t( 'donation_form_firstname_placeholder' )"
-					@blur="$emit('field-changed', 'firstName')">
-			</b-input>
+			<b-field :type="{ 'is-danger': showError.firstName }">
+				<b-input class="is-medium"
+						type="text"
+						id="first-name"
+						v-model="formData.firstName.value"
+						:placeholder="$t( 'donation_form_firstname_placeholder' )"
+						@blur="$emit('field-changed', 'firstName')">
+				</b-input>
+			</b-field>
 			<span v-if="showError.firstName" class="help is-danger">{{ $t( 'donation_form_firstname_error' ) }}</span>
 		</div>
 		<div v-bind:class="[{ 'is-invalid': showError.lastName }]">
 			<label for="last-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_lastname_label' ) }}</label>
-			<b-input type="text"
-					id="last-name"
-					v-model="formData.lastName.value"
-					:placeholder="$t( 'donation_form_lastname_placeholder' )"
-					@blur="$emit('field-changed', 'lastName')">
-			</b-input>
+			<b-field :type="{ 'is-danger': showError.lastName }">
+				<b-input type="text"
+						id="last-name"
+						v-model="formData.lastName.value"
+						:placeholder="$t( 'donation_form_lastname_placeholder' )"
+						@blur="$emit('field-changed', 'lastName')">
+				</b-input>
+			</b-field>
 			<span v-if="showError.lastName" class="help is-danger">{{ $t( 'donation_form_lastname_error' ) }}</span>
 		</div>
 	</div>
 	<div v-else-if="addressType === AddressTypeModel.COMPANY" v-bind:class="[{ 'is-invalid': showError.companyName }]">
 		<label for="company-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_companyname_label' ) }}</label>
-		<b-input type="text"
-				id="company-name"
-				:placeholder="$t( 'donation_form_companyname_placeholder' )"
-				v-model="formData.companyName.value"
-				@blur="$emit('field-changed', 'companyName')">
-		</b-input>
+		<b-field :type="{ 'is-danger': showError.companyName }">
+			<b-input type="text"
+					id="company-name"
+					:placeholder="$t( 'donation_form_companyname_placeholder' )"
+					v-model="formData.companyName.value"
+					@blur="$emit('field-changed', 'companyName')">
+			</b-input>
+		</b-field>
 		<span v-if="showError.companyName" class="help is-danger">{{ $t( 'donation_form_companyname_error' )  }}</span>
 	</div>
 </div>
