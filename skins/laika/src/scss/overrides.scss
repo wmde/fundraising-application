@@ -62,7 +62,7 @@
 	&.is-valid {
 		background-color: $fun-color-bright;
 		border-color: $fun-color-primary;
-		border-bottom-width: 2px;
+		box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color;
 	}
 	&.is-invalid {
 		background-color: $fun-color-bright;

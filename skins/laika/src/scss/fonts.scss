@@ -73,4 +73,5 @@ $icon-warning: '\f0f3'; /* Warning Bell */
 
 .mdi-alert:before {
 	content: $icon-warning;
+	color: $fun-color-gray-dark;
 }
