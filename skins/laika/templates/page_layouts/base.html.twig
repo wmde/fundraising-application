@@ -1,0 +1,30 @@
+{% extends 'Base_Layout.html.twig' %}
+{% set page_works_without_js = true %}
+{% set content = web_content("pages/#{page_id}") %}
+{% set title = page_id|trans({}, 'pageTitles') %}
+
+{% block main %}
+	<div id="app"
+		data-page-id="{$ page_id $}"
+		data-page-title="{$ title | e('html_attr') $}"
+		data-page-content="{$ content | e('html_attr') | raw $}"
+		data-application-vars="{$ _context|json_encode|e('html_attr') $}" 
+   		data-application-messages="{$ translations()|e('html_attr') $}" 
+    	data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
+	</div>
+        <noscript>
+                <h2>{$ title $}</h2>
+                {$ content $}
+        </noscript>
+    </div>
+	<!--<div class="itz-logo col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4 hidden-print">
+		<a href="{$ 'content_pages_itz_link' | trans | e ( 'html_attr' ) $}" target="_blank" title="{$ 'content_pages_itz_title' | trans | e ( 'html_attr' ) $}">
+			<img src="{$ 'content_pages_itz_logo' | trans | e ( 'html_attr' ) $}" alt="{$ 'content_pages_itz_title' | trans | e ( 'html_attr' ) $}">
+		</a>
+	</div>-->
+{% endblock %}
+
+{% block scripts %}
+	{$ parent() $}
+	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/js/static_page.js"></script>
+{% endblock %}
