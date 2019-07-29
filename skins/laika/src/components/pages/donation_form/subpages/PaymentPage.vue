@@ -3,7 +3,7 @@
 		<payment v-bind="$props"></payment>
 		<div class="level has-margin-top-36">
 			<div class="level-left">
-				<b-button id="next" class="level-item"
+				<b-button id="next" :class="[ $store.getters.isValidating ? 'is-loading' : '', 'level-item']"
 						@click="next()"
 						type="is-primary is-main">
 					{{ $t('donation_form_section_continue') }}
