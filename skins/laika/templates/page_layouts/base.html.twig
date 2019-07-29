@@ -1,9 +1,9 @@
 {% extends 'Base_Layout.html.twig' %}
 {% set page_works_without_js = true %}
-{% set content = web_content("pages/#{page_id}") %}
 {% set title = page_id|trans({}, 'pageTitles') %}
 
 {% block main %}
+	{% set content = web_content("pages/#{page_id}") %}
 	<div id="app"
 		data-page-id="{$ page_id $}"
 		data-page-title="{$ title | e('html_attr') $}"
