@@ -1,11 +1,7 @@
 {% extends 'page_layouts/base.html.twig' %}
 {% set page_works_without_js = false %}
 
-{% block scripts %}
-	<script id="privacy_opt_out" data-tracking_url="{$ piwik.baseUrl $}" src="{$ basepath $}/skins/laika/js/privacy_protection.js"></script>
-{% endblock %}
-
-{% block main %}
+{% block main_content %}
 	{# Writing opt-out wrapper into variable before injecting it into content page via string replace #}
 	{% set matomo_opt_out %}
 		<div class="privacy_wrapper">
@@ -33,12 +29,17 @@
 		</div>
 	{% endset %}
 	{% set content = web_content("pages/#{page_id}") | replace({'<!-- placeholder_matomo -->': matomo_opt_out}) | raw %}
-	<div id="app"
-		data-page-id="{$ page_id $}"
-		data-page-title="{$ title | e('html_attr') $}"
-		data-page-content="{$ content | e('html_attr') | raw $}"
-		data-application-vars="{$ _context|json_encode|e('html_attr') $}" 
-   		data-application-messages="{$ translations()|e('html_attr') $}" 
-    	data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
-	</div>
+		<div id="app"
+			data-page-id="{$ page_id $}"
+			data-page-title="{$ title | e('html_attr') $}"
+			data-page-content="{$ content | e('html_attr') | raw $}"
+			data-application-vars="{$ _context|json_encode|e('html_attr') $}" 
+			data-application-messages="{$ translations()|e('html_attr') $}" 
+			data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
+		</div>
+{% endblock %}
+
+{% block scripts %}
+	{$ parent() $}
+	<script id="privacy_opt_out" data-tracking_url="{$ piwik.baseUrl $}" src="{$ basepath $}/skins/laika/js/privacy_protection.js"></script>
 {% endblock %}

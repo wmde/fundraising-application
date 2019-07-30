@@ -3,18 +3,20 @@
 {% set title = page_id|trans({}, 'pageTitles') %}
 
 {% block main %}
-	{% set content = web_content("pages/#{page_id}") %}
-	<div id="app"
-		data-page-id="{$ page_id $}"
-		data-page-title="{$ title | e('html_attr') $}"
-		data-page-content="{$ content | e('html_attr') | raw $}"
-		data-application-vars="{$ _context|json_encode|e('html_attr') $}" 
-   		data-application-messages="{$ translations()|e('html_attr') $}" 
-    	data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
-	</div>
+	{% block main_content %}
+		{% set content = web_content("pages/#{page_id}") %}
+		<div id="app"
+			data-page-id="{$ page_id $}"
+			data-page-title="{$ title | e('html_attr') $}"
+			data-page-content="{$ content | e('html_attr') | raw $}"
+			data-application-vars="{$ _context|json_encode|e('html_attr') $}" 
+			data-application-messages="{$ translations()|e('html_attr') $}" 
+			data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
+		</div>
+	{% endblock %}
         <noscript>
-                <h2>{$ title $}</h2>
-                {$ content $}
+			<h2>{$ title $}</h2>
+			{$ content $}
         </noscript>
     </div>
 	<!--<div class="itz-logo col-xs-12 col-sm-5 col-sm-offset-7 col-md-offset-0 col-md-4 hidden-print">

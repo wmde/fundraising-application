@@ -12,7 +12,7 @@
 import Vue from 'vue';
 
 export default Vue.extend( {
-	name: 'PrivacyProtection',
+	name: 'StaticPage',
 	props: {
 		pageTitle: String,
 		pageContent: String,
