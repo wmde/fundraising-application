@@ -15,7 +15,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { TrackingData } from '@/view_models/SubmitValues';
 import PaymentPage from '@/components/pages/membership_form/subpages/PaymentPage.vue';
 import AddressPage from '@/components/pages/membership_form/subpages/AddressPage.vue';
 

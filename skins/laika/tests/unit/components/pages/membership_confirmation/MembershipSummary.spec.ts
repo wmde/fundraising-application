@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Buefy from 'buefy';
-import MembershipSummary from '@/components/pages/membership_confirmation/MembershipSummary.vue';
+import MembershipSummary from '@/components/MembershipSummary.vue';
 import { createStore } from '@/store/donation_store';
 
 const localVue = createLocalVue();
@@ -73,9 +73,8 @@ describe( 'MembershipSummary', () => {
 		} );
 
 		expect( wrapper.find( '.payment-summary' ).text() ).toContain(
-			'Herr Prof. Dr. Testy MacTest, Tempelhofer Ufer 26, 10963 Berlin, donation_form_country_option_DE'
+			'Herr Prof. Dr. Testy MacTest, Tempelhofer Ufer 26, 10963 Berlin, donation_form_country_option_DE E-Mail: testperson@wikimedia.de'
 		);
-		expect( wrapper.find( '.payment-email' ).text() ).toContain( 'testperson@wikimedia.de' );
 	} );
 
 	it( 'renders company membership confirmation data', () => {
@@ -92,9 +91,8 @@ describe( 'MembershipSummary', () => {
 		} );
 
 		expect( wrapper.find( '.payment-summary' ).text() ).toContain(
-			'Test Company, Teststreet 123, 12345 Company City, donation_form_country_option_DE'
+			'Test Company, Teststreet 123, 12345 Company City, donation_form_country_option_DE E-Mail: testcompany@wikimedia.de'
 		);
-		expect( wrapper.find( '.payment-email' ).text() ).toContain( 'testcompany@wikimedia.de' );
 	} );
 
 	// If the backslashes below are put in correctly, they will get double-escaped and won't match
@@ -114,7 +112,7 @@ describe( 'MembershipSummary', () => {
 		} );
 
 		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFee\": \"15,00\"' );
-		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFeeYearly\": \"(180,00 currency_name donation_form_payment_interval_yearly)\"' );
+		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFeeYearly\": \"(180,00 currency_name donation_form_payment_interval_12)\"' );
 	} );
 
 	it( 'renders quarterly payments', () => {
@@ -131,7 +129,7 @@ describe( 'MembershipSummary', () => {
 		} );
 
 		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFee\": \"45,00\"' );
-		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFeeYearly\": \"(180,00 currency_name donation_form_payment_interval_yearly)\"' );
+		expect( wrapper.find( '.payment-summary' ).text() ).toContain( '\"membershipFeeYearly\": \"(180,00 currency_name donation_form_payment_interval_12)\"' );
 	} );
 
 	it( 'renders yearly payments', () => {
