@@ -14,14 +14,14 @@ class PrivateApplicantRenderer {
 	static renderAddress( address, country ) {
 		return address.salutation + ' ' + address.fullName + ', '
 				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city + ', ' + country
-				+ '<p>E-Mail: ' + address.email + '</p>';
+				+ ' <p>E-Mail: ' + address.email + '</p>';
 	}
 }
 class CompanyApplicantRenderer {
 	static renderAddress( address, country ) {
 		return address.fullName + ', '
 				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city + ', ' + country
-				+ '<p>E-Mail: ' + address.email + '</p>';
+				+ ' <p>E-Mail: ' + address.email + '</p>';
 	}
 }
 
