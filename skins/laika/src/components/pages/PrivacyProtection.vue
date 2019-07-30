@@ -1,37 +1,75 @@
 <template>
-    <div class="column is-full">
-        <h2>Datenerhebung</h2>
+    <div class="column is-full privacy-selection has-padding-36">
+        <h2 class="title is-size-2">{{ $t( 'privacy_protection_title' ) }}</h2>
         <p class="legend">
             {{ $t('privacy_optout_description') }}
         </p>
-        <div class="privacy_selection">
-            <div class="privacy_selection_box">
-                <div class="wrap-field choice-in">
-                    <div class="wrap-input">
-                        <input name="matomo_choice" id="tracking-opt-in" value="0" type="radio">
-                        <label for="tracking-opt-in"><span>{{ $t('privacy_optout_tracking_permit') }}</span></label>
-                    </div>
-                </div>
-                <div class="wrap-field choice-out">
-                    <div class="wrap-input">
-                        <input name="matomo_choice" id="tracking-opt-out" value="1" type="radio">
-                        <label for="tracking-opt-out"><span>{{ $t('privacy_optout_tracking_deny') }}</span></label>
-                    </div>
-                </div>
-            </div>
-            <div class="privacy_explanation">
-                <p>
-                    {{ $t('privacy_optout_tracking_state') }}
-                </p>
-            </div>
+            <b-radio id="tracking-opt-in"
+                    name="matomo_choice"
+                    native-value="0"
+                    v-model="optOut"
+                    @input="changeTracking">
+                {{ $t('privacy_optout_tracking_permit') }}
+            </b-radio>
+            <b-radio id="tracking-opt-out"
+                    name="matomo_choice"
+                    native-value="1"
+                    v-model="optOut"
+                    @input="changeTracking">
+                {{ $t('privacy_optout_tracking_deny') }}
+            </b-radio>
+        <div class="privacy_explanation">
+            <p>{{ $t('privacy_optout_tracking_state') }}</p>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import axios from 'axios';
+import { TRACKING_URL } from '@/trackingUrl';
 
 export default Vue.extend( {
 	name: 'PrivacyProtection',
+	data: function () {
+		return {
+			optOut: 0,
+		};
+	},
+	methods: {
+		changeTracking: function (): void {
+			if ( this.$data.optOut === 0 ) {
+				axios.post( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.doTrack&format=json' )
+					.then( function () {
+						console.log( 'opted into tracking ' );
+					} )
+					.catch( function ( error ) {
+						console.log( error );
+					} );
+			} else {
+				axios.post( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.doIgnore&format=json' )
+					.then( function () {
+						console.log( 'opted out of tracking ' );
+					} )
+					.catch( function ( error ) {
+						console.log( error );
+					} );
+			}
+
+		},
+	},
 } );
 </script>
+<style lang="scss" scoped>
+@import "../../scss/custom.scss";
+	.b-radio.radio {
+		height: 6.5em;
+		&+.radio{
+			margin-left: 0;
+		}
+    }
+    .privacy-selection {
+        border: 1px solid $fun-color-primary-light;
+		border-radius: 2px;
+    }
+</style>
