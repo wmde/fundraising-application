@@ -1,9 +1,9 @@
 <template>
 <div class="column is-full">
 	<h2 class="title is-size-2">{{ pageTitle }}</h2>
-	<div v-html="partialContentFirstHalf" class="has-margin-top-18 column is-full"></div>
+	<div v-html="partialContentFirstHalf" class="has-margin-top-18 column is-full privacy"></div>
 	<privacy-protection v-if="pageId === 'privacy_protection'"></privacy-protection>
-	<div v-html="partialContentSecondHalf" class="has-margin-top-18 column is-full"></div>
+	<div v-html="partialContentSecondHalf" class="has-margin-top-18 column is-full privacy"></div>
 </div>
 </template>
 

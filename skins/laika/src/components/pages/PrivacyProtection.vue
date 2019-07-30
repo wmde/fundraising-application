@@ -10,6 +10,7 @@
                     v-model="optOut"
                     @input="changeTracking">
                 {{ $t('privacy_optout_tracking_permit') }}
+                <p class="has-text-dark-lighter">{{ $t( 'privacy_optout_tracking_state' ) }}</p>
             </b-radio>
             <b-radio id="tracking-opt-out"
                     name="matomo_choice"
@@ -17,10 +18,8 @@
                     v-model="optOut"
                     @input="changeTracking">
                 {{ $t('privacy_optout_tracking_deny') }}
+                <p class="has-text-dark-lighter" v-html="$t( 'privacy_optout_tracking_state_no' )"></p>
             </b-radio>
-        <div class="privacy_explanation">
-            <p>{{ $t('privacy_optout_tracking_state') }}</p>
-        </div>
     </div>
 </template>
 
