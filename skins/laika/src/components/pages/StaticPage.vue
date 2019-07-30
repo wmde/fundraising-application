@@ -1,19 +1,30 @@
 <template>
-<!--set matomo_opt_out-->
 <div class="column is-full">
 	<h2 class="title is-size-2">{{ pageTitle }}</h2>
-	<div v-html="pageContent" class="has-margin-top-18 column is-full"></div>
+	<div v-html="partialContentFirstHalf" class="has-margin-top-18 column is-full"></div>
+	<privacy-protection v-if="pageId === 'privacy_protection'"></privacy-protection>
+	<div v-html="partialContentSecondHalf" class="has-margin-top-18 column is-full"></div>
 </div>
-<!--{$ web_content("pages/#{page_id}") | replace({: matomo_opt_out}) | raw $}-->
-
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import PrivacyProtection from '@/components/pages/PrivacyProtection.vue';
 
 export default Vue.extend( {
 	name: 'StaticPage',
+	components: {
+		PrivacyProtection,
+	},
+	data: function () {
+		const splitContent = this.$props.pageContent.split( '<!-- placeholder_matomo -->' );
+		return {
+			partialContentFirstHalf: splitContent[ 0 ],
+			partialContentSecondHalf: splitContent[ 1 ],
+		};
+	},
 	props: {
+		pageId: String,
 		pageTitle: String,
 		pageContent: String,
 	},
