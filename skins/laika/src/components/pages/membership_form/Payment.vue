@@ -13,7 +13,7 @@
 				:minimum-amount="getMinimumAmount"
 				:title="$t('membership_form_payment_amount_title')"
 				:caption="$t('membership_form_payment_amount_description')"
-				:error="feeIsValid ? '' : $t('donation_form_payment_amount_error')"
+				:error="feeIsValid ? '' : $t('membership_form_payment_amount_error')"
 				v-on:amount-selected="sendAmountToStore"
 		></amount-selection>
 		<payment-bank-data
