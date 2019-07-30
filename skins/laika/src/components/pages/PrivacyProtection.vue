@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import axios from 'axios';
+import jsonp from 'jsonp';
 import { TRACKING_URL } from '@/trackingUrl';
 
 export default Vue.extend( {
@@ -39,21 +39,15 @@ export default Vue.extend( {
 	methods: {
 		changeTracking: function (): void {
 			if ( this.$data.optOut === 0 ) {
-				axios.post( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.doTrack&format=json' )
-					.then( function () {
-						console.log( 'opted into tracking ' );
-					} )
-					.catch( function ( error ) {
-						console.log( error );
-					} );
+				jsonp( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.doTrack&format=json',
+					null,
+					function ( err, data ) {}
+				);
 			} else {
-				axios.post( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.doIgnore&format=json' )
-					.then( function () {
-						console.log( 'opted out of tracking ' );
-					} )
-					.catch( function ( error ) {
-						console.log( error );
-					} );
+				jsonp( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.doIgnore&format=json',
+					null,
+					function ( err, data ) {}
+				);
 			}
 
 		},
