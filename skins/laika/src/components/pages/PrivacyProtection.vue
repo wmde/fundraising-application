@@ -40,13 +40,13 @@ export default Vue.extend( {
 		changeTracking: function (): void {
 			if ( this.$data.optOut === 0 ) {
 				jsonp( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.doTrack&format=json',
-					null,
-					function ( err, data ) {}
+					undefined,
+					function () {}
 				);
 			} else {
 				jsonp( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.doIgnore&format=json',
-					null,
-					function ( err, data ) {}
+					undefined,
+					function () {}
 				);
 			}
 

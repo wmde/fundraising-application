@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
+    "@types/jsonp": "^0.2.0",
     "@types/moxios": "^0.4.8",
     "@vue/cli-plugin-babel": "^3.7.0",
     "@vue/cli-plugin-eslint": "^3.7.0",
