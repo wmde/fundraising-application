@@ -5,7 +5,7 @@
 			<div class="column is-half">
 				<membership-summary :address="confirmationData.address"
 									:membershipApplication="confirmationData.membershipApplication">
-					<div class="title is-size-5">{{ $t( 'membership_confirmation_thanks_text' ) }}</div>
+					{{ $t( 'membership_confirmation_success_text' ) }}
 				</membership-summary>
 			</div>
 
@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import MembershipSummary from '@/components/pages/membership_confirmation/MembershipSummary.vue';
+import MembershipSummary from '@/components/MembershipSummary.vue';
 import SummaryLinks from '@/components/pages/membership_confirmation/SummaryLinks.vue';
 
 export default Vue.extend( {
