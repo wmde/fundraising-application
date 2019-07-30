@@ -33,6 +33,7 @@ new Vue( {
 	[
 		h( Component, {
 			props: {
+				pageId: staticPage.getAttribute( 'data-page-id' ),
 				pageTitle: staticPage.getAttribute( 'data-page-title' ),
 				pageContent: staticPage.getAttribute( 'data-page-content' ),
 			},
