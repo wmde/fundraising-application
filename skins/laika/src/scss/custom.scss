@@ -93,6 +93,17 @@
 .external-notice {
 	color: $fun-color-dark-lighter;
 }
-
+.privacy {
+	ol {
+		margin-left: 1.5em;
+	}
+	& > ol {
+		padding-left: 10px;
+		list-style-type: upper-roman;
+	}
+	p {
+		margin: 0 0 11px;
+	}
+}
 
 @import "overrides";
