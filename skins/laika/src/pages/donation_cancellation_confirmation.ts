@@ -4,7 +4,7 @@ import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
 
-import Component from '@/components/pages/Placeholder.vue';
+import Component from '@/components/pages/DonationCancellation.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 
 const PAGE_IDENTIFIER = 'donation-cancellation-confirmation';
@@ -34,7 +34,11 @@ new Vue( {
 		},
 	},
 	[
-		h( Component, {} ),
+		h( Component, {
+			props: {
+				cancellationData: pageData.applicationVars,
+			},
+		} ),
 		h( Sidebar, {
 			slot: 'sidebar',
 		} ),
