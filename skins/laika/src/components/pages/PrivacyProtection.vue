@@ -1,9 +1,10 @@
 <template>
 	<div class="column is-full privacy-selection has-padding-36">
 		<h2 class="title is-size-2">{{ $t( 'privacy_protection_title' ) }}</h2>
-		<p class="legend">
-			{{ $t('privacy_optout_description') }}
-		</p>
+		<fieldset>
+			<legend class="legend">
+				{{ $t('privacy_optout_description') }}
+			</legend>
 			<b-radio id="tracking-opt-in"
 					name="matomo_choice"
 					:native-value="0"
@@ -20,6 +21,7 @@
 			</b-radio>
 			<p v-if="showOptOutExplanation === 0" class="has-text-dark-lighter has-margin-top-18">{{ $t( 'privacy_optout_tracking_state' ) }}</p>
 			<p v-else class="has-text-dark-lighter has-margin-top-18" v-html="$t( 'privacy_optout_tracking_state_no' )"></p>
+		</fieldset>
 	</div>
 </template>
 
@@ -72,15 +74,16 @@ export default Vue.extend( {
 	},
 } );
 </script>
-<style lang="scss" scoped>
-@import "../../scss/custom.scss";
-	.b-radio.radio {
-		&+.radio {
-			margin-left: 0;
+
+<style lang="scss">
+	@import "../../scss/custom.scss";
+		.privacy-selection {
+			border: 1px solid $fun-color-gray-mid;
+			border-radius: 2px;
+			.b-radio.radio {
+				& + .radio {
+					margin-left: 0;
+				}
+			}
 		}
-	}
-	.privacy-selection {
-		border: 1px solid $fun-color-gray-mid;
-		border-radius: 2px;
-	}
 </style>
