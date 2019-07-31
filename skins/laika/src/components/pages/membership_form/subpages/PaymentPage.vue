@@ -62,6 +62,8 @@ export default Vue.extend( {
 					if ( this.$store.getters[ NS_MEMBERSHIP_FEE + '/paymentDataIsValid' ] &&
 						this.$store.getters[ NS_BANKDATA + '/bankDataIsValid' ] ) {
 						this.$emit( 'submit-membership' );
+					} else {
+						document.getElementsByClassName( 'is-danger' )[ 0 ].scrollIntoView( { behavior: 'smooth', block: 'center', inline: 'nearest' } );
 					}
 				} );
 			} );

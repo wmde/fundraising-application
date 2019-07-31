@@ -37,6 +37,8 @@ export default Vue.extend( {
 			( this.$refs.address as any ).validateForm().then( () => {
 				if ( this.$store.getters[ NS_MEMBERSHIP_ADDRESS + '/requiredFieldsAreValid' ] ) {
 					this.$emit( 'next-page' );
+				} else {
+					document.getElementsByClassName( 'is-danger' )[ 0 ].scrollIntoView( { behavior: 'smooth', block: 'center', inline: 'nearest' } );
 				}
 			} );
 		},

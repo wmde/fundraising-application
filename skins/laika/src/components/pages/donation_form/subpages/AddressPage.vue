@@ -104,9 +104,12 @@ export default Vue.extend( {
 					if ( this.$store.getters[ NS_ADDRESS + '/requiredFieldsAreValid' ] ) {
 						if ( this.$store.getters[ NS_PAYMENT + '/isDirectDebitPayment' ] &&
 							!this.$store.getters[ NS_BANKDATA + '/bankDataIsValid' ] ) {
+							document.getElementsByClassName( 'help is-danger' )[ 0 ].scrollIntoView( { behavior: 'smooth', block: 'center', inline: 'nearest' } );
 							return;
 						}
 						this.$emit( 'submit-donation' );
+					} else {
+						document.getElementsByClassName( 'help is-danger' )[ 0 ].scrollIntoView( { behavior: 'smooth', block: 'center', inline: 'nearest' } );
 					}
 				} );
 			} );
