@@ -6,20 +6,20 @@
         </p>
             <b-radio id="tracking-opt-in"
                     name="matomo_choice"
-                    native-value="0"
+                    :native-value="0"
                     v-model="optOut"
                     @input="changeTracking">
                 {{ $t('privacy_optout_tracking_permit') }}
-                <p class="has-text-dark-lighter">{{ $t( 'privacy_optout_tracking_state' ) }}</p>
             </b-radio>
             <b-radio id="tracking-opt-out"
                     name="matomo_choice"
-                    native-value="1"
+                    :native-value="1"
                     v-model="optOut"
                     @input="changeTracking">
                 {{ $t('privacy_optout_tracking_deny') }}
-                <p class="has-text-dark-lighter" v-html="$t( 'privacy_optout_tracking_state_no' )"></p>
             </b-radio>
+            <p v-if="optOut === 0" class="has-text-dark-lighter has-margin-top-18">{{ $t( 'privacy_optout_tracking_state' ) }}</p>
+            <p v-else class="has-text-dark-lighter has-margin-top-18" v-html="$t( 'privacy_optout_tracking_state_no' )"></p>
     </div>
 </template>
 
@@ -34,7 +34,10 @@ export default Vue.extend( {
 		return {
 			optOut: 0,
 		};
-	},
+    },
+    beforeMount: function() {
+       this.getInitialTrackingState();
+    },
 	methods: {
 		changeTracking: function (): void {
 			if ( this.$data.optOut === 0 ) {
@@ -48,21 +51,27 @@ export default Vue.extend( {
 					function () {}
 				);
 			}
-
-		},
+        },
+        getInitialTrackingState: function(): void {
+            jsonp( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.isTracked&format=json',
+					undefined,
+					( error, data ) => {
+                        this.$data.optOut = data.value ? 0 : 1;
+                    }
+				);
+        },
 	},
 } );
 </script>
 <style lang="scss" scoped>
 @import "../../scss/custom.scss";
 	.b-radio.radio {
-		height: 6.5em;
 		&+.radio{
-			margin-left: 0;
+            margin-left: 0;
 		}
     }
     .privacy-selection {
-        border: 1px solid $fun-color-primary-light;
+        border: 1px solid $fun-color-gray-mid;
 		border-radius: 2px;
     }
 </style>
