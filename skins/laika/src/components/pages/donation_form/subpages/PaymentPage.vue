@@ -38,6 +38,8 @@ export default Vue.extend( {
 				this.$store.dispatch( action( NS_PAYMENT, markEmptyValuesAsInvalid ) ).then( () => {
 					if ( this.$store.getters[ NS_PAYMENT + '/paymentDataIsValid' ] ) {
 						this.$emit( 'next-page' );
+					} else {
+						document.getElementsByClassName( 'is-danger' )[ 0 ].scrollIntoView( { behavior: 'smooth', block: 'center', inline: 'nearest' } );
 					}
 				} );
 			} );
