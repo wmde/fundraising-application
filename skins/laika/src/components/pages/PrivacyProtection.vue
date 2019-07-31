@@ -18,7 +18,7 @@
 					@input="changeTracking">
 				{{ $t('privacy_optout_tracking_deny') }}
 			</b-radio>
-			<p v-if="optOut === 0" class="has-text-dark-lighter has-margin-top-18">{{ $t( 'privacy_optout_tracking_state' ) }}</p>
+			<p v-if="showOptOutExplanation === 0" class="has-text-dark-lighter has-margin-top-18">{{ $t( 'privacy_optout_tracking_state' ) }}</p>
 			<p v-else class="has-text-dark-lighter has-margin-top-18" v-html="$t( 'privacy_optout_tracking_state_no' )"></p>
 	</div>
 </template>
@@ -33,6 +33,7 @@ export default Vue.extend( {
 	data: function () {
 		return {
 			optOut: 0,
+			showOptOutExplanation: 0,
 		};
 	},
 	beforeMount: function () {
@@ -43,12 +44,20 @@ export default Vue.extend( {
 			if ( this.$data.optOut === 0 ) {
 				jsonp( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.doTrack&format=json',
 					undefined,
-					function () {}
+					( error, data ) => {
+						if ( data.result === 'success' ) {
+							this.$data.showOptOutExplanation = 0;
+						}
+					}
 				);
 			} else {
 				jsonp( TRACKING_URL + 'index.php?module=API&method=AjaxOptOut.doIgnore&format=json',
 					undefined,
-					function () {}
+					( error, data ) => {
+						if ( data.result === 'success' ) {
+							this.$data.showOptOutExplanation = 1;
+						}
+					}
 				);
 			}
 		},
