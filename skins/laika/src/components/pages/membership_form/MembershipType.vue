@@ -1,7 +1,7 @@
 <template>
 	<fieldset class="has-margin-top-36 column is-full">
 		<legend class="title is-size-5">{{ $t('membership_form_membershiptype_legend') }}</legend>
-		<div>
+		<div class="membership-type">
 			<b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.SUSTAINING }"
 					id="sustaining"
 					name="type"
@@ -73,12 +73,14 @@ export default Vue.extend( {
 	},
 } );
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @import "../../../scss/custom.scss";
-	.b-radio.radio {
-		height: 6.5em;
-		&+.radio{
-			margin-left: 0;
+	.membership-type {
+		.b-radio.radio {
+			height: 6.5em;
+			& + .radio {
+				margin-left: 0;
+			}
 		}
 	}
 </style>

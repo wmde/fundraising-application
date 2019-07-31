@@ -1,5 +1,5 @@
 <template>
-	<div class="payment-notice" v-html="paymentNotice"></div>
+	<div class="has-margin-top-18 payment-notice" v-html="paymentNotice"></div>
 </template>
 
 <script>
@@ -45,9 +45,3 @@ export default {
 	},
 };
 </script>
-
-<style scoped>
-	.payment-notice {
-		margin-top: 18px;
-	}
-</style>

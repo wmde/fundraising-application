@@ -18,5 +18,3 @@ export default Vue.extend( {
 	name: 'DonationReview',
 } );
 </script>
-<style lang="scss" scoped>
-</style>
