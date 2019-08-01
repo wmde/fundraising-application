@@ -1,22 +1,17 @@
 <template>
-	<div class="question">
-		<div v-bind:class="[ isOpen ? 'accordion' : '' ]" >
-
-			<div class="inline-icon" @click="toggle()"
-				:data-content-target="!isOpen ? '/page/Häufige Fragen' : ''"
-				:data-track-content="!isOpen"
-				:data-content-name="!isOpen ? 'Expand' : ''"
-				:data-content-piece="!isOpen ? content.question : ''">
-				<h3 v-bind:class="[ isOpen ? 'has-text-primary has-text-weight-bold ' : 'accordion-heading' ] ">
-					{{ content.question }}
-				</h3>
-				<i v-bind:class="[ isOpen ? 'icon-keyboard_arrow_up secondary-color' : 'icon-keyboard_arrow_down primary-color' ]">
-				</i>
+	<div class="question" v-bind:class="[ isOpen ? 'accordion' : '' ]">
+		<div @click="toggle()"
+			:data-content-target="!isOpen ? '/page/Häufige Fragen' : ''"
+			:data-track-content="!isOpen"
+			:data-content-name="!isOpen ? 'Expand' : ''"
+			:data-content-piece="!isOpen ? content.question : ''">
+			<div v-bind:class="[ isOpen ? '' : 'accordion-heading', 'icon-inline', 'question-title' ] ">
+				{{ content.question }}
+				<b-icon v-if="isOpen" icon="arrow-up" class="icon-size"></b-icon>
+				<b-icon v-else icon="arrow-down" class="icon-size"></b-icon>
 			</div>
-
-			<div v-show="isOpen" v-html="content.visibleText" class="accordion-content"></div>
-
 		</div>
+		<div v-show="isOpen" v-html="content.visibleText" class="accordion-content"></div>
 	</div>
 </template>
 
@@ -53,7 +48,7 @@ export default Vue.extend( {
 </script>
 
 <style lang="scss">
-@import "../scss/custom";
+@import "../../../scss/custom";
 
 .accordion {
 	border: 1px solid $fun-color-gray-light-transparency;
@@ -68,8 +63,14 @@ export default Vue.extend( {
 		padding-top: 2.8rem;
 		padding-right: 0.6rem;
 	}
-	h3 {
+	.question-title {
 		cursor: pointer;
 	}
+}
+.icon-inline {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+	align-items: center;
 }
 </style>

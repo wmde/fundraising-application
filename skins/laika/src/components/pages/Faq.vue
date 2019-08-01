@@ -1,12 +1,10 @@
 <template>
-	<div id="faq" class="column">
+	<div id="faq" class="column has-padding-36">
 		<h1 class="title is-size-1">{{ $t('page_title') }}</h1>
 		<ul>
 			<li v-for="( topic, index ) in content.topics"
 				:key="index">
-
-				<h2 class="title is-size-2">{{ topic.name }}</h2>
-
+				<h2 class="title is-size-2 has-margin-top-36 has-margin-bottom-18">{{ topic.name }}</h2>
 				<question
 						v-for="(content, index) in getQuestionsByTopic(topic)"
 						v-on:question-opened="setOpenQuestionId( $event )"
@@ -15,7 +13,6 @@
 						:visible-question-id="openQuestionId"
 						:question-id="topic.id+index.toString()">
 				</question>
-
 			</li>
 		</ul>
 	</div>
@@ -23,7 +20,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Question from '@/components/Question.vue';
+import Question from '@/components/pages/frequently_asked_questions/Question.vue';
 import { FaqContent, Topic, FaqData, QuestionModel } from '@/view_models/faq';
 
 export default Vue.extend( {
