@@ -54,6 +54,8 @@
 
 $icon-error: '\e800'; /* Error triangle */
 $icon-warning: '\f0f3'; /* Warning Bell */
+$icon-up-open: '\e801'; /* Arrow Up */
+$icon-down-open: '\e802'; /* Arrow Down*/
 
 .mdi:before {
 	font: normal normal normal 18px/48px "Icons";
@@ -75,3 +77,16 @@ $icon-warning: '\f0f3'; /* Warning Bell */
 	content: $icon-warning;
 	color: $fun-color-gray-dark;
 }
+
+.mdi-arrow-down:before {
+	content: $icon-down-open;
+	font-size: 14px;
+	color: $fun-color-dark;
+}
+
+.mdi-arrow-up:before {
+	content: $icon-up-open;
+	font-size: 14px;
+	color: $fun-color-dark;
+}
+
