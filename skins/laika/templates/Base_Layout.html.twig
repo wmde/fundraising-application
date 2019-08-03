@@ -17,6 +17,7 @@
     <meta property="og:site_name" content="{$ 'wikimedia_organization_title' | trans $}" />
     <meta property="og:description" content="{$ 'wikimedia_description' | trans $}" />
 
+    <link rel="preconnect" href="{$ piwik.baseUrl $}">
     <link rel="shortcut icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/images/favicon.ico" />
     <link rel="apple-touch-icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/images/apple-touch-icon.png" />
     {% block styles %}
