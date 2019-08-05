@@ -15,7 +15,7 @@
 				</div>
 				<div class="column">
 					<b-button id="submit-btn" :class="[ $store.getters.isValidating ? 'is-loading' : '', 'level-item']"
-						@click="submit"
+						@mousedown.native="submit"
 						type="is-primary is-main">
 						{{ $t('membership_form_finalize') }}
 					</b-button>
