@@ -1,13 +1,20 @@
 @import "variables";
 
 // Miscellaneous overrides
-.navbar-brand {
-	margin-right: 54px;
-}
-
-.navbar-menu {
-	.navbar-item {
-		padding: 18px;
+.navbar {
+	&-brand {
+		@include from($tablet) {
+			margin-right: 54px;
+		}
+	}
+	&-menu {
+		padding: 0;
+		.navbar-item {
+			padding: 18px;
+			@include until($desktop) {
+				border-bottom: 2px solid $fun-color-dark-lighter;
+			}
+		}
 	}
 }
 
@@ -96,21 +103,10 @@ button.is-main {
 	height: 54px;
 	font-size: 1em;
 	font-weight: bold;
-	width: 270px;
+	width: 240px;
 	border-radius: 0;
-}
-
-@include until($tablet) {
-	button.is-main {
+	@include until($tablet) {
 		width: 100%;
-	}
-}
-
-@include until($desktop) {
-	.navbar-menu {
-		.navbar-item {
-			border-bottom: 2px solid $fun-color-dark-lighter;
-		}
 	}
 }
 
