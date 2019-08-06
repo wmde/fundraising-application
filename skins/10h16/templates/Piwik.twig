@@ -1,6 +1,9 @@
 <!-- Piwik -->
 <script type="text/javascript">
 	var _paq = _paq || [];
+	{% if initialFormValues.paymentType != '' %}
+		_paq.push( [ 'setCustomDimension', 1, '{$ initialFormValues.paymentType $}' ] );
+	{% endif %}
 	_paq.push( [ 'trackPageView', '{$ main_template $}' ] );
 	_paq.push( [ 'enableLinkTracking' ] );
 	_paq.push( [ 'trackAllContentImpressions' ] );
