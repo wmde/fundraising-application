@@ -1,6 +1,19 @@
 @import "variables";
 
 // Miscellaneous overrides
+.column {
+	padding: 18px;
+}
+
+.navbar-brand {
+	margin-right: 54px;
+}
+
+.navbar-menu {
+	.navbar-item {
+		padding: 18px;
+	}
+}
 
 .subtitle {
 	display: inline-block;
@@ -95,6 +108,14 @@ button.is-main {
 @include until($tablet) {
 	button.is-main {
 		width: 100%;
+	}
+}
+
+@include from($tablet) {
+	.navbar-menu {
+		.navbar-item {
+			border-bottom: 2px solid $fun-color-dark-lighter;
+		}
 	}
 }
 
