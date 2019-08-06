@@ -1,10 +1,6 @@
 @import "variables";
 
 // Miscellaneous overrides
-.column {
-	padding: 18px;
-}
-
 .navbar-brand {
 	margin-right: 54px;
 }
@@ -53,7 +49,6 @@
 	}
 	input[type="checkbox"] + .check {
 		border: 1px solid $fun-color-dark;
-		border-radius: 2px;
 	}
 }
 
@@ -111,7 +106,7 @@ button.is-main {
 	}
 }
 
-@include from($tablet) {
+@include until($desktop) {
 	.navbar-menu {
 		.navbar-item {
 			border-bottom: 2px solid $fun-color-dark-lighter;
