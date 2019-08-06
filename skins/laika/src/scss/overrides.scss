@@ -38,6 +38,10 @@
 	.control-label {
 		padding-left: 18px;
 	}
+	input[type="checkbox"] + .check {
+		border: 1px solid $fun-color-dark;
+		border-radius: 2px;
+	}
 }
 
 .input, .field {
