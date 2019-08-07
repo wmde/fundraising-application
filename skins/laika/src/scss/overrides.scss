@@ -1,6 +1,22 @@
 @import "variables";
 
 // Miscellaneous overrides
+.navbar {
+	&-brand {
+		@include from($tablet) {
+			margin-right: 54px;
+		}
+	}
+	&-menu {
+		padding: 0;
+		.navbar-item {
+			padding: 18px;
+			@include until($desktop) {
+				border-bottom: 2px solid $fun-color-dark-lighter;
+			}
+		}
+	}
+}
 
 .subtitle {
 	display: inline-block;
@@ -28,6 +44,18 @@
 	}
 	.check {
 		font-size: 12px;
+	}
+	.control-label {
+		padding-left: 18px;
+	}
+}
+
+.b-checkbox.checkbox {
+	.control-label {
+		padding-left: 18px;
+	}
+	input[type="checkbox"] + .check {
+		border: 1px solid $fun-color-dark;
 	}
 }
 
@@ -75,12 +103,9 @@ button.is-main {
 	height: 54px;
 	font-size: 1em;
 	font-weight: bold;
-	width: 270px;
+	width: 240px;
 	border-radius: 0;
-}
-
-@include until($tablet) {
-	button.is-main {
+	@include until($tablet) {
 		width: 100%;
 	}
 }
