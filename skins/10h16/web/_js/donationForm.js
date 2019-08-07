@@ -1,7 +1,7 @@
 $( function () {
 	/** global: WMDE */
 
-	var initData = $( '#10h16-donation' ),
+	var initData = $( '#init-form' ),
 		store = WMDE.Store.createDonationStore(),
 		actions = WMDE.Actions
 		;
