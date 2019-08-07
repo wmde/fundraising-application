@@ -26,7 +26,7 @@ describe( 'ReceiptOptOut', () => {
 					$t: () => { },
 				},
 			} ),
-			event = 'optedOut',
+			event = 'opted-out',
 			checkBox = wrapper.find( '#donation_receipt' );
 		checkBox.trigger( 'click' );
 
