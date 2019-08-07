@@ -1,7 +1,7 @@
 $( function () {
 	/** global: WMDE */
 
-	var initData = $( '#init-form' ),
+	var initData = $( '#10h16-donation' ),
 		store = WMDE.Store.createMembershipStore(),
 		actions = WMDE.Actions;
 
@@ -338,7 +338,7 @@ $( function () {
 
 	function handleMembershipDataSubmitForNonDirectDebit() {
 		if ( formDataIsValid() ) {
-			$( '#memForm' ).submit();
+			$( '#10h16-membership' ).submit();
 		} else {
 			triggerValidityCheckForPersonalDataPage();
 			displayErrorBox();
@@ -357,7 +357,7 @@ $( function () {
 
 	$( '#finishFormSubmit2' ).click( function () {
 		if ( store.getState().validity.sepaConfirmation ) {
-			$( '#memForm' ).submit();
+			$( '#10h16-membership' ).submit();
 		} else {
 			triggerValidityCheckForSepaPage();
 			displayErrorBox();
