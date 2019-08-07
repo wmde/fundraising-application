@@ -1,6 +1,6 @@
 <template>
 
-	<form class="column is-full" ref="form" action="/donation/add" method="post">
+	<form name="laika-donation" class="column is-full" ref="form" action="/donation/add" method="post">
 		<div class="column is-full">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_headline' ) }}</h1>
 		</div>
