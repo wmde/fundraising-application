@@ -101,7 +101,7 @@ describe( 'Address.vue', () => {
 		expect( store.dispatch ).toBeCalledWith( expectedAction, {
 			'name': 'email',
 			'optionalField': false,
-			'pattern': '^[^@]+@.+$',
+			'pattern': '^(.+)@(.+)\\.(.+)$',
 			'value': testEmail,
 		} );
 	} );
