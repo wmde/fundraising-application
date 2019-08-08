@@ -46,7 +46,7 @@ export default {
 				{ id: 'contact', url: '/contact/get-in-touch' },
 				{ id: 'imprint', url: '/page/Impressum' },
 				{ id: 'data_protection', url: '/page/Datenschutz' },
-				{ id: 'supporters_list', url: '/page/Unterst%C3%BCtzerliste' },
+				// T226387 { id: 'supporters_list', url: '/page/Unterst%C3%BCtzerliste' },
 			],
 		};
 	},

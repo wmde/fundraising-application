@@ -43,7 +43,7 @@ export default Vue.extend( {
 			'headerMenu': [
 				{ id: 'donation-form', localeId: 'donate', url: '/' },
 				{ id: 'membership-application', localeId: 'membership_application', url: '/apply-for-membership' },
-				{ id: 'faq-page', localeId: 'faq', url: '/faq' },
+				// T226387 { id: 'faq-page', localeId: 'faq', url: '/faq' },
 				{ id: 'use-of-funds', localeId: 'use_of_resources', url: '/use-of-funds' },
 			],
 		};
