@@ -1,5 +1,6 @@
 import { Validity } from '@/view_models/Validity';
-import { PostData, FormData } from '@/view_models/Address';
+import { FormData, PostData } from '@/view_models/Address';
+
 /**
  * @param namespacesAndName namespace1, namespace2, ..., mutationOrActionName
  */
@@ -11,7 +12,10 @@ export const action = buildActionOrMutationName;
 export const mutation = buildActionOrMutationName;
 
 export const Helper = {
-	inputIsValid: ( value: string, pattern: string ) => {
+	inputIsValid: function ( value: string, pattern: string, isOptional?: boolean ) {
+		if ( isOptional && value === '' ) {
+			return Validity.VALID;
+		}
 		if ( pattern === null ) {
 			return value !== '' ? Validity.VALID : Validity.INVALID;
 		}
