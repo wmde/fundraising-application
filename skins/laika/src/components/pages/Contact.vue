@@ -2,6 +2,7 @@
 	<div class="column is-full contact-form">
 		<h1 class="title">{{ $t( 'contact_form_title' ) }}</h1>
 		<span class="help is-danger has-padding-bottom-18" v-if="contactData.errors">{{ $t('contact_form_error') }}</span>
+		<span class="help is-danger has-padding-bottom-18" v-for="error in contactData.errors">{{ $t( error ) }}</span>
 		<form method="post" action="/contact/get-in-touch" @submit="submit" id="laika-contact">
 			<fieldset>
 				<div>
@@ -122,49 +123,49 @@ export default Vue.extend( {
 			formData: {
 				name: {
 					name: 'name',
-					value: '',
+					value: this.contactData.firstname,
 					pattern: '^.+$',
 					optionalField: true,
 					validity: Validity.VALID,
 				},
 				surname: {
 					name: 'surname',
-					value: '',
+					value: this.contactData.lastname,
 					pattern: '^.+$',
 					optionalField: true,
 					validity: Validity.VALID,
 				},
 				donationNumber: {
 					name: 'donationNumber',
-					value: '',
+					value: this.contactData.donationNumber,
 					pattern: '^[0-9]*$',
 					optionalField: true,
 					validity: Validity.VALID,
 				},
 				email: {
 					name: 'email',
-					value: '',
+					value: this.contactData.email,
 					pattern: '^(.+)@(.+)\\.(.+)$',
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
 				},
 				topic: {
 					name: 'topic',
-					value: null,
+					value: this.contactData.category ? this.$i18n.t( this.contactData.category ) as string : null,
 					pattern: '^.+$',
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
 				},
 				subject: {
 					name: 'subject',
-					value: '',
+					value: this.contactData.subject,
 					pattern: '^.+$',
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
 				},
 				comment: {
 					name: 'comment',
-					value: '',
+					value: this.contactData.messageBody,
 					pattern: '(\n|.)+',
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
