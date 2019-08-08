@@ -3,7 +3,7 @@
 		<h1 class="title">{{ $t( 'contact_form_title' ) }}</h1>
 		<span class="help is-danger has-padding-bottom-18" v-if="contactData.errors">{{ $t('contact_form_error') }}</span>
 		<span class="help is-danger has-padding-bottom-18" v-for="error in contactData.errors">{{ $t( error ) }}</span>
-		<form method="post" action="/contact/get-in-touch" @submit="submit" id="laika-contact">
+		<form method="post" action="/contact/get-in-touch" v-on:submit.prevent="submit" id="laika-contact" ref="form">
 			<fieldset>
 				<div>
 					<label for="firstname" class="subtitle">
@@ -15,10 +15,10 @@
 								id="firstname"
 								name="firstname"
 								:placeholder="$t( 'contact_form_firstname_placeholder' )"
-								v-model="formData.name.value">
+								v-model="formData.firstname.value">
 						</b-input>
 					</b-field>
-					<span v-if="formData.name.validity === Validity.INVALID" class="help is-danger">{{ $t( 'contact_form_firstname_error' ) }}</span>
+					<span v-if="formData.firstname.validity === Validity.INVALID" class="help is-danger">{{ $t( 'contact_form_firstname_error' ) }}</span>
 				</div>
 				<div class="has-margin-top-18">
 					<label for="lastname" class="subtitle">
@@ -30,10 +30,10 @@
 								id="lastname"
 								name="lastname"
 								:placeholder="$t( 'contact_form_lastname_placeholder' )"
-								v-model="formData.surname.value">
+								v-model="formData.lastname.value">
 						</b-input>
 					</b-field>
-					<span v-if="formData.surname.validity === Validity.INVALID" class="help is-danger">{{ $t( 'contact_form_lastname_error' ) }}</span>
+					<span v-if="formData.lastname.validity === Validity.INVALID" class="help is-danger">{{ $t( 'contact_form_lastname_error' ) }}</span>
 				</div>
 				<div class="has-margin-top-18">
 					<label for="donationNumber" class="subtitle">
@@ -70,9 +70,8 @@
 						class="is-form-input"
 						v-model="formData.topic.value"
 						id="category"
-						name="category"
-						:placeholder="$t( 'contact_form_topic_placeholder' )"
-						@input="$emit('field-changed', 'title')">
+						name="category">
+						<option hidden="hidden" disabled="disabled" value="">{{ $t( 'contact_form_topic_placeholder' ) }}</option>
 						<option v-for="option in contactData.contact_categories">{{ option }}</option>
 					</b-select>
 					<span v-if="formData.topic.validity === Validity.INVALID" class="help is-danger has-padding-top-18">{{ $t( 'contact_form_topic_error' ) }}</span>
@@ -121,51 +120,51 @@ export default Vue.extend( {
 	data: function (): { formData: FormData } {
 		return {
 			formData: {
-				name: {
+				firstname: {
 					name: 'name',
-					value: this.contactData.firstname,
+					value: this.contactData.firstname ? this.contactData.firstname : '',
 					pattern: '^.+$',
 					optionalField: true,
 					validity: Validity.VALID,
 				},
-				surname: {
-					name: 'surname',
-					value: this.contactData.lastname,
+				lastname: {
+					name: 'lastname',
+					value: this.contactData.lastname ? this.contactData.lastname : '',
 					pattern: '^.+$',
 					optionalField: true,
 					validity: Validity.VALID,
 				},
 				donationNumber: {
 					name: 'donationNumber',
-					value: this.contactData.donationNumber,
+					value: this.contactData.donationNumber ? this.contactData.donationNumber : '',
 					pattern: '^[0-9]*$',
 					optionalField: true,
 					validity: Validity.VALID,
 				},
 				email: {
 					name: 'email',
-					value: this.contactData.email,
+					value: this.contactData.email ? this.contactData.email : '',
 					pattern: '^(.+)@(.+)\\.(.+)$',
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
 				},
 				topic: {
 					name: 'topic',
-					value: this.contactData.category ? this.$i18n.t( this.contactData.category ) as string : null,
+					value: this.contactData.category ? this.$i18n.t( this.contactData.category ) as string : '',
 					pattern: '^.+$',
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
 				},
 				subject: {
 					name: 'subject',
-					value: this.contactData.subject,
+					value: this.contactData.subject ? this.contactData.subject : '',
 					pattern: '^.+$',
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
 				},
 				comment: {
 					name: 'comment',
-					value: this.contactData.messageBody,
+					value: this.contactData.messageBody ? this.contactData.messageBody : '',
 					pattern: '(\n|.)+',
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
@@ -176,8 +175,15 @@ export default Vue.extend( {
 	props: [
 		'contactData',
 	],
+	computed: {
+		Validity: {
+			get() {
+				return Validity;
+			},
+		},
+	},
 	methods: {
-		submit( event: Event ) {
+		submit() {
 			let isValid = true;
 			Object.keys( this.$data.formData ).forEach( ( fieldName: string ) => {
 				let field = this.$data.formData[ fieldName ];
@@ -187,16 +193,8 @@ export default Vue.extend( {
 				}
 			} );
 			if ( isValid ) {
-				return true;
+				( this.$refs.form as HTMLFormElement ).submit();
 			}
-			event.preventDefault();
-		},
-	},
-	computed: {
-		Validity: {
-			get() {
-				return Validity;
-			},
 		},
 	},
 } );

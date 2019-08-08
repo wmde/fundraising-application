@@ -12,20 +12,14 @@ export const action = buildActionOrMutationName;
 export const mutation = buildActionOrMutationName;
 
 export const Helper = {
-	inputIsValid: ( value: string, pattern: string, isOptional?: boolean ) => {
-		if ( isOptional && Helper.isEmpty( value ) ) {
+	inputIsValid: function ( value: string, pattern: string, isOptional?: boolean ) {
+		if ( isOptional && value === '' ) {
 			return Validity.VALID;
 		}
 		if ( pattern === null ) {
 			return value !== '' ? Validity.VALID : Validity.INVALID;
 		}
-		if ( Helper.isEmpty( value ) ) {
-			return Validity.INVALID;
-		}
 		return new RegExp( pattern ).test( value ) ? Validity.VALID : Validity.INVALID;
-	},
-	isEmpty( value: string ) {
-		return value === undefined || value === null || value === '';
 	},
 	formatPostData: ( form: FormData ): any => {
 		return Object.keys( form ).reduce( ( accumulator: PostData, currentValue: string ) => {

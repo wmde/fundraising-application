@@ -1,12 +1,8 @@
 import { Validity } from '@/view_models/Validity';
 
-export interface AddressValidity {
-    [key: string]: boolean
-}
-
 export interface InputField {
     name: string,
-    value: string | null,
+    value: string,
     pattern: string,
     optionalField: boolean,
     validity: Validity,
