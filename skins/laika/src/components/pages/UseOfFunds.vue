@@ -1,10 +1,7 @@
 <template>
 	<div class="column is-full" id="use-of-funds">
-		<div>
-			<h1 class="title is-size-1">{{ $t('use_of_funds_header') }}</h1>
-			<p>{{ $t('use_of_funds_description') }}</p>
-		</div>
-
+		<h1 class="title has-margin-bottom-18">{{ $t('use_of_funds_header') }}</h1>
+		<p>{{ $t('use_of_funds_description') }}</p>
 		<organization-section v-for="(org, index) in content.organizations"
 							:title="org.title"
 							:overallAmount="org.overallAmount"

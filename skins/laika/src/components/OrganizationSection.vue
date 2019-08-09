@@ -1,11 +1,10 @@
 <template>
 	<div class="organization-section">
-		<h2 class="title is-size-2">
+		<h2 class="title has-margin-top-18 as-margin-bottom-18">
 			{{ title }}<br>
 			{{ overallAmount.replace(/ /g, '.') }} €
 		</h2>
-		<div>{{ description }}</div>
-
+		<p>{{ description }}</p>
 		<fund-section v-for="(fund, index) in funds"
 					:title="fund.title"
 					:amount="fund.amount"
@@ -13,7 +12,6 @@
 					:width="calculateProgressBarWidth( fund.amount )"
 					:key="index">
 		</fund-section>
-
 	</div>
 </template>
 

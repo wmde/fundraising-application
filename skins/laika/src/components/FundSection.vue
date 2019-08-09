@@ -1,11 +1,14 @@
 <template>
-	<div class="fund-section">
-		<h3 class="title is-size-3">{{ title }}</h3>
-		<div class="inline border-bottom clickable" @click="isOpen = !isOpen">
-			<div class="money-progress" :style="{ width: width }">{{ amount.replace(/ /g, '.') }} €</div>
-			<i v-bind:class="[ isOpen ? 'icon-keyboard_arrow_up' : 'icon-keyboard_arrow_down' ]"></i>
+	<div class="fund-section" @click="isOpen = !isOpen" :class="[ isOpen ? 'accordion' : '' ]">
+		<div :class="[ isOpen ? 'has-text-primary has-text-weight-bold' : 'accordion-heading', 'icon-inline' ]">
+			<div class="fund-text-inline">
+				<span>{{ title }}</span>
+				<div v-if="!isOpen" class="money-progress">{{ amount.replace(/ /g, '.') }} €</div>
+			</div>
+			<b-icon v-if="isOpen" icon="arrow-up" class="icon-size"></b-icon>
+			<b-icon v-else icon="arrow-down" class="icon-size"></b-icon>
 		</div>
-		<div class="is-bordered" v-show="isOpen">{{ description }}</div>
+	<div class="accordion-content" v-show="isOpen">{{ description }}</div>
 	</div>
 </template>
 
@@ -27,3 +30,49 @@ export default Vue.extend( {
 	},
 } );
 </script>
+<style lang="scss">
+@import "../scss/custom";
+
+.accordion {
+	padding: 18px;
+	box-sizing: content-box;
+	border: 1px solid $fun-color-gray-light-transparency;
+	&-heading {
+		padding: 18px;
+		padding-bottom: 0px;
+		border-bottom: 2px solid $fun-color-gray-light-transparency;
+		cursor: pointer;
+	}
+	&-content {
+		padding: 36px;
+	}
+}
+.icon-inline {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+	align-items: center;
+}
+.fund-text-inline {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	align-content: stretch;
+	cursor: pointer;
+}
+.money-progress {
+	border: 1px solid $fun-color-primary;
+	background: $fun-color-primary;
+	width: 240px;
+	height: 35px;
+	white-space: nowrap;
+	color: $fun-color-bright;
+	padding-left: 18px;
+}
+.has-text-primary {
+	padding: 18px;
+	padding-bottom: 0;
+}
+</style>
