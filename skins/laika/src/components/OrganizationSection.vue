@@ -9,7 +9,9 @@
 					:title="fund.title"
 					:amount="fund.amount"
 					:description="fund.description"
-					:width="calculateProgressBarWidth( fund.amount )"
+					v-on:fund-opened="setOpenFundId( $event )"
+					:fund-id="index.toString()"
+					:visible-fund-id="openFundId"
 					:key="index">
 		</fund-section>
 	</div>
@@ -28,14 +30,16 @@ export default Vue.extend( {
 		title: String,
 		description: String,
 		overallAmount: String,
-		funds: {}
+		funds: {},
+	},
+	data: function () {
+		return {
+			openFundId: '',
+		};
 	},
 	methods: {
-		calculateProgressBarWidth: function ( amount: string ) : string {
-			let castedOverAllAmount: number = Number( this.overallAmount.replace( / /g, '' ) );
-			let castedAmountNumber: number = Number( amount.replace( / /g, '' ) );
-			let barWidthPercentage: number = castedAmountNumber / castedOverAllAmount * 100;
-			return barWidthPercentage.toString() + '%';
+		setOpenFundId: function ( id: string ): void {
+			this.$data.openFundId = id;
 		},
 	},
 } );

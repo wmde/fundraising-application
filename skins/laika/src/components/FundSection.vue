@@ -1,5 +1,5 @@
 <template>
-	<div class="fund-section" @click="isOpen = !isOpen" :class="[ isOpen ? 'accordion' : '' ]">
+	<div class="fund-section" @click="toggle()" :class="[ isOpen ? 'accordion' : '' ]">
 		<div :class="[ isOpen ? 'has-text-primary has-text-weight-bold' : 'accordion-heading', 'icon-inline' ]">
 			<div class="fund-text-inline">
 				<span>{{ title }}</span>
@@ -21,12 +21,24 @@ export default Vue.extend( {
 		title: String,
 		amount: String,
 		description: String,
-		width: String,
+		visibleFundId: String,
+		fundId: String,
 	},
-	data: function () {
-		return {
-			isOpen: false,
-		};
+	computed: {
+		isOpen: {
+			get: function (): boolean {
+				return this.$props.fundId === this.$props.visibleFundId;
+			},
+		},
+	},
+	methods: {
+		toggle: function () {
+			if ( !this.isOpen ) {
+				this.$emit( 'fund-opened', this.$props.fundId );
+			} else {
+				this.$emit( 'fund-opened' ); // close the current fund section when the arrow up icon is clicked
+			}
+		},
 	},
 } );
 </script>
