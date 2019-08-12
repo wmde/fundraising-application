@@ -5,6 +5,9 @@
 		<div v-bind:class="[{ 'is-invalid': bankDataIsInvalid }]">
 			<label for="iban" class="subtitle has-margin-top-18">{{ $t( labels.iban ) }}</label>
 			<b-input class="is-medium"
+					data-content-name="Bank Data Type"
+					:data-track-content="getTrackingCode !== ''"
+					:data-content-piece="getTrackingCode"
 					type="text"
 					id="iban"
 					v-model="accountId"
@@ -53,6 +56,14 @@ export default Vue.extend( {
 		validateLegacyBankDataUrl: String,
 	},
 	computed: {
+		getTrackingCode(): string {
+			if ( this.looksLikeIban() ) {
+				return 'IBAN';
+			} else if (this.looksLikeBankAccountNumber()) {
+				return 'Classic';
+			}
+			return '';
+		},
 		isBankIdDisabled(): boolean {
 			return this.looksLikeGermanIban();
 		},
