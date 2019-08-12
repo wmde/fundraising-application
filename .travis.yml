@@ -1,27 +1,13 @@
-dist: trusty
-
+language: bash
 services:
   - docker
-
-language: php
-
-matrix:
-  fast_finish: true
-  include:
-  - php: 7.2
-    env: TYPE=coverage
-  # More PHP instances with different environment variables may be added here
-  # This may be useful if a additional PHP versions or DBMS (SQLite, ...) should be tested by Travis
-
-before_install:
-  - docker build -t wmde/fundraising-frontend-phpstan build/phpstan
 
 install:
   - travis_retry make install-php
   - make install-js
 
 before_script:
-  - if [ "$MCP_ACCESS_KEY" != "" ] && [ "$MCP_PROJECT_ID" != "" ]; then bash build/travis/createLocalTestConfig.sh > app/config/config.test.local.json; fi
+  - bash build/travis/createLocalTestConfig.sh
   - echo "APP_ENV=dev" > .env
 
 script:
@@ -29,7 +15,7 @@ script:
   - make clear
   - make ci-with-coverage
   - make install-php COMPOSER_FLAGS="--no-dev -q" # Remove dev dependencies to make sure PHPStan creates errors if prod code depends on dev classes
-  - docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse --level 1 --no-progress cli/ src/ # Can't use "make stan" because stan was removed
+  - docker run -v $PWD:/app --rm  wikimediade/fundraising-frontend:stan analyse --level 1 --no-progress cli/ src/ # Can't use "make stan" it contains the test directory
 
 after_success:
   - if [ "$TYPE" == "coverage" ]; then bash build/travis/uploadCoverage.sh; fi
