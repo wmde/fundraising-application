@@ -1,10 +1,10 @@
 <template>
 	<div class="organization-section">
-		<h2 class="title has-margin-top-36 has-margin-bottom-18">
+		<h3 class="title is-3 has-margin-top-36 has-margin-bottom-18 has-margin-left-18">
 			{{ title }}<br>
 			{{ overallAmount.replace(/ /g, '.') }} €
-		</h2>
-		<p>{{ description }}</p>
+		</h3>
+		<p class="has-margin-left-18">{{ description }}</p>
 		<fund-section v-for="(fund, index) in funds"
 					:title="fund.title"
 					:amount="fund.amount"

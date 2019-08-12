@@ -1,7 +1,7 @@
 <template>
 	<div class="columns is-full has-padding-18 has-background-bright" id="use-of-funds">
 		<div class="column is-two-thirds">
-			<h1 class="title has-margin-bottom-18">{{ $t('use_of_funds_header') }}</h1>
+			<h1 class="title is-1 has-margin-bottom-18">{{ $t('use_of_funds_header') }}</h1>
 			<p>{{ $t('use_of_funds_description') }}</p>
 			<organization-section v-for="(org, index) in content.organizations"
 								:title="org.title"
