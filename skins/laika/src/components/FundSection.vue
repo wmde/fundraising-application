@@ -1,9 +1,9 @@
 <template>
-	<div class="fund-section" @click="toggle()" :class="[ isOpen ? 'accordion' : '' ]">
-		<div :class="[ isOpen ? 'has-text-primary has-text-weight-bold' : 'accordion-heading', 'icon-inline' ]">
+	<div class="fund-section" @click="toggle()">
+		<div :class="[ 'accordion-heading', 'icon-inline' ]">
 			<div class="fund-text-inline">
 				<span>{{ title }}</span>
-				<div v-if="!isOpen" class="money-progress">{{ amount.replace(/ /g, '.') }} €</div>
+				<div class="money-progress" :style="{ width: width }">{{ amount.replace(/ /g, '.') }} €</div>
 			</div>
 			<b-icon v-if="isOpen" icon="arrow-up" class="icon-size"></b-icon>
 			<b-icon v-else icon="arrow-down" class="icon-size"></b-icon>
@@ -23,6 +23,7 @@ export default Vue.extend( {
 		description: String,
 		visibleFundId: String,
 		fundId: String,
+		width: String,
 	},
 	computed: {
 		isOpen: {
@@ -46,9 +47,6 @@ export default Vue.extend( {
 @import "../scss/custom";
 
 .accordion {
-	padding: 18px;
-	box-sizing: content-box;
-	border: 1px solid $fun-color-gray-light-transparency;
 	&-heading {
 		padding: 18px;
 		padding-bottom: 0px;
@@ -57,6 +55,7 @@ export default Vue.extend( {
 	}
 	&-content {
 		padding: 36px;
+		border: 1px solid $fun-color-gray-light-transparency;
 	}
 }
 .icon-inline {
@@ -75,13 +74,11 @@ export default Vue.extend( {
 	cursor: pointer;
 }
 .money-progress {
-	border: 1px solid $fun-color-primary;
-	background: $fun-color-primary;
-	width: 240px;
-	height: 35px;
+	border: 1px solid $fun-color-primary-lighter;
+	background: $fun-color-primary-lighter;
 	white-space: nowrap;
-	color: $fun-color-bright;
-	padding-left: 18px;
+	color: $fun-color-dark;
+	padding: 9px;
 }
 .has-text-primary {
 	padding: 18px;
