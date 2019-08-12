@@ -7,7 +7,8 @@ import App from '@/components/App.vue';
 import Component from '@/components/pages/UseOfFunds.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 
-const PAGE_IDENTIFIER = 'use-of-funds';
+const PAGE_IDENTIFIER = 'use-of-funds',
+	IS_FULLWIDTH_PAGE = true;
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
@@ -27,6 +28,7 @@ new Vue( {
 		props: {
 			assetsPath: pageData.assetsPath,
 			pageIdentifier: PAGE_IDENTIFIER,
+			isFullWidth: IS_FULLWIDTH_PAGE,
 		},
 	},
 	[
@@ -34,9 +36,6 @@ new Vue( {
 			props: {
 				content: pageData.applicationVars,
 			},
-		} ),
-		h( Sidebar, {
-			slot: 'sidebar',
 		} ),
 	] ),
 } ).$mount( '#app' );
