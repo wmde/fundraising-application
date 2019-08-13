@@ -33,6 +33,7 @@ module.exports = {
 		privacy_protection: 'src/pages/privacy_protection.ts',
 		static_page: 'src/pages/static_page.ts',
 		system_message: 'src/pages/system_message.ts',
+		supporters: 'src/pages/supporters.ts',
 		update_address: 'src/pages/update_address.ts',
 	},
 	devServer: {

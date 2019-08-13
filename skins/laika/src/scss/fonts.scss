@@ -82,11 +82,13 @@ $icon-down-open: '\e802'; /* Arrow Down*/
 	content: $icon-down-open;
 	font-size: 14px;
 	color: $fun-color-dark;
+	top: 0;
 }
 
 .mdi-arrow-up:before {
 	content: $icon-up-open;
 	font-size: 14px;
 	color: $fun-color-dark;
+	top: 0;
 }
 

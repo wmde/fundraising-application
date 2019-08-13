@@ -4,15 +4,20 @@ import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
 
-import Component from '@/components/pages/UseOfFunds.vue';
+import Component from '@/components/pages/Supporters.vue';
+import Sidebar from '@/components/layout/Sidebar.vue';
+import { supportersFromObject } from '@/view_models/supporters';
 
-const PAGE_IDENTIFIER = 'use-of-funds',
-	IS_FULLWIDTH_PAGE = true;
+const PAGE_IDENTIFIER = 'supporters';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
-const pageData = new PageDataInitializer<any>( '#app' );
+interface ErrorModel {
+	message: string
+}
+
+const pageData = new PageDataInitializer<ErrorModel>( '#app' );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
@@ -27,14 +32,16 @@ new Vue( {
 		props: {
 			assetsPath: pageData.assetsPath,
 			pageIdentifier: PAGE_IDENTIFIER,
-			isFullWidth: IS_FULLWIDTH_PAGE,
 		},
 	},
 	[
 		h( Component, {
 			props: {
-				content: pageData.applicationVars,
+				supporters: supportersFromObject( pageData.applicationVars ),
 			},
+		} ),
+		h( Sidebar, {
+			slot: 'sidebar',
 		} ),
 	] ),
 } ).$mount( '#app' );

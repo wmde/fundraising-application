@@ -1644,16 +1644,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.2.2",
+            "version": "v4.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "1bd73cc04c3843ad8d6b0bfc0956026a151fc420"
+                "reference": "e612609022e935f3d0337c1295176505b41188c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1bd73cc04c3843ad8d6b0bfc0956026a151fc420",
-                "reference": "1bd73cc04c3843ad8d6b0bfc0956026a151fc420",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/e612609022e935f3d0337c1295176505b41188c8",
+                "reference": "e612609022e935f3d0337c1295176505b41188c8",
                 "shasum": ""
             },
             "require": {
@@ -1661,7 +1661,7 @@
                 "php": ">=7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.5 || ^7.0"
+                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0"
             },
             "bin": [
                 "bin/php-parse"
@@ -1691,7 +1691,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2019-05-25T20:07:01+00:00"
+            "time": "2019-08-12T20:17:41+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -4408,12 +4408,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "46862fe8e8419b76e56f42ffaf7a0b9a623506cf"
+                "reference": "9fb31e723e7eaf1309fa0be75d7e9df958119e46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/46862fe8e8419b76e56f42ffaf7a0b9a623506cf",
-                "reference": "46862fe8e8419b76e56f42ffaf7a0b9a623506cf",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/9fb31e723e7eaf1309fa0be75d7e9df958119e46",
+                "reference": "9fb31e723e7eaf1309fa0be75d7e9df958119e46",
                 "shasum": ""
             },
             "require": {
@@ -4460,7 +4460,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2019-08-05T09:05:16+00:00"
+            "time": "2019-08-13T16:41:57+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -5276,7 +5276,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette Finder: find files and directories with an intuitive API.",
+            "description": "🔍 Nette Finder: find files and directories with an intuitive API.",
             "homepage": "https://nette.org",
             "keywords": [
                 "filesystem",
@@ -5336,7 +5336,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette NEON: encodes and decodes NEON file format.",
+            "description": "🍸 Nette NEON: encodes and decodes NEON file format.",
             "homepage": "http://ne-on.org",
             "keywords": [
                 "export",
@@ -8121,12 +8121,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "25631bea62392a4220a4debad29c35cd3b764aed"
+                "reference": "9cb84a73b11517513c817a9b995f283d1678a4e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/25631bea62392a4220a4debad29c35cd3b764aed",
-                "reference": "25631bea62392a4220a4debad29c35cd3b764aed",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/9cb84a73b11517513c817a9b995f283d1678a4e7",
+                "reference": "9cb84a73b11517513c817a9b995f283d1678a4e7",
                 "shasum": ""
             },
             "require-dev": {
@@ -8159,7 +8159,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-08-08T16:06:10+00:00"
+            "time": "2019-08-14T07:34:03+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

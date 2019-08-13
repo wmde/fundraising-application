@@ -1,5 +1,5 @@
 <template>
-	<div class="fund-section" @click="toggle()">
+	<div @click="toggle()">
 		<div :class="[ 'accordion-heading', 'icon-inline' ]">
 			<div class="fund-text-inline">
 				<span>{{ title }}</span>
@@ -49,7 +49,7 @@ export default Vue.extend( {
 .accordion {
 	&-heading {
 		padding: 18px;
-		padding-bottom: 0px;
+		padding-bottom: 0;
 		border-bottom: 2px solid $fun-color-gray-light-transparency;
 		cursor: pointer;
 	}
@@ -58,12 +58,7 @@ export default Vue.extend( {
 		border: 1px solid $fun-color-gray-light-transparency;
 	}
 }
-.icon-inline {
-	display: flex;
-	justify-content: space-between;
-	flex-wrap: nowrap;
-	align-items: center;
-}
+
 .fund-text-inline {
 	display: flex;
 	flex-direction: column;
@@ -80,9 +75,5 @@ export default Vue.extend( {
 	white-space: nowrap;
 	color: $fun-color-dark;
 	padding: 9px;
-}
-.has-text-primary {
-	padding: 18px;
-	padding-bottom: 0;
 }
 </style>
