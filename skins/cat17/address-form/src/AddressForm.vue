@@ -3,7 +3,7 @@
         <h2>{{ messages.address_form_title }}</h2>
         <h5>{{ messages.address_form_subtitle }}</h5>
         <div class="row">
-            <form ref="form" :action="updateAddressURL + addressToken" method="post">
+            <form name="cat17-address-update" ref="form" :action="updateAddressURL + addressToken" method="post">
                 <div class="col-xs-12 col-md-9">
                     <div class="form-shadow-wrap">
                         <receipt-opt-out v-model="receiptOptOut" :messages="messages" />
