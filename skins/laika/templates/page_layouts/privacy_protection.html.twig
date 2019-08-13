@@ -10,16 +10,17 @@
 		data-page-content="{$ content | e('html_attr') | raw $}"
 		data-application-vars="{$ _context|json_encode|e('html_attr') $}" 
 		data-application-messages="{$ translations()|e('html_attr') $}" 
-		data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
+		data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}"
+		data-tracking-url="{$ piwik.baseUrl | e('html_attr') $}">
 	</div>
 	<noscript>
 		<h2>{$ title $}</h2>
-		{$ content $}
+		{$ content | raw $}
 	</noscript>
 </div>
 {% endblock %}
 
 {% block scripts %}
 	{$ parent() $}
-	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/js/static_page.js"></script>
+	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/js/privacy_protection.js"></script>
 {% endblock %}
