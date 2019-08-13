@@ -4,7 +4,7 @@ import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
 
-import Component from '@/components/pages/Placeholder.vue';
+import Component from '@/components/pages/SystemMessage.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 
 const PAGE_IDENTIFIER = 'system-message';
@@ -34,7 +34,11 @@ new Vue( {
 		},
 	},
 	[
-		h( Component, {} ),
+		h( Component, {
+			props: {
+				errorData: pageData.applicationVars,
+			},
+		} ),
 		h( Sidebar, {
 			slot: 'sidebar',
 		} ),

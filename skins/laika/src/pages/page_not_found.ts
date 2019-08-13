@@ -4,7 +4,7 @@ import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
 
-import Component from '@/components/pages/Placeholder.vue';
+import Component from '@/components/pages/PageNotFound.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 
 const PAGE_IDENTIFIER = 'page-not-found';
