@@ -331,6 +331,7 @@ class Routes {
 		$app->get(
 			'use-of-funds',
 			function () use ( $ffFactory ) {
+				$ffFactory->getTranslationCollector()->addTranslationFile($ffFactory->getI18nDirectory() . '/messages/useOfFundsMessages.json' );
 				return $ffFactory->getLayoutTemplate( 'Funds_Usage.html.twig' )->render(
 					[
 						'use_of_funds_content' => $ffFactory->getApplicationOfFundsContent(),
