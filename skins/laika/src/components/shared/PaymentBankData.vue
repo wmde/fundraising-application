@@ -5,6 +5,9 @@
 		<div v-bind:class="[{ 'is-invalid': bankDataIsInvalid }]">
 			<label for="iban" class="subtitle has-margin-top-18">{{ $t( labels.iban ) }}</label>
 			<b-input class="is-medium"
+					data-content-name="Bank Data Type"
+					:data-track-content="getTrackingCode !== ''"
+					:data-content-piece="getTrackingCode"
 					type="text"
 					id="iban"
 					v-model="accountId"
@@ -53,8 +56,16 @@ export default Vue.extend( {
 		validateLegacyBankDataUrl: String,
 	},
 	computed: {
+		getTrackingCode(): string {
+			if ( this.looksLikeIban() ) {
+				return 'IBAN';
+			} else if ( this.looksLikeBankAccountNumber() ) {
+				return 'Classic';
+			}
+			return '';
+		},
 		isBankIdDisabled(): boolean {
-			return this.looksLikeGermanIban();
+			return this.looksLikeIban();
 		},
 		bankIdentifier: {
 			get: function (): string {
@@ -68,21 +79,13 @@ export default Vue.extend( {
 			},
 		},
 		labels() {
-			if ( this.looksLikeGermanIban() ) {
-				return {
-					iban: 'donation_form_payment_bankdata_account_iban_label',
-					bic: 'donation_form_payment_bankdata_bank_bic_label',
-					bicPlaceholder: 'donation_form_payment_bankdata_bank_bic_german_placeholder',
-				};
-			}
 			if ( this.looksLikeIban() ) {
 				return {
 					iban: 'donation_form_payment_bankdata_account_iban_label',
 					bic: 'donation_form_payment_bankdata_bank_bic_label',
 					bicPlaceholder: 'donation_form_payment_bankdata_bank_bic_placeholder',
 				};
-			}
-			if ( this.looksLikeBankAccountNumber() ) {
+			} else if ( this.looksLikeBankAccountNumber() ) {
 				return {
 					iban: 'donation_form_payment_bankdata_account_legacy_label',
 					bic: 'donation_form_payment_bankdata_bank_legacy_label',
@@ -92,7 +95,7 @@ export default Vue.extend( {
 			return {
 				iban: 'donation_form_payment_bankdata_account_default_label',
 				bic: 'donation_form_payment_bankdata_bank_default_label',
-				bicPlaceholder: 'donation_form_payment_bankdata_bank_bic_placeholder',
+				bicPlaceholder: '',
 			};
 		},
 		...mapGetters( NS_BANKDATA, [
@@ -106,7 +109,7 @@ export default Vue.extend( {
 				this.$store.dispatch( ( action( NS_BANKDATA, markBankDataAsInvalid ) ) );
 				return;
 			}
-			if ( this.isAccountIdEmpty() || ( !this.looksLikeGermanIban() && this.isBankIdEmpty() ) ) {
+			if ( this.isAccountIdEmpty() || ( !this.looksLikeIban() && this.isBankIdEmpty() ) ) {
 				this.$store.dispatch( action( NS_BANKDATA, markBankDataAsIncomplete ) );
 				return;
 			}

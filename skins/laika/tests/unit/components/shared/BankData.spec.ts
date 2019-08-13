@@ -96,7 +96,7 @@ describe( 'BankData', () => {
 
 		wrapper.setData( { accountId: 'AT12345605171238489890' } );
 		iban.trigger( 'blur' );
-		expect( bic.element.getAttribute( 'disabled' ) ).toBeNull();
+		expect( bic.element.getAttribute( 'disabled' ) ).toMatch( 'disabled' );
 
 		wrapper.setData( { accountId: '34560517' } );
 		iban.trigger( 'blur' );
@@ -123,29 +123,6 @@ describe( 'BankData', () => {
 		iban.trigger( 'blur' );
 
 		const expectedAction = action( NS_BANKDATA, markBankDataAsInvalid );
-		expect( store.dispatch ).toBeCalledWith( expectedAction );
-	} );
-
-	it( 'marks bank account data as incomplete if foreign IBAN without BIC is entered', () => {
-		const wrapper = mount( BankData, {
-			localVue,
-			propsData: {
-				validateBankDataUrl: '/check-iban',
-				validateLegacyBankDataUrl: '/generate-iban',
-			},
-			store: createStore(),
-			mocks: {
-				$t: () => {},
-			},
-		} );
-		const store = wrapper.vm.$store;
-		store.dispatch = jest.fn();
-
-		const iban = wrapper.find( '#iban' );
-		wrapper.setData( { accountId: 'AT12345605171238489890' } );
-		iban.trigger( 'blur' );
-
-		const expectedAction = action( NS_BANKDATA, markBankDataAsIncomplete );
 		expect( store.dispatch ).toBeCalledWith( expectedAction );
 	} );
 
