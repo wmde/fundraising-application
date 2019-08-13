@@ -72,6 +72,7 @@ export default Vue.extend( {
 	align-items: stretch;
 	align-content: stretch;
 	cursor: pointer;
+	width: 100%;
 }
 .money-progress {
 	border: 1px solid $fun-color-primary-lighter;
