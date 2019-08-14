@@ -698,6 +698,13 @@ class FunFunFactory implements ServiceProviderInterface {
 		) )->readAndValidateJson();
 	}
 
+	public function getSupportersList(): string {
+		return ( new JsonStringReader(
+			$this->getI18nDirectory() . '/data/supporters.json',
+			new SimpleFileFetcher()
+		) )->readAndValidateJson();
+	}
+
 	public function setSkinTwigEnvironment( Twig_Environment $twig ): void {
 		$this->pimple['skin_twig_environment'] = $twig;
 	}
