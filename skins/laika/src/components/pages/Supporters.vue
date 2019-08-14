@@ -6,7 +6,8 @@
 				v-on:supporter-closed="setSupporterId( null )"
 				:content="supporter"
 				:visible-supporter-id="visibleSupporterId"
-				:supporter-id="index"></supporter>
+				:supporter-id="index">
+		</supporter>
 	</div>
 </template>
 

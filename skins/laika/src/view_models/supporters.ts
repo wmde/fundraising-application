@@ -3,9 +3,9 @@ export interface SupportersData {
 }
 
 export interface Supporter {
-	name : string,
-	amount : string,
-	comment : string,
+	name: string,
+	amount: string,
+	comment: string,
 }
 
 export function supportersFromObject( obj: any ): Supporter[] {
