@@ -3,6 +3,10 @@
 @import "variables";
 @import "fonts";
 
+.is-nowrap-whitespace {
+	white-space: nowrap !important;
+}
+
 .is-form-input {
 	.has-border-rounded {
 		background-color: $fun-color-bright;

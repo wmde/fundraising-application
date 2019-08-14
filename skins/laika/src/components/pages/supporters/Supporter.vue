@@ -2,9 +2,16 @@
 	<div class="accordion-item" v-bind:class="[ isOpen ? 'accordion' : '' ]">
 		<div @click="toggle()">
 			<div v-bind:class="[ isOpen ? 'has-text-primary has-text-weight-bold' : 'accordion-heading', 'icon-inline', 'accordion-title' ] ">
-				<span class="container">{{ content.name }}, {{ content.amount }}</span>
-				<b-icon v-if="isExpandable && isOpen" icon="arrow-up" class="icon-size"></b-icon>
-				<b-icon v-else-if="isExpandable && !isOpen" icon="arrow-down" class="icon-size"></b-icon>
+				<span class="container columns is-mobile">
+					<span class="column">{{ content.name }}</span>
+					<span class="column is-narrow">
+						<span class="is-nowrap-whitespace is-narrow has-padding-right-18">{{ content.amount }}</span>
+						<span class="icon-aligned">
+							<b-icon v-if="isExpandable && isOpen" icon="arrow-up" class="icon-size"></b-icon>
+							<b-icon v-else-if="isExpandable && !isOpen" icon="arrow-down" class="icon-size"></b-icon>
+						</span>
+					</span>
+				</span>
 			</div>
 		</div>
 		<div v-show="isOpen" v-html="content.comment" class="accordion-content"></div>
@@ -50,3 +57,12 @@ export default Vue.extend( {
 	},
 } );
 </script>
+
+<style lang="scss">
+	@import "../../../scss/custom";
+
+	.icon-aligned {
+		width:20px;
+		display: inline-block;
+	}
+</style>
