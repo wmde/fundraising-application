@@ -47,6 +47,7 @@ export default {
 				{ id: 'imprint', url: '/page/Impressum' },
 				{ id: 'data_protection', url: '/page/Datenschutz' },
 				{ id: 'supporters_list', url: '/page/Unterst%C3%BCtzerliste' },
+				{ id: 'donor_comments', url: '/list-comments.html' },
 			],
 		};
 	},

@@ -6121,16 +6121,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.11.12",
+            "version": "0.11.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "56b3eb2a371b60537fd20794e24af9e7e8ed4e30"
+                "reference": "493d12d4a98ba0d2a0b8e576d80e65c8e8068d08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/56b3eb2a371b60537fd20794e24af9e7e8ed4e30",
-                "reference": "56b3eb2a371b60537fd20794e24af9e7e8ed4e30",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/493d12d4a98ba0d2a0b8e576d80e65c8e8068d08",
+                "reference": "493d12d4a98ba0d2a0b8e576d80e65c8e8068d08",
                 "shasum": ""
             },
             "require": {
@@ -6141,7 +6141,7 @@
                 "nette/robot-loader": "^3.0.1",
                 "nette/schema": "^1.0",
                 "nette/utils": "^2.4.5 || ^3.0",
-                "nikic/php-parser": "^4.0.2",
+                "nikic/php-parser": "^4.2.3",
                 "php": "~7.1",
                 "phpstan/phpdoc-parser": "^0.3.5",
                 "symfony/console": "~3.2 || ~4.0",
@@ -6151,7 +6151,7 @@
                 "symfony/console": "3.4.16 || 4.1.5"
             },
             "require-dev": {
-                "brianium/paratest": "^2.0",
+                "brianium/paratest": "^2.0 || ^3.0",
                 "consistence/coding-standard": "^3.5",
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
                 "ext-intl": "*",
@@ -6166,7 +6166,7 @@
                 "phpstan/phpstan-php-parser": "^0.11",
                 "phpstan/phpstan-phpunit": "^0.11",
                 "phpstan/phpstan-strict-rules": "^0.11",
-                "phpunit/phpunit": "^7.0",
+                "phpunit/phpunit": "^7.5.14 || ^8.0",
                 "slevomat/coding-standard": "^4.7.2",
                 "squizlabs/php_codesniffer": "^3.3.2"
             },
@@ -6192,7 +6192,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2019-07-08T06:55:18+00:00"
+            "time": "2019-08-13T13:05:56+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -8121,12 +8121,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "9cb84a73b11517513c817a9b995f283d1678a4e7"
+                "reference": "f32feee8b27a386960e66ae7b077aedc525a6a9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/9cb84a73b11517513c817a9b995f283d1678a4e7",
-                "reference": "9cb84a73b11517513c817a9b995f283d1678a4e7",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f32feee8b27a386960e66ae7b077aedc525a6a9d",
+                "reference": "f32feee8b27a386960e66ae7b077aedc525a6a9d",
                 "shasum": ""
             },
             "require-dev": {
@@ -8159,7 +8159,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-08-14T07:34:03+00:00"
+            "time": "2019-08-15T16:23:41+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
