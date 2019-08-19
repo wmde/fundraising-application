@@ -55,6 +55,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 			'spender' => 'First name',
 			'kommentar' => 'First comment',
 			'datum' => 'Sun, 01 Jan 1984 00:00:00 +0100',
+			'lokalisiertes_datum' => '01.01.1984 um 00:00 Uhr',
 			'id' => 1,
 		];
 	}
@@ -65,6 +66,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 			'spender' => 'Second name',
 			'kommentar' => 'Second comment',
 			'datum' => 'Thu, 02 Feb 1984 00:00:00 +0100',
+			'lokalisiertes_datum' => '02.02.1984 um 00:00 Uhr',
 			'id' => 2,
 		];
 	}
