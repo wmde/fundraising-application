@@ -3,7 +3,7 @@
 		<payment-interval
 				:payment-intervals="paymentIntervals"
 				:current-interval="interval"
-				:title="$t('donation_form_payment_interval_title')"
+				:title="$t('membership_form_payment_interval_title')"
 				v-on:interval-selected="sendIntervalToStore"
 		></payment-interval>
 		<amount-selection
