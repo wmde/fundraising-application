@@ -6,7 +6,7 @@
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<email v-if="addressTypeIsNotAnon" :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
 		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
-		<newsletter-opt-in></newsletter-opt-in>
+		<newsletter-opt-in v-if="addressTypeIsNotAnon"></newsletter-opt-in>
 	</div>
 </template>
 
