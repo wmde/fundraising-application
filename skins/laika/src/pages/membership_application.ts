@@ -68,7 +68,8 @@ function initializePage(): void {
 	} ).$mount( '#app' );
 }
 
-if ( pageData.applicationVars.initialFormValues !== undefined ) {
+// The PHP serialization sends the initial for data as empty array (instead of empty object) when donation was anonymous
+if ( pageData.applicationVars.initialFormValues !== undefined && !( ( pageData.applicationVars.initialFormValues as any ) instanceof Array ) ) {
 	const initializationCalls = [
 		store.dispatch( action( NS_MEMBERSHIP_ADDRESS, initializeAddress ), pageData.applicationVars.initialFormValues ),
 	];
