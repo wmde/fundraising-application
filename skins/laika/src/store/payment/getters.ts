@@ -20,6 +20,9 @@ export const getters: GetterTree<Payment, any> = {
 	isDirectDebitPayment: function ( state: Payment ): boolean {
 		return state.values.type === 'BEZ';
 	},
+	isBankTransferPayment: function ( state: Payment ): boolean {
+		return state.values.type === 'UEB';
+	},
 	isExternalPayment: ( state: Payment ): boolean => {
 		const externalPaymentTypes = [ 'PPL', 'MCP', 'SUB' ];
 		return externalPaymentTypes.indexOf( state.values.type ) > -1;
