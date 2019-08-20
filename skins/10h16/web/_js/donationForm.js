@@ -386,7 +386,7 @@ $( function () {
 
 	function handlePersonalDataSubmitForNonDirectDebit() {
 		if ( personalDataPageIsValid() ) {
-			$( '#donForm2' ).submit();
+			$( '#10h16-donation-personal-data' ).submit();
 		} else {
 			triggerValidityCheckForPersonalDataPage();
 			displayErrorBox();
@@ -410,7 +410,7 @@ $( function () {
 		var validity = store.getState().validity;
 		// we use validity directly here because SEPA really needs these values to be valid
 		if ( validity.paymentData && validity.address && validity.bankData && validity.sepaConfirmation ) {
-			$( '#donForm2' ).submit();
+			$( '#10h16-donation-personal-data' ).submit();
 		} else {
 			triggerValidityCheckForSepaPage();
 			displayErrorBox();
@@ -418,7 +418,7 @@ $( function () {
 	} );
 
 
-	$( '#donForm1 .amount-input' ).keypress( function ( evt ) {
+	$( '#10h16-donation-payment .amount-input' ).keypress( function ( evt ) {
 		if( evt.which === 13 ) {
 			$( '#continueFormSubmit1' ).click();
 			evt.preventDefault();

@@ -200,6 +200,7 @@ describe('AddressForm.vue', () => {
 		});
 		let title = wrapper.find('#title');
 		title.setValue('Prof. Dr.');
+		title.trigger('blur');
 		let firstName = wrapper.find('#first-name');
 		firstName.setValue('Testina');
 		let lastName = wrapper.find('#last-name');

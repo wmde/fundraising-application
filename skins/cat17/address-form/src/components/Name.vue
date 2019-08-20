@@ -15,10 +15,11 @@
 			<label for="salutation">{{ messages.salutation_label }}</label>
 			<select class="salutation col-xs-12 col-md-6"
 					id="salutation"
-					v-model="formData.salutation.value"
+					v-model="salutation"
 					name="salutation"
 					data-jcf='{"wrapNative": false,  "wrapNativeOnMobile": true  }'
-					@blur="validateInput(formData, 'salutation')">
+					@change="updateJcfDropdown('salutation')"
+					@blur="updateJcfDropdown('salutation')">
 				<option hidden class="hideme" value="">{{ messages.salutation_label }}</option>
 				<option value="Herr">{{ messages.salutation_option_mr }}</option>
 				<option value="Frau">{{ messages.salutation_option_mrs }}</option>
@@ -28,10 +29,11 @@
 			<label for="title">{{ messages.academic_title_label }}</label>
 			<select class="personal-title col-xs-12 col-md-6"
 					id="title"
-					v-model="formData.title.value"
+					v-model="title"
 					name="title"
 					data-jcf='{"wrapNative": false, "wrapNativeOnMobile": true}'
-					@blur="validateInput(formData, 'title')">
+					@change="updateJcfDropdown('salutation')"
+					@blur="updateJcfDropdown('title')">
 				<option value="">{{ messages.title_option_none }}</option>
 				<option value="Dr.">Dr.</option>
 				<option value="Prof.">Prof.</option>
@@ -67,6 +69,28 @@
 	import Vue from 'vue';
 	export default Vue.extend( {
 		name: 'name',
-		props: [ 'showError', 'formData', 'validateInput', 'isCompany', 'messages' ]
+		data: function () {
+			return {
+				salutation: '',
+				title: ''
+			}
+		},
+		props: [ 'showError', 'formData', 'validateInput', 'isCompany', 'messages' ],
+		methods: {
+			/**
+			 * Circumvent the early triggering of the "blur" event that leads to premature error messages
+			 * When the user selects a dropdown that's empty by default.
+			 *
+			 * @param fieldName
+			 */
+			updateJcfDropdown( fieldName: string) {
+				if ( this.$data[ fieldName ] === '' && this.$props.formData[ fieldName ].value === '' ) {
+					return;
+				}
+
+				this.$props.formData[ fieldName ].value = this.$data[ fieldName ];
+				this.$props.validateInput( this.$props.formData, fieldName );
+			}
+		}
 	} );
 </script>
