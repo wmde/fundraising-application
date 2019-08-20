@@ -53,6 +53,7 @@ function newMinimalStore( overrides: Object ): MembershipAddressState {
 				email: Validity.INCOMPLETE,
 				date: Validity.VALID,
 				addressType: Validity.VALID,
+				membershipType: Validity.VALID,
 			},
 		},
 		overrides
@@ -111,6 +112,29 @@ describe( 'MembershipAddress', () => {
 			expect( getters.requiredFieldsAreValid(
 				newMinimalStore( {} ),
 				{ invalidFields },
+				null,
+				null
+			) ).toBe( false );
+		} );
+	} );
+
+	describe( 'Getters/membershipTypeIsValid', () => {
+
+		it( 'returns true when validity is valid (default)', () => {
+			expect( getters.membershipTypeIsValid( newMinimalStore( {} ), null, null, null ) ).toBe( true );
+		} );
+
+		it( 'returns false when validity is incomplete or invalid', () => {
+			expect( getters.membershipTypeIsValid(
+				newMinimalStore( { validity: { membershipType: Validity.INCOMPLETE } } ),
+				null,
+				null,
+				null
+			) ).toBe( false );
+
+			expect( getters.membershipTypeIsValid(
+				newMinimalStore( { validity: { membershipType: Validity.INVALID } } ),
+				null,
 				null,
 				null
 			) ).toBe( false );

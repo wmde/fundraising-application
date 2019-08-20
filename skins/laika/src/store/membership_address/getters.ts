@@ -12,6 +12,7 @@ export const getters: GetterTree<MembershipAddressState, any> = {
 	requiredFieldsAreValid: ( state: MembershipAddressState, getters: GetterTree<MembershipAddressState, any> ): boolean => {
 		return getters.invalidFields.length === 0;
 	},
+	membershipTypeIsValid: ( state: MembershipAddressState ): boolean => state.validity.membershipType === Validity.VALID,
 	addressType: ( state: MembershipAddressState ): AddressTypeModel => state.addressType,
 	membershipType: ( state: MembershipAddressState ): MembershipTypeModel => state.membershipType,
 	email: ( state: MembershipAddressState ): String => state.values.email,
