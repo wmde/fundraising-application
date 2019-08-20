@@ -1,6 +1,6 @@
 {%- set formattedAmount = membershipFee|number_format(2, ',', '.') ~ ' Euro' -%}
 {% if membershipType == 'sustaining' %}
-{$- greeting_generator.createInformalLastnameGreeting( salutation, lastName )|raw $}
+{$- greeting_generator.createInformalLastnameGreeting( salutation, lastName, title )|raw $}
 {% else %}
 {$- greeting_generator.createInformalGreeting( salutation, firstName, lastName )|raw $}
 {% endif %}
@@ -8,7 +8,7 @@
 {$ mail_content('membership_application_confirmation/intro', {
     'formatted_amount': formattedAmount,
     'donation_interval': paymentIntervalInMonths|trans({}, 'paymentIntervals'),
-	'membership_type': membershipType|trans({}, 'membershipTypes'),
+    'membership_type': membershipType|trans({}, 'membershipTypes'),
 }) $}
 
 {$ mail_content('membership_application_confirmation/contact', {
@@ -17,7 +17,7 @@
 
 
 {$ mail_content('membership_application_confirmation/outro', {
-		'day_of_the_week': "now"|date("N")|trans({}, 'daysOfTheWeek')
+        'day_of_the_week': "now"|date("N")|trans({}, 'daysOfTheWeek')
 }) $}
 
 {$ mail_content('name_head_of_organization') $}
