@@ -37,8 +37,13 @@ export const mutations: MutationTree<MembershipFee> = {
 		state.validity.type = state.values.type === '' ?
 			Validity.INVALID : Validity.VALID;
 	},
-	[ SET_FEE ]( state: MembershipFee, fee ) {
-		state.values.fee = fee;
+	[ SET_FEE ]( state: MembershipFee, fee: string ) {
+		if ( fee === '' ) {
+			state.values.fee = '';
+			return;
+		}
+		const euroAmount = fee.slice( 0, -2 );
+		state.values.fee = parseInt( euroAmount, 10 ) > 0 ? fee.slice( 0, -2 ) + '00' : '0';
 	},
 	[ SET_INTERVAL ]( state: MembershipFee, interval ) {
 		state.values.interval = interval;

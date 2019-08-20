@@ -84,14 +84,14 @@ class GreetingGeneratorTest extends TestCase {
 	public function testGivenNoLastnameForInformalLastnameGreeting_neutralGreetingIsGenerated(): void {
 		$this->assertSame(
 			'mail_introduction_generic',
-			$this->getGreetingGenerator()->createInformalLastnameGreeting( 'Herr', '' )
+			$this->getGreetingGenerator()->createInformalLastnameGreeting( 'Herr', '', '' )
 		);
 	}
 
 	public function testGivenNoSalutationForInformalLastnameGreeting_neutralGreetingIsGenerated(): void {
 		$this->assertSame(
 			'mail_introduction_generic',
-			$this->getGreetingGenerator()->createInformalLastnameGreeting( '', 'Testname' )
+			$this->getGreetingGenerator()->createInformalLastnameGreeting( '', 'Testname', '' )
 		);
 	}
 
@@ -101,7 +101,7 @@ class GreetingGeneratorTest extends TestCase {
 	public function testGivenValidDataForInformalLastnameGreeting_specificGreetingIsGenerated( string $salutation, string $expected ): void {
 		$this->assertSame(
 			$expected,
-			$this->getGreetingGenerator()->createInformalLastnameGreeting( $salutation, 'Mustermann' )
+			$this->getGreetingGenerator()->createInformalLastnameGreeting( $salutation, 'Mustermann', '' )
 		);
 	}
 

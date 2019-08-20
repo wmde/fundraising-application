@@ -53,6 +53,7 @@ function newMinimalStore( overrides: Object ): MembershipAddressState {
 				email: Validity.INCOMPLETE,
 				date: Validity.VALID,
 				addressType: Validity.VALID,
+				membershipType: Validity.VALID,
 			},
 		},
 		overrides
@@ -117,6 +118,29 @@ describe( 'MembershipAddress', () => {
 		} );
 	} );
 
+	describe( 'Getters/membershipTypeIsValid', () => {
+
+		it( 'returns true when validity is valid (default)', () => {
+			expect( getters.membershipTypeIsValid( newMinimalStore( {} ), null, null, null ) ).toBe( true );
+		} );
+
+		it( 'returns false when validity is incomplete or invalid', () => {
+			expect( getters.membershipTypeIsValid(
+				newMinimalStore( { validity: { membershipType: Validity.INCOMPLETE } } ),
+				null,
+				null,
+				null
+			) ).toBe( false );
+
+			expect( getters.membershipTypeIsValid(
+				newMinimalStore( { validity: { membershipType: Validity.INVALID } } ),
+				null,
+				null,
+				null
+			) ).toBe( false );
+		} );
+	} );
+
 	describe( 'Getters/addressType', () => {
 
 		it( 'returns address type from the store', () => {
@@ -128,6 +152,27 @@ describe( 'MembershipAddress', () => {
 				null,
 				null
 			) ).toBe( AddressTypeModel.COMPANY );
+		} );
+	} );
+
+	describe( 'Getters/isPerson', () => {
+
+		it( 'returns true for private persons', () => {
+			expect( getters.isPerson(
+				newMinimalStore( {} ),
+				null,
+				null,
+				null
+			) ).toBe( true );
+		} );
+
+		it( 'returns false for private persons', () => {
+			expect( getters.isPerson(
+				newMinimalStore( { addressType: AddressTypeModel.COMPANY } ),
+				null,
+				null,
+				null
+			) ).toBe( false );
 		} );
 	} );
 

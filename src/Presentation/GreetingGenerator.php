@@ -21,12 +21,17 @@ class GreetingGenerator {
 		$this->translator = $translator;
 	}
 
+	private static function getSpacedTitle( string $title ): string {
+		$spacedTitle = $title === '' ? '' : $title . ' ';
+		return $spacedTitle;
+	}
+
 	public function createFormalGreeting( string $lastName, string $salutation, string $title ): string {
 		if ( $lastName === '' ) {
 			return $this->translator->trans( 'mail_introduction_generic' );
 		}
 
-		$spacedTitle = $title === '' ? '' : $title . ' ';
+		$spacedTitle = self::getSpacedTitle( $title );
 
 		switch ( $salutation ) {
 			case self::GREETING_MALE:
@@ -58,18 +63,29 @@ class GreetingGenerator {
 		}
 	}
 
-	public function createInformalLastnameGreeting( string $salutation, string $lastName ): string {
+	public function createInformalLastnameGreeting( string $salutation, string $lastName, string $title ): string {
 		if ( $lastName === '' ) {
 			return $this->translator->trans( 'mail_introduction_generic' );
 		}
 
+		$spacedTitle = self::getSpacedTitle( $title );
+
 		switch ( $salutation ) {
 			case self::GREETING_MALE:
-				return $this->translator->trans( 'mail_introduction_male_lastname_informal', [ '%lastName%' => $lastName ] );
+				return $this->translator->trans( 'mail_introduction_male_lastname_informal', [
+					'%spacedTitle%' => $spacedTitle,
+					'%lastName%' => $lastName
+				] );
 			case self::GREETING_FEMALE:
-				return $this->translator->trans( 'mail_introduction_female_lastname_informal', [ '%lastName%' => $lastName ] );
+				return $this->translator->trans( 'mail_introduction_female_lastname_informal', [
+					'%spacedTitle%' => $spacedTitle,
+					'%lastName%' => $lastName
+				] );
 			case self::GREETING_FAMILY:
-				return $this->translator->trans( 'mail_introduction_family_informal', [ '%lastName%' => $lastName ] );
+				return $this->translator->trans( 'mail_introduction_family_informal', [
+					'%spacedTitle%' => $spacedTitle,
+					'%lastName%' => $lastName
+				] );
 			default:
 				return $this->translator->trans( 'mail_introduction_generic' );
 		}

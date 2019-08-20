@@ -3,7 +3,7 @@
 		<payment-interval
 				:payment-intervals="paymentIntervals"
 				:current-interval="interval"
-				:title="$t('donation_form_payment_interval_title')"
+				:title="$t('membership_form_payment_interval_title')"
 				v-on:interval-selected="sendIntervalToStore"
 		></payment-interval>
 		<amount-selection
@@ -16,6 +16,7 @@
 				:error="feeIsValid ? '' : $t('membership_form_payment_amount_error')"
 				v-on:amount-selected="sendAmountToStore"
 		></amount-selection>
+		<div>{{ $t('membership_form_payment_amount_cap_notice') }}</div>
 		<payment-bank-data
 			class="has-margin-top-36"
 			:validateBankDataUrl="validateBankDataUrl"
