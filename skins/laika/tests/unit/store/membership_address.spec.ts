@@ -155,6 +155,27 @@ describe( 'MembershipAddress', () => {
 		} );
 	} );
 
+	describe( 'Getters/isPerson', () => {
+
+		it( 'returns true for private persons', () => {
+			expect( getters.isPerson(
+				newMinimalStore( {} ),
+				null,
+				null,
+				null
+			) ).toBe( true );
+		} );
+
+		it( 'returns false for private persons', () => {
+			expect( getters.isPerson(
+				newMinimalStore( { addressType: AddressTypeModel.COMPANY } ),
+				null,
+				null,
+				null
+			) ).toBe( false );
+		} );
+	} );
+
 	describe( 'Getters/membershipType', () => {
 
 		it( 'returns membership type from the store', () => {

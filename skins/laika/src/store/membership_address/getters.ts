@@ -15,6 +15,7 @@ export const getters: GetterTree<MembershipAddressState, any> = {
 	membershipTypeIsValid: ( state: MembershipAddressState ): boolean => state.validity.membershipType === Validity.VALID,
 	addressType: ( state: MembershipAddressState ): AddressTypeModel => state.addressType,
 	membershipType: ( state: MembershipAddressState ): MembershipTypeModel => state.membershipType,
+	isPerson: ( state: MembershipAddressState ): boolean => state.addressType === AddressTypeModel.PERSON,
 	email: ( state: MembershipAddressState ): String => state.values.email,
 	fullName: ( state: MembershipAddressState ): string => {
 		// Duplicating code from DonorName PHP class
