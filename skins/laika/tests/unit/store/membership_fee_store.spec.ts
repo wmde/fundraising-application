@@ -428,10 +428,24 @@ describe( 'MembershipFee', () => {
 	describe( 'Mutations/SET_FEE', () => {
 		it( 'mutates the fee', () => {
 			const store = newMinimalStore( {} );
-			mutations.SET_FEE( store, 2500 );
-			expect( store.values.fee ).toStrictEqual( 2500 );
-			mutations.SET_FEE( store, 5500 );
-			expect( store.values.fee ).toStrictEqual( 5500 );
+			mutations.SET_FEE( store, '2500' );
+			expect( store.values.fee ).toStrictEqual( '2500' );
+			mutations.SET_FEE( store, '100' );
+			expect( store.values.fee ).toStrictEqual( '100' );
+		} );
+
+		it( 'cuts off cent amounts', () => {
+			const store = newMinimalStore( {} );
+			mutations.SET_FEE( store, '2599' );
+			expect( store.values.fee ).toStrictEqual( '2500' );
+			mutations.SET_FEE( store, '5555' );
+			expect( store.values.fee ).toStrictEqual( '5500' );
+			mutations.SET_FEE( store, '99' );
+			expect( store.values.fee ).toStrictEqual( '0' );
+			mutations.SET_FEE( store, '' );
+			expect( store.values.fee ).toStrictEqual( '' );
+			mutations.SET_FEE( store, '0' );
+			expect( store.values.fee ).toStrictEqual( '0' );
 		} );
 	} );
 

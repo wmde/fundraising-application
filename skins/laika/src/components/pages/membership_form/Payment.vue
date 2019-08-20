@@ -16,6 +16,7 @@
 				:error="feeIsValid ? '' : $t('membership_form_payment_amount_error')"
 				v-on:amount-selected="sendAmountToStore"
 		></amount-selection>
+		<div>{{ $t('membership_form_payment_amount_cap_notice') }}</div>
 		<payment-bank-data
 			class="has-margin-top-36"
 			:validateBankDataUrl="validateBankDataUrl"
