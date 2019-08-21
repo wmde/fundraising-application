@@ -65,6 +65,11 @@
 	}
 }
 
+/* Change dropdown caret */
+.select:not(.is-multiple):not(.is-loading)::after {
+	border-color: $fun-color-dark;
+}
+
 .input, .field {
 	max-width: 300px;
 }
