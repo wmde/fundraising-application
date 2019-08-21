@@ -30,9 +30,12 @@
 }
 
 .b-radio.radio {
-	height: 4em;
+	height: auto;
 	width: 320px;
 	border-bottom: 2px solid $fun-color-off-bright;
+	align-items: flex-start;
+	padding-bottom: 1.5em;
+	padding-top: 1.5em;
 	&:hover {
 		border-bottom: 2px solid $fun-color-dark-lighter;
 	}
@@ -43,6 +46,7 @@
 		}
 	}
 	.check {
+		margin-top: 3px; // visually align the radio box with the label text
 		font-size: 12px;
 	}
 	.control-label {
