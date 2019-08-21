@@ -55,11 +55,13 @@
 }
 
 .b-checkbox.checkbox {
+	align-items: flex-start;
 	.control-label {
 		padding-left: 18px;
 	}
 	input[type="checkbox"] + .check {
 		border: 1px solid $fun-color-dark;
+		margin-top: 2px; // visually align the checkbox with the label text
 	}
 }
 

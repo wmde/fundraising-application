@@ -1,5 +1,5 @@
 <template>
-	<div class="has-margin-top-18">
+	<div class="has-margin-top-36">
 		<b-checkbox type="checkbox" class="is-inline-checkbox"
 			id="donation_receipt"
 			name="receiptOptOut"
