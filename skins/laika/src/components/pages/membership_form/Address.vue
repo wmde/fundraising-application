@@ -7,9 +7,9 @@
 		<h1 class="has-margin-top-36 title is-size-5">{{ $t( 'donation_form_section_address_title' ) }}</h1>
 		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
+		<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
 		<date-of-birth v-if="isPerson"/>
 		<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"/>
-		<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
 	</div>
 </template>
 
