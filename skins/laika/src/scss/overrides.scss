@@ -12,7 +12,7 @@
 		.navbar-item {
 			padding: 18px;
 			@include until($desktop) {
-				border-bottom: 2px solid $fun-color-dark-lighter;
+				border-bottom: 2px solid $fun-color-gray-light-transparency;
 			}
 		}
 	}
