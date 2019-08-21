@@ -8,12 +8,12 @@ use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentWithAmount;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentList;
 
 /**
- * @licence GNU GPL v2+
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @license GNU GPL v2+
  */
 class CommentListJsonPresenter {
 
 	public function present( CommentList $commentList ): array {
+		// TODO Translate keys into English once old skins are phased out
 		return array_map(
 			function( CommentWithAmount $comment ) {
 				return [
@@ -21,6 +21,7 @@ class CommentListJsonPresenter {
 					'spender' => $comment->getAuthorName(),
 					'kommentar' => $comment->getCommentText(),
 					'datum' => $comment->getDonationTime()->format( 'r' ),
+					'lokalisiertes_datum' => $comment->getDonationTime()->format( 'd.m.Y \u\m H:i \U\h\r' ),
 					'id' => $comment->getDonationId(),
 				];
 			},

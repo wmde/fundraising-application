@@ -63,8 +63,16 @@ class PageDisplayHandler {
 
 		if ( file_exists( $this->ffFactory->getAbsoluteSkinDirectory() . DIRECTORY_SEPARATOR . $pageTemplate ) ) {
 			$template = $pageTemplate;
+			$context = $this->getAdditionalContextForPageId( $pageId, $context );
 		}
 
 		return $this->ffFactory->getLayoutTemplate( $template, $context );
+	}
+
+	private function getAdditionalContextForPageId( string $pageId, array $context ): array {
+		if ( $pageId === 'supporters' ) {
+			$context['supporters'] = $this->ffFactory->getSupportersList();
+		}
+		return $context;
 	}
 }

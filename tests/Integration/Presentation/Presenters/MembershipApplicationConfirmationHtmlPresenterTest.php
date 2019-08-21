@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
@@ -35,7 +36,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 			$membershipApplication->confirm();
 		}
 
-		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig, $bankDataGeneratorStub );
+		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig, $bankDataGeneratorStub, new FakeUrlGenerator() );
 		$presenter->presentConfirmation(
 			$membershipApplication,
 			'update_token'
@@ -68,10 +69,15 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 				'postalCode' => '1234',
 				'city' => 'Berlin',
 				'email' => 'jeroendedauw@gmail.com',
+				'countryCode' => 'DE',
+				'applicantType' => 'person'
 			],
 			'bankData' => [],
 			'payPalData' => [
 				'firstPaymentDate' => '01.02.2021'
+			],
+			'urls' => [
+				'cancelMembership' => '/such.a.url/cancel-membership-application?updateToken=update_token'
 			]
 		];
 	}

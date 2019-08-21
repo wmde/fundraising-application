@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de" class="client-nojs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+
+    <title>{% block title %}{$ 'wikimedia_title_line' | trans $}{% endblock %}</title>
+
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="title" content="{$ block('title') $}" />
+    <meta name="description" content="{$ 'wikimedia_call_to_action' | trans $}" />
+
+    <meta property="og:title" content="{$ 'wikimedia_call_to_action' | trans $}" />
+    <meta property="og:type" content="non_profit" />
+    <meta property="og:url" content="https://spenden.wikimedia.de/" />
+    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Wikipedia_svg_logo-de.svg/200px-Wikipedia_svg_logo-de.svg.png" />
+    <meta property="og:site_name" content="{$ 'wikimedia_organization_title' | trans $}" />
+    <meta property="og:description" content="{$ 'wikimedia_description' | trans $}" />
+
+    <link rel="preconnect" href="{$ piwik.baseUrl $}">
+    <link rel="shortcut icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/images/favicon.ico" />
+    <link rel="apple-touch-icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/images/apple-touch-icon.png" />
+    {% block styles %}
+        {% if not assets_path %}
+            <link rel="stylesheet" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/css/styles.css">
+        {% endif %}
+    {% endblock %}
+</head>
+<body>
+{% block main %}
+    <div id="app" data-application-vars="{$ _context|json_encode|e('html_attr') $}" 
+    data-application-messages="{$ translations()|e('html_attr') $}" 
+    data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
+        <noscript>
+                <h2>{$ 'no_javascript_title' | trans $}</h2>
+                {$ web_content( 'pages/no_javascript' ) $}
+        </noscript>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {% if not assets_path %}
+        <script src="{$ basepath $}/skins/laika/js/chunk-vendors.js"></script>
+        {#
+           The file `styles.js` is needed due to a webpack error that propagates to the CSS-extract plugin.
+           Hopefully, the error gets fixed before this skin is released, so we can remove this silly dependency.
+           Otherwise, we must integrate the contents of styles.js into chunk-vendors.js during the build process.
+           See
+           https://github.com/webpack/webpack/issues/7300
+           https://github.com/webpack-contrib/mini-css-extract-plugin/issues/85
+           https://github.com/webpack-contrib/mini-css-extract-plugin/issues/113
+        #}
+        <script src="{$ basepath $}/skins/laika/js/styles.js"></script>
+    {% endif %}
+{% endblock %}
+
+{# Matomo is Piwik's new name #}
+{% include 'matomo.html.twig' %}
+{% if piwikGoals | default( [] ) %}
+    <script>
+        {% for goal in piwikGoals %}
+        _paq.push( [ 'trackGoal', '{$ goal $}' ] );
+        {% endfor %}
+    </script>
+{% endif %}
+
+</body>
+</html>

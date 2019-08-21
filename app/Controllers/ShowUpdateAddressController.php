@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\App\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
+use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**
@@ -26,7 +27,13 @@ class ShowUpdateAddressController {
 				[
 					'addressToken' => $addressToken,
 					'isCompany' => $addressChange->isCompanyAddress(),
-					'messages' => $ffFactory->getMessages()
+					'messages' => $ffFactory->getMessages(),
+					'urls' => array_merge(
+						Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() ),
+						[
+							'updateAddress' => $ffFactory->getUrlGenerator()->generateAbsoluteUrl( Routes::UPDATE_ADDRESS, [ 'addressToken' => $addressToken ] )
+						]
+					)
 				]
 			)
 		);

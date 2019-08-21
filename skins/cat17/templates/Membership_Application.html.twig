@@ -366,10 +366,10 @@
 		data-initial-form-values="{$ initialFormValues | json_encode | e( 'html_attr' ) $}"
 		data-violated-fields="{% if violatedFields %}{$ violatedFields|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
 		data-initial-validation-result="{% if initialValidationResult %}{$ initialValidationResult|json_encode|e('html_attr') $}{% else %}{}{% endif %}"
-		data-validate-fee-url="{$ basepath|e('html_attr') $}/validate-fee"
-		data-validate-address-url="{$ basepath|e('html_attr') $}/validate-address"
-		data-validate-email-address-url="{$ basepath|e('html_attr') $}/validate-email"
-		data-validate-iban-url="{$ basepath $}/check-iban"
-		data-generate-iban-url="{$ basepath $}/generate-iban"
+		data-validate-address-url="{$ urls.validateAddress | e('html_attr') $}"
+		data-validate-email-address-url="{$ urls.validateEmail | e('html_attr') $}"
+		data-validate-iban-url="{$ urls.validateIban | e('html_attr') $}"
+		data-generate-iban-url="{$ urls.convertBankData | e('html_attr') $}"
+		data-validate-fee-url="{$ urls.validateMembershipFee | e('html_attr') $}"
 		data-messages="{$ messages $}"></script>
 {% endblock %}

@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Address.vue renders input fields 1`] = `
+<span
+  class="submit-values"
+>
+  <input
+    name="zahlweise"
+    type="hidden"
+    value="BEZ"
+  />
+   
+  <input
+    name="periode"
+    type="hidden"
+    value="3"
+  />
+   
+  <input
+    name="betrag"
+    type="hidden"
+    value="23,49"
+  />
+   
+  <input
+    name="iban"
+    type="hidden"
+    value="DE12500105170648489890"
+  />
+   
+  <input
+    name="bic"
+    type="hidden"
+    value="INGDDEFFXXX"
+  />
+   
+  <input
+    name="addressType"
+    type="hidden"
+    value="person"
+  />
+   
+  <input
+    name="salutation"
+    type="hidden"
+    value="Herr"
+  />
+   
+  <input
+    name="title"
+    type="hidden"
+    value="Dr."
+  />
+   
+  <input
+    name="firstName"
+    type="hidden"
+    value="Victor"
+  />
+   
+  <input
+    name="lastName"
+    type="hidden"
+    value="van Doom"
+  />
+   
+  <input
+    name="companyName"
+    type="hidden"
+  />
+   
+  <input
+    name="street"
+    type="hidden"
+    value="Untere Straße 5"
+  />
+   
+  <input
+    name="postcode"
+    type="hidden"
+    value="08114"
+  />
+   
+  <input
+    name="city"
+    type="hidden"
+    value="Haasenstadt"
+  />
+   
+  <input
+    name="country"
+    type="hidden"
+    value="DE"
+  />
+   
+  <input
+    name="email"
+    type="hidden"
+    value="doom@untergang.biz"
+  />
+   
+  <input
+    name="info"
+    type="hidden"
+    value="1"
+  />
+   
+  <input
+    name="donationReceipt"
+    type="hidden"
+    value="1"
+  />
+   
+  <input
+    name="impCount"
+    type="hidden"
+    value="1"
+  />
+   
+  <input
+    name="bImpCount"
+    type="hidden"
+    value="5"
+  />
+</span>
+`;

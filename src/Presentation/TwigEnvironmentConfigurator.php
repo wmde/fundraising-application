@@ -60,5 +60,6 @@ class TwigEnvironmentConfigurator {
 
 	private function setDefaultTwigVariables( Twig_Environment $twig ): void {
 		$twig->addGlobal( 'basepath', $this->config['web-basepath'] );
+		$twig->addGlobal( 'assets_path', $this->config['assets-path'] );
 	}
 }

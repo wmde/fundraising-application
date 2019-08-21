@@ -30,6 +30,7 @@ services:
     links:
       - database
       - mailhog
+      - skin_laika
 
   database:
     image: mysql:5.6
@@ -58,6 +59,19 @@ services:
     depends_on:
       - database
     command: database:3306
+
+  # webpack dev server for laika skin development
+  skin_laika:
+    image: node:10
+    expose:
+      - "8080"
+    ports:
+      - "7072:8080"
+    volumes:
+      - ./skins/laika:/app:cached
+    working_dir: /app
+    command: npm run serve
+
 
 volumes:
   var-data:

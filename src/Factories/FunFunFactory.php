@@ -26,6 +26,7 @@ use RemotelyLiving\Doorkeeper\Features\Set;
 use RemotelyLiving\Doorkeeper\Requestor;
 use Swift_MailTransport;
 use Swift_NullTransport;
+use Symfony\Bridge\Twig\TokenParser\TransChoiceTokenParser;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -113,6 +114,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
@@ -158,7 +160,6 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationP
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
-use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
@@ -206,7 +207,7 @@ use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 /**
- * @licence GNU GPL v2+
+ * @license GNU GPL v2+
  */
 class FunFunFactory implements ServiceProviderInterface {
 
@@ -390,6 +391,13 @@ class FunFunFactory implements ServiceProviderInterface {
 					'web_content',
 					function( string $name, array $context = [] ): string {
 						return $this->getContentProvider()->getWeb( $name, $context );
+					},
+					[ 'is_safe' => [ 'html' ] ]
+				),
+				new Twig_SimpleFunction(
+					'translations',
+					function(): string {
+						return json_encode( $this-> getTranslationCollector()->collectTranslations() );
 					},
 					[ 'is_safe' => [ 'html' ] ]
 				),
@@ -641,7 +649,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newGetInTouchHtmlPresenter(): GetInTouchHtmlPresenter {
 		return new GetInTouchHtmlPresenter(
-			$this->getLayoutTemplate( 'contact_form.html.twig' ),
+			$this->getLayoutTemplate( 'Contact_Form.html.twig' ),
 			$this->getTranslator(),
 			$this->getGetInTouchCategories()
 		);
@@ -686,6 +694,13 @@ class FunFunFactory implements ServiceProviderInterface {
 	public function getMessages(): string {
 		return ( new JsonStringReader(
 			$this->getI18nDirectory() . '/messages/messages.json',
+			new SimpleFileFetcher()
+		) )->readAndValidateJson();
+	}
+
+	public function getSupportersList(): string {
+		return ( new JsonStringReader(
+			$this->getI18nDirectory() . '/data/supporters.json',
 			new SimpleFileFetcher()
 		) )->readAndValidateJson();
 	}
@@ -970,7 +985,10 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new TwigFactory(
 			array_merge_recursive(
 				$twigConfig,
-				[ 'web-basepath' => $this->config['web-basepath'] ]
+				[
+					'web-basepath' => $this->config['web-basepath'],
+					'assets-path' => $this->config['assets-path']
+				]
 			),
 			$this->getCachePath() . '/twig',
 			$this->config['locale']
@@ -1389,6 +1407,8 @@ class FunFunFactory implements ServiceProviderInterface {
 			[
 				'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
 				'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
+				// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
+				'paymentIntervals' => [0, 1, 3, 6, 12],
 				'messages' => $this->getMessages(),
 			]
 		);
@@ -1398,6 +1418,8 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
+			// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
+			'paymentIntervals' => [1, 3, 6, 12],
 			'messages' => $this->getMessages()
 		] );
 	}
@@ -1472,7 +1494,8 @@ class FunFunFactory implements ServiceProviderInterface {
 	public function newMembershipApplicationConfirmationHtmlPresenter(): MembershipApplicationConfirmationHtmlPresenter {
 		return new MembershipApplicationConfirmationHtmlPresenter(
 			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig' ),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			$this->getUrlGenerator()
 		);
 	}
 
@@ -1647,7 +1670,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newPageNotFoundHtmlPresenter(): PageNotFoundPresenter {
-		return new PageNotFoundPresenter( $this->getLayoutTemplate( 'Page_not_found.html.twig' ) );
+		return new PageNotFoundPresenter( $this->getLayoutTemplate( 'Page_Not_Found.html.twig' ) );
 	}
 
 	public function setPageViewTracker( PageViewTracker $tracker ): void {
@@ -1827,5 +1850,22 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getCampaignCollection(): CampaignCollection {
 		return new CampaignCollection( ...$this->getCampaigns() );
+	}
+
+	/**
+	 * TranslationCollector is currently only used by the Laika Vue-based frontend
+	 * In the future, the desired solution would be to use laika_messages.json exclusively
+	 * for front-end related strings and any backend strings would be separated into individual files
+	 * to avoid unnecessary strings being loaded on the client side
+	 * @see https://phabricator.wikimedia.org/T225105
+	 */
+	public function getTranslationCollector(): TranslationsCollector {
+		return $this->createSharedObject( TranslationsCollector::class, function (): TranslationsCollector {
+			$translationsCollector = new TranslationsCollector( new SimpleFileFetcher() );
+			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/messages_laika.json' );
+			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/membershipTypes.json' );
+			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/validations.json' );
+			return $translationsCollector;
+		} );
 	}
 }
