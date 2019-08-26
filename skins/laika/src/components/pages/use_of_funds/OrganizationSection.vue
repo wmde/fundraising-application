@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import FundSection from '@/components/FundSection.vue';
+import FundSection from '@/components/pages/use_of_funds/FundSection.vue';
 
 export default Vue.extend( {
 	name: 'OrganizationSection',

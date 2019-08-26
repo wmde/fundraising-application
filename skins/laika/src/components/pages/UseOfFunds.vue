@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import OrganizationSection from '@/components/OrganizationSection.vue';
+import OrganizationSection from '@/components/pages/use_of_funds/OrganizationSection.vue';
 import { UseOfFundsContent } from '@/view_models/useOfFunds';
 
 export default Vue.extend( {
