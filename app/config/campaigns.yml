@@ -36,7 +36,7 @@ donation_address:
 skins:
   description: Test different skins
   reference: "https://phabricator.wikimedia.org/T206994"
-  start: "2019-08-17 10:00:00"
+  start: "2019-08-27 10:00:00"
   end: "2019-09-17 23:59:59"
   buckets:
     - "cat17"
@@ -44,7 +44,7 @@ skins:
     - "laika"
   default_bucket: "cat17"
   url_key: skin
-  active: true
+  active: false
 
 membership_call_to_action:
   description: Display different content for membership call to action on donation confirmation page
