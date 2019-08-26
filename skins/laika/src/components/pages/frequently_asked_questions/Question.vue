@@ -1,11 +1,11 @@
 <template>
-	<div class="accordion-item" v-bind:class="[ isOpen ? 'accordion' : '' ]">
+	<div class="accordion-item" v-bind:class="[ isOpen ? 'accordion-open' : '' ]">
 		<div @click="toggle()"
 			:data-content-target="isOpen ? '/page/Häufige Fragen' : ''"
 			:data-track-content="isOpen"
 			:data-content-name="isOpen ? 'Expand' : ''"
 			:data-content-piece="isOpen ? content.question : ''">
-			<div v-bind:class="[ isOpen ? 'has-text-primary has-text-weight-bold' : 'accordion-heading', 'icon-inline', 'accordion-title' ] ">
+			<div v-bind:class="[ isOpen ? 'has-text-primary has-text-weight-bold has-margin-left-18' : 'accordion-heading', 'icon-inline', 'accordion-title' ] ">
 				{{ content.question }}
 				<b-icon v-if="isOpen" icon="arrow-up" class="icon-size"></b-icon>
 				<b-icon v-else icon="arrow-down" class="icon-size"></b-icon>

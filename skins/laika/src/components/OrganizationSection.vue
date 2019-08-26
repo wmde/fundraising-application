@@ -1,6 +1,6 @@
 <template>
 	<div class="organization-section">
-		<h3 class="title is-3 has-margin-top-36 has-margin-bottom-18 has-margin-left-18">
+		<h3 class="title is-3 has-margin-top-36 has-margin-bottom-18">
 			{{ title }}<br>
 			{{ overallAmount.replace(/ /g, '.') }} €
 		</h3>
