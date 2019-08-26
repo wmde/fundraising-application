@@ -77,7 +77,7 @@ phpunit:
 
 phpunit-with-coverage:
 	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm app_debug ./vendor/bin/phpunit --dump-xdebug-filter var/xdebug-filter.php
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm app_debug ./vendor/bin/phpunit --prepend var/xdebug-filter.php --configuration=phpunit.xml.dist --coverage-clover coverage.clover --printer="PHPUnit\TextUI\ResultPrinter"
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm app_debug ./vendor/bin/phpunit --prepend var/xdebug-filter.php --configuration=phpunit.xml.dist --stop-on-error --coverage-clover coverage.clover --printer="PHPUnit\TextUI\ResultPrinter"
 
 phpunit-system:
 	docker-compose run --rm app ./vendor/bin/phpunit tests/System/
