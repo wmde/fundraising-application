@@ -4,6 +4,7 @@
 	{% if initialFormValues.paymentType != '' %}
 		_paq.push( [ 'setCustomDimension', 1, '{$ initialFormValues.paymentType $}' ] );
 	{% endif %}
+	_paq.push( ['setCustomDimension', 2, 'laika' ] );
 	_paq.push( [ 'trackPageView' ] );
 	_paq.push( [ 'enableLinkTracking' ] );
 	_paq.push( [ 'trackVisibleContentImpressions' ] );
