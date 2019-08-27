@@ -1,5 +1,5 @@
 $( function () {
-	/** global: WMDE */
+	/** global: WMDE, _paq */
 
 	var initData = $( '#init-form' ),
 		store = WMDE.Store.createMembershipStore(),
@@ -309,6 +309,12 @@ $( function () {
 		}
 	}
 
+	function triggerMatomoEvent( eventData ) {
+		if ( typeof _paq !== 'undefined' ) {
+			_paq.push( eventData );
+		}
+	}
+
 	function hasInvalidFields() {
 		var invalidFields = false;
 		$.each( store.getState().membershipInputValidation, function( key, value ) {
@@ -338,7 +344,9 @@ $( function () {
 
 	function handleMembershipDataSubmitForNonDirectDebit() {
 		if ( formDataIsValid() ) {
-			$( '#memForm' ).submit();
+			var form = $( '#memForm' );
+			triggerMatomoEvent( [ 'FormAnalytics::trackFormSubmit', form.get( 0 ) ] );
+			form.submit();
 		} else {
 			triggerValidityCheckForPersonalDataPage();
 			displayErrorBox();
@@ -357,7 +365,9 @@ $( function () {
 
 	$( '#finishFormSubmit2' ).click( function () {
 		if ( store.getState().validity.sepaConfirmation ) {
-			$( '#memForm' ).submit();
+			var form = $( '#memForm' );
+			triggerMatomoEvent( [ 'FormAnalytics::trackFormSubmit', form.get( 0 ) ] );
+			form.submit();
 		} else {
 			triggerValidityCheckForSepaPage();
 			displayErrorBox();
