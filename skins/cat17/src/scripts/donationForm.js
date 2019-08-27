@@ -285,9 +285,17 @@ $( function () {
 		return WMDE.Promise.resolve();
 	}
 
+	function triggerMatomoEvent( eventData ) {
+		if ( typeof _paq !== 'undefined' ) {
+			_paq.push( eventData );
+		}
+	}
+
 	$( '.btn-donation' ).on( 'click', function () {
 		if ( WMDE.StateAggregation.Donation.allValiditySectionsAreValid( store.getState() ) ) {
-			$( 'form' ).submit();
+			var form = $( 'form' );
+			triggerMatomoEvent( [ 'FormAnalytics::trackFormSubmit', form.get( 0 ) ] );
+			form.submit();
 		}
 		else if ( WMDE.StateAggregation.Donation.someValiditySectionsAreIncomplete( store.getState() ) ) {
 			WMDE.Promise.all( [

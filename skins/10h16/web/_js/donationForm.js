@@ -1,5 +1,5 @@
 $( function () {
-	/** global: WMDE */
+	/** global: WMDE, _paq */
 
 	var initData = $( '#init-form' ),
 		store = WMDE.Store.createDonationStore(),
@@ -358,7 +358,7 @@ $( function () {
 		$( 'html, body' ).animate( { scrollTop: $( '#validation-errors' ).offset().top } );
 	}
 
-	function triggerPiwikEvent( eventData ) {
+	function triggerMatomoEvent( eventData ) {
 		if ( typeof _paq !== 'undefined' ) {
 			_paq.push( eventData );
 		}
@@ -367,7 +367,7 @@ $( function () {
 	function handlePaymentDataSubmit() {
 		if ( paymentDataIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
-			triggerPiwikEvent( [ 'trackGoal', 2 ] );
+			triggerMatomoEvent( [ 'trackGoal', 2 ] );
 		} else {
 			triggerValidityCheckForPaymentPage();
 			displayErrorBox();
@@ -377,7 +377,7 @@ $( function () {
 	function handlePersonalDataSubmitForDirectDebit() {
 		if ( personalDataPageIsValid() ) {
 			store.dispatch( actions.newNextPageAction() );
-			triggerPiwikEvent( [ 'trackGoal', 4 ] );
+			triggerMatomoEvent( [ 'trackGoal', 4 ] );
 		} else {
 			triggerValidityCheckForPersonalDataPage();
 			displayErrorBox();
@@ -386,7 +386,9 @@ $( function () {
 
 	function handlePersonalDataSubmitForNonDirectDebit() {
 		if ( personalDataPageIsValid() ) {
-			$( '#10h16-donation-personal-data' ).submit();
+			var form = $( '#10h16-donation-personal-data' );
+			triggerMatomoEvent( [ 'FormAnalytics::trackFormSubmit', form.get( 0 ) ] );
+			form.submit();
 		} else {
 			triggerValidityCheckForPersonalDataPage();
 			displayErrorBox();
@@ -410,7 +412,9 @@ $( function () {
 		var validity = store.getState().validity;
 		// we use validity directly here because SEPA really needs these values to be valid
 		if ( validity.paymentData && validity.address && validity.bankData && validity.sepaConfirmation ) {
-			$( '#10h16-donation-personal-data' ).submit();
+			var form = $( '#10h16-donation-personal-data' );
+			triggerMatomoEvent( [ 'FormAnalytics::trackFormSubmit', form.get( 0 ) ] );
+			form.submit();
 		} else {
 			triggerValidityCheckForSepaPage();
 			displayErrorBox();
