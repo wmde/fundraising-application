@@ -22,6 +22,7 @@ import Vue from 'vue';
 import { TrackingData } from '@/view_models/SubmitValues';
 import PaymentPage from '@/components/pages/donation_form/subpages/PaymentPage.vue';
 import AddressPage from '@/components/pages/donation_form/subpages/AddressPage.vue';
+import { trackFormSubmission } from '@/tracking';
 
 export default Vue.extend( {
 	name: 'DonationForm',
@@ -93,7 +94,9 @@ export default Vue.extend( {
 			window.scrollTo( 0, 0 );
 		},
 		submitDonationForm(): void {
-			( this.$refs.form as HTMLFormElement ).submit();
+			const form = this.$refs.form as HTMLFormElement;
+			trackFormSubmission( form );
+			form.submit();
 		},
 	},
 } );

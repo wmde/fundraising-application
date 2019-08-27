@@ -17,6 +17,7 @@
 import Vue from 'vue';
 import PaymentPage from '@/components/pages/membership_form/subpages/PaymentPage.vue';
 import AddressPage from '@/components/pages/membership_form/subpages/AddressPage.vue';
+import { trackFormSubmission } from '@/tracking';
 
 export default Vue.extend( {
 	name: 'MembershipForm',
@@ -77,7 +78,9 @@ export default Vue.extend( {
 			window.scrollTo( 0, 0 );
 		},
 		submitMembershipForm(): void {
-			( this.$refs.form as HTMLFormElement ).submit();
+			const form = this.$refs.form as HTMLFormElement;
+			trackFormSubmission( form );
+			form.submit();
 		},
 	},
 } );
