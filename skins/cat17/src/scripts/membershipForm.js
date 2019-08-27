@@ -421,9 +421,17 @@ $( function () {
 		return formValues;
 	}
 
+	function triggerMatomoEvent( eventData ) {
+		if ( typeof _paq !== 'undefined' ) {
+			_paq.push( eventData );
+		}
+	}
+
 	$( '.btn-donation' ).on( 'click', function () {
 		if ( WMDE.StateAggregation.Membership.allValiditySectionsAreValid( store.getState() ) ) {
-			$( 'form' ).submit();
+			var form = $( 'form' );
+			triggerMatomoEvent( [ 'FormAnalytics::trackFormSubmit', form.get( 0 ) ] );
+			form.submit();
 		}
 		else if ( WMDE.StateAggregation.Membership.someValiditySectionsAreIncomplete( store.getState() ) ) {
 			WMDE.Promise.all( [
@@ -433,7 +441,6 @@ $( function () {
 				forceValidateFeeData(),
 				forceValidateEmail()
 			] ).then( function() {
-				console.log("invalid stuff", store.getState().validity, store.getState().membershipInputValidation );
 				scroller.scrollTo( $( $( '.error-container.invalid' ).get( 0 ) ), { elementStart: WMDE.Scrolling.ElementStart.MARGIN }, animationTime );
 			});
 		}
