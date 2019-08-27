@@ -17,27 +17,40 @@
 @font-face {
 	font-family: 'Open Sans';
 	font-style: normal;
-	font-weight: 700;
-	src: url('/skins/laika/fonts/Open-Sans.eot');
-	src: local('/skins/laika/fonts/Open Sans Light'), local('OpenSans-Light'),
-	url('/skins/laika/fonts/Open-Sans.eot?#iefix') format('embedded-opentype'),
-	url('/skins/laika/fonts/Open-Sans-bold.woff2') format('woff2'),
-	url('/skins/laika/fonts/Open-Sans-bold.woff') format('woff'),
-	url('/skins/laika/fonts/Open-Sans-bold.ttf') format('truetype'),
-	url('/skins/laika/fonts/Open-Sans.svg#OpenSans') format('svg');
+	font-weight: 400;
+	src: url('/skins/laika/fonts/open-sans-v17-latin-regular.eot'); /* IE9 Compat Modes */
+	src: local('Open Sans Regular'), local('OpenSans-Regular'),
+	url('/skins/laika/fonts/open-sans-v17-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+	url('/skins/laika/fonts/open-sans-v17-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+	url('/skins/laika/fonts/open-sans-v17-latin-regular.woff') format('woff'), /* Modern Browsers */
+	url('/skins/laika/fonts/open-sans-v17-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+	url('/skins/laika/fonts/open-sans-v17-latin-regular.svg#OpenSans') format('svg'); /* Legacy iOS */
 }
 
 @font-face {
 	font-family: 'Open Sans';
 	font-style: italic;
 	font-weight: 400;
-	src: url('/skins/laika/fonts/Open-Sans.eot');
-	src: local('/skins/laika/fonts/Open Sans Light'), local('OpenSans-Light'),
-	url('/skins/laika/fonts/Open-Sans.eot?#iefix') format('embedded-opentype'),
-	url('/skins/laika/fonts/Open-Sans-italic.woff2') format('woff2'),
-	url('/skins/laika/fonts/Open-Sans-italic.woff') format('woff'),
-	url('/skins/laika/fonts/Open-Sans-italic.ttf') format('truetype'),
-	url('/skins/laika/fonts/Open-Sans.svg#OpenSans') format('svg');
+	src: url('/skins/laika/fonts/open-sans-v17-latin-italic.eot'); /* IE9 Compat Modes */
+	src: local('Open Sans Italic'), local('OpenSans-Italic'),
+	url('/skins/laika/fonts/open-sans-v17-latin-italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+	url('/skins/laika/fonts/open-sans-v17-latin-italic.woff2') format('woff2'), /* Super Modern Browsers */
+	url('/skins/laika/fonts/open-sans-v17-latin-italic.woff') format('woff'), /* Modern Browsers */
+	url('/skins/laika/fonts/open-sans-v17-latin-italic.ttf') format('truetype'), /* Safari, Android, iOS */
+	url('/skins/laika/fonts/open-sans-v17-latin-italic.svg#OpenSans') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 700;
+	src: url('/skins/laika/fonts/open-sans-v17-latin-700.eot'); /* IE9 Compat Modes */
+	src: local('Open Sans Bold'), local('OpenSans-Bold'),
+	url('/skins/laika/fonts/open-sans-v17-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+	url('/skins/laika/fonts/open-sans-v17-latin-700.woff2') format('woff2'), /* Super Modern Browsers */
+	url('/skins/laika/fonts/open-sans-v17-latin-700.woff') format('woff'), /* Modern Browsers */
+	url('/skins/laika/fonts/open-sans-v17-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */
+	url('/skins/laika/fonts/open-sans-v17-latin-700.svg#OpenSans') format('svg'); /* Legacy iOS */
 }
 
 @font-face {

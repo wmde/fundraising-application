@@ -12,7 +12,7 @@
 		.navbar-item {
 			padding: 18px;
 			@include until($desktop) {
-				border-bottom: 2px solid $fun-color-dark-lighter;
+				border-bottom: 2px solid $fun-color-gray-light-transparency;
 			}
 		}
 	}
@@ -30,9 +30,12 @@
 }
 
 .b-radio.radio {
-	height: 4em;
+	height: auto;
 	width: 320px;
 	border-bottom: 2px solid $fun-color-off-bright;
+	align-items: flex-start;
+	padding-bottom: 1.5em;
+	padding-top: 1.5em;
 	&:hover {
 		border-bottom: 2px solid $fun-color-dark-lighter;
 	}
@@ -43,6 +46,7 @@
 		}
 	}
 	.check {
+		margin-top: 3px; // visually align the radio box with the label text
 		font-size: 12px;
 	}
 	.control-label {
@@ -51,12 +55,19 @@
 }
 
 .b-checkbox.checkbox {
+	align-items: flex-start;
 	.control-label {
 		padding-left: 18px;
 	}
 	input[type="checkbox"] + .check {
 		border: 1px solid $fun-color-dark;
+		margin-top: 2px; // visually align the checkbox with the label text
 	}
+}
+
+/* Change dropdown caret */
+.select:not(.is-multiple):not(.is-loading)::after {
+	border-color: $fun-color-dark;
 }
 
 .input, .field {

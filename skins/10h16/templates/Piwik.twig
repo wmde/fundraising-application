@@ -4,6 +4,7 @@
 	{% if initialFormValues.paymentType != '' %}
 		_paq.push( [ 'setCustomDimension', 1, '{$ initialFormValues.paymentType $}' ] );
 	{% endif %}
+	_paq.push( ['setCustomDimension', 2, '10h16' ] );
 	_paq.push( [ 'trackPageView', '{$ main_template $}' ] );
 	_paq.push( [ 'enableLinkTracking' ] );
 	_paq.push( [ 'trackAllContentImpressions' ] );
