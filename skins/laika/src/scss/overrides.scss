@@ -121,12 +121,24 @@ button.is-main {
 	}
 }
 
+
 button.is-low {
 	height: 36px;
 	font-size: 1em;
 	font-weight: bold;
 	width: 240px;
 	border-radius: 2px;
+}
+
+.modal-card {
+	background-color: $fun-color-bright;
+	border: 2px solid $fun-color-gray-light-solid;
+	border-radius: $radius;
+	padding: 36px;
+	.icon.icon-size {
+		float: right;
+		padding: 0;
+	}
 }
 
 // Ensure footer always sticks to the bottom of the page
