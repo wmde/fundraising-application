@@ -114,7 +114,7 @@ import Vue from 'vue';
 import { FormData } from '@/view_models/Contact';
 import { Helper } from '@/store/util';
 import { Validity } from '@/view_models/Validity';
-import { trackFormSubmission } from "@/tracking";
+import { trackFormSubmission } from '@/tracking';
 
 export default Vue.extend( {
 	name: 'Contact',
