@@ -1,7 +1,7 @@
 <template>
 	<form name="laika-donation-personal-data"
 			id="laika-donation-personal-data"
-			class="address-page column is-full"
+			class="address-page"
 			ref="personal"
 			action="/donation/add"
 			method="post">

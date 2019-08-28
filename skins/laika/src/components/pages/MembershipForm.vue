@@ -1,5 +1,5 @@
 <template>
-	<form name="laika-membership" class="column is-full" ref="form" action="/apply-for-membership" method="post">
+	<form name="laika-membership" ref="form" action="/apply-for-membership" method="post">
 		<keep-alive>
 			<component
 				ref="currentPage"

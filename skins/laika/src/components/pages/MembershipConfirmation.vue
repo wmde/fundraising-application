@@ -1,5 +1,5 @@
 <template>
-	<div class="column is-full">
+	<div class="membership-confirmation">
 		<div class="donation-summary-wrapper has-background-bright columns has-padding-18">
 
 			<div class="column is-half">

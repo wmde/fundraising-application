@@ -1,5 +1,5 @@
 <template>
-	<div id="payment" class="column is-full">
+	<div class="payment-section">
 		<amount-selection
 				:payment-amounts="paymentAmounts"
 				:amount="amount"

@@ -1,5 +1,5 @@
 <template>
-	<div id="addressForm" class="column is-full">
+	<div class="address-section">
 		<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
 		<address-type v-on:address-type="setAddressType( $event )" :disabledAddressTypes="disabledAddressTypes"></address-type>
 		<div class="has-margin-top-18" v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}</div>

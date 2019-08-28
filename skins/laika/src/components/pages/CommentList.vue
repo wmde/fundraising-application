@@ -1,5 +1,5 @@
 <template>
-	<div class="column is-full">
+	<div class="comment-list">
 		<h1 class="title">{{ $t( 'donation_comments_title' ) }}</h1>
 		<span>{{ $t( 'donation_comments_text' )}}</span>
 		<span v-if="isLoading" class="has-margin-top-36 columns is-centered">

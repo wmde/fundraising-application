@@ -1,8 +1,8 @@
 <template>
-	<div class="column is-full">
+	<div class="privacy_protection">
 		<h2 class="title is-size-2">{{ pageTitle }}</h2>
-		<div v-html="partialContentFirstHalf" class="has-margin-top-18 is-full static-content"></div>
-		<div class="column is-full privacy-selection has-padding-36">
+		<div v-html="partialContentFirstHalf" class="has-margin-top-18 static-content"></div>
+		<div class="privacy-selection has-padding-36">
 			<h2 class="title is-size-2">{{ $t( 'privacy_protection_title' ) }}</h2>
 			<fieldset>
 				<legend class="legend">
@@ -26,7 +26,7 @@
 				<p v-else class="has-text-dark-lighter has-margin-top-18" v-html="$t( 'privacy_optout_tracking_state_no' )"></p>
 			</fieldset>
 		</div>
-		<div v-html="partialContentSecondHalf" class="has-margin-top-18 is-full static-content"></div>
+		<div v-html="partialContentSecondHalf" class="has-margin-top-18 static-content"></div>
 	</div>
 </template>
 
