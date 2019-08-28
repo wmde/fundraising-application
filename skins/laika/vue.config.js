@@ -38,7 +38,7 @@ module.exports = {
 	},
 	devServer: {
 		watchOptions: {
-			poll: true,
+			poll: false,
 		},
 	},
 	outputDir: path.resolve( __dirname, '../../web/skins/laika' ),
