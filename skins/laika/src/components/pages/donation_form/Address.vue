@@ -2,6 +2,7 @@
 	<div id="addressForm" class="column is-full">
 		<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
 		<address-type v-on:address-type="setAddressType( $event )" :disabledAddressTypes="disabledAddressTypes"></address-type>
+		<div class="has-margin-top-18" v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}</div>
 		<name v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
 		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
