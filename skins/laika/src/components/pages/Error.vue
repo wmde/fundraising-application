@@ -1,5 +1,5 @@
 <template>
-	<div class="column is-full">
+	<div class="error-page">
 		<h1 class="title">{{ $t( 'error_page_header' ) }}</h1>
 		<p>
 			<span v-html="$t( 'error_page' )"></span>

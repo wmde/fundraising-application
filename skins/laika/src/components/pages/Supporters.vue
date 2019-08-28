@@ -1,5 +1,5 @@
 <template>
-	<div class="column is-full">
+	<div class="supporters">
 		<supporter v-for="( supporter, index ) in supporters"
 				:key="index"
 				v-on:supporter-opened="setSupporterId( $event )"

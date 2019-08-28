@@ -1,5 +1,5 @@
 <template>
-	<div class="columns is-full has-padding-18 has-background-bright" id="use-of-funds">
+	<div class="columns has-padding-18 has-background-bright use-of-funds">
 		<div class="column is-two-thirds">
 			<h1 class="title is-1 has-margin-bottom-18">{{ $t('use_of_funds_header') }}</h1>
 			<p>{{ $t('use_of_funds_description') }}</p>

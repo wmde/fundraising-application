@@ -1,5 +1,5 @@
 <template>
-	<div class="column is-full contact-form">
+	<div class="contact-form">
 		<h1 class="title">{{ $t( 'contact_form_title' ) }}</h1>
 		<span class="help is-danger has-padding-bottom-18" v-if="contactData.errors">{{ $t('contact_form_error') }}</span>
 		<span class="help is-danger has-padding-bottom-18" v-for="error in contactData.errors">{{ $t( error ) }}</span>

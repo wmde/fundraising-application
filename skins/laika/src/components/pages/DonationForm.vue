@@ -1,6 +1,6 @@
 <template>
 
-	<form name="laika-donation" class="column is-full" ref="form" action="/donation/add" method="post">
+	<form name="laika-donation" ref="form" action="/donation/add" method="post">
 		<keep-alive>
 			<component
 				ref="currentPage"

@@ -1,5 +1,5 @@
 <template>
-	<div class="column is-full">
+	<div class="placeholder">
 
 		<h1 class="title">Placeholder Page</h1>
 
