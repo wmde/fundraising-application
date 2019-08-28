@@ -34,7 +34,12 @@
 }
 
 .list-menu {
-	min-width: 300px;
+	// 320px is the smallest assumed mobile size, minus 2 x column gap (18px).
+	// We don't use calc(100vw-36px) for compat reasons
+	min-width: 284px;
+	@include from($tablet) {
+		min-width: 320px; // stretch the lines of the menu further to the right
+	}
 	max-width: 340px;
 	li {
 		height: 54px;
