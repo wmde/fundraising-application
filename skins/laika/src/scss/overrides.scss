@@ -31,8 +31,11 @@
 
 .b-radio.radio {
 	height: auto;
-	width: 320px;
-	border-bottom: 2px solid $fun-color-gray-light-transparency;
+	width: 284px;
+	@include from($tablet) {
+		width: 320px;
+	}
+    border-bottom: 2px solid $fun-color-gray-light-transparency;
 	align-items: flex-start;
 	padding-bottom: 1.5em;
 	padding-top: 1.5em;
@@ -145,7 +148,7 @@ a[disabled=disabled] {
     color: gray;
 	cursor: default;
 	&:hover {
-		text-decoration: none;	
+		text-decoration: none;
 	}
 }
 
