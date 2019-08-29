@@ -20,7 +20,10 @@
 	.select {
 		select {
 			border-radius: 0;
-			width: 300px;
+			width: $fun-smallest-width;
+			@include from($tablet) {
+				width: 300px;
+			}
 			font-size: 1rem;
 			line-height: 40px;
 			height: 48px;
@@ -34,9 +37,7 @@
 }
 
 .list-menu {
-	// 320px is the smallest assumed mobile size, minus 2 x column gap (18px).
-	// We don't use calc(100vw-36px) for compat reasons
-	min-width: 284px;
+	min-width: $fun-smallest-width;
 	@include from($tablet) {
 		min-width: 320px; // stretch the lines of the menu further to the right
 	}
