@@ -1,13 +1,22 @@
 <template>
 	<div class="address-page">
+		<h1 v-if="!paymentWasInitialized" class="title is-size-1">{{ $t( 'donation_form_section_headline' ) }}</h1>
+		<div class="has-margin-left-18 has-margin-right-18">
+			<payment-summary v-if="paymentWasInitialized"
+							:amount="paymentSummary.amount"
+							:paymentType="paymentSummary.paymentType"
+							:interval="paymentSummary.interval"
+							v-on:previous-page="$emit( 'previous-page' )"
+			></payment-summary>
+		</div>
 		<address-fields v-bind="$props" ref="address"></address-fields>
 		<div class="column">
-			<div class="summary-wrapper">
+			<div class="summary-wrapper has-outside-border">
 				<donation-summary :payment="paymentSummary" :address-type="addressType" :address="addressSummary">
 					<div class="title is-size-5">{{ $t( 'donation_confirmation_review_headline' ) }}</div>
 				</donation-summary>
 				<submit-values :tracking-data="{}"></submit-values>
-				<div class="columns has-margin-top-36">
+				<div class="columns has-margin-top-18">
 					<div class="column">
 						<b-button id="previous-btn" class="level-item"
 								@click="$emit( 'previous-page' )"
@@ -43,6 +52,7 @@ import { TrackingData } from '@/view_models/SubmitValues';
 import { action } from '@/store/util';
 import { markEmptyValuesAsInvalid } from '@/store/bankdata/actionTypes';
 import { waitForServerValidationToFinish } from '@/wait_for_server_validation';
+import PaymentSummary from '@/components/pages/donation_form/PaymentSummary.vue';
 
 export default Vue.extend( {
 	name: 'AddressPage',
@@ -50,6 +60,7 @@ export default Vue.extend( {
 		AddressFields,
 		DonationSummary,
 		SubmitValues,
+		PaymentSummary,
 	},
 	props: {
 		validateAddressUrl: String,
@@ -93,6 +104,11 @@ export default Vue.extend( {
 		isBankTransferPayment: {
 			get(): boolean {
 				return this.$store.getters[ NS_PAYMENT + '/isBankTransferPayment' ];
+			},
+		},
+		paymentWasInitialized: {
+			get(): boolean {
+				return this.$store.state[ NS_PAYMENT ].initialized;
 			},
 		},
 	},

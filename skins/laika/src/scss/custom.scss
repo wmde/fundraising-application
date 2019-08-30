@@ -3,6 +3,9 @@
 @import "variables";
 @import "fonts";
 
+// Import Bulma's utility mixins
+@import "~bulma/sass/utilities/_all";
+
 .is-nowrap-whitespace {
 	white-space: nowrap !important;
 }
@@ -68,6 +71,16 @@
 	top: 3px;
 }
 
+.has-outside-border {
+	margin: -10px; /* half of column gap +1 pixel for border */
+	padding: 8px; /* add back column gap -1 pixel border */
+	@include from($tablet) {
+		margin:  1 - $column-gap;
+		padding: $column-gap - 1;
+	}
+	border: solid 2px $fun-color-gray-light-solid;
+}
+
 .accordion {
 	&-item {
 		border: 1px solid $fun-color-bright;
@@ -106,17 +119,12 @@
 	}
 }
 
-// Import Bulma's core
-@import "~bulma/sass/utilities/_all";
-
 // Import Bulma and Buefy styles
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
 @import "~bulma-helpers/sass/helpers/spacing/margin-padding";
 
 .summary-wrapper {
-	border: 2px solid $fun-color-gray-light-solid;
-	padding: 18px;
 	@include until($widescreen) {
 		button.is-main {
 			width: 100%;

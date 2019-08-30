@@ -1,6 +1,6 @@
 <template>
 	<div class="column is-full">
-		<div class="donation-summary-wrapper has-background-bright columns has-padding-18">
+		<div class="donation-summary-wrapper has-background-bright columns has">
 			<div class="column is-half">
 				<donation-summary :address="confirmationData.address" :address-type="confirmationData.addressType"
 								:payment="confirmationData.donation">

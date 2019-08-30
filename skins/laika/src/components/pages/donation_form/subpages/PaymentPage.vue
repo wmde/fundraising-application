@@ -1,5 +1,6 @@
 <template>
 	<div class="payment-page">
+		<h1 class="title is-size-1">{{ $t( 'donation_form_section_headline' ) }}</h1>
 		<payment v-bind="$props"></payment>
 		<div class="level has-margin-top-36">
 			<div class="level-left">
