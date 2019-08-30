@@ -1,8 +1,12 @@
 <template>
 	<div class="donation-links is-hidden-print">
 		<a id="print-link" href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
-		<a id="comment-link" :href="donationCommentUrl" v-if="donationCanBeCommented">{{ $t( 'donation_confirmation_comment_button' )
-			}}</a>
+		<a id="comment-link" @click="addComment = true" v-if="donationCanBeCommented">
+			{{ $t( 'donation_confirmation_comment_button' )}}
+		</a>
+		 <b-modal :active.sync="addComment" has-modal-card>
+            <donation-comment-pop-up v-if="addComment"></donation-comment-pop-up>
+        </b-modal>
 		<div id="cancel-link" v-if="donationCanBeCanceled">
 			<form class="has-margin-top-18" :action="confirmationData.urls.cancelDonation" method="post">
 				<a href="javascript:" onclick="parentNode.submit();">{{ $t( 'donation_confirmation_cancel_button' )
@@ -15,9 +19,19 @@
 </template>
 <script lang="ts">
 import Vue from 'vue';
+import DonationCommentPopUp from '@/components/DonationCommentPopUp.vue';
+
 
 export default Vue.extend( {
 	name: 'SummaryLinks',
+	components: {
+		DonationCommentPopUp,
+	},
+	data: function() {
+		return {
+			addComment: false,
+		}
+	},
 	props: [
 		'confirmationData',
 	],
