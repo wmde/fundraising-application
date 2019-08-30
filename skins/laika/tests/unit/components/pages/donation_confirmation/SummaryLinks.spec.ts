@@ -35,10 +35,8 @@ describe( 'SummaryLinks', () => {
 			},
 		} );
 
-		let href = wrapper.find( '#comment-link' ).element.attributes.getNamedItem( 'href' );
-		expect( href!.value ).toMatch(
-			'/add-comment?donationId=' + testId + '&accessToken=' + testAccessToken + '&updateToken=' + testUpdateToken
-		);
+		let donationCommentLink = wrapper.find( '#comment-link' );
+		expect( donationCommentLink.exists() ).toBeTruthy();
 	} );
 
 	it( 'prevents donations from being commented if the payment method is UEB', () => {

@@ -141,6 +141,14 @@ button.is-low {
 	}
 }
 
+a[disabled=disabled] {
+    color: gray;
+	cursor: default;
+	&:hover {
+		text-decoration: none;	
+	}
+}
+
 // Ensure footer always sticks to the bottom of the page
 // by setting min-height of the root elements to 100vh
 // and ensuring the main element is set to flex: 1

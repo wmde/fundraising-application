@@ -1,16 +1,19 @@
 <template>
 	<div class="donation-links is-hidden-print">
 		<a id="print-link" href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
-		<a id="comment-link" @click="addComment = true" v-if="donationCanBeCommented">
-			{{ $t( 'donation_confirmation_comment_button' )}}
+		<a id="comment-link" @click="openPopUp()" v-if="donationCanBeCommented" :disabled="disableCommentLink">
+			{{ disableCommentLink ? $t( 'donation_comment_popup_thanks' ) : $t( 'donation_confirmation_comment_button' ) }}
 		</a>
-		 <b-modal :active.sync="addComment" has-modal-card>
-            <donation-comment-pop-up v-if="addComment"></donation-comment-pop-up>
+		<b-modal :active.sync="addComment" has-modal-card>
+            <donation-comment-pop-up 
+				v-on:disable-comment-link="disableCommentLink = true" 
+				v-if="addComment" 
+				:confirmation-data="confirmationData"
+				/>
         </b-modal>
 		<div id="cancel-link" v-if="donationCanBeCanceled">
 			<form class="has-margin-top-18" :action="confirmationData.urls.cancelDonation" method="post">
-				<a href="javascript:" onclick="parentNode.submit();">{{ $t( 'donation_confirmation_cancel_button' )
-					}}</a>
+				<a href="javascript:" onclick="parentNode.submit();">{{ $t( 'donation_confirmation_cancel_button' ) }}</a>
 				<input type="hidden" name="sid" :value="confirmationData.donation.id"/>
 				<input type="hidden" name="utoken" :value="confirmationData.donation.updateToken">
 			</form>
@@ -21,16 +24,16 @@
 import Vue from 'vue';
 import DonationCommentPopUp from '@/components/DonationCommentPopUp.vue';
 
-
 export default Vue.extend( {
 	name: 'SummaryLinks',
 	components: {
 		DonationCommentPopUp,
 	},
-	data: function() {
+	data: function () {
 		return {
 			addComment: false,
-		}
+			disableCommentLink: false,
+		};
 	},
 	props: [
 		'confirmationData',
@@ -42,11 +45,14 @@ export default Vue.extend( {
 		donationCanBeCommented(): boolean {
 			return this.confirmationData.donation.paymentType !== 'UEB';
 		},
-		donationCommentUrl(): string {
-			const donation = this.confirmationData.donation;
-			return `/add-comment?donationId=${donation.id}&accessToken=${donation.accessToken}&updateToken=${donation.updateToken}`;
-		},
 	},
+	methods: {
+		openPopUp(): void {
+			if ( !this.$data.disableCommentLink ) {
+				this.$data.addComment = true;
+			}
+		}
+	}
 } );
 </script>
 
