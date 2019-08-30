@@ -2,10 +2,10 @@ import { ActionContext } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
 import {
 	IntervalData,
-	Payment,
 	TypeData,
 	InitialPaymentValues,
 } from '@/view_models/Payment';
+import { DonationPayment } from '@/store/payment/types';
 
 import {
 	initializePayment,
@@ -19,7 +19,7 @@ import {
 	MARK_EMPTY_AMOUNT_INVALID,
 	MARK_EMPTY_FIELDS_INVALID,
 	SET_AMOUNT,
-	SET_AMOUNT_VALIDITY,
+	SET_AMOUNT_VALIDITY, SET_INITIALIZED,
 	SET_INTERVAL, SET_IS_VALIDATING,
 	SET_TYPE,
 	SET_TYPE_VALIDITY,
@@ -28,7 +28,7 @@ import { ValidationResponse } from '@/store/ValidationResponse';
 import { Validity } from '@/view_models/Validity';
 
 export const actions = {
-	[ initializePayment ]( context: ActionContext<Payment, any>, initialValues: InitialPaymentValues ): Promise<boolean> {
+	[ initializePayment ]( context: ActionContext<DonationPayment, any>, initialValues: InitialPaymentValues ): Promise<boolean> {
 		let amountIsFilled = false, paymentIsFilled = false;
 		if ( initialValues.amount !== '0' ) {
 			context.commit( SET_AMOUNT, initialValues.amount );
@@ -42,16 +42,17 @@ export const actions = {
 			paymentIsFilled = true;
 		}
 		context.commit( SET_INTERVAL, initialValues.paymentIntervalInMonths );
+		context.commit( SET_INITIALIZED, amountIsFilled && paymentIsFilled );
 
 		return Promise.resolve( amountIsFilled && paymentIsFilled );
 	},
-	[ markEmptyValuesAsInvalid ]( context: ActionContext<Payment, any> ): void {
+	[ markEmptyValuesAsInvalid ]( context: ActionContext<DonationPayment, any> ): void {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
 	},
-	[ markEmptyAmountAsInvalid ]( context: ActionContext<Payment, any> ): void {
+	[ markEmptyAmountAsInvalid ]( context: ActionContext<DonationPayment, any> ): void {
 		context.commit( MARK_EMPTY_AMOUNT_INVALID );
 	},
-	[ setAmount ]( context: ActionContext<Payment, any>, payload: any ): void {
+	[ setAmount ]( context: ActionContext<DonationPayment, any>, payload: any ): void {
 		context.commit( SET_AMOUNT, payload.amountValue );
 		context.commit( SET_IS_VALIDATING, true );
 		const bodyFormData = new FormData();
@@ -67,10 +68,10 @@ export const actions = {
 			context.commit( SET_IS_VALIDATING, false );
 		} );
 	},
-	[ setInterval ]( context: ActionContext<Payment, any>, payload: IntervalData ): void {
+	[ setInterval ]( context: ActionContext<DonationPayment, any>, payload: IntervalData ): void {
 		context.commit( SET_INTERVAL, payload );
 	},
-	[ setType ]( context: ActionContext<Payment, any>, payload: TypeData ): void {
+	[ setType ]( context: ActionContext<DonationPayment, any>, payload: TypeData ): void {
 		context.commit( SET_TYPE, payload );
 		context.commit( SET_TYPE_VALIDITY );
 	},

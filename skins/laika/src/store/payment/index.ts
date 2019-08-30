@@ -1,12 +1,12 @@
 import { Module } from 'vuex';
-import { Payment } from '@/view_models/Payment';
 import { Validity } from '@/view_models/Validity';
 import { actions } from '@/store/payment/actions';
 import { getters } from '@/store/payment/getters';
 import { mutations } from '@/store/payment/mutations';
+import { DonationPayment } from '@/store/payment/types';
 
-export default function (): Module<Payment, any> {
-	const state: Payment = {
+export default function (): Module<DonationPayment, any> {
+	const state: DonationPayment = {
 		isValidating: false,
 		validity: {
 			amount: Validity.INCOMPLETE,
@@ -17,6 +17,7 @@ export default function (): Module<Payment, any> {
 			interval: '0',
 			type: '',
 		},
+		initialized: false,
 	};
 
 	const namespaced = true;

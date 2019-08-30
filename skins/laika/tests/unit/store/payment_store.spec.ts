@@ -1,7 +1,6 @@
 import { getters } from '@/store/payment/getters';
 import { actions } from '@/store/payment/actions';
 import { mutations } from '@/store/payment/mutations';
-import { Payment } from '@/view_models/Payment';
 import { Validity } from '@/view_models/Validity';
 import {
 	initializePayment,
@@ -16,8 +15,9 @@ import {
 } from '@/store/payment/mutationTypes';
 import each from 'jest-each';
 import moxios from 'moxios';
+import { DonationPayment } from '@/store/payment/types';
 
-function newMinimalStore( overrides: Object ): Payment {
+function newMinimalStore( overrides: Object ): DonationPayment {
 	return Object.assign(
 		{
 			isValidating: false,
@@ -30,6 +30,7 @@ function newMinimalStore( overrides: Object ): Payment {
 				interval: '0',
 				type: '',
 			},
+			initialized: false,
 		},
 		overrides
 	);
