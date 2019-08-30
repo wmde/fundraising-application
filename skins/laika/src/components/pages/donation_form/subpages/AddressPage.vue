@@ -6,7 +6,7 @@
 							:amount="paymentSummary.amount"
 							:paymentType="paymentSummary.paymentType"
 							:interval="paymentSummary.interval"
-							v-on:previous-page="$emit( 'previous-page' )"
+							v-on:previous-page="previousPage"
 			></payment-summary>
 		</div>
 		<address-fields v-bind="$props" ref="address"></address-fields>
@@ -19,7 +19,7 @@
 				<div class="columns has-margin-top-18">
 					<div class="column">
 						<b-button id="previous-btn" class="level-item"
-								@click="$emit( 'previous-page' )"
+								@click="previousPage"
 								type="is-primary is-main"
 								outlined>
 							{{ $t('donation_form_section_back') }}
@@ -53,6 +53,7 @@ import { action } from '@/store/util';
 import { markEmptyValuesAsInvalid } from '@/store/bankdata/actionTypes';
 import { waitForServerValidationToFinish } from '@/wait_for_server_validation';
 import PaymentSummary from '@/components/pages/donation_form/PaymentSummary.vue';
+import { discardInitialization } from '@/store/payment/actionTypes';
 
 export default Vue.extend( {
 	name: 'AddressPage',
@@ -113,6 +114,10 @@ export default Vue.extend( {
 		},
 	},
 	methods: {
+		previousPage() {
+			this.$store.dispatch( action( NS_PAYMENT, discardInitialization ) );
+			this.$emit( 'previous-page' );
+		},
 		submit() {
 			const validationCalls = [
 				( this.$refs.address as any ).validateForm(),

@@ -8,6 +8,7 @@ import {
 import { DonationPayment } from '@/store/payment/types';
 
 import {
+	discardInitialization,
 	initializePayment,
 	markEmptyAmountAsInvalid,
 	markEmptyValuesAsInvalid,
@@ -28,6 +29,9 @@ import { ValidationResponse } from '@/store/ValidationResponse';
 import { Validity } from '@/view_models/Validity';
 
 export const actions = {
+	[ discardInitialization ]( context: ActionContext<DonationPayment, any>, initialValues: InitialPaymentValues ): void {
+		context.commit( SET_INITIALIZED, false );
+	},
 	[ initializePayment ]( context: ActionContext<DonationPayment, any>, initialValues: InitialPaymentValues ): Promise<boolean> {
 		let amountIsFilled = false, paymentIsFilled = false;
 		if ( initialValues.amount !== '0' ) {
