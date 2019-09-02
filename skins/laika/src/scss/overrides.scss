@@ -121,6 +121,14 @@ button.is-main {
 	}
 }
 
+button.is-low {
+	height: 36px;
+	font-size: 1em;
+	font-weight: bold;
+	width: 240px;
+	border-radius: 2px;
+}
+
 // Ensure footer always sticks to the bottom of the page
 // by setting min-height of the root elements to 100vh
 // and ensuring the main element is set to flex: 1
