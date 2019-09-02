@@ -32,12 +32,12 @@
 .b-radio.radio {
 	height: auto;
 	width: 320px;
-	border-bottom: 2px solid $fun-color-off-bright;
+	border-bottom: 2px solid $fun-color-gray-light-transparency;
 	align-items: flex-start;
 	padding-bottom: 1.5em;
 	padding-top: 1.5em;
 	&:hover {
-		border-bottom: 2px solid $fun-color-dark-lighter;
+		border-bottom: 2px solid $fun-color-gray-dark;
 	}
 	&.is-active {
 		border-bottom: 2px solid $fun-color-primary;
