@@ -4,7 +4,7 @@
 		<div class="has-margin-left-18 has-margin-right-18">
 			<payment-summary v-if="paymentWasInitialized"
 							:amount="paymentSummary.amount"
-							:paymentType="paymentSummary.paymentType"
+							:payment-type="paymentSummary.paymentType"
 							:interval="paymentSummary.interval"
 							v-on:previous-page="previousPage"
 			></payment-summary>
