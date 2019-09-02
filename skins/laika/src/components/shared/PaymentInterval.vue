@@ -3,7 +3,7 @@
 		<legend class="title is-size-5">{{ title }}</legend>
 		<div>
 			<div class="wrap-radio" v-for="interval in paymentIntervals" :key="'interval-' + interval">
-				<b-radio :class="{ 'is-active': selectedInterval === interval }"
+				<b-radio :class="{ 'is-active': selectedInterval === interval.toString() }"
 						:id="'interval-' + interval"
 						name="interval"
 						v-model="selectedInterval"
