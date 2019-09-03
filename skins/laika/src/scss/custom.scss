@@ -84,11 +84,12 @@
 .accordion {
 	&-item {
 		border: 1px solid $fun-color-bright;
-		padding-top: 1.1rem ;
+		padding-top: 1rem;
 		box-sizing: content-box;
 	}
 	&-open {
 		border: 1px solid $fun-color-gray-light-transparency;
+		margin-top: 1rem;
 	}
 	&-heading {
 		border-bottom: 2px solid $fun-color-gray-light-transparency;
