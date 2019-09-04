@@ -4,9 +4,11 @@
 		<input type="hidden" name="updateToken" :value="confirmationData.donation.updateToken">
 		<p class="modal-card-title has-margin-bottom-18">{{ $t( 'donation_comment_popup_title' ) }}</p><br>
 		<p class="has-margin-bottom-18">{{ $t( 'donation_comment_popup_explanation' ) }}</p>
-		<b-field :label="$t( 'donation_comment_popup_label' )">
+		<div class="has-margin-bottom-18">
+			<label for="comment">{{ $t( 'donation_comment_popup_label' ) }}</label>
 			<b-input id="comment" name="comment" type="textarea"></b-input>
-		</b-field>
+			<p v-if="commentErrored" class="help is-danger"> {{ $t( 'donation_comment_popup_error' ) }}</p>
+		</div>
 		<div class="field has-margin-bottom-18">
 			<b-checkbox type="checkbox" id="isAnonymous" name="isAnonymous" v-model="commentIsAnon">{{ $t( 'donation_comment_popup_is_anon' ) }}</b-checkbox>
 		</div>
@@ -39,6 +41,7 @@ export default Vue.extend( {
 		return {
 			commentIsPublic: true,
 			commentIsAnon: false,
+			commentErrored: false,
 		};
 	},
 	props: [
@@ -49,11 +52,17 @@ export default Vue.extend( {
 			let form = this.$refs.form as HTMLFormElement;
 			trackFormSubmission( form );
 			const jsonForm = new FormData( form );
-			axios.post(this.$props.confirmationData.urls.postComment, jsonForm)
+			axios.post( this.$props.confirmationData.urls.postComment, jsonForm )
 				.then( ( validationResult: AxiosResponse<any> ) => {
-				( this.$parent as any ).close();
-				this.$emit( 'disable-comment-link' );
-			} );
+					if ( validationResult.data.status === 'OK' ) {
+						this.$data.commentErrored = false;
+						( this.$parent as any ).close();
+						this.$emit( 'disable-comment-link' );
+					} else {
+						this.$data.commentErrored = true;
+					}
+
+				} );
 		},
 	},
 } );

@@ -1,13 +1,13 @@
 <template>
 	<div class="donation-links is-hidden-print">
 		<a id="print-link" href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
-		<a id="comment-link" @click="openPopUp()" v-if="donationCanBeCommented" :disabled="disableCommentLink">
-			{{ disableCommentLink ? $t( 'donation_comment_popup_thanks' ) : $t( 'donation_confirmation_comment_button' ) }}
+		<a id="comment-link" @click="openPopUp()" v-if="donationCanBeCommented" :disabled="commentLinkIsDisabled">
+			{{ commentLinkIsDisabled ? $t( 'donation_comment_popup_thanks' ) : $t( 'donation_confirmation_comment_button' ) }}
 		</a>
-		<b-modal :active.sync="addComment" has-modal-card>
-            <donation-comment-pop-up 
-				v-on:disable-comment-link="disableCommentLink = true" 
-				v-if="addComment" 
+		<b-modal :active.sync="openCommentPopUp" scroll="keep" modal-card>
+            <donation-comment-pop-up
+				v-on:disable-comment-link="commentLinkIsDisabled = true"
+				v-if="openCommentPopUp"
 				:confirmation-data="confirmationData"
 				/>
         </b-modal>
@@ -31,8 +31,8 @@ export default Vue.extend( {
 	},
 	data: function () {
 		return {
-			addComment: false,
-			disableCommentLink: false,
+			openCommentPopUp: false,
+			commentLinkIsDisabled: false,
 		};
 	},
 	props: [
@@ -48,11 +48,11 @@ export default Vue.extend( {
 	},
 	methods: {
 		openPopUp(): void {
-			if ( !this.$data.disableCommentLink ) {
-				this.$data.addComment = true;
+			if ( !this.$data.commentLinkIsDisabled ) {
+				this.$data.openCommentPopUp = true;
 			}
-		}
-	}
+		},
+	},
 } );
 </script>
 
