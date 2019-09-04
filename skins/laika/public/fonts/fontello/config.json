@@ -41,6 +41,12 @@
       "css": "right-open",
       "code": 59396,
       "src": "fontawesome"
+    },
+    {
+      "uid": "c709da589c923ba3c2ad48d9fc563e93",
+      "css": "cancel",
+      "code": 59397,
+      "src": "entypo"
     }
   ]
 }
