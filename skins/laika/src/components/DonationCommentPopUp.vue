@@ -5,7 +5,7 @@
 		<div v-if="commentHasBeenSubmitted">
 			<p v-html="serverResponse"></p>
 			<b-button type="is-primary is-main has-margin-top-18" @click="$parent.close()" outlined>
-				{{ $t( 'donation_comment_popup_cancel' ) }}
+				{{ $t( 'back_to_donation_summary' ) }}
 			</b-button>
 		</div>
 		<div v-else>
