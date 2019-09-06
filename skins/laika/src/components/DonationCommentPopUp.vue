@@ -1,5 +1,5 @@
 <template>
-	<form id="laika-comment" v-on:submit.prevent="postComment" method="post" ref="form" class="modal-card">
+	<form id="laika-comment" name="laika-comment" v-on:submit.prevent="postComment" method="post" ref="form" class="modal-card">
 		<input type="hidden" name="donationId" :value="confirmationData.donation.id"/>
 		<input type="hidden" name="updateToken" :value="confirmationData.donation.updateToken">
 		<p class="modal-card-title has-margin-bottom-18">{{ $t( 'donation_comment_popup_title' ) }}</p><br>
