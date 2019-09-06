@@ -6,7 +6,6 @@
 				:is="currentFormComponent"
 				v-on:next-page="changePageIndex( 1 )"
 				v-on:previous-page="changePageIndex( -1 )"
-				v-on:submit-donation="submitDonationForm"
 				v-bind="currentProperties">
 			</component>
 		</keep-alive>
@@ -18,7 +17,6 @@ import Vue from 'vue';
 import { TrackingData } from '@/view_models/SubmitValues';
 import PaymentPage from '@/components/pages/donation_form/subpages/PaymentPage.vue';
 import AddressPage from '@/components/pages/donation_form/subpages/AddressPage.vue';
-import { trackFormSubmission } from '@/tracking';
 
 export default Vue.extend( {
 	name: 'DonationForm',
@@ -88,11 +86,6 @@ export default Vue.extend( {
 		},
 		scrollToTop(): void {
 			window.scrollTo( 0, 0 );
-		},
-		submitDonationForm(): void {
-			const form = this.$refs.form as HTMLFormElement;
-			trackFormSubmission( form );
-			form.submit();
 		},
 	},
 } );

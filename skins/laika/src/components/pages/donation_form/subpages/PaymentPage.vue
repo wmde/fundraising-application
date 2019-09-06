@@ -1,10 +1,10 @@
 <template>
-		<form name="laika-donation-payment-data"
-			id="laika-donation-payment-data"
-			class="payment-page column is-full"
-			ref="payment"
-			action="#"
-			method="post">
+	<form name="laika-donation-payment"
+		id="laika-donation-payment"
+		class="payment-page column is-full"
+		ref="payment"
+		action="/donation/add"
+		method="post">
 		<h1 class="title is-size-1">{{ $t( 'donation_form_section_headline' ) }}</h1>
 		<payment v-bind="$props"></payment>
 		<div class="level has-margin-top-36">
@@ -26,6 +26,7 @@ import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
 import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
 import { waitForServerValidationToFinish } from '@/wait_for_server_validation';
+import { trackFormSubmission } from '@/tracking';
 
 export default Vue.extend( {
 	name: 'PaymentPage',
@@ -43,6 +44,8 @@ export default Vue.extend( {
 			return waitForServerValidationToFinish( this.$store ).then( () => {
 				this.$store.dispatch( action( NS_PAYMENT, markEmptyValuesAsInvalid ) ).then( () => {
 					if ( this.$store.getters[ NS_PAYMENT + '/paymentDataIsValid' ] ) {
+						const formPayment = this.$refs.payment as HTMLFormElement;
+						trackFormSubmission( formPayment );
 						this.$emit( 'next-page' );
 					} else {
 						document.getElementsByClassName( 'is-danger' )[ 0 ].scrollIntoView( { behavior: 'smooth', block: 'center', inline: 'nearest' } );
