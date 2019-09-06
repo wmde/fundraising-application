@@ -5,12 +5,12 @@
 			{{ commentLinkIsDisabled ? $t( 'donation_comment_popup_thanks' ) : $t( 'donation_confirmation_comment_button' ) }}
 		</a>
 		<b-modal :active.sync="openCommentPopUp" scroll="keep" modal-card>
-            <donation-comment-pop-up
+			<donation-comment-pop-up
 				v-on:disable-comment-link="commentLinkIsDisabled = true"
 				v-if="openCommentPopUp"
 				:confirmation-data="confirmationData"
-				/>
-        </b-modal>
+			/>
+		</b-modal>
 		<div id="cancel-link" v-if="donationCanBeCanceled">
 			<form class="has-margin-top-18" :action="confirmationData.urls.cancelDonation" method="post">
 				<a href="javascript:" onclick="parentNode.submit();">{{ $t( 'donation_confirmation_cancel_button' ) }}</a>
