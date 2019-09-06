@@ -1,5 +1,10 @@
 <template>
-	<div class="payment-page">
+		<form name="laika-donation-payment-data"
+			id="laika-donation-payment-data"
+			class="payment-page column is-full"
+			ref="payment"
+			action="#"
+			method="post">
 		<h1 class="title is-size-1">{{ $t( 'donation_form_section_headline' ) }}</h1>
 		<payment v-bind="$props"></payment>
 		<div class="level has-margin-top-36">
@@ -11,7 +16,7 @@
 				</b-button>
 			</div>
 		</div>
-	</div>
+	</form>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,10 @@
 <template>
-	<div class="address-page">
+	<form name="laika-donation-personal-data"
+			id="laika-donation-personal-data"
+			class="address-page column is-full"
+			ref="personal"
+			action="#"
+			method="post">
 		<h1 v-if="!paymentWasInitialized" class="title is-size-1">{{ $t( 'donation_form_section_headline' ) }}</h1>
 		<div class="has-margin-left-18 has-margin-right-18">
 			<payment-summary v-if="paymentWasInitialized"
@@ -37,8 +42,7 @@
 				<div class="summary-notice" v-if="isBankTransferPayment">{{ $t('donation_form_summary_bank_transfer_payment') }}</div>
 			</div>
 		</div>
-
-	</div>
+	</form>
 </template>
 
 <script lang="ts">

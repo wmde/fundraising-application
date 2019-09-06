@@ -1,6 +1,5 @@
 <template>
-
-	<form name="laika-donation" class="column is-full" ref="form" action="/donation/add" method="post">
+	<div id="laika-donation" class="column is-full">
 		<keep-alive>
 			<component
 				ref="currentPage"
@@ -11,7 +10,7 @@
 				v-bind="currentProperties">
 			</component>
 		</keep-alive>
-	</form>
+	</div>
 </template>
 
 <script lang="ts">
