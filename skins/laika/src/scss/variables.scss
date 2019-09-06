@@ -38,9 +38,9 @@ $custom-colors: (
 		"gray-very-light": ($fun-color-gray-very-light),
 );
 
-// 320px is the smallest assumed mobile size, minus 2 x column gap (18px).
-// We don't use calc(100vw-36px) for compat reasons
-$fun-smallest-width: 284px;
+// Max and min form item widths
+$fun-min-width: 250px;
+$fun-max-width: 350px;
 
 //
 // Overriding Bulma variables
