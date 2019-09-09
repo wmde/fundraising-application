@@ -1,5 +1,5 @@
 <template>
-	<fieldset class="has-margin-top-36 column is-full">
+	<fieldset class="has-margin-top-18">
 		<legend class="title is-size-5">{{ $t('membership_form_membershiptype_legend') }}</legend>
 		<div class="membership-type">
 			<b-radio :class="{ 'is-active': selectedType === MembershipTypeModel.SUSTAINING }"

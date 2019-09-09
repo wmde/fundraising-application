@@ -121,7 +121,10 @@ export default Vue.extend( {
 			display: flex;
 			justify-content: space-between;
 			flex-wrap: wrap;
-			width: 270px;
+			width: $fun-min-width;
+			@include from($tablet) {
+				width: $fun-max-width;
+			}
 		}
 		&-selector {
 			position: relative;
@@ -134,7 +137,10 @@ export default Vue.extend( {
 				display: flex;
 				justify-content: center;
 				height: 55px;
-				width: 55px;
+				width: 60px;
+				@include from($tablet) {
+					width: 75px;
+				}
 				&:active {
 					background-color: $fun-color-primary-lightest;
 				}
