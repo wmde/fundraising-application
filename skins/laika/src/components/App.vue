@@ -59,11 +59,4 @@ export default Vue.extend( {
 	.main-wrapper {
 		padding: $navbar-height 18px;
 	}
-
-	@include until($desktop) {
-		.intro-content {
-			margin: 18px !important;
-			padding: 18px 5%;
-		}
-	}
 </style>
