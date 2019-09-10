@@ -2,7 +2,7 @@
 	<div class="privacy_protection">
 		<h2 class="title is-size-2">{{ pageTitle }}</h2>
 		<div v-html="partialContentFirstHalf" class="has-margin-top-18 static-content"></div>
-		<div class="privacy-selection has-padding-36">
+		<div class="privacy-selection has-outside-border has-margin-top-18 has-margin-bottom-18">
 			<h2 class="title is-size-2">{{ $t( 'privacy_protection_title' ) }}</h2>
 			<fieldset>
 				<legend class="legend">
@@ -100,9 +100,6 @@ export default Vue.extend( {
 		}
 	}
 	.static-content {
-		ol {
-			margin-left: 1.5em;
-		}
 		& > ol {
 			padding-left: 10px;
 			list-style-type: upper-roman;
