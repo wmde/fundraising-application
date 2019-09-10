@@ -5,7 +5,7 @@
 			<div class="column is-half">
 				<membership-summary :address="confirmationData.address"
 									:membershipApplication="confirmationData.membershipApplication">
-					{{ $t( 'membership_confirmation_success_text' ) }}
+					<div class="has-margin-top-18">{{ $t( 'membership_confirmation_success_text' ) }}</div>
 				</membership-summary>
 			</div>
 

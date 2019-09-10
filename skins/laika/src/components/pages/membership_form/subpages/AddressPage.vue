@@ -1,5 +1,6 @@
 <template>
 	<div class="address-page">
+		<h1 class="title is-size-1">{{ $t('membership_form_headline' ) }}</h1>
 		<membership-type v-if="showMembershipTypeOption"></membership-type>
 		<address-fields v-bind="$props" ref="address"></address-fields>
 		<div class="level has-margin-top-18">
