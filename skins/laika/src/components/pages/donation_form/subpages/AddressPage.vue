@@ -1,5 +1,10 @@
 <template>
-	<div class="address-page">
+	<form name="laika-donation-personal-data"
+			id="laika-donation-personal-data"
+			class="address-page column is-full"
+			ref="personal"
+			action="/donation/add"
+			method="post">
 		<h1 v-if="!paymentWasInitialized" class="title is-size-1">{{ $t( 'donation_form_section_headline' ) }}</h1>
 		<div class="has-margin-left-18 has-margin-right-18">
 			<payment-summary v-if="paymentWasInitialized"
@@ -37,8 +42,7 @@
 				<div class="summary-notice" v-if="isBankTransferPayment">{{ $t('donation_form_summary_bank_transfer_payment') }}</div>
 			</div>
 		</div>
-
-	</div>
+	</form>
 </template>
 
 <script lang="ts">
@@ -54,6 +58,7 @@ import { markEmptyValuesAsInvalid } from '@/store/bankdata/actionTypes';
 import { waitForServerValidationToFinish } from '@/wait_for_server_validation';
 import PaymentSummary from '@/components/pages/donation_form/PaymentSummary.vue';
 import { discardInitialization } from '@/store/payment/actionTypes';
+import { trackFormSubmission } from '@/tracking';
 
 export default Vue.extend( {
 	name: 'AddressPage',
@@ -134,12 +139,17 @@ export default Vue.extend( {
 							document.getElementsByClassName( 'help is-danger' )[ 0 ].scrollIntoView( { behavior: 'smooth', block: 'center', inline: 'nearest' } );
 							return;
 						}
-						this.$emit( 'submit-donation' );
+						( this as any ).submitDonationForm();
 					} else {
 						document.getElementsByClassName( 'help is-danger' )[ 0 ].scrollIntoView( { behavior: 'smooth', block: 'center', inline: 'nearest' } );
 					}
 				} );
 			} );
+		},
+		submitDonationForm(): void {
+			const formPersonal = this.$refs.personal as HTMLFormElement;
+			trackFormSubmission( formPersonal );
+			formPersonal.submit();
 		},
 	},
 } );
