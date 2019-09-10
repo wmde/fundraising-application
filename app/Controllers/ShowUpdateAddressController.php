@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\App\Routes;
@@ -16,7 +17,12 @@ class ShowUpdateAddressController {
 
 	public const ADDRESS_CHANGE_SESSION_KEY = 'address_changed';
 
-	public function showForm( string $addressToken, FunFunFactory $ffFactory ): Response {
+	public function showForm( Request $request, FunFunFactory $ffFactory ): Response {
+		$addressToken = $request->get( 'addressToken', '' );
+		if ( $addressToken === '' ) {
+			throw new AccessDeniedException();
+		}
+
 		$addressChangeRepository = $ffFactory->newAddressChangeRepository();
 		$addressChange = $addressChangeRepository->getAddressChangeByUuid( $addressToken );
 		if ( $addressChange === null ) {

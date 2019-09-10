@@ -34,7 +34,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 
 				$client->request(
 					Request::METHOD_POST,
-					self::PATH . '/' . $addressToken,
+					self::PATH . '?addressToken=' . $addressToken,
 					[  ]
 				);
 
@@ -60,7 +60,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 
 				$client->request(
 					Request::METHOD_POST,
-					self::PATH . '/' . $addressToken,
+					self::PATH . '?addressToken=' . $addressToken,
 					[
 						'addressType' => 'person',
 						'firstName' => 'Graf',
@@ -95,7 +95,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 
 				$client->request(
 					Request::METHOD_POST,
-					self::PATH . '/' . $addressToken,
+					self::PATH . '?addressToken=' . $addressToken,
 					[
 						'receiptOptOut' => '1'
 					]

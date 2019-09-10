@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\AddressChange\UseCases\ChangeAddress\ChangeAddressRequest;
+use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**
@@ -15,7 +16,12 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class UpdateAddressController {
 
-	public function updateAddress( string $addressToken, Request $request, FunFunFactory $ffFactory ): Response {
+	public function updateAddress( Request $request, FunFunFactory $ffFactory ): Response {
+
+		$addressToken = $request->get( 'addressToken', '' );
+		if ( $addressToken === '' ) {
+			throw new AccessDeniedException();
+		}
 
 		$addressChangeRequest = $this->newAddressChangeRequestFromParams( $addressToken, $request->request );
 

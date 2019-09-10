@@ -68,11 +68,11 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function performRequest( Client $client, string $updateToken ): Crawler {
+	private function performRequest( Client $client, string $addressToken ): Crawler {
 		return $client->request(
 			Request::METHOD_GET,
-			self::PATH . '/' . $updateToken,
-			[ 'updateToken' => $updateToken ]
+			self::PATH . '?addressToken=' . $addressToken,
+			[ 'updateToken' => $addressToken ]
 		);
 	}
 

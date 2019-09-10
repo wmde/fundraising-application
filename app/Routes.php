@@ -317,13 +317,12 @@ class Routes {
 		)->bind( self::SHOW_FAQ );
 
 		$app->get(
-			'update-address/{addressToken}',
+			self::UPDATE_ADDRESS,
 			ShowUpdateAddressController::class . '::showForm'
-
 		)->bind( self::SHOW_UPDATE_ADDRESS );
 
 		$app->post(
-			'update-address/{addressToken}',
+			self::UPDATE_ADDRESS,
 			UpdateAddressController::class . '::updateAddress'
 
 		)->bind( self::UPDATE_ADDRESS );
