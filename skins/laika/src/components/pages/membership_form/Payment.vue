@@ -1,5 +1,5 @@
 <template>
-	<div id="payment" class="column is-full">
+	<div class="payment-section">
 		<payment-interval
 				:payment-intervals="paymentIntervals"
 				:current-interval="interval"
