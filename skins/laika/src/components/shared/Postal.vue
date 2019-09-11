@@ -56,13 +56,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { AddressValidity, FormData } from '@/view_models/Address';
+import { AddressValidity, AddressFormData } from '@/view_models/Address';
 
 export default Vue.extend( {
 	name: 'postal',
 	props: {
 		showError: Object as () => AddressValidity,
-		formData: Object as () => FormData,
+		formData: Object as () => AddressFormData,
 		countries: Array as () => Array<String>,
 	},
 	data() {

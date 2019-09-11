@@ -12,6 +12,13 @@
 	}
 }
 
+.is-form-input-width {
+	width: $fun-min-width !important;
+	@include from($tablet) {
+		width: $fun-max-width !important;
+	}
+}
+
 .is-nowrap-whitespace {
 	white-space: nowrap !important;
 }

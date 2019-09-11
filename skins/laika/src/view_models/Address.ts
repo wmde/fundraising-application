@@ -13,7 +13,7 @@ export interface InputField {
     optionalField: boolean
 }
 
-export interface FormData {
+export interface AddressFormData {
     [key: string]: InputField
 }
 
@@ -69,7 +69,7 @@ export interface InputField {
 
 export interface Payload {
     validateAddressUrl: string,
-    formData: FormData
+    formData: AddressFormData
 }
 
 /**
