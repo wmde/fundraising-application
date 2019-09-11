@@ -6,6 +6,12 @@
 // Import Bulma's utility mixins
 @import "~bulma/sass/utilities/_all";
 
+.is-two-thirds.column {
+	@include from($tablet) {
+		padding: $column-gap * 2;
+	}
+}
+
 .is-nowrap-whitespace {
 	white-space: nowrap !important;
 }
@@ -20,7 +26,10 @@
 	.select {
 		select {
 			border-radius: 0;
-			width: 300px;
+			width: $fun-min-width;
+			@include from($tablet) {
+				width: $fun-max-width;
+			}
 			font-size: 1rem;
 			line-height: 40px;
 			height: 48px;
@@ -34,8 +43,7 @@
 }
 
 .list-menu {
-	min-width: 300px;
-	max-width: 340px;
+	width: 100%;
 	li {
 		height: 54px;
 		position: relative;
@@ -93,7 +101,6 @@
 	}
 	&-heading {
 		border-bottom: 2px solid $fun-color-gray-light-transparency;
-		margin-left: 1.1rem;
 		cursor: pointer;
 	}
 	&-content {

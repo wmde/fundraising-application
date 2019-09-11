@@ -4,7 +4,7 @@
 		<a id="comment-link" @click="openPopUp()" v-if="donationCanBeCommented" :disabled="commentLinkIsDisabled">
 			{{ commentLinkIsDisabled ? $t( 'donation_comment_popup_thanks' ) : $t( 'donation_confirmation_comment_button' ) }}
 		</a>
-		<b-modal :active.sync="openCommentPopUp" scroll="keep" modal-card>
+		<b-modal :active.sync="openCommentPopUp" scroll="keep" has-modal-card>
 			<donation-comment-pop-up
 				v-on:disable-comment-link="commentLinkIsDisabled = true"
 				v-if="openCommentPopUp"

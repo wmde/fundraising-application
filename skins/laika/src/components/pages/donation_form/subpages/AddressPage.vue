@@ -1,7 +1,7 @@
 <template>
 	<form name="laika-donation-personal-data"
 			id="laika-donation-personal-data"
-			class="address-page column is-full"
+			class="address-page"
 			ref="personal"
 			action="/donation/add"
 			method="post">
@@ -15,8 +15,7 @@
 			></payment-summary>
 		</div>
 		<address-fields v-bind="$props" ref="address"></address-fields>
-		<div class="column">
-			<div class="summary-wrapper has-outside-border">
+			<div class="summary-wrapper has-margin-top-18 has-outside-border">
 				<donation-summary :payment="paymentSummary" :address-type="addressType" :address="addressSummary">
 					<div class="title is-size-5">{{ $t( 'donation_confirmation_review_headline' ) }}</div>
 				</donation-summary>
@@ -40,7 +39,6 @@
 				</div>
 				<div class="summary-notice" v-if="isExternalPayment">{{ $t('donation_form_summary_external_payment') }}</div>
 				<div class="summary-notice" v-if="isBankTransferPayment">{{ $t('donation_form_summary_bank_transfer_payment') }}</div>
-			</div>
 		</div>
 	</form>
 </template>

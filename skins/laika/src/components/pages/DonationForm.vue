@@ -1,5 +1,5 @@
 <template>
-	<div id="laika-donation" class="column is-full">
+	<div id="laika-donation">
 		<keep-alive>
 			<component
 				ref="currentPage"

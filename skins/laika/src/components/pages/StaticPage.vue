@@ -1,7 +1,7 @@
 <template>
-<div class="column is-full">
+<div class="static-page">
 	<h2 class="title is-size-2">{{ pageTitle }}</h2>
-	<div v-html="pageContent" class="has-margin-top-18 is-full static-content"></div>
+	<div v-html="pageContent" class="has-margin-top-18 static-content"></div>
 </div>
 </template>
 

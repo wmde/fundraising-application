@@ -1,8 +1,8 @@
 <template>
-	<div class="donation-summary">
+	<div class="membership-summary">
 		<div class="title is-size-5">{{ $t( 'membership_confirmation_thanks_text' ) }}</div>
 		<div class="payment-summary" v-html="getSummary()"></div>
-		<div class="has-margin-top-18"><slot></slot></div>
+		<slot></slot>
 	</div>
 </template>
 

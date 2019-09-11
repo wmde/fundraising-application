@@ -1,8 +1,9 @@
 <template>
-	<div class="column is-full">
+	<div class="address-page">
+		<h1 class="title is-size-1">{{ $t('membership_form_headline' ) }}</h1>
 		<membership-type v-if="showMembershipTypeOption"></membership-type>
 		<address-fields v-bind="$props" ref="address"></address-fields>
-		<div class="level column is-full has-margin-top-18">
+		<div class="level has-margin-top-18">
 			<div class="level-left">
 				<b-button id="next" :class="[ $store.getters.isValidating ? 'is-loading' : '', 'level-item']"
 						@click="next()"

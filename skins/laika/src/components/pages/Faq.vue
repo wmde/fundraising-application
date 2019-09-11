@@ -1,5 +1,5 @@
 <template>
-	<div id="faq" class="column has-padding-36">
+	<div id="faq">
 		<h1 class="title is-size-1">{{ $t('page_title') }}</h1>
 		<ul>
 			<li v-for="( topic, index ) in content.topics"

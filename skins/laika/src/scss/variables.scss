@@ -38,6 +38,10 @@ $custom-colors: (
 		"gray-very-light": ($fun-color-gray-very-light),
 );
 
+// Max and min form item widths
+$fun-min-width: 272px;
+$fun-max-width: 350px;
+
 //
 // Overriding Bulma variables
 //
@@ -83,6 +87,9 @@ $title-weight: 400;
 $subtitle-size: $size-8;
 $subtitle-color: $fun-color-dark;
 $subtitle-weight: bold;
+
+// Footer
+$footer-padding: 3rem $column-gap 6rem;
 
 // Header / Navbar
 $navbar-height: 5.2rem;

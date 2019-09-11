@@ -31,8 +31,11 @@
 
 .b-radio.radio {
 	height: auto;
-	width: 320px;
-	border-bottom: 2px solid $fun-color-gray-light-transparency;
+	width: $fun-min-width;
+	@include from($tablet) {
+		width: $fun-max-width;
+	}
+    border-bottom: 2px solid $fun-color-gray-light-transparency;
 	align-items: flex-start;
 	padding-bottom: 1.5em;
 	padding-top: 1.5em;
@@ -71,7 +74,7 @@
 }
 
 .input, .field {
-	max-width: 300px;
+	max-width: $fun-max-width;
 }
 
 .input {
@@ -135,6 +138,7 @@ button.is-low {
 	border: 2px solid $fun-color-gray-light-solid;
 	border-radius: $radius;
 	padding: 36px;
+	overflow-y: auto;
 	.icon.icon-size {
 		float: right;
 		padding: 0;
@@ -145,7 +149,7 @@ a[disabled=disabled] {
     color: gray;
 	cursor: default;
 	&:hover {
-		text-decoration: none;	
+		text-decoration: none;
 	}
 }
 

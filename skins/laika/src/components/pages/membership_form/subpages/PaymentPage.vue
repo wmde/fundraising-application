@@ -1,10 +1,10 @@
 <template>
 	<div class="payment-page">
 		<payment v-bind="$props"></payment>
-		<div class="summary-wrapper">
+		<div class="summary-wrapper has-margin-top-18 has-outside-border">
 			<membership-summary :membership-application="membershipApplication" :address="addressSummary"></membership-summary>
 			<submit-values :tracking-data="{}"></submit-values>
-			<div class="columns has-margin-top-36">
+			<div class="columns has-margin-top-18">
 				<div class="column">
 					<b-button id="previous-btn" class="level-item"
 						@click="$emit( 'previous-page' )"

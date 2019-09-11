@@ -1,11 +1,11 @@
 <template>
-	<div class="column is-full">
+	<div class="membership-confirmation">
 		<div class="donation-summary-wrapper has-background-bright columns has-padding-18">
 
 			<div class="column is-half">
 				<membership-summary :address="confirmationData.address"
 									:membershipApplication="confirmationData.membershipApplication">
-					{{ $t( 'membership_confirmation_success_text' ) }}
+					<div class="has-margin-top-18">{{ $t( 'membership_confirmation_success_text' ) }}</div>
 				</membership-summary>
 			</div>
 

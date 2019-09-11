@@ -1,5 +1,5 @@
 <template>
-	<div id="addressForm" class="column is-full">
+	<div class="address-section">
 		<div class="has-margin-top-18">
 			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
 			<address-type :initial-value="addressType" v-on:address-type="setAddressType( $event )"/>

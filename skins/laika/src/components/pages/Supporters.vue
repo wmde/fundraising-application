@@ -1,6 +1,6 @@
 <template>
-	<div class="column is-full">
-		<supporter v-for="( supporter, index ) in supporters"
+	<div class="supporters">
+		<supporter lang="de" v-for="( supporter, index ) in supporters"
 				:key="index"
 				v-on:supporter-opened="setSupporterId( $event )"
 				v-on:supporter-closed="setSupporterId( null )"
@@ -38,3 +38,20 @@ export default Vue.extend( {
 	},
 } );
 </script>
+
+<style lang="scss">
+	@import "../../scss/custom";
+
+	.icon-aligned {
+		width:20px;
+		display: inline-block;
+	}
+
+	.supporters {
+		hyphens: auto;
+		width: 85vw;
+		@include from($tablet) {
+			width: auto;
+		}
+	}
+</style>

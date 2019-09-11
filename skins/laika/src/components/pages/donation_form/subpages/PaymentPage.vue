@@ -1,7 +1,7 @@
 <template>
 	<form name="laika-donation-payment"
 		id="laika-donation-payment"
-		class="payment-page column is-full"
+		class="payment-page"
 		ref="payment"
 		action="/donation/add"
 		method="post">

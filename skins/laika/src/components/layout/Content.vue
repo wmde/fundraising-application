@@ -1,5 +1,5 @@
 <template>
-	<div class="columns has-margin-top-0">
+	<div class="columns content-wrapper">
 		<div v-bind:class="[isFullWidth ? 'column is-full' : 'is-two-thirds column has-background-bright']">
 			<slot></slot>
 		</div>
@@ -13,3 +13,10 @@ export default {
 	props: [ 'isFullWidth' ],
 };
 </script>
+
+<style lang="scss">
+	@import "../../scss/custom";
+	.columns.content-wrapper {
+		margin: 0 -12px;
+	}
+</style>

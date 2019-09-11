@@ -1,5 +1,5 @@
 <template>
-	<div class="column is-full">
+	<div class="system-message">
 		<h1 class="title">{{ $t( 'system_message_page_header' ) }}</h1>
 		<span>{{ $t( errorData.message ) }}</span>
 	</div>
