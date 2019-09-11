@@ -2,7 +2,7 @@
 	<div class="address-update-form">
 		<form name="address-update" ref="form" :action="updateAddressURL" method="post">
 			<h1 class="title is-size-1">{{ $t('address_change_form_title') }}</h1>
-			<legend class="title is-size-5">{{ $t( 'address_change_form_label' ) }}</legend>
+			<legend class="title is-size-6">{{ $t( 'address_change_form_label' ) }}</legend>
 			<div>
 				<name :show-error="fieldErrors"
 						:form-data="formData"
@@ -14,12 +14,14 @@
 						:countries="countries"
 						v-on:field-changed="onFieldChange">
 				</postal>
+				<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
+				<submit-values :tracking-data="{}"></submit-values>
 			</div>
 			<div class="level has-margin-top-36">
 				<div class="level-right">
 					<b-button id="next" :class="['is-form-input-width', $store.getters.isValidating ? 'is-loading' : '', 'level-item']"
-							  @click.prevent="submit()"
-							  type="is-primary is-main">
+							@click.prevent="submit()"
+							type="is-primary is-main">
 						{{ $t('address_change_form_submit') }}
 					</b-button>
 				</div>
@@ -31,19 +33,23 @@
 import Vue from 'vue';
 import Name from '@/components/shared/Name.vue';
 import Postal from '@/components/shared/Postal.vue';
+import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
+import SubmitValues from '@/components/pages/update-address/SubmitValues.vue';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
-import { AddressTypeModel } from "@/view_models/AddressTypeModel";
-import { mapGetters } from "vuex";
+import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import { mapGetters } from 'vuex';
 
 export default Vue.extend( {
 	name: 'update-address',
 	components: {
 		Name,
 		Postal,
+		ReceiptOptOut,
+		SubmitValues,
 	},
 	beforeMount() {
 		this.setAddressType( this.isCompany ? AddressTypeModel.COMPANY : AddressTypeModel.PERSON );
@@ -109,6 +115,7 @@ export default Vue.extend( {
 		};
 	},
 	props: {
+		validateAddressUrl: String,
 		updateAddressURL: String,
 		isCompany: Boolean,
 		countries: Array as () => Array<String>,
@@ -117,7 +124,7 @@ export default Vue.extend( {
 		fieldErrors: {
 			get: function (): AddressValidity {
 				return Object.keys( this.formData ).reduce( ( validity: AddressValidity, fieldName: string ) => {
-					if( !this.formData[ fieldName ].optionalField ) {
+					if ( !this.formData[ fieldName ].optionalField ) {
 						validity[ fieldName ] = this.$store.state.address.validity[ fieldName ] === Validity.INVALID;
 					}
 					return validity;
@@ -127,6 +134,11 @@ export default Vue.extend( {
 		...mapGetters( NS_ADDRESS, [
 			'addressType',
 		] ),
+		addressTypeString: {
+			get: function (): string {
+				return addressTypeName( ( this as any ).addressType );
+			},
+		},
 	},
 	methods: {
 		validateForm(): Promise<ValidationResult> {
@@ -143,7 +155,6 @@ export default Vue.extend( {
 		},
 		submit() {
 			this.validateForm().then( ( validationResult: ValidationResult ) => {
-				console.log( validationResult );
 				if ( validationResult.status === 'OK' ) {
 					const form = this.$refs.form as HTMLFormElement;
 					form.submit();

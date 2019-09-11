@@ -32,6 +32,7 @@ export interface AddressState {
     receiptOptOut: boolean,
     values: FormValues,
     validity: FormValidity,
+    requiredFields: { [key: number]: string[] },
 }
 
 export interface MembershipAddressState {

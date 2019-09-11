@@ -13,7 +13,6 @@ import {
 	SET_RECEIPT_OPTOUT,
 } from '@/store/address/mutationTypes';
 import { AddressState, InputField } from '@/view_models/Address';
-import { REQUIRED_FIELDS } from '@/store/address/constants';
 
 export const mutations: MutationTree<AddressState> = {
 	[ VALIDATE_INPUT ]( state: AddressState, field: InputField ) {
@@ -24,8 +23,10 @@ export const mutations: MutationTree<AddressState> = {
 		}
 	},
 	[ MARK_EMPTY_FIELDS_INVALID ]( state: AddressState ) {
-		REQUIRED_FIELDS[ state.addressType ].forEach( ( fieldName: string ) => {
-			if ( state.validity[ fieldName ] === Validity.INCOMPLETE ) {
+		state.requiredFields[ state.addressType ].forEach( ( fieldName: string ) => {
+			let addressTypeRequirements = state.requiredFields[ state.addressType ];
+			if ( state.validity[ fieldName ] === Validity.INCOMPLETE &&
+				addressTypeRequirements[ addressTypeRequirements.indexOf( fieldName ) ] ) {
 				state.validity[ fieldName ] = Validity.INVALID;
 			}
 		} );
@@ -38,7 +39,7 @@ export const mutations: MutationTree<AddressState> = {
 		if ( payload.status === 'OK' ) {
 			return;
 		}
-		REQUIRED_FIELDS[ state.addressType ].forEach( name => {
+		state.requiredFields[ state.addressType ].forEach( name => {
 			if ( payload.messages[ name ] ) {
 				state.validity[ name ] = Validity.INVALID;
 			}

@@ -6,7 +6,7 @@ import { getters } from '@/store/address/getters';
 import { mutations } from '@/store/address/mutations';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
-export default function (): Module<AddressState, any> {
+export default function ( requiredFields: { [key: number]: string[] } ): Module<AddressState, any> {
 	const state: AddressState = {
 		isValidating: false,
 		addressType: AddressTypeModel.PERSON,
@@ -37,6 +37,7 @@ export default function (): Module<AddressState, any> {
 			email: Validity.INCOMPLETE,
 			addressType: Validity.VALID,
 		},
+		requiredFields: requiredFields,
 	};
 
 	const namespaced = true;
