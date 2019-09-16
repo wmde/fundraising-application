@@ -1,7 +1,7 @@
 <template>
 	<div class="address-update-form">
-		<form name="address-update" ref="form" :action="updateAddressURL" method="post">
-			<h1 class="title is-size-1">{{ $t('address_change_form_title') }}</h1>
+		<form name="laika-address-update" ref="form" :action="updateAddressURL" method="post">
+			<h1 class="title is-size-1">{{ $t( 'address_change_form_title' ) }}</h1>
 			<legend class="title is-size-6">{{ $t( 'address_change_form_label' ) }}</legend>
 			<div>
 				<name :show-error="fieldErrors"
@@ -19,10 +19,10 @@
 			</div>
 			<div class="level has-margin-top-36">
 				<div class="level-right">
-					<b-button id="next" :class="['is-form-input-width', $store.getters.isValidating ? 'is-loading' : '', 'level-item']"
+					<b-button id="next" :class="[ 'is-form-input-width', $store.getters.isValidating ? 'is-loading' : '', 'level-item' ]"
 							@click.prevent="submit()"
 							type="is-primary is-main">
-						{{ $t('address_change_form_submit') }}
+						{{ $t( 'address_change_form_submit' ) }}
 					</b-button>
 				</div>
 			</div>
@@ -44,7 +44,7 @@ import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeMode
 import { mapGetters } from 'vuex';
 
 export default Vue.extend( {
-	name: 'update-address',
+	name: 'UpdateAddress',
 	components: {
 		Name,
 		Postal,
