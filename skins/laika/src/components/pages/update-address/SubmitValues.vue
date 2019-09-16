@@ -6,7 +6,7 @@
 		<input type="hidden" name="title" :value="address.title">
 		<input type="hidden" name="firstName" :value="address.firstName">
 		<input type="hidden" name="lastName" :value="address.lastName">
-		<input type="hidden" name="companyName" :value="address.companyName">
+		<input type="hidden" name="company" :value="address.companyName">
 		<input type="hidden" name="street" :value="address.street">
 		<input type="hidden" name="postcode" :value="address.postcode">
 		<input type="hidden" name="city" :value="address.city">

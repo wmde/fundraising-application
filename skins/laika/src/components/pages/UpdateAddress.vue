@@ -42,6 +42,7 @@ import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } fr
 import { action } from '@/store/util';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { mapGetters } from 'vuex';
+import { trackFormSubmission } from "@/tracking";
 
 export default Vue.extend( {
 	name: 'UpdateAddress',
@@ -157,6 +158,7 @@ export default Vue.extend( {
 			this.validateForm().then( ( validationResult: ValidationResult ) => {
 				if ( validationResult.status === 'OK' ) {
 					const form = this.$refs.form as HTMLFormElement;
+					trackFormSubmission( form );
 					form.submit();
 				}
 			} );

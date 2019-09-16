@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
-import { createStore } from '@/store/update-address_store';
+import { createStore } from '@/store/update_address_store';
 
 import App from '@/components/App.vue';
 import Component from '@/components/pages/UpdateAddress.vue';
