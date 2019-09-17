@@ -87,8 +87,8 @@
     "uglifyjs-webpack-plugin": "^2.1.2",
     "vueify": "^9.0.0",
     "watchify": "^3.11.1",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0",
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9",
     "webpack-concat-plugin": "^3.0.0",
     "webpack-config-utils": "^2.3.1"
   },
