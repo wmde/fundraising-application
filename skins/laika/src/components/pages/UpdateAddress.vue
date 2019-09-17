@@ -1,43 +1,59 @@
 <template>
-	<div class="address-section">
-		<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
-		<address-type v-on:address-type="setAddressType( $event )" :disabledAddressTypes="disabledAddressTypes"></address-type>
-		<div class="has-margin-top-18" v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}</div>
-		<name v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
-		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
-		<email v-if="addressTypeIsNotAnon" :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
-		<newsletter-opt-in v-if="addressTypeIsNotAnon"></newsletter-opt-in>
+	<div class="address-update-form">
+		<form name="laika-address-update" ref="form" :action="updateAddressURL" method="post">
+			<h1 class="title is-size-1">{{ $t( 'address_change_form_title' ) }}</h1>
+			<legend class="title is-size-6">{{ $t( 'address_change_form_label' ) }}</legend>
+			<div>
+				<name :show-error="fieldErrors"
+						:form-data="formData"
+						:address-type="addressType"
+						v-on:field-changed="onFieldChange">
+				</name>
+				<postal :show-error="fieldErrors"
+						:form-data="formData"
+						:countries="countries"
+						v-on:field-changed="onFieldChange">
+				</postal>
+				<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
+				<submit-values :tracking-data="{}"></submit-values>
+			</div>
+			<div class="level has-margin-top-36">
+				<div class="level-right">
+					<b-button id="next" :class="[ 'is-form-input-width', $store.getters.isValidating ? 'is-loading' : '', 'level-item' ]"
+							@click.prevent="submit()"
+							type="is-primary is-main">
+						{{ $t( 'address_change_form_submit' ) }}
+					</b-button>
+				</div>
+			</div>
+		</form>
 	</div>
 </template>
-
 <script lang="ts">
 import Vue from 'vue';
-import AddressType from '@/components/pages/donation_form/AddressType.vue';
 import Name from '@/components/shared/Name.vue';
 import Postal from '@/components/shared/Postal.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
-import Email from '@/components/shared/Email.vue';
-import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
-import { mapGetters } from 'vuex';
+import SubmitValues from '@/components/pages/update-address/SubmitValues.vue';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
-import PaymentBankData from '@/components/shared/PaymentBankData.vue';
+import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import { mapGetters } from 'vuex';
+import { trackFormSubmission } from "@/tracking";
 
 export default Vue.extend( {
-	name: 'Address',
+	name: 'UpdateAddress',
 	components: {
 		Name,
 		Postal,
-		AddressType,
 		ReceiptOptOut,
-		Email,
-		NewsletterOptIn,
-		PaymentBankData,
+		SubmitValues,
+	},
+	beforeMount() {
+		this.setAddressType( this.isCompany ? AddressTypeModel.COMPANY : AddressTypeModel.PERSON );
 	},
 	data: function (): { formData: AddressFormData } {
 		return {
@@ -96,19 +112,13 @@ export default Vue.extend( {
 					pattern: '',
 					optionalField: false,
 				},
-				email: {
-					name: 'email',
-					value: '',
-					pattern: '^(.+)@(.+)\\.(.+)$',
-					optionalField: false,
-				},
 			},
 		};
 	},
 	props: {
 		validateAddressUrl: String,
-		validateBankDataUrl: String,
-		validateLegacyBankDataUrl: String,
+		updateAddressURL: String,
+		isCompany: Boolean,
 		countries: Array as () => Array<String>,
 	},
 	computed: {
@@ -122,20 +132,14 @@ export default Vue.extend( {
 				}, ( {} as AddressValidity ) );
 			},
 		},
-		isDirectDebit: {
-			get: function (): boolean {
-				return this.$store.getters[ 'payment/isDirectDebitPayment' ];
-			},
-		},
-		disabledAddressTypes: {
-			get: function (): Array<AddressTypeModel> {
-				return this.$store.getters[ 'payment/isDirectDebitPayment' ] ? [ AddressTypeModel.ANON ] : [];
-			},
-		},
 		...mapGetters( NS_ADDRESS, [
 			'addressType',
-			'addressTypeIsNotAnon',
 		] ),
+		addressTypeString: {
+			get: function (): string {
+				return addressTypeName( ( this as any ).addressType );
+			},
+		},
 	},
 	methods: {
 		validateForm(): Promise<ValidationResult> {
@@ -149,6 +153,15 @@ export default Vue.extend( {
 		},
 		setAddressType( addressType: AddressTypeModel ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
+		},
+		submit() {
+			this.validateForm().then( ( validationResult: ValidationResult ) => {
+				if ( validationResult.status === 'OK' ) {
+					const form = this.$refs.form as HTMLFormElement;
+					trackFormSubmission( form );
+					form.submit();
+				}
+			} );
 		},
 	},
 } );

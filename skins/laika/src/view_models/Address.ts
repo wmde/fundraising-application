@@ -1,6 +1,7 @@
 import { Validity } from './Validity';
 import { AddressTypeModel } from './AddressTypeModel';
 import { MembershipTypeModel } from './MembershipTypeModel';
+import { AddressRequirements } from "@/store/address/constants";
 
 export interface AddressValidity {
     [key: string]: boolean
@@ -13,7 +14,7 @@ export interface InputField {
     optionalField: boolean
 }
 
-export interface FormData {
+export interface AddressFormData {
     [key: string]: InputField
 }
 
@@ -32,6 +33,7 @@ export interface AddressState {
     receiptOptOut: boolean,
     values: FormValues,
     validity: FormValidity,
+    requiredFields: AddressRequirements,
 }
 
 export interface MembershipAddressState {
@@ -69,7 +71,7 @@ export interface InputField {
 
 export interface Payload {
     validateAddressUrl: string,
-    formData: FormData
+    formData: AddressFormData
 }
 
 /**

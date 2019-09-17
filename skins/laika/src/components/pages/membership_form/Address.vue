@@ -22,7 +22,7 @@ import Postal from '@/components/shared/Postal.vue';
 import DateOfBirth from '@/components/pages/membership_form/DateOfBirth.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import Email from '@/components/shared/Email.vue';
-import { AddressValidity, FormData, ValidationResult } from '@/view_models/Address';
+import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
@@ -39,7 +39,7 @@ export default Vue.extend( {
 		AddressType,
 		Email,
 	},
-	data: function (): { formData: FormData } {
+	data: function (): { formData: AddressFormData } {
 		return {
 			formData: {
 				salutation: {

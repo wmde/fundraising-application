@@ -8,7 +8,6 @@ import {
 	FINISH_ADDRESS_VALIDATION,
 	SET_ADDRESS_FIELD,
 	SET_ADDRESS_TYPE,
-	SET_ADDRESS_FIELDS,
 	SET_NEWSLETTER_OPTIN,
 	SET_RECEIPT_OPTOUT,
 } from '@/store/address/mutationTypes';
@@ -25,6 +24,7 @@ function newMinimalStore( overrides: Object ): AddressState {
 			addressType: AddressTypeModel.PERSON,
 			newsletterOptIn: false,
 			receiptOptOut: false,
+			requiredFields: REQUIRED_FIELDS,
 			values: {
 				salutation: '',
 				title: '',

@@ -5,13 +5,15 @@ import { actions } from '@/store/address/actions';
 import { getters } from '@/store/address/getters';
 import { mutations } from '@/store/address/mutations';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressRequirements } from "@/store/address/constants";
 
-export default function (): Module<AddressState, any> {
+export default function ( requiredFields: AddressRequirements ): Module<AddressState, any> {
 	const state: AddressState = {
 		isValidating: false,
 		addressType: AddressTypeModel.PERSON,
 		newsletterOptIn: false,
 		receiptOptOut: false,
+		requiredFields: requiredFields,
 		values: {
 			salutation: '',
 			title: '',
