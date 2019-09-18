@@ -2,7 +2,11 @@
 	<div class="address-page">
 		<h1 class="title is-size-1">{{ $t('membership_form_headline' ) }}</h1>
 		<membership-type v-if="showMembershipTypeOption"></membership-type>
-		<address-fields v-bind="$props" ref="address"></address-fields>
+		<address-fields
+				:validate-address-url="validateAddressUrl"
+				:countries="countries"
+				ref="address">
+		</address-fields>
 		<div class="level has-margin-top-18">
 			<div class="level-left">
 				<b-button id="next" :class="[ 'is-form-input-width', $store.getters.isValidating ? 'is-loading' : '', 'level-item']"
