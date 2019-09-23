@@ -11,10 +11,16 @@
 							:amount="paymentSummary.amount"
 							:payment-type="paymentSummary.paymentType"
 							:interval="paymentSummary.interval"
-							v-on:previous-page="previousPage"
-			></payment-summary>
+							v-on:previous-page="previousPage">
+			</payment-summary>
 		</div>
-		<address-fields v-bind="$props" ref="address"></address-fields>
+		<address-fields
+				:validate-address-url="validateAddressUrl"
+				:validate-bank-data-url="validateBankDataUrl"
+				:validate-legacy-bank-data-url="validateLegacyBankDataUrl"
+				:countries="countries"
+				ref="address">
+		</address-fields>
 			<div class="summary-wrapper has-margin-top-18 has-outside-border">
 				<donation-summary :payment="paymentSummary" :address-type="addressType" :address="addressSummary">
 					<div class="title is-size-5">{{ $t( 'donation_confirmation_review_headline' ) }}</div>
