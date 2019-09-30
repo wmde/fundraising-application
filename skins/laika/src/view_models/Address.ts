@@ -1,7 +1,7 @@
 import { Validity } from './Validity';
 import { AddressTypeModel } from './AddressTypeModel';
 import { MembershipTypeModel } from './MembershipTypeModel';
-import { AddressRequirements } from "@/store/address/constants";
+import { AddressRequirements } from '@/store/address/constants';
 
 export interface AddressValidity {
     [key: string]: boolean

@@ -42,7 +42,7 @@ import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } fr
 import { action } from '@/store/util';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { mapGetters } from 'vuex';
-import { trackFormSubmission } from "@/tracking";
+import { trackFormSubmission } from '@/tracking';
 
 export default Vue.extend( {
 	name: 'UpdateAddress',
