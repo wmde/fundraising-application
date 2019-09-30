@@ -5,7 +5,7 @@ import { actions } from '@/store/address/actions';
 import { getters } from '@/store/address/getters';
 import { mutations } from '@/store/address/mutations';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
-import { AddressRequirements } from "@/store/address/constants";
+import { AddressRequirements } from '@/store/address/constants';
 
 export default function ( requiredFields: AddressRequirements ): Module<AddressState, any> {
 	const state: AddressState = {
