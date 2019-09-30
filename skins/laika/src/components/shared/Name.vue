@@ -37,29 +37,28 @@
 				<option value="Prof. Dr.">Prof. Dr.</option>
 			</b-select>
 		</div>
-		<div v-bind:class="[{ 'is-invalid': showError.firstName }]">
-			<label for="first-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_firstname_label' ) }}</label>
-			<b-field :type="{ 'is-danger': showError.firstName }">
-				<b-input class="is-medium"
-						type="text"
-						id="first-name"
-						v-model="formData.firstName.value"
-						:placeholder="$t( 'donation_form_firstname_placeholder' )"
-						@blur="$emit('field-changed', 'firstName')">
-				</b-input>
-			</b-field>
+		<div v-bind:class="[{ 'is-invalid': showError.firstName }, 'has-margin-top-36']">
+			<input-wrapper
+				id="first-name"
+				placeholder="donation_form_firstname_placeholder"
+				:value="formData.firstName.value"
+				event="field-changed"
+				eventValue="firstName"
+				:type="{ 'is-danger': showError.firstName }"
+				label="donation_form_firstname_label"
+			/>
 			<span v-if="showError.firstName" class="help is-danger">{{ $t( 'donation_form_firstname_error' ) }}</span>
 		</div>
 		<div v-bind:class="[{ 'is-invalid': showError.lastName }]">
-			<label for="last-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_lastname_label' ) }}</label>
-			<b-field :type="{ 'is-danger': showError.lastName }">
-				<b-input type="text"
-						id="last-name"
-						v-model="formData.lastName.value"
-						:placeholder="$t( 'donation_form_lastname_placeholder' )"
-						@blur="$emit('field-changed', 'lastName')">
-				</b-input>
-			</b-field>
+			<input-wrapper
+				id="last-name"
+				placeholder="donation_form_lastname_placeholder"
+				:value="formData.lastName.value"
+				event="field-changed"
+				eventValue="lastName"
+				:type="{ 'is-danger': showError.lastName }"
+				label="donation_form_lastname_label"
+			/>
 			<span v-if="showError.lastName" class="help is-danger">{{ $t( 'donation_form_lastname_error' ) }}</span>
 		</div>
 	</div>
@@ -82,9 +81,13 @@
 import Vue from 'vue';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { AddressValidity, AddressFormData } from '@/view_models/Address';
+import InputWrapper from '@/components/shared/InputWrapper.vue';
 
 export default Vue.extend( {
 	name: 'name',
+	components: {
+		InputWrapper,
+	},
 	props: {
 		showError: Object as () => AddressValidity,
 		formData: Object as () => AddressFormData,

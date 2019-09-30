@@ -1,12 +1,13 @@
 <template>
 	<b-field :type="type" :label="$t( label )" class="input-wrapper">
-		<input type="text"
+		<b-input type="text"
 				ref="input"
 				:id="id"
 				:name="id"
 				:placeholder="$t( placeholder )"
 				v-model="value"
 				@blur="$emit( event, eventValue )">
+		</b-input>
 	</b-field>
 </template>
 
@@ -25,8 +26,7 @@ export default Vue.extend( {
 		label: String,
 	},
 	mounted: function () {
-		( this.$refs.input as any ).addEventListener( 'animationstart', ( e: any ) => {
-			console.log( 'animation name', e.animationName );
+		( document as any ).getElementById( this.$props.id ).addEventListener( 'animationstart', ( e: any ) => {
 			switch ( e.animationName ) {
 				case 'onAutoFillStart':
 					this.onAutoFillStart();
