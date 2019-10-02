@@ -9,7 +9,8 @@ import Component from '@/components/pages/DonationForm.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
-import { initializePayment, setAmount } from '@/store/payment/actionTypes';
+import { initializePayment } from '@/store/payment/actionTypes';
+import { FeatureTogglePlugin } from '@/FeatureToggle';
 
 const PAGE_IDENTIFIER = 'donation-form',
 	COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
@@ -17,7 +18,7 @@ const PAGE_IDENTIFIER = 'donation-form',
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
-interface DonationAmountModel {
+interface DonationFormModel {
 	initialFormValues: any,
 	presetAmounts: Array<string>,
 	paymentTypes: Array<string>,
@@ -26,7 +27,7 @@ interface DonationAmountModel {
 	urls: any
 }
 
-const pageData = new PageDataInitializer<DonationAmountModel>( '#app' );
+const pageData = new PageDataInitializer<DonationFormModel>( '#app' );
 const store = createStore();
 
 const i18n = new VueI18n( {
@@ -35,6 +36,8 @@ const i18n = new VueI18n( {
 		[ DEFAULT_LOCALE ]: pageData.messages,
 	},
 } );
+
+Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
 
 store.dispatch( action( NS_PAYMENT, initializePayment ), {
 	// convert German-Formatted amount, see DonationFormPresenter

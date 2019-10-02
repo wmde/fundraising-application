@@ -1,7 +1,15 @@
 <template>
 	<div class="address-section">
 		<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
-		<address-type v-on:address-type="setAddressType( $event )" :disabledAddressTypes="disabledAddressTypes"></address-type>
+		<feature-toggle>
+			<div slot="campaigns.anon_form_display.two_steps">
+				TODO: 2-step address-type selection
+			</div>
+			<address-type
+					slot="campaigns.anon_form_display.address_type"
+					v-on:address-type="setAddressType( $event )"
+					:disabledAddressTypes="disabledAddressTypes"></address-type>
+		</feature-toggle>
 		<div class="has-margin-top-18" v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}</div>
 		<name v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>

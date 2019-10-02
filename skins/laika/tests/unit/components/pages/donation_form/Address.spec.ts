@@ -11,14 +11,15 @@ import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { createStore } from '@/store/donation_store';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
-import { NS_ADDRESS, NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
+import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
-import { SET_ADDRESS_FIELD } from '@/store/membership_address/mutationTypes';
+import { FeatureTogglePlugin } from '@/FeatureToggle';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
+localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'campaigns.anon_form_display.address_type' ] } );
 
 describe( 'Address.vue', () => {
 	let wrapper: any;
