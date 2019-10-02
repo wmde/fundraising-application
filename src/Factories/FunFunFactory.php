@@ -118,6 +118,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
+use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
@@ -744,7 +745,8 @@ class FunFunFactory implements ServiceProviderInterface {
 		return [
 			'honorifics' => $this->getHonorifics()->getList(),
 			'piwik' => $this->config['piwik'],
-			'locale' => $this->config['locale']
+			'locale' => $this->config['locale'],
+			'selectedBuckets' => BucketRenderer::renderBuckets( ...$this->getSelectedBuckets() ),
 		];
 	}
 
