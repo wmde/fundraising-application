@@ -5,10 +5,12 @@ import { FeatureTogglePlugin } from '@/FeatureToggle';
 const localVue = createLocalVue();
 localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'address.optional', 'skin.laika' ] } );
 
+const VueWithPlugin = localVue;
+
 describe( 'FeatureToggle component', () => {
 
 	it( 'does not render contents without slots', () => {
-		const vm = new localVue( {
+		const vm = new VueWithPlugin( {
 			render( h ) {
 				return h( 'feature-toggle', {}, [
 					h( 'div', 'Test' ),
@@ -20,7 +22,7 @@ describe( 'FeatureToggle component', () => {
 	} );
 
 	it( 'does not render slots for invisible features', () => {
-		const vm = new localVue( {
+		const vm = new VueWithPlugin( {
 			render( h ) {
 				return h( 'feature-toggle', {}, [
 					h( 'div', { slot: 'address.mandatory' }, 'Test' ),
@@ -32,7 +34,7 @@ describe( 'FeatureToggle component', () => {
 	} );
 
 	it( 'renders slot of visible features', () => {
-		const vm = new localVue( {
+		const vm = new VueWithPlugin( {
 			render( h ) {
 				return h( 'feature-toggle', {}, [
 					h( 'div', { slot: 'address.mandatory' }, 'Test mandatory address' ),

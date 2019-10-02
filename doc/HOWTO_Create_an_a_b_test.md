@@ -1,5 +1,7 @@
 # How to create an A/B test for a feature
 
+This document describes how you create an A/B test for a feature. If the feature affects the behavior of the PHP code or the client-side code in the skins `10h16` or `cat17`, follow sections 1-4. If the test affects the client-side code written with [Vue.js](https://vuejs.org/), follow the sections 1 and 5.
+
 ## 1. Create a campaign definition
 Edit the file `app/config/campaigns.yml` and add a new entry. If you're unsure about the end date, set it to the end of 
 next year. If you want to start with a deactivated campaign, but want to test it in your local environment, copy the 
@@ -123,3 +125,66 @@ public function testFancyHeader() {
 	} );
 }
 ```
+
+## 5. Implement A/B testing for Vue.js client-side code
+
+### Initialize FeatureToggle Plugin
+The PHP code provides the IDs of the selected buckets as template variables to the client-side code. You can use the IDs as a configuration for initializing the FeatureToggle plugin like this:
+
+```typescript
+import { FeatureTogglePlugin } from "@/FeatureToggle";
+import PageDataInitializer from '@/page_data_initializer';
+
+interface MyApplicationDataModel {
+    prop1: string,
+    prop2: string,
+    // etc
+}
+
+const pageData = new PageDataInitializer<MyApplicationDataModel>( '#app' );
+
+Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
+
+```
+
+With this initialization code, the new component `<feature-toggle>` becomes available in all of your components.
+
+You don't need to add the initialization code to *every* entry point, only to those entry points which use components that contain `<feature-toggle>` components.
+
+### Use `<feature-toggle>` component
+If you want a component to show up conditionally, wrap it in a `<feature-toggle>` and add a slot attribute to it that follows the pattern `campaigns.<CAMPAIGN_NAME>.<GROUP_NAME>`. The `<feature-toggle>` component will hide all children where the `slot` attribute does not match an active and selected bucket. It will also hide all children without a `slot` attribute.
+
+In the following example, only one headline will be shown, depending on the server-side selection of the bucket for the `header_template` campaign.
+````vue
+<template>
+    <div>
+        <feature-toggle>
+            <h1 slot="campaigns.header_template.default_header">Default Header</h1>
+            <h1 slot="campaigns.header_template.fancy_header" class="fancy">Fancy Header</h1>
+        </feature-toggle>
+    </div>
+</template>
+````  
+
+Although it's good style, you don't need to list all possible bucket options for a campaign  inside a `<feature-toggle>` component. You can even list bucket options for *multiple* campaigns inside a `<feature-toggle>` component.
+
+### Unit-test components with `<feature-toggle>` children 
+To pass the unit tests for components that contain the `<feature-toggle>` component, you need to use the [`localVue` option](https://vue-test-utils.vuejs.org/api/options.html#localvue) when mounting the component:
+
+```typescript
+import { createLocalVue, mount } from '@vue/test-utils';
+import { FeatureTogglePlugin } from "@/FeatureToggle";
+import MyComponent from "@/components/MyComponent";
+
+const localVue = createLocalVue();
+localVue.use( FeatureTogglePlugin, { 
+    activeFeatures: [ 'campaigns.header_template.default' ] 
+} );
+
+const wrapper = mount(MyComponent, { localVue });
+expect(wrapper.vm.find('.fancy')).toBeEmpty();
+```
+
+Make sure to cover all the code paths by initializing different `localVue` instances with different settings for `activeFeatures`!
+
+If you get the error message `Unknown custom element: <feature-toggle> - did you register the component correctly?` during testing, that's an indicator that you have to use `createLocalVue` and use the `FeatureTogglePlugin` in your test.
