@@ -11,6 +11,7 @@ import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
 import { initializePayment } from '@/store/payment/actionTypes';
 import { FeatureTogglePlugin } from '@/FeatureToggle';
+import { bucketIdToCssClass } from '@/bucket_id_to_css_class';
 
 const PAGE_IDENTIFIER = 'donation-form',
 	COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
@@ -61,6 +62,7 @@ store.dispatch( action( NS_PAYMENT, initializePayment ), {
 				paymentTypes: pageData.applicationVars.paymentTypes,
 				addressCountries: COUNTRIES,
 				trackingData: pageData.applicationVars.tracking,
+				bucketClasses: bucketIdToCssClass( pageData.selectedBuckets ),
 			},
 		},
 		[

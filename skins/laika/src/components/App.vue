@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div :class="bucketClasses">
 		<header>
 			<Header :page-identifier="pageIdentifier" :assets-path="assetsPath"></Header>
 		</header>
@@ -49,6 +49,10 @@ export default Vue.extend( {
 		isFullWidth: {
 			type: Boolean,
 			default: false,
+		},
+		bucketClasses: {
+			type: Array,
+			default: () => [],
 		},
 	},
 } );
