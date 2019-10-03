@@ -128,10 +128,45 @@ public function testFancyHeader() {
 
 ## 5. Implement A/B testing for Vue.js client-side code
 
+On the client side you have two options to influence the behavior and design of the app: For design changes, you add the bucket classes and write CSS for them. For behavior changes or additional components you you the FeatureToggle plugin. You can mix and match between the approaches, depending on your need.
+
+The PHP code provides the IDs of the selected buckets as template variables to the client-side code. The `pageData` object you use in your entry point JavaScript files has the `selectedBuckets` property.
+
+### Doing CSS-based changes
+
+To visually differentiate between different buckets, you can  convert the bucket IDs to CSS class names with the `bucketIdToCssClass` function and add them to the `App` component as a property:
+
+```typescript
+import Vue from 'vue';
+import PageDataInitializer from '@/page_data_initializer';
+import { bucketIdToCssClass } from '@bucket_id_to_css_class';
+import App from '@/components/App.vue';
+
+interface MyApplicationDataModel {
+    prop1: string,
+    prop2: string,
+    // etc
+}
+
+const pageData = new PageDataInitializer<MyApplicationDataModel>( '#app' );
+
+new Vue( {
+		render: h => h( App, {
+			props: {
+				assetsPath: pageData.assetsPath,
+				bucketClasses: bucketIdToCssClass( pageData.selectedBuckets ),
+			},
+		})
+} );
+```
+
+`bucketIdToCssClass` converts a bucket id in the format `campaigns.CAMPAIGN_NAME.BUCKET_NAME` to a CSS class in the format `campaigns--campaign-name--bucket-name`. You can prefix your CSS classes with the bucket CSS class name to display your content differently.
+
 ### Initialize FeatureToggle Plugin
 The PHP code provides the IDs of the selected buckets as template variables to the client-side code. You can use the IDs as a configuration for initializing the FeatureToggle plugin like this:
 
 ```typescript
+import Vue from 'vue';
 import { FeatureTogglePlugin } from "@/FeatureToggle";
 import PageDataInitializer from '@/page_data_initializer';
 
