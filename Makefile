@@ -119,6 +119,9 @@ ci: covers phpunit cs npm-ci validate-app-config validate-campaign-config stan
 
 ci-with-coverage: covers phpunit-with-coverage cs npm-ci validate-app-config validate-campaign-config stan
 
-setup: install-php install-js default-config ui setup-db
+create-env: 
+	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
+
+setup: create-env install-php install-js default-config ui setup-db
 
 .PHONY: ci ci-with-coverage clean clear covers cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config validate-campaign-config
