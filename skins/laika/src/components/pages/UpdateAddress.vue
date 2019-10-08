@@ -34,7 +34,7 @@ import Vue from 'vue';
 import Name from '@/components/shared/Name.vue';
 import Postal from '@/components/shared/Postal.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
-import SubmitValues from '@/components/pages/update-address/SubmitValues.vue';
+import SubmitValues from '@/components/pages/update_address/SubmitValues.vue';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
