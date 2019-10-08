@@ -68,6 +68,28 @@
 	}
 }
 
+.campaigns {
+	&--anon-form-display {
+		&--two-steps {
+			.radio-container {
+				display: flex;
+			}
+
+			.b-radio.radio {
+				width: 180px;
+				margin-right: 18px;
+			}
+		}
+
+		&--address-type {
+			/* Remove margin added by buefy, since each button is on its own line */
+			.b-radio.radio + .radio {
+				margin-left: 0;
+			}
+		}
+	}
+}
+
 /* Change dropdown caret */
 .select:not(.is-multiple):not(.is-loading)::after {
 	border-color: $fun-color-dark;

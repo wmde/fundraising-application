@@ -3,7 +3,7 @@
 	<div v-if="addressType === AddressTypeModel.PERSON">
 		<fieldset class="has-margin-top-36">
 			<legend class="subtitle">{{ $t( 'donation_form_salutation_label' ) }}</legend>
-			<div>
+			<div class="radio-container">
 				<b-radio id="salutation-mr"
 						name="salutationInternal"
 						:native-value="$t( 'donation_form_salutation_option_mr' ) "
@@ -11,8 +11,6 @@
 						@input="$emit('field-changed', 'salutation')">
 					{{ $t( 'donation_form_salutation_option_mr' ) }}
 				</b-radio>
-			</div>
-			<div>
 				<b-radio id="salutation-mrs"
 						name="salutationInternal"
 						:native-value="$t( 'donation_form_salutation_option_mrs' ) "
