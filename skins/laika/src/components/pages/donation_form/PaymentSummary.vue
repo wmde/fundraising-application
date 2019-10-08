@@ -1,11 +1,11 @@
 <template>
 	<div class="payment-summary has-outside-border has-margin-top-0 has-margin-bottom-18">
-			<p class="has-margin-bottom-18" v-html="getSummary()"></p>
-			<b-button @click="$emit( 'previous-page' )"
-					type="is-primary is-low"
-					outlined>
-				{{ $t('donation_form_section_back') }}
-			</b-button>
+		<p v-html="getSummary()"></p>
+		<b-button @click="$emit( 'previous-page' )"
+				type="is-primary is-low"
+				outlined>
+			{{ $t('donation_form_section_back') }}
+		</b-button>
 	</div>
 </template>
 
