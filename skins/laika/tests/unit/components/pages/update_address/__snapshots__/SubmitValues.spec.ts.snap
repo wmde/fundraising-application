@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Address.vue renders input fields 1`] = `
+<span
+  class="submit-values"
+>
+  <input
+    name="addressType"
+    type="hidden"
+    value="person"
+  />
+   
+  <input
+    name="salutation"
+    type="hidden"
+    value="Frau"
+  />
+   
+  <input
+    name="title"
+    type="hidden"
+    value="Dr."
+  />
+   
+  <input
+    name="firstName"
+    type="hidden"
+    value="Victoria"
+  />
+   
+  <input
+    name="lastName"
+    type="hidden"
+    value="van Doom"
+  />
+   
+  <input
+    name="company"
+    type="hidden"
+  />
+   
+  <input
+    name="street"
+    type="hidden"
+    value="Untere Straße 5"
+  />
+   
+  <input
+    name="postcode"
+    type="hidden"
+    value="08114"
+  />
+   
+  <input
+    name="city"
+    type="hidden"
+    value="Haasenstadt"
+  />
+   
+  <input
+    name="country"
+    type="hidden"
+    value="DE"
+  />
+   
+  <input
+    name="donationReceipt"
+    type="hidden"
+    value="1"
+  />
+</span>
+`;
