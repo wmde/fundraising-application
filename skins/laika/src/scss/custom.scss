@@ -134,6 +134,22 @@
 	}
 }
 
+.payment-summary {
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: nowrap;
+	align-items: center;
+	button.is-primary {
+		border: none;
+		max-width: 200px;
+		&.is-outlined:hover {
+			background-color: $fun-color-bright;
+			border: none;
+			color: inherit;
+		}
+	}
+}
+
 // Import Bulma and Buefy styles
 @import "~bulma";
 @import "~buefy/src/scss/buefy";

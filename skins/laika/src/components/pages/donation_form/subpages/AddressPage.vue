@@ -6,14 +6,12 @@
 			action="/donation/add"
 			method="post">
 		<h1 v-if="!paymentWasInitialized" class="title is-size-1">{{ $t( 'donation_form_section_headline' ) }}</h1>
-		<div class="has-margin-left-18 has-margin-right-18">
-			<payment-summary v-if="paymentWasInitialized"
-							:amount="paymentSummary.amount"
-							:payment-type="paymentSummary.paymentType"
-							:interval="paymentSummary.interval"
-							v-on:previous-page="previousPage">
-			</payment-summary>
-		</div>
+		<payment-summary v-if="paymentWasInitialized"
+						:amount="paymentSummary.amount"
+						:payment-type="paymentSummary.paymentType"
+						:interval="paymentSummary.interval"
+						v-on:previous-page="previousPage">
+		</payment-summary>
 		<address-fields
 				:validate-address-url="validateAddressUrl"
 				:validate-bank-data-url="validateBankDataUrl"
