@@ -77,11 +77,11 @@ amount_options:
 anon_form_display:
   description: Test form variations of selecting anonymous donation - with selecting "address type" or 2 groups of radio buttons, first for selecting anonymous yes/no, then address type person/company
   reference: "https://phabricator.wikimedia.org/T234187"
-  start: "2019-10-09 10:00:00"
-  end: "2019-10-23 10:00:00"
+  start: "2019-10-10 15:00:00"
+  end: "2019-10-23 15:00:00"
   buckets:
      - "address_type"
      - "two_steps"
   default_bucket: "address_type"
   url_key: fd
-  active: false
+  active: true
