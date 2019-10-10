@@ -20,8 +20,10 @@
 				:payment-types="paymentTypes"
 				:error="typeIsValid ? '' : $t('donation_form_payment_type_error')"
 				:title="$t('donation_form_payment_type_title')"
+				:disabled-payment-types="disabledPaymentTypes"
 				v-on:payment-type-selected="sendTypeToStore"
 		></payment-type>
+		<div v-show="disabledPaymentTypes.indexOf( 'BEZ' ) > -1 " class="has-margin-top-18">{{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }}</div>
 	</div>
 </template>
 
@@ -31,9 +33,10 @@ import AmountSelection from '@/components/shared/AmountSelection.vue';
 import PaymentInterval from '@/components/shared/PaymentInterval.vue';
 import PaymentType from '@/components/pages/donation_form/PaymentType.vue';
 import { action } from '@/store/util';
-import { NS_PAYMENT } from '@/store/namespaces';
+import { NS_ADDRESS, NS_PAYMENT } from '@/store/namespaces';
 import { setAmount, setInterval, setType } from '@/store/payment/actionTypes';
 import { mapGetters, mapState } from 'vuex';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 export default Vue.extend( {
 	name: 'Payment',
@@ -48,6 +51,7 @@ export default Vue.extend( {
 			amount: ( state: any ) => state[ NS_PAYMENT ].values.amount,
 			interval: ( state: any ) => state[ NS_PAYMENT ].values.interval,
 			type: ( state: any ) => state[ NS_PAYMENT ].values.type,
+			disabledPaymentTypes: ( state: any ) => state[ NS_ADDRESS ].addressType === AddressTypeModel.ANON ? [ 'BEZ' ] : [],
 		} ),
 		...mapGetters( NS_PAYMENT, [ 'amountIsValid', 'typeIsValid' ] ),
 	},
