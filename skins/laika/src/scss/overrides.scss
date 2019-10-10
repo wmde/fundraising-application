@@ -48,6 +48,9 @@
 			border-bottom: 2px solid $fun-color-primary;
 		}
 	}
+	+ .radio {
+		margin-left: 0; /* Remove margin added by Buefy, since each button is on its own line */
+	}
 	.check {
 		margin-top: 3px; // visually align the radio box with the label text
 		font-size: 12px;
@@ -65,28 +68,6 @@
 	input[type="checkbox"] + .check {
 		border: 1px solid $fun-color-dark;
 		margin-top: 2px; // visually align the checkbox with the label text
-	}
-}
-
-.campaigns {
-	&--anon-form-display {
-		&--two-steps {
-			.radio-container {
-				display: flex;
-			}
-
-			.b-radio.radio {
-				width: 180px;
-				margin-right: 18px;
-			}
-		}
-
-		&--address-type {
-			/* Remove margin added by buefy, since each button is on its own line */
-			.b-radio.radio + .radio {
-				margin-left: 0;
-			}
-		}
 	}
 }
 
