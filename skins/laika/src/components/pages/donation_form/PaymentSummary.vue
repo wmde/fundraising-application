@@ -1,5 +1,5 @@
 <template>
-	<div class="payment-summary has-outside-border has-margin-top-0 has-margin-bottom-18">
+	<div class="payment-summary-banner has-outside-border has-margin-top-0 has-margin-bottom-18">
 		<p v-html="getSummary()"></p>
 		<b-button @click="$emit( 'previous-page' )"
 				type="is-primary is-low"
