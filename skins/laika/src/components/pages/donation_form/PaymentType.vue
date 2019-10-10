@@ -8,6 +8,7 @@
 						name="payment"
 						v-model="selectedType"
 						:native-value="paymentType"
+						:disabled="disabledPaymentTypes.indexOf( paymentType ) > -1"
 						@change.native="setType">
 					{{ $t( paymentType ) }}
 				</b-radio>
@@ -36,6 +37,10 @@ export default Vue.extend( {
 		},
 		paymentTypes: Array,
 		title: String,
+		disabledPaymentTypes: {
+			type: Array,
+			default: () => [],
+		},
 	},
 	methods: {
 		setType(): void {
