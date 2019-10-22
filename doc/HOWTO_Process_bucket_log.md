@@ -27,7 +27,7 @@ The file `var/bucket.log` contains the names of the "testing buckets" for each d
   },
   "buckets": {
     "donation_address": "optional",
-    "skins": "cat17"
+    "skins": "laika"
   }
 }
 ```
