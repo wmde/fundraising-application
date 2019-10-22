@@ -23,7 +23,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 
@@ -38,9 +38,10 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 					[  ]
 				);
 
+				$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 				$response = $client->getResponse();
 				$this->assertTrue( $response->isOk() );
-				$this->assertSame( 1, $client->getCrawler()->filter( '.page-error' )->count() );
+				$this->assertSame( 'Invalid value for field "Company".', $dataVars->message );
 			}
 		);
 	}
@@ -49,7 +50,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 
@@ -72,10 +73,10 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 						'country' => 'DE'
 					]
 				);
-
+				$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 				$response = $client->getResponse();
 				$this->assertTrue( $response->isOk() );
-				$this->assertSame( 1, $client->getCrawler()->filter( '.page-address-update-success' )->count(), 'Confirmation page should be shown' );
+				$this->assertNotTrue( isset( $dataVars->message ), 'No error message is sent.' );
 			}
 		);
 	}
@@ -84,7 +85,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 
@@ -101,9 +102,10 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 					]
 				);
 
+				$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 				$response = $client->getResponse();
 				$this->assertTrue( $response->isOk() );
-				$this->assertSame( 1, $client->getCrawler()->filter( '.page-address-update-success' )->count(), 'Confirmation page should be shown' );
+				$this->assertNotTrue( isset( $dataVars->message ), 'No error message is sent.' );
 			}
 		);
 	}
@@ -115,5 +117,9 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 				[ 'skins' => [ 'default_bucket' => $skinName ] ]
 			)
 		);
+	}
+
+	private function getDataApplicationVars( Crawler $crawler ): object {
+		return json_decode( $crawler->filter( '#app' )->getNode( 0 )->getAttribute( 'data-application-vars' ) );
 	}
 }
