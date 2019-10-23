@@ -35,6 +35,7 @@ class CreditCardPaymentNotificationController {
 		$loggingContext = $response->getLowLevelError() === null ? [] : [ 'exception' => $response->getLowLevelError() ];
 		if ( !$response->isSuccessful() ) {
 			$loggingContext['queryParams'] = $request->query->all();
+			$loggingContext['clientIP'] = $request->getClientIp();
 			$ffFactory->getLogger()->error( 'Credit Card Notification Error: ' . $response->getErrorMessage(), $loggingContext );
 		} elseif ( $loggingContext !== [] ) {
 			$ffFactory->getLogger()->warning( 'Failed to send conformation email for credit card notification', $loggingContext );
