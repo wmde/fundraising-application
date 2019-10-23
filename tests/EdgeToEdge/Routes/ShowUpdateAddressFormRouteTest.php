@@ -25,7 +25,7 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 
@@ -40,8 +40,11 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 				);
 
 				$response = $client->getResponse();
+				$dataVars = json_decode(
+					$client->getCrawler()->filter( '#app' )->getNode( 0 )->getAttribute( 'data-application-vars' )
+				);
 				$this->assertTrue( $response->isOk() );
-				$this->assertSame( $addressToken, $client->getCrawler()->filter( '#updateAddress' )->attr( 'data-address-token' ) );
+				$this->assertSame( $addressToken, $dataVars->addressToken );
 			}
 		);
 	}
@@ -50,7 +53,7 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 

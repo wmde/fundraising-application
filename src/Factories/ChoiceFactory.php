@@ -22,10 +22,6 @@ class ChoiceFactory {
 	}
 
 	public function isDonationAddressOptional(): bool {
-		/** The "optional address" feature is only implemented for cat17 */
-		if ( $this->getSkinTemplateDirectory() !== $this->getSkinDirectory( 'cat17' ) ) {
-			return false;
-		}
 		if ( $this->featureToggle->featureIsActive( 'campaigns.donation_address.required' ) ) {
 			return false;
 		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.donation_address.optional' ) ) {
@@ -35,9 +31,7 @@ class ChoiceFactory {
 	}
 
 	public function getSkinTemplateDirectory(): string {
-		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.cat17' ) ) {
-			return $this->getSkinDirectory( 'cat17' );
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.laika' ) ) {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.laika' ) ) {
 			return $this->getSkinDirectory( 'laika' );
 		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.10h16' ) ) {
 			return $this->getSkinDirectory( '10h16' );

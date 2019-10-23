@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-The mobile-friendly, more aesthetically pleasing design of the software (called `cat17`) did not gather as much donations as the "old" design, called `10h16`. UX engineering, product management and stakeholders from the fundraising department decided against going "back" to the mobile-unfriendly and hard-to-maintain `10h16` design and instead improving the existing `cat17` design by applying UX best practices and making educated guesses at what made `10h16` so attractive to donors.
+In 2017, the fundraising frontend was redesigned, to be more mobile-friendly and more aesthetically pleasing. The internal name of that design was `cat17`. Unfortunately, it did not gather as many donations as the "old" design, called `10h16`. UX engineering, product management and stakeholders from the fundraising department decided against going "back" to the mobile-unfriendly and hard-to-maintain `10h16` design and instead improving the existing `cat17` design by applying UX best practices and making educated guesses at what made `10h16` so attractive to donors.
 
 The engineering team, planning the modernization of the frontend code base as outlined in "[ADR 006 - Using Vue.js](006_Vue.js.md) and "[ADR 007 - Using Typescript](007_Typescript.md) now had to choose between an *evolution* of `cat17` and a *rewrite* of the client-side code. The benefits of one approach would be the drawbacks of the other, so the following sections will describe each approach through the lens of benefits.
 

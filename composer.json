@@ -4,7 +4,7 @@
 	"homepage": "https://github.com/wmde/FundraisingFrontend",
 	"license": "GPL-2.0+",
 	"require": {
-		"php": ">=7.1",
+		"php": ">=7.3",
 		"ext-intl": "*",
 		"ext-curl": "*",
 		"ext-json": "*",

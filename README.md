@@ -288,15 +288,9 @@ If you want to debug problems in the Redux data flow, use the command
 
 Actions and their resulting state will be logged.
     
-### Automatic recompilation of assets during development (cat17)
+### Automatic recompilation of assets during development (10h16)
 
-If you are working on the JavaScript files of the cat17 skin and need automatic recompilation when a file changes, run the command
-
-    make watch-js  
-
-To debug problems in the Redux data flow, add the parameter `REDUX_LOG=on` to the command line above
-
-To do the same for the 10h16 skin, run the following Docker command corresponding to the skin:
+If you are working on the JavaScript files of the 10h16 skin and need automatic recompilation when a file changes, run the command
 
     docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/app -v $(pwd)/web/skins/10h16:/app/skins/10h16/web -w /app/skins/10h16 -e NO_UPDATE_NOTIFIER=1 node:8 npm run watch 
 

@@ -8,8 +8,8 @@
 #    end: "2019-12-31"
 #    buckets:
 #        - "10h16"
-#        - cat17
-#    default_bucket: cat17
+#        - "laika"
+#    default_bucket: "laika"
 #
 # Start each campaign with a unique key, that is "campaign name". Then add the following keys:
 # description: (optional) What this campaign is about
@@ -37,12 +37,11 @@ skins:
   description: Test different skins
   reference: "https://phabricator.wikimedia.org/T206994"
   start: "2019-08-28 10:00:00"
-  end: "2019-10-28 23:59:59"
+  end: "2019-10-25 23:59:59"
   buckets:
-    - "cat17"
-    - "10h16"
     - "laika"
-  default_bucket: "cat17"
+    - "10h16"
+  default_bucket: "laika"
   url_key: skin
   active: true
 
@@ -78,7 +77,7 @@ anon_form_display:
   description: Test form variations of selecting anonymous donation - with selecting "address type" or 2 groups of radio buttons, first for selecting anonymous yes/no, then address type person/company
   reference: "https://phabricator.wikimedia.org/T234187"
   start: "2019-10-10 15:00:00"
-  end: "2019-10-23 15:00:00"
+  end: "2019-10-25 15:00:00"
   buckets:
      - "address_type"
      - "two_steps"

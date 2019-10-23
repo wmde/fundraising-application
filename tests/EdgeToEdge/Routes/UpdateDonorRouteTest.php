@@ -30,7 +30,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = $this->newStoredDonation( $factory );
 				$this->performRequest(
 					$client,
@@ -43,10 +43,16 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 				$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
 
 				$crawler = $client->followRedirect();
-				$this->assertContains(
-					'Hans Wurst, Teststraße 123, 12345 Mönchengladbach',
-					$crawler->filter( '.receipt-info' )->html()
-				);
+				$dataVars = $this->getDataApplicationVars( $crawler );
+				$this->assertEquals( $this->newPrivateDonorData()['addressType'], $dataVars->addressType );
+				$this->assertEquals( $this->newPrivateDonorData()['salutation'], $dataVars->address->salutation );
+				$this->assertEquals( $this->newPrivateDonorData()['firstName'], $dataVars->address->firstName );
+				$this->assertEquals( $this->newPrivateDonorData()['lastName'], $dataVars->address->lastName );
+				$this->assertEquals( $this->newPrivateDonorData()['street'], $dataVars->address->streetAddress );
+				$this->assertEquals( $this->newPrivateDonorData()['postcode'], $dataVars->address->postalCode );
+				$this->assertEquals( $this->newPrivateDonorData()['city'], $dataVars->address->city );
+				$this->assertEquals( $this->newPrivateDonorData()['country'], $dataVars->address->countryCode );
+				$this->assertEquals( $this->newPrivateDonorData()['email'], $dataVars->address->email );
 			}
 		);
 	}
@@ -55,7 +61,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = $this->newStoredDonation( $factory );
 				$this->performRequest(
 					$client,
@@ -68,10 +74,14 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 				$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
 
 				$crawler = $client->followRedirect();
-				$this->assertContains(
-					'Wikimedia Deutschland Money Makers GmbH, Teststraße 123, 12345 Mönchengladbach',
-					$crawler->filter( '.receipt-info' )->html()
-				);
+				$dataVars = $this->getDataApplicationVars( $crawler );
+				$this->assertEquals( $this->newCompanyDonorData()['addressType'], $dataVars->addressType );
+				$this->assertEquals( $this->newCompanyDonorData()['companyName'], $dataVars->address->fullName );
+				$this->assertEquals( $this->newCompanyDonorData()['street'], $dataVars->address->streetAddress );
+				$this->assertEquals( $this->newCompanyDonorData()['postcode'], $dataVars->address->postalCode );
+				$this->assertEquals( $this->newCompanyDonorData()['city'], $dataVars->address->city );
+				$this->assertEquals( $this->newCompanyDonorData()['country'], $dataVars->address->countryCode );
+				$this->assertEquals( $this->newCompanyDonorData()['email'], $dataVars->address->email );
 			}
 		);
 	}
@@ -93,7 +103,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = $this->newStoredDonation( $factory );
 
 				$this->performRequest(
@@ -114,7 +124,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 
 				$donation = ValidDoctrineDonation::newExportedirectDebitDoctrineDonation();
 				$donation->modifyDataObject(
@@ -144,7 +154,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = $this->newStoredDonation( $factory );
 				$donorData = $this->newPrivateDonorData();
 				$donorData['email'] = 'this_is_not_a_valid_email_address.de';
@@ -155,12 +165,12 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 					self::CORRECT_UPDATE_TOKEN,
 					self::CORRECT_UPDATE_TOKEN
 				);
-
+				$dataVars = $this->getDataApplicationVars( $crawler );
 				$response = $client->getResponse();
 				$this->assertTrue( $response->isSuccessful() );
 				$this->assertContains(
 					'donor_change_failure_validation_error',
-					$crawler->filter( '.messages .h3' )->html()
+					$dataVars->updateData->message
 				);
 			}
 		);
@@ -170,7 +180,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'cat17' );
+				$this->setDefaultSkin( $factory, 'laika' );
 
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 				$donation->modifyDataObject(
@@ -268,5 +278,9 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 				'accessToken' => self::CORRECT_UPDATE_TOKEN
 			]
 		);
+	}
+
+	private function getDataApplicationVars( Crawler $crawler ): object {
+		return json_decode( $crawler->filter( '#app' )->getNode( 0 )->getAttribute( 'data-application-vars' ) );
 	}
 }
