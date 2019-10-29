@@ -37,7 +37,7 @@ skins:
   description: Test different skins
   reference: "https://phabricator.wikimedia.org/T206994"
   start: "2019-08-28 10:00:00"
-  end: "2019-10-25 23:59:59"
+  end: "2020-01-31 23:59:59"
   buckets:
     - "laika"
     - "10h16"
