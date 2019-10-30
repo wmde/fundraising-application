@@ -35,7 +35,7 @@
 				<option value="Prof. Dr.">Prof. Dr.</option>
 			</b-select>
 		</div>
-		<div v-bind:class="[{ 'is-invalid': showError.firstName }]">
+		<div v-bind:class="['form-input', { 'is-invalid': showError.firstName }]">
 			<label for="first-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_firstname_label' ) }}</label>
 			<b-field :type="{ 'is-danger': showError.firstName }">
 				<b-input class="is-medium"
@@ -48,7 +48,7 @@
 			</b-field>
 			<span v-if="showError.firstName" class="help is-danger">{{ $t( 'donation_form_firstname_error' ) }}</span>
 		</div>
-		<div v-bind:class="[{ 'is-invalid': showError.lastName }]">
+		<div v-bind:class="['form-input', { 'is-invalid': showError.lastName }]">
 			<label for="last-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_lastname_label' ) }}</label>
 			<b-field :type="{ 'is-danger': showError.lastName }">
 				<b-input type="text"
@@ -61,7 +61,7 @@
 			<span v-if="showError.lastName" class="help is-danger">{{ $t( 'donation_form_lastname_error' ) }}</span>
 		</div>
 	</div>
-	<div v-else-if="addressType === AddressTypeModel.COMPANY" v-bind:class="[{ 'is-invalid': showError.companyName }]">
+	<div v-else-if="addressType === AddressTypeModel.COMPANY" v-bind:class="['form-input', { 'is-invalid': showError.companyName }]">
 		<label for="company-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_companyname_label' ) }}</label>
 		<b-field :type="{ 'is-danger': showError.companyName }">
 			<b-input type="text"

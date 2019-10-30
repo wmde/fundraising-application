@@ -1,0 +1,19 @@
+// This is part of an AB Test, see https://phabricator.wikimedia.org/T236667
+
+@import "variables";
+
+.campaigns--compact-design--compact {
+	.input {
+		height: $column-gap * 2;
+		.islarge {
+			height: $column-gap * 2;
+		}
+	}
+	.is-form-input .select select {
+		line-height: $column-gap;
+		height: $column-gap * 2;
+		&:not(.is-multiple):not(.is-loading)::after {
+			top: $column-gap;
+		}
+	}
+}

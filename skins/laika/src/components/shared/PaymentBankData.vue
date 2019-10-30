@@ -2,7 +2,7 @@
 	<fieldset class="has-margin-bottom-36">
 		<legend class="title is-size-5">{{ $t( 'donation_form_payment_bankdata_title' ) }}</legend>
 		<legend class="form-caption has-margin-bottom-18">{{ $t( 'donation_form_payment_bankdata_legend' ) }}</legend>
-		<div v-bind:class="[{ 'is-invalid': bankDataIsInvalid }]">
+		<div v-bind:class="['form-input', { 'is-invalid': bankDataIsInvalid }]">
 			<label for="iban" class="subtitle has-margin-top-18">{{ $t( labels.iban ) }}</label>
 			<b-input class="is-medium"
 					data-content-name="Bank Data Type"
@@ -16,7 +16,7 @@
 					@blur="validate">
 			</b-input>
 		</div>
-		<div v-bind:class="[{ 'is-invalid': bankDataIsInvalid }]">
+		<div v-bind:class="['form-input', { 'is-invalid': bankDataIsInvalid }]">
 			<label for="bic" class="subtitle has-margin-top-36">{{ $t( labels.bic ) }}</label>
 			<b-input class="is-medium"
 					type="text"
