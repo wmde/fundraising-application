@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div v-if="addressType === AddressTypeModel.PERSON">
-		<fieldset class="has-margin-top-36">
+		<fieldset class="form-input">
 			<legend class="subtitle">{{ $t( 'donation_form_salutation_label' ) }}</legend>
 			<div class="radio-container">
 				<b-radio id="salutation-mr"
@@ -21,7 +21,7 @@
 			</div>
 			<span v-if="showError.salutation" class="help is-danger"> {{ $t( 'donation_form_salutation_error' ) }}</span>
 		</fieldset>
-		<div class="has-margin-top-36">
+		<div class="form-input">
 			<label for="title" class="subtitle">{{ $t( 'donation_form_academic_title_label' ) }}</label>
 			<b-select
 					class="is-form-input"
@@ -36,7 +36,7 @@
 			</b-select>
 		</div>
 		<div v-bind:class="['form-input', { 'is-invalid': showError.firstName }]">
-			<label for="first-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_firstname_label' ) }}</label>
+			<label for="first-name" class="subtitle">{{ $t( 'donation_form_firstname_label' ) }}</label>
 			<b-field :type="{ 'is-danger': showError.firstName }">
 				<b-input class="is-medium"
 						type="text"
@@ -49,7 +49,7 @@
 			<span v-if="showError.firstName" class="help is-danger">{{ $t( 'donation_form_firstname_error' ) }}</span>
 		</div>
 		<div v-bind:class="['form-input', { 'is-invalid': showError.lastName }]">
-			<label for="last-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_lastname_label' ) }}</label>
+			<label for="last-name" class="subtitle">{{ $t( 'donation_form_lastname_label' ) }}</label>
 			<b-field :type="{ 'is-danger': showError.lastName }">
 				<b-input type="text"
 						id="last-name"
@@ -62,7 +62,7 @@
 		</div>
 	</div>
 	<div v-else-if="addressType === AddressTypeModel.COMPANY" v-bind:class="['form-input', { 'is-invalid': showError.companyName }]">
-		<label for="company-name" class="subtitle has-margin-top-36">{{ $t( 'donation_form_companyname_label' ) }}</label>
+		<label for="company-name" class="subtitle">{{ $t( 'donation_form_companyname_label' ) }}</label>
 		<b-field :type="{ 'is-danger': showError.companyName }">
 			<b-input type="text"
 					id="company-name"

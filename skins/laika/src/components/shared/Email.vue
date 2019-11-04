@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="has-margin-top-36">
+    <fieldset class="form-input">
 		<label for="email" class="subtitle">{{ $t( 'donation_form_email_label' ) }}</label>
 		<b-field :type="{ 'is-danger': showError }">
 			<b-input type="text"
