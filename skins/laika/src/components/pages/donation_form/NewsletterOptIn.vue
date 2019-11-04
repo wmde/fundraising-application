@@ -1,5 +1,5 @@
 <template>
-	<div class="has-margin-top-18">
+	<div class="opt-out-box">
 		<b-checkbox type="checkbox" class="is-inline-checkbox"
 			id="newsletter"
 			name="newsletter"

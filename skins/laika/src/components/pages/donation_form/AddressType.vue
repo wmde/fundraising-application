@@ -1,15 +1,13 @@
 <template>
-	<fieldset>
+	<fieldset class="form-input form-input__vertical-option-list">
 		<legend class="subtitle">{{ $t( 'donation_form_section_address_header_type' ) }}</legend>
-		<div>
+		<div class="radio-container">
 			<b-radio id="personal"
 					name="addressTypeInternal"
 					v-model="type"
 					:native-value="AddressTypeModel.PERSON"
 					@change.native="setAddressType()">{{ $t( 'donation_form_addresstype_option_private' ) }}
 			</b-radio>
-		</div>
-		<div>
 			<b-radio id="company"
 					name="addressTypeInternal"
 					v-model="type"
@@ -17,8 +15,6 @@
 					@change.native="setAddressType()">
 				{{ $t( 'donation_form_addresstype_option_company' ) }}
 			</b-radio>
-		</div>
-		<div>
 			<b-radio id="anonymous"
 					name="addressTypeInternal"
 					v-model="type"

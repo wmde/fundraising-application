@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div v-if="addressType === AddressTypeModel.PERSON">
-		<fieldset class="form-input">
+		<fieldset class="form-input form-input__horizontal-option-list">
 			<legend class="subtitle">{{ $t( 'donation_form_salutation_label' ) }}</legend>
 			<div class="radio-container">
 				<b-radio id="salutation-mr"
@@ -23,6 +23,7 @@
 		</fieldset>
 		<div class="form-input">
 			<label for="title" class="subtitle">{{ $t( 'donation_form_academic_title_label' ) }}</label>
+			<b-field>
 			<b-select
 					class="is-form-input"
 					v-model="formData.title.value"
@@ -34,6 +35,7 @@
 				<option value="Prof.">Prof.</option>
 				<option value="Prof. Dr.">Prof. Dr.</option>
 			</b-select>
+			</b-field>
 		</div>
 		<div v-bind:class="['form-input', { 'is-invalid': showError.firstName }]">
 			<label for="first-name" class="subtitle">{{ $t( 'donation_form_firstname_label' ) }}</label>

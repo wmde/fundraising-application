@@ -37,19 +37,21 @@
 		</b-field>
 		<span v-if="showError.city" class="help is-danger">{{ $t('donation_form_city_error') }}</span>
 	</div>
-	<div>
+	<div class="form-input">
 		<label for="country" class="subtitle">{{ $t( 'donation_form_country_label' ) }}</label>
-		<b-select
-				class="is-form-input"
-				v-model="formData.country.value"
-				id="country"
-				name="country"
-				@blur="$emit('field-changed', 'country')">
-			<option v-for="(countryCode, index) in countries"
-					:value="countryCode"
-					:key="index">{{ $t('donation_form_country_option_' + countryCode ) }}
-			</option>
-		</b-select>
+		<b-field>
+			<b-select
+					class="is-form-input"
+					v-model="formData.country.value"
+					id="country"
+					name="country"
+					@blur="$emit('field-changed', 'country')">
+				<option v-for="(countryCode, index) in countries"
+						:value="countryCode"
+						:key="index">{{ $t('donation_form_country_option_' + countryCode ) }}
+				</option>
+			</b-select>
+		</b-field>
 	</div>
 </div>
 </template>
