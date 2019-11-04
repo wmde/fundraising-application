@@ -88,7 +88,7 @@ anon_form_display:
 compact_design:
   description: Test form design variation where the design is more compact by moving elements onto the same row and generally closer together.
   reference: "https://phabricator.wikimedia.org/T236667"
-  start: "2019-11-06 10:00:00"
+  start: "2019-11-05 14:00:00"
   end: "2019-12-31 23:00:00"
   buckets:
     - "classic"
