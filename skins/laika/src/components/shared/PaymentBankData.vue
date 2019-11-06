@@ -1,32 +1,36 @@
 <template>
 	<fieldset class="has-margin-bottom-36">
 		<legend class="title is-size-5">{{ $t( 'donation_form_payment_bankdata_title' ) }}</legend>
-		<legend class="form-caption has-margin-bottom-18">{{ $t( 'donation_form_payment_bankdata_legend' ) }}</legend>
-		<div v-bind:class="[{ 'is-invalid': bankDataIsInvalid }]">
-			<label for="iban" class="subtitle has-margin-top-18">{{ $t( labels.iban ) }}</label>
-			<b-input class="is-medium"
-					data-content-name="Bank Data Type"
-					:data-track-content="getTrackingCode !== ''"
-					:data-content-piece="getTrackingCode"
-					type="text"
-					id="iban"
-					v-model="accountId"
-					name="iban"
-					:placeholder="$t( 'donation_form_payment_bankdata_account_iban_placeholder' )"
-					@blur="validate">
-			</b-input>
+		<legend class="form-caption">{{ $t( 'donation_form_payment_bankdata_legend' ) }}</legend>
+		<div v-bind:class="['form-input', { 'is-invalid': bankDataIsInvalid }]">
+			<label for="iban" class="subtitle">{{ $t( labels.iban ) }}</label>
+			<b-field>
+				<b-input class="is-medium"
+						data-content-name="Bank Data Type"
+						:data-track-content="getTrackingCode !== ''"
+						:data-content-piece="getTrackingCode"
+						type="text"
+						id="iban"
+						v-model="accountId"
+						name="iban"
+						:placeholder="$t( 'donation_form_payment_bankdata_account_iban_placeholder' )"
+						@blur="validate">
+				</b-input>
+			</b-field>
 		</div>
-		<div v-bind:class="[{ 'is-invalid': bankDataIsInvalid }]">
-			<label for="bic" class="subtitle has-margin-top-36">{{ $t( labels.bic ) }}</label>
-			<b-input class="is-medium"
-					type="text"
-					id="bic"
-					v-model="bankIdentifier"
-					name="bic"
-					:disabled="isBankIdDisabled"
-					:placeholder="$t( labels.bicPlaceholder )"
-					@blur="validate">
-			</b-input>
+		<div v-bind:class="['form-input', { 'is-invalid': bankDataIsInvalid }]">
+			<label for="bic" class="subtitle">{{ $t( labels.bic ) }}</label>
+			<b-field>
+				<b-input class="is-medium"
+						type="text"
+						id="bic"
+						v-model="bankIdentifier"
+						name="bic"
+						:disabled="isBankIdDisabled"
+						:placeholder="$t( labels.bicPlaceholder )"
+						@blur="validate">
+				</b-input>
+			</b-field>
 		</div>
 		<div>
 			<span id="bank-name">{{ getBankName }}</span>

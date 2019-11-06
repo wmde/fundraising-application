@@ -86,6 +86,10 @@
 	top: 3px;
 }
 
+.opt-out-box {
+	margin-top: $column-gap * 2;
+}
+
 .has-outside-border {
 	margin: -10px; /* half of column gap +1 pixel for border */
 	padding: 8px; /* add back column gap -1 pixel border */
@@ -173,3 +177,4 @@
 }
 
 @import "overrides";
+@import "compact_form"; // AB Test Import

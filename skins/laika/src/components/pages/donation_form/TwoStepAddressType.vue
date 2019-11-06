@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<fieldset>
+		<fieldset class="form-input form-input__option-list">
 			<legend class="subtitle">{{ $t( 'donation_form_section_address_or_anon' ) }}</legend>
 			<div class="radio-container">
 				<b-radio id="withAddress"
@@ -28,7 +28,7 @@
 			{{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }}
 		</div>
 
-		<fieldset v-show="isAnon === 'no'" class="has-margin-top-36">
+		<fieldset v-show="isAnon === 'no'" class="has-margin-top-36 form-input form-input__option-list">
 			<legend class="subtitle">{{ $t( 'donation_form_section_address_header_type' ) }}</legend>
 			<div  class="radio-container">
 				<b-radio id="personal"

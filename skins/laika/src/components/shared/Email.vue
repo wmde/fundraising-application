@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="has-margin-top-36">
+    <div class="form-input">
 		<label for="email" class="subtitle">{{ $t( 'donation_form_email_label' ) }}</label>
 		<b-field :type="{ 'is-danger': showError }">
 			<b-input type="text"
@@ -10,7 +10,7 @@
 			</b-input>
 		</b-field>
 		<span v-if="showError" class="help is-danger">{{ $t( 'donation_form_email_error' ) }}</span>
-    </fieldset>
+    </div>
 </template>
 
 <script lang="ts">

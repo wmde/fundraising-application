@@ -77,10 +77,22 @@ anon_form_display:
   description: Test form variations of selecting anonymous donation - with selecting "address type" or 2 groups of radio buttons, first for selecting anonymous yes/no, then address type person/company
   reference: "https://phabricator.wikimedia.org/T234187"
   start: "2019-10-10 15:00:00"
-  end: "2019-12-31 11:00:00"
+  end: "2019-12-31 23:00:00"
   buckets:
      - "address_type"
      - "two_steps"
   default_bucket: "two_steps"
   url_key: fd
+  active: true
+
+compact_design:
+  description: Test form design variation where the design is more compact by moving elements onto the same row and generally closer together.
+  reference: "https://phabricator.wikimedia.org/T236667"
+  start: "2019-11-05 14:00:00"
+  end: "2019-12-31 23:00:00"
+  buckets:
+    - "classic"
+    - "compact"
+  default_bucket: "classic"
+  url_key: compact
   active: true

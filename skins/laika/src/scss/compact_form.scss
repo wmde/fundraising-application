@@ -1,0 +1,112 @@
+// This is part of an AB Test, see https://phabricator.wikimedia.org/T236667
+
+@import "variables";
+
+.campaigns--compact-design--compact {
+	@include from($widescreen) {
+		.form-input {
+			margin-top: $column-gap;
+			display: flex;
+			flex-wrap: wrap;
+
+			.subtitle {
+				display: block;
+				margin-top: 0;
+				width: $column-gap * 10;
+				margin-right: $column-gap;
+				text-align: right;
+				padding-top: 9px; /* Half of the column gap, to center the labels */
+			}
+
+			.field {
+				flex: 1 1 auto;
+				max-width: none;
+			}
+
+			.help.is-danger {
+				width: 100%;
+				flex-shrink: 0;
+				text-align: right;
+			}
+
+			&.form-input__horizontal-option-list {
+				display: block;
+
+				.subtitle {
+					margin-top: 12px;
+					float: left;
+				}
+
+				.radio-container {
+					display: flex;
+				}
+
+				.b-radio.radio {
+					width: 40%;
+					flex: 1 1 40%;
+					margin-right: $column-gap * 2;
+				}
+
+				.b-radio.radio:last-child {
+					margin-right: 0;
+				}
+
+			}
+
+			&.form-input__vertical-option-list {
+				display: block;
+
+				.subtitle {
+					width: $column-gap * 10;
+					float: left;
+				}
+
+				.radio-container {
+					clear: left;
+					padding-left: $column-gap * 11;
+					width: 100%;
+				}
+
+				.b-radio.radio {
+					margin-right: $column-gap * 2;
+				}
+
+				.b-radio.radio:last-child {
+					margin-right: 0;
+				}
+
+			}
+		}
+
+		.input {
+			height: $column-gap * 2;
+			max-width: none;
+
+			.islarge {
+				height: $column-gap * 2;
+			}
+		}
+		.is-form-input .select {
+			display: block;
+			select {
+				line-height: $column-gap;
+				height: $column-gap * 2;
+				width: 100%;
+			}
+
+			&:not(.is-multiple):not(.is-loading)::after {
+				top: $column-gap;
+				border-width: 2px;
+			}
+
+		}
+
+		.opt-out-box {
+			margin: $column-gap 0 0 $column-gap * 11;
+		}
+
+		.form-caption {
+			margin-left: $column-gap * 11;
+		}
+	}
+}

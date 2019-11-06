@@ -25,6 +25,10 @@
 	}
 }
 
+.form-input .subtitle {
+	margin-top: $column-gap * 2;
+}
+
 .is-danger, .is-warning .help {
 	font-size: 1em;
 }
