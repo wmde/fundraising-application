@@ -1854,6 +1854,10 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new CampaignCollection( ...$this->getCampaigns() );
 	}
 
+	public function getUseOfFundsRenderer(): \Closure {
+		return $this->getChoiceFactory()->getUseOfFundsResponse( $this );
+	}
+
 	/**
 	 * TranslationCollector is currently only used by the Laika Vue-based frontend
 	 * In the future, the desired solution would be to use laika_messages.json exclusively

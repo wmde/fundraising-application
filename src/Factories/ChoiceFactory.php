@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -39,6 +41,33 @@ class ChoiceFactory {
 			return $this->getSkinDirectory( 'test' );
 		}
 		throw new UnknownChoiceDefinition( 'Skin selection configuration failure.' );
+	}
+
+	public function getUseOfFundsResponse( FunFunFactory $factory ): \Closure {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.laika' ) ) {
+			$factory->getTranslationCollector()->addTranslationFile( $factory->getI18nDirectory() . '/messages/useOfFundsMessages.json' );
+			$template = $factory->getLayoutTemplate( 'Funds_Usage.html.twig', [
+				'use_of_funds_content' => $factory->getApplicationOfFundsContent(),
+				'use_of_funds_messages' => $factory->getApplicationOfFundsMessages()
+			] );
+			return function() use ( $template )  {
+				return $template->render( [] );
+			};
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.10h16' ) ) {
+			// Redirect to laika skin, since we don't have usa of fund in 10h16
+			return function( Request $request ) {
+				$params = $request->query->all();
+				$params['skin'] = '0';
+				$url = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo().'?'.http_build_query( $params );
+				return new RedirectResponse( $url );
+			};
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.test' ) ) {
+			// we don't care what happens in test
+			return function() { return 'Test rendering: Use of funds';
+
+   };
+		}
+		throw new UnknownChoiceDefinition( 'Use of funds configuration failure.' );
 	}
 
 	public function getMembershipCallToActionTemplate(): string {
