@@ -2,13 +2,14 @@
 	<div class="organization-section">
 		<h3 class="title is-3 has-margin-top-36 has-margin-bottom-18">
 			{{ title }}<br>
-			{{ overallAmount.replace(/ /g, '.') }} €
+			{{ overallAmount.replace(/ /g, '.') }} {{ currencySymbol }}
 		</h3>
 		<p class="has-margin-left-18">{{ description }}</p>
 		<fund-section v-for="(fund, index) in funds"
 					:title="fund.title"
 					:amount="fund.amount"
 					:description="fund.description"
+					:currencySymbol="fund.currencySymbol"
 					v-on:fund-opened="setOpenFundId( $event )"
 					:fund-id="index.toString()"
 					:visible-fund-id="openFundId"
@@ -31,6 +32,7 @@ export default Vue.extend( {
 		title: String,
 		description: String,
 		overallAmount: String,
+		currencySymbol: String,
 		funds: {},
 	},
 	data: function () {

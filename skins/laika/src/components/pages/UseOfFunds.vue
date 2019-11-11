@@ -8,6 +8,7 @@
 								:overallAmount="org.overallAmount"
 								:description="org.description"
 								:funds="org.funds"
+								:currency-symbol="org.currencySymbol"
 								:key="index">
 			</organization-section>
 		</div>
