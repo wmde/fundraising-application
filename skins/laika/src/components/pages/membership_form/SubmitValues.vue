@@ -22,6 +22,7 @@
 		<input type="hidden" name="country" :value="address.country">
 		<input type="hidden" name="email" :value="address.email">
 		<input type="hidden" name="donationReceipt" :value="receiptOptIn">
+		<input type="hidden" name="dob" :value="address.date">
 
 	</span>
 </template>

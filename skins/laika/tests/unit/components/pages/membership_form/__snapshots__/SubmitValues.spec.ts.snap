@@ -110,5 +110,11 @@ exports[`SubmitValues.vue renders input fields 1`] = `
     type="hidden"
     value="1"
   />
+   
+  <input
+    name="dob"
+    type="hidden"
+    value="25.01.1948"
+  />
 </span>
 `;
