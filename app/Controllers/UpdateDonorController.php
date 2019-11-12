@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\Controllers;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,12 @@ class UpdateDonorController {
 		$responseModel = $ffFactory
 			->newUpdateDonorUseCase( $updateToken, $accessToken )
 			->updateDonor( $this->newRequestModel( $request ) );
+		if ( $request->getAcceptableContentTypes()[0] === 'application/json' ) {
+			return JsonResponse::create( [
+				'state' => $responseModel->getDonation() !== null || $responseModel->isSuccessful() ? 'OK' : 'ERR',
+				'message' => $responseModel->getErrorMessage()
+			] );
+		}
 		if ( $responseModel->getDonation() === null ) {
 			throw new AccessDeniedException();
 		}

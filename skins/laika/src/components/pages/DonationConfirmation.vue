@@ -6,6 +6,22 @@
 								:payment="confirmationData.donation">
 					<div class="title is-size-5">{{ $t( 'donation_confirmation_topbox_intro' ) }}</div>
 				</donation-summary>
+				<b-button v-if="showAddressChangeButton"
+							id="address-change-button"
+							class="address-change-button"
+							@click="showAddressModal()"
+							type="is-primary is-main">
+					{{ $t('donation_confirmation_address_update_button') }}
+				</b-button>
+				<b-modal :active.sync="isAddressModalOpen" scroll="keep" has-modal-card>
+					<address-modal :countries="countries"
+									:donation="confirmationData.donation"
+									:updateDonorUrl="updateDonorUrl"
+									:validate-address-url="validateAddressUrl"
+									:has-errored="addressChangeHasErrored"
+									v-on:address-update-failed="addressChangeHasErrored = true">
+					</address-modal>
+				</b-modal>
 				<payment-notice :payment="confirmationData.donation"></payment-notice>
 				<div id="bank-data" v-if="showBankTransferCode">
 					<bank-data :bank-transfer-code="confirmationData.donation.bankTransferCode"></bank-data>
@@ -33,6 +49,8 @@ import DonationSummary from '@/components/DonationSummary.vue';
 import MembershipInfo from '@/components/pages/donation_confirmation/MembershipInfo.vue';
 import PaymentNotice from '@/components/pages/donation_confirmation/PaymentNotice.vue';
 import SummaryLinks from '@/components/pages/donation_confirmation/SummaryLinks.vue';
+import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import AddressModal from '@/components/pages/donation_confirmation/AddressModal.vue';
 
 export default Vue.extend( {
 	name: 'DonationConfirmation',
@@ -42,10 +60,25 @@ export default Vue.extend( {
 		MembershipInfo,
 		PaymentNotice,
 		SummaryLinks,
+		AddressModal
 	},
-	props: [
-		'confirmationData',
-	],
+	data: function () {
+		return {
+			isAddressModalOpen: false,
+			addressChangeHasErrored: false,
+		};
+	},
+	props: {
+		confirmationData: Object,
+		updateDonorUrl: String,
+		validateAddressUrl: String,
+		countries: Array as () => Array<String>,
+	},
+	methods: {
+		showAddressModal: function () {
+			this.$data.isAddressModalOpen = true;
+		},
+	},
 	computed: {
 		showBankTransferCode: function () {
 			return this.confirmationData.donation.paymentType === 'UEB';
@@ -53,6 +86,9 @@ export default Vue.extend( {
 		hasOptedIntoNewsletter: function () {
 			return this.confirmationData.donation.optsIntoNewsletter;
 		},
+		showAddressChangeButton: function () {
+			return this.confirmationData.addressType === addressTypeName( AddressTypeModel.ANON ) && !this.$data.addressChangeHasErrored;
+		}
 	},
 } );
 </script>
@@ -65,6 +101,11 @@ export default Vue.extend( {
 			&-wrapper {
 				border: 1px solid $fun-color-gray-mid;
 				border-radius: 2px;
+
+				.address-change-button {
+					width: 100%;
+					white-space: normal;
+				}
 			}
 
 			.bank-data-content {

@@ -68,7 +68,8 @@ export default Vue.extend( {
 			const personType = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );
 			let address = this.$t( 'donation_confirmation_review_address_missing' );
 			if ( addressTypeRenderer.canRender( this.address ) ) {
-				address = addressTypeRenderer.renderAddress( this.address, this.$t( 'donation_form_country_option_' + this.address.countryCode ) );
+				const country = this.address.countryCode ? this.$t( 'donation_form_country_option_' + this.address.countryCode ) : '';
+				address = addressTypeRenderer.renderAddress( this.address, country );
 			}
 
 			return this.$t(

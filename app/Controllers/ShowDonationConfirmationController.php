@@ -40,7 +40,17 @@ class ShowDonationConfirmationController {
 				$responseModel->getUpdateToken(),
 				$request->get( 'accessToken', '' ),
 				PiwikVariableCollector::newForDonation( $application['session']->get( 'piwikTracking', [] ), $responseModel->getDonation() ),
-				Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
+				array_merge(
+					Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() ),
+					[
+						'updateDonor' => $ffFactory->getUrlGenerator()->generateAbsoluteUrl(
+							Routes::UPDATE_DONOR,
+							[
+								'accessToken' => $request->get( 'accessToken', '' )
+							]
+						)
+					]
+				)
 			)
 		);
 
