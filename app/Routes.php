@@ -60,6 +60,7 @@ class Routes {
 	public const SHOW_USE_OF_FUNDS = 'use-of-funds';
 	public const SUBSCRIBE = 'subscribe';
 	public const UPDATE_ADDRESS = 'update-address';
+	public const UPDATE_DONOR = 'update-donor';
 	public const VALIDATE_ADDRESS = 'validate-donor-address';
 	public const VALIDATE_DONATION_AMOUNT = 'validate-donation-amount';
 	/**
@@ -362,7 +363,7 @@ class Routes {
 		$app->post(
 			'donation/update',
 			UpdateDonorController::class . '::updateDonor'
-		);
+		)->bind( self::UPDATE_DONOR );
 
 		// Show a donation form with pre-filled payment values, e.g. when coming from a banner
 		$app->get(
