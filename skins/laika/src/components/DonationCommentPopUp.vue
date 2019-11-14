@@ -18,10 +18,12 @@
 				<p v-if="commentErrored" class="help is-danger"> {{ $t( 'donation_comment_popup_error' ) }}</p>
 			</div>
 			<div class="field has-margin-bottom-18">
-				<b-checkbox type="checkbox" id="isAnonymous" name="isAnonymous" native-value="0" v-model="commentHasPublicAuthorName">{{ $t( 'donation_comment_popup_is_anon' ) }}</b-checkbox>
+				<b-checkbox type="checkbox" id="isAnonymous" name="isAnonymous" native-value="0"
+							v-model="commentHasPublicAuthorName">{{ $t( 'donation_comment_popup_is_anon' ) }}</b-checkbox>
 			</div>
 			<div class="field has-margin-bottom-18">
-				<b-checkbox type="checkbox" id="public" name="public" native-value="1" v-model="commentIsPublic">{{ $t( 'donation_comment_popup_is_public' ) }}</b-checkbox>
+				<b-checkbox type="checkbox" id="public" name="public" native-value="1"
+							v-model="commentIsPublic">{{ $t( 'donation_comment_popup_is_public' ) }}</b-checkbox>
 			</div>
 			<div class="columns">
 				<div class="column">
