@@ -200,10 +200,10 @@ class Routes {
 			function ( Request $request ) use ( $app, $ffFactory ) {
 				$addCommentRequest = new AddCommentRequest();
 				$addCommentRequest->setCommentText( trim( $request->request->get( 'comment', '' ) ) );
-				$addCommentRequest->setIsPublic( $request->request->get( 'public', '0' ) === '1' );
+				$addCommentRequest->setIsPublic( $request->request->getBoolean( 'public' ) );
 				$addCommentRequest->setDonationId( (int)$request->request->get( 'donationId', '' ) );
 
-				if ( $request->request->get( 'isAnonymous', '0' ) === '1' ) {
+				if ( $request->request->getBoolean( 'isAnonymous' ) ) {
 					$addCommentRequest->setIsAnonymous();
 				} else {
 					$addCommentRequest->setIsNamed();

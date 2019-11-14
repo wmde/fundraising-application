@@ -2,6 +2,7 @@
 	<form id="laika-comment" name="laika-comment" v-on:submit.prevent="postComment" method="post" ref="form" class="modal-card">
 		<input type="hidden" name="donationId" :value="confirmationData.donation.id"/>
 		<input type="hidden" name="updateToken" :value="confirmationData.donation.updateToken">
+		<input type="hidden" name="isAnonymous" value="1" />
 		<div v-if="commentHasBeenSubmitted">
 			<p v-html="serverResponse"></p>
 			<b-button type="is-primary is-main has-margin-top-18" @click="$parent.close()" outlined>
@@ -17,10 +18,10 @@
 				<p v-if="commentErrored" class="help is-danger"> {{ $t( 'donation_comment_popup_error' ) }}</p>
 			</div>
 			<div class="field has-margin-bottom-18">
-				<b-checkbox type="checkbox" id="isAnonymous" name="isAnonymous" v-model="commentIsAnon">{{ $t( 'donation_comment_popup_is_anon' ) }}</b-checkbox>
+				<b-checkbox type="checkbox" id="isAnonymous" name="isAnonymous" native-value="0" v-model="commentHasPublicAuthorName">{{ $t( 'donation_comment_popup_is_anon' ) }}</b-checkbox>
 			</div>
 			<div class="field has-margin-bottom-18">
-				<b-checkbox type="checkbox" id="public" name="public" v-model="commentIsPublic">{{ $t( 'donation_comment_popup_is_public' ) }}</b-checkbox>
+				<b-checkbox type="checkbox" id="public" name="public" native-value="1" v-model="commentIsPublic">{{ $t( 'donation_comment_popup_is_public' ) }}</b-checkbox>
 			</div>
 			<div class="columns">
 				<div class="column">
@@ -48,7 +49,7 @@ export default Vue.extend( {
 	data: function () {
 		return {
 			commentIsPublic: true,
-			commentIsAnon: false,
+			commentHasPublicAuthorName: false,
 			commentErrored: false,
 			commentHasBeenSubmitted: false,
 			serverResponse: '',
