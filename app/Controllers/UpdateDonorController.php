@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorRequest;
+use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorResponse;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
@@ -27,11 +28,25 @@ class UpdateDonorController {
 			->newUpdateDonorUseCase( $updateToken, $accessToken )
 			->updateDonor( $this->newRequestModel( $request ) );
 		if ( $request->getAcceptableContentTypes()[0] === 'application/json' ) {
-			return JsonResponse::create( [
-				'state' => $responseModel->getDonation() !== null || $responseModel->isSuccessful() ? 'OK' : 'ERR',
-				'message' => $responseModel->getErrorMessage()
-			] );
+			return $this->createJsonResponse( $responseModel );
 		}
+		return $this->createHtmlResponse( $app, $ffFactory, $responseModel, $updateToken, $accessToken );
+	}
+
+	private function createJsonResponse( UpdateDonorResponse $responseModel ): JsonResponse {
+		return JsonResponse::create( [
+			'state' => $responseModel->getDonation() !== null || $responseModel->isSuccessful() ? 'OK' : 'ERR',
+			'message' => $responseModel->getErrorMessage()
+		] );
+	}
+
+	private function createHtmlResponse(
+		Application $app,
+		FunFunFactory $ffFactory,
+		UpdateDonorResponse $responseModel,
+		string $updateToken,
+		string $accessToken
+	) {
 		if ( $responseModel->getDonation() === null ) {
 			throw new AccessDeniedException();
 		}
