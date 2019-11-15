@@ -40,7 +40,7 @@ export default Vue.extend( {
 	},
 	props: {
 		disabledAddressTypes: Array,
-		disabledAnonymousType: Boolean
+		disabledAnonymousType: Boolean,
 	},
 	computed: {
 		AddressTypeModel: {

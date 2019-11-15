@@ -19,7 +19,9 @@
 									:updateDonorUrl="updateDonorUrl"
 									:validate-address-url="validateAddressUrl"
 									:has-errored="addressChangeHasErrored"
-									v-on:address-update-failed="addressChangeHasErrored = true">
+									:has-succeeded="addressChangeHasSucceeded"
+									v-on:address-update-failed="addressChangeHasErrored = true"
+									v-on:address-updated="updateAddress( $event )">
 					</address-modal>
 				</b-modal>
 				<payment-notice :payment="confirmationData.donation"></payment-notice>
@@ -51,6 +53,9 @@ import PaymentNotice from '@/components/pages/donation_confirmation/PaymentNotic
 import SummaryLinks from '@/components/pages/donation_confirmation/SummaryLinks.vue';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import AddressModal from '@/components/pages/donation_confirmation/AddressModal.vue';
+import { AddressFormData } from '@/view_models/Address';
+import { NS_ADDRESS } from '@/store/namespaces';
+import { mapGetters } from 'vuex';
 
 export default Vue.extend( {
 	name: 'DonationConfirmation',
@@ -60,12 +65,13 @@ export default Vue.extend( {
 		MembershipInfo,
 		PaymentNotice,
 		SummaryLinks,
-		AddressModal
+		AddressModal,
 	},
 	data: function () {
 		return {
 			isAddressModalOpen: false,
 			addressChangeHasErrored: false,
+			addressChangeHasSucceeded: false,
 		};
 	},
 	props: {
@@ -78,8 +84,18 @@ export default Vue.extend( {
 		showAddressModal: function () {
 			this.$data.isAddressModalOpen = true;
 		},
+		updateAddress: function ( addressData: AddressFormData ) {
+			this.$data.addressChangeHasSucceeded = true;
+			Object.keys( addressData ).forEach( fieldName => {
+				this.confirmationData.address[ fieldName ] = addressData[ fieldName ].value;
+			} );
+			this.confirmationData.addressType = addressTypeName( ( this as any ).addressType );
+		},
 	},
 	computed: {
+		...mapGetters( NS_ADDRESS, [
+			'addressType',
+		] ),
 		showBankTransferCode: function () {
 			return this.confirmationData.donation.paymentType === 'UEB';
 		},
@@ -87,8 +103,9 @@ export default Vue.extend( {
 			return this.confirmationData.donation.optsIntoNewsletter;
 		},
 		showAddressChangeButton: function () {
-			return this.confirmationData.addressType === addressTypeName( AddressTypeModel.ANON ) && !this.$data.addressChangeHasErrored;
-		}
+			return this.confirmationData.addressType === addressTypeName( AddressTypeModel.ANON ) &&
+					!this.$data.addressChangeHasErrored && !this.$data.addressChangeHasSucceeded;
+		},
 	},
 } );
 </script>

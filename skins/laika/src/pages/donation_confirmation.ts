@@ -2,15 +2,11 @@ import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
-import { createStore } from '@/store/update_address_store';
+import { createStore } from '@/store/donor_update_store';
 
 import App from '@/components/App.vue';
 
 import Component from '@/components/pages/DonationConfirmation.vue';
-import { action } from '@/store/util';
-import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField } from '@/store/address/actionTypes';
-import { InputField } from "@/view_models/Address";
 
 const PAGE_IDENTIFIER = 'donation-confirmation',
 	IS_FULLWIDTH_PAGE = true,
