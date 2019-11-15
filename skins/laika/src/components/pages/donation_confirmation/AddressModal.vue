@@ -57,6 +57,11 @@ import SubmitValues from '@/components/pages/update_address/SubmitValues.vue';
 import axios, { AxiosResponse } from 'axios';
 import { trackFormSubmission } from '@/tracking';
 
+export interface SubmittedAddress {
+	addressData: AddressFormData,
+	addressType: string
+}
+
 export default Vue.extend( {
 	name: 'AddressModal',
 	components: {
@@ -190,7 +195,26 @@ export default Vue.extend( {
 						{ headers: { 'Content-Type': 'multipart/form-data' } }
 					).then( ( validationResult: AxiosResponse<any> ) => {
 						if ( validationResult.data.state === 'OK' ) {
-							this.$emit( 'address-updated', this.$data.formData );
+							const address = this.$data.formData;
+							let addressData = {
+								streetAddress: address.street.value,
+								postalCode: address.postcode.value,
+								city: address.city.value,
+								country: address.country.value,
+								email: address.email.value,
+							} as any;
+							if ( this.$store.getters[ NS_ADDRESS + '/addressType' ] === AddressTypeModel.COMPANY ) {
+								addressData.fullName = address.companyName.value;
+							} else {
+								addressData.salutation = address.salutation.value;
+								addressData.firstName = address.firstName.value;
+								addressData.lastName = address.lastName.value;
+								addressData.fullName = `${address.title.value} ${address.firstName.value} ${address.lastName.value}`;
+							}
+							this.$emit( 'address-updated', {
+								addressData,
+								addressType: addressTypeName( this.$store.getters[ NS_ADDRESS + '/addressType' ] ),
+							} );
 						} else {
 							this.$emit( 'address-update-failed' );
 						}
