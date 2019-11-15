@@ -1,26 +1,19 @@
 <template>
 	<form id="address-update-form" name="address-update-form" v-on:submit.prevent="submit" method="post" ref="form" class="modal-card">
-		<address-type v-on:address-type="setAddressType( $event )" :disabled-anonymous-type="true"></address-type>
-		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
-		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-		<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
-		<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
-		<newsletter-opt-in></newsletter-opt-in>
 		<div v-if="hasErrored" class="help is-danger has-margin-top-18">
 			{{ $t( 'donation_confirmation_address_update_error' ) }}
 		</div>
 		<div v-if="hasSucceeded" class="has-margin-top-18">
 			{{ $t( 'donation_confirmation_address_update_success' ) }}
 		</div>
-		<div class="columns has-margin-top-18 has-padding-bottom-18">
-			<div v-if="hasErrored || hasSucceeded">
-				<div class="column">
-					<b-button type="is-primary is-main has-margin-top-18" @click="$parent.close()" outlined>
-						{{ $t( 'back_to_donation_summary' ) }}
-					</b-button>
-				</div>
-			</div>
-			<div v-else>
+		<div v-if="!hasErrored && !hasSucceeded">
+			<address-type v-on:address-type="setAddressType( $event )" :disabled-anonymous-type="true"></address-type>
+			<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
+			<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
+			<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
+			<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
+			<newsletter-opt-in></newsletter-opt-in>
+			<div class="columns has-margin-top-18 has-padding-bottom-18">
 				<div class="column">
 					<b-button type="is-primary is-main has-margin-top-18 level-item" @click="$parent.close()" outlined>
 						{{ $t( 'donation_confirmation_address_update_cancel' ) }}
@@ -31,6 +24,13 @@
 						{{ $t( 'donation_confirmation_address_update_confirm' ) }}
 					</b-button>
 				</div>
+			</div>
+		</div>
+		<div v-else class="columns has-margin-top-18 has-padding-bottom-18">
+			<div class="column">
+				<b-button type="is-primary is-main has-margin-top-18" @click="$parent.close()" outlined>
+					{{ $t( 'back_to_donation_summary' ) }}
+				</b-button>
 			</div>
 		</div>
 	</form>
@@ -68,7 +68,7 @@ export default Vue.extend( {
 		Email,
 		NewsletterOptIn,
 		PaymentBankData,
-		SubmitValues
+		SubmitValues,
 	},
 	data: function (): { formData: AddressFormData } {
 		return {
@@ -142,7 +142,7 @@ export default Vue.extend( {
 		validateAddressUrl: String,
 		countries: Array as () => Array<String>,
 		hasErrored: Boolean,
-		hasSucceeded: Boolean
+		hasSucceeded: Boolean,
 	},
 	computed: {
 		fieldErrors: {
@@ -189,8 +189,8 @@ export default Vue.extend( {
 						jsonForm,
 						{ headers: { 'Content-Type': 'multipart/form-data' } }
 					).then( ( validationResult: AxiosResponse<any> ) => {
-						if( validationResult.data.status === 'OK' ) {
-							this.$emit( 'address-updated' );
+						if ( validationResult.data.state === 'OK' ) {
+							this.$emit( 'address-updated', this.$data.formData );
 						} else {
 							this.$emit( 'address-update-failed' );
 						}
