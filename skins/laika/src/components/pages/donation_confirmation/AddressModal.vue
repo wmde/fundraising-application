@@ -20,7 +20,9 @@
 					</b-button>
 				</div>
 				<div class="column">
-					<b-button type="is-primary is-main has-margin-top-18 level-item" native-type="submit">
+					<b-button type="is-primary is-main has-margin-top-18 level-item"
+								:class="isValidating ? 'is-loading' : ''"
+								native-type="submit">
 						{{ $t( 'donation_confirmation_address_update_confirm' ) }}
 					</b-button>
 				</div>
@@ -75,8 +77,9 @@ export default Vue.extend( {
 		PaymentBankData,
 		SubmitValues,
 	},
-	data: function (): { formData: AddressFormData } {
+	data: function (): { formData: AddressFormData, isValidating: boolean } {
 		return {
+			isValidating: false,
 			formData: {
 				salutation: {
 					name: 'salutation',
@@ -178,6 +181,7 @@ export default Vue.extend( {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
 		},
 		submit() {
+			this.$data.isValidating = true;
 			this.validateForm().then( ( validationResult: ValidationResult ) => {
 				if ( validationResult.status === 'OK' ) {
 					let form = this.$refs.form as HTMLFormElement;
@@ -194,6 +198,7 @@ export default Vue.extend( {
 						jsonForm,
 						{ headers: { 'Content-Type': 'multipart/form-data' } }
 					).then( ( validationResult: AxiosResponse<any> ) => {
+						this.$data.isValidating = false;
 						if ( validationResult.data.state === 'OK' ) {
 							const address = this.$data.formData;
 							let addressData = {
