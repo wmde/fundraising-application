@@ -22,9 +22,10 @@ export function createStore() {
 		},
 		strict: process.env.NODE_ENV !== 'production',
 		getters: {
-			isValidating: function ( state ): boolean {
+			isValidating: function ( state, getters ): boolean {
 				return state[ NS_PAYMENT ].isValidating ||
-					state[ NS_ADDRESS ].isValidating ||
+					//TODO use getters instead
+					state[ NS_ADDRESS ].serverSideValidationCount > 0 ||
 					state[ NS_BANKDATA ].isValidating;
 			},
 		},

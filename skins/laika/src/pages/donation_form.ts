@@ -56,6 +56,7 @@ store.dispatch( action( NS_PAYMENT, initializePayment ), {
 				assetsPath: pageData.assetsPath,
 				pageIdentifier: PAGE_IDENTIFIER,
 				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
+				validateEmailUrl: pageData.applicationVars.urls.validateEmail,
 				validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
 				paymentAmounts: pageData.applicationVars.presetAmounts,
 				paymentIntervals: pageData.applicationVars.paymentIntervals,
@@ -69,6 +70,7 @@ store.dispatch( action( NS_PAYMENT, initializePayment ), {
 			h( Component, {
 				props: {
 					validateAddressUrl: pageData.applicationVars.urls.validateAddress,
+					validateEmailUrl: pageData.applicationVars.urls.validateEmail,
 					validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
 					validateBankDataUrl: pageData.applicationVars.urls.validateIban,
 					validateLegacyBankDataUrl: pageData.applicationVars.urls.convertBankData,

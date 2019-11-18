@@ -9,7 +9,7 @@ import { AddressRequirements } from '@/store/address/constants';
 
 export default function ( requiredFields: AddressRequirements ): Module<AddressState, any> {
 	const state: AddressState = {
-		isValidating: false,
+		serverSideValidationCount: 0,
 		addressType: AddressTypeModel.PERSON,
 		newsletterOptIn: false,
 		receiptOptOut: false,

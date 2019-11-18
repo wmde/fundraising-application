@@ -21,4 +21,7 @@ export const getters: GetterTree<AddressState, any> = {
 		const privateName = state.addressType === AddressTypeModel.PERSON ? [ address.title, address.firstName, address.lastName ].filter( nonEmpty ).join( ' ' ) : '';
 		return [ companyName, privateName ].filter( nonEmpty ).join( ', ' );
 	},
+	isValidating: ( state: AddressState ): boolean => {
+		return state.serverSideValidationCount > 0;
+	},
 };

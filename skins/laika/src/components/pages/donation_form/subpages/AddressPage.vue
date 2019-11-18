@@ -14,6 +14,7 @@
 		</payment-summary>
 		<address-fields
 				:validate-address-url="validateAddressUrl"
+				:validate-email-url="validateEmailUrl"
 				:validate-bank-data-url="validateBankDataUrl"
 				:validate-legacy-bank-data-url="validateLegacyBankDataUrl"
 				:countries="countries"
@@ -72,6 +73,7 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
+		validateEmailUrl: String,
 		validateBankDataUrl: String,
 		validateLegacyBankDataUrl: String,
 		countries: Array as () => Array<String>,
