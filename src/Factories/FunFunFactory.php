@@ -1221,7 +1221,6 @@ class FunFunFactory implements ServiceProviderInterface {
 					[
 						'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
 						'featureToggle' => [
-							'donorUpdateEnabled' => $this->getChoiceFactory()->isDonationAddressOptional(),
 							'callToActionTemplate' => $this->getChoiceFactory()->getMembershipCallToActionTemplate()
 						],
 					]

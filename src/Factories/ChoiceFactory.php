@@ -23,15 +23,6 @@ class ChoiceFactory {
 		$this->featureToggle = $featureToggle;
 	}
 
-	public function isDonationAddressOptional(): bool {
-		if ( $this->featureToggle->featureIsActive( 'campaigns.donation_address.required' ) ) {
-			return false;
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.donation_address.optional' ) ) {
-			return true;
-		}
-		throw new UnknownChoiceDefinition( 'Confirmation Page Template configuration failure.' );
-	}
-
 	public function getSkinTemplateDirectory(): string {
 		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.laika' ) ) {
 			return $this->getSkinDirectory( 'laika' );
