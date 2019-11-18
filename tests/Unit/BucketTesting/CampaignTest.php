@@ -83,11 +83,27 @@ class CampaignTest extends TestCase {
 		$campaign->getDefaultBucket();
 	}
 
-	public function testGivenCampaignwithDateRange_itCanBeCheckedForExpiration() {
+	public function testGivenCampaignWithDateRange_itCanBeCheckedForExpiration() {
 		$campaign = new Campaign( 'test', 't', new CampaignDate( '2018-10-01' ), new CampaignDate( '2018-12-31' ), true );
 
 		$this->assertTrue( $campaign->isExpired( new CampaignDate( '2018-09-09' ) ), 'Campaign is expired before start date' );
 		$this->assertTrue( $campaign->isExpired( new CampaignDate( '2025-02-25' ) ), 'Campaign is expired after end date' );
 		$this->assertFalse( $campaign->isExpired( new CampaignDate( '2018-10-02' ) ), 'Campaign is not expired inside date range' );
+	}
+
+	public function testCampaignsCanBeActiveAndInactive() {
+		$activeCampaign = new Campaign( 'test', 't', new CampaignDate( '2018-10-01' ), new CampaignDate( '2018-12-31' ), Campaign::ACTIVE );
+		$inActiveCampaign = new Campaign( 'test', 't', new CampaignDate( '2018-10-01' ), new CampaignDate( '2018-12-31' ), Campaign::INACTIVE );
+
+		$this->assertTrue( $activeCampaign->isActive() );
+		$this->assertFalse( $inActiveCampaign->isActive() );
+	}
+
+	public function testCampaignsUrlParameterCanBeActiveAndInactive() {
+		$activeCampaign = new Campaign( 'test', 't', new CampaignDate( '2018-10-01' ), new CampaignDate( '2018-12-31' ), Campaign::ACTIVE, Campaign::NEEDS_URL_KEY );
+		$inActiveCampaign = new Campaign( 'test', 't', new CampaignDate( '2018-10-01' ), new CampaignDate( '2018-12-31' ), Campaign::ACTIVE, Campaign::NEEDS_NO_URL_KEY );
+
+		$this->assertTrue( $activeCampaign->isOnlyActiveWithUrlKey() );
+		$this->assertFalse( $inActiveCampaign->isOnlyActiveWithUrlKey() );
 	}
 }

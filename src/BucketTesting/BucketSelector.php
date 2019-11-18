@@ -34,6 +34,7 @@ class BucketSelector {
 		$selectionStrategies = [
 			new InactiveCampaignBucketSelection( new CampaignDate() ),
 			new ParameterBucketSelection( $possibleParameters ),
+			new SelectDefaultWhenParamsAreMissingSelection( $possibleParameters ),
 			$this->fallbackSelectionStrategy
 		];
 

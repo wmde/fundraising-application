@@ -28,7 +28,8 @@ class CampaignBuilder {
 				$config['url_key'],
 				CampaignDate::createFromString( $config['start'], $this->timezone ),
 				CampaignDate::createFromString( $config['end'], $this->timezone ),
-				$config['active']
+				$config['active'],
+				$config['param_only'] ?? Campaign::NEEDS_NO_URL_KEY
 			);
 			foreach ( $config['buckets'] as $bucketName ) {
 				$campaign->addBucket( new Bucket( $bucketName, $campaign, $bucketName === $config['default_bucket'] ) );

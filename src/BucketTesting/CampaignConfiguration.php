@@ -35,6 +35,7 @@ class CampaignConfiguration implements ConfigurationInterface {
 						->isRequired()
 					->end()
 					->booleanNode( 'active' )
+						->info( 'If campaign is active. Allows for campaigns to run as long as they want' )
 						->isRequired()
 					->end()
 					->arrayNode( 'buckets' )
@@ -49,6 +50,10 @@ class CampaignConfiguration implements ConfigurationInterface {
 					->scalarNode( 'url_key' )
 						->info( 'URL parameter key used for assigning buckets to people' )
 						->isRequired()
+					->end()
+					->booleanNode( 'param_only' )
+						->info( 'Returns the default bucket when the "url_key" parameter is missing in a request' )
+						->defaultFalse()
 					->end()
 				->end()
 			->end();
