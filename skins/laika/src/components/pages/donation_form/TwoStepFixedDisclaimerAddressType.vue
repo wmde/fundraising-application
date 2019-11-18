@@ -19,12 +19,12 @@
 				</b-radio>
 			</div>
 		</fieldset>
-		<div v-show="isAnon === 'yes'" class="has-margin-top-18">
+		<div class="has-margin-top-18">
 			{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}
 		</div>
-		<div
+		<div class="has-margin-top-18"
 				v-show="isAnon === 'no' && disabledAddressTypes.includes( AddressTypeModel.ANON )"
-				class="has-margin-top-18">
+				>
 			{{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }}
 		</div>
 
@@ -55,7 +55,7 @@ import Vue from 'vue';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 export default Vue.extend( {
-	name: 'TwoStepAddressType',
+	name: 'TwoStepFixedDisclaimerAddressType',
 	data: function () {
 		return {
 			isAnon: 'no',

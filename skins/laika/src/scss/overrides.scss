@@ -33,6 +33,10 @@
 	font-size: 1em;
 }
 
+.form-input.form-input__option-list, .form-input.form-input__horizontal-option-list  {
+	margin-top: 18px;
+}
+
 .b-radio.radio {
 	height: auto;
 	width: $fun-min-width;

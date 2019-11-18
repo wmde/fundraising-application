@@ -120,16 +120,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "c15dcd24b756f9e52ea7c3ae8227354f3628f11a"
+                "reference": "89a5c76c39c292f7798f964ab3c836c3f8192a55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/c15dcd24b756f9e52ea7c3ae8227354f3628f11a",
-                "reference": "c15dcd24b756f9e52ea7c3ae8227354f3628f11a",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/89a5c76c39c292f7798f964ab3c836c3f8192a55",
+                "reference": "89a5c76c39c292f7798f964ab3c836c3f8192a55",
                 "shasum": ""
             },
             "require": {
@@ -199,7 +199,7 @@
                 "riak",
                 "xcache"
             ],
-            "time": "2019-11-11T10:31:52+00:00"
+            "time": "2019-11-15T14:31:57+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -783,16 +783,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.6.4",
+            "version": "v2.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "b52ef5a1002f99ab506a5a2d6dba5a2c236c5f43"
+                "reference": "16751d210fb806cc6f1b868a2b9dde6fab6866ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/b52ef5a1002f99ab506a5a2d6dba5a2c236c5f43",
-                "reference": "b52ef5a1002f99ab506a5a2d6dba5a2c236c5f43",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/16751d210fb806cc6f1b868a2b9dde6fab6866ed",
+                "reference": "16751d210fb806cc6f1b868a2b9dde6fab6866ed",
                 "shasum": ""
             },
             "require": {
@@ -860,7 +860,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2019-09-20T14:30:26+00:00"
+            "time": "2019-11-18T11:06:51+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -8139,12 +8139,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "03cf14a1874650f3b28f78b2bde15389b614e1e2"
+                "reference": "5be11214dbe0f920425b862361e37bff8aba0ed7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/03cf14a1874650f3b28f78b2bde15389b614e1e2",
-                "reference": "03cf14a1874650f3b28f78b2bde15389b614e1e2",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/5be11214dbe0f920425b862361e37bff8aba0ed7",
+                "reference": "5be11214dbe0f920425b862361e37bff8aba0ed7",
                 "shasum": ""
             },
             "require-dev": {
@@ -8177,7 +8177,7 @@
                 "GPL-2.0+"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2019-11-13T15:13:34+00:00"
+            "time": "2019-11-18T15:31:28+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
