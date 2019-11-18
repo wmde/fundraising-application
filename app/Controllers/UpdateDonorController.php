@@ -46,7 +46,7 @@ class UpdateDonorController {
 		UpdateDonorResponse $responseModel,
 		string $updateToken,
 		string $accessToken
-	) {
+	): Response {
 		if ( $responseModel->getDonation() === null ) {
 			throw new AccessDeniedException();
 		}

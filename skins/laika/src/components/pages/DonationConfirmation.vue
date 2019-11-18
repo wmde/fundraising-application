@@ -2,7 +2,7 @@
 	<div class="donation-confirmation">
 		<div class="donation-summary-wrapper has-background-bright columns has-padding-18">
 			<div class="column is-half">
-				<donation-summary :address="confirmationData.address" :address-type="confirmationData.addressType"
+				<donation-summary :address="address" :address-type="addressType"
 								:payment="confirmationData.donation">
 					<div class="title is-size-5">{{ $t( 'donation_confirmation_topbox_intro' ) }}</div>
 				</donation-summary>
@@ -52,10 +52,7 @@ import MembershipInfo from '@/components/pages/donation_confirmation/MembershipI
 import PaymentNotice from '@/components/pages/donation_confirmation/PaymentNotice.vue';
 import SummaryLinks from '@/components/pages/donation_confirmation/SummaryLinks.vue';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
-import AddressModal from '@/components/pages/donation_confirmation/AddressModal.vue';
-import { AddressFormData } from '@/view_models/Address';
-import { NS_ADDRESS } from '@/store/namespaces';
-import { mapGetters } from 'vuex';
+import AddressModal, { SubmittedAddress } from '@/components/pages/donation_confirmation/AddressModal.vue';
 
 export default Vue.extend( {
 	name: 'DonationConfirmation',
@@ -72,6 +69,8 @@ export default Vue.extend( {
 			isAddressModalOpen: false,
 			addressChangeHasErrored: false,
 			addressChangeHasSucceeded: false,
+			address: this.$props.confirmationData.address,
+			addressType: this.$props.confirmationData.addressType,
 		};
 	},
 	props: {
@@ -84,18 +83,13 @@ export default Vue.extend( {
 		showAddressModal: function () {
 			this.$data.isAddressModalOpen = true;
 		},
-		updateAddress: function ( addressData: AddressFormData ) {
+		updateAddress: function ( submittedAddress: SubmittedAddress ) {
 			this.$data.addressChangeHasSucceeded = true;
-			Object.keys( addressData ).forEach( fieldName => {
-				this.confirmationData.address[ fieldName ] = addressData[ fieldName ].value;
-			} );
-			this.confirmationData.addressType = addressTypeName( ( this as any ).addressType );
+			this.$data.address = submittedAddress.addressData;
+			this.$data.addressType = submittedAddress.addressType;
 		},
 	},
 	computed: {
-		...mapGetters( NS_ADDRESS, [
-			'addressType',
-		] ),
 		showBankTransferCode: function () {
 			return this.confirmationData.donation.paymentType === 'UEB';
 		},
