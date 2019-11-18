@@ -13,6 +13,3 @@ skins:
   buckets:
      - "test"
   default_bucket: "test"
-
-donation_address:
-  active: false
