@@ -23,7 +23,8 @@ class CampaignConfigurationTest extends TestCase {
 						'active' => true,
 						'buckets' => [ 'bucket1', 'bucket2' ],
 						'default_bucket' => 'bucket2',
-						'url_key' => 'mc'
+						'url_key' => 'mc',
+						'param_only' => true
 					],
 					'full_campaign' => [
 						'description' => 'This is just a test of a campaign configuration with all possible values set',
@@ -144,7 +145,8 @@ class CampaignConfigurationTest extends TestCase {
 						'active' => false,
 						'buckets' => [ 'bucket3' ],
 						'default_bucket' => 'bucket3',
-						'url_key' => 'fc'
+						'url_key' => 'fc',
+						'param_only' => true
 					],
 					'third_campaign' => [
 						'start' => '2020-10-31',
@@ -169,7 +171,8 @@ class CampaignConfigurationTest extends TestCase {
 					'active' => false,
 					'buckets' => [ 'bucket1', 'bucket2', 'bucket3' ],
 					'default_bucket' => 'bucket3',
-					'url_key' => 'fc'
+					'url_key' => 'fc',
+					'param_only' => true
 				],
 				'second_campaign' => [
 					'start' => '2019-01-01',
@@ -177,7 +180,8 @@ class CampaignConfigurationTest extends TestCase {
 					'active' => false,
 					'buckets' => [ 'bucket1', 'bucket2' ],
 					'default_bucket' => 'bucket2',
-					'url_key' => 'sc'
+					'url_key' => 'sc',
+					'param_only' => false
 				],
 				'third_campaign' => [
 					'start' => '2020-10-31',
@@ -185,7 +189,8 @@ class CampaignConfigurationTest extends TestCase {
 					'active' => true,
 					'buckets' => [ 'default', 'fancy' ],
 					'default_bucket' => 'default',
-					'url_key' => 'tc'
+					'url_key' => 'tc',
+					'param_only' => false
 				]
 			]
 		);

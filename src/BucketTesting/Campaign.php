@@ -18,11 +18,16 @@ class Campaign {
 	private $buckets;
 	private $urlKey;
 	private $defaultBucketIndex;
+	private $onlyActiveWithUrlKey;
 
 	public const ACTIVE = true;
 	public const INACTIVE = false;
 
-	public function __construct( string $name, string $urlKey, CampaignDate $startTimestamp, CampaignDate $endTimestamp, bool $isActive ) {
+	public const NEEDS_URL_KEY = true;
+	public const NEEDS_NO_URL_KEY = false;
+
+	public function __construct( string $name, string $urlKey, CampaignDate $startTimestamp, CampaignDate $endTimestamp,
+								 bool $isActive, bool $onlyActiveWithUrlKey = false ) {
 		$this->name = $name;
 		$this->urlKey = $urlKey;
 		$this->active = $isActive;
@@ -30,6 +35,7 @@ class Campaign {
 		$this->endTimestamp = $endTimestamp;
 		$this->buckets = [];
 		$this->defaultBucketIndex = -1;
+		$this->onlyActiveWithUrlKey = $onlyActiveWithUrlKey;
 	}
 
 	public function isActive(): bool {
@@ -91,5 +97,8 @@ class Campaign {
 		return $bucket;
 	}
 
+	public function isOnlyActiveWithUrlKey(): bool {
+		return $this->onlyActiveWithUrlKey;
+	}
 
 }

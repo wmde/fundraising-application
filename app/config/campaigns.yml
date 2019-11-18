@@ -20,6 +20,8 @@
 # buckets: List of bucket names
 # default_bucket: used bucket when campaign is not active. Must be listed in buckets.
 # url_key: URL parameter key used for assigning buckets to people
+# param_only: (Optional) Set to true if the campaign should return the default bucket when the url key is not in a request. This is for A/B tests triggered by banners
+
 donation_address:
   description: Test address form being required immediately against only being presented optionally on the confirmation page
   reference: "https://phabricator.wikimedia.org/T211666"
@@ -44,6 +46,7 @@ skins:
   default_bucket: "laika"
   url_key: skin
   active: true
+  param_only: true
 
 membership_call_to_action:
   description: Display different content for membership call to action on donation confirmation page
@@ -84,6 +87,7 @@ anon_form_display:
   default_bucket: "two_steps"
   url_key: fd
   active: true
+  param_only: true
 
 compact_design:
   description: Test form design variation where the design is more compact by moving elements onto the same row and generally closer together.

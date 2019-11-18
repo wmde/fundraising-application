@@ -153,6 +153,33 @@ class BucketSelectorTest extends TestCase {
 		$this->assertTrue( $this->bucketSelectionStrategy->bucketWasSelected(), 'Bucket should be selected by fallback selection strategy' );
 	}
 
+	public function testGivenNoParamsAndUrlActivatedCampaign_defaultBucketIsSelected() {
+		$campaign = new Campaign(
+			'test1',
+			't1',
+			( new CampaignDate() )->sub( new \DateInterval( 'P1M' ) ),
+			( new CampaignDate() )->add( new \DateInterval( 'P1M' ) ),
+			Campaign::ACTIVE,
+			Campaign::NEEDS_URL_KEY
+		);
+		$defaultBucket = new Bucket( 'a', $campaign, Bucket::DEFAULT );
+		$alternativeBucket = new Bucket( 'b', $campaign, Bucket::NON_DEFAULT );
+		$campaign->addBucket( $defaultBucket )->addBucket( $alternativeBucket );
+		$bucketSelector = new BucketSelector( new CampaignCollection( $campaign ), $this->bucketSelectionStrategy );
+
+		$this->assertSame(
+			[ $defaultBucket ],
+			$bucketSelector->selectBuckets( [], [] ),
+		);
+		$this->assertFalse( $this->bucketSelectionStrategy->bucketWasSelected(), 'Bucket not should be selected by fallback selection strategy' );
+
+		$this->assertSame(
+			[ $alternativeBucket ],
+			$bucketSelector->selectBuckets( ['t1' => 1], [] ),
+			);
+		$this->assertFalse( $this->bucketSelectionStrategy->bucketWasSelected(), 'Bucket not should be selected by fallback selection strategy' );
+	}
+
 	/**
 	 * @dataProvider invalidParametersProvider
 	 */

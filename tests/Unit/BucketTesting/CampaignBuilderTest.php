@@ -21,7 +21,8 @@ class CampaignBuilderTest extends TestCase {
 			'f',
 			new CampaignDate( '2018-10-10', new \DateTimeZone( 'UTC' ) ),
 			new CampaignDate( '2018-12-12', new \DateTimeZone( 'UTC' ) ),
-			true
+			true,
+			false
 		);
 		$firstExpectedCampaign
 			->addBucket( new Bucket( 'bucket1', $firstExpectedCampaign, Bucket::DEFAULT ) )
@@ -31,7 +32,8 @@ class CampaignBuilderTest extends TestCase {
 			's',
 			new CampaignDate( '2019-01-01', new \DateTimeZone( 'UTC' ) ),
 			new CampaignDate( '2025-12-31', new \DateTimeZone( 'UTC' ) ),
-			false
+			false,
+			true
 		);
 		$secondExpectedCampaign
 			->addBucket( new Bucket( 'example1', $secondExpectedCampaign, Bucket::NON_DEFAULT ) )
@@ -47,7 +49,8 @@ class CampaignBuilderTest extends TestCase {
 					'active' => true,
 					'buckets' => [ 'bucket1', 'bucket2' ],
 					'default_bucket' => 'bucket1',
-					'url_key' => 'f'
+					'url_key' => 'f',
+					'param_only' => false
 				],
 				'second' => [
 					'start' => '2019-01-01',
@@ -55,7 +58,8 @@ class CampaignBuilderTest extends TestCase {
 					'active' => false,
 					'buckets' => [ 'example1', 'example2', 'default' ],
 					'default_bucket' => 'default',
-					'url_key' => 's'
+					'url_key' => 's',
+					'param_only' => true
 				],
 			]
 		);
@@ -96,7 +100,8 @@ class CampaignBuilderTest extends TestCase {
 					'active' => true,
 					'buckets' => [ 'bucket1', 'bucket2' ],
 					'default_bucket' => 'bucket1',
-					'url_key' => 'f'
+					'url_key' => 'f',
+					'param_only' => false
 				],
 				'second' => [
 					'start' => '2019-01-01',
@@ -104,7 +109,8 @@ class CampaignBuilderTest extends TestCase {
 					'active' => false,
 					'buckets' => [ 'example1', 'example2', 'default' ],
 					'default_bucket' => 'default',
-					'url_key' => 's'
+					'url_key' => 's',
+					'param_only' => false
 				],
 			]
 		);
