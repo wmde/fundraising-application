@@ -116,7 +116,7 @@ export default Vue.extend( {
 				email: {
 					name: 'email',
 					value: '',
-					pattern: '^[^@]+@.+$',
+					pattern: '^(.+)@(.+)\\.(.+)$',
 					optionalField: false,
 				},
 			},

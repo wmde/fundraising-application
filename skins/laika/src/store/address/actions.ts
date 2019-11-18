@@ -46,9 +46,8 @@ export const actions = {
 
 		context.commit( 'BEGIN_EMAIL_VALIDATION' );
 		const bodyFormData = new FormData();
-		Object.keys( context.state.values ).forEach(
-			field => bodyFormData.append( field, context.state.values[ field ] )
-		);
+		bodyFormData.append( 'email', context.state.values.email );
+
 		return axios( validateEmailUrl, {
 			method: 'post',
 			data: bodyFormData,

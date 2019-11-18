@@ -27,6 +27,7 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
+		validateEmailUrl: String,
 		validateBankDataUrl: String,
 		validateLegacyBankDataUrl: String,
 		validateFeeUrl: String,
@@ -52,6 +53,7 @@ export default Vue.extend( {
 				if ( this.currentFormComponent === 'AddressPage' ) {
 					return {
 						validateAddressUrl: this.$props.validateAddressUrl,
+						validateEmailUrl: this.$props.validateEmailUrl,
 						countries: this.$props.addressCountries,
 						showMembershipTypeOption: this.$props.showMembershipTypeOption,
 					};

@@ -4,6 +4,7 @@
 		<membership-type v-if="showMembershipTypeOption"></membership-type>
 		<address-fields
 				:validate-address-url="validateAddressUrl"
+				:validate-email-url="validateEmailUrl"
 				:countries="countries"
 				ref="address">
 		</address-fields>
@@ -34,6 +35,7 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
+		validateEmailUrl: String,
 		countries: Array as () => Array<String>,
 		showMembershipTypeOption: Boolean,
 	},

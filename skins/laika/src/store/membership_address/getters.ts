@@ -1,5 +1,5 @@
 import { GetterTree } from 'vuex';
-import { MembershipAddressState } from '@/view_models/Address';
+import { AddressState, MembershipAddressState } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
@@ -25,5 +25,8 @@ export const getters: GetterTree<MembershipAddressState, any> = {
 		// remove ternary operator in the following line when we implement contact person, https://phabricator.wikimedia.org/T220366
 		const privateName = state.addressType === AddressTypeModel.PERSON ? [ address.title, address.firstName, address.lastName ].filter( nonEmpty ).join( ' ' ) : '';
 		return [ companyName, privateName ].filter( nonEmpty ).join( ', ' );
+	},
+	isValidating: ( state: MembershipAddressState ): boolean => {
+		return state.serverSideValidationCount > 0;
 	},
 };
