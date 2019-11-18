@@ -5,6 +5,8 @@ import {
 	MARK_EMPTY_FIELDS_INVALID,
 	BEGIN_ADDRESS_VALIDATION,
 	FINISH_ADDRESS_VALIDATION,
+	BEGIN_EMAIL_VALIDATION,
+	FINISH_EMAIL_VALIDATION,
 	SET_ADDRESS_TYPE,
 	SET_ADDRESS_FIELD,
 	SET_ADDRESS_FIELDS,
@@ -16,7 +18,7 @@ import {
 } from '@/store/membership_address/mutationTypes';
 import { REQUIRED_FIELDS } from '@/store/membership_address/constants';
 import { Validity } from '@/view_models/Validity';
-import { MembershipAddressState, InputField } from '@/view_models/Address';
+import { MembershipAddressState, InputField, AddressState } from '@/view_models/Address';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
 
@@ -36,10 +38,10 @@ export const mutations: MutationTree<MembershipAddressState> = {
 		} );
 	},
 	[ BEGIN_ADDRESS_VALIDATION ]( state: MembershipAddressState ) {
-		state.isValidating = true;
+		state.serverSideValidationCount++;
 	},
 	[ FINISH_ADDRESS_VALIDATION ]( state: MembershipAddressState, payload ) {
-		state.isValidating = false;
+		state.serverSideValidationCount--;
 		if ( payload.status === 'OK' ) {
 			return;
 		}
@@ -48,6 +50,18 @@ export const mutations: MutationTree<MembershipAddressState> = {
 				state.validity[ name ] = Validity.INVALID;
 			}
 		} );
+	},
+	[ BEGIN_EMAIL_VALIDATION ]( state: MembershipAddressState ) {
+		state.serverSideValidationCount++;
+	},
+	[ FINISH_EMAIL_VALIDATION ]( state: MembershipAddressState, payload ) {
+		state.serverSideValidationCount--;
+		if ( payload.status === 'OK' ) {
+			return;
+		}
+		if ( REQUIRED_FIELDS[ state.addressType ].indexOf( 'email' ) > 0 ) {
+			state.validity.email = Validity.INVALID;
+		}
 	},
 	[ SET_ADDRESS_TYPE ]( state: MembershipAddressState, type: AddressTypeModel ) {
 		state.addressType = type;

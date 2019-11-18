@@ -23,7 +23,7 @@ import moxios from 'moxios';
 function newMinimalStore( overrides: Object ): MembershipAddressState {
 	return Object.assign(
 		{
-			isValidating: false,
+			serverSideValidationCount: 0,
 			addressType: AddressTypeModel.PERSON,
 			membershipType: MembershipTypeModel.SUSTAINING,
 			receiptOptOut: false,
@@ -514,22 +514,22 @@ describe( 'MembershipAddress', () => {
 	} );
 
 	describe( 'Mutations/BEGIN_ADDRESS_VALIDATION', () => {
-		it( 'sets validation flag to true', () => {
+		it( 'increases validation counter', () => {
 			const store = newMinimalStore( {} );
 			mutations.BEGIN_ADDRESS_VALIDATION( store, null );
-			expect( store.isValidating ).toBe( true );
+			expect( store.serverSideValidationCount ).toBe( 1 );
 		} );
 	} );
 
 	describe( 'Mutations/FINISH_ADDRESS_VALIDATION', () => {
-		it( 'sets validation flag to false if there are no errors after the server responds', () => {
-			const store = newMinimalStore( {} ),
+		it( 'sets validation counter to 0 if there are no errors after the server responds', () => {
+			const store = newMinimalStore( { serverSideValidationCount: 1 } ),
 				resp = {
 					status: 'OK',
 					messages: {},
 				};
 			mutations.FINISH_ADDRESS_VALIDATION( store, resp );
-			expect( store.isValidating ).toBe( false );
+			expect( store.serverSideValidationCount ).toBe( 0 );
 		} );
 
 		it( 'sets validity to invalid for the appropriate form fields according to the response from the server', () => {
@@ -548,6 +548,43 @@ describe( 'MembershipAddress', () => {
 
 			expect( store.validity.postcode ).toStrictEqual( Validity.INVALID );
 			expect( store.validity.street ).toStrictEqual( Validity.INVALID );
+		} );
+
+	} );
+
+	describe( 'Mutations/BEGIN_EMAIL_VALIDATION', () => {
+		it( 'increase validation counter', () => {
+			const store = newMinimalStore( {} );
+			mutations.BEGIN_EMAIL_VALIDATION( store, null );
+			expect( store.serverSideValidationCount ).toBe( 1 );
+		} );
+	} );
+
+	describe( 'Mutations/FINISH_ADDRESS_VALIDATION', () => {
+		it( 'sets validation counter to 0 if there are no errors after the server responds', () => {
+			const store = newMinimalStore( { serverSideValidationCount: 1 } ),
+				resp = {
+					status: 'OK',
+					messages: {},
+				};
+			mutations.FINISH_EMAIL_VALIDATION( store, resp );
+			expect( store.serverSideValidationCount ).toBe( 0 );
+		} );
+
+		it( 'sets validity to invalid for the appropriate form fields according to the response from the server', () => {
+			const store = newMinimalStore( {} ),
+				resp = {
+					status: 'ERR',
+					messages: {
+						postcode: 'error',
+						street: 'error',
+					},
+				};
+			expect( store.validity.email ).toStrictEqual( Validity.INCOMPLETE );
+
+			mutations.FINISH_EMAIL_VALIDATION( store, resp );
+
+			expect( store.validity.email ).toStrictEqual( Validity.INVALID );
 		} );
 
 	} );

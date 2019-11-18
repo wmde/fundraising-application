@@ -9,7 +9,7 @@ import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
 
 export default function (): Module<MembershipAddressState, any> {
 	const state: MembershipAddressState = {
-		isValidating: false,
+		serverSideValidationCount: 0,
 		addressType: AddressTypeModel.PERSON,
 		membershipType: MembershipTypeModel.SUSTAINING,
 		receiptOptOut: false,

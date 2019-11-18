@@ -24,7 +24,7 @@ export function createStore() {
 		getters: {
 			isValidating: function ( state, getters ): boolean {
 				return state[ NS_PAYMENT ].isValidating ||
-					//TODO use getters instead
+					// TODO use getters instead
 					state[ NS_ADDRESS ].serverSideValidationCount > 0 ||
 					state[ NS_BANKDATA ].isValidating;
 			},

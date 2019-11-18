@@ -4,6 +4,7 @@ import createAddress from '@/store/membership_address';
 import createBankData from '@/store/bankdata';
 import createPayment from '@/store/membership_fee';
 import {
+	NS_ADDRESS,
 	NS_BANKDATA,
 	NS_MEMBERSHIP_ADDRESS,
 	NS_MEMBERSHIP_FEE,
@@ -22,7 +23,8 @@ export function createStore() {
 		getters: {
 			isValidating: function ( state ): boolean {
 				return state[ NS_MEMBERSHIP_FEE ].isValidating ||
-					state[ NS_MEMBERSHIP_ADDRESS ].isValidating ||
+					// TODO use getters instead
+					state[ NS_MEMBERSHIP_ADDRESS ].serverSideValidationCount > 0 ||
 					state[ NS_BANKDATA ].isValidating;
 			},
 		},

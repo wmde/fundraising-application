@@ -3,13 +3,14 @@ import axios, { AxiosResponse } from 'axios';
 import {
 	initializeAddress,
 	validateAddress,
+	validateEmail,
 	setAddressType,
 	setAddressField,
 	setReceiptOptOut,
 	setDate,
 	setMembershipType,
 } from '@/store/membership_address/actionTypes';
-import { MembershipAddressState, InputField, InitialMembershipData } from '@/view_models/Address';
+import { MembershipAddressState, InputField, InitialMembershipData, AddressState } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { addressTypeFromName, AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
@@ -53,6 +54,26 @@ export const actions = {
 			headers: { 'Content-Type': 'multipart/form-data' },
 		} ).then( ( validationResult: AxiosResponse<ValidationResponse> ) => {
 			context.commit( 'FINISH_ADDRESS_VALIDATION', validationResult.data );
+			return validationResult.data;
+		} );
+
+	},
+	[ validateEmail ]( context: ActionContext<MembershipAddressState, any>, validateEmailUrl: string ) {
+		context.commit( MARK_EMPTY_FIELDS_INVALID );
+		if ( !context.getters.requiredFieldsAreValid ) {
+			return Promise.resolve( { status: 'ERR', messages: [] } );
+		}
+
+		context.commit( 'BEGIN_EMAIL_VALIDATION' );
+		const bodyFormData = new FormData();
+		bodyFormData.append( 'email', context.state.values.email );
+
+		return axios( validateEmailUrl, {
+			method: 'post',
+			data: bodyFormData,
+			headers: { 'Content-Type': 'multipart/form-data' },
+		} ).then( ( validationResult: AxiosResponse<ValidationResponse> ) => {
+			context.commit( 'FINISH_EMAIL_VALIDATION', validationResult.data );
 			return validationResult.data;
 		} );
 

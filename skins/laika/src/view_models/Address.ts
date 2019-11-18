@@ -37,7 +37,7 @@ export interface AddressState {
 }
 
 export interface MembershipAddressState {
-    isValidating: boolean,
+    serverSideValidationCount: number,
     addressType: AddressTypeModel,
     membershipType: MembershipTypeModel,
     receiptOptOut: boolean,
