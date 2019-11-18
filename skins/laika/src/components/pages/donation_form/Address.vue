@@ -45,7 +45,7 @@ import { AddressValidity, AddressFormData, ValidationResult } from '@/view_model
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
+import { setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import TwoStepAddressType from '@/components/pages/donation_form/TwoStepAddressType.vue';
@@ -124,7 +124,7 @@ export default Vue.extend( {
 				email: {
 					name: 'email',
 					value: '',
-					pattern: '^(.+)@(.+)\\.(.+)$',
+					pattern: '^[^@]+@.+$',
 					optionalField: false,
 				},
 			},
@@ -132,6 +132,7 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
+		validateEmailUrl: String,
 		validateBankDataUrl: String,
 		validateLegacyBankDataUrl: String,
 		countries: Array as () => Array<String>,
@@ -164,7 +165,22 @@ export default Vue.extend( {
 	},
 	methods: {
 		validateForm(): Promise<ValidationResult> {
-			return this.$store.dispatch( action( NS_ADDRESS, validateAddress ), this.$props.validateAddressUrl );
+			return Promise.all( [
+				this.$store.dispatch( action( NS_ADDRESS, validateAddress ), this.$props.validateAddressUrl ),
+				this.$store.dispatch( action( NS_ADDRESS, validateEmail ), this.$props.validateEmailUrl ),
+			] ).then( ( results: ValidationResult[] ) => {
+				return results.reduce(
+					( result:ValidationResult, currentResult:ValidationResult ) => {
+						if ( currentResult.status !== 'OK' ) {
+							result.status = 'ERR';
+							result.messages = Object.assign( result.messages, currentResult.messages );
+						}
+						return result;
+					},
+					{ status: 'OK', messages: {} },
+				);
+			} );
+
 		},
 		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
