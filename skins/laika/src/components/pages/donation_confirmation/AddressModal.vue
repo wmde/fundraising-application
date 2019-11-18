@@ -10,7 +10,6 @@
 			<address-type v-on:address-type="setAddressType( $event )" :disabled-anonymous-type="true"></address-type>
 			<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 			<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-			<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
 			<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
 			<newsletter-opt-in></newsletter-opt-in>
 			<div class="columns has-margin-top-18 has-padding-bottom-18">
@@ -173,9 +172,6 @@ export default Vue.extend( {
 		},
 		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
-		},
-		setReceiptOptedOut( optedOut: boolean ): void {
-			this.$store.dispatch( action( NS_ADDRESS, setReceiptOptOut ), optedOut );
 		},
 		setAddressType( addressType: AddressTypeModel ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
