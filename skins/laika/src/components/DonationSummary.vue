@@ -19,6 +19,7 @@ class PrivateDonorRenderer {
 				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city + ', ' + country;
 	}
 	static canRender( address ) {
+		console.log( 'can render?', address.salutation, address.firstName, address.lastName, address.streetAddress, address.postalCode, address.city );
 		return address.salutation && address.firstName && address.lastName && address.streetAddress && address.postalCode && address.city;
 	}
 }

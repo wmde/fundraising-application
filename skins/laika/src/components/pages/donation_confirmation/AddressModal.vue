@@ -10,7 +10,6 @@
 			<address-type v-on:address-type="setAddressType( $event )" :disabled-anonymous-type="true"></address-type>
 			<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 			<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-			<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
 			<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
 			<newsletter-opt-in></newsletter-opt-in>
 			<div class="columns has-margin-top-18 has-padding-bottom-18">
@@ -20,7 +19,9 @@
 					</b-button>
 				</div>
 				<div class="column">
-					<b-button type="is-primary is-main has-margin-top-18 level-item" native-type="submit">
+					<b-button type="is-primary is-main has-margin-top-18 level-item"
+								:class="isValidating ? 'is-loading' : ''"
+								native-type="submit">
 						{{ $t( 'donation_confirmation_address_update_confirm' ) }}
 					</b-button>
 				</div>
@@ -57,6 +58,11 @@ import SubmitValues from '@/components/pages/update_address/SubmitValues.vue';
 import axios, { AxiosResponse } from 'axios';
 import { trackFormSubmission } from '@/tracking';
 
+export interface SubmittedAddress {
+	addressData: AddressFormData,
+	addressType: string
+}
+
 export default Vue.extend( {
 	name: 'AddressModal',
 	components: {
@@ -70,8 +76,9 @@ export default Vue.extend( {
 		PaymentBankData,
 		SubmitValues,
 	},
-	data: function (): { formData: AddressFormData } {
+	data: function (): { formData: AddressFormData, isValidating: boolean } {
 		return {
+			isValidating: false,
 			formData: {
 				salutation: {
 					name: 'salutation',
@@ -166,13 +173,11 @@ export default Vue.extend( {
 		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
 		},
-		setReceiptOptedOut( optedOut: boolean ): void {
-			this.$store.dispatch( action( NS_ADDRESS, setReceiptOptOut ), optedOut );
-		},
 		setAddressType( addressType: AddressTypeModel ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
 		},
 		submit() {
+			this.$data.isValidating = true;
 			this.validateForm().then( ( validationResult: ValidationResult ) => {
 				if ( validationResult.status === 'OK' ) {
 					let form = this.$refs.form as HTMLFormElement;
@@ -189,8 +194,28 @@ export default Vue.extend( {
 						jsonForm,
 						{ headers: { 'Content-Type': 'multipart/form-data' } }
 					).then( ( validationResult: AxiosResponse<any> ) => {
+						this.$data.isValidating = false;
 						if ( validationResult.data.state === 'OK' ) {
-							this.$emit( 'address-updated', this.$data.formData );
+							const address = this.$data.formData;
+							let addressData = {
+								streetAddress: address.street.value,
+								postalCode: address.postcode.value,
+								city: address.city.value,
+								country: address.country.value,
+								email: address.email.value,
+							} as any;
+							if ( this.$store.getters[ NS_ADDRESS + '/addressType' ] === AddressTypeModel.COMPANY ) {
+								addressData.fullName = address.companyName.value;
+							} else {
+								addressData.salutation = address.salutation.value;
+								addressData.firstName = address.firstName.value;
+								addressData.lastName = address.lastName.value;
+								addressData.fullName = `${address.title.value} ${address.firstName.value} ${address.lastName.value}`;
+							}
+							this.$emit( 'address-updated', {
+								addressData,
+								addressType: addressTypeName( this.$store.getters[ NS_ADDRESS + '/addressType' ] ),
+							} );
 						} else {
 							this.$emit( 'address-update-failed' );
 						}
