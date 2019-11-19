@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="name-section">
 	<div v-if="addressType === AddressTypeModel.PERSON">
 		<fieldset class="form-input form-input__horizontal-option-list">
 			<legend class="subtitle">{{ $t( 'donation_form_salutation_label' ) }}</legend>

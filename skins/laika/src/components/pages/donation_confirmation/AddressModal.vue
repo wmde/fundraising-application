@@ -179,48 +179,50 @@ export default Vue.extend( {
 		submit() {
 			this.$data.isValidating = true;
 			this.validateForm().then( ( validationResult: ValidationResult ) => {
-				if ( validationResult.status === 'OK' ) {
-					let form = this.$refs.form as HTMLFormElement;
-					trackFormSubmission( form );
-					const jsonForm = new FormData();
-					Object.keys( this.$data.formData ).forEach( fieldName => {
-						jsonForm.set( fieldName, this.$data.formData[ fieldName ].value );
-					} );
-					jsonForm.set( 'updateToken', this.$props.donation.updateToken );
-					jsonForm.set( 'donation_id', this.$props.donation.id );
-					jsonForm.set( 'addressType', addressTypeName( this.$store.getters[ NS_ADDRESS + '/addressType' ] ) );
-					axios.post(
-						this.$props.updateDonorUrl,
-						jsonForm,
-						{ headers: { 'Content-Type': 'multipart/form-data' } }
-					).then( ( validationResult: AxiosResponse<any> ) => {
-						this.$data.isValidating = false;
-						if ( validationResult.data.state === 'OK' ) {
-							const address = this.$data.formData;
-							let addressData = {
-								streetAddress: address.street.value,
-								postalCode: address.postcode.value,
-								city: address.city.value,
-								country: address.country.value,
-								email: address.email.value,
-							} as any;
-							if ( this.$store.getters[ NS_ADDRESS + '/addressType' ] === AddressTypeModel.COMPANY ) {
-								addressData.fullName = address.companyName.value;
-							} else {
-								addressData.salutation = address.salutation.value;
-								addressData.firstName = address.firstName.value;
-								addressData.lastName = address.lastName.value;
-								addressData.fullName = `${address.title.value} ${address.firstName.value} ${address.lastName.value}`;
-							}
-							this.$emit( 'address-updated', {
-								addressData,
-								addressType: addressTypeName( this.$store.getters[ NS_ADDRESS + '/addressType' ] ),
-							} );
-						} else {
-							this.$emit( 'address-update-failed' );
-						}
-					} );
+				if ( validationResult.status !== 'OK' ) {
+					this.$data.isValidating = false;
+					return;
 				}
+				let form = this.$refs.form as HTMLFormElement;
+				trackFormSubmission( form );
+				const jsonForm = new FormData();
+				Object.keys( this.$data.formData ).forEach( fieldName => {
+					jsonForm.append( fieldName, this.$data.formData[ fieldName ].value );
+				} );
+				jsonForm.append( 'updateToken', this.$props.donation.updateToken );
+				jsonForm.append( 'donation_id', this.$props.donation.id );
+				jsonForm.append( 'addressType', addressTypeName( this.$store.getters[ NS_ADDRESS + '/addressType' ] ) );
+				axios.post(
+					this.$props.updateDonorUrl,
+					jsonForm,
+					{ headers: { 'Content-Type': 'multipart/form-data' } }
+				).then( ( validationResult: AxiosResponse<any> ) => {
+					this.$data.isValidating = false;
+					if ( validationResult.data.state === 'OK' ) {
+						const address = this.$data.formData;
+						let addressData = {
+							streetAddress: address.street.value,
+							postalCode: address.postcode.value,
+							city: address.city.value,
+							country: address.country.value,
+							email: address.email.value,
+						} as any;
+						if ( this.$store.getters[ NS_ADDRESS + '/addressType' ] === AddressTypeModel.COMPANY ) {
+							addressData.fullName = address.companyName.value;
+						} else {
+							addressData.salutation = address.salutation.value;
+							addressData.firstName = address.firstName.value;
+							addressData.lastName = address.lastName.value;
+							addressData.fullName = `${address.title.value} ${address.firstName.value} ${address.lastName.value}`;
+						}
+						this.$emit( 'address-updated', {
+							addressData,
+							addressType: addressTypeName( this.$store.getters[ NS_ADDRESS + '/addressType' ] ),
+						} );
+					} else {
+						this.$emit( 'address-update-failed' );
+					}
+				} );
 			} );
 		},
 	},

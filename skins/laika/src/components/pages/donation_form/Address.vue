@@ -8,6 +8,12 @@
 					:disabledAddressTypes="disabledAddressTypes"
 			></two-step-address-type>
 
+			<two-step-fixed-disclaimer-address-type
+					slot="campaigns.anon_form_display.two_steps_fixed_disclaimer"
+					v-on:address-type="setAddressType( $event )"
+					:disabledAddressTypes="disabledAddressTypes"
+			></two-step-fixed-disclaimer-address-type>
+
 			<address-type
 					slot="campaigns.anon_form_display.address_type"
 					v-on:address-type="setAddressType( $event )"
@@ -43,6 +49,7 @@ import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } fr
 import { action } from '@/store/util';
 import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import TwoStepAddressType from '@/components/pages/donation_form/TwoStepAddressType.vue';
+import TwoStepFixedDisclaimerAddressType from '@/components/pages/donation_form/TwoStepFixedDisclaimerAddressType.vue';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -51,6 +58,7 @@ export default Vue.extend( {
 		Postal,
 		AddressType,
 		TwoStepAddressType,
+		TwoStepFixedDisclaimerAddressType,
 		ReceiptOptOut,
 		Email,
 		NewsletterOptIn,
