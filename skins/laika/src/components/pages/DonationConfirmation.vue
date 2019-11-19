@@ -13,7 +13,7 @@
 							type="is-primary is-main">
 					{{ $t('donation_confirmation_address_update_button') }}
 				</b-button>
-				<b-modal :active.sync="isAddressModalOpen" scroll="keep" has-modal-card>
+				<b-modal :active.sync="isAddressModalOpen" scroll="keep" class="address-modal" has-modal-card>
 					<address-modal :countries="countries"
 									:donation="confirmationData.donation"
 									:updateDonorUrl="updateDonorUrl"

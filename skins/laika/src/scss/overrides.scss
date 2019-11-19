@@ -140,15 +140,28 @@ button.is-low {
 	border-radius: 2px;
 }
 
-.modal-card {
-	background-color: $fun-color-bright;
-	border: 2px solid $fun-color-gray-light-solid;
-	border-radius: $radius;
-	padding: 36px;
-	overflow-y: auto;
-	.icon.icon-size {
-		float: right;
-		padding: 0;
+.modal {
+	&-card {
+		background-color: $fun-color-bright;
+		border: 2px solid $fun-color-gray-light-solid;
+		border-radius: $radius;
+		padding: 36px;
+		overflow-y: auto;
+		.icon.icon-size {
+			float: right;
+			padding: 0;
+		}
+	}
+}
+.address-modal {
+	.modal {
+		&-close {
+			&:after, &:before {
+				@include until($tablet) {
+					background-color: $fun-color-dark;
+				}
+			}
+		}
 	}
 }
 
