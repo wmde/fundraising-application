@@ -41,6 +41,7 @@ new Vue( {
 				confirmationData: pageData.applicationVars,
 				countries: ADDRESS_UPDATE_COUNTRIES,
 				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
+				validateEmailUrl: pageData.applicationVars.urls.validateEmail,
 				updateDonorUrl: pageData.applicationVars.urls.updateDonor,
 			},
 		} ),

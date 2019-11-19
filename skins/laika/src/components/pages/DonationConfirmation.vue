@@ -18,6 +18,7 @@
 									:donation="confirmationData.donation"
 									:updateDonorUrl="updateDonorUrl"
 									:validate-address-url="validateAddressUrl"
+									:validate-email-url="validateEmailUrl"
 									:has-errored="addressChangeHasErrored"
 									:has-succeeded="addressChangeHasSucceeded"
 									v-on:address-update-failed="addressChangeHasErrored = true"
@@ -77,6 +78,7 @@ export default Vue.extend( {
 		confirmationData: Object,
 		updateDonorUrl: String,
 		validateAddressUrl: String,
+		validateEmailUrl: String,
 		countries: Array as () => Array<String>,
 	},
 	methods: {
