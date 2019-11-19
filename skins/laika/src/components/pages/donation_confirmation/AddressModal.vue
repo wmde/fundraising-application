@@ -187,11 +187,11 @@ export default Vue.extend( {
 				trackFormSubmission( form );
 				const jsonForm = new FormData();
 				Object.keys( this.$data.formData ).forEach( fieldName => {
-					jsonForm.set( fieldName, this.$data.formData[ fieldName ].value );
+					jsonForm.append( fieldName, this.$data.formData[ fieldName ].value );
 				} );
-				jsonForm.set( 'updateToken', this.$props.donation.updateToken );
-				jsonForm.set( 'donation_id', this.$props.donation.id );
-				jsonForm.set( 'addressType', addressTypeName( this.$store.getters[ NS_ADDRESS + '/addressType' ] ) );
+				jsonForm.append( 'updateToken', this.$props.donation.updateToken );
+				jsonForm.append( 'donation_id', this.$props.donation.id );
+				jsonForm.append( 'addressType', addressTypeName( this.$store.getters[ NS_ADDRESS + '/addressType' ] ) );
 				axios.post(
 					this.$props.updateDonorUrl,
 					jsonForm,
