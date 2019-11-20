@@ -50,6 +50,7 @@ import { action } from '@/store/util';
 import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import TwoStepAddressType from '@/components/pages/donation_form/TwoStepAddressType.vue';
 import TwoStepFixedDisclaimerAddressType from '@/components/pages/donation_form/TwoStepFixedDisclaimerAddressType.vue';
+import { mergeValidationResults } from "@/merge_validation_results";
 
 export default Vue.extend( {
 	name: 'Address',
@@ -168,18 +169,7 @@ export default Vue.extend( {
 			return Promise.all( [
 				this.$store.dispatch( action( NS_ADDRESS, validateAddress ), this.$props.validateAddressUrl ),
 				this.$store.dispatch( action( NS_ADDRESS, validateEmail ), this.$props.validateEmailUrl ),
-			] ).then( ( results: ValidationResult[] ) => {
-				return results.reduce(
-					( result:ValidationResult, currentResult:ValidationResult ) => {
-						if ( currentResult.status !== 'OK' ) {
-							result.status = 'ERR';
-							result.messages = Object.assign( result.messages, currentResult.messages );
-						}
-						return result;
-					},
-					{ status: 'OK', messages: {} },
-				);
-			} );
+			] ).then( mergeValidationResults );
 
 		},
 		onFieldChange( fieldName: string ): void {
