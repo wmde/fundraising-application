@@ -26,8 +26,9 @@ import { AddressValidity, AddressFormData, ValidationResult } from '@/view_model
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/membership_address/actionTypes';
+import { setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
+import { mergeValidationResults } from "@/merge_validation_results";
 
 export default Vue.extend( {
 	name: 'Address',
@@ -107,6 +108,7 @@ export default Vue.extend( {
 	},
 	props: {
 		validateAddressUrl: String,
+		validateEmailUrl: String,
 		countries: Array as () => Array<String>,
 		initialFormValues: [ Object, String ],
 	},
@@ -139,7 +141,11 @@ export default Vue.extend( {
 	},
 	methods: {
 		validateForm(): Promise<ValidationResult> {
-			return this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, validateAddress ), this.$props.validateAddressUrl );
+			return Promise.all( [
+				this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, validateAddress ), this.$props.validateAddressUrl ),
+				this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, validateEmail ), this.$props.validateEmailUrl ),
+			] ).then( mergeValidationResults );
+
 		},
 		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );

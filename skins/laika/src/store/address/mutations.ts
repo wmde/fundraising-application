@@ -6,6 +6,8 @@ import {
 	MARK_EMPTY_FIELDS_INVALID,
 	BEGIN_ADDRESS_VALIDATION,
 	FINISH_ADDRESS_VALIDATION,
+	BEGIN_EMAIL_VALIDATION,
+	FINISH_EMAIL_VALIDATION,
 	SET_ADDRESS_TYPE,
 	SET_ADDRESS_FIELD,
 	SET_ADDRESS_FIELDS,
@@ -32,10 +34,10 @@ export const mutations: MutationTree<AddressState> = {
 		} );
 	},
 	[ BEGIN_ADDRESS_VALIDATION ]( state: AddressState ) {
-		state.isValidating = true;
+		state.serverSideValidationCount++;
 	},
 	[ FINISH_ADDRESS_VALIDATION ]( state: AddressState, payload ) {
-		state.isValidating = false;
+		state.serverSideValidationCount--;
 		if ( payload.status === 'OK' ) {
 			return;
 		}
@@ -44,6 +46,18 @@ export const mutations: MutationTree<AddressState> = {
 				state.validity[ name ] = Validity.INVALID;
 			}
 		} );
+	},
+	[ BEGIN_EMAIL_VALIDATION ]( state: AddressState ) {
+		state.serverSideValidationCount++;
+	},
+	[ FINISH_EMAIL_VALIDATION ]( state: AddressState, payload ) {
+		state.serverSideValidationCount--;
+		if ( payload.status === 'OK' ) {
+			return;
+		}
+		if ( state.requiredFields[ state.addressType ].indexOf( 'email' ) > 0 ) {
+			state.validity.email = Validity.INVALID;
+		}
 	},
 	[ SET_ADDRESS_TYPE ]( state: AddressState, type ) {
 		state.addressType = type;

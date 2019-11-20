@@ -27,7 +27,7 @@ export interface FormValues {
 }
 
 export interface AddressState {
-    isValidating: boolean,
+    serverSideValidationCount: number,
     addressType: AddressTypeModel,
     newsletterOptIn: boolean,
     receiptOptOut: boolean,
@@ -37,7 +37,7 @@ export interface AddressState {
 }
 
 export interface MembershipAddressState {
-    isValidating: boolean,
+    serverSideValidationCount: number,
     addressType: AddressTypeModel,
     membershipType: MembershipTypeModel,
     receiptOptOut: boolean,
@@ -71,6 +71,7 @@ export interface InputField {
 
 export interface Payload {
     validateAddressUrl: string,
+    validateEmailUrl: string,
     formData: AddressFormData
 }
 

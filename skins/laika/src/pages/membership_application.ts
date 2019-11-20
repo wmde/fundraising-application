@@ -52,6 +52,7 @@ function initializePage(): void {
 			h( Component, {
 				props: {
 					validateAddressUrl: pageData.applicationVars.urls.validateAddress,
+					validateEmailUrl: pageData.applicationVars.urls.validateEmail,
 					validateFeeUrl: pageData.applicationVars.urls.validateMembershipFee,
 					validateBankDataUrl: pageData.applicationVars.urls.validateIban,
 					validateLegacyBankDataUrl: pageData.applicationVars.urls.convertBankData,
