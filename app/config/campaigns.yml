@@ -74,7 +74,7 @@ anon_form_display:
      - "address_type"
      - "two_steps"
      - "two_steps_fixed_disclaimer"
-  default_bucket: "two_steps"
+  default_bucket: "address_type"
   url_key: fd
   active: true
   param_only: true
