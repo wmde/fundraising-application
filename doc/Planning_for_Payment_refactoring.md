@@ -23,8 +23,8 @@ Payment data is extracted as array, depending on payment type
 **Suggestion:** Add `getData` or `asArray` to `PaymentMethod` interface
 
 ### Redirect/display template based on payment type
-```AddDonationHandler.php
-ApplyForMembershipHandler.php
+```AddDonationController.php
+ApplyForMembershipController.php
 ``` 
 Payment data is used for instantiating subclasses of redirects/presenters
 
@@ -56,13 +56,14 @@ SofortPaymentNotificationUseCase.php
 CreditCardNotificationUseCase.php
 ```
 
-* Checks if donation has the right payment type
+* Checks if the donation/membership payment type matches the payment type of the notification
 * Add transaction data to donation payment data
-* Check paypal transactions if they were booked before (for recurring payments)
+* Check PayPal transactions if they were booked before (for recurring payments)
 
 **Suggestions:**
 * Use payment data repository instead of having methods on Donation for manipulating payment data (one method per payment data type, which is a code smell)
 * Add 'markAsPaid' method to `PaymentMethod` interface that adds the necessary payment data. This method has `object` as input type and individual `PaymentMethod` implementations have to check the input (requires PHP 7.2). This could help us to have one generic use case for accepting external payments.
+* The donation/membership domains should be completely separate from the payment domain. For that, the payment domain should implement a `ConfirmPayment` use case for receiving confirmation requests from the payment provider, with donations and memberships implementing `ReceivePayment` use cases that they can use to update themselves with the DTO returned from the ConfirmPayment use case.
 
 ### Add Donation use case
 ```AddDonationUseCase.php```
