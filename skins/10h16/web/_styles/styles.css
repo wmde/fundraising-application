@@ -442,6 +442,11 @@ section.container { overflow: hidden; }
 .step-list li.first { background: #65b6ed url(../_assets/img/steps_overview_step_list_item_1.png) right center no-repeat; }
 .step-list li.last { width: 155px; background: #64aadb; margin-right: 0 !important; padding-right: 0; }
 
+/* separating long numbers into digit groups */
+.digit-group {
+	margin-right: 0.25em;
+}
+
 ul.horizontal.share { height: 0px; margin-top: -4px; }
 ul.horizontal.share li { margin: 0 0 0 8px; font-size: 1.4em; }
 ul.horizontal.share li a { color: #e1f3de; }
