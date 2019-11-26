@@ -19,7 +19,8 @@
 			</div>
 			<div class="field has-margin-bottom-18">
 				<b-checkbox type="checkbox" id="isAnonymous" name="isAnonymous" native-value="0"
-							v-model="commentHasPublicAuthorName">{{ $t( 'donation_comment_popup_is_anon' ) }}</b-checkbox>
+							v-model="commentHasPublicAuthorName"></b-checkbox>
+				<label for="isAnonymous" v-html="$t( 'donation_comment_popup_is_anon' )"></label>
 			</div>
 			<div class="field has-margin-bottom-18">
 				<b-checkbox type="checkbox" id="public" name="public" native-value="1"
