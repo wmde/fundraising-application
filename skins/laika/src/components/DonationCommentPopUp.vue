@@ -17,7 +17,7 @@
 				<b-input id="comment" name="comment" type="textarea"></b-input>
 				<p v-if="commentErrored" class="help is-danger"> {{ $t( 'donation_comment_popup_error' ) }}</p>
 			</div>
-			<div class="field has-margin-bottom-18">
+			<div class="field has-margin-bottom-18" v-if="!isAnonymous">
 				<b-checkbox type="checkbox" id="isAnonymous" name="isAnonymous" native-value="0"
 							v-model="commentHasPublicAuthorName"></b-checkbox>
 				<label for="isAnonymous" v-html="$t( 'donation_comment_popup_is_anon' )"></label>
@@ -43,41 +43,49 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import axios, { AxiosResponse } from 'axios';
-import { trackFormSubmission } from '@/tracking';
+	import Vue from 'vue';
+	import axios, { AxiosResponse } from 'axios';
+	import { trackFormSubmission } from '@/tracking';
+	import { addressTypeFromName, AddressTypeModel } from '@/view_models/AddressTypeModel';
 
-export default Vue.extend( {
-	name: 'DonationCommentPopUp',
-	data: function () {
-		return {
-			commentIsPublic: false,
-			commentHasPublicAuthorName: false,
-			commentErrored: false,
-			commentHasBeenSubmitted: false,
-			serverResponse: '',
-		};
-	},
-	props: [
-		'confirmationData',
-	],
-	methods: {
-		postComment() {
-			let form = this.$refs.form as HTMLFormElement;
-			trackFormSubmission( form );
-			const jsonForm = new FormData( form );
-			axios.post( this.$props.confirmationData.urls.postComment, jsonForm )
-				.then( ( validationResult: AxiosResponse<any> ) => {
-					if ( validationResult.data.status === 'OK' ) {
-						this.$data.commentErrored = false;
-						this.$data.commentHasBeenSubmitted = true;
-						this.$data.serverResponse = validationResult.data.message;
-						this.$emit( 'disable-comment-link' );
-					} else {
-						this.$data.commentErrored = true;
-					}
-				} );
+	export default Vue.extend( {
+		name: 'DonationCommentPopUp',
+		data: function () {
+			return {
+				commentIsPublic: false,
+				commentHasPublicAuthorName: false,
+				commentErrored: false,
+				commentHasBeenSubmitted: false,
+				serverResponse: '',
+			};
 		},
-	},
-} );
+		props: [
+			'confirmationData',
+		],
+		computed: {
+			isAnonymous: {
+				get(): boolean {
+					return addressTypeFromName( this.$props.confirmationData.addressType ) === AddressTypeModel.ANON;
+				},
+			},
+		},
+		methods: {
+			postComment() {
+				let form = this.$refs.form as HTMLFormElement;
+				trackFormSubmission( form );
+				const jsonForm = new FormData( form );
+				axios.post( this.$props.confirmationData.urls.postComment, jsonForm )
+					.then( ( validationResult: AxiosResponse<any> ) => {
+						if ( validationResult.data.status === 'OK' ) {
+							this.$data.commentErrored = false;
+							this.$data.commentHasBeenSubmitted = true;
+							this.$data.serverResponse = validationResult.data.message;
+							this.$emit( 'disable-comment-link' );
+						} else {
+							this.$data.commentErrored = true;
+						}
+					} );
+			},
+		},
+	} );
 </script>
