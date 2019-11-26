@@ -62,7 +62,7 @@ services:
 
   # webpack dev server for laika skin development
   skin_laika:
-    image: node:10
+    image: node:12
     expose:
       - "8080"
     ports:
