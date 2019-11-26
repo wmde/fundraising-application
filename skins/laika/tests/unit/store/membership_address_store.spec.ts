@@ -259,6 +259,32 @@ describe( 'MembershipAddress', () => {
 				field
 			);
 		} );
+
+		it( 'trims values before it commits to mutation', () => {
+			const commit = jest.fn(),
+				action = actions.setAddressField as any,
+				field = {
+					name: 'postcode',
+					value: '     12345      ',
+					pattern: '^[0-9]{4,5}$',
+					optionalField: false,
+				},
+				trimmedField = {
+					name: 'postcode',
+					value: '12345',
+					pattern: '^[0-9]{4,5}$',
+					optionalField: false,
+				};
+			action( { commit }, field );
+			expect( commit ).toBeCalledWith(
+				'SET_ADDRESS_FIELD',
+				trimmedField
+			);
+			expect( commit ).toBeCalledWith(
+				'VALIDATE_INPUT',
+				trimmedField
+			);
+		} );
 	} );
 
 	describe( 'Actions/validateAddress', () => {
