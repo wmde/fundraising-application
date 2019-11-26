@@ -6,8 +6,6 @@ import {
 	MARK_EMPTY_FIELDS_INVALID,
 	BEGIN_ADDRESS_VALIDATION,
 	FINISH_ADDRESS_VALIDATION,
-	BEGIN_EMAIL_VALIDATION,
-	FINISH_EMAIL_VALIDATION,
 	SET_ADDRESS_FIELD,
 	SET_ADDRESS_TYPE,
 	SET_NEWSLETTER_OPTIN,
@@ -223,6 +221,32 @@ describe( 'Address', () => {
 			expect( commit ).toBeCalledWith(
 				'VALIDATE_INPUT',
 				field
+			);
+		} );
+
+		it( 'trims values before it commits to mutation', () => {
+			const commit = jest.fn(),
+				action = actions.setAddressField as any,
+				field = {
+					name: 'postcode',
+					value: '     12345      ',
+					pattern: '^[0-9]{4,5}$',
+					optionalField: false,
+				},
+				trimmedField = {
+					name: 'postcode',
+					value: '12345',
+					pattern: '^[0-9]{4,5}$',
+					optionalField: false,
+				};
+			action( { commit }, field );
+			expect( commit ).toBeCalledWith(
+				'SET_ADDRESS_FIELD',
+				trimmedField
+			);
+			expect( commit ).toBeCalledWith(
+				'VALIDATE_INPUT',
+				trimmedField
 			);
 		} );
 	} );

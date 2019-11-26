@@ -28,7 +28,7 @@ import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
-import { mergeValidationResults } from "@/merge_validation_results";
+import { mergeValidationResults } from '@/merge_validation_results';
 
 export default Vue.extend( {
 	name: 'Address',

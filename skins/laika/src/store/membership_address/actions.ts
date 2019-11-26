@@ -33,6 +33,7 @@ export const actions = {
 		} );
 	},
 	[ setAddressField ]( context: ActionContext<MembershipAddressState, any>, field: InputField ) {
+		field.value = field.value.trim();
 		context.commit( 'SET_ADDRESS_FIELD', field );
 		context.commit( 'VALIDATE_INPUT', field );
 	},
