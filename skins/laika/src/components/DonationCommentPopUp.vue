@@ -50,7 +50,7 @@ export default Vue.extend( {
 	name: 'DonationCommentPopUp',
 	data: function () {
 		return {
-			commentIsPublic: true,
+			commentIsPublic: false,
 			commentHasPublicAuthorName: false,
 			commentErrored: false,
 			commentHasBeenSubmitted: false,
