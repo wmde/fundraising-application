@@ -14,7 +14,7 @@
 						<b-input type="text"
 								id="firstname"
 								name="firstname"
-								:placeholder="$t( 'contact_form_firstname_placeholder' )"
+								:placeholder="$t( 'form_for_example', { example: $t( 'contact_form_firstname_placeholder' ) } )"
 								v-model="formData.firstname.value">
 						</b-input>
 					</b-field>
@@ -29,7 +29,7 @@
 						<b-input type="text"
 								id="lastname"
 								name="lastname"
-								:placeholder="$t( 'contact_form_lastname_placeholder' )"
+								:placeholder="$t( 'form_for_example', { example: $t( 'contact_form_lastname_placeholder' ) } )"
 								v-model="formData.lastname.value">
 						</b-input>
 					</b-field>
@@ -44,7 +44,7 @@
 						<b-input type="text"
 								id="donationNumber"
 								name="donationNumber"
-								:placeholder="$t( 'contact_form_donation_number_placeholder' )"
+								:placeholder="$t( 'form_for_example', { example: $t( 'contact_form_donation_number_placeholder' ) } )"
 								v-model="formData.donationNumber.value">
 						</b-input>
 					</b-field>
@@ -58,7 +58,7 @@
 					<b-input type="text"
 							id="email"
 							name="email"
-							:placeholder="$t( 'contact_form_email_placeholder' )"
+							:placeholder="$t( 'form_for_example', { example: $t( 'contact_form_email_placeholder' ) } )"
 							v-model="formData.email.value">
 					</b-input>
 				</b-field>
@@ -82,7 +82,7 @@
 						<b-input type="text"
 								id="subject"
 								name="subject"
-								:placeholder="$t( 'contact_form_subject_placeholder' )"
+								:placeholder="$t( 'form_for_example', { example: $t( 'contact_form_subject_placeholder' ) } )"
 								v-model="formData.subject.value">
 						</b-input>
 					</b-field>

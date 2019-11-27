@@ -4,7 +4,7 @@
 		<b-field :type="{ 'is-danger': showError }">
 			<b-input type="text"
 				id="email"
-				:placeholder="$t( 'donation_form_email_placeholder' )"
+				:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_email_placeholder' ) } )"
 				v-model="formData.email.value"
 				@blur="$emit('field-changed', 'email')">
 			</b-input>
