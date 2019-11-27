@@ -1,5 +1,5 @@
 import { GetterTree } from 'vuex';
-import { Payment } from '@/view_models/Payment';
+import { AmountValidity, Payment } from '@/view_models/Payment';
 import { Validity } from '@/view_models/Validity';
 
 export const getters: GetterTree<Payment, any> = {
@@ -8,6 +8,20 @@ export const getters: GetterTree<Payment, any> = {
 	},
 	typeIsValid: function ( state: Payment ): boolean {
 		return state.validity.type !== Validity.INVALID;
+	},
+	amountValidity: function ( state: Payment ): AmountValidity {
+		/* TODO reuse configuration amounts from config files:
+		    "donation-minimum-amount": 1,
+		    "donation-maximum-amount": 100000,
+		    see https://phabricator.wikimedia.org/T239349
+		    */
+		if ( state.validity.amount !== Validity.INVALID ) {
+			return AmountValidity.AMOUNT_VALID;
+		}
+		if ( Number( state.values.amount ) > 100000 ) {
+			return AmountValidity.AMOUNT_TOO_HIGH;
+		}
+		return AmountValidity.AMOUNT_TOO_LOW;
 	},
 	paymentDataIsValid: function ( state: Payment ): boolean {
 		for ( const prop in state.validity ) {

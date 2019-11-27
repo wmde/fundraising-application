@@ -29,3 +29,9 @@ export interface InitialPaymentValues {
     paymentIntervalInMonths: string,
     isCustomAmount: boolean,
 }
+
+export enum AmountValidity {
+    AMOUNT_VALID,
+    AMOUNT_TOO_LOW,
+    AMOUNT_TOO_HIGH,
+}
