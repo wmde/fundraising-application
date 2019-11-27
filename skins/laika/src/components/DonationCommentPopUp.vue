@@ -17,7 +17,7 @@
 				<b-input id="comment" name="comment" type="textarea"></b-input>
 				<p v-if="commentErrored" class="help is-danger"> {{ $t( 'donation_comment_popup_error' ) }}</p>
 			</div>
-			<div class="field has-margin-bottom-18">
+			<div class="field has-margin-bottom-18" v-if="showPublishAuthor">
 				<b-checkbox type="checkbox" id="isAnonymous" name="isAnonymous" native-value="0"
 							v-model="commentHasPublicAuthorName"></b-checkbox>
 				<label for="isAnonymous" v-html="$t( 'donation_comment_popup_is_anon' )"></label>
@@ -46,6 +46,7 @@
 import Vue from 'vue';
 import axios, { AxiosResponse } from 'axios';
 import { trackFormSubmission } from '@/tracking';
+import { addressTypeFromName, AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 export default Vue.extend( {
 	name: 'DonationCommentPopUp',
@@ -61,6 +62,13 @@ export default Vue.extend( {
 	props: [
 		'confirmationData',
 	],
+	computed: {
+		showPublishAuthor: {
+			get(): boolean {
+				return addressTypeFromName( this.$props.confirmationData.addressType ) !== AddressTypeModel.ANON;
+			},
+		},
+	},
 	methods: {
 		postComment() {
 			let form = this.$refs.form as HTMLFormElement;
