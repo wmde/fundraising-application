@@ -2,6 +2,7 @@ import { getters } from '@/store/payment/getters';
 import { actions } from '@/store/payment/actions';
 import { mutations } from '@/store/payment/mutations';
 import { Validity } from '@/view_models/Validity';
+import { AmountValidity } from '@/view_models/Payment';
 import {
 	initializePayment,
 	markEmptyAmountAsInvalid,
@@ -70,6 +71,48 @@ describe( 'Payment', () => {
 				) ).toBe( isValid );
 			},
 		);
+	} );
+
+	describe( 'Getters/amountValidity', () => {
+		const invalidCentAmountsTooLow = [ 0, 99 ];
+		const invalidCentAmountsTooHigh = [ 10000000, 10000001 ];
+		const validCentAmounts = [ 100, 9999999 ];
+
+		it( 'does not return invalid amount on initalization', () => {
+			expect( getters.amountValidity(
+				newMinimalStore( {} ),
+				null,
+				null,
+				null
+			) ).toBe( AmountValidity.AMOUNT_VALID );
+		} );
+
+		each( validCentAmounts ).it( 'does not return invalid amount on valid donation amount (cents)', ( validAmount ) => {
+			expect( getters.amountValidity(
+				newMinimalStore( { values: { amount: validAmount } } ),
+				null,
+				null,
+				null
+			) ).toBe( AmountValidity.AMOUNT_VALID );
+		} );
+
+		each( invalidCentAmountsTooLow ).it( 'returns amount too low error on minimum donation amounts (cents)', ( tooLowAmount ) => {
+			expect( getters.amountValidity(
+				newMinimalStore( { values: { amount: tooLowAmount }, validity: { amount: Validity.INVALID } } ),
+				null,
+				null,
+				null
+			) ).toBe( AmountValidity.AMOUNT_TOO_LOW );
+		} );
+
+		each( invalidCentAmountsTooHigh ).it( 'returns amount too high error on maximum donation amounts (cents)', ( tooHighAmount ) => {
+			expect( getters.amountValidity(
+				newMinimalStore( { values: { amount: tooHighAmount }, validity: { amount: Validity.INVALID } } ),
+				null,
+				null,
+				null
+			) ).toBe( AmountValidity.AMOUNT_TOO_HIGH );
+		} );
 	} );
 
 	describe( 'Getters/typeIsValid', () => {

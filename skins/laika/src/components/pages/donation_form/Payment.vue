@@ -4,7 +4,7 @@
 				:payment-amounts="paymentAmounts"
 				:amount="amount"
 				:title="$t('donation_form_payment_amount_title')"
-				:error="amountIsValid ? '' : $t('donation_form_payment_amount_error')"
+				:error="showErrorMessage"
 				v-on:amount-selected="sendAmountToStore"
 		></amount-selection>
 		<payment-interval
@@ -37,6 +37,7 @@ import { NS_ADDRESS, NS_PAYMENT } from '@/store/namespaces';
 import { setAmount, setInterval, setType } from '@/store/payment/actionTypes';
 import { mapGetters, mapState } from 'vuex';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AmountValidity } from '@/view_models/Payment';
 
 export default Vue.extend( {
 	name: 'Payment',
@@ -53,7 +54,15 @@ export default Vue.extend( {
 			type: ( state: any ) => state[ NS_PAYMENT ].values.type,
 			disabledPaymentTypes: ( state: any ) => state[ NS_ADDRESS ].addressType === AddressTypeModel.ANON ? [ 'BEZ' ] : [],
 		} ),
-		...mapGetters( NS_PAYMENT, [ 'amountIsValid', 'typeIsValid' ] ),
+		...mapGetters( NS_PAYMENT, [ 'amountValidity', 'typeIsValid' ] ),
+		showErrorMessage(): String {
+			const messages : { [ key:number ]:string; } = {
+				[ AmountValidity.AMOUNT_VALID ]: '',
+				[ AmountValidity.AMOUNT_TOO_LOW ]: this.$t( 'donation_form_payment_amount_error' ) as string,
+				[ AmountValidity.AMOUNT_TOO_HIGH ]: this.$t( 'donation_form_payment_amount_too_high' ) as string,
+			};
+			return messages[ this.$store.getters[ NS_PAYMENT + '/amountValidity' ] ];
+		},
 	},
 	methods: {
 		sendAmountToStore( amountValue: string ): Promise<null> {
