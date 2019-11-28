@@ -44,7 +44,7 @@
 						type="text"
 						id="first-name"
 						v-model="formData.firstName.value"
-						:placeholder="$t( 'donation_form_firstname_placeholder' )"
+						:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_firstname_placeholder' ) } )"
 						@blur="$emit('field-changed', 'firstName')">
 				</b-input>
 			</b-field>
@@ -56,11 +56,12 @@
 				<b-input type="text"
 						id="last-name"
 						v-model="formData.lastName.value"
-						:placeholder="$t( 'donation_form_lastname_placeholder' )"
+						:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_lastname_placeholder' ) } )"
 						@blur="$emit('field-changed', 'lastName')">
 				</b-input>
 			</b-field>
 			<span v-if="showError.lastName" class="help is-danger">{{ $t( 'donation_form_lastname_error' ) }}</span>
+			<span v-if="lastNameValueEqualsPlaceholder" class="help">{{ $t( 'donation_form_lastname_placeholder_warning' ) }}</span>
 		</div>
 	</div>
 	<div v-else-if="addressType === AddressTypeModel.COMPANY" v-bind:class="['form-input', { 'is-invalid': showError.companyName }]">
@@ -68,7 +69,7 @@
 		<b-field :type="{ 'is-danger': showError.companyName }">
 			<b-input type="text"
 					id="company-name"
-					:placeholder="$t( 'donation_form_companyname_placeholder' )"
+					:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_companyname_placeholder' ) } )"
 					v-model="formData.companyName.value"
 					@blur="$emit('field-changed', 'companyName')">
 			</b-input>
@@ -95,6 +96,9 @@ export default Vue.extend( {
 			get: function () {
 				return AddressTypeModel;
 			},
+		},
+		lastNameValueEqualsPlaceholder(): boolean {
+			return this.$props.formData.lastName.value === this.$t( 'donation_form_lastname_placeholder' );
 		},
 	},
 } );
