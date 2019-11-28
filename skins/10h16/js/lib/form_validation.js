@@ -91,7 +91,7 @@ var jQuery = require( 'jquery' ),
 			if ( this.formValuesHaveEmptyRequiredFields( formValues ) ) {
 				return { status: ValidationStates.INCOMPLETE };
 			}
-			amountInCents = Math.trunc( parseFloat( String( formValues.amount ).replace( ',', '.' ) ) * 100 );
+			amountInCents = Math.floor( parseFloat( String( formValues.amount ).replace( ',', '.' ) ) * 100 );
 			postData = {
 				amount: amountInCents,
 				paymentType: formValues.paymentType
