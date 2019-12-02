@@ -45,7 +45,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios, { AxiosResponse } from 'axios';
-import { trackFormSubmission } from '@/tracking';
+import { trackDynamicForm, trackFormSubmission } from '@/tracking';
 import { addressTypeFromName, AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 export default Vue.extend( {
@@ -68,6 +68,9 @@ export default Vue.extend( {
 				return addressTypeFromName( this.$props.confirmationData.addressType ) !== AddressTypeModel.ANON;
 			},
 		},
+	},
+	mounted: function () {
+		trackDynamicForm();
 	},
 	methods: {
 		postComment() {
