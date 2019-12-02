@@ -11,7 +11,7 @@ MIGRATION_VERSION :=
 APP_ENV       := dev
 DOCKER_IMAGE  := wikimediade/fundraising-frontend
 
-NODE_IMAGE    := node:10
+NODE_IMAGE    := node:12
 DOCKER_IMAGE  := wikimediade/fundraising-frontend
 
 
