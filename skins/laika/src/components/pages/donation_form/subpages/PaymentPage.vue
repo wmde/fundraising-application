@@ -4,7 +4,8 @@
 		class="payment-page"
 		ref="payment"
 		action="/donation/add"
-		method="post">
+		method="post"
+		@keydown.enter.prevent="next()">
 		<payment v-bind="$props"></payment>
 		<div class="level has-margin-top-36">
 			<div class="level-left">
