@@ -6,6 +6,10 @@ interface MatomoLoggable {
 	push( eventData: Array<any> ): void;
 }
 
+export function trackDynamicForm() {
+	_paq.push( [ 'FormAnalytics::scanForForms' ] );
+}
+
 export function trackFormSubmission( formElement: HTMLFormElement ) {
 	_paq.push( [ 'FormAnalytics::trackFormSubmit', formElement ] );
 }

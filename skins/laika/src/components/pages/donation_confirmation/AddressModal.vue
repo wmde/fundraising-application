@@ -1,5 +1,5 @@
 <template>
-	<form id="address-update-form" name="address-update-form" v-on:submit.prevent="submit" method="post" ref="form" class="modal-card">
+	<form id="address-update-form" name="address-update-form" v-on:submit.prevent="submit" method="post" ref="addressForm" class="modal-card">
 		<div v-if="hasErrored" class="help is-danger has-margin-top-18">
 			{{ $t( 'donation_confirmation_address_update_error' ) }}
 		</div>
@@ -56,7 +56,7 @@ import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import TwoStepAddressType from '@/components/pages/donation_form/TwoStepAddressType.vue';
 import SubmitValues from '@/components/pages/update_address/SubmitValues.vue';
 import axios, { AxiosResponse } from 'axios';
-import { trackFormSubmission } from '@/tracking';
+import { trackDynamicForm, trackFormSubmission } from '@/tracking';
 import { mergeValidationResults } from '@/merge_validation_results';
 
 export interface SubmittedAddress {
@@ -144,6 +144,9 @@ export default Vue.extend( {
 			},
 		};
 	},
+	mounted: function () {
+		trackDynamicForm();
+	},
 	props: {
 		donation: Object,
 		updateDonorUrl: String,
@@ -189,7 +192,7 @@ export default Vue.extend( {
 					this.$data.isValidating = false;
 					return;
 				}
-				let form = this.$refs.form as HTMLFormElement;
+				let form = this.$refs.addressForm as HTMLFormElement;
 				trackFormSubmission( form );
 				const jsonForm = new FormData();
 				Object.keys( this.$data.formData ).forEach( fieldName => {

@@ -5,6 +5,13 @@ import Vuex from 'vuex';
 import Buefy from 'buefy';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 
+jest.mock( '@/tracking', () => {
+	return {
+		trackDynamicForm: jest.fn(),
+		trackFormSubmission: jest.fn(),
+	};
+} );
+
 const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
