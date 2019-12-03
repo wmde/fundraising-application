@@ -45,6 +45,7 @@
 						id="first-name"
 						v-model="formData.firstName.value"
 						:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_firstname_placeholder' ) } )"
+						autocomplete="given-name"
 						@blur="$emit('field-changed', 'firstName')">
 				</b-input>
 			</b-field>
@@ -57,6 +58,7 @@
 						id="last-name"
 						v-model="formData.lastName.value"
 						:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_lastname_placeholder' ) } )"
+						autocomplete="family-name"
 						@blur="$emit('field-changed', 'lastName')">
 				</b-input>
 			</b-field>
@@ -70,6 +72,7 @@
 			<b-input type="text"
 					id="company-name"
 					:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_companyname_placeholder' ) } )"
+					autocomplete="organization"
 					v-model="formData.companyName.value"
 					@blur="$emit('field-changed', 'companyName')">
 			</b-input>

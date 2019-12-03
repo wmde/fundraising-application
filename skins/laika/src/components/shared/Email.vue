@@ -5,6 +5,7 @@
 			<b-input type="text"
 				id="email"
 				:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_email_placeholder' ) } )"
+				autocomplete="email"
 				v-model="formData.email.value"
 				@blur="$emit('field-changed', 'email')">
 			</b-input>

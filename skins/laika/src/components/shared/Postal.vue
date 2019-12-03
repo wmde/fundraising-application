@@ -6,6 +6,7 @@
 			<b-input type="text"
 					id="street"
 					:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_street_placeholder' ) } )"
+					autocomplete="street-address"
 					v-model="formData.street.value"
 					@blur="$emit('field-changed', 'street'); displayStreetWarning()">
 			</b-input>
@@ -21,6 +22,7 @@
 					id="post-code"
 					v-model="formData.postcode.value"
 					:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_zip_placeholder' ) } )"
+					autocomplete="postal-code"
 					@blur="$emit('field-changed', 'postcode')">
 			</b-input>
 		</b-field>
