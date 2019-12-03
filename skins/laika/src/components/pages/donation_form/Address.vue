@@ -56,11 +56,7 @@ import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import TwoStepAddressType from '@/components/pages/donation_form/TwoStepAddressType.vue';
 import TwoStepFixedDisclaimerAddressType from '@/components/pages/donation_form/TwoStepFixedDisclaimerAddressType.vue';
 import { mergeValidationResults } from '@/merge_validation_results';
-
-// from kebab-case to camelCase
-function camelizeName( fieldName: string ): string {
-	return fieldName.replace(/-(\w)/g, (_: string, firstChar: string) => firstChar.toUpperCase() );
-}
+import { camelizeName } from '@/camlize_name';
 
 export default Vue.extend( {
 	name: 'Address',
