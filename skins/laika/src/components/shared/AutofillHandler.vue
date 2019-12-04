@@ -6,6 +6,13 @@
 	import Vue from 'vue';
 
 	/**
+	 * Number of milliseconds in which all autofill "events" are collected until they are emitted
+	 * as event data. This value needs to strike a balance between the browser's autofill slowly filling
+	 * out the fields and the period in which the error messages appear.
+	 */
+	const AUTOFILL_DEBOUNCE_PERIOD = 50;
+
+	/**
 	 * This class is a hack around the Safari/Edge bug where no events are triggered on autofill.
 	 * We get around this by defining keyframe animations for the `:-webkit-autofill` pseudo selector and
 	 * listening to the animationstart event for that specific keyframe.
@@ -38,7 +45,7 @@
 				if ( this.$data.debounceTimeout !== null ) {
 					clearTimeout( this.$data.debounceTimeout );
 				}
-				this.$data.debounceTimeout = setTimeout( this.emitAutofillValues.bind( this ), 200 );
+				this.$data.debounceTimeout = setTimeout( this.emitAutofillValues.bind( this ), AUTOFILL_DEBOUNCE_PERIOD );
 			},
 			emitAutofillValues() {
 				let eventData: { [key: string]: string; }  = {};
