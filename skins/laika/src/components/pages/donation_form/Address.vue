@@ -70,7 +70,7 @@ export default Vue.extend( {
 		Email,
 		NewsletterOptIn,
 		PaymentBankData,
-		AutofillHandler
+		AutofillHandler,
 	},
 	data: function (): { formData: AddressFormData } {
 		return {

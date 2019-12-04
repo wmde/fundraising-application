@@ -24,7 +24,7 @@ import Postal from '@/components/shared/Postal.vue';
 import DateOfBirth from '@/components/pages/membership_form/DateOfBirth.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import Email from '@/components/shared/Email.vue';
-import AutofillHandler from "@/components/shared/AutofillHandler.vue";
+import AutofillHandler from '@/components/shared/AutofillHandler.vue';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
@@ -156,7 +156,7 @@ export default Vue.extend( {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
 		},
 		onAutofill( autofilledFields: { [key: string]: string; } ) {
-			console.log("Autofill called", autofilledFields);
+			console.log( 'Autofill called', autofilledFields );
 			Object.keys( autofilledFields ).forEach( key => {
 				const fieldName = camelizeName( key );
 				if ( this.$data.formData[ fieldName ] ) {

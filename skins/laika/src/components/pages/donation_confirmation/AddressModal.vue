@@ -47,7 +47,7 @@ import Postal from '@/components/shared/Postal.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import Email from '@/components/shared/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
-import AutofillHandler from "@/components/shared/AutofillHandler.vue";
+import AutofillHandler from '@/components/shared/AutofillHandler.vue';
 import { mapGetters } from 'vuex';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
@@ -61,7 +61,7 @@ import SubmitValues from '@/components/pages/update_address/SubmitValues.vue';
 import axios, { AxiosResponse } from 'axios';
 import { trackDynamicForm, trackFormSubmission } from '@/tracking';
 import { mergeValidationResults } from '@/merge_validation_results';
-import { camelizeName } from "@/camlize_name";
+import { camelizeName } from '@/camlize_name';
 
 export interface SubmittedAddress {
 	addressData: AddressFormData,
@@ -80,7 +80,7 @@ export default Vue.extend( {
 		NewsletterOptIn,
 		PaymentBankData,
 		SubmitValues,
-		AutofillHandler
+		AutofillHandler,
 	},
 	data: function (): { formData: AddressFormData, isValidating: boolean } {
 		return {
