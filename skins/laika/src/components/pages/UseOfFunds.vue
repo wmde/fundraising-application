@@ -15,10 +15,16 @@
 		<div class="column is-one-third">
 			<ul class="list-menu list-unstyled">
 				<li>
-					<a :href="content.organizations.wmde.url">{{ $t('year_plan_wmde') }} {{ content.organizations.wmde.title }}</a>
+					<a class="organization-link" :href="content.organizations.wmde.url">
+						<span>{{ $t('year_plan_wmde') }}</span>
+						<span>{{ content.organizations.wmde.title }}</span>
+					</a>
 				</li>
 				<li>
-					<a :href="content.organizations.wmf.url">{{ $t('year_plan_wmf')  }} {{ content.organizations.wmf.title }}</a>
+					<a class="organization-link" :href="content.organizations.wmf.url">
+						<span>{{ $t('year_plan_wmf')  }}</span>
+						<span>{{ content.organizations.wmf.title }}</span>
+					</a>
 				</li>
 			</ul>
 		</div>
@@ -49,3 +55,9 @@ export default Vue.extend( {
 	},
 } );
 </script>
+
+<style lang="scss">
+	.organization-link > span {
+		display: inline-block;
+	}
+</style>
