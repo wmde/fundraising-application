@@ -5,11 +5,13 @@
 			<address-type :initial-value="addressType" v-on:address-type="setAddressType( $event )"/>
 		</div>
 		<h1 class="has-margin-top-36 title is-size-5">{{ $t( 'donation_form_section_address_title' ) }}</h1>
-		<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
-		<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-		<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
-		<date-of-birth v-if="isPerson"/>
-		<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"/>
+		<AutofillHandler @autofill="onAutofill">
+			<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"/>
+			<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"/>
+			<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
+			<date-of-birth v-if="isPerson"/>
+			<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"/>
+		</AutofillHandler>
 	</div>
 </template>
 
@@ -22,6 +24,7 @@ import Postal from '@/components/shared/Postal.vue';
 import DateOfBirth from '@/components/pages/membership_form/DateOfBirth.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import Email from '@/components/shared/Email.vue';
+import AutofillHandler from '@/components/shared/AutofillHandler.vue';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
@@ -29,6 +32,7 @@ import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 import { mergeValidationResults } from '@/merge_validation_results';
+import { camelizeName } from '@/camlize_name';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -39,6 +43,7 @@ export default Vue.extend( {
 		ReceiptOptOut,
 		AddressType,
 		Email,
+		AutofillHandler,
 	},
 	data: function (): { formData: AddressFormData } {
 		return {
@@ -149,6 +154,15 @@ export default Vue.extend( {
 		},
 		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
+		},
+		onAutofill( autofilledFields: { [key: string]: string; } ) {
+			console.log( 'Autofill called', autofilledFields );
+			Object.keys( autofilledFields ).forEach( key => {
+				const fieldName = camelizeName( key );
+				if ( this.$data.formData[ fieldName ] ) {
+					this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
+				}
+			} );
 		},
 		setReceiptOptedOut( optedOut: boolean ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setReceiptOptOut ), optedOut );

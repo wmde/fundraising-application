@@ -7,10 +7,12 @@
 			{{ $t( 'donation_confirmation_address_update_success' ) }}
 		</div>
 		<div v-if="!hasErrored && !hasSucceeded">
-			<address-type v-on:address-type="setAddressType( $event )" :disabled-anonymous-type="true"></address-type>
-			<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
-			<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-			<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
+			<AutofillHandler v-on:autofill="onAutofill">
+				<address-type v-on:address-type="setAddressType( $event )" :disabled-anonymous-type="true"></address-type>
+				<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
+				<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
+				<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
+			</AutofillHandler>
 			<newsletter-opt-in></newsletter-opt-in>
 			<div class="columns has-margin-top-18 has-padding-bottom-18">
 				<div class="column">
@@ -45,6 +47,7 @@ import Postal from '@/components/shared/Postal.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import Email from '@/components/shared/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
+import AutofillHandler from '@/components/shared/AutofillHandler.vue';
 import { mapGetters } from 'vuex';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
@@ -58,6 +61,7 @@ import SubmitValues from '@/components/pages/update_address/SubmitValues.vue';
 import axios, { AxiosResponse } from 'axios';
 import { trackDynamicForm, trackFormSubmission } from '@/tracking';
 import { mergeValidationResults } from '@/merge_validation_results';
+import { camelizeName } from '@/camlize_name';
 
 export interface SubmittedAddress {
 	addressData: AddressFormData,
@@ -76,6 +80,7 @@ export default Vue.extend( {
 		NewsletterOptIn,
 		PaymentBankData,
 		SubmitValues,
+		AutofillHandler,
 	},
 	data: function (): { formData: AddressFormData, isValidating: boolean } {
 		return {
@@ -181,6 +186,14 @@ export default Vue.extend( {
 		},
 		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
+		},
+		onAutofill( autofilledFields: { [key: string]: string; } ) {
+			Object.keys( autofilledFields ).forEach( key => {
+				const fieldName = camelizeName( key );
+				if ( this.$data.formData[ fieldName ] ) {
+					this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
+				}
+			} );
 		},
 		setAddressType( addressType: AddressTypeModel ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );

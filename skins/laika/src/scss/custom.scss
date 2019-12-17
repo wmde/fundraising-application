@@ -180,5 +180,17 @@
 	margin-bottom: -18px !important;
 }
 
+// trigger animation events on autofill
+@keyframes onAutoFillStart {  from {
+	background-color: initial;
+}  to {
+	background-color: #faffbd; /* iOS autofill indication color */
+}}
+.autofill-handler {
+	input[id]:-webkit-autofill {
+		animation: onAutoFillStart 0.5s;
+	}
+}
+
 @import "overrides";
 @import "compact_form"; // AB Test Import

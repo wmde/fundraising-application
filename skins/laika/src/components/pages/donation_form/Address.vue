@@ -1,6 +1,8 @@
 <template>
 	<div class="address-section">
-		<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
+		<AutofillHandler @autofill="onAutofill" >
+			<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
+		</AutofillHandler>
 		<feature-toggle>
 			<two-step-address-type
 					slot="campaigns.anon_form_display.two_steps"
@@ -24,16 +26,19 @@
 					class="has-margin-top-18"
 					v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}</div>
 		</feature-toggle>
-		<name v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
-		<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-		<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
-		<email v-if="addressTypeIsNotAnon" :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
-		<newsletter-opt-in v-if="addressTypeIsNotAnon"></newsletter-opt-in>
+		<AutofillHandler @autofill="onAutofill" >
+			<name v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
+			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
+			<receipt-opt-out v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
+			<email v-if="addressTypeIsNotAnon" :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
+			<newsletter-opt-in v-if="addressTypeIsNotAnon"></newsletter-opt-in>
+		</AutofillHandler>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
+import AutofillHandler from '@/components/shared/AutofillHandler.vue';
 import AddressType from '@/components/pages/donation_form/AddressType.vue';
 import Name from '@/components/shared/Name.vue';
 import Postal from '@/components/shared/Postal.vue';
@@ -51,6 +56,7 @@ import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import TwoStepAddressType from '@/components/pages/donation_form/TwoStepAddressType.vue';
 import TwoStepFixedDisclaimerAddressType from '@/components/pages/donation_form/TwoStepFixedDisclaimerAddressType.vue';
 import { mergeValidationResults } from '@/merge_validation_results';
+import { camelizeName } from '@/camlize_name';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -64,6 +70,7 @@ export default Vue.extend( {
 		Email,
 		NewsletterOptIn,
 		PaymentBankData,
+		AutofillHandler,
 	},
 	data: function (): { formData: AddressFormData } {
 		return {
@@ -173,6 +180,14 @@ export default Vue.extend( {
 		},
 		onFieldChange( fieldName: string ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
+		},
+		onAutofill( autofilledFields: { [key: string]: string; } ) {
+			Object.keys( autofilledFields ).forEach( key => {
+				const fieldName = camelizeName( key );
+				if ( this.$data.formData[ fieldName ] ) {
+					this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
+				}
+			} );
 		},
 		setReceiptOptedOut( optedOut: boolean ): void {
 			this.$store.dispatch( action( NS_ADDRESS, setReceiptOptOut ), optedOut );
