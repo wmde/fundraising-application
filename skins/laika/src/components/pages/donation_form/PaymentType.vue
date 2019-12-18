@@ -11,6 +11,9 @@
 						:disabled="disabledPaymentTypes.indexOf( paymentType ) > -1"
 						@change.native="setType">
 					{{ $t( paymentType ) }}
+					<div v-show=" disabledPaymentTypes.indexOf( paymentType ) > -1" class="has-margin-top-18">
+						Eine regelmäßige Zahlung per Sofortüberweisung ist nicht möglich.
+					</div>
 				</b-radio>
 			</div>
 		</div>
