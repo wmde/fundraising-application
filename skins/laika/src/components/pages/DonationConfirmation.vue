@@ -42,6 +42,11 @@
 			</div>
 		</div>
 		<membership-info :confirmation-data="confirmationData"></membership-info>
+		<img :src="'https://de.wikipedia.org/wiki/Special:HideBanners?duration=' + confirmationData.donation.cookieDuration + '&reason=donate'"
+			alt=""
+			width="0"
+			height="0"
+		/>
 	</div>
 </template>
 
