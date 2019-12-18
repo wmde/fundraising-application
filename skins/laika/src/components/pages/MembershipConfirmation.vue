@@ -12,6 +12,11 @@
 			<div class="column is-half">
 				<summary-links :confirmation-data="confirmationData"/>
 			</div>
+			<img src="https://de.wikipedia.org/wiki/Special:HideBanners?category=fr-thankyou&duration=15552000&reason=membership"
+				alt=""
+				width="0"
+				height="0"
+			/>
 		</div>
 	</div>
 </template>
