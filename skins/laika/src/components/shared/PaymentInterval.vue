@@ -7,7 +7,8 @@
 						:id="'interval-' + interval"
 						name="interval"
 						v-model="selectedInterval"
-						:native-value="interval.toString()" :disabled="disabledPaymentIntervals.indexOf( interval.toString() ) > -1"
+						:native-value="interval.toString()"
+						:disabled="disabledPaymentIntervals.indexOf( interval.toString() ) > -1"
 						@change.native="setInterval">
 					{{ $t( 'donation_form_payment_interval_' + interval.toString() ) }}
 					<div v-show="disabledPaymentIntervals.length && disabledPaymentIntervals.indexOf( interval.toString() ) === -1"

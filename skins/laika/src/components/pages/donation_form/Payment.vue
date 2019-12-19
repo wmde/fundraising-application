@@ -63,10 +63,12 @@ export default Vue.extend( {
 				}
 				return disabledTypes;
 			},
-			disabledPaymentIntervals: ( state: any ) => {
+			disabledPaymentIntervals: function ( state: any ) {
 				var disabledIntervals : String[] = [];
 				if ( state[ NS_PAYMENT ].values.type === 'SUB' ) {
-					disabledIntervals.push( '1', '3', '6', '12' );
+					disabledIntervals = this.$props.paymentIntervals
+						.filter( ( interval:Number ) => Number( interval ) > 0 )
+						.map( ( interval:Number ) => String( interval ) );
 				}
 				return disabledIntervals;
 			},
