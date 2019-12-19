@@ -12,6 +12,7 @@
 				:payment-intervals="paymentIntervals"
 				:current-interval="interval"
 				:title="$t('donation_form_payment_interval_title')"
+				:disabled-payment-intervals="disabledPaymentIntervals"
 				v-on:interval-selected="sendIntervalToStore"
 		></payment-interval>
 		<payment-type
@@ -52,7 +53,25 @@ export default Vue.extend( {
 			amount: ( state: any ) => state[ NS_PAYMENT ].values.amount,
 			interval: ( state: any ) => state[ NS_PAYMENT ].values.interval,
 			type: ( state: any ) => state[ NS_PAYMENT ].values.type,
-			disabledPaymentTypes: ( state: any ) => state[ NS_ADDRESS ].addressType === AddressTypeModel.ANON ? [ 'BEZ' ] : [],
+			disabledPaymentTypes: ( state: any ) => {
+				var disabledTypes : String[] = [];
+				if ( state[ NS_ADDRESS ].addressType === AddressTypeModel.ANON ) {
+					disabledTypes.push( 'BEZ' );
+				}
+				if ( state[ NS_PAYMENT ].values.interval !== '0' ) {
+					disabledTypes.push( 'SUB' );
+				}
+				return disabledTypes;
+			},
+			disabledPaymentIntervals: function ( state: any ) {
+				var disabledIntervals : String[] = [];
+				if ( state[ NS_PAYMENT ].values.type === 'SUB' ) {
+					disabledIntervals = this.$props.paymentIntervals
+						.filter( ( interval:Number ) => Number( interval ) > 0 )
+						.map( ( interval:Number ) => String( interval ) );
+				}
+				return disabledIntervals;
+			},
 		} ),
 		...mapGetters( NS_PAYMENT, [ 'amountValidity', 'typeIsValid' ] ),
 		showErrorMessage(): String {

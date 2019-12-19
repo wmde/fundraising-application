@@ -8,8 +8,13 @@
 						name="interval"
 						v-model="selectedInterval"
 						:native-value="interval.toString()"
+						:disabled="disabledPaymentIntervals.indexOf( interval.toString() ) > -1"
 						@change.native="setInterval">
 					{{ $t( 'donation_form_payment_interval_' + interval.toString() ) }}
+					<div v-show="disabledPaymentIntervals.length && disabledPaymentIntervals.indexOf( interval.toString() ) === -1"
+						class="has-text-dark-lighter has-margin-top-18" >
+						{{ $t( 'donation_form_SUB_payment_type_info' ) }}
+					</div>
 				</b-radio>
 			</div>
 		</div>
@@ -31,6 +36,10 @@ export default Vue.extend( {
 		currentInterval: String,
 		paymentIntervals: Array,
 		title: String,
+		disabledPaymentIntervals: {
+			type: Array,
+			default: () => [],
+		},
 	},
 	methods: {
 		setInterval(): void {

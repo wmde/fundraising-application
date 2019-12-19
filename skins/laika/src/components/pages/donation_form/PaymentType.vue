@@ -11,6 +11,9 @@
 						:disabled="disabledPaymentTypes.indexOf( paymentType ) > -1"
 						@change.native="setType">
 					{{ $t( paymentType ) }}
+					<div v-show=" disabledPaymentTypes.indexOf( paymentType ) > -1" class="has-text-dark-lighter has-margin-top-18">
+						{{ $t( 'donation_form_SUB_payment_type_info' ) }}
+					</div>
 				</b-radio>
 			</div>
 		</div>
