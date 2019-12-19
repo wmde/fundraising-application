@@ -36,6 +36,9 @@ module.exports = {
 		supporters: 'src/pages/supporters.ts',
 		update_address: 'src/pages/update_address.ts',
 	},
+	transpileDependencies: [
+		'buefy'
+	],
 	devServer: {
 		watchOptions: {
 			poll: false,
