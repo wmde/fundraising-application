@@ -4,6 +4,8 @@
 			<h1 class="title is-size-1">{{ $t( 'address_change_form_title' ) }}</h1>
 			<legend class="title is-size-6">{{ $t( 'address_change_form_label' ) }}</legend>
 			<div>
+				<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
+				<div> {{ $t( 'address_change_opt_out_hint') }}</div>
 				<name :show-error="fieldErrors"
 						:form-data="formData"
 						:address-type="addressType"
@@ -14,7 +16,6 @@
 						:countries="countries"
 						v-on:field-changed="onFieldChange">
 				</postal>
-				<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
 				<submit-values :tracking-data="{}"></submit-values>
 			</div>
 			<div class="level has-margin-top-36">
@@ -155,6 +156,11 @@ export default Vue.extend( {
 			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
 		},
 		submit() {
+			if ( this.$store.state.address.receiptOptOut && this.$store.getters[ NS_ADDRESS + '/allRequiredFieldsEmpty' ] ) {
+				const form = this.$refs.form as HTMLFormElement;
+				trackFormSubmission( form );
+				form.submit();
+			}
 			this.validateForm().then( ( validationResult: ValidationResult ) => {
 				if ( validationResult.status === 'OK' ) {
 					const form = this.$refs.form as HTMLFormElement;
