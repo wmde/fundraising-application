@@ -24,4 +24,7 @@ export const getters: GetterTree<AddressState, any> = {
 	isValidating: ( state: AddressState ): boolean => {
 		return state.serverSideValidationCount > 0;
 	},
+	allRequiredFieldsEmpty: ( state: AddressState ): boolean => {
+		return state.requiredFields[ state.addressType ].map( field => state.values[ field ] === '' ).every( x => x );
+	},
 };
