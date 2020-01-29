@@ -79,13 +79,13 @@ class UpdateAddressController {
 	}
 
 	private function addReceiptParams( ChangeAddressRequest $request, ParameterBag $params ) {
-		if ( ! $params->get( 'receiptOptOut', '' ) ) {
-			$request->setIsOptOutOnly( false );
+		if ( $params->get( 'receiptOptOut', '' ) ) {
 			$request->setDonationReceipt( false );
+			$request->setIsOptOutOnly( $this->isOptOutOnly( $params ) );
 			return;
 		}
-		$request->setDonationReceipt( false );
-		$request->setIsOptOutOnly( $this->isOptOutOnly( $params ) );
+		$request->setIsOptOutOnly( false );
+		$request->setDonationReceipt( true );
 	}
 
 	private function isOptOutOnly( ParameterBag $params ): bool {
