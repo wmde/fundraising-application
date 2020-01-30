@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Factories;
 
+use Airbrake\MonologHandler as AirbrakeHandler;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -12,7 +13,7 @@ use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
 use PHPUnit\Framework\TestCase;
 
 class LoggerFactoryTest extends TestCase {
-	public function testGivenErrorHandlerConfiguration_itReturnsErrorLoggingHandler() {
+	public function testGivenErrorHandlerConfiguration_itReturnsErrorLoggingHandler(): void {
 		$factory = new LoggerFactory( [
 			'method' => 'error_log',
 			'level' => 'WARNING'
@@ -24,7 +25,7 @@ class LoggerFactoryTest extends TestCase {
 		$this->assertSame( Logger::WARNING, $firstHandler->getLevel() );
 	}
 
-	public function testGivenFileConfiguration_itReturnsStreamHandler() {
+	public function testGivenFileConfiguration_itReturnsStreamHandler(): void {
 		vfsStream::setup( 'logs' );
 		$factory = new LoggerFactory( [
 			'method' => 'file',
@@ -39,13 +40,116 @@ class LoggerFactoryTest extends TestCase {
 		$this->assertSame( vfsStream::url( 'logs/error.log' ), $firstHandler->getUrl() );
 	}
 
-	public function testGivenUnknownLogType_exeptionIsThrown() {
+	public function testGivenErrbitLoggingConfiguration_itReturnsErrbitLoggingHandler(): void {
+		$factory = new LoggerFactory( [
+			'handlers' => [
+				[
+					'method' => 'errbit',
+					'level' => 'ERROR',
+					'projectId' => 1,
+					'projectKey' => 'fd8794457af0da70882c850eb486524f',
+					'host' => 'http://errbit:8080'
+				]
+			],
+		]);
+		$logger = $factory->getLogger();
+		$this->assertCount( 1, $logger->getHandlers() );
+		$firstHandler = $logger->getHandlers()[0]; /** @var AirbrakeHandler $firstHandler */
+		$this->assertInstanceOf( AirbrakeHandler::class, $firstHandler );
+		$this->assertSame( Logger::ERROR, $firstHandler->getLevel() );
+	}
+
+
+	public function missingErrbitConfigParamsProvider(): iterable {
+		$validParams = [
+			'projectId' => 1,
+			'projectKey' => 'fd8794457af0da70882c850eb486524f',
+			'host' => 'http://errbit:8080'
+		];
+		yield [ array_merge( $validParams, ['projectId' => '' ] ) ];
+		yield [ array_merge( $validParams, ['projectKey' => null ] ) ];
+		unset( $validParams['host'] );
+		yield [ $validParams ];
+		yield [ [
+		'projectId' => '',
+			'projectKey' => '',
+			'host' => ''
+		] ];
+	}
+
+	/**
+	 * @dataProvider missingErrbitConfigParamsProvider
+	 */
+	public function testMissingErrbitConfigParam_itThrowsException( array $invalidConfigParams ): void {
+		$factory = new LoggerFactory( [
+			'handlers' => [
+				[
+					'method' => 'errbit',
+					'level' => 'ERROR',
+					'projectId' => $invalidConfigParams['projectId'],
+					'projectKey' => $invalidConfigParams['projectKey'],
+					'host' => $invalidConfigParams['host']
+				]
+			],
+		]);
+		$this->expectException( \InvalidArgumentException::class );
+		$logger = $factory->getLogger();
+	}
+
+	public function testGivenUnknownLogType_exeptionIsThrown(): void {
 		$factory = new LoggerFactory( [
 			'method' => 'syslog'
 		]);
 		$this->expectException( \InvalidArgumentException::class );
 		$factory->getLogger();
-
 	}
 
+
+
+
+
+	public function testGivenMultipleValidHandlers_itReturnsMultipleHandlers(): void {
+		vfsStream::setup( 'logs' );
+		$factory = new LoggerFactory( [
+			'handlers' => [
+				[
+					'method' => 'file',
+					'url' => vfsStream::url( 'logs/error.log' ),
+					'level' => 'ERROR'
+				],
+				[
+					'method' => 'error_log',
+					'level' => 'WARNING'
+				]
+			],
+		]);
+		$logger = $factory->getLogger();
+		$this->assertCount( 2, $logger->getHandlers() );
+		$firstHandler = $logger->getHandlers()[0]; /** @var StreamHandler $firstHandler */
+		$this->assertInstanceOf( StreamHandler::class, $firstHandler );
+		$this->assertSame( Logger::ERROR, $firstHandler->getLevel() );
+		$this->assertSame( vfsStream::url( 'logs/error.log' ), $firstHandler->getUrl() );
+
+		$secondHandler = $logger->getHandlers()[1]; /** @var ErrorLogHandler $secondHandler */
+		$this->assertInstanceOf( ErrorLogHandler::class, $secondHandler );
+		$this->assertSame( Logger::WARNING, $secondHandler->getLevel() );
+	}
+
+	public function testGivenMultipleHandlersOneInvalid_itThrowsException(): void {
+		$factory = new LoggerFactory( [
+			'handlers' => [
+				[
+					'method' => 'nonExistingInvalidHandler',
+					'level' => 'ERROR'
+				],
+				[
+					'method' => 'error_log',
+					'level' => 'WARNING'
+				]
+			],
+		]);
+
+		$this->expectException( \InvalidArgumentException::class );
+		$factory->getLogger();
+	}
 }

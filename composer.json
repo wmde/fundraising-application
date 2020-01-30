@@ -29,6 +29,7 @@
 		"symfony/stopwatch": "^3.3",
 		"symfony/http-foundation": "^3.3",
 
+		"airbrake/phpbrake": "~0.7",
 		"wmde/freezable-value-object": "~1.0",
 		"wmde/fun-validators": "~1.0",
 		"jeroen/file-fetcher": "~4.0",

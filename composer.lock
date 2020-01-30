@@ -4,8 +4,61 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26f837f31b489d6d1a0d3f0c4c8120d7",
+    "content-hash": "4cac74e9a18f666fe66dd332b253ae23",
     "packages": [
+        {
+            "name": "airbrake/phpbrake",
+            "version": "v0.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/airbrake/phpbrake.git",
+                "reference": "19d06e2f787b2600c64ff4db9af8181155e5f7fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/airbrake/phpbrake/zipball/19d06e2f787b2600c64ff4db9af8181155e5f7fb",
+                "reference": "19d06e2f787b2600c64ff4db9af8181155e5f7fb",
+                "shasum": ""
+            },
+            "require": {
+                "cash/lrucache": "^1.0",
+                "guzzlehttp/guzzle": "^6.3",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "monolog/monolog": "^1.22",
+                "phpunit/phpunit": "^5.7",
+                "squizlabs/php_codesniffer": "^2.9"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "Guzzle HTTP client"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Airbrake\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Airbrake exception and error notifier for PHP",
+            "homepage": "https://airbrake.io",
+            "keywords": [
+                "airbrake",
+                "error",
+                "exception",
+                "logging",
+                "notifier"
+            ],
+            "time": "2020-01-15T07:51:01+00:00"
+        },
         {
             "name": "behat/transliterator",
             "version": "v1.3.0",
@@ -50,6 +103,47 @@
                 "transliterator"
             ],
             "time": "2020-01-14T16:39:13+00:00"
+        },
+        {
+            "name": "cash/lrucache",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cash/LRUCache.git",
+                "reference": "4fa4c6834cec59690b43526c4da41d6153026289"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cash/LRUCache/zipball/4fa4c6834cec59690b43526c4da41d6153026289",
+                "reference": "4fa4c6834cec59690b43526c4da41d6153026289",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "cash": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cash Costello",
+                    "email": "cash.costello@gmail.com"
+                }
+            ],
+            "description": "An efficient memory-based Least Recently Used (LRU) cache",
+            "homepage": "https://github.com/cash/LRUCache",
+            "keywords": [
+                "cache",
+                "lru"
+            ],
+            "time": "2013-09-20T18:59:12+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -8176,12 +8270,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "b051dabc0d41302b0cf1e6efcca761557aac08c9"
+                "reference": "632722d57cd0d20f4af858200a3e91045b595417"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/b051dabc0d41302b0cf1e6efcca761557aac08c9",
-                "reference": "b051dabc0d41302b0cf1e6efcca761557aac08c9",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/632722d57cd0d20f4af858200a3e91045b595417",
+                "reference": "632722d57cd0d20f4af858200a3e91045b595417",
                 "shasum": ""
             },
             "require-dev": {
@@ -8214,7 +8308,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-01-31T11:26:43+00:00"
+            "time": "2020-02-03T14:52:04+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

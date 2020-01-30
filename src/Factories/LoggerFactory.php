@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
+use http\Exception\InvalidArgumentException;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\StreamHandler;
@@ -16,6 +17,7 @@ class LoggerFactory {
 
 	private const TYPE_ERROR_LOG = 'error_log';
 	private const TYPE_FILE = 'file';
+	private const TYPE_ERRBIT = 'errbit';
 
 	private $config;
 
@@ -24,18 +26,39 @@ class LoggerFactory {
 	}
 
 	public function getLogger(): Logger {
-		$logger = new Logger( 'application', [ $this->newHandler() ] );
-		return $logger;
+		if( empty( $this->config['handlers'] ) ){
+			$handlers = [ $this->newHandler( $this->config ) ];
+		} else {
+			$handlers = [];
+			foreach ( $this->config['handlers'] as $handlerParams ) {
+				$handlers[] = $this->newHandler( $handlerParams );
+			}
+		}
+
+		return new Logger( 'application', $handlers );
 	}
 
-	private function newHandler(): HandlerInterface {
-		switch ( $this->config['method'] ?? '' ) {
+	private function newHandler( $config ): HandlerInterface {
+		switch ( $config['method'] ?? '' ) {
 			case self::TYPE_ERROR_LOG:
-				return new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, $this->config['level'] );
+				return new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, $config['level'] );
 			case self::TYPE_FILE:
-				return new StreamHandler( $this->config['url'], $this->config['level'] );
+				return new StreamHandler( $config['url'], $config['level'] );
+
+			case self::TYPE_ERRBIT:
+				if( empty( $config['projectId'] ) || empty( $config['projectKey'] ) || empty( $config['host'] ) ) {
+					throw new \InvalidArgumentException( 'You need to configure project ID, projectKey and host for errbit logging' );
+				}
+				$notifier = new \Airbrake\Notifier([
+					'projectId' => $config['projectId'],
+					'projectKey' => $config['projectKey'],
+					'host' => $config['host']
+				]);
+
+				return new \Airbrake\MonologHandler( $notifier, $config['level'] );
+
 			default:
-				throw new \InvalidArgumentException( 'Unknown logging method - ' . $this->config['method'] );
+				throw new \InvalidArgumentException( 'Unknown logging method - ' . $config['method'] );
 		}
 	}
 
