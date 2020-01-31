@@ -3,6 +3,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use FileFetcher\SimpleFileFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
@@ -23,6 +24,9 @@ $configReader = new ConfigReader(
 	...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/app/config' )
 );
 
-$factory = new Factory( DriverManager::getConnection( $configReader->getConfig()['db'] ) );
+$config = $configReader->getConfig();
+$factory = new Factory( DriverManager::getConnection( $config['db'] ), __DIR__ . '/var/doctrine_proxies', [], [
+	'WMDE\Fundraising\AddressChange\Domain\Model' => $driver = new XmlDriver( __DIR__ . '/vendor/wmde/fundraising-address-change/config/DoctrineClassMapping' )
+] );
 
 return ConsoleRunner::createHelperSet( $factory->getEntityManager() );
