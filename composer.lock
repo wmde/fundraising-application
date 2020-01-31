@@ -4551,16 +4551,16 @@
         },
         {
             "name": "wmde/fundraising-store",
-            "version": "10.4.1",
+            "version": "10.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FundraisingStore",
-                "reference": "9e3db2fe565e0f0e8bbbfa73def85cf82e1a1f93"
+                "reference": "cdf7eab2b2ffe62fe40e69022e583bcdc5255612"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/9e3db2fe565e0f0e8bbbfa73def85cf82e1a1f93",
-                "reference": "9e3db2fe565e0f0e8bbbfa73def85cf82e1a1f93",
+                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/cdf7eab2b2ffe62fe40e69022e583bcdc5255612",
+                "reference": "cdf7eab2b2ffe62fe40e69022e583bcdc5255612",
                 "shasum": ""
             },
             "require": {
@@ -4612,7 +4612,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Persistence services around the fundraising database",
-            "time": "2020-01-30T10:25:58+00:00"
+            "time": "2020-02-03T09:58:17+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
