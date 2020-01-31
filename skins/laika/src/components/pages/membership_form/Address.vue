@@ -156,7 +156,6 @@ export default Vue.extend( {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
 		},
 		onAutofill( autofilledFields: { [key: string]: string; } ) {
-			console.log( 'Autofill called', autofilledFields );
 			Object.keys( autofilledFields ).forEach( key => {
 				const fieldName = camelizeName( key );
 				if ( this.$data.formData[ fieldName ] ) {
