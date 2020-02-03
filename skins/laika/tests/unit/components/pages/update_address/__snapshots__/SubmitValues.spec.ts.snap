@@ -64,9 +64,8 @@ exports[`Address.vue renders input fields 1`] = `
   />
    
   <input
-    name="donationReceipt"
+    name="receiptOptOut"
     type="hidden"
-    value="1"
   />
 </span>
 `;

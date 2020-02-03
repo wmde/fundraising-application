@@ -11,7 +11,7 @@
 		<input type="hidden" name="postcode" :value="address.postcode">
 		<input type="hidden" name="city" :value="address.city">
 		<input type="hidden" name="country" :value="address.country">
-		<input type="hidden" name="donationReceipt" :value="receiptOptIn">
+		<input type="hidden" name="receiptOptOut" :value="receiptOptOut">
 	</span>
 </template>
 
@@ -35,7 +35,7 @@ export default Vue.extend( {
 			addressType: ( state: AddressState ) => {
 				return addressTypeName( state.addressType );
 			},
-			receiptOptIn: ( state: AddressState ) => state.receiptOptOut ? '0' : '1',
+			receiptOptOut: ( state: AddressState ) => state.receiptOptOut ? '1' : '',
 		} ),
 	},
 } );
