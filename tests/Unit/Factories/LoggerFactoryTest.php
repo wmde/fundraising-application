@@ -4,13 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Factories;
 
-use Airbrake\MonologHandler as AirbrakeHandler;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use org\bovigo\vfs\vfsStream;
 use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Infrastructure\SupportHandler;
 
 class LoggerFactoryTest extends TestCase {
 	public function testGivenErrorHandlerConfiguration_itReturnsErrorLoggingHandler(): void {
@@ -54,8 +54,8 @@ class LoggerFactoryTest extends TestCase {
 		]);
 		$logger = $factory->getLogger();
 		$this->assertCount( 1, $logger->getHandlers() );
-		$firstHandler = $logger->getHandlers()[0]; /** @var AirbrakeHandler $firstHandler */
-		$this->assertInstanceOf( AirbrakeHandler::class, $firstHandler );
+		$firstHandler = $logger->getHandlers()[0]; /** @var SupportHandler $firstHandler */
+		$this->assertInstanceOf( SupportHandler::class, $firstHandler );
 		$this->assertSame( Logger::ERROR, $firstHandler->getLevel() );
 	}
 
@@ -68,8 +68,7 @@ class LoggerFactoryTest extends TestCase {
 		];
 		yield [ array_merge( $validParams, ['projectId' => '' ] ) ];
 		yield [ array_merge( $validParams, ['projectKey' => null ] ) ];
-		unset( $validParams['host'] );
-		yield [ $validParams ];
+		yield [ array_merge( $validParams, ['host' => '' ] ) ];
 		yield [ [
 		'projectId' => '',
 			'projectKey' => '',
