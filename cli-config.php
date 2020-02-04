@@ -25,8 +25,6 @@ $configReader = new ConfigReader(
 );
 
 $config = $configReader->getConfig();
-$factory = new Factory( DriverManager::getConnection( $config['db'] ), __DIR__ . '/var/doctrine_proxies', [], [
-	'WMDE\Fundraising\AddressChange\Domain\Model' => $driver = new XmlDriver( __DIR__ . '/vendor/wmde/fundraising-address-change/config/DoctrineClassMapping' )
-] );
+$factory = new Factory( DriverManager::getConnection( $config['db'] ), __DIR__ . '/var/doctrine_proxies' );
 
 return ConsoleRunner::createHelperSet( $factory->getEntityManager() );
