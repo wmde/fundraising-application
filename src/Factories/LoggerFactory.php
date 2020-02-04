@@ -4,11 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
-use http\Exception\InvalidArgumentException;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Psr\Log\LogLevel;
+use WMDE\Fundraising\Frontend\Infrastructure\SupportHandler;
 
 /**
  * @license GNU GPL v2+
@@ -38,7 +39,7 @@ class LoggerFactory {
 		return new Logger( 'application', $handlers );
 	}
 
-	private function newHandler( $config ): HandlerInterface {
+	private function newHandler( array $config ): HandlerInterface {
 		switch ( $config['method'] ?? '' ) {
 			case self::TYPE_ERROR_LOG:
 				return new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, $config['level'] );
@@ -55,7 +56,10 @@ class LoggerFactory {
 					'host' => $config['host']
 				]);
 
-				return new \Airbrake\MonologHandler( $notifier, $config['level'] );
+				return new SupportHandler(
+					new \Airbrake\MonologHandler( $notifier, $config['level'] ),
+					new Logger( 'errbit errors', [ new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, LogLevel::ERROR ), ] ),
+				);
 
 			default:
 				throw new \InvalidArgumentException( 'Unknown logging method - ' . $config['method'] );
