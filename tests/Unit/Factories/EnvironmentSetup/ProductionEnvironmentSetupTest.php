@@ -29,6 +29,10 @@ class ProductionEnvironmentSetupTest extends TestCase {
 		$factory->expects( $this->never() )->method( $this->logicalNot( $this->matchesRegularExpression( $methodNameMatcher ) ) );
 
 		$setup = new ProductionEnvironmentSetup();
-		$setup->setEnvironmentDependentInstances( $factory, [ 'logging' => [ 'method' => 'error_log', 'level' => 0 ] ] );
+		$setup->setEnvironmentDependentInstances( $factory, [ 'logging' => [
+			'handlers' => [
+				[ 'method' => 'error_log', 'level' => 0 ]
+			]
+		] ] );
 	}
 }
