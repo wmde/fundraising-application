@@ -187,7 +187,11 @@
 		"configurations": [ "campaigns.yml" ]
 	},
 	"logging": {
-		"method": "error_log",
-		"level": "DEBUG"
+		"handlers": [
+			{
+				"method": "error_log",
+				"level": "DEBUG"
+			}
+		]
 	}
 }

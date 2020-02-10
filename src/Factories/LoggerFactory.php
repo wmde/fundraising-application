@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
+use Airbrake\MonologHandler as AirbrakeHandler;
+use Airbrake\Notifier;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\StreamHandler;
@@ -27,13 +29,9 @@ class LoggerFactory {
 	}
 
 	public function getLogger(): Logger {
-		if( empty( $this->config['handlers'] ) ){
-			$handlers = [ $this->newHandler( $this->config ) ];
-		} else {
-			$handlers = [];
-			foreach ( $this->config['handlers'] as $handlerParams ) {
-				$handlers[] = $this->newHandler( $handlerParams );
-			}
+		$handlers = [];
+		foreach ( $this->config['handlers'] as $handlerParams ) {
+			$handlers[] = $this->newHandler( $handlerParams );
 		}
 
 		return new Logger( 'application', $handlers );
@@ -50,14 +48,14 @@ class LoggerFactory {
 				if( empty( $config['projectId'] ) || empty( $config['projectKey'] ) || empty( $config['host'] ) ) {
 					throw new \InvalidArgumentException( 'You need to configure project ID, projectKey and host for errbit logging' );
 				}
-				$notifier = new \Airbrake\Notifier([
+				$notifier = new Notifier([
 					'projectId' => $config['projectId'],
 					'projectKey' => $config['projectKey'],
 					'host' => $config['host']
 				]);
 
 				return new SupportHandler(
-					new \Airbrake\MonologHandler( $notifier, $config['level'] ),
+					new AirbrakeHandler( $notifier, $config['level'] ),
 					new Logger( 'errbit errors', [ new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, LogLevel::ERROR ), ] ),
 				);
 
