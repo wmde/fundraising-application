@@ -15,6 +15,7 @@ use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalData;
@@ -124,7 +125,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
-			'membership_fee' => (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO, // TODO: change to localized
+			'membership_fee' => (string)1000,
 
 			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
 			'iban' => ValidMembershipApplication::PAYMENT_IBAN,
@@ -156,7 +157,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
-			'membership_fee' => (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO, // TODO: change to localized
+			'membership_fee' => (string)1000,
 
 			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
 			'iban' => ValidMembershipApplication::PAYMENT_IBAN,
@@ -170,7 +171,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 
 		$httpParameters = $this->newValidHttpParameters();
-		$httpParameters['membership_fee'] = '1.00'; // TODO: change to localized
+		$httpParameters['membership_fee'] = '100';
 
 		$client->request( 'POST', 'apply-for-membership', $httpParameters );
 
@@ -383,7 +384,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_PAYPAL,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
-			'membership_fee' => (string)ValidMembershipApplication::PAYMENT_AMOUNT_IN_EURO, // TODO: change to localized
+			'membership_fee' => (string)1000,
 		];
 	}
 
@@ -444,7 +445,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 
 			$params = $this->newValidHttpParametersForCompanies();
-			$client->request(
+			$result = $client->request(
 				'POST',
 				'apply-for-membership',
 				$params
@@ -480,7 +481,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
-			'membership_fee' => (string)ValidMembershipApplication::COMPANY_PAYMENT_AMOUNT_IN_EURO, // TODO: change to localized
+			'membership_fee' => (string)2500,
 
 			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
 			'iban' => ValidMembershipApplication::PAYMENT_IBAN,

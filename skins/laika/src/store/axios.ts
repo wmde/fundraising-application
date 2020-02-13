@@ -9,12 +9,12 @@ import axios, { AxiosResponse } from 'axios';
 function postFeeData(
 	context: ActionContext<MembershipFee, any>,
 	validateFeeUrl: string,
-	amount: string,
+	membershipFee: string,
 	interval: string,
 	addressType: AddressTypeModel
 ): Promise<ValidationResponse> {
 	const bodyFormData = new FormData();
-	bodyFormData.append( 'amount', amount );
+	bodyFormData.append( 'membershipFee', membershipFee );
 	bodyFormData.append( 'paymentIntervalInMonths', interval );
 	bodyFormData.append( 'addressType', addressTypeName( addressType ) );
 	return axios( validateFeeUrl, {
@@ -32,7 +32,7 @@ export function validateFeeDataRemotely(
 	feeValue: string,
 	interval: string
 ): Promise<ValidationResponse> {
-	const feeAmount = ( Number( feeValue ) / 100 ).toFixed( 2 );
+	const feeAmount = feeValue;
 	const paymentInterval = interval;
 	const addressType = context.rootState.membership_address.addressType;
 	return postFeeData( context, validateFeeUrl, feeAmount, paymentInterval, addressType );

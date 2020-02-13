@@ -571,7 +571,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newInvalidFormInput(): array {
 		return [
-			'ammount' => '0',
+			'amount' => '0',
 			'zahlweise' => 'BEZ',
 			'periode' => 3,
 			'iban' => 'DE12500105170648489890',

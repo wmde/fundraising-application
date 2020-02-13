@@ -20,7 +20,7 @@ class NewDonationController {
 		);
 
 		try {
-			$amount = Euro::newFromCents( intval( $request->get( 'amount', 0) ) );
+			$amount = Euro::newFromCents( intval( $request->get( 'amount', 0 ) ) );
 		}
 		catch ( \InvalidArgumentException $ex ) {
 			$amount = Euro::newFromCents( 0 );

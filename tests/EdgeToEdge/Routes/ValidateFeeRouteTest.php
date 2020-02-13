@@ -18,7 +18,7 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 		$client->request(
 			'POST',
 			'/validate-fee',
-			[ 'amount' => '12,34', 'paymentIntervalInMonths' => '6', 'addressType' => 'person' ]
+			[ 'membershipFee' => '1234', 'paymentIntervalInMonths' => '6', 'addressType' => 'person' ]
 		);
 
 		$this->assertJsonSuccessResponse(
@@ -33,7 +33,7 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 		$client->request(
 			'POST',
 			'/validate-fee',
-			[ 'amount' => '12,34', 'paymentIntervalInMonths' => '6', 'addressType' => 'firma' ]
+			[ 'membershipFee' => '1234', 'paymentIntervalInMonths' => '6', 'addressType' => 'firma' ]
 		);
 
 		$response = $client->getResponse();
@@ -45,7 +45,7 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 		return [
 			'status' => 'ERR',
 			'messages' => [
-				'amount' => 'too-low'
+				'membershipFee' => 'too-low'
 			]
 		];
 	}
@@ -56,14 +56,14 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 		$client->request(
 			'POST',
 			'/validate-fee',
-			[ 'amount' => 'such', 'paymentIntervalInMonths' => '6', 'addressType' => 'person' ]
+			[ 'membershipFee' => 'such', 'paymentIntervalInMonths' => '6', 'addressType' => 'person' ]
 		);
 
 		$this->assertSame(
 			[
 				'status' => 'ERR',
 				'messages' => [
-					'amount' => 'not-money'
+					'membershipFee' => 'not-money'
 				]
 			],
 			json_decode( $client->getResponse()->getContent(), true )

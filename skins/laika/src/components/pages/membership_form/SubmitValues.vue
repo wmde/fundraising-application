@@ -5,7 +5,7 @@
 
 		<input type="hidden" name="payment_type" value="BEZ">
 		<input type="hidden" name="membership_fee_interval" :value="fee.interval">
-		<input type="hidden" name="membership_fee" :value="formattedAmount">
+		<input type="hidden" name="membership_fee" :value="fee.fee">
 		<input type="hidden" name="iban" :value="bankdata.iban">
 		<input type="hidden" name="bic" :value="bankdata.bic">
 
@@ -42,15 +42,6 @@ export default Vue.extend( {
 	computed: {
 		...mapState( NS_MEMBERSHIP_FEE, {
 			fee: ( state: Payment ) => state.values,
-			formattedAmount: ( state: Payment ) => {
-				// endpoint expects a German-formatted decimal number
-				const strAmount = String( state.values.fee );
-				return [
-					strAmount.slice( 0, -2 ),
-					',',
-					strAmount.slice( -2 ),
-				].join( '' );
-			},
 		} ),
 		...mapState( NS_MEMBERSHIP_ADDRESS, {
 			address: ( state: MembershipAddressState ) => state.values,
