@@ -17,6 +17,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
+use WMDE\Fundraising\Frontend\App\Controllers\NewDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
@@ -366,61 +367,10 @@ class Routes {
 		)->bind( self::UPDATE_DONOR );
 
 		// Show a donation form with pre-filled payment values, e.g. when coming from a banner
-		$app->get(
+		$app->match(
 			'donation/new',
-			function ( Application $app, Request $request ) use ( $ffFactory ) {
-				$ffFactory->getTranslationCollector()->addTranslationFile(
-					$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
-				);
-				$app['session']->set(
-					'piwikTracking',
-					array_filter(
-						[
-							'paymentType' => $request->get( 'zahlweise', '' ),
-							'paymentAmount' => $request->get( 'betrag', '' ),
-							'paymentInterval' => $request->get( 'periode', '' )
-						],
-						function ( string $value ) {
-							return $value !== '' && strlen( $value ) < 20;
-						}
-					)
-				);
-
-				try {
-					$amount = Euro::newFromFloat(
-						( new AmountParser( 'en_EN' ) )->parseAsFloat(
-							$request->get( 'betrag_auswahl', $request->get( 'betrag',  $request->get( 'amountGiven', '' ) ) )
-						)
-					);
-				}
-				catch ( \InvalidArgumentException $ex ) {
-					$amount = Euro::newFromCents( 0 );
-				}
-				$validationResult = $ffFactory->newPaymentDataValidator()->validate(
-					$amount,
-					(string)$request->get( 'zahlweise', '' )
-				);
-
-				$trackingInfo = new DonationTrackingInfo();
-				$trackingInfo->setTotalImpressionCount( intval( $request->get( 'impCount' ) ) );
-				$trackingInfo->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount' ) ) );
-
-				// TODO: don't we want to use newDonationFormViolationPresenter when !$validationResult->isSuccessful()?
-
-				return new Response(
-					$ffFactory->newDonationFormPresenter()->present(
-						$amount,
-						$request->get( 'zahlweise', '' ),
-						intval( $request->get( 'periode', 0 ) ),
-						$validationResult->isSuccessful(),
-						$trackingInfo,
-						$request->get( 'addressType', 'person' ),
-						self::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
-					)
-				);
-			}
-		)
-			->method( 'POST|GET' )
+			NewDonationController::class . '::handle'
+		)->method( 'POST|GET' )
 			->bind( self::SHOW_DONATION_FORM );
 
 		$app->post(
