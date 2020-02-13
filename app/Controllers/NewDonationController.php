@@ -11,7 +11,6 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 
 class NewDonationController {
 
@@ -19,30 +18,14 @@ class NewDonationController {
 		$ffFactory->getTranslationCollector()->addTranslationFile(
 			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
 		);
-		$app['session']->set(
-			'piwikTracking',
-			array_filter(
-				[
-					'paymentType' => $request->get( 'zahlweise', '' ),
-					'paymentAmount' => $request->get( 'betrag', '' ),
-					'paymentInterval' => $request->get( 'periode', '' )
-				],
-				function ( string $value ) {
-					return $value !== '' && strlen( $value ) < 20;
-				}
-			)
-		);
 
 		try {
-			$amount = Euro::newFromFloat(
-				( new AmountParser( 'en_EN' ) )->parseAsFloat(
-					$request->get( 'betrag_auswahl', $request->get( 'betrag',  $request->get( 'amountGiven', '' ) ) )
-				)
-			);
+			$amount = Euro::newFromCents( intval( $request->get( 'amount', 0) ) );
 		}
 		catch ( \InvalidArgumentException $ex ) {
 			$amount = Euro::newFromCents( 0 );
 		}
+
 		$validationResult = $ffFactory->newPaymentDataValidator()->validate(
 			$amount,
 			(string)$request->get( 'zahlweise', '' )

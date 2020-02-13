@@ -109,7 +109,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newValidFormInput(): array {
 		return [
-			'betrag' => '5,51',
+			'amount' => '551',
 			'zahlweise' => 'BEZ',
 			'periode' => 0,
 			'iban' => 'DE12500105170648489890',
@@ -254,7 +254,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newValidBankTransferInput(): array {
 		return [
-			'betrag' => '12,34',
+			'amount' => '1234',
 			'zahlweise' => 'UEB',
 			'periode' => 0,
 			'addressType' => 'person',
@@ -304,7 +304,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newComplementableFormInput(): array {
 		return [
-			'betrag' => '5,51',
+			'amount' => '551',
 			'zahlweise' => 'BEZ',
 			'periode' => 0,
 			'iban' => 'DE12500105170648489890',
@@ -356,7 +356,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newFrenchDonorFormInput(): array {
 		return [
-			'betrag' => '5,51',
+			'amount' => '551',
 			'zahlweise' => 'BEZ',
 			'periode' => 0,
 			'iban' => 'FR7630066100410001057380116',
@@ -417,7 +417,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newValidPayPalInput(): array {
 		return [
-			'betrag' => '12,34',
+			'amount' => '1234',
 			'zahlweise' => 'PPL',
 			'periode' => 3,
 			'addressType' => 'anonym',
@@ -471,7 +471,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newValidCreditCardInput(): array {
 		return [
-			'betrag' => '12,34',
+			'amount' => '1234',
 			'zahlweise' => 'MCP',
 			'periode' => 3,
 			'addressType' => 'anonym',
@@ -480,7 +480,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newValidSofortInput(): array {
 		return [
-			'betrag' => '100,00',
+			'amount' => '10000',
 			'zahlweise' => 'SUB',
 			'periode' => 0,
 			'addressType' => 'anonym',
@@ -537,7 +537,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 
 		$formValues = $this->newInvalidFormInput();
-		$formValues['betrag'] = '-5,00';
+		$formValues['amount'] = '-5';
 
 		$client->request(
 			'POST',
@@ -571,7 +571,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newInvalidFormInput(): array {
 		return [
-			'betrag' => '0',
+			'ammount' => '0',
 			'zahlweise' => 'BEZ',
 			'periode' => 3,
 			'iban' => 'DE12500105170648489890',
@@ -619,7 +619,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newAnonymousFormInput(): array {
 		return [
-			'betrag' => '0',
+			'amount' => '0',
 			'zahlweise' => 'UEB',
 			'periode' => 1,
 			'addressType' => 'anonym'
@@ -679,38 +679,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenInitiallyIntendedPaymentOptionsDifferFromActual_itIsReflectedInPiwikTrackingEvents(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
-
-			$client->request(
-				'GET',
-				'/donation/new',
-				[
-					'betrag' => '5.00',
-					'zahlweise' => 'BEZ',
-					'periode' => 12
-				]
-			);
-
-			$client->request(
-				'POST',
-				'/donation/add',
-				[
-					'addressType' => 'anonym',
-					'betrag' => '12,34',
-					'periode' => '0',
-					'zahlweise' => 'UEB'
-				]
-			);
-			$client->followRedirect();
-
-			$responseContent = $client->getResponse()->getContent();
-			$this->assertContains( 'BEZ/UEB', $responseContent );
-			$this->assertContains( '5.00/12.34', $responseContent );
-			$this->assertContains( '12/0', $responseContent );
-		} );
-	}
 
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
@@ -738,7 +706,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	private function newValidMobilePayPalInput(): array {
 		return [
-			'betrag' => '12,34',
+			'amount' => '1234',
 			'zahlweise' => 'PPL',
 			'periode' => 3,
 			'addressType' => 'anonym',

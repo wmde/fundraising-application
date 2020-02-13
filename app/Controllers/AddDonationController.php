@@ -14,7 +14,6 @@ use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
@@ -117,7 +116,7 @@ class AddDonationController {
 	private function createDonationRequest( Request $request ): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 
-		$donationRequest->setAmount( $this->getEuroAmountFromString( $request->get( 'betrag', '' ) ) );
+		$donationRequest->setAmount( $this->getEuroAmountFromString( $request->get( 'amount', '' ) ) );
 
 		$donationRequest->setPaymentType( $request->get( 'zahlweise', '' ) );
 		$donationRequest->setInterval( intval( $request->get( 'periode', 0 ) ) );
@@ -177,9 +176,8 @@ class AddDonationController {
 	}
 
 	private function getEuroAmountFromString( string $amount ): Euro {
-		$locale = 'de_DE'; // TODO: make this configurable for multilanguage support
 		try {
-			return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );
+			return Euro::newFromCents( intval( $amount ) );
 		} catch ( \InvalidArgumentException $ex ) {
 			return Euro::newFromCents( 0 );
 		}

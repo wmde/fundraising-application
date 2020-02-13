@@ -11,7 +11,6 @@ use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\PiwikVariableCollector;
 
 /**
  * @license GNU GPL v2+
@@ -39,7 +38,6 @@ class ShowDonationConfirmationController {
 				$responseModel->getDonation(),
 				$responseModel->getUpdateToken(),
 				$request->get( 'accessToken', '' ),
-				PiwikVariableCollector::newForDonation( $application['session']->get( 'piwikTracking', [] ), $responseModel->getDonation() ),
 				array_merge(
 					Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() ),
 					[

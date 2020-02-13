@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
@@ -41,7 +40,6 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			$donation,
 			self::UPDATE_TOKEN,
 			self::ACCESS_TOKEN,
-			$this->newPiwikEvents(),
 			$this->newUrls()
 		);
 	}
@@ -66,10 +64,6 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			],
 			'bankData' => [],
 			'initialFormValues' => [],
-			'piwikEvents' => [
-				[ 'setCustomVariable', 1, 'Payment', 'some value', PiwikEvents::SCOPE_VISIT ],
-				[ 'trackGoal', 4095 ]
-			],
 			'urls' => [
 				'testUrl' => 'https://example.com/',
 				'addComment' => '/such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'
@@ -85,13 +79,6 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			->method( 'render' )
 			->with( $expectedParameters );
 		return $twig;
-	}
-
-	private function newPiwikEvents(): PiwikEvents {
-		$piwikEvents = new PiwikEvents();
-		$piwikEvents->triggerSetCustomVariable( 1, 'some value', PiwikEvents::SCOPE_VISIT );
-		$piwikEvents->triggerTrackGoal( 4095 );
-		return $piwikEvents;
 	}
 
 	public function testWhenPresenterPresents_itPassesMappedStatus(): void {
@@ -110,7 +97,6 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			$donation,
 			self::UPDATE_TOKEN,
 			self::ACCESS_TOKEN,
-			$this->newPiwikEvents(),
 			$this->newUrls()
 		);
 	}
