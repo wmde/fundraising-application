@@ -51,7 +51,8 @@ class LoggerFactory {
 				$notifier = new Notifier([
 					'projectId' => $config['projectId'],
 					'projectKey' => $config['projectKey'],
-					'host' => $config['host']
+					'host' => $config['host'],
+					'environment' => getenv( 'APP_ENV' ) ?: 'dev'
 				]);
 
 				return new SupportHandler(
