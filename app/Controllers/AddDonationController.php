@@ -118,8 +118,8 @@ class AddDonationController {
 
 		$donationRequest->setAmount( $this->getEuroAmountFromString( $request->get( 'amount', '' ) ) );
 
-		$donationRequest->setPaymentType( $request->get( 'zahlweise', '' ) );
-		$donationRequest->setInterval( intval( $request->get( 'periode', 0 ) ) );
+		$donationRequest->setPaymentType( $request->get( 'paymentType', '' ) );
+		$donationRequest->setInterval( intval( $request->get( 'interval', 0 ) ) );
 
 		$donationRequest->setDonorType( $request->get( 'addressType', '' ) );
 		$donationRequest->setDonorSalutation( $request->get( 'salutation', '' ) );
@@ -133,7 +133,7 @@ class AddDonationController {
 		$donationRequest->setDonorCountryCode( $request->get( 'country', '' ) );
 		$donationRequest->setDonorEmailAddress( $request->get( 'email', '' ) );
 
-		if ( $request->get( 'zahlweise', '' ) === PaymentMethod::DIRECT_DEBIT ) {
+		if ( $request->get( 'paymentType', '' ) === PaymentMethod::DIRECT_DEBIT ) {
 			$donationRequest->setBankData( $this->getBankDataFromRequest( $request ) );
 		}
 

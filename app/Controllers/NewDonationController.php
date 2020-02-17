@@ -28,7 +28,7 @@ class NewDonationController {
 
 		$validationResult = $ffFactory->newPaymentDataValidator()->validate(
 			$amount,
-			(string)$request->get( 'zahlweise', '' )
+			(string)$request->get( 'paymentType', '' )
 		);
 
 		$trackingInfo = new DonationTrackingInfo();
@@ -40,8 +40,8 @@ class NewDonationController {
 		return new Response(
 			$ffFactory->newDonationFormPresenter()->present(
 				$amount,
-				$request->get( 'zahlweise', '' ),
-				intval( $request->get( 'periode', 0 ) ),
+				$request->get( 'paymentType', '' ),
+				intval( $request->get( 'interval', 0 ) ),
 				$validationResult->isSuccessful(),
 				$trackingInfo,
 				$request->get( 'addressType', 'person' ),

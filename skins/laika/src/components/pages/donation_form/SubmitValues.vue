@@ -1,8 +1,8 @@
 <template>
 	<span class="submit-values">
 
-		<input type="hidden" name="zahlweise" :value="payment.type">
-		<input type="hidden" name="periode" :value="payment.interval">
+		<input type="hidden" name="paymentType" :value="payment.type">
+		<input type="hidden" name="interval" :value="payment.interval">
 		<input type="hidden" name="amount" :value="payment.amount">
 		<input type="hidden" name="iban" :value="bankdata.iban">
 		<input type="hidden" name="bic" :value="bankdata.bic">

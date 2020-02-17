@@ -19,8 +19,8 @@ class DefaultRouteTest extends WebRouteTestCase {
 			'/',
 			[
 				'amount' => '1234',
-				'zahlweise' => 'UEB',
-				'periode' => 6
+				'paymentType' => 'UEB',
+				'interval' => 6
 			]
 		);
 
@@ -37,8 +37,8 @@ class DefaultRouteTest extends WebRouteTestCase {
 			'/',
 			[
 				'amount' => '-1234',
-				'zahlweise' => 'UEB',
-				'periode' => 6
+				'paymentType' => 'UEB',
+				'interval' => 6
 			]
 		);
 

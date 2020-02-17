@@ -47,8 +47,8 @@ class NewDonationRouteTest extends WebRouteTestCase {
 			[
 				[
 					'amount' => '10000',
-					'zahlweise' => 'BEZ',
-					'periode' => '0'
+					'paymentType' => 'BEZ',
+					'interval' => '0'
 				],
 				[
 					'validity' => 'valid',
@@ -59,8 +59,8 @@ class NewDonationRouteTest extends WebRouteTestCase {
 			[
 				[
 					'amount' => '12345',
-					'zahlweise' => 'PPL',
-					'periode' => 6
+					'paymentType' => 'PPL',
+					'interval' => 6
 				],
 				[
 					'validity' => 'valid',
@@ -71,8 +71,8 @@ class NewDonationRouteTest extends WebRouteTestCase {
 			[
 				[
 					'amount' => '870',
-					'zahlweise' => 'BEZ',
-					'periode' => '0'
+					'paymentType' => 'BEZ',
+					'interval' => '0'
 				],
 				[
 					'validity' => 'valid',
@@ -83,8 +83,8 @@ class NewDonationRouteTest extends WebRouteTestCase {
 			[
 				[
 					'amount' => '0',
-					'zahlweise' => 'PPL',
-					'periode' => 6
+					'paymentType' => 'PPL',
+					'interval' => 6
 				],
 				[
 					'validity' => 'invalid',
@@ -95,8 +95,8 @@ class NewDonationRouteTest extends WebRouteTestCase {
 			[
 				[
 					'amount' => '10000',
-					'zahlweise' => 'BTC',
-					'periode' => 6
+					'paymentType' => 'BTC',
+					'interval' => 6
 				],
 				[
 					'validity' => 'invalid',
@@ -121,34 +121,5 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse()->getContent();
 		$this->assertContains( 'Impression Count: 12', $response );
 		$this->assertContains( 'Banner Impression Count: 3', $response );
-	}
-
-	public function testAllPaymentTypesAreOffered(): void {
-		$client = $this->createClient(
-			[],
-			function ( FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, '10h16' );
-			}
-		);
-		$client->request(
-			'GET',
-			'/donation/new'
-		);
-		$crawler = $client->getCrawler();
-
-		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="BEZ"]' )->count() );
-		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="UEB"]' )->count() );
-		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="MCP"]' )->count() );
-		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="PPL"]' )->count() );
-		$this->assertSame( 1, $crawler->filter( '#donation-payment input[name="zahlweise"][value="SUB"]' )->count() );
-	}
-
-	private function setDefaultSkin( FunFunFactory $factory, string $skinName ): void {
-		$factory->setCampaignConfigurationLoader(
-			new OverridingCampaignConfigurationLoader(
-				$factory->getCampaignConfigurationLoader(),
-				[ 'skins' => [ 'default_bucket' => $skinName ] ]
-			)
-		);
 	}
 }

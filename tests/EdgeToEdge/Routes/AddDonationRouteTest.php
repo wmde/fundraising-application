@@ -110,8 +110,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function newValidFormInput(): array {
 		return [
 			'amount' => '551',
-			'zahlweise' => 'BEZ',
-			'periode' => 0,
+			'paymentType' => 'BEZ',
+			'interval' => 0,
 			'iban' => 'DE12500105170648489890',
 			'bic' => 'INGDDEFFXXX',
 			'konto' => '0648489890',
@@ -255,8 +255,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function newValidBankTransferInput(): array {
 		return [
 			'amount' => '1234',
-			'zahlweise' => 'UEB',
-			'periode' => 0,
+			'paymentType' => 'UEB',
+			'interval' => 0,
 			'addressType' => 'person',
 			'salutation' => 'Frau',
 			'title' => 'Prof. Dr.',
@@ -305,8 +305,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function newComplementableFormInput(): array {
 		return [
 			'amount' => '551',
-			'zahlweise' => 'BEZ',
-			'periode' => 0,
+			'paymentType' => 'BEZ',
+			'interval' => 0,
 			'iban' => 'DE12500105170648489890',
 			'addressType' => 'person',
 			'salutation' => 'Frau',
@@ -357,8 +357,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function newFrenchDonorFormInput(): array {
 		return [
 			'amount' => '551',
-			'zahlweise' => 'BEZ',
-			'periode' => 0,
+			'paymentType' => 'BEZ',
+			'interval' => 0,
 			'iban' => 'FR7630066100410001057380116',
 			'addressType' => 'person',
 			'salutation' => 'Frau',
@@ -418,8 +418,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function newValidPayPalInput(): array {
 		return [
 			'amount' => '1234',
-			'zahlweise' => 'PPL',
-			'periode' => 3,
+			'paymentType' => 'PPL',
+			'interval' => 3,
 			'addressType' => 'anonym',
 		];
 	}
@@ -472,8 +472,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function newValidCreditCardInput(): array {
 		return [
 			'amount' => '1234',
-			'zahlweise' => 'MCP',
-			'periode' => 3,
+			'paymentType' => 'MCP',
+			'interval' => 3,
 			'addressType' => 'anonym',
 		];
 	}
@@ -481,8 +481,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function newValidSofortInput(): array {
 		return [
 			'amount' => '10000',
-			'zahlweise' => 'SUB',
-			'periode' => 0,
+			'paymentType' => 'SUB',
+			'interval' => 0,
 			'addressType' => 'anonym',
 		];
 	}
@@ -572,8 +572,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function newInvalidFormInput(): array {
 		return [
 			'amount' => '0',
-			'zahlweise' => 'BEZ',
-			'periode' => 3,
+			'paymentType' => 'BEZ',
+			'interval' => 3,
 			'iban' => 'DE12500105170648489890',
 			'bic' => 'INGDDEFFXXX',
 			'konto' => '0648489890',
@@ -620,8 +620,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function newAnonymousFormInput(): array {
 		return [
 			'amount' => '0',
-			'zahlweise' => 'UEB',
-			'periode' => 1,
+			'paymentType' => 'UEB',
+			'interval' => 1,
 			'addressType' => 'anonym'
 		];
 	}
@@ -707,8 +707,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function newValidMobilePayPalInput(): array {
 		return [
 			'amount' => '1234',
-			'zahlweise' => 'PPL',
-			'periode' => 3,
+			'paymentType' => 'PPL',
+			'interval' => 3,
 			'addressType' => 'anonym',
 			'piwik_campaign' => 'test',
 			'piwik_kwd' => 'gelb',
