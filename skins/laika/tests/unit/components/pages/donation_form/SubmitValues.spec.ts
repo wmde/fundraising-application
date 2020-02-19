@@ -69,7 +69,7 @@ describe( 'Address.vue', () => {
 	} );
 
 	it( 'renders the amount as German-Formatted decimal number', () => {
-		expect( ( wrapper.find( 'input[name=amount]' ).element as HTMLInputElement ).value ).toBe( '23,49' );
+		expect( ( wrapper.find( 'input[name=amount]' ).element as HTMLInputElement ).value ).toBe( '2349' );
 	} );
 
 	it( 'renders the address type as string', () => {

@@ -5,21 +5,21 @@ exports[`Address.vue renders input fields 1`] = `
   class="submit-values"
 >
   <input
-    name="zahlweise"
+    name="paymentType"
     type="hidden"
     value="BEZ"
   />
    
   <input
-    name="periode"
+    name="interval"
     type="hidden"
     value="3"
   />
    
   <input
-    name="betrag"
+    name="amount"
     type="hidden"
-    value="23,49"
+    value="2349"
   />
    
   <input
