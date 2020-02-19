@@ -19,6 +19,12 @@ class NewDonationController {
 			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
 		);
 
+		foreach ( [ 'betrag', 'periode', 'zahlweise' ] as $deprecatedParameter ) {
+			if( $request->request->has( $deprecatedParameter ) ){
+				$ffFactory->getLogger()->notice( "Some application is still submitting the deprecated form parameter {$deprecatedParameter}" );
+			}
+		}
+
 		try {
 			$amount = Euro::newFromCents( intval( $request->get( 'amount', 0 ) ) );
 		}

@@ -34,6 +34,12 @@ class AddDonationController {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
 
+		foreach ( [ 'betrag', 'periode', 'zahlweise' ] as $deprecatedParameter ) {
+			if( $request->request->has( $deprecatedParameter ) ){
+				$ffFactory->getLogger()->notice( "Some application is still submitting the deprecated form parameter {$deprecatedParameter}" );
+			}
+		}
+
 		$addDonationRequest = $this->createDonationRequest( $request );
 		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation( $addDonationRequest );
 
