@@ -44,10 +44,10 @@ export default Vue.extend( {
 	],
 	computed: {
 		...mapState( NS_PAYMENT, {
-			payment: ( state: Payment ) => state.values,
-			formattedAmount: ( state: Payment ) => {
+			payment: state => ( state as Payment ).values,
+			formattedAmount: state => {
 				// endpoint expects a German-formatted decimal number
-				const strAmount = String( state.values.amount );
+				const strAmount = String( ( state as Payment ).values.amount );
 				return [
 					strAmount.slice( 0, -2 ),
 					',',
@@ -56,15 +56,15 @@ export default Vue.extend( {
 			},
 		} ),
 		...mapState( NS_ADDRESS, {
-			address: ( state: AddressState ) => state.values,
-			addressType: ( state: AddressState ) => {
-				return addressTypeName( state.addressType );
+			address: state => ( state as AddressState ).values,
+			addressType: state => {
+				return addressTypeName( ( state as AddressState ).addressType );
 			},
-			newsletterOptIn: ( state: AddressState ) => state.newsletterOptIn ? '1' : '',
-			receiptOptIn: ( state: AddressState ) => state.receiptOptOut ? '0' : '1',
+			newsletterOptIn: state => ( state as AddressState ).newsletterOptIn ? '1' : '',
+			receiptOptIn: state => ( state as AddressState ).receiptOptOut ? '0' : '1',
 		} ),
 		...mapState( NS_BANKDATA, {
-			bankdata: ( state: BankAccount ) => state.values,
+			bankdata: state => ( state as BankAccount ).values,
 		} ),
 	},
 } );
