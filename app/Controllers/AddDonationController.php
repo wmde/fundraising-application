@@ -14,6 +14,7 @@ use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\Validation\DeprecatedParamsLogger;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
@@ -34,12 +35,7 @@ class AddDonationController {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
 
-		//TODO should go elsewhere?
-		foreach ( [ 'betrag', 'periode', 'zahlweise' ] as $deprecatedParameter ) {
-			if( $request->request->has( $deprecatedParameter ) ){
-				$ffFactory->getLogger()->notice( "Some application is still submitting the deprecated form parameter '{$deprecatedParameter}'" );
-			}
-		}
+		DeprecatedParamsLogger::logParamUsage( $ffFactory->getLogger(), $request );
 
 		$addDonationRequest = $this->createDonationRequest( $request );
 		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation( $addDonationRequest );
@@ -92,7 +88,7 @@ class AddDonationController {
 				return new RedirectResponse(
 					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
-						$responseModel->getDonation()->getAmount(), //TODO does this have to be changed in case of old params? *100
+						$responseModel->getDonation()->getAmount(),
 						$responseModel->getDonation()->getPaymentIntervalInMonths(),
 						$responseModel->getUpdateToken(),
 						$responseModel->getAccessToken()
@@ -104,7 +100,7 @@ class AddDonationController {
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getBankTransferCode(),
-						$responseModel->getDonation()->getAmount(), //TODO does this have to be changed in case of old params? *100
+						$responseModel->getDonation()->getAmount(),
 						$responseModel->getUpdateToken(),
 						$responseModel->getAccessToken()
 					)
@@ -120,16 +116,12 @@ class AddDonationController {
 		}
 	}
 
+
+
 	private function createDonationRequest( Request $request ): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 
-		$donationRequest->setAmount(
-			$this->getEuroAmountFromString(
-				$request->get( 'amount',
-					intval( $request->get( 'betrag', '' ) )*100
-				)
-			)
-		);
+		$donationRequest->setAmount( $this->getEuroAmount( $this->getFallbackAmount( $request ) ) );
 
 		$donationRequest->setPaymentType( $request->get( 'paymentType', $request->get( 'zahlweise', '' ) ) );
 		$donationRequest->setInterval( intval( $request->get( 'interval', $request->get( 'periode', 0 ) ) ) );
@@ -188,13 +180,25 @@ class AddDonationController {
 		return $this->ffFactory->newBankDataConverter()->getBankDataFromAccountData( $account, $bankCode );
 	}
 
-	private function getEuroAmountFromString( string $amount ): Euro {
+	private function getEuroAmount( int $amount ): Euro {
 		try {
-			return Euro::newFromCents( intval( $amount ) );
+			return Euro::newFromCents( $amount );
 		} catch ( \InvalidArgumentException $ex ) {
 			return Euro::newFromCents( 0 );
 		}
+	}
 
+	private function getFallbackAmount ( Request $request ): int {
+		if ( $request->request->has( 'amount' ) ) {
+			return intval( $request->get( 'amount' ) );
+		}
+		$fallbackParameters = [ 'betrag', 'betrag_auswahl' ];
+		foreach ( $fallbackParameters as $fbParam ) {
+			if ( $request->request->has( $fbParam ) ) {
+				return intval( $request->get( $fbParam ) ) * 100;
+			}
+		}
+		return 0;
 	}
 
 	private function isSubmissionAllowed( Request $request ): bool {

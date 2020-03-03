@@ -4,13 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers;
 
-use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\Validation\DeprecatedParamsLogger;
 
 class NewDonationController {
 
@@ -19,12 +19,7 @@ class NewDonationController {
 			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
 		);
 
-		//TODO should go elsewhere?
-		foreach ( [ 'betrag', 'periode', 'zahlweise' ] as $deprecatedParameter ) {
-			if( $request->request->has( $deprecatedParameter ) ){
-				$ffFactory->getLogger()->notice( "Some application is still submitting the deprecated form parameter '{$deprecatedParameter}'" );
-			}
-		}
+		DeprecatedParamsLogger::logParamUsage( $ffFactory->getLogger(), $request );
 
 		try {
 			$amount = Euro::newFromCents( intval(

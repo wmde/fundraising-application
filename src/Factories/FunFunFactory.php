@@ -94,7 +94,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\Validation\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailSubjectRendererInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailTemplateFilenameTraversable;
