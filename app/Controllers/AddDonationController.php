@@ -34,9 +34,10 @@ class AddDonationController {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
 
+		//TODO should go elsewhere?
 		foreach ( [ 'betrag', 'periode', 'zahlweise' ] as $deprecatedParameter ) {
 			if( $request->request->has( $deprecatedParameter ) ){
-				$ffFactory->getLogger()->notice( "Some application is still submitting the deprecated form parameter {$deprecatedParameter}" );
+				$ffFactory->getLogger()->notice( "Some application is still submitting the deprecated form parameter '{$deprecatedParameter}'" );
 			}
 		}
 
@@ -91,7 +92,7 @@ class AddDonationController {
 				return new RedirectResponse(
 					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
-						$responseModel->getDonation()->getAmount(),
+						$responseModel->getDonation()->getAmount(), //TODO does this have to be changed in case of old params? *100
 						$responseModel->getDonation()->getPaymentIntervalInMonths(),
 						$responseModel->getUpdateToken(),
 						$responseModel->getAccessToken()
@@ -103,7 +104,7 @@ class AddDonationController {
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getBankTransferCode(),
-						$responseModel->getDonation()->getAmount(),
+						$responseModel->getDonation()->getAmount(), //TODO does this have to be changed in case of old params? *100
 						$responseModel->getUpdateToken(),
 						$responseModel->getAccessToken()
 					)
@@ -122,10 +123,16 @@ class AddDonationController {
 	private function createDonationRequest( Request $request ): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 
-		$donationRequest->setAmount( $this->getEuroAmountFromString( $request->get( 'amount', '' ) ) );
+		$donationRequest->setAmount(
+			$this->getEuroAmountFromString(
+				$request->get( 'amount',
+					intval( $request->get( 'betrag', '' ) )*100
+				)
+			)
+		);
 
-		$donationRequest->setPaymentType( $request->get( 'paymentType', '' ) );
-		$donationRequest->setInterval( intval( $request->get( 'interval', 0 ) ) );
+		$donationRequest->setPaymentType( $request->get( 'paymentType', $request->get( 'zahlweise', '' ) ) );
+		$donationRequest->setInterval( intval( $request->get( 'interval', $request->get( 'periode', 0 ) ) ) );
 
 		$donationRequest->setDonorType( $request->get( 'addressType', '' ) );
 		$donationRequest->setDonorSalutation( $request->get( 'salutation', '' ) );
@@ -139,7 +146,7 @@ class AddDonationController {
 		$donationRequest->setDonorCountryCode( $request->get( 'country', '' ) );
 		$donationRequest->setDonorEmailAddress( $request->get( 'email', '' ) );
 
-		if ( $request->get( 'paymentType', '' ) === PaymentMethod::DIRECT_DEBIT ) {
+		if ( $request->get( 'paymentType', $request->get( 'zahlweise', '' ) ) === PaymentMethod::DIRECT_DEBIT ) {
 			$donationRequest->setBankData( $this->getBankDataFromRequest( $request ) );
 		}
 
