@@ -1,0 +1,49 @@
+{
+  "organizations": {
+    "wmde": {
+      "title": "Wikimedia Deutschland e. V.",
+      "url": "https://meta.wikimedia.org/wiki/Wikimedia_Deutschland/Planung_2019/Wirtschaftsplan_2019",
+      "overallAmount": "19 149 000",
+      "description": "",
+      "funds": {
+        "1": {
+          "title": "Handlungsfeld Freiwillige",
+          "amount": "2 213 000",
+          "description": "Ehrenamtliche Autorinnen und Autoren teilen in der freien Online-Enzyklopädie Wikipedia kostenlos ihr Wissen, indem sie Fehler verbessern, Fotos einbinden, Informationen aktuell halten und ganze Artikel schreiben. Ohne den unermüdlichen Einsatz von vielen Tausend Freiwilligen würden Projekte wie die Wikipedia, das freie Medienarchiv Wikimedia Commons oder die freie Wissensdatenbank Wikidata nicht existieren. Deswegen ist die Förderung der Freiwilligen in den Wikimedia-Projekten ein fester Bestandteil der Arbeit von Wikimedia Deutschland. Alle Ehrenamtlichen - ob neu oder schon langjährig aktiv - bestärken wir in ihrem Engagement und stehen ihnen zur Seite, wenn es darum geht, ihre Pläne in die Tat umzusetzen. Wir vergeben zum Beispiel Stipendien, helfen bei der Durchführung von Workshops und Wettbewerben, bieten technische Unterstützung und fördern die Einrichtung lokaler Wikipedia-Büros. Darüber hinaus versuchen wir auch stetig mehr Menschen dafür zu begeistern ihr Wissen in den Wikimedia-Projekten zu teilen."
+        },
+        "2": {
+          "title": "Handlungsfeld Technologie",
+          "amount": "2 834 000",
+          "description": "Wikimedia Deutschland unterstützt nicht nur die Ehrenamtlichen, die in den Wikimedia-Projekten ihr Wissen mit der Welt teilen, sondern kümmert sich auch um die stetige Verbesserung der technischen Infrastruktur für Wikipedia & Co. Das beinhaltet beispielsweise die Arbeit an der Software, mit der sämtliche Wikimedia-Projekte betrieben werden. Darüber hinaus entwickeln wir im engen Austausch mit Freiwilligen technische Produkte zur Weiterentwicklung von Wikipedia und zur Verbreitung Freien Wissens. Ein Großprojekt, an dem wir Hand in Hand mit einer internationalen Community arbeiten, ist die freie, kollaborativ gepflegte Wissensdatenbank Wikidata, die 2012 bei Wikimedia Deutschland in Berlin startete und seitdem federführend durch uns ausgebaut und weiterentwickelt wird. Unsere Arbeit im Bereich der Software-Entwicklung folgt dem Ziel, dem sich auch die Tausenden von Wikimedia-Aktiven verschrieben haben: Mehr Menschen mehr Zugang zu mehr Wissen zu ermöglichen."
+        },
+        "3": {
+          "title": "Handlungsfeld Rahmenbedingungen",
+          "amount": "1 833 000",
+          "description": "Die Stärkung rechtlicher und politischer Rahmenbedingungen für Freies Wissen auf EU- und Bundesebene spielt für Wikimedia Deutschland eine zentrale Rolle. Dabei geht es uns darum, über die Vorteile Freien Wissens für die Gesellschaft aufzuklären. Durch direkte Gespräche, Veranstaltungen und Stellungnahmen machen wir politische Entscheidungsträger auf unsere Positionen aufmerksam. Außerdem arbeiten wir mit Kultur-, Bildungs- und Wissenschaftsinstitutionen zusammen, um mehr Inhalte für die Wikimedia-Projekte — und damit für alle Menschen — zu befreien. Auch im Bildungsbereich engagieren wir uns für den ungehinderten Zugang zu freien Bildungsmaterialien und die Öffnung der Wissenschaft Forschung."
+        },
+        "4": {
+          "title": "Öffentlichkeitsarbeit und Werbung",
+          "amount": "2 065 000",
+          "description": "Zur Öffentlichkeitsarbeit zählen insbesondere Ausgaben für Informationsmaterialien zur Vereins- und Projektarbeit, der Erstellung von Jahres- und Projektberichten sowie der Pressearbeit. Die Ausgaben für Werbung umfassen die Mittel zur Beschaffung von Spendeneinnahmen und Mitgliedsbeiträgen, öffentlichen Mitteln sowie Zuwendungen von anderen Organisationen und Unternehmen, sowie die Mitgliederkommunikation."
+        },
+        "5": {
+          "title": "Verwaltungskosten",
+          "amount": "1 924 000",
+          "description": "Hierunter fallen Kosten für die unterstützenden Bereiche, die der betrieblichen Organisation und dem betrieblichen Ablauf dienen."
+        },
+        "6": {
+          "title": "Mittelweiterleitung an die Wikimedia Foundation",
+          "amount": "8 280 000",
+          "description": "Die Spenden werden für die technische Infrastruktur eingesetzt, damit diese schnell, sicher und jederzeit verfügbar ist, für internationale Wikimedia-Projekte und Initiativen zur Verbreitung und Förderung Freien Wissens und zur Unterstützung der Freiwilligen bei der Erstellung von Inhalten für Wikipedia sowie der anderen Wikimedia-Projekte."
+        }
+      }
+    },
+    "wmf": {
+      "title": "Wikimedia Foundation USA",
+      "url": "https://meta.wikimedia.org/wiki/Wikimedia_Foundation_Annual_Plan/2018-2019/Final",
+      "overallAmount": "92 936 000",
+      "description": "Die Spenden werden für die technische Infrastruktur eingesetzt, damit diese schnell, sicher und jederzeit verfügbar ist, für internationale Wikimedia-Projekte und Initiativen zur Verbreitung und Förderung Freien Wissens und zur Unterstützung der Freiwilligen bei der Erstellung von Inhalten für Wikipedia sowie der anderen Wikimedia-Projekte.",
+      "funds": {}
+    }
+  }
+}

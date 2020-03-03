@@ -1,0 +1,153 @@
+{
+	"topics": [{
+			"id": "1",
+			"name": "Überblick"
+		},
+		{
+			"id": "2",
+			"name": "Weitere Spendenmöglichkeiten"
+		},
+		{
+			"id": "3",
+			"name": "Spenden und Mitgliedschaften"
+		},
+		{
+			"id": "4",
+			"name": "Spendenkampagne"
+		},
+		{
+			"id": "5",
+			"name": "Wikimedia"
+		},
+		{
+			"id": "6",
+			"name": "Wikimedia-Projekte"
+		}
+	],
+	"questions": [{
+			"question": "Kann ich einfach auf euer Spendenkonto überweisen?",
+			"visible_text": "<p>Für Spenden per Überweisung nutzen Sie bitte folgende Bankverbindung:<br /><br /><strong>Wikimedia Foerdergesellschaft</strong><br /><strong>IBAN: DE33 1002 0500 0001 1947 00</strong><br /><strong>BIC: BFSWDE33BER</strong></p><p>Wenn Sie Ihre Adressdaten in den Verwendungszweck schreiben, können wir Ihnen auch eine Zuwendungsbescheinigung ausstellen. Sie können uns Ihre Adresse übrigens auch über das Adressformular übermitteln: <ul><li>Rufen Sie unser Spendenformular auf.</li><li>Wählen Sie die Option „Überweisung“ und geben Sie Ihre Adresse ein.</li><li>Sie erhalten von uns Ihren persönlichen Überweisungscode.</li><li>Schreiben Sie den Überweisungcode einfach in den Verwendungszweck Ihrer Überweisung.</li></ul>Auf diesem Weg können wir Ihre Adresse der Zahlung automatisch zuordnen. Das ist für uns der einfachste Weg. Vielen Dank für Ihr Engagement.</p>",
+			"topic": "1,2"
+		},
+		{
+			"question": "Wie kann ich euch mit einer SMS unterstützen?",
+			"visible_text": "<p><strong>Helfen per SMS:</strong> Senden Sie das Wort „WIKI“ an die Nummer 81190.</p><p>Von diesen 5 Euro gehen 4,83 Euro direkt an Wikimedia, 17 Cent erhält der Anbieter. Zusätzlich fallen Ihnen die Kosten einer Standard-SMS entsprechend den Konditionen Ihres Mobilfunkvertrags an. Der Betrag wird nur einmal abgebucht, Sie gehen durch uns keine weiteren Verpflichtungen ein. Bitte beachten Sie, dass Zuwendungen per SMS steuerlich nicht als Spende abgesetzt werden können. Vielen Dank für Ihr Engagement.</p>",
+			"topic": "2"
+		},
+		{
+			"question": "Ich möchte keine Adressdaten eingeben, aber dennoch spenden. Geht das?",
+			"visible_text": "Auf unserem Spendenformular gibt es im Abschnitt „Daten“ die Möglichkeit, die Option „anonym“ auszuwählen. Diese Option ist für alle Zahlungsarten außer für Lastschriftspenden möglich. Bedenken Sie bitte, dass wir Ihnen im Fall einer anonymen Spende keine Zuwendungsbescheinigung für Ihre Steuererklärung ausstellen können.",
+			"topic": "1,3"
+		},
+		{
+			"question": "Wie kann ich meine periodische Spende kündigen?",
+			"visible_text": "Eine formlose Mitteilung genügt. Am einfachsten können Sie uns diese über unser <a href=\"/contact/get-in-touch\">Kontaktformular</a> senden. Oder Sie rufen uns unter 030 - 219 158 26 -19 an. Da eine Spende immer freiwillig ist, gibt es keine Kündigungsfristen.",
+			"topic": "3"
+		},
+		{
+			"question": "Wie kann ich meine neue Adresse oder Bankverbindung bei Wikimedia ändern lassen?",
+			"visible_text": "Eine formlose Mitteilung genügt. Am einfachsten können Sie uns diese über unser <a href=\"/contact/get-in-touch\">Kontaktformular</a> senden. Oder Sie rufen uns unter 030 - 219 158 26 -19 an.",
+			"topic": "1,3"
+		},
+		{
+			"question": "Ich habe technische Probleme beim Spenden. Wer kann mir helfen?",
+			"visible_text": "<p>Es tut uns sehr leid, dass Sie beim Spendenvorgang technische Probleme hatten. Bitte entschuldigen Sie die Umstände.Wir wären Ihnen sehr dankbar, wenn Sie uns nachfolgende Informationen mitteilen würden, da uns diese helfen das Problem zu verstehen und einzugrenzen:</p><ul><li>Haben Sie den Spendenvorgang über einen Desktop-PC, Handy oder ein Tablet durchgeführt?</li><li>Welchen Browser und welches Betriebssystem (inkl. Angabe der Version) haben Sie verwendet?</li><li>Können Sie das Problem mit Hilfe eines Screenshots visualisieren?</li></ul><p>Am einfachsten können Sie uns diese Informationen über unser <a href=\"/contact/get-in-touch\">Kontaktformular</a> senden. Oder Sie rufen uns unter 030 - 219 158 26 -19 an. Wir werden der Sache unverzüglich nachgehen und natürlich versuchen den eventuellen Fehler zu beheben.</p><p>Alternativ können Sie uns Ihre Spende auch auf folgendes Konto überweisen:<br /><strong>IBAN: DE33 1002 0500 0001 1947 00</strong><br /><strong>BIC: BFSWDE33BER</strong></p><p>Für den Fall, dass Sie eine Zuwendungsbescheinigung benötigen, schreiben Sie bitte Ihre Adresse in den Verwendungszweck. Ab einem Spendenbetrag von 5 Euro erhalten Sie dadurch automatisch zum Ende des 1. Quartals des folgenden Jahres eine Zuwendungsbescheinigung per Post.</p>",
+			"topic": "3"
+		},
+		{
+			"question": "Was ist der Unterschied zwischen einer (periodischen) Spende und einer Fördermitgliedschaft?",
+			"visible_text": "<p>Es gibt viele Gemeinsamkeiten zwischen diesen beiden Arten der Unterstützung und ein paar wenige aber wichtige Unterschiede. Grundsätzlich gilt, dass beide eine wichtige Unterstützung für Wikipedia und Freies Wissen sind. Beide Formen sind steuerlich absetzbar. Wir versenden daher für alle Zuwendungen – seien es Spenden oder Mitgliedsbeiträge – Zuwendungsbescheinigungen.</p><p>Periodische Spenden und Fördermitgliedschaften sind in vielerlei Hinsicht gleich. Beides sind freiwillige Leistungen, die jederzeit widerrufen werden können. Fördermitglieder bekommen jedoch mehr Informationen zu Wikimedia sowie Möglichkeiten zur Beteiligung. Dadurch erhalten Fördermitglieder einen guten Einblick in die vielfältigen Projekte zur Förderung Freien Wissens in Deutschland. Als Fördermitglied unterstützen Sie den Verein aber in erster Linie finanziell mit einem regelmäßigen Beitrag und geben uns damit wichtige Planungssicherheit. Der finanzielle Beitrag ist wichtig; die Anzahl unserer Fördernden spielt aber auch eine große Rolle, um uns als Organisation Gehör zu verschaffen. Fördermitglied können nicht nur natürliche, sondern auch juristische Personen werden.</p>",
+			"topic": "3"
+		},
+		{
+			"question": "Was ist der Unterschied zwischen einer Fördermitgliedschaft und einer aktiven Mitgliedschaft?",
+			"visible_text": "<p>Als Fördermitglied unterstützen Sie den Verein in erster Linie finanziell mit einem jährlichen Beitrag und geben uns damit wichtige Planungssicherheit. Der finanzielle Beitrag ist wichtig; die Anzahl unserer Fördernden spielt aber auch eine große Rolle, um uns als Organisation Gehör zu verschaffen. Fördermitglied können nicht nur natürliche, sondern auch juristische Personen werden. Sie werden zu Veranstaltungen eingeladen und auf Wunsch bekommen Sie Informationen zum und aus dem Verein.</p><p>Aktive Mitglieder unterstützen den Verein darüber hinaus durch Ihre Mitarbeit. Sie sind das Herz von Wikimedia Deutschland und haben alle satzungsgemäßen Rechte und Pflichten. Dies ist insbesondere das Recht zur Antragstellung gegenüber Vorstand und Mitgliederversammlung, das aktive und passive Wahlrecht, sowie Stimm- und Rederecht auf Mitgliederversammlungen. Aktive Mitglieder organisieren und gestalten die Veranstaltungen und die Vereinsarbeit von Wikimedia Deutschland. Sie engagieren sich nach persönlichem Interesse und zeitlichen Möglichkeiten aktiv für den Verein.</p>",
+			"topic": "3"
+		},
+		{
+			"question": "Was ist die ermäßigte Mitgliedschaft und wie kann ich diese beantragen?",
+			"visible_text": "<p>Für Personen mit eingeschränkter finanzieller Leistungskraft (z. B. Menschen, die Sozialhilfe erhalten, niedrige Renten beziehen, studieren, in Ausbildung sind oder zur Schule gehen) kann der Mitgliedsbeitrag ermäßigt werden. Der ermäßigte Beitrag beträgt jährlich 12 Euro. Das Verfahren für einen ermäßigten Mitgliedsbeitrag ist folgendermaßen: <ul><li>Füllen Sie das <a href=\"/apply-for-membership\">Mitgliedschaftsformular</a> aus und wählen den Mindestbeitrag von 24 Euro.</li><li>Senden Sie anschließend eine E-Mail an <a href=\"mailto:mitglieder@wikimedia.de\">mitglieder@wikimedia.de</a> mit dem entsprechenden Hinweis, dass Sie einen ermäßigten Beitrag zahlen möchten.</li><li>Fügen Sie der E-Mail zudem den für die Ermäßigung notwendigen Nachweis bei.</li></ul>Um den Rest kümmern wir uns dann.</p>",
+			"topic": "3"
+		},
+		{
+			"question": "Wie kann ich meine Mitgliedschaft kündigen?",
+			"visible_text": "Eine Fördermitgliedschaft kann jederzeit formlos schriftlich, auch per E-Mail an <a href=\"mailto:mitglieder@wikimedia.de\">mitglieder@wikimedia.de</a> storniert werden. Eine aktive Mitgliedschaft ist laut unserer Satzung immer zum Ende des Jahres kündbar. Auch hier reicht eine E-Mail an <a href=\"mailto:mitglieder@wikimedia.de\">mitglieder@wikimedia.de</a> aus. Sie können natürlich auch unser <a href=\"/contact/get-in-touch\">Kontaktformular</a> nutzen.",
+			"topic": "3"
+		},
+		{
+			"question": "Bekomme ich eine Zuwendungsbescheinigung für meine Spende oder meinen Mitgliedsbeitrag?",
+			"visible_text": "<p>Die Wikimedia Fördergesellschaft und Wikimedia Deutschland sind als gemeinnützig anerkannt und können somit Zuwendungsbescheinigungen ausstellen.</p><p>Als Dankeschön und Zeichen unserer Wertschätzung stellen wir für jede Spende ab genau 5 Euro und jeden Mitgliedsbeitrag automatisch eine Zuwendungsbescheinigung aus. Dies erfolgt nur dann nicht, wenn Sie dies ausdrücklich nicht wünschen. Die Bescheinigungen verschicken wir immer zum Ende des ersten Quartals des folgenden Jahres. Wenn Sie Ihre Zuwendungsbestätigung eher benötigen, sagen Sie uns einfach Bescheid. Auf Nachfrage versenden wir die Bestätigung auch gern eher.</p><p>Für Spenden unter 5 Euro bieten wir in der Regel nur den vereinfachten Zuwendungsbescheid an, der in Verbindung mit dem Kontoauszug als Nachweis der Spende ausreicht. Den vereinfachten Zuwendungsbescheid für Spenden an die Wikimedia Fördergesellschaft bieten wir Ihnen als <a href=\"/resources/de_DE/Vereinfachter_Zuwendungsbescheid_Foerdergesellschaft.pdf\" target=\"_blank\">PDF-Dokument</a> an. Wenn Sie dennoch eine Zuwendungsbestätigung erhalten möchten, ist dies natürlich kein Problem. Gern stellen wir Ihnen eine Bestätigung aus.</p><p>Schreiben Sie uns dazu einfach eine Nachricht über unser <a href=\"/contact/get-in-touch\">Kontaktformular</a>.</p>",
+			"topic": "1,3"
+		},
+		{
+			"question": "Wann bekomme ich die Zuwendungsbescheinigung?",
+			"visible_text": "<p>Die Zuwendungsbescheinigungen werden jedes Jahr im März versendet. Dies erfolgt deshalb zu diesem Zeitpunkt, weil die Spendenkampagne in der Regel bis zum Ende des Vorjahres stattfindet. Die umfangreichen Vorbereitungen, die einem kostengünstigen Massenversand von Zuwendungsbescheinigungen vorangehen, können derzeit leider nicht frühzeitiger abgeschlossen werden. Wenn Sie Ihre Zuwendungsbestätigung früher benötigen, sagen Sie uns einfach Bescheid. Auf Nachfrage versenden wir die Bestätigung auch gern eher.</p><p>Schreiben Sie uns dazu einfach eine Nachricht über unser <a href=\"/contact/get-in-touch\">Kontaktformular</a>.</p>",
+			"topic": "3"
+		},
+		{
+			"question": "Warum wird die Spendenkampagne durchgeführt?",
+			"visible_text": "Wikipedia wird durch das freiwillige Engagement von Autorinnen und Autoren sowie Spenderinnen und Spendern getragen. Wikipedia finanziert sich nicht durch Werbung; eine objektive Enzyklopädie wäre so auch nicht glaubwürdig. Wikipedia finanziert sich vor allem durch freiwillige Zuwendungen in Form von Spenden und Mitgliedsbeiträgen. Daher führen wir einmal im Jahr eine mehrwöchige Spendenkampagne durch und fragen unsere Leserinnen und Leser nach einem kleinen Beitrag. Die Spendenkampagne wird beendet, sobald das Spendenziel erreicht ist.",
+			"topic": "4"
+		},
+		{
+			"question": "Wann wird die Spendenkampagne durchgeführt?",
+			"visible_text": "In Deutschland wird die Spendenkampagne in den letzten sechs bis sieben Wochen des Jahres durchgeführt. Auch andere gemeinnützige Organisationen nutzen häufig das Jahresende und die Weihnachtszeit, um ihre jeweiligen Unterstützenden nach Spenden zu fragen. International erfolgen die Wikimedia-Spendenkampagnen jedoch zu unterschiedlichen Zeitpunkten; wenngleich auch hier der Fokus auf den letzten Monaten im Jahr liegt.",
+			"topic": "4"
+		},
+		{
+			"question": "Warum sehe ich manchmal Spendenbanner, obwohl die Kampagne doch immer am Ende des Jahres durchgeführt wird?",
+			"visible_text": "<p>Unsere jährliche Spendenkampagne findet auch dieses Jahr ab November statt. Wie in den vergangenen Jahren endet die Kampagne, sobald der notwendige Betrag für alle geplanten Vorhaben zur Finanzierung und Weiterentwicklung von Wikipedia und der anderen Projekten für Freies Wissen erreicht wurde. Die Kampagne läuft nicht länger als bis zum 31. Dezember. Um diese für unsere Unterstützer so reibungslos wie möglich zu gestalten, zeigen wir einigen wenigen Besucherinnen und Besuchern der Wikipedia schon vorab unser Spendenbanner, um die Akzeptanz neuer Spendenmöglichkeiten zu eruieren oder auch technische Lasttests unserer Server vorzunehmen.</p><p>Das Banner kann natürlich jederzeit mit einem Klick auf das Kreuz rechts oben ausgeschaltet werden. Darüber hinaus haben Sie die Möglichkeit, sich ein <a href=\"https://de.wikipedia.org/wiki/Spezial:Benutzerkonto_anlegen\">kostenloses Benutzerkonto</a> in der Wikipedia einzurichten, bzw. sich mit Ihrem schon bestehenden Konto einzuloggen. Denn wenn Sie eingeloggt sind, wird Ihnen das Spendenbanner ebenfalls nicht angezeigt.</p>",
+			"topic": "4"
+		},
+		{
+			"question": "Ich habe gespendet, sehe aber immer noch Spendenaufforderungen. Warum?",
+			"visible_text": "<p>Nach dem Abschluss einer Spende wird ein Cookie gesetzt, welches verhindern soll, dass das Spendenbanner weiterhin für die Spenderin oder den Spender sichtbar ist. Natürlich betrifft das nur Spenden, die über das Spendenformular auf dieser Webseite erfolgt sind. Sollten Sie das Banner weiterhin sehen, kann es sein, dass die Einstellungen in Ihrem Browser das Setzen unseres Cookies verhindern. Bitte beachten Sie zudem, dass Cookies browserspezifisch sind. Das bedeutet, dass das Spendenbanner wieder erscheint, wenn Sie Wikipedia nach Ihrer Spende mit einem anderen Browser besuchen.</p><p>Neben dem einfachen Schließen des Banners haben Sie aber stets die Möglichkeit, sich ein <a href=\"https://de.wikipedia.org/wiki/Spezial:Benutzerkonto_anlegen\">kostenloses Benutzerkonto</a> in der Wikipedia einzurichten. Wenn Sie über dieses eingeloggt sind, wird Ihnen das Spendenbanner ebenfalls nicht angezeigt. Generell wird jeder Person das Banner maximal zehn Mal angezeigt.</p>",
+			"topic": "4"
+		},
+		{
+			"question": "Wie kann ich die Spendenbanner ausblenden?",
+			"visible_text": "<p>Das Banner kann jederzeit mit einem Klick auf das Kreuz rechts oben geschlossen werden. Das Banner ist dann für einen Zeitraum von zwei Wochen deaktiviert. Darüber hinaus haben Sie die Möglichkeit, sich ein <a href=\"https://de.wikipedia.org/wiki/Spezial:Benutzerkonto_anlegen\">kostenloses Benutzerkonto</a> in der Wikipedia einzurichten, bzw. sich mit Ihrem schon bestehenden Konto anzumelden. Wenn Sie angemeldet sind, wird Ihnen das Spendenbanner gar nicht angezeigt.</p><p>Ebenfalls wird nach dem Abschluss einer Spende ein Cookie gesetzt, welches verhindern soll, dass das Spendenbanner weiterhin für Spenderinnen und Spender sichtbar ist. Natürlich betrifft das nur Spenden, die über das Spendenformular auf unserer Webseite https://spenden.wikimedia.de erfolgt sind. Bitte beachten Sie zudem, dass Cookies browserspezifisch sind. Das bedeutet, dass wenn Sie Wikipedia mit einem anderen Browser besuchen als mit dem Sie gespendet haben, das Spendenbanner wieder erscheint.</p><p>Bitte beachten Sie, dass generell jeder Person das Banner maximal zehn Mal angezeigt wird. Sollten Sie das Banner weiterhin sehen, kann es sein, dass die Einstellungen in Ihrem Browser das Setzen unseres Cookies verhindern.</p>",
+			"topic": "1,4"
+		},
+		{
+			"question": "Was ist der Unterschied zwischen Wikipedia und Wikimedia?",
+			"visible_text": "<p>Wikimedia ist die gemeinnützige Bewegung hinter Wikipedia, die das Projekt betreibt, die Arbeit der ehrenamtlichen Autorinnen und Autoren unterstützt und durch technische Weiterentwicklung einfacher macht. Wikimedia ist eine internationale Bewegung, mit der US-amerikanischen Wikimedia Foundation (WMF) in Zentrum. Die WMF ist die Betreiberin der Wikipedia und führt z.B. die Spendenkampagne international durch. Es gibt des weiteren ca. 40 Ländervertretungen von Wikimedia, die vor Ort Freies Wissen voranbringen. In Deutschland gibt den Verein Wikimedia Deutschland e. V. (WMDE) sowie die angeschlossene Wikimedia Fördergesellschaft (WMFG). Während WMDE projektbezogen aktiv ist, hat die WMFG den Zweck der Durchführung der Spendenkampagne. Beide Organisationen sind als gemeinnützig anerkannt und stellen Zuwendungsbescheinigungen aus.</p><p>Wikipedia ist somit das internationale Projekt; Wikimedia ist der Sammelbegriff für die Organisationen hinter der Wikipedia und ihren Schwesterprojekten.</p>",
+			"topic": "5"
+		},
+		{
+			"question": "Was ist der Unterschied zwischen Wikimedia Deutschland und der Wikimedia Fördergesellschaft?",
+			"visible_text": "<p>Wikimedia ist die gemeinnützige Organisation hinter Wikipedia. Wikimedia besteht in Deutschland aus zwei Einrichtungen: Wikimedia Deutschland e. V. (WMDE) und dessen 100%iger Tochtergesellschaft Gemeinnützige Wikimedia Fördergesellschaft mbH (WMFG).</p><p>Die WMFG ist Empfängerin der Spenden. Sie hat den Zweck, Gelder an die US-amerikanische Wikimedia Foundation (WMF) zum Betrieb und Ausbau der Wikimedia-Projekte und für internationale Programme weiterzuleiten. Ebenso leitet die WMFG Gelder an Wikimedia Deutschland e. V. weiter, wo die Projekte des Vereins ausgeführt werden. Informationen zu Wikimedia Deutschland finden Sie auf <a href=\"https://www.wikimedia.de/\" target=\"_blank\">unserer Website</a>. Informationen über die Wikimedia Foundation finden Sie auf <a href=\"https://www.wikimediafoundation.org\" target=\"_blank\">www.wikimediafoundation.org</a>.</p>",
+			"topic": "5"
+		},
+		{
+			"question": "Wofür werden die Gelder verwendet?",
+			"visible_text": "Auf unserer <a href=\"/page/Transparenz\">Transparenzseite</a> können Sie die Mittelverwendung einsehen. Dort finden Sie weitere Erläuterungen zur Verwendung der Spenden und die Weiterführungen der ausführlichen Projektbeschreibungen in den Jahresberichten von Wikimedia Deutschland und der Wikimedia Foundation.",
+			"topic": "5"
+		},
+		{
+			"question": "Wer legt die Spendenziele fest?",
+			"visible_text": "Die Ziele der Spendenkampagne resultieren aus den Jahresplänen von Wikimedia Deutschland (WMDE) und der Wikimedia Foundation (WMF). In diesen Jahresplänen wird festgelegt, was die Ziele für das kommende Jahr sind und welche Projekte und Programme hierfür durchgeführt werden sollen. Daraus ergibt sich das für das nächste Jahr benötigte Budget und somit auch, wie hoch die geplanten Erlöse durch Spenden und bei WMDE auch durch Mitgliedschaftsbeiträge sind, die einen großen Teil des Budgets tragen. Die Spendenkampagne ist sowohl bei der WMF als auch bei WMDE die wichtigste Maßnahme zur Finanzierung der Projekte zur Förderung Freien Wissens im Folgejahr. Die Jahrespläne der beiden Organisationen sind auf der <a href=\"/page/Transparenz\">Transparenzseite</a> unten verlinkt.",
+			"topic": "5"
+		},
+		{
+			"question": "Warum finanziert sich Wikipedia durch Spenden und nicht durch Werbung?",
+			"visible_text": "Einer der Grundpfeiler unseres Selbstverständnisses ist, keine Werbung in der Wikipedia und auch auf den anderen von der Wikimedia Foundation betriebenen Projektseiten zu schalten. Dies geschieht, um dauerhaft frei und unabhängig zu sein. Außerdem ist Werbung mit dem Ziel einer objektiven Enzyklopädie nicht vereinbar. Für die Instandhaltung und den weiteren Ausbau der bestehenden Projekte sind wir daher auf die Spenden der Wikipedia-Nutzerinnen und -Nutzer angewiesen. Während der aktuellen und jährlich auf wenige Wochen befristeten Online-Spendenkampagne nehmen wir mit Abstand den größten Teil der dafür notwendigen Mittel ein.",
+			"topic": "5"
+		},
+		{
+			"question": "Was ist Freies Wissen und was hat das mit Wikipedia zu tun?",
+			"visible_text": "<p>Stell dir eine Welt vor, in der das gesamte Wissen der Menschheit allen frei zugänglich ist. Mit dieser Vision startete Jimmy Wales die Wikipedia. Wikipedia sollte eine Enzyklopädie werden, bei der jeder mitmachen kann. Das beinhaltet insbesondere die gemeinsame Bearbeitung von Texten. Dies ist nur dann möglich, wenn das zur Verfügung gestellte Wissen frei ist. Wissen ist dann frei, wenn es für alle Menschen frei zugänglich und nutzbar ist. Sämtliche Inhalte der Wikipedia können von allen Menschen frei weiterverwendet werden, ohne das Urheberrecht zu verletzen oder Gebühren zu bezahlen. In der Wikipedia teilen ehrenamtliche Autorinnen und Autoren auf diese Weise ihr Wissen und haben die freie Online-Enzyklopädie somit zu einer der wichtigsten Wissensquellen der Welt gemacht. Auch das Wissen der anderen Wikimedia-Projekte steht allen zur freien Verfügung – beispielsweise in Form von Fotos und Videos aus dem freien Medienarchiv Wikimedia Commons.</p><p>Als Gesellschaft zur Förderung Freien Wissens arbeiten wir daran, dass Projekte wie Wikipedia auch in Zukunft existieren können und dass Freies Wissen in unserer Gesellschaft zur Selbstverständlichkeit wird.</p>",
+			"topic": "6"
+		},
+		{
+			"question": "Ich habe Fragen zu Artikeln in der Wikipedia. An wen kann ich mich wenden?",
+			"visible_text": "<p>Sie haben zwei Möglichkeiten zur Kontaktaufnahme mit Wikipedia-Autorinnen und Autoren. Sie können Ihre Frage auf die jeweilige Diskussionsseite, die zu jedem einzelnen Artikel existiert, schreiben. Oder Sie wenden sich per E-Mail an das ehrenamtlich arbeitende Support-Team der Wikipedia: <a href=\"mailto:info-de@wikimedia.org\">info-de@wikimedia.org</a>.</p><p>In beiden Fälle berücksichtigen Sie bitte, dass ehrenamtliche Autorinnen und Autoren die Inhalte in der Wikipedia erarbeiten und diskutieren. Es kann daher mitunter passieren, dass Anfragen nicht sofort beantwortet werden.</p>",
+			"topic": "6"
+		},
+		{
+			"question": "Was gibt es neben Wikipedia für weitere Wikimedia-Projekte?",
+			"visible_text": "<p>Derzeit gibt es neben Wikipedia neun weitere große Schwesterprojekte. Die beiden größten hiervon sind das freie Medienarchiv Wikimedia Commons mit derzeit über 50 Millionen freien Fotos, Grafiken, Audio- und Videodateien sowie die von Wikimedia Deutschland entwickelte freie Wissensdatenbank Wikidata, in der derzeit über 50 Millionen Datensätze frei verfügbar sind. Unter <a href=\"https://www.wikimedia.de/wiki/Projekte\">www.wikimedia.de/wiki/Projekte</a> finden Sie weitere Informationen zu den großen Wikimedia-Projekten.</p><p>Darüber hinaus gibt es weitere Projekte zur Förderung Freien Wissens in Deutschland und weltweit. In unseren <a href=\"/page/Transparenz\">Hinweisen zur Mittelverwendung</a> unter finden Sie Erläuterungen und Informationen zu diesen Projekten sowie die Weiterleitungen zu ausführlichen Projektbeschreibungen in den Jahresberichten.</p>",
+			"topic": "6"
+		}
+	]
+}

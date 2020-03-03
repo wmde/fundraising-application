@@ -1,0 +1,13 @@
+language: php
+
+php: 7.1
+
+sudo: false
+
+install: travis_retry composer install --no-interaction
+
+script: composer ci
+
+cache:
+  directories:
+    - $HOME/.composer/cache
