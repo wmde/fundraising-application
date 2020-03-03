@@ -41,10 +41,10 @@ export default Vue.extend( {
 	name: 'SubmitValues',
 	computed: {
 		...mapState( NS_MEMBERSHIP_FEE, {
-			fee: ( state: Payment ) => state.values,
-			formattedAmount: ( state: Payment ) => {
+			fee: state => ( state as Payment ).values,
+			formattedAmount: state => {
 				// endpoint expects a German-formatted decimal number
-				const strAmount = String( state.values.fee );
+				const strAmount = String( ( state as Payment ).values.fee );
 				return [
 					strAmount.slice( 0, -2 ),
 					',',
@@ -53,15 +53,15 @@ export default Vue.extend( {
 			},
 		} ),
 		...mapState( NS_MEMBERSHIP_ADDRESS, {
-			address: ( state: MembershipAddressState ) => state.values,
-			addressType: ( state: MembershipAddressState ) => {
-				return addressTypeName( state.addressType );
+			address: state => ( state as MembershipAddressState ).values,
+			addressType: state => {
+				return addressTypeName( ( state as MembershipAddressState ).addressType );
 			},
-			receiptOptIn: ( state: MembershipAddressState ) => state.receiptOptOut ? '0' : '1',
-			membershipType: ( state: MembershipAddressState ) => membershipTypeName( state.membershipType ),
+			receiptOptIn: state => ( state as MembershipAddressState ).receiptOptOut ? '0' : '1',
+			membershipType: state => membershipTypeName( ( state as MembershipAddressState ).membershipType ),
 		} ),
 		...mapState( NS_BANKDATA, {
-			bankdata: ( state: BankAccount ) => state.values,
+			bankdata: state => ( state as BankAccount ).values,
 		} ),
 	},
 } );
