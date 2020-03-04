@@ -121,7 +121,7 @@ class AddDonationController {
 	private function createDonationRequest( Request $request ): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 
-		$donationRequest->setAmount( $this->getEuroAmount( $this->getFallbackAmount( $request ) ) );
+		$donationRequest->setAmount( $this->getEuroAmount( $this->getAmountOrFallback( $request ) ) );
 
 		$donationRequest->setPaymentType( $request->get( 'paymentType', $request->get( 'zahlweise', '' ) ) );
 		$donationRequest->setInterval( intval( $request->get( 'interval', $request->get( 'periode', 0 ) ) ) );
@@ -188,7 +188,7 @@ class AddDonationController {
 		}
 	}
 
-	private function getFallbackAmount ( Request $request ): int {
+	private function getAmountOrFallback ( Request $request ): int {
 		if ( $request->request->has( 'amount' ) ) {
 			return intval( $request->get( 'amount' ) );
 		}

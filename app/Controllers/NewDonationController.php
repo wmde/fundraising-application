@@ -14,6 +14,20 @@ use WMDE\Fundraising\Frontend\Infrastructure\Validation\DeprecatedParamsLogger;
 
 class NewDonationController {
 
+	private function getAmountOrFallback ( Request $request ): int {
+
+		if ( $request->get( 'amount' ) !== null ) {
+			return intval( $request->get( 'amount' ) );
+		}
+		$fallbackParameters = [ 'betrag', 'betrag_auswahl' ];
+		foreach ( $fallbackParameters as $fbParam ) {
+			if ( $request->get( $fbParam ) !== null ) {
+				return intval( $request->get( $fbParam ) ) * 100;
+			}
+		}
+		return 0;
+	}
+
 	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
 		$ffFactory->getTranslationCollector()->addTranslationFile(
 			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
@@ -22,11 +36,7 @@ class NewDonationController {
 		DeprecatedParamsLogger::logParamUsage( $ffFactory->getLogger(), $request );
 
 		try {
-			$amount = Euro::newFromCents( intval(
-				$request->get( 'amount',
-					intval( $request->get( 'betrag', 0 ) ) * 100
-				)
-			) );
+			$amount = Euro::newFromCents( $this->getAmountOrFallback( $request ) );
 		}
 		catch ( \InvalidArgumentException $ex ) {
 			$amount = Euro::newFromCents( 0 );

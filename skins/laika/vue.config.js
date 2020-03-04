@@ -37,7 +37,7 @@ module.exports = {
 		update_address: 'src/pages/update_address.ts',
 	},
 	transpileDependencies: [
-		'buefy'
+		'buefy',
 	],
 	devServer: {
 		watchOptions: {

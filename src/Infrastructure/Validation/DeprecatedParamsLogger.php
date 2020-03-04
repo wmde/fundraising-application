@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Validation;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**
  * @license GNU GPL v2+
