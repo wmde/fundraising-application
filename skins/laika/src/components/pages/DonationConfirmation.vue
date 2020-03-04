@@ -47,6 +47,11 @@
 			width="0"
 			height="0"
 		/>
+		<img src="https://bruce.wikipedia.de/finish-donation?c=fundraising"
+			alt=""
+			width="0"
+			height="0"
+		/>
 	</div>
 </template>
 

@@ -31,11 +31,11 @@ export default Vue.extend( {
 	],
 	computed: {
 		...mapState( NS_ADDRESS, {
-			address: ( state: AddressState ) => state.values,
-			addressType: ( state: AddressState ) => {
-				return addressTypeName( state.addressType );
+			address: state => ( state as AddressState ).values,
+			addressType: state => {
+				return addressTypeName( ( state as AddressState ).addressType );
 			},
-			receiptOptOut: ( state: AddressState ) => state.receiptOptOut ? '1' : '',
+			receiptOptOut: state => ( state as AddressState ).receiptOptOut ? '1' : '',
 		} ),
 	},
 } );

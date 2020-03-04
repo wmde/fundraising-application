@@ -15,8 +15,12 @@ use WMDE\Fundraising\Frontend\Infrastructure\SupportHandler;
 class LoggerFactoryTest extends TestCase {
 	public function testGivenErrorHandlerConfiguration_itReturnsErrorLoggingHandler(): void {
 		$factory = new LoggerFactory( [
-			'method' => 'error_log',
-			'level' => 'WARNING'
+			'handlers' => [
+				[
+					'method' => 'error_log',
+					'level' => 'WARNING'
+				]
+			]
 		]);
 		$logger = $factory->getLogger();
 		$this->assertCount( 1, $logger->getHandlers() );
@@ -28,9 +32,13 @@ class LoggerFactoryTest extends TestCase {
 	public function testGivenFileConfiguration_itReturnsStreamHandler(): void {
 		vfsStream::setup( 'logs' );
 		$factory = new LoggerFactory( [
-			'method' => 'file',
-			'url' => vfsStream::url( 'logs/error.log' ),
-			'level' => 'ERROR'
+			'handlers' => [
+				[
+					'method' => 'file',
+					'url' => vfsStream::url( 'logs/error.log' ),
+					'level' => 'ERROR'
+				]
+			]
 		]);
 		$logger = $factory->getLogger();
 		$this->assertCount( 1, $logger->getHandlers() );
@@ -95,17 +103,15 @@ class LoggerFactoryTest extends TestCase {
 		$logger = $factory->getLogger();
 	}
 
-	public function testGivenUnknownLogType_exeptionIsThrown(): void {
+	public function testGivenUnknownLogType_exceptionIsThrown(): void {
 		$factory = new LoggerFactory( [
-			'method' => 'syslog'
+			'handlers' => [
+				['method' => 'nonExistingInvalidHandler']
+			]
 		]);
 		$this->expectException( \InvalidArgumentException::class );
 		$factory->getLogger();
 	}
-
-
-
-
 
 	public function testGivenMultipleValidHandlers_itReturnsMultipleHandlers(): void {
 		vfsStream::setup( 'logs' );

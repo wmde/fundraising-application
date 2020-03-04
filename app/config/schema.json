@@ -785,27 +785,17 @@
       "type": "object",
       "title": "Logging configuration",
       "properties": {
-        "method": {
-          "type": "string",
-          "title": "Type of logging",
-          "enum": [ "error_log", "file", "gelf" ],
-          "default": "error_log"
-        },
-        "url": {
-          "type": "string",
-          "title": "Relative file URL or Graylog GELF endpoint",
-          "description": "File name for the 'file' logging type. Or host URL for Graylog GELF endpoint. Graylog URL *MUST* contain a host and a port, but not a protocol",
-          "format": "url"
-        },
-        "level": {
-          "type": "string",
-          "title": "One of the error level constants",
-          "enum": [ "DEBUG", "INFO", "NOTICE", "WARNING", "ERROR", "CRITICAL", "ALERT", "EMERGENCY" ],
-          "default": "DEBUG"
+        "handlers": {
+          "type": "array",
+          "title": "'Output targets' for logging, each with a log level, type and other, handler-specific parameters ",
+          "items": {
+            "type": { "$ref":  "#/definitions/logConfig" }
+          },
+          "minItems": 1
         }
       },
       "additionalProperties": false,
-      "required": [ "method", "level" ]
+      "required": [ "handlers" ]
     }
   },
   "additionalProperties": false,
@@ -834,5 +824,32 @@
     "cookie",
     "preset-amounts",
     "logging"
-  ]
+  ],
+  "definitions": {
+    "logConfig": {
+      "type": "object",
+      "title": "Configuration for a logging handler, where the output should be written to",
+      "properties": {
+        "method": {
+          "type": "string",
+          "title": "Type of logging",
+          "enum": [ "error_log", "file", "errbit" ],
+          "default": "error_log"
+        },
+        "url": {
+          "type": "string",
+          "title": "Relative file URL endpoint",
+          "description": "File name for the 'file' logging type.",
+          "format": "url"
+        },
+        "level": {
+          "type": "string",
+          "title": "One of the error level constants",
+          "enum": [ "DEBUG", "INFO", "NOTICE", "WARNING", "ERROR", "CRITICAL", "ALERT", "EMERGENCY" ],
+          "default": "DEBUG"
+        }
+      },
+      "required": [ "method", "level"]
+    }
+  }
 }
