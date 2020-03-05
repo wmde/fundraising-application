@@ -28,6 +28,7 @@ use WMDE\FunValidators\Validators\EmailValidator;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  *
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\AddDonationController
  * @requires extension konto_check
  */
 class AddDonationRouteTest extends WebRouteTestCase {
