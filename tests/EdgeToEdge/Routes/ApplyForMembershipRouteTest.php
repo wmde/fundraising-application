@@ -125,7 +125,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
-			'membership_fee' => (string)1000,
+			'membership_fee' => '1000',
 
 			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
 			'iban' => ValidMembershipApplication::PAYMENT_IBAN,
@@ -157,7 +157,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
-			'membership_fee' => (string)1000,
+			'membership_fee' => '1000',
 
 			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
 			'iban' => ValidMembershipApplication::PAYMENT_IBAN,
@@ -384,7 +384,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_PAYPAL,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
-			'membership_fee' => (string)1000,
+			'membership_fee' => '1000',
 		];
 	}
 
@@ -481,7 +481,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
 			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
-			'membership_fee' => (string)2500,
+			'membership_fee' => '2500',
 
 			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
 			'iban' => ValidMembershipApplication::PAYMENT_IBAN,

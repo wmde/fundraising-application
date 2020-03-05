@@ -10,54 +10,37 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Validation\DeprecatedParamsLogger;
+use WMDE\Fundraising\Frontend\Infrastructure\Validation\FallbackRequestValueReader;
 
 class NewDonationController {
-
-	private function getAmountOrFallback ( Request $request ): int {
-
-		if ( $request->get( 'amount' ) !== null ) {
-			return intval( $request->get( 'amount' ) );
-		}
-		$fallbackParameters = [ 'betrag', 'betrag_auswahl' ];
-		foreach ( $fallbackParameters as $fbParam ) {
-			if ( $request->get( $fbParam ) !== null ) {
-				return intval( $request->get( $fbParam ) ) * 100;
-			}
-		}
-		return 0;
-	}
 
 	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
 		$ffFactory->getTranslationCollector()->addTranslationFile(
 			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
 		);
 
-		DeprecatedParamsLogger::logParamUsage( $ffFactory->getLogger(), $request );
-
+		// TODO Remove LegacyValueReader after January 2021
+		$legacyValueReader = new FallbackRequestValueReader( $ffFactory->getLogger(), $request );
 		try {
-			$amount = Euro::newFromCents( $this->getAmountOrFallback( $request ) );
+			$amount = Euro::newFromCents( intval( $request->get( 'amount', $legacyValueReader->getAmount() ) ) );
 		}
 		catch ( \InvalidArgumentException $ex ) {
 			$amount = Euro::newFromCents( 0 );
 		}
+		$paymentType = (string) $request->get( 'paymentType', $legacyValueReader->getPaymentType() );
+		$interval = intval( $request->get( 'interval', $legacyValueReader->getInterval() ) );
 
-		$validationResult = $ffFactory->newPaymentDataValidator()->validate(
-			$amount,
-			(string)$request->get( 'paymentType', (string)$request->get( 'zahlweise', '' ) )
-		);
+		$validationResult = $ffFactory->newPaymentDataValidator()->validate( $amount, $paymentType );
 
 		$trackingInfo = new DonationTrackingInfo();
 		$trackingInfo->setTotalImpressionCount( intval( $request->get( 'impCount' ) ) );
 		$trackingInfo->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount' ) ) );
 
-		// TODO: don't we want to use newDonationFormViolationPresenter when !$validationResult->isSuccessful()?
-
 		return new Response(
 			$ffFactory->newDonationFormPresenter()->present(
 				$amount,
-				$request->get( 'paymentType', $request->get( 'zahlweise', '' ) ),
-				intval( $request->get( 'interval', $request->get( 'periode', 0 ) ) ),
+				$paymentType,
+				$interval,
 				$validationResult->isSuccessful(),
 				$trackingInfo,
 				$request->get( 'addressType', 'person' ),
@@ -65,5 +48,4 @@ class NewDonationController {
 			)
 		);
 	}
-
 }
