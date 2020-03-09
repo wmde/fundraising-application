@@ -46,8 +46,12 @@ class ValidateFeeController {
 	 * @throws InvalidArgumentException
 	 */
 	private function euroFromRequest( Request $httpRequest ): Euro {
-		return Euro::newFromString(
-			str_replace( ',', '.', $httpRequest->request->get( 'amount', '' ) )
+		$currentFeeString = $httpRequest->request->get( 'membershipFee', '' );
+		if( !ctype_digit( $currentFeeString ) ) {
+			throw new InvalidArgumentException();
+		}
+		return Euro::newFromCents(
+			intval( $currentFeeString )
 		);
 	}
 
@@ -58,7 +62,7 @@ class ValidateFeeController {
 		return new JsonResponse( [
 			'status' => 'ERR',
 			'messages' => [
-				'amount' => self::ERROR_RESPONSE_MAP[$errorCode]
+				'membershipFee' => self::ERROR_RESPONSE_MAP[$errorCode]
 			]
 		] );
 	}

@@ -30,15 +30,15 @@ class DonationConfirmationHtmlPresenter {
 		$this->donorDataFormatter = new DonorDataFormatter();
 	}
 
-	public function present( Donation $donation, string $updateToken, string $accessToken, PiwikEvents $piwikEvents,
+	public function present( Donation $donation, string $updateToken, string $accessToken,
 							 array $urlEndpoints ): string {
 		return $this->template->render(
-			$this->getConfirmationPageArguments( $donation, $updateToken, $accessToken, $piwikEvents, $urlEndpoints )
+			$this->getConfirmationPageArguments( $donation, $updateToken, $accessToken, $urlEndpoints )
 		);
 	}
 
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken,
-		PiwikEvents $piwikEvents, array $urlEndpoints ): array {
+		array $urlEndpoints ): array {
 
 		return [
 			'donation' => [
@@ -62,7 +62,6 @@ class DonationConfirmationHtmlPresenter {
 			'initialFormValues' => $this->donationMembershipApplicationAdapter->getInitialMembershipFormValues(
 				$donation
 			),
-			'piwikEvents' => $piwikEvents->getEvents(),
 			'urls' => array_merge(
 				$urlEndpoints,
 				[

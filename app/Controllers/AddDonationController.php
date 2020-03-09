@@ -14,7 +14,7 @@ use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\AmountParser;
+use WMDE\Fundraising\Frontend\Infrastructure\Validation\FallbackRequestValueReader;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
@@ -27,6 +27,10 @@ class AddDonationController {
 
 	private $app;
 	private $ffFactory;
+	/**
+	 * @var FallbackRequestValueReader
+	 */
+	private $legacyRequestValueReader;
 
 	public function handle( FunFunFactory $ffFactory, Request $request, Application $app ): Response {
 		$this->app = $app;
@@ -35,6 +39,7 @@ class AddDonationController {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
 
+		$this->legacyRequestValueReader = new FallbackRequestValueReader( $ffFactory->getLogger(), $request );
 		$addDonationRequest = $this->createDonationRequest( $request );
 		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation( $addDonationRequest );
 
@@ -114,13 +119,15 @@ class AddDonationController {
 		}
 	}
 
+
+
 	private function createDonationRequest( Request $request ): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 
-		$donationRequest->setAmount( $this->getEuroAmountFromString( $request->get( 'betrag', '' ) ) );
-
-		$donationRequest->setPaymentType( $request->get( 'zahlweise', '' ) );
-		$donationRequest->setInterval( intval( $request->get( 'periode', 0 ) ) );
+		// TODO Replace legacyRequestValueReader with default values after January 2021
+		$donationRequest->setAmount( $this->getEuroAmount( $this->getAmountFromRequest( $request ) ) );
+		$donationRequest->setPaymentType( $request->get( 'paymentType', $this->legacyRequestValueReader->getPaymentType() ) );
+		$donationRequest->setInterval( intval( $request->get( 'interval', $this->legacyRequestValueReader->getInterval() ) ) );
 
 		$donationRequest->setDonorType( $request->get( 'addressType', '' ) );
 		$donationRequest->setDonorSalutation( $request->get( 'salutation', '' ) );
@@ -134,7 +141,7 @@ class AddDonationController {
 		$donationRequest->setDonorCountryCode( $request->get( 'country', '' ) );
 		$donationRequest->setDonorEmailAddress( $request->get( 'email', '' ) );
 
-		if ( $request->get( 'zahlweise', '' ) === PaymentMethod::DIRECT_DEBIT ) {
+		if ( $donationRequest->getPaymentType() === PaymentMethod::DIRECT_DEBIT ) {
 			$donationRequest->setBankData( $this->getBankDataFromRequest( $request ) );
 		}
 
@@ -176,14 +183,19 @@ class AddDonationController {
 		return $this->ffFactory->newBankDataConverter()->getBankDataFromAccountData( $account, $bankCode );
 	}
 
-	private function getEuroAmountFromString( string $amount ): Euro {
-		$locale = 'de_DE'; // TODO: make this configurable for multilanguage support
+	private function getEuroAmount( int $amount ): Euro {
 		try {
-			return Euro::newFromFloat( ( new AmountParser( $locale ) )->parseAsFloat( $amount ) );
+			return Euro::newFromCents( $amount );
 		} catch ( \InvalidArgumentException $ex ) {
 			return Euro::newFromCents( 0 );
 		}
+	}
 
+	private function getAmountFromRequest ( Request $request ): int {
+		if ( $request->request->has( 'amount' ) ) {
+			return intval( $request->get( 'amount' ) );
+		}
+		return $this->legacyRequestValueReader->getAmount();
 	}
 
 	private function isSubmissionAllowed( Request $request ): bool {

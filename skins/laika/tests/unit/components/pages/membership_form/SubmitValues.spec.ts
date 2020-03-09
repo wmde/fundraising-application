@@ -65,7 +65,7 @@ describe( 'SubmitValues.vue', () => {
 	} );
 
 	it( 'renders the amount as German-Formatted decimal number', () => {
-		expect( ( wrapper.find( 'input[name=membership_fee]' ).element as HTMLInputElement ).value ).toBe( '23,49' );
+		expect( ( wrapper.find( 'input[name=membership_fee]' ).element as HTMLInputElement ).value ).toBe( '2349' );
 	} );
 
 	it( 'renders the membership type as string', () => {

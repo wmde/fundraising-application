@@ -1,9 +1,9 @@
 <template>
 	<span class="submit-values">
 
-		<input type="hidden" name="zahlweise" :value="payment.type">
-		<input type="hidden" name="periode" :value="payment.interval">
-		<input type="hidden" name="betrag" :value="formattedAmount">
+		<input type="hidden" name="paymentType" :value="payment.type">
+		<input type="hidden" name="interval" :value="payment.interval">
+		<input type="hidden" name="amount" :value="payment.amount">
 		<input type="hidden" name="iban" :value="bankdata.iban">
 		<input type="hidden" name="bic" :value="bankdata.bic">
 
@@ -45,15 +45,6 @@ export default Vue.extend( {
 	computed: {
 		...mapState( NS_PAYMENT, {
 			payment: state => ( state as Payment ).values,
-			formattedAmount: state => {
-				// endpoint expects a German-formatted decimal number
-				const strAmount = String( ( state as Payment ).values.amount );
-				return [
-					strAmount.slice( 0, -2 ),
-					',',
-					strAmount.slice( -2 ),
-				].join( '' );
-			},
 		} ),
 		...mapState( NS_ADDRESS, {
 			address: state => ( state as AddressState ).values,

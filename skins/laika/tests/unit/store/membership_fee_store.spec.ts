@@ -188,7 +188,7 @@ describe( 'MembershipFee', () => {
 			moxios.wait( function () {
 				const request = moxios.requests.mostRecent();
 				let bodyFormData = new FormData();
-				bodyFormData.append( 'amount', '20.00' );
+				bodyFormData.append( 'membershipFee', '2000' );
 				bodyFormData.append( 'paymentIntervalInMonths', '6' );
 				bodyFormData.append( 'addressType', 'person' );
 				expect( request.config.data ).toStrictEqual( bodyFormData );
@@ -255,7 +255,7 @@ describe( 'MembershipFee', () => {
 					validateFeeUrl: '/validation-fee-url',
 				},
 				bodyFormData = new FormData();
-			bodyFormData.append( 'amount', '25.00' );
+			bodyFormData.append( 'membershipFee', '2500' );
 			bodyFormData.append( 'paymentIntervalInMonths', '12' );
 			bodyFormData.append( 'addressType', 'person' );
 			const action = actions.setFee as any;

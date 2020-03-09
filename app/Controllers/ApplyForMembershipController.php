@@ -162,13 +162,8 @@ class ApplyForMembershipController {
 	 * @throws \InvalidArgumentException
 	 */
 	private function addFeeToRequestModel( ApplyForMembershipRequest $requestModel, Request $httpRequest ) {
-		// TODO: German format expected here, amount should be converted based on user's locale
-		$requestModel->setPaymentAmountInEuros( Euro::newFromString(
-			str_replace(
-				',',
-				'.',
-				$httpRequest->request->get( 'membership_fee', '' )
-			)
+		$requestModel->setPaymentAmountInEuros( Euro::newFromCents(
+			intval( $httpRequest->request->get( 'membership_fee', '' ) )
 		) );
 	}
 

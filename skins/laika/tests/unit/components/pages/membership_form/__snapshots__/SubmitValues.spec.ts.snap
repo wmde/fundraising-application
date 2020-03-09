@@ -25,7 +25,7 @@ exports[`SubmitValues.vue renders input fields 1`] = `
   <input
     name="membership_fee"
     type="hidden"
-    value="23,49"
+    value="2349"
   />
    
   <input
