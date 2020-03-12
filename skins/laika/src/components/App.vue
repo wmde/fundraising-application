@@ -29,8 +29,17 @@ import Header from '@/components/layout/Header.vue';
 import Headline from '@/components/layout/Headline.vue';
 import Content from '@/components/layout/Content.vue';
 import Footer from '@/components/layout/Footer.vue';
+import createLogger from '@/logger';
 
 Vue.use( Buefy );
+
+Vue.config.errorHandler = function ( err, vm, info ) {
+	createLogger().notify( {
+		error: err,
+		params: { info: info },
+	} );
+};
+
 export default Vue.extend( {
 	name: 'app',
 	components: {

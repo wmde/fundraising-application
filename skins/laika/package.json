@@ -10,6 +10,7 @@
     "ci": "npm run lint && npm run test:unit"
   },
   "dependencies": {
+    "@airbrake/browser": "^1.0.6",
     "axios": "^0.18.1",
     "buefy": "^0.8.12",
     "bulma-helpers": "^0.3.10",
