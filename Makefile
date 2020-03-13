@@ -6,7 +6,6 @@ COMPOSER_FLAGS :=
 NPM_FLAGS     := --prefer-offline
 DOCKER_FLAGS  := --interactive --tty
 TEST_DIR      :=
-REDUX_LOG     :=
 MIGRATION_VERSION :=
 APP_ENV       := dev
 DOCKER_IMAGE  := wikimediade/fundraising-frontend
@@ -46,8 +45,7 @@ default-config:
 	cp -i build/app/config.dev.json app/config
 
 js:
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 -e REDUX_LOG=$(REDUX_LOG) $(NODE_IMAGE) npm run build-assets
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 $(NODE_IMAGE) npm run copy-assets
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data/skins/laika -e NO_UPDATE_NOTIFIER=1 $(NODE_IMAGE) npm run build
 
 clear:
 	rm -rf var/cache/
