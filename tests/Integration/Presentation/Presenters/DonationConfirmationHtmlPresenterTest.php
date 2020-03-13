@@ -63,7 +63,6 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 				'isAnonymous' => true
 			],
 			'bankData' => [],
-			'initialFormValues' => [],
 			'urls' => [
 				'testUrl' => 'https://example.com/',
 				'addComment' => '/such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'

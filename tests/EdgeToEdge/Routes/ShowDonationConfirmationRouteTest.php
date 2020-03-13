@@ -51,41 +51,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidPostRequest_embeddedMembershipFormContainsDonationData(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-
-			$donation = $this->newStoredDonation( $factory );
-
-			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
-
-			$this->assertEmbeddedMembershipFormIsPrefilled( $donation, $responseContent );
-		} );
-	}
-
-	private function assertEmbeddedMembershipFormIsPrefilled( Donation $donation, string $responseContent ): void {
-		$personName = $donation->getDonor()->getName();
-		$physicalAddress = $donation->getDonor()->getPhysicalAddress();
-		/** @var DirectDebitPayment $paymentMethod */
-		$paymentMethod = $donation->getPaymentMethod();
-		$bankData = $paymentMethod->getBankData();
-		$this->assertContains( 'initialFormValues.addressType: ' . $personName->getPersonType(), $responseContent );
-		$this->assertContains( 'initialFormValues.salutation: ' . $personName->getSalutation(), $responseContent );
-		$this->assertContains( 'initialFormValues.title: ' . $personName->getTitle(), $responseContent );
-		$this->assertContains( 'initialFormValues.firstName: ' . $personName->getFirstName(), $responseContent );
-		$this->assertContains( 'initialFormValues.lastName: ' . $personName->getLastName(), $responseContent );
-		$this->assertContains( 'initialFormValues.companyName: ' . $personName->getCompanyName(), $responseContent );
-		$this->assertContains( 'initialFormValues.street: ' . $physicalAddress->getStreetAddress(), $responseContent );
-		$this->assertContains( 'initialFormValues.postcode: ' . $physicalAddress->getPostalCode(), $responseContent );
-		$this->assertContains( 'initialFormValues.city: ' . $physicalAddress->getCity(), $responseContent );
-		$this->assertContains( 'initialFormValues.country: ' . $physicalAddress->getCountryCode(), $responseContent );
-		$this->assertContains( 'initialFormValues.email: ' . $donation->getDonor()->getEmailAddress(), $responseContent );
-		$this->assertContains( 'initialFormValues.iban: ' . $bankData->getIban()->toString(), $responseContent );
-		$this->assertContains( 'initialFormValues.bic: ' . $bankData->getBic(), $responseContent );
-		$this->assertContains( 'initialFormValues.accountNumber: ' . $bankData->getAccount(), $responseContent );
-		$this->assertContains( 'initialFormValues.bankCode: ' . $bankData->getBankCode(), $responseContent );
-		$this->assertContains( 'initialFormValues.bankname: ' . $bankData->getBankName(), $responseContent );
-	}
-
 	public function testGivenAnonymousDonation_confirmationPageReflectsThat(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->newBookedAnonymousPayPalDonation( $factory );
