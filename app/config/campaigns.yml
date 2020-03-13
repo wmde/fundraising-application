@@ -7,7 +7,6 @@
 #    start: "2017-10-01"
 #    end: "2019-12-31"
 #    buckets:
-#        - "10h16"
 #        - "laika"
 #    default_bucket: "laika"
 #
@@ -29,7 +28,6 @@ skins:
   end: "2020-01-31 23:59:59"
   buckets:
     - "laika"
-    - "10h16"
   default_bucket: "laika"
   url_key: skin
   active: true

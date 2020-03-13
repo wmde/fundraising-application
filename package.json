@@ -3,10 +3,10 @@
 	"version": "2.0.0-dev",
 	"description": "WMDE fundraising application (end user facing part)",
 	"scripts": {
-		"postinstall": "node npm_skins install",
-		"test": "node npm_skins run test",
-		"cs": "node npm_skins run cs",
-		"ci": "node npm_skins run ci",
+		"postinstall": "cd skins/laika && npm install",
+		"test": "cd skins/laika && npm run test:unit",
+		"cs": "cd skins/laika && npm run cs",
+		"ci": "cd skins/laika && npm run ci",
 		"toc": "markdown-toc --maxdepth 2 --bullets '*' -i README.md"
 	},
 	"repository": {

@@ -58,10 +58,6 @@ class DonationConfirmationHtmlPresenter {
 			'addressType' => $this->donorDataFormatter->getAddressType( $donation ),
 			'address' => $this->donorDataFormatter->getAddressArguments( $donation ),
 			'bankData' => $this->donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),
-			// TODO Remove this together with 10h16 skin. laika does not display confirmation and membership form on the same page.
-			'initialFormValues' => $this->donationMembershipApplicationAdapter->getInitialMembershipFormValues(
-				$donation
-			),
 			'urls' => array_merge(
 				$urlEndpoints,
 				[

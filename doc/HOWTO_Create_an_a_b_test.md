@@ -1,6 +1,6 @@
 # How to create an A/B test for a feature
 
-This document describes how you create an A/B test for a feature. If the feature affects the behavior of the PHP code or the client-side code in the skins `10h16` or `laika`, follow sections 1-4. If the test affects the client-side code written with [Vue.js](https://vuejs.org/), follow the sections 1 and 5.
+This document describes how you create an A/B test for a feature. If the feature affects the behavior of the PHP code or the client-side code in the `laika` skin, follow sections 1-4. If the test affects the client-side code written with [Vue.js](https://vuejs.org/), follow the sections 1 and 5.
 
 ## 1. Create a campaign definition
 Edit the file `app/config/campaigns.yml` and add a new entry. If you're unsure about the end date, set it to the end of 

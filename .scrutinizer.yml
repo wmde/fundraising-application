@@ -15,7 +15,6 @@ tools:
 filter:
     excluded_paths:
         - 'web/skins/*'
-        - 'skins/10h16/*'
         - 'node_modules/*'
         - 'tests/*'
         - 'src/Factories/FunFunFactory.php'

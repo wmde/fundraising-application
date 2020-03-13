@@ -26,8 +26,6 @@ class ChoiceFactory {
 	public function getSkinTemplateDirectory(): string {
 		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.laika' ) ) {
 			return $this->getSkinDirectory( 'laika' );
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.10h16' ) ) {
-			return $this->getSkinDirectory( '10h16' );
 		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.test' ) ) {
 			return $this->getSkinDirectory( 'test' );
 		}
@@ -43,14 +41,6 @@ class ChoiceFactory {
 			] );
 			return function() use ( $template )  {
 				return $template->render( [] );
-			};
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.10h16' ) ) {
-			// Redirect to laika skin, since we don't have usa of fund in 10h16
-			return function( Request $request ) {
-				$params = $request->query->all();
-				$params['skin'] = '0';
-				$url = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo().'?'.http_build_query( $params );
-				return new RedirectResponse( $url );
 			};
 		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.test' ) ) {
 			// we don't care what happens in test
