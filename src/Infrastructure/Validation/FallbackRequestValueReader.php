@@ -45,7 +45,7 @@ class FallbackRequestValueReader {
 
 	public function getInterval(): int {
 		if ($this->request->get( 'periode' ) !== null ) {
-			$this->logDeprecationWarning( 'zahlweise' );
+			$this->logDeprecationWarning( 'periode' );
 			return intval( $this->request->get( 'periode', 0 ) );
 		}
 		return 0;
