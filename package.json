@@ -4,6 +4,7 @@
 	"description": "WMDE fundraising application (end user facing part)",
 	"scripts": {
 		"postinstall": "cd skins/laika && npm install",
+		"postupdate": "cd skins/laika && npm update",
 		"test": "cd skins/laika && npm run test:unit",
 		"cs": "cd skins/laika && npm run cs",
 		"ci": "cd skins/laika && npm run ci",
