@@ -1739,7 +1739,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getSkinDirectory(): string {
-		return $this->getChoiceFactory()->getSkinTemplateDirectory();
+		return 'skins/' . $this->config['skin'] . '/templates';
 	}
 
 	public function getAbsoluteSkinDirectory(): string {

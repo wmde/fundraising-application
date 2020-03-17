@@ -23,9 +23,8 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 
 	public function testWhenCorrectUpdateAddressTokenIsSupplied_addressChangeFormIsShown(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
 
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 
@@ -51,9 +50,8 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 
 	public function testWhenIncorrectUpdateAddressTokenIsSupplied_accessToAddressChangeFormIsDenied(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
 
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 
@@ -79,12 +77,4 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function setDefaultSkin( FunFunFactory $factory, string $skinName ): void {
-		$factory->setCampaignConfigurationLoader(
-			new OverridingCampaignConfigurationLoader(
-				$factory->getCampaignConfigurationLoader(),
-				[ 'skins' => [ 'default_bucket' => $skinName ] ]
-			)
-		);
-	}
 }

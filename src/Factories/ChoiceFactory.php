@@ -23,15 +23,6 @@ class ChoiceFactory {
 		$this->featureToggle = $featureToggle;
 	}
 
-	public function getSkinTemplateDirectory(): string {
-		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.laika' ) ) {
-			return $this->getSkinDirectory( 'laika' );
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.test' ) ) {
-			return $this->getSkinDirectory( 'test' );
-		}
-		throw new UnknownChoiceDefinition( 'Skin selection configuration failure.' );
-	}
-
 	public function getUseOfFundsResponse( FunFunFactory $factory ): \Closure {
 		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.laika' ) ) {
 			$factory->getTranslationCollector()->addTranslationFile( $factory->getI18nDirectory() . '/messages/useOfFundsMessages.json' );
@@ -44,9 +35,9 @@ class ChoiceFactory {
 			};
 		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.test' ) ) {
 			// we don't care what happens in test
-			return function() { return 'Test rendering: Use of funds';
-
-   };
+			return function() {
+				return 'Test rendering: Use of funds';
+			};
 		}
 		throw new UnknownChoiceDefinition( 'Use of funds configuration failure.' );
 	}
@@ -75,10 +66,6 @@ class ChoiceFactory {
 			return $this->getAmountOptionInEuros( [ 5000, 10000, 15000, 20000, 25000, 30000, 50000 ] );
 		}
 		throw new UnknownChoiceDefinition( 'Amount option selection configuration failure.' );
-	}
-
-	private function getSkinDirectory( string $skin ): string {
-		return 'skins/' . $skin . '/templates';
 	}
 
 	public function getAmountOptionInEuros( array $amountOption ): array {

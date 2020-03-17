@@ -2,11 +2,6 @@
 #
 # Set all campaigns to inactive to force the test server to use the default code paths
 
-skins:
-  active: true
-  start: "2018-10-10"
-  end: "2099-12-31"
-
 membership_call_to_action:
   active: true
 

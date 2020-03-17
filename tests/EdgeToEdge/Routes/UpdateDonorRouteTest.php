@@ -28,9 +28,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	public function testWhenCorrectPrivatePersonDataIsPosted_addressIsChanged(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = $this->newStoredDonation( $factory );
 				$this->performRequest(
 					$client,
@@ -59,9 +58,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	public function testWhenCorrectCompanyDataIsPosted_addressIsChanged(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = $this->newStoredDonation( $factory );
 				$this->performRequest(
 					$client,
@@ -101,9 +99,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	public function testWhenInvalidUpdateTokenIsSupplied_requestIsDenied(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = $this->newStoredDonation( $factory );
 
 				$this->performRequest(
@@ -122,10 +119,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	public function testWhenDonationIsExported_requestIsDenied(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
-
 				$donation = ValidDoctrineDonation::newExportedirectDebitDoctrineDonation();
 				$donation->modifyDataObject(
 					function ( DonationData $data ) {
@@ -152,9 +147,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	public function testWhenDonationDataIsInvalid_requestIsDenied(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = $this->newStoredDonation( $factory );
 				$donorData = $this->newPrivateDonorData();
 				$donorData['email'] = 'this_is_not_a_valid_email_address.de';
@@ -178,10 +172,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	public function testWhenDonationAlreadyHasAddress_requestIsDenied(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
-
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 				$donation->modifyDataObject(
 					function ( DonationData $data ) {
@@ -259,15 +251,6 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 			'street' => 'Teststraße 123',
 
 		];
-	}
-
-	private function setDefaultSkin( FunFunFactory $factory, string $skinName ): void {
-		$factory->setCampaignConfigurationLoader(
-			new OverridingCampaignConfigurationLoader(
-				$factory->getCampaignConfigurationLoader(),
-				[ 'skins' => [ 'default_bucket' => $skinName ] ]
-			)
-		);
 	}
 
 	private function newValidSuccessRedirectUrl( Donation $donation, FunFunFactory $ffFactory ): string {

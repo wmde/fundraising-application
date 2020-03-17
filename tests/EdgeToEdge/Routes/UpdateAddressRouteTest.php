@@ -22,9 +22,8 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 
 	public function testWhenInvalidDataIsSent_serverThrowsAnError(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
 
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 
@@ -49,9 +48,8 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 
 	public function testWhenValidDataIsSent_serverShowsAConfirmationPage(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 				$factory->getEntityManager()->persist( $donation );
 				$factory->getEntityManager()->flush();
@@ -89,9 +87,8 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 
 	public function testUsersOptIntoReceiptByDefault(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 				$entityManager = $factory->getEntityManager();
 				$entityManager->persist( $donation );
@@ -120,9 +117,8 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 
 	public function testUsersCanOptOutOfReceiptWhileStillProvidingAnAddress(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 				$entityManager = $factory->getEntityManager();
 				$entityManager->persist( $donation );
@@ -145,10 +141,8 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 
 	public function testOptingOutWithEmptyFields_serverShowsAConfirmationPage(): void {
 		$this->createEnvironment(
-			[],
+			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$this->setDefaultSkin( $factory, 'laika' );
-
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 
 				$factory->getEntityManager()->persist( $donation );
@@ -169,15 +163,6 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 				$this->assertTrue( $response->isOk() );
 				$this->assertNotTrue( isset( $dataVars->message ), 'No error message is sent.' );
 			}
-		);
-	}
-
-	private function setDefaultSkin( FunFunFactory $factory, string $skinName ): void {
-		$factory->setCampaignConfigurationLoader(
-			new OverridingCampaignConfigurationLoader(
-				$factory->getCampaignConfigurationLoader(),
-				[ 'skins' => [ 'default_bucket' => $skinName ] ]
-			)
 		);
 	}
 
