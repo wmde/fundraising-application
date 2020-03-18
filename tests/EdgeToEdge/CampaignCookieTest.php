@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
+use Symfony\Component\BrowserKit\Cookie as BrowserKitCookie;
+use Symfony\Component\HttpFoundation\Cookie;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedCampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
@@ -53,13 +55,17 @@ class CampaignCookieTest extends WebRouteTestCase {
 			function ( FunFunFactory $factory ): void {
 				$factory->setCampaignConfigurationLoader( new OverridingCampaignConfigurationLoader(
 					$factory->getCampaignConfigurationLoader(),
-					[ 'skins' => [ 'active' => true ] ]
+					self::TEST_CAMPAIGN_CONFIG
 				) );
 			}
 		);
-		$client->request( 'get', '/', [] );
-		$client->request( 'get', '/', [ 'skin' => 1 ] );
-		$this->assertContains( 'skin=1', $client->getCookieJar()->get( self::COOKIE_NAME )->getValue() );
+		$client->getCookieJar()->set( new BrowserKitCookie( self::COOKIE_NAME, 'omg=0' ) );
+		$client->request( 'get', '/', [ 'omg' => 1 ] );
+		$responseCookies = $client->getResponse()->headers->getCookies();
+		$bucketCookie = array_filter( $responseCookies, function ( Cookie $cookie ): bool {
+			return $cookie->getName() === self::COOKIE_NAME;
+		} )[0];
+		$this->assertContains( 'omg=1', $bucketCookie->getValue() );
 	}
 
 	public function testWhenCampaignsAreInactive_cookieExpiresAtEndOfSession(): void {

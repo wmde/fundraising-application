@@ -6,7 +6,6 @@ COMPOSER_FLAGS :=
 NPM_FLAGS     := --prefer-offline
 DOCKER_FLAGS  := --interactive --tty
 TEST_DIR      :=
-REDUX_LOG     :=
 MIGRATION_VERSION :=
 APP_ENV       := dev
 DOCKER_IMAGE  := wikimediade/fundraising-frontend
@@ -37,7 +36,7 @@ install-php:
 update-js:
 	-mkdir -p $(TMPDIR)/home
 	-echo "node:x:$(current_user):$(current_group)::/var/nodehome:/bin/bash" > $(TMPDIR)/passwd
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR)/skins/10h16:/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm update $(NPM_FLAGS)
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm update $(NPM_FLAGS)
 
 update-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update $(COMPOSER_FLAGS)
@@ -46,8 +45,7 @@ default-config:
 	cp -i build/app/config.dev.json app/config
 
 js:
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 -e REDUX_LOG=$(REDUX_LOG) $(NODE_IMAGE) npm run build-assets
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -e NO_UPDATE_NOTIFIER=1 $(NODE_IMAGE) npm run copy-assets
+	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data/skins/laika -e NO_UPDATE_NOTIFIER=1 $(NODE_IMAGE) npm run build
 
 clear:
 	rm -rf var/cache/

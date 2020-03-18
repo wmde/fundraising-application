@@ -282,19 +282,7 @@ If JavaScript or CSS files where changed, you will need to (re)run
 
     make js
 
-If you want to debug problems in the Redux data flow, use the command
-
-    make js REDUX_LOG=on
-
 Actions and their resulting state will be logged.
-    
-### Automatic recompilation of assets during development (10h16)
-
-If you are working on the JavaScript files of the 10h16 skin and need automatic recompilation when a file changes, run the command
-
-    docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/app -v $(pwd)/web/skins/10h16:/app/skins/10h16/web -w /app/skins/10h16 -e NO_UPDATE_NOTIFIER=1 node:8 npm run watch 
-
-If you want to debug problems in the Redux data flow, add the parameter `-e REDUX_LOG=on` to the command line above
 
 ### Automatic recompilation of assets during development (Laika)
 

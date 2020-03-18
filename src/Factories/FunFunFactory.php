@@ -1384,16 +1384,6 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function getDonationFormTemplate(): TwigTemplate {
-		if ($this->getSkinDirectory() === 'skins/10h16/templates')  {
-			return $this->getLayoutTemplate(
-				'Donation_Form.html.twig',
-				[
-					'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
-					'presetAmounts' => $this->getChoiceFactory()->getAmountOption(),
-					'messages' => $this->getMessages()
-				]
-			);
-		}
 		return $this->getLayoutTemplate(
 			'Donation_Form.html.twig',
 			[
@@ -1749,7 +1739,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getSkinDirectory(): string {
-		return $this->getChoiceFactory()->getSkinTemplateDirectory();
+		return 'skins/' . $this->config['skin'] . '/templates';
 	}
 
 	public function getAbsoluteSkinDirectory(): string {

@@ -72,6 +72,12 @@
       "description": "Base url of web assets. Can be a full URL, a path (without trailing slash), or blank. Can be used in dev mode to point to an asset server for a specific skin",
       "default": ""
     },
+    "skin": {
+      "type": "string",
+      "title": "Skin name to use",
+      "description": "Currently either 'laika' or 'test' (in the test environment), but in the long term, 'test' should be eliminated and this configuration removed.",
+      "default": "laika"
+    },
     "twig": {
       "type": "object",
       "title": "Twig configuration settings for the skin Twig instance",

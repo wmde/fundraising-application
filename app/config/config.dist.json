@@ -11,6 +11,7 @@
 			"1002": "SET NAMES utf8"
 		}
 	},
+	"skin": "laika",
 	"enable-dev-entry-point": false,
 	"banned-ibans": [],
 	"web-basepath": "",

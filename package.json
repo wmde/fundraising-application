@@ -3,12 +3,11 @@
 	"version": "2.0.0-dev",
 	"description": "WMDE fundraising application (end user facing part)",
 	"scripts": {
-		"postinstall": "node npm_skins install",
-		"build-assets": "node npm_skins run build-assets",
-		"copy-assets": "find skins/ -maxdepth 2 -name 'web' -type d -exec sh -c 'dirname \"$1\" | xargs -I{} cp -r \"./{}/web/.\" \"./web/{}\"' -- {} \\;",
-		"test": "node npm_skins run test",
-		"cs": "node npm_skins run cs",
-		"ci": "node npm_skins run ci",
+		"postinstall": "cd skins/laika && npm install",
+		"postupdate": "cd skins/laika && npm update",
+		"test": "cd skins/laika && npm run test:unit",
+		"cs": "cd skins/laika && npm run cs",
+		"ci": "cd skins/laika && npm run ci",
 		"toc": "markdown-toc --maxdepth 2 --bullets '*' -i README.md"
 	},
 	"repository": {
