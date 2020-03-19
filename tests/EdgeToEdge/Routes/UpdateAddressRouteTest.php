@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\Entities\AddressChange;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -19,22 +20,21 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoad
 class UpdateAddressRouteTest extends WebRouteTestCase {
 
 	private const PATH = 'update-address';
+	private const DUMMY_DONATION_ID = 0;
 
 	public function testWhenInvalidDataIsSent_serverThrowsAnError(): void {
 		$this->createEnvironment(
 			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 
-				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 
-				$factory->getEntityManager()->persist( $donation );
+				$factory->getEntityManager()->persist( $addressChange );
 				$factory->getEntityManager()->flush();
-
-				$addressToken = $donation->getAddressChange()->getCurrentIdentifier();
 
 				$client->request(
 					Request::METHOD_POST,
-					self::PATH . '?addressToken=' . $addressToken,
+					self::PATH . '?addressToken=' . $addressChange->getCurrentIdentifier(),
 					[  ]
 				);
 
@@ -50,12 +50,11 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
-				$factory->getEntityManager()->persist( $donation );
+				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
+				$factory->getEntityManager()->persist( $addressChange );
 				$factory->getEntityManager()->flush();
-				$addressToken = $donation->getAddressChange()->getCurrentIdentifier();
 
-				$this->doRequestWithValidData( $client, $addressToken );
+				$this->doRequestWithValidData( $client, $addressChange->getCurrentIdentifier() );
 				$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 				$response = $client->getResponse();
 
@@ -89,52 +88,34 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 				$entityManager = $factory->getEntityManager();
-				$entityManager->persist( $donation );
+				$entityManager->persist( $addressChange );
 				$entityManager->flush();
-				$generatedAddressChange = $donation->getAddressChange();
-				$addressToken = $generatedAddressChange->getCurrentIdentifier();
-				// Doctrine Entity has different accessors, use Reflection as a crutch
-				// until we can use the Domain Entity AddressChange and use getId()
-				// see https://phabricator.wikimedia.org/T232010
-				$addressChangeId = $this->getDoctrineAddressChangeId( $generatedAddressChange );
 
-				$this->doRequestWithValidData( $client, $addressToken );
+				$this->doRequestWithValidData( $client, $addressChange->getCurrentIdentifier() );
 
 				$entityManager->clear( AddressChange::class );
-				$addressChange = $entityManager->getRepository( AddressChange::class )->find( $addressChangeId );
-				$this->assertTrue( $addressChange->isOptedIntoDonationReceipt(), 'Donor should be opted into donation receipt' );
+				$addressChangeAfterRequest = $entityManager->getRepository( AddressChange::class )->find( $addressChange->getId() );
+				$this->assertTrue( $addressChangeAfterRequest->isOptedIntoDonationReceipt(), 'Donor should be opted into donation receipt' );
 			}
 		);
-	}
-
-	private function getDoctrineAddressChangeId( AddressChange $addressChange ): int {
-		$prop = ( new \ReflectionClass( AddressChange::class ) )->getProperty( 'id' );
-		$prop->setAccessible( true );
-		return $prop->getValue( $addressChange );
 	}
 
 	public function testUsersCanOptOutOfReceiptWhileStillProvidingAnAddress(): void {
 		$this->createEnvironment(
 			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 				$entityManager = $factory->getEntityManager();
-				$entityManager->persist( $donation );
+				$entityManager->persist( $addressChange );
 				$entityManager->flush();
-				$generatedAddressChange = $donation->getAddressChange();
-				$addressToken = $generatedAddressChange->getCurrentIdentifier();
-				// Doctrine Entity has different accessors, use Reflection as a crutch
-				// until we can use the Domain Entity AddressChange and use getId()
-				// see https://phabricator.wikimedia.org/T232010
-				$addressChangeId = $this->getDoctrineAddressChangeId( $generatedAddressChange );
 
-				$this->doRequestWithValidData( $client, $addressToken, [ 'receiptOptOut' => '1' ] );
+				$this->doRequestWithValidData( $client, $addressChange->getCurrentIdentifier(), [ 'receiptOptOut' => '1' ] );
 
 				$entityManager->clear( AddressChange::class );
-				$addressChange = $entityManager->getRepository( AddressChange::class )->find( $addressChangeId );
-				$this->assertFalse( $addressChange->isOptedIntoDonationReceipt(), 'Donor should be opted out of donation receipt' );
+				$addressChangeAfterRequest = $entityManager->getRepository( AddressChange::class )->find( $addressChange->getId() );
+				$this->assertFalse( $addressChangeAfterRequest->isOptedIntoDonationReceipt(), 'Donor should be opted out of donation receipt' );
 			}
 		);
 	}
@@ -143,16 +124,14 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 
-				$factory->getEntityManager()->persist( $donation );
+				$factory->getEntityManager()->persist( $addressChange );
 				$factory->getEntityManager()->flush();
-
-				$addressToken = $donation->getAddressChange()->getCurrentIdentifier();
 
 				$client->request(
 					Request::METHOD_POST,
-					self::PATH . '?addressToken=' . $addressToken,
+					self::PATH . '?addressToken=' . $addressChange->getCurrentIdentifier(),
 					[
 						'receiptOptOut' => '1'
 					]
