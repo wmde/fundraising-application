@@ -5,6 +5,12 @@ import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 
 export const getters: GetterTree<AddressState, any> = {
 	invalidFields: ( state: AddressState ): Array<string> => {
+		if ( state.addressType === null ) {
+			const reqFieldsForPersonDefault = state.requiredFields[ AddressTypeModel.PERSON ]
+				.filter( fieldName => state.validity[ fieldName ] !== Validity.VALID );
+			reqFieldsForPersonDefault.push( 'addressType' );
+			return reqFieldsForPersonDefault;
+		}
 		return state.requiredFields[ state.addressType ].filter( fieldName => state.validity[ fieldName ] !== Validity.VALID );
 	},
 	requiredFieldsAreValid: ( state: AddressState, getters: GetterTree<AddressState, any> ): boolean => {

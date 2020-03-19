@@ -35,7 +35,7 @@ export default Vue.extend( {
 	name: 'AddressType',
 	data: function () {
 		return {
-			type: AddressTypeModel.PERSON,
+			type: null,
 		};
 	},
 	props: {
