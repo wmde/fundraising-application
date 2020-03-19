@@ -19,7 +19,7 @@ class StreamLogWriterTest extends TestCase {
 
 	private $logPath;
 
-	public function setUp() {
+	public function setUp(): void {
 		vfsStream::setup( self::EXISTING_DIRECTORY );
 		$this->logPath = self::EXISTING_DIRECTORY . '/buckets.log';
 	}

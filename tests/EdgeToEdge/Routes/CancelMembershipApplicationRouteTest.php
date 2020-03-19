@@ -33,7 +33,7 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'membership-cancellation-text', $client->getResponse()->getContent() );
+			$this->assertStringContainsString( 'membership-cancellation-text', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -50,7 +50,7 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'membership-cancellation-failed-text', $client->getResponse()->getContent() );
+			$this->assertStringContainsString( 'membership-cancellation-failed-text', $client->getResponse()->getContent() );
 		} );
 	}
 

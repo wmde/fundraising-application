@@ -23,7 +23,7 @@ class CampaignCollectionTest extends TestCase {
 	private $defaultBucketOfSecondCampaign;
 	private $alternativeBucketOfSecondCampaign;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		$this->firstCampaign = new Campaign(
 			'test_something',
 			't1',

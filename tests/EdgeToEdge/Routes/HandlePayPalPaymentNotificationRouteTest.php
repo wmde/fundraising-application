@@ -401,11 +401,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	private function newSucceedingNotificationVerifier(): PaymentNotificationVerifier {
-		$verifier = $this->createMock( PaymentNotificationVerifier::class );
-
-		$verifier->expects( $this->any() )->method( 'verify' )->willReturn( true );
-
-		return $verifier;
+		// The PayPal verifier throws exceptions on verification failure.
+		return $this->createMock( PaymentNotificationVerifier::class );
 	}
 
 }

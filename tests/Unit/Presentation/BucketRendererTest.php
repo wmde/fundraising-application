@@ -14,7 +14,7 @@ class BucketRendererTest extends TestCase {
 	private $campaign1;
 	private $campaign2;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		$now = new CampaignDate();
 		$start = $now->modify( '-1 week' );
 		$end = $now->modify( '+1 week' );

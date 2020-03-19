@@ -67,7 +67,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$cookie = $client->getCookieJar()->get( 'donation_timestamp' );
 			$this->assertNotNull( $cookie );
 			$donationTimestamp = new \DateTime( $cookie->getValue() );
-			$this->assertEquals( time(), $donationTimestamp->getTimestamp(), 'Timestamp should be not more than 5 seconds old', 5.0 );
+			$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
 		} );
 	}
 
@@ -81,7 +81,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->newValidFormInput()
 		);
 
-		$this->assertContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() );
 	}
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
@@ -100,7 +100,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				$this->newValidFormInput()
 			);
 
-			$this->assertNotContains( 'donation_rejected_limit', $client->getResponse()->getContent() );
+			$this->assertStringNotContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -188,16 +188,16 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse()->getContent();
 
-			$this->assertContains( '5,51 €', $response );
-			$this->assertContains( 'donation.interval: 0', $response );
-			$this->assertContains( 'DE12500105170648489890', $response );
-			$this->assertContains( 'INGDDEFFXXX', $response );
-			$this->assertContains( 'ING-DiBa', $response );
-			$this->assertContains( 'Prof. Dr. Karla Kennichnich', $response );
-			$this->assertContains( 'Lehmgasse 12', $response );
-			$this->assertContains( '<span id="confirm-postcode">12345</span> <span id="confirm-city">Einort</span>', $response );
-			$this->assertContains( 'karla@kennichnich.de', $response );
-			$this->assertContains( 'send-info', $response );
+			$this->assertStringContainsString( '5,51 €', $response );
+			$this->assertStringContainsString( 'donation.interval: 0', $response );
+			$this->assertStringContainsString( 'DE12500105170648489890', $response );
+			$this->assertStringContainsString( 'INGDDEFFXXX', $response );
+			$this->assertStringContainsString( 'ING-DiBa', $response );
+			$this->assertStringContainsString( 'Prof. Dr. Karla Kennichnich', $response );
+			$this->assertStringContainsString( 'Lehmgasse 12', $response );
+			$this->assertStringContainsString( '<span id="confirm-postcode">12345</span> <span id="confirm-city">Einort</span>', $response );
+			$this->assertStringContainsString( 'karla@kennichnich.de', $response );
+			$this->assertStringContainsString( 'send-info', $response );
 		} );
 	}
 
@@ -394,7 +394,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 			$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
-			$this->assertContains( 'sandbox.paypal.com', $response->getContent() );
+			$this->assertStringContainsString( 'sandbox.paypal.com', $response->getContent() );
 		} );
 	}
 
@@ -412,7 +412,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 			$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
-			$this->assertContains( 'item_name=item_name_donation', $response->getContent() );
+			$this->assertStringContainsString( 'item_name=item_name_donation', $response->getContent() );
 		} );
 	}
 
@@ -437,8 +437,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$response = $client->getResponse();
 			$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 			$this->assertTrue( $response->isRedirect() );
-			$this->assertContains( 'amount=1234', $response->headers->get( 'Location' ) );
-			$this->assertContains( 'thatother.paymentprovider.com', $response->headers->get( 'Location' ) );
+			$this->assertStringContainsString( 'amount=1234', $response->headers->get( 'Location' ) );
+			$this->assertStringContainsString( 'thatother.paymentprovider.com', $response->headers->get( 'Location' ) );
 		} );
 	}
 
@@ -498,23 +498,23 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse()->getContent();
 
-		$this->assertContains( 'Amount: 0,00', $response );
-		$this->assertContains( 'Payment type: BEZ', $response );
-		$this->assertContains( 'Interval: 3', $response );
-		$this->assertContains( 'IBAN: DE12500105170648489890', $response );
-		$this->assertContains( 'BIC: INGDDEFFXXX', $response );
-		$this->assertContains( 'Bank name: ING-DiBa', $response );
-		$this->assertContains( 'Address type: person', $response );
-		$this->assertContains( 'Salutation: Frau', $response );
-		$this->assertContains( 'Title: Prof. Dr.', $response );
-		$this->assertContains( 'Company: ', $response );
-		$this->assertContains( 'First name: Karla', $response );
-		$this->assertContains( 'Last name: Kennichnich', $response );
-		$this->assertContains( 'Street: Lehmgasse 12', $response );
-		$this->assertContains( 'Postal code: 12345', $response );
-		$this->assertContains( 'City: Einort', $response );
-		$this->assertContains( 'Country code: DE', $response );
-		$this->assertContains( 'Email address: karla@kennichnich.de', $response );
+		$this->assertStringContainsString( 'Amount: 0,00', $response );
+		$this->assertStringContainsString( 'Payment type: BEZ', $response );
+		$this->assertStringContainsString( 'Interval: 3', $response );
+		$this->assertStringContainsString( 'IBAN: DE12500105170648489890', $response );
+		$this->assertStringContainsString( 'BIC: INGDDEFFXXX', $response );
+		$this->assertStringContainsString( 'Bank name: ING-DiBa', $response );
+		$this->assertStringContainsString( 'Address type: person', $response );
+		$this->assertStringContainsString( 'Salutation: Frau', $response );
+		$this->assertStringContainsString( 'Title: Prof. Dr.', $response );
+		$this->assertStringContainsString( 'Company: ', $response );
+		$this->assertStringContainsString( 'First name: Karla', $response );
+		$this->assertStringContainsString( 'Last name: Kennichnich', $response );
+		$this->assertStringContainsString( 'Street: Lehmgasse 12', $response );
+		$this->assertStringContainsString( 'Postal code: 12345', $response );
+		$this->assertStringContainsString( 'City: Einort', $response );
+		$this->assertStringContainsString( 'Country code: DE', $response );
+		$this->assertStringContainsString( 'Email address: karla@kennichnich.de', $response );
 	}
 
 	public function testGivenInvalidRequest_formStillContainsBannerTrackingData(): void {
@@ -530,8 +530,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse()->getContent();
 
-		$this->assertContains( 'Impression Count: 12', $response );
-		$this->assertContains( 'Banner Impression Count: 3', $response );
+		$this->assertStringContainsString( 'Impression Count: 12', $response );
+		$this->assertStringContainsString( 'Banner Impression Count: 3', $response );
 	}
 
 	public function testGivenNegativeDonationAmount_formIsReloadedAndPrefilledWithZero(): void {
@@ -548,7 +548,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse()->getContent();
 
-		$this->assertContains( 'Amount: 0,00', $response );
+		$this->assertStringContainsString( 'Amount: 0,00', $response );
 	}
 
 	public function testGivenInvalidRequest_errorsAreLogged(): void {
@@ -612,10 +612,10 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse()->getContent();
 
-		$this->assertContains( 'Amount: 0', $response );
-		$this->assertContains( 'Payment type: UEB', $response );
-		$this->assertContains( 'Interval: 1', $response );
-		$this->assertContains( 'Value of field "amount" violates rule: Amount too low', $response );
+		$this->assertStringContainsString( 'Amount: 0', $response );
+		$this->assertStringContainsString( 'Payment type: UEB', $response );
+		$this->assertStringContainsString( 'Interval: 1', $response );
+		$this->assertStringContainsString( 'Value of field "amount" violates rule: Amount too low', $response );
 	}
 
 	private function newAnonymousFormInput(): array {
@@ -642,7 +642,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse()->getContent();
 
-			$this->assertContains( self::SOME_TOKEN, $response );
+			$this->assertStringContainsString( self::SOME_TOKEN, $response );
 		} );
 	}
 

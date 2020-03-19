@@ -251,8 +251,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$responseContent = $client->getResponse()->getContent();
 
-			$this->assertContains( 'id=1', $responseContent );
-			$this->assertContains( 'accessToken=' . self::FIXED_TOKEN, $responseContent );
+			$this->assertStringContainsString( 'id=1', $responseContent );
+			$this->assertStringContainsString( 'accessToken=' . self::FIXED_TOKEN, $responseContent );
 		} );
 	}
 
@@ -268,7 +268,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertTrue( $response->isRedirect() );
-		$this->assertContains( 'show-membership-confirmation', $response->headers->get( 'Location' ) );
+		$this->assertStringContainsString( 'show-membership-confirmation', $response->headers->get( 'Location' ) );
 	}
 
 	public function testWhenApplicationGetsPersisted_timestampIsStoredInCookie(): void {
@@ -282,7 +282,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$cookie = $client->getCookieJar()->get( 'memapp_timestamp' );
 		$this->assertNotNull( $cookie );
 		$donationTimestamp = new \DateTime( $cookie->getValue() );
-		$this->assertEquals( time(), $donationTimestamp->getTimestamp(), 'Timestamp should be not more than 5 seconds old', 5.0 );
+		$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
 	}
 
 	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected(): void {
@@ -295,7 +295,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->newValidHttpParameters()
 		);
 
-		$this->assertContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 	}
 
 	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected(): void {
@@ -308,7 +308,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->newValidHttpParameters()
 		);
 
-		$this->assertNotContains( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
+		$this->assertStringNotContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 	}
 
 	private function getPastTimestamp( string $interval = 'PT10S' ): string {
@@ -400,7 +400,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertTrue( $response->isRedirect() );
-		$this->assertContains( 'sandbox.paypal.com', $response->headers->get( 'Location' ) );
+		$this->assertStringContainsString( 'sandbox.paypal.com', $response->headers->get( 'Location' ) );
 	}
 
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
@@ -415,7 +415,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertSame( 302, $response->getStatusCode() );
-		$this->assertContains( 'item_name=item_name_membership', $response->getContent() );
+		$this->assertStringContainsString( 'item_name=item_name_membership', $response->getContent() );
 	}
 
 	public function testCommasInStreetNamesAreRemoved(): void {

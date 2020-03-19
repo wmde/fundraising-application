@@ -32,7 +32,7 @@ class JsonBucketLoggerTest extends TestCase {
 	 */
 	private $clock;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->logWriter = new LogWriterSpy();
 		$this->clock = new StubClock( new \DateTimeImmutable( self::STUB_TIME_VALUE ) );
 	}
@@ -135,7 +135,7 @@ class JsonBucketLoggerTest extends TestCase {
 		foreach( $this->logWriter->getWriteCalls() as $line ) {
 			$logData = json_decode( $line, false );
 			$this->assertSame( JSON_ERROR_NONE, json_last_error(), 'JSON should be valid' );
-			$this->assertInternalType( 'object', $logData );
+			$this->assertIsObject( $logData );
 		}
 	}
 

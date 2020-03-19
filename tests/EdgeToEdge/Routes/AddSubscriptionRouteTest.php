@@ -96,7 +96,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			$this->invalidFormInput
 		);
 
-		$this->assertContains( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
+		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
 
 		$this->assertCount(
 			1,

@@ -13,15 +13,15 @@ class PiwikTest extends WebRouteTestCase {
 	public function testPiwikScriptGetsEmbedded(): void {
 		$client = $this->createClient();
 		$client->request( 'GET', '/' );
-		$this->assertContains( '<!-- Piwik -->', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( '<!-- Piwik -->', $client->getResponse()->getContent() );
 	}
 
 	public function testConfigParametersAreUsed(): void {
 		$client = $this->createClient();
 		$client->request( 'GET', '/' );
 
-		$this->assertContains( 'tracking.wikimedia.de', $client->getResponse()->getContent() );
-		$this->assertContains( 'idsite=1234', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'tracking.wikimedia.de', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'idsite=1234', $client->getResponse()->getContent() );
 	}
 
 }

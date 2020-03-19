@@ -30,17 +30,17 @@ class NewDonationLegacyParametersTest extends WebRouteTestCase {
 			$validPaymentInput
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'Payment data: ' . $expected['validity'],
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'Amount: ' . $expected['formattedAmount'] . "\n",
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'isCustomAmount: ' . ( $expected['isCustomAmount'] ? '1' : '' ) . "\n",
 			$client->getResponse()->getContent()
 		);

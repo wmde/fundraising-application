@@ -137,12 +137,12 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$this->assertContains( 'Internal Error: A database error occurred', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'Internal Error: A database error occurred', $client->getResponse()->getContent() );
 		$this->assertTrue( $client->getResponse()->isServerError() );
 	}
 
 	private function assertAccessIsDenied( string $expectedMessage, Client $client ): void {
-		$this->assertContains( $expectedMessage, $client->getResponse()->getContent() );
+		$this->assertStringContainsString( $expectedMessage, $client->getResponse()->getContent() );
 		$this->assertTrue( $client->getResponse()->isForbidden() );
 	}
 

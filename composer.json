@@ -118,7 +118,7 @@
 	"require-dev": {
 		"ext-pdo_sqlite": "*",
 
-		"phpunit/phpunit": "~7.0",
+		"phpunit/phpunit": "~8.0",
 		"codeception/specify": "~1.1",
 		"ockcyp/covers-validator": "~1.0",
 		"mikey179/vfsstream": "~1.6",

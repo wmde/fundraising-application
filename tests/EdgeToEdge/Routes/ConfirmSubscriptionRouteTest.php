@@ -41,7 +41,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 			$response = $client->getResponse();
 
 			$this->assertSame( 200, $response->getStatusCode() );
-			$this->assertContains( 'Subscription confirmed.', $response->getContent() );
+			$this->assertStringContainsString( 'Subscription confirmed.', $response->getContent() );
 		} );
 	}
 
@@ -66,7 +66,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 
 		$this->assertSame( 200, $response->getStatusCode() );
-		$this->assertContains( 'subscription_confirmation_code_not_found', $response->getContent() );
+		$this->assertStringContainsString( 'subscription_confirmation_code_not_found', $response->getContent() );
 	}
 
 	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed(): void {
@@ -86,7 +86,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 			$response = $client->getResponse();
 
 			$this->assertSame( 200, $response->getStatusCode() );
-			$this->assertContains( 'subscription_already_confirmed', $response->getContent() );
+			$this->assertStringContainsString( 'subscription_already_confirmed', $response->getContent() );
 		} );
 	}
 }

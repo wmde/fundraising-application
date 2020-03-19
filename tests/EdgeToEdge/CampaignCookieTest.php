@@ -65,7 +65,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 		$bucketCookie = array_filter( $responseCookies, function ( Cookie $cookie ): bool {
 			return $cookie->getName() === self::COOKIE_NAME;
 		} )[0];
-		$this->assertContains( 'omg=1', $bucketCookie->getValue() );
+		$this->assertStringContainsString( 'omg=1', $bucketCookie->getValue() );
 	}
 
 	public function testWhenCampaignsAreInactive_cookieExpiresAtEndOfSession(): void {

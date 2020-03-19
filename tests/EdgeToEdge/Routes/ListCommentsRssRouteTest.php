@@ -41,32 +41,32 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 
 		$this->assertTrue( $client->getResponse()->isSuccessful(), 'request is successful' );
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'100,42 Euro von First name',
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'First comment',
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'9.001,00 Euro von Second name',
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'Second comment',
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'name &amp; company',
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'Third &lt;script&gt; comment',
 			$client->getResponse()->getContent()
 		);
