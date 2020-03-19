@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -18,24 +19,23 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoad
 class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 
 	private const PATH = 'update-address';
+	private const DUMMY_DONATION_ID = 0;
 
-	const INVALID_TOKEN = 'abcdefghijklmnopqrstuvwxzy12345';
+	private const INVALID_TOKEN = 'abcdefghijklmnopqrstuvwxzy12345';
 
 	public function testWhenCorrectUpdateAddressTokenIsSupplied_addressChangeFormIsShown(): void {
 		$this->createEnvironment(
 			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 
-				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 
-				$factory->getEntityManager()->persist( $donation );
+				$factory->getEntityManager()->persist( $addressChange );
 				$factory->getEntityManager()->flush();
-
-				$addressToken = $donation->getAddressChange()->getCurrentIdentifier();
 
 				$this->performRequest(
 					$client,
-					$addressToken
+					$addressChange->getCurrentIdentifier()
 				);
 
 				$response = $client->getResponse();
@@ -43,7 +43,7 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 					$client->getCrawler()->filter( '#app' )->getNode( 0 )->getAttribute( 'data-application-vars' )
 				);
 				$this->assertTrue( $response->isOk() );
-				$this->assertSame( $addressToken, $dataVars->addressToken );
+				$this->assertSame( $addressChange->getCurrentIdentifier(), $dataVars->addressToken );
 			}
 		);
 	}
@@ -52,11 +52,6 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-
-				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
-
-				$factory->getEntityManager()->persist( $donation );
-				$factory->getEntityManager()->flush();
 
 				$this->performRequest(
 					$client,
