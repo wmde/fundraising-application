@@ -8,7 +8,6 @@ use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use RuntimeException;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\TranslatorInterface;
-use Twig_Extension_StringLoader;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
 use Twig_SimpleFilter;
@@ -43,10 +42,10 @@ class TwigFactory {
 	private function getTemplateDir( array $config ): array {
 		$appRoot = realpath( __DIR__ . '/../..' ) . '/';
 		if ( is_string( $config['template-dir'] ) ) {
-			return $this->convertToAbsolute( $appRoot, $templateDir = [ $config['template-dir'] ] );
+			return $this->convertToAbsolute( $appRoot, [ $config['template-dir'] ] );
 		}
 		elseif ( is_array( $config['template-dir'] ) ) {
-			return $this->convertToAbsolute( $appRoot, $templateDir = $config['template-dir'] );
+			return $this->convertToAbsolute( $appRoot, $config['template-dir'] );
 		}
 
 		throw new RuntimeException( 'wrong template directory type' );
@@ -55,7 +54,7 @@ class TwigFactory {
 	private function convertToAbsolute( string $root, array $dirs ): array {
 		return array_map(
 				function( $dir ) use ( $root ) {
-					if ( strlen( $dir ) == 0 || $dir{0} != '/' ) {
+					if ( strlen( $dir ) === 0 || $dir[0] !== '/' ) {
 						$dir = $root . $dir;
 					}
 					return $dir;
@@ -67,10 +66,6 @@ class TwigFactory {
 	public function newArrayLoader(): Twig_Loader_Array {
 		$templates = $this->config['loaders']['array'] ?? [];
 		return new Twig_Loader_Array( $templates );
-	}
-
-	public function newStringLoaderExtension(): Twig_Extension_StringLoader {
-		return new Twig_Extension_StringLoader();
 	}
 
 	public function newTranslationExtension( TranslatorInterface $translator ): TranslationExtension {
