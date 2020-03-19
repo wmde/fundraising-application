@@ -174,7 +174,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	private function assertRequestVarsAreLogged( LoggerSpy $logger ): void {
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'<transaction>' . self::VALID_TRANSACTION_ID . '</transaction>',
 			$logger->getLogCalls()->getFirstCall()->getContext()['request_content']
 		);

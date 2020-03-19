@@ -26,17 +26,17 @@ class NewDonationRouteTest extends WebRouteTestCase {
 			$validPaymentInput
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'Payment data: ' . $expected['validity'],
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'Amount: ' . $expected['formattedAmount'] . "\n",
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'isCustomAmount: ' . ( $expected['isCustomAmount'] ? '1' : '' ) . "\n",
 			$client->getResponse()->getContent()
 		);
@@ -119,7 +119,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse()->getContent();
-		$this->assertContains( 'Impression Count: 12', $response );
-		$this->assertContains( 'Banner Impression Count: 3', $response );
+		$this->assertStringContainsString( 'Impression Count: 12', $response );
+		$this->assertStringContainsString( 'Banner Impression Count: 3', $response );
 	}
 }

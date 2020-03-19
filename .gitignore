@@ -14,6 +14,8 @@ var/
 .floo
 .flooignore
 
+.phpunit.result.cache
+
 app/config/
 
 app/fundraising-frontend-content/

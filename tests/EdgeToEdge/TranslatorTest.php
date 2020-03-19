@@ -22,13 +22,13 @@ class TranslatorTest extends WebRouteTestCase {
 			}
 		);
 		$client->request( 'GET', '/anything' );
-		$this->assertContains( 'Seite nicht gefunden', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'Seite nicht gefunden', $client->getResponse()->getContent() );
 	}
 
 	public function testGivenUndefinedMessageKey_responseContainsMessageKey(): void {
 		$client = $this->createClient();
 		$client->request( 'GET', '/anything' );
-		$this->assertContains( 'page_not_found', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'page_not_found', $client->getResponse()->getContent() );
 	}
 
 	private function newTranslator( array $translatableMessages, string $locale ): Translator {

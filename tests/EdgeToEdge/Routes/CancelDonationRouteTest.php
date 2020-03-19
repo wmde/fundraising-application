@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Doctrine\ORM\EntityManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
@@ -74,7 +75,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'Cancellation status: successful', $client->getResponse()->getContent() );
+			$this->assertStringContainsString( 'Cancellation status: successful', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -101,7 +102,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'Cancellation status: failed', $client->getResponse()->getContent() );
+			$this->assertStringContainsString( 'Cancellation status: failed', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -139,10 +140,13 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertContains( 'Mail delivery status: failed', $client->getResponse()->getContent() );
+			$this->assertStringContainsString( 'Mail delivery status: failed', $client->getResponse()->getContent() );
 		} );
 	}
 
+	/**
+	 * @return Messenger&MockObject
+	 */
 	private function newThrowingMessenger(): Messenger {
 		$failingMessenger = $this->getMockBuilder( Messenger::class )->disableOriginalConstructor()->getMock();
 		$failingMessenger->method( 'sendMessageToUser' )->willThrowException( new \RuntimeException() );

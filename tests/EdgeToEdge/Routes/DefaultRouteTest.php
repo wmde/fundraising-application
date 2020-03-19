@@ -25,9 +25,9 @@ class DefaultRouteTest extends WebRouteTestCase {
 		);
 
 		$responseContent = $client->getResponse()->getContent();
-		$this->assertContains( 'Amount: 12,34', $responseContent );
-		$this->assertContains( 'Payment type: UEB', $responseContent );
-		$this->assertContains( 'Interval: 6', $responseContent );
+		$this->assertStringContainsString( 'Amount: 12,34', $responseContent );
+		$this->assertStringContainsString( 'Payment type: UEB', $responseContent );
+		$this->assertStringContainsString( 'Interval: 6', $responseContent );
 	}
 
 	public function testWhenFormParametersContainNegativeAmount_zeroAmountIsPassedToTheTemplate(): void {
@@ -43,8 +43,8 @@ class DefaultRouteTest extends WebRouteTestCase {
 		);
 
 		$responseContent = $client->getResponse()->getContent();
-		$this->assertContains( 'Amount: 0,00', $responseContent );
-		$this->assertContains( 'Payment type: UEB', $responseContent );
-		$this->assertContains( 'Interval: 6', $responseContent );
+		$this->assertStringContainsString( 'Amount: 0,00', $responseContent );
+		$this->assertStringContainsString( 'Payment type: UEB', $responseContent );
+		$this->assertStringContainsString( 'Interval: 6', $responseContent );
 	}
 }

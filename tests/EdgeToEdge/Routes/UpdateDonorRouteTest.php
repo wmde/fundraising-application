@@ -162,7 +162,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 				$dataVars = $this->getDataApplicationVars( $crawler );
 				$response = $client->getResponse();
 				$this->assertTrue( $response->isSuccessful() );
-				$this->assertContains(
+				$this->assertStringContainsString(
 					'donor_change_failure_validation_error',
 					$dataVars->updateData->message
 				);

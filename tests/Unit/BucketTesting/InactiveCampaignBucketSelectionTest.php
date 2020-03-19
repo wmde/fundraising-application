@@ -15,7 +15,7 @@ class InactiveCampaignBucketSelectionTest extends TestCase {
 	/** @var CampaignDate */
 	private $now;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		$this->now = new CampaignDate();
 	}
 

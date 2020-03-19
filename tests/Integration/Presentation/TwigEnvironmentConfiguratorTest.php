@@ -127,7 +127,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		$prefixer = new FilePrefixer( 'mylittleprefix' );
 		$factory->setFilePrefixer( $prefixer );
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'mylittleprefix.testfile.js',
 			$factory->getLayoutTemplate( 'unicorns.html.twig' )->render( [] )
 		);

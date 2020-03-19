@@ -27,7 +27,7 @@ class BucketSelectorTest extends TestCase {
 	 */
 	private $bucketSelectionStrategy;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		$this->campaign = new Campaign(
 			'test1',
 			't1',

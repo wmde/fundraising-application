@@ -89,27 +89,27 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		// TODO Restructure template to use elements and classes.
 		// Then we can use $crawler instead of searching strings
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'100,42&euro; von First name am',
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'First comment',
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'9.001,00&euro; von Second name am',
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'Second comment',
 			$client->getResponse()->getContent()
 		);
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'name &amp; company',
 			$client->getResponse()->getContent()
 		);
@@ -122,7 +122,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 		$client->request( 'GET', '/list-comments.html' );
 
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'Third &lt;script&gt; comment',
 			$client->getResponse()->getContent()
 		);
@@ -135,9 +135,9 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 		$client->request( 'GET', '/list-comments.json?n=2&page=2' );
 
-		$this->assertContains( 'First', $client->getResponse()->getContent() );
-		$this->assertNotContains( 'Second', $client->getResponse()->getContent() );
-		$this->assertNotContains( 'Third', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'First', $client->getResponse()->getContent() );
+		$this->assertStringNotContainsString( 'Second', $client->getResponse()->getContent() );
+		$this->assertStringNotContainsString( 'Third', $client->getResponse()->getContent() );
 	}
 
 }

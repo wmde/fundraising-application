@@ -45,8 +45,8 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertContains( "status=error\n", $client->getResponse()->getContent() );
-			$this->assertContains( 'msg=', $client->getResponse()->getContent() );
+			$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
+			$this->assertStringContainsString( 'msg=', $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -68,8 +68,8 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertContains( "status=ok\n", $client->getResponse()->getContent() );
-			$this->assertContains(
+			$this->assertStringContainsString( "status=ok\n", $client->getResponse()->getContent() );
+			$this->assertStringContainsString(
 				"url=http://my.donation.app/show-donation-confirmation?id=1&accessToken=my_secret_access_token\n",
 				$client->getResponse()->getContent()
 			);

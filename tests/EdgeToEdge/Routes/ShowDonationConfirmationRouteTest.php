@@ -57,7 +57,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
-			$this->assertContains( 'Anonym', $responseContent );
+			$this->assertStringContainsString( 'Anonym', $responseContent );
 		} );
 	}
 
@@ -67,7 +67,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
 
-			$this->assertContains( 'status-booked', $responseContent );
+			$this->assertStringContainsString( 'status-booked', $responseContent );
 		} );
 	}
 
@@ -111,26 +111,26 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		/** @var DirectDebitPayment $paymentMethod */
 		$paymentMethod = $donation->getPaymentMethod();
 
-		$this->assertContains( 'donation.id: ' . $donation->getId(), $responseContent );
-		$this->assertContains( 'donation.status: ' . self::MAPPED_STATUS, $responseContent );
-		$this->assertContains( 'donation.amount: ' . $donation->getAmount()->getEuroString(), $responseContent );
-		$this->assertContains( 'donation.interval: ' . $donation->getPaymentIntervalInMonths(), $responseContent );
-		$this->assertContains( 'donation.paymentType: ' . $donation->getPaymentMethodId(), $responseContent );
-		$this->assertContains( 'donation.optsIntoNewsletter: ' . $donation->getOptsIntoNewsletter(), $responseContent );
-		$this->assertContains( 'donation.updateToken: ' . self::CORRECT_ACCESS_TOKEN, $responseContent );
+		$this->assertStringContainsString( 'donation.id: ' . $donation->getId(), $responseContent );
+		$this->assertStringContainsString( 'donation.status: ' . self::MAPPED_STATUS, $responseContent );
+		$this->assertStringContainsString( 'donation.amount: ' . $donation->getAmount()->getEuroString(), $responseContent );
+		$this->assertStringContainsString( 'donation.interval: ' . $donation->getPaymentIntervalInMonths(), $responseContent );
+		$this->assertStringContainsString( 'donation.paymentType: ' . $donation->getPaymentMethodId(), $responseContent );
+		$this->assertStringContainsString( 'donation.optsIntoNewsletter: ' . $donation->getOptsIntoNewsletter(), $responseContent );
+		$this->assertStringContainsString( 'donation.updateToken: ' . self::CORRECT_ACCESS_TOKEN, $responseContent );
 
-		$this->assertContains( 'address.salutation: ' . $personName->getSalutation(), $responseContent );
-		$this->assertContains( 'address.fullName: ' . $personName->getFullName(), $responseContent );
-		$this->assertContains( 'address.firstName: ' . $personName->getFirstName(), $responseContent );
-		$this->assertContains( 'address.lastName: ' . $personName->getLastName(), $responseContent );
-		$this->assertContains( 'address.streetAddress: ' . $physicalAddress->getStreetAddress(), $responseContent );
-		$this->assertContains( 'address.postalCode: ' . $physicalAddress->getPostalCode(), $responseContent );
-		$this->assertContains( 'address.city: ' . $physicalAddress->getCity(), $responseContent );
-		$this->assertContains( 'address.email: ' . $donor->getEmailAddress(), $responseContent );
+		$this->assertStringContainsString( 'address.salutation: ' . $personName->getSalutation(), $responseContent );
+		$this->assertStringContainsString( 'address.fullName: ' . $personName->getFullName(), $responseContent );
+		$this->assertStringContainsString( 'address.firstName: ' . $personName->getFirstName(), $responseContent );
+		$this->assertStringContainsString( 'address.lastName: ' . $personName->getLastName(), $responseContent );
+		$this->assertStringContainsString( 'address.streetAddress: ' . $physicalAddress->getStreetAddress(), $responseContent );
+		$this->assertStringContainsString( 'address.postalCode: ' . $physicalAddress->getPostalCode(), $responseContent );
+		$this->assertStringContainsString( 'address.city: ' . $physicalAddress->getCity(), $responseContent );
+		$this->assertStringContainsString( 'address.email: ' . $donor->getEmailAddress(), $responseContent );
 
-		$this->assertContains( 'bankData.iban: ' . $paymentMethod->getBankData()->getIban()->toString(), $responseContent );
-		$this->assertContains( 'bankData.bic: ' . $paymentMethod->getBankData()->getBic(), $responseContent );
-		$this->assertContains( 'bankData.bankname: ' . $paymentMethod->getBankData()->getBankName(), $responseContent );
+		$this->assertStringContainsString( 'bankData.iban: ' . $paymentMethod->getBankData()->getIban()->toString(), $responseContent );
+		$this->assertStringContainsString( 'bankData.bic: ' . $paymentMethod->getBankData()->getBic(), $responseContent );
+		$this->assertStringContainsString( 'bankData.bankname: ' . $paymentMethod->getBankData()->getBankName(), $responseContent );
 	}
 
 	public function testGivenWrongToken_accessIsDenied(): void {
@@ -151,10 +151,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	private function assertDonationIsNotShown( Donation $donation, string $responseContent ): void {
-		$this->assertNotContains( $donation->getDonor()->getName()->getFirstName(), $responseContent );
-		$this->assertNotContains( $donation->getDonor()->getName()->getLastName(), $responseContent );
+		$this->assertStringNotContainsString( $donation->getDonor()->getName()->getFirstName(), $responseContent );
+		$this->assertStringNotContainsString( $donation->getDonor()->getName()->getLastName(), $responseContent );
 
-		$this->assertContains( self::ACCESS_DENIED_TEXT, $responseContent );
+		$this->assertStringContainsString( self::ACCESS_DENIED_TEXT, $responseContent );
 	}
 
 	public function testGivenWrongId_accessIsDenied(): void {
@@ -171,7 +171,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$client = $this->createClient( [] );
 		$responseContent = $this->retrieveDonationConfirmation( $client, 1 );
 
-		$this->assertContains( self::ACCESS_DENIED_TEXT, $responseContent );
+		$this->assertStringContainsString( self::ACCESS_DENIED_TEXT, $responseContent );
 	}
 
 	public function testWhenDonationTimestampCookiePreexists_itIsNotOverwritten(): void {
