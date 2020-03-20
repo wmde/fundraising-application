@@ -12,9 +12,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
  */
 class ServerSideTrackerSpy implements ServerSideTracker {
 
-	/**
-	 * @var string[]
-	 */
 	private $pageViews = [];
 
 	private $ips = [];
@@ -26,9 +23,6 @@ class ServerSideTrackerSpy implements ServerSideTracker {
 		];
 	}
 
-	/**
-	 * @return string[]
-	 */
 	public function getPageViews(): array {
 		return $this->pageViews;
 	}

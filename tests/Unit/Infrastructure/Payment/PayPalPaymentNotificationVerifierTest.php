@@ -91,7 +91,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 
 	public function testPaypalHttpCallReturnsUnexpectedResponse_verifierThrowsException(): void {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
-		$verifier = $this->newVerifier( $this->newClient( 'Ra-ra-rasputin, lover of the Russian queen!') );
+		$verifier = $this->newVerifier( $this->newClient( 'Ra-ra-rasputin, lover of the Russian queen!' ) );
 		$verifier->verify( $this->newRequest() );
 	}
 

@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Twig_Environment;
 use Twig_Error_Loader;
 use Twig_Error_Runtime;
@@ -44,16 +45,19 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 
 	public function testTwigInstancesTryAllLoadersUntilTemplateIsFound(): void {
 		$loaderException = new Twig_Error_Loader( 'not found' );
+		/** @var Twig_LoaderInterface&MockObject $firstLoader */
 		$firstLoader = $this->createMock( Twig_LoaderInterface::class );
 		$firstLoader->method( 'getSource' )->willThrowException( $loaderException );
 		$firstLoader->method( 'isFresh' )->willThrowException( $loaderException );
 		$firstLoader->method( 'getCacheKey' )->willThrowException( $loaderException );
 
+		/** @var Twig_LoaderInterface&MockObject $secondLoader */
 		$secondLoader = $this->createMock( Twig_LoaderInterface::class );
 		$secondLoader->method( 'getSource' )->willReturn( 'Meeow!' );
 		$secondLoader->method( 'isFresh' )->willReturn( true );
 		$secondLoader->method( 'getCacheKey' )->willReturn( 'Canis_silvestris' );
 
+		/** @var Twig_LoaderInterface&MockObject $thirdLoader */
 		$thirdLoader = $this->createMock( Twig_LoaderInterface::class );
 		$thirdLoader->expects( $this->never() )->method( $this->anything() );
 
@@ -147,7 +151,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		] )->getFactory();
 		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 
-		$provider = $this->createMock( ContentProvider::class );
+		$provider = $this->getMockContentProvider();
 		$provider->method( 'getWeb' )
 			->with( 'lorem', ['state' => 'fine'] )
 			->willReturn( 'ipsum. all is <strong>fine</strong>.' );
@@ -174,7 +178,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		] )->getFactory();
 		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 
-		$provider = $this->createMock( ContentProvider::class );
+		$provider = $this->getMockContentProvider();
 		$provider->method( 'getMail' )
 			->with( 'something', [ 'dontation_id' => 45 ] )
 			->willReturn( 'you got mail' );
@@ -200,7 +204,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		] )->getFactory();
 		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 
-		$provider = $this->createMock( ContentProvider::class );
+		$provider = $this->getMockContentProvider();
 		$provider->method( 'getWeb' )
 			->with( 'lorem' )
 			->willThrowException( new ContentException( "An exception occured rendering 'lorem'" ) );
@@ -211,5 +215,12 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		$this->expectExceptionMessageRegExp( '/An exception occured rendering \'lorem\'/' );
 
 		$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [] );
+	}
+
+	/**
+	 * @return ContentProvider & MockObject
+	 */
+	public function getMockContentProvider(): ContentProvider {
+		return $this->createMock( ContentProvider::class );
 	}
 }

@@ -39,8 +39,10 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 				);
 
 				$response = $client->getResponse();
+				/** @var \DOMElement $appElement */
+				$appElement = $client->getCrawler()->filter( '#app' )->getNode( 0 );
 				$dataVars = json_decode(
-					$client->getCrawler()->filter( '#app' )->getNode( 0 )->getAttribute( 'data-application-vars' )
+					$appElement->getAttribute( 'data-application-vars' )
 				);
 				$this->assertTrue( $response->isOk() );
 				$this->assertSame( $addressChange->getCurrentIdentifier(), $dataVars->addressToken );

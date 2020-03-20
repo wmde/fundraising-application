@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GetInTouch;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
@@ -30,7 +31,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	private $validator;
 
-	/** @var OperatorMailer|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var OperatorMailer&MockObject */
 	private $operatorMailer;
 
 	/** @var TemplateBasedMailerSpy */
@@ -38,6 +39,7 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 
 	public function setUp(): void {
 		$this->validator = $this->newSucceedingValidator();
+		/** @var OperatorMailer&MockObject operatorMailer */
 		$this->operatorMailer = $this->createMock( OperatorMailer::class );
 		$this->userMailer = new TemplateBasedMailerSpy( $this );
 	}
@@ -94,10 +96,11 @@ class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
+	/**
+	 * @return GetInTouchValidator&MockObject
+	 */
 	private function newSucceedingValidator(): GetInTouchValidator {
-		$validator = $this->getMockBuilder( GetInTouchValidator::class )
-			->disableOriginalConstructor()
-			->getMock();
+		$validator = $this->createMock( GetInTouchValidator::class );
 		$validator->method( 'validate' )->willReturn( new ValidationResult() );
 
 		return $validator;

@@ -9,6 +9,7 @@ use Doctrine\Common\Cache\VoidCache;
 use FileFetcher\InMemoryFileFetcher;
 use FileFetcher\StubFileFetcher;
 use FileFetcher\ThrowingFileFetcher;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -37,7 +38,7 @@ campaign1:
 CFG;
 
 	public function testGivenOneConfigurationFile_itIsLoaded() {
-		$filesystem = $this->createMock( Filesystem::class );
+		$filesystem = $this->getMockFilesystem();
 		$filesystem->method( 'exists' )->willReturn( true );
 		$fileFetcher = new StubFileFetcher( self::VALID_CONFIGURATION );
 		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
@@ -46,7 +47,7 @@ CFG;
 	}
 
 	public function testGivenSeveralConfigurationFiles_theyAreLoaded() {
-		$filesystem = $this->createMock( Filesystem::class );
+		$filesystem = $this->getMockFilesystem();
 		$filesystem->method( 'exists' )->willReturn( true );
 		$fileFetcher = new InMemoryFileFetcher(
 			[
@@ -62,7 +63,7 @@ CFG;
 	}
 
 	public function testGivenNonexistentFiles_exceptionIsThrown() {
-		$filesystem = $this->createMock( Filesystem::class );
+		$filesystem = $this->getMockFilesystem();
 		$filesystem->method( 'exists' )->willReturn( false );
 		$fileFetcher = new StubFileFetcher( self::VALID_CONFIGURATION );
 		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
@@ -72,7 +73,7 @@ CFG;
 	}
 
 	public function testGivenInvalidYaml_parseExceptionIsThrown() {
-		$filesystem = $this->createMock( Filesystem::class );
+		$filesystem = $this->getMockFilesystem();
 		$filesystem->method( 'exists' )->willReturn( true );
 		$fileFetcher = new StubFileFetcher( ' """ ' );
 		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
@@ -82,7 +83,7 @@ CFG;
 	}
 
 	public function testGivenInvalidFileStructure_configurationExceptionIsThrown() {
-		$filesystem = $this->createMock( Filesystem::class );
+		$filesystem = $this->getMockFilesystem();
 		$filesystem->method( 'exists' )->willReturn( true );
 		$fileFetcher = new StubFileFetcher( 'campaign: true' );
 		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
@@ -102,7 +103,7 @@ CFG;
 				'default_bucket' => 'a'
 			]
 		];
-		$filesystem = $this->createMock( Filesystem::class );
+		$filesystem = $this->getMockFilesystem();
 		$filesystem->method( 'exists' )->willReturn( false );
 		$fileFetcher = new ThrowingFileFetcher();
 		$cache = new ArrayCache();
@@ -111,6 +112,13 @@ CFG;
 		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, $cache );
 
 		$this->assertEquals( $campaignConfig, $loader->loadCampaignConfiguration( 'campaigns.yml' ) );
+	}
+
+	/**
+	 * @return MockObject|Filesystem
+	 */
+	public function getMockFilesystem() {
+		return $this->createMock( Filesystem::class );
 	}
 
 }

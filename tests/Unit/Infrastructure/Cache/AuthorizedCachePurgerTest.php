@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Cache;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\CachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\CachePurgingException;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
@@ -29,9 +30,9 @@ class AuthorizedCachePurgerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	/**
-	 * @return CachePurger|\PHPUnit_Framework_MockObject_MockObject
+	 * @return CachePurger & MockObject
 	 */
-	private function newCachePurger() {
+	private function newCachePurger(): CachePurger {
 		return $this->createMock( CachePurger::class );
 	}
 

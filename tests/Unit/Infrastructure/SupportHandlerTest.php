@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\NullHandler;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -16,6 +17,7 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
 class SupportHandlerTest extends TestCase {
 
 	public function testGivenWrappedMainHandlerHandlesRecord_loggerForHandlerErrorsLogsNothing(): void {
+		/** @var LoggerInterface&MockObject $loggerForHandlerErrors */
 		$loggerForHandlerErrors = $this->createMock( LoggerInterface::class );
 		$loggerForHandlerErrors->expects( $this->never() )->method( $this->anything() );
 		$supportHandler = new SupportHandler( new NullHandler(), $loggerForHandlerErrors );
@@ -23,6 +25,7 @@ class SupportHandlerTest extends TestCase {
 	}
 
 	public function testGivenWrappedMainHandlerThrowsException_loggerForHandlerErrorsLogsThisException(): void {
+		/** @var AbstractHandler&MockObject $throwingHandler */
 		$throwingHandler = $this->createMock( AbstractHandler::class );
 		$throwingHandler->method( 'handle' )->willThrowException( new \RuntimeException( 'I can\'t handle the logs anymore ?!😞' ) );
 
@@ -39,6 +42,7 @@ class SupportHandlerTest extends TestCase {
 	}
 
 	public function testSupportHandlerReturnsHandlingResultFromWrappedMainHandler(): void {
+		/** @var AbstractHandler&MockObject $returningHandler */
 		$returningHandler = $this->createMock( AbstractHandler::class );
 
 		$returningHandler->expects( $this->at( 0 ) )

@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Payment;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LogLevel;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
@@ -28,8 +29,13 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase
 		$loggingVerifier->verify( [] );
 	}
 
+	/**
+	 * @param PayPalPaymentNotificationVerifierException|null $exception
+	 *
+	 * @return PayPalPaymentNotificationVerifier&MockObject
+	 */
 	private function newThrowingVerifier( PayPalPaymentNotificationVerifierException $exception = null ): PayPalPaymentNotificationVerifier {
-		$verifier = $this->getMockBuilder( PayPalPaymentNotificationVerifier::class )->disableOriginalConstructor()->getMock();
+		$verifier = $this->createMock( PayPalPaymentNotificationVerifier::class );
 
 		if ( is_null( $exception ) ) {
 			$exception = new PayPalPaymentNotificationVerifierException( 'reticulation of splines failed' );

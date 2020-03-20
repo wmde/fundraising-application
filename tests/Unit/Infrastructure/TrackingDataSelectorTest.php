@@ -36,10 +36,6 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider trackingVarProvider
-	 *
-	 * @param $expectedResult string
-	 * @param $campaign string
-	 * @param $keyword string
 	 */
 	public function testConcatTrackingFromVarCouple( string $expectedResult, string $campaign, string $keyword ): void {
 		$value = TrackingDataSelector::getFirstNonEmptyValue( [

@@ -5,15 +5,20 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 
 use FileFetcher\FileFetcher;
+use FileFetcher\StubFileFetcher;
+use FileFetcher\ThrowingFileFetcher;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation\ConfigValidationException;
 use WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation\SchemaLoader;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation\SchemaLoader
  */
-class SchemaLoaderTest extends \PHPUnit\Framework\TestCase {
+class SchemaLoaderTest extends TestCase {
 
 	public function testOnFileFetchingError_runtimeExceptionIsThrown(): void {
+		/** @var FileFetcher&MockObject $fileFetcher */
 		$fileFetcher = $this->createMock( FileFetcher::class );
 		$fileFetcher->method( 'fetchFile' )->willThrowException( new \RuntimeException() );
 		$loader = new SchemaLoader( $fileFetcher );
@@ -22,24 +27,21 @@ class SchemaLoaderTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testGivenInvalidJson_validationExceptionIsThrown(): void {
-		$fileFetcher = $this->createMock( FileFetcher::class );
-		$fileFetcher->method( 'fetchFile' )->willReturn( 'Not a valid JSON string' );
+		$fileFetcher = new StubFileFetcher( 'Not a valid JSON string' );
 		$loader = new SchemaLoader( $fileFetcher );
 		$this->expectException( ConfigValidationException::class );
 		$loader->loadSchema( 'test.json' );
 	}
 
 	public function testGivenJsonRootIsNotAnObject_validationExceptionIsThrown(): void {
-		$fileFetcher = $this->createMock( FileFetcher::class );
-		$fileFetcher->method( 'fetchFile' )->willReturn( '"A valid JSON string"' );
+		$fileFetcher = new StubFileFetcher( '"A valid JSON string"' );
 		$loader = new SchemaLoader( $fileFetcher );
 		$this->expectException( ConfigValidationException::class );
 		$loader->loadSchema( 'test.json' );
 	}
 
 	public function testGivenValidJson_itIsReturnedAsObject(): void {
-		$fileFetcher = $this->createMock( FileFetcher::class );
-		$fileFetcher->method( 'fetchFile' )->willReturn( '{"testProperty": "A valid JSON string"}' );
+		$fileFetcher = new StubFileFetcher( '{"testProperty": "A valid JSON string"}' );
 		$loader = new SchemaLoader( $fileFetcher );
 
 		$expectedObject = new \stdClass();

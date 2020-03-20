@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
@@ -73,6 +74,7 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 	}
 
 	private function newTwigTemplateMock( array $expectedParameters ): TwigTemplate {
+		/** @var TwigTemplate&MockObject $twig */
 		$twig = $this->createMock( TwigTemplate::class );
 		$twig->expects( $this->once() )
 			->method( 'render' )
