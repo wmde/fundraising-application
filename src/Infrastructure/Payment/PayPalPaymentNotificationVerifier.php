@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure\Payment;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 
 /**
  * @license GNU GPL v2+
@@ -50,9 +51,13 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 			);
 		}
 
-		$result = $this->httpClient->post(
+		$result = $this->httpClient->request(
+			'POST',
 			$this->baseUrl,
-			[ 'form_params' => array_merge( [ 'cmd' => '_notify-validate' ], $request ) ]
+			[
+				RequestOptions::FORM_PARAMS => array_merge( [ 'cmd' => '_notify-validate' ], $request ),
+				RequestOptions::HTTP_ERRORS => false // disable throwing exceptions, return status instead
+			]
 		);
 
 		if ( $result->getStatusCode() !== 200 ) {

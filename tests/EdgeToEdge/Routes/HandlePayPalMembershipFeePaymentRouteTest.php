@@ -5,6 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use Symfony\Component\HttpKernel\Client;
@@ -43,7 +45,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 
 			$request = $this->newSubscriptionSignupRequest();
 			$factory->setPayPalMembershipFeeNotificationVerifier(
-				$this->newSucceedingVerifier( array_merge( [ 'cmd' => '_notify-validate' ], $request ) )
+				$this->newSucceedingVerifier()
 			);
 
 			$client->request(
@@ -57,66 +59,35 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newSucceedingVerifier( array $request ): PayPalPaymentNotificationVerifier {
-		return $this->newVerifierMock( $request, self::VERIFICATION_SUCCESSFUL );
+	private function newSucceedingVerifier(): PayPalPaymentNotificationVerifier {
+		return $this->newVerifierMock( self::VERIFICATION_SUCCESSFUL );
 	}
 
-	private function newFailingVerifier( array $request ): PayPalPaymentNotificationVerifier {
-		return $this->newVerifierMock( $request, self::VERIFICATION_FAILED );
+	private function newFailingVerifier(): PayPalPaymentNotificationVerifier {
+		return $this->newVerifierMock( self::VERIFICATION_FAILED );
 	}
 
-	private function newVerifierMock( array $request, string $expectedResponse ): PayPalPaymentNotificationVerifier {
+	private function newVerifierMock( string $responseBody ): PayPalPaymentNotificationVerifier {
 		return new PayPalPaymentNotificationVerifier(
-			$this->newGuzzleClientMock( $request, $expectedResponse ),
+			$this->newGuzzleClientMock( $responseBody ),
 			self::BASE_URL,
 			self::EMAIL_ADDRESS
 		);
 	}
 
-	private function newGuzzleClientMock( array $request, string $expectedResponse ): GuzzleClient {
-		$body = $this->getMockBuilder( Stream::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'getContents' ] )
-			->getMock();
-
-		$body->expects( $this->any() )
-			->method( 'getContents' )
-			->willReturn( $expectedResponse );
-
-		$response = $this->getMockBuilder( Response::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'getBody' ] )
-			->getMock();
-
-		$response->expects( $this->any() )
-			->method( 'getBody' )
-			->willReturn( $body );
-
-		$client = $this->getMockBuilder( GuzzleClient::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'post' ] )
-			->getMock();
-
-		$client->expects( $this->any() )
-			->method( 'post' )
-			->with(
-				self::BASE_URL,
-				[ 'form_params' => $request ]
-			)
-			->willReturn( $response );
-
-		return $client;
+	private function newGuzzleClientMock( string $responseBody ): GuzzleClient {
+		$mock = new MockHandler( [
+			new Response( 200, [], $responseBody )
+		] );
+		$handlerStack = HandlerStack::create( $mock );
+		return new GuzzleClient( ['handler' => $handlerStack ] );
 	}
 
 	public function testWhenPaymentProviderDoesNotVerify_errorCodeIsReturned(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$request = $this->newSubscriptionSignupRequest();
 
-			$factory->setPayPalMembershipFeeNotificationVerifier(
-				$this->newFailingVerifier(
-					array_merge( [ 'cmd' => '_notify-validate' ], $request )
-				)
-			);
+			$factory->setPayPalMembershipFeeNotificationVerifier( $this->newFailingVerifier() );
 
 			$client->request( 'POST', '/handle-paypal-membership-fee-payments', $request );
 
@@ -129,11 +100,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$invalidRequest = $this->newInvalidTransactionRequest();
 
-			$factory->setPayPalMembershipFeeNotificationVerifier(
-				$this->newSucceedingVerifier(
-					array_merge( [ 'cmd' => '_notify-validate' ], $invalidRequest )
-				)
-			);
+			$factory->setPayPalMembershipFeeNotificationVerifier( $this->newSucceedingVerifier() );
 
 			$client->request( 'POST', '/handle-paypal-membership-fee-payments', $invalidRequest );
 
@@ -196,9 +163,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 			$invalidRequest = $this->newInvalidMembershipIdRequest();
 
 			$factory->setPayPalMembershipFeeNotificationVerifier(
-				$this->newSucceedingVerifier(
-					array_merge( [ 'cmd' => '_notify-validate' ], $invalidRequest )
-				)
+				$this->newSucceedingVerifier()
 			);
 
 			$client->request( 'POST', '/handle-paypal-membership-fee-payments', $invalidRequest );
