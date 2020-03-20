@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ServerSideTrackerSpy;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 
@@ -13,7 +14,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
  * @licence GNU GPL v2+
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  */
-class PageViewTrackerTest extends \PHPUnit\Framework\TestCase {
+class PageViewTrackerTest extends TestCase {
 
 	public function testTrackPaypalRedirection(): void {
 		$tracker = new ServerSideTrackerSpy();

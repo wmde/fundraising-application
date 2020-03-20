@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Swift_NullTransport;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailerException;
@@ -32,10 +33,11 @@ class MessengerTest extends \PHPUnit\Framework\TestCase {
 			);
 	}
 
+	/**
+	 * @return Swift_NullTransport & MockObject
+	 */
 	private function newMailTransport(): Swift_NullTransport {
-		return $this->getMockBuilder( Swift_NullTransport::class )
-			->disableOriginalConstructor()
-			->getMock();
+		return $this->createMock( Swift_NullTransport::class );
 	}
 
 	public function testSendToAddressWithInternationalCharacters_doesNotCauseException(): void {

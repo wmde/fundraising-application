@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -447,6 +448,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$response = new SofortResponse();
 			$response->setPaymentUrl( 'https://bankingpin.please' );
 
+			/** @var SofortClient&MockObject $sofortClient */
 			$sofortClient = $this->createMock( SofortClient::class );
 			$sofortClient
 				->method( 'get' )

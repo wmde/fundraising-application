@@ -145,10 +145,10 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	/**
-	 * @return Messenger&MockObject
+	 * @return Messenger & MockObject
 	 */
 	private function newThrowingMessenger(): Messenger {
-		$failingMessenger = $this->getMockBuilder( Messenger::class )->disableOriginalConstructor()->getMock();
+		$failingMessenger = $this->createMock( Messenger::class );
 		$failingMessenger->method( 'sendMessageToUser' )->willThrowException( new \RuntimeException() );
 		return $failingMessenger;
 	}

@@ -14,6 +14,7 @@ use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
@@ -114,9 +115,11 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'Ok', $client->getResponse()->getContent() );
 			$this->assertSame( Response::HTTP_OK, $client->getResponse()->getStatusCode() );
 
+			/** @var SofortPayment $paymentMethod */
+			$paymentMethod = $factory->getDonationRepository()->getDonationById( $donation->getId() )->getPaymentMethod();
 			$this->assertEquals(
 				new DateTime( self::VALID_TRANSACTION_TIME ),
-				$factory->getDonationRepository()->getDonationById( $donation->getId() )->getPaymentMethod()->getConfirmedAt()
+				$paymentMethod->getConfirmedAt()
 			);
 		} );
 	}

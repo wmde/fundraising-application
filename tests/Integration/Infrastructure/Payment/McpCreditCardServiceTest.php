@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Infrastructure\Payment;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiry;
 use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiryFetchingException;
@@ -44,9 +45,9 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	/**
-	 * @return \PHPUnit_Framework_MockObject_MockObject|\IMcpCreditcardService_v1_5
+	 * @return \IMcpCreditcardService_v1_5 & MockObject
 	 */
-	private function getMicroPaymentServiceTestDouble() {
+	private function getMicroPaymentServiceTestDouble(): \IMcpCreditcardService_v1_5 {
 		return $this->createMock( \IMcpCreditcardService_v1_5::class );
 	}
 

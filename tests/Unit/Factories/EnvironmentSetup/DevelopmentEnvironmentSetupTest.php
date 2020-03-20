@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Factories\EnvironmentSetup;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -20,6 +21,7 @@ class DevelopmentEnvironmentSetupTest extends TestCase {
 			'setSofortLogger',
 		];
 		$supportingGetters = [ 'getLoggingPath' ];
+		/** @var FunFunFactory&MockObject $factory */
 		$factory = $this->createMock( FunFunFactory::class );
 		foreach ( $expectedSetters as $setterName ) {
 			$factory->expects( $this->once() )->method( $setterName );

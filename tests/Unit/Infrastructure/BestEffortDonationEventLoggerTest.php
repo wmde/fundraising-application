@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationEventLogException;
@@ -43,6 +44,7 @@ class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testWhenEventLoggerThrows_itIsLogged(): void {
+		/** @var DonationEventLogger&MockObject $eventLogger */
 		$eventLogger = $this->createMock( DonationEventLogger::class );
 		$eventLogger->method( 'log' )->will( $this->throwException( new DonationEventLogException( 'Fire Alarm!' ) ) );
 		$logger = $this->getLogger();
@@ -55,7 +57,7 @@ class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	/**
-	 * @return LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+	 * @return LoggerInterface&MockObject
 	 */
 	private function getLogger(): LoggerInterface {
 		return $this->createMock( LoggerInterface::class );
