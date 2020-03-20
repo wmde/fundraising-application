@@ -3,6 +3,7 @@
 
 composer.phar
 npm-debug.log
+coverage.clover
 
 vendor/
 node_modules/

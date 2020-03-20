@@ -91,6 +91,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\DoctrinePostPersistSubscriberCreateAddressChange;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\FallbackRequestValueReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
@@ -283,6 +284,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			if ( $this->addDoctrineSubscribers ) {
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineDonationPrePersistSubscriber() );
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineMembershipApplicationPrePersistSubscriber() );
+				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrinePostPersistSubscriberCreateAddressChange( $entityManager ) );
 			}
 
 			return $entityManager;
@@ -1513,6 +1515,10 @@ class FunFunFactory implements ServiceProviderInterface {
 			$this->getMembershipTokenGenerator(),
 			$this->getMembershipTokenGenerator()
 		);
+	}
+
+	private function newDoctrinePostPersistSubscriberCreateAddressChange( EntityManager $entityManager ): DoctrinePostPersistSubscriberCreateAddressChange {
+		return new DoctrinePostPersistSubscriberCreateAddressChange( $entityManager );
 	}
 
 	public function setDonationTokenGenerator( TokenGenerator $tokenGenerator ): void {
