@@ -5,8 +5,12 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Payment;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Stream;
+use GuzzleHttp\RequestOptions;
+use PHPUnit\Framework\MockObject\MockObject;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
 
@@ -26,6 +30,14 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 	const CURRENCY_EUR = 'EUR';
 	const RECURRING_NO_PAYMENT = 'recurring_payment_suspended_due_to_max_failed_payment';
 
+	private $expectedRequestparameters;
+	private $receivedRequests;
+
+	protected function setUp(): void {
+		$this->expectedRequestparameters = [];
+		$this->receivedRequests = [];
+	}
+
 	public function testReceiverAddressMismatches_verifierThrowsException(): void {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 
@@ -36,37 +48,50 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 	}
 
 	public function testReceiverAddressNotGiven_verifierThrowsException(): void {
-		$this->expectException( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException::class );
+		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 
 		$this->newVerifier( new Client() )->verify( [] );
 	}
 
 	public function testPaymentStatusNotGiven_verifierThrowsException(): void {
-		$this->expectException( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException::class );
+		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$this->newVerifier( new Client() )->verify( [
 			'receiver_email' => self::VALID_ACCOUNT_EMAIL
 		] );
 	}
 
 	public function testPaymentStatusNotConfirmable_verifierThrowsException(): void {
-		$this->expectException( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException::class );
+		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$this->newVerifier( new Client() )->verify( [
 			'receiver_email' => self::VALID_ACCOUNT_EMAIL,
 			'payment_status' => self::INVALID_PAYMENT_STATUS,
 		] );
 	}
 
-	public function testReassuringReceivedDataSucceeds_verifierDoesNotThrowException(): void {
+	public function testPaypalHttpCallSucceeds_verifierDoesNotThrowException(): void {
+		$this->expectNotToPerformAssertions();
 		try {
 			$this->newVerifier( $this->newSucceedingClient() )->verify( $this->newRequest() );
-		} catch ( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException $e ) {
+		} catch ( PayPalPaymentNotificationVerifierException $e ) {
 			$this->fail( 'There should be no exception with valid data and succeeding client.' );
 		}
 	}
 
-	public function testReassuringReceivedDataFails_verifierThrowsException(): void {
-		$this->expectException( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException::class );
+	public function testPaypalHttpCallReturnsFailure_verifierThrowsException(): void {
+		$this->expectException( PayPalPaymentNotificationVerifierException::class );
+		$verifier = $this->newVerifier( $this->newClientWithErrorResponse() );
+		$verifier->verify( $this->newRequest() );
+	}
+
+	public function testPaypalHttpCallFails_verifierThrowsException(): void {
+		$this->expectException( PayPalPaymentNotificationVerifierException::class );
 		$verifier = $this->newVerifier( $this->newFailingClient() );
+		$verifier->verify( $this->newRequest() );
+	}
+
+	public function testPaypalHttpCallReturnsUnexpectedResponse_verifierThrowsException(): void {
+		$this->expectException( PayPalPaymentNotificationVerifierException::class );
+		$verifier = $this->newVerifier( $this->newClient( 'Ra-ra-rasputin, lover of the Russian queen!') );
 		$verifier->verify( $this->newRequest() );
 	}
 
@@ -82,7 +107,8 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 			];
 			$this->newVerifier( $this->newSucceedingClientExpectingParams( $expectedParams ) )
 				->verify( $this->newFailedRecurringPaymentRequest() );
-		} catch ( \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException $e ) {
+			$this->assertVerificationParametersWereSent();
+		} catch ( PayPalPaymentNotificationVerifierException $e ) {
 			$this->fail( 'Currency in different field should be ok for non-payment-complete recurring notices.' );
 		}
 	}
@@ -115,76 +141,49 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 	}
 
 	private function newSucceedingClient(): Client {
-		$body = $this->getMockBuilder( Stream::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'getContents' ] )
-			->getMock();
-
-		$body->expects( $this->once() )
-			->method( 'getContents' )
-			->willReturn( 'VERIFIED' );
-
-		return $this->newClient( $body );
+		return $this->newClient( 'VERIFIED' );
 	}
 
 	private function newSucceedingClientExpectingParams( array $expectedParams ): Client {
-		$body = $this->getMockBuilder( Stream::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'getContents' ] )
-			->getMock();
+		return $this->newClient( 'VERIFIED', $expectedParams );
+	}
 
-		$body->expects( $this->once() )
-			->method( 'getContents' )
-			->willReturn( 'VERIFIED' );
+	private function newClientWithErrorResponse(): Client {
+		return $this->newClient( 'INVALID' );
+	}
 
-		return $this->newClient( $body, $expectedParams );
+	private function newClient( string $body, array $expectedParams = [] ): Client {
+		$this->receivedRequests = [];
+		$history = Middleware::history( $this->receivedRequests );
+		$mock = new MockHandler( [
+			new Response( 200, [], $body )
+		] );
+		$handlerStack = HandlerStack::create( $mock );
+		$handlerStack->push( $history );
+		$this->expectedRequestparameters = $expectedParams;
+		return new Client( ['handler' => $handlerStack ] );
 	}
 
 	private function newFailingClient(): Client {
-		$body = $this->getMockBuilder( Stream::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'getContents' ] )
-			->getMock();
-
-		$body->expects( $this->once() )
-			->method( 'getContents' )
-			->willReturn( 'INVALID' );
-
-		return $this->newClient( $body );
+		$mock = new MockHandler( [
+			new Response( 500, [], 'Internal Server Error - Paypal is overwhelmed' )
+		] );
+		$handlerStack = HandlerStack::create( $mock );
+		return new Client( ['handler' => $handlerStack ] );
 	}
 
-	private function newClient( Stream $body, array $expectedParams = null ): Client {
-		$response = $this->getMockBuilder( Response::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'getBody' ] )
-			->getMock();
-
-		$response->expects( $this->once() )
-			->method( 'getBody' )
-			->willReturn( $body );
-
-		$client = $this->getMockBuilder( Client::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'post' ] )
-			->getMock();
-
-		if ( is_null( $expectedParams ) ) {
-			$expectedParams = [
-				'cmd' => '_notify-validate',
-				'receiver_email' => self::VALID_ACCOUNT_EMAIL,
-				'payment_status' => self::VALID_PAYMENT_STATUS,
-				'item_name' => self::ITEM_NAME,
-				'mc_currency' => self::CURRENCY_EUR
-			];
+	private function assertVerificationParametersWereSent(): void {
+		if ( count( $this->expectedRequestparameters ) == 0 ) {
+			return;
 		}
-		$client->expects( $this->once() )
-			->method( 'post' )
-			->with( self::DUMMY_API_URL, [
-				'form_params' => $expectedParams
-			] )
-			->willReturn( $response );
+		if ( count( $this->receivedRequests ) == 0 ) {
+			$this->fail( 'No verification requests received' );
+		}
+		/** @var \GuzzleHttp\Psr7\Request $req */
+		$req = $this->receivedRequests[0]['request'];
+		parse_str( $req->getBody()->getContents(), $receivedArguments );
 
-		return $client;
+		$this->assertEquals( $this->expectedRequestparameters, $receivedArguments );
 	}
 
 }

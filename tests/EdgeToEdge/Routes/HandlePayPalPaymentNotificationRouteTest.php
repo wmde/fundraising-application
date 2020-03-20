@@ -5,8 +5,10 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Stream;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
@@ -45,7 +47,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
 
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newNonNetworkUsingNotificationVerifier( $this->newHttpParamsForPayment() )
+				$this->newNonNetworkUsingNotificationVerifier()
 			);
 
 			$client->request(
@@ -59,9 +61,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newNonNetworkUsingNotificationVerifier( array $requestParams ): PayPalPaymentNotificationVerifier {
+	private function newNonNetworkUsingNotificationVerifier(): PayPalPaymentNotificationVerifier {
 		return new PayPalPaymentNotificationVerifier(
-			$this->newGuzzleClientMock( self::VALID_VERIFICATION_RESPONSE, $requestParams ),
+			$this->newGuzzleClientMock( self::VALID_VERIFICATION_RESPONSE ),
 			self::BASE_URL,
 			self::EMAIL_ADDRESS
 		);
@@ -69,45 +71,18 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	private function newFailingNotifierMock(): PayPalPaymentNotificationVerifier {
 		return new PayPalPaymentNotificationVerifier(
-			$this->newGuzzleClientMock( self::FAILING_VERIFICATION_RESPONSE, $this->newHttpParamsForPayment() ),
+			$this->newGuzzleClientMock( self::FAILING_VERIFICATION_RESPONSE ),
 			self::BASE_URL,
 			self::EMAIL_ADDRESS
 		);
 	}
 
-	private function newGuzzleClientMock( string $responseBody, array $requestParams ): GuzzleClient {
-		$body = $this->getMockBuilder( Stream::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'getContents' ] )
-			->getMock();
-
-		$body->expects( $this->any() )
-			->method( 'getContents' )
-			->willReturn( $responseBody );
-
-		$response = $this->getMockBuilder( Response::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'getBody' ] )
-			->getMock();
-
-		$response->expects( $this->any() )
-			->method( 'getBody' )
-			->willReturn( $body );
-
-		$client = $this->getMockBuilder( GuzzleClient::class )
-			->disableOriginalConstructor()
-			->setMethods( [ 'post' ] )
-			->getMock();
-
-		$client->expects( $this->any() )
-			->method( 'post' )
-			->with(
-				self::BASE_URL,
-				[ 'form_params' => array_merge( $requestParams, [ 'cmd' => '_notify-validate' ] ) ]
-			)
-			->willReturn( $response );
-
-		return $client;
+	private function newGuzzleClientMock( string $responseBody ): GuzzleClient {
+		$mock = new MockHandler( [
+			new Response( 200, [], $responseBody )
+		] );
+		$handlerStack = HandlerStack::create( $mock );
+		return new GuzzleClient( ['handler' => $handlerStack ] );
 	}
 
 	private function assertPayPalDataGotPersisted( DonationRepository $donationRepo, array $request ): void {
@@ -165,7 +140,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenInvalidReceiverEmail_applicationReturnsError(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newNonNetworkUsingNotificationVerifier( $this->newHttpParamsForPayment() )
+				$this->newNonNetworkUsingNotificationVerifier()
 			);
 
 			$client->request(
@@ -188,7 +163,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK( array $params ): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) use ( $params ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newNonNetworkUsingNotificationVerifier( $params )
+				$this->newNonNetworkUsingNotificationVerifier()
 			);
 
 			$client->request(
@@ -210,7 +185,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenUnsupportedPaymentStatus_requestDataIsLogged(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newNonNetworkUsingNotificationVerifier( $this->newPendingPaymentParams() )
+				$this->newNonNetworkUsingNotificationVerifier()
 			);
 
 			$logger = new LoggerSpy();
@@ -254,7 +229,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenUnsupportedCurrency_applicationReturnsError(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newNonNetworkUsingNotificationVerifier( $this->newHttpParamsForPayment() )
+				$this->newNonNetworkUsingNotificationVerifier()
 			);
 
 			$requestData = $this->newHttpParamsForPayment();
@@ -273,7 +248,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenTransactionTypeForSubscriptionChanges_requestDataIsLogged(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
-				$this->newNonNetworkUsingNotificationVerifier( $this->newSubscriptionModificationParams() )
+				$this->newNonNetworkUsingNotificationVerifier()
 			);
 			$logger = new LoggerSpy();
 			$factory->setPaypalLogger( $logger );
@@ -400,7 +375,10 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		return $parameters;
 	}
 
-	private function newSucceedingNotificationVerifier(): PaymentNotificationVerifier {
+	/**
+	 * @return PaymentNotificationVerifier&MockObject
+	 */
+	private function newSucceedingNotificationVerifier() {
 		// The PayPal verifier throws exceptions on verification failure.
 		return $this->createMock( PaymentNotificationVerifier::class );
 	}
