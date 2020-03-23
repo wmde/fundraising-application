@@ -36,3 +36,19 @@ donation_address:
     - optional
   default_bucket: required
   url_key: da
+
+anon_form_display:
+  description: >
+    Test form variations of selecting anonymous donation - with selecting "address type" (a radio group with three choices)
+    or 2 groups of radio buttons, first for selecting anonymous yes/no, then address type person/company.
+  reference: "https://phabricator.wikimedia.org/T237939"
+  start: "2019-11-19 11:00:00"
+  end: "2019-12-31 23:00:00"
+  buckets:
+    - "address_type"
+    - "two_steps"
+    - "two_steps_fixed_disclaimer"
+  default_bucket: "address_type"
+  url_key: fd
+  active: true
+  param_only: true

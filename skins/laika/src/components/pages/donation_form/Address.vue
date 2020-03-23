@@ -3,29 +3,15 @@
 		<AutofillHandler @autofill="onAutofill" >
 			<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
 		</AutofillHandler>
-		<feature-toggle>
-			<two-step-address-type
-					slot="campaigns.anon_form_display.two_steps"
-					v-on:address-type="setAddressType( $event )"
-					:disabledAddressTypes="disabledAddressTypes"
-			></two-step-address-type>
 
-			<two-step-fixed-disclaimer-address-type
-					slot="campaigns.anon_form_display.two_steps_fixed_disclaimer"
-					v-on:address-type="setAddressType( $event )"
-					:disabledAddressTypes="disabledAddressTypes"
-			></two-step-fixed-disclaimer-address-type>
+		<address-type
+				v-on:address-type="setAddressType( $event )"
+				:disabledAddressTypes="disabledAddressTypes"
+		></address-type>
+		<div
+				class="has-margin-top-18"
+				v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}</div>
 
-			<address-type
-					slot="campaigns.anon_form_display.address_type"
-					v-on:address-type="setAddressType( $event )"
-					:disabledAddressTypes="disabledAddressTypes"
-			></address-type>
-			<div
-					slot="campaigns.anon_form_display.address_type"
-					class="has-margin-top-18"
-					v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}</div>
-		</feature-toggle>
 		<AutofillHandler @autofill="onAutofill" >
 			<name v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
@@ -53,8 +39,6 @@ import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import PaymentBankData from '@/components/shared/PaymentBankData.vue';
-import TwoStepAddressType from '@/components/pages/donation_form/TwoStepAddressType.vue';
-import TwoStepFixedDisclaimerAddressType from '@/components/pages/donation_form/TwoStepFixedDisclaimerAddressType.vue';
 import { mergeValidationResults } from '@/merge_validation_results';
 import { camelizeName } from '@/camlize_name';
 
@@ -64,8 +48,6 @@ export default Vue.extend( {
 		Name,
 		Postal,
 		AddressType,
-		TwoStepAddressType,
-		TwoStepFixedDisclaimerAddressType,
 		ReceiptOptOut,
 		Email,
 		NewsletterOptIn,
