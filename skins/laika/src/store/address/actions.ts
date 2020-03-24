@@ -4,12 +4,13 @@ import {
 	validateAddress,
 	validateEmail,
 	setAddressType,
-	setNewsletterOptIn, setReceiptOptOut, setAddressField,
+	setNewsletterOptIn, setReceiptOptOut, setAddressField, initializeAddress,
 } from '@/store/address/actionTypes';
 import { AddressState, InputField } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
-import { MARK_EMPTY_FIELDS_INVALID } from '@/store/address/mutationTypes';
+import { INITIALIZE_ADDRESS, MARK_EMPTY_FIELDS_INVALID } from '@/store/address/mutationTypes';
+import { FieldInitialization } from '@/store/address/types';
 
 export const actions = {
 	[ setAddressField ]( context: ActionContext<AddressState, any>, field: InputField ) {
@@ -67,6 +68,9 @@ export const actions = {
 	},
 	[ setReceiptOptOut ]( context: ActionContext<AddressState, any>, optOut: boolean ) {
 		context.commit( 'SET_RECEIPT_OPTOUT', optOut );
+	},
+	[ initializeAddress ]( context: ActionContext<AddressState, any>, fields: FieldInitialization[] ): void {
+		context.commit( INITIALIZE_ADDRESS, fields );
 	},
 
 };
