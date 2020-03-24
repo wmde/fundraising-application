@@ -3,15 +3,26 @@
 		<AutofillHandler @autofill="onAutofill" >
 			<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
 		</AutofillHandler>
+		<feature-toggle>
 
-		<address-type
-				v-on:address-type="setAddressType( $event )"
-				:disabledAddressTypes="disabledAddressTypes"
-		></address-type>
-		<div
-				class="has-margin-top-18"
-				v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}</div>
+			<address-type
+					slot="campaigns.address_type.no_preselection"
+					v-on:address-type="setAddressType( $event )"
+					:disabledAddressTypes="disabledAddressTypes"
+					:initial-address-type="null">
+			</address-type>
 
+			<address-type
+					slot="campaigns.address_type.preselection"
+					v-on:address-type="setAddressType( $event )"
+					:disabledAddressTypes="disabledAddressTypes"
+					:initial-address-type="AddressTypeModel.PERSON">
+			</address-type>
+			<div
+					class="has-margin-top-18"
+					v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}</div>
+			<span v-if="addressTypeIsInvalid" class="help is-danger">{{ $t( 'donation_form_section_address_error' )  }}</span>
+		</feature-toggle>
 		<AutofillHandler @autofill="onAutofill" >
 			<name v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
@@ -151,6 +162,7 @@ export default Vue.extend( {
 		...mapGetters( NS_ADDRESS, [
 			'addressType',
 			'addressTypeIsNotAnon',
+			'addressTypeIsInvalid',
 		] ),
 	},
 	methods: {

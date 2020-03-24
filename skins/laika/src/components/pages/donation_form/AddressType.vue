@@ -35,12 +35,13 @@ export default Vue.extend( {
 	name: 'AddressType',
 	data: function () {
 		return {
-			type: null,
+			type: this.$props.initialAddressType,
 		};
 	},
 	props: {
 		disabledAddressTypes: Array,
 		disabledAnonymousType: Boolean,
+		initialAddressType: String,
 	},
 	computed: {
 		AddressTypeModel: {
