@@ -13,8 +13,10 @@ import {
 	SET_ADDRESS_FIELDS,
 	SET_NEWSLETTER_OPTIN,
 	SET_RECEIPT_OPTOUT,
+	SET_VALIDITY, INITIALIZE_ADDRESS,
 } from '@/store/address/mutationTypes';
 import { AddressState, InputField } from '@/view_models/Address';
+import { FieldInitialization } from '@/store/address/types';
 
 export const mutations: MutationTree<AddressState> = {
 	[ VALIDATE_INPUT ]( state: AddressState, field: InputField ) {
@@ -78,5 +80,14 @@ export const mutations: MutationTree<AddressState> = {
 	},
 	[ SET_RECEIPT_OPTOUT ]( state: AddressState, optOut ) {
 		state.receiptOptOut = optOut;
+	},
+	[ SET_VALIDITY ]( state: AddressState, { name, value } ) {
+		state.validity[ name ] = value;
+	},
+	[ INITIALIZE_ADDRESS ]( state: AddressState, fields: FieldInitialization[] ) {
+		fields.forEach( ( field: FieldInitialization ) => {
+			state.validity[ field.name ] = field.validity;
+			state.values[ field.name ] = field.value;
+		} );
 	},
 };

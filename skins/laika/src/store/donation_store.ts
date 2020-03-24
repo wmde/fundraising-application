@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuex, { StoreOptions } from 'vuex';
+import Vuex, { Store, StoreOptions } from 'vuex';
 import createPayment from '@/store/payment';
 import createAddress from '@/store/address';
 import createBankData from '@/store/bankdata';
@@ -13,7 +13,7 @@ import {
 
 Vue.use( Vuex );
 
-export function createStore() {
+export function createStore( plugins: Array< ( s: Store<any> ) => void > = [] ) {
 	const storeBundle: StoreOptions<any> = {
 		modules: {
 			[ NS_PAYMENT ]: createPayment(),
@@ -29,6 +29,7 @@ export function createStore() {
 					state[ NS_BANKDATA ].isValidating;
 			},
 		},
+		plugins,
 	};
 
 	return new Vuex.Store<any>( storeBundle );
