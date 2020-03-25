@@ -1,9 +1,15 @@
-language: bash
+language: php
+
+php:
+    - 7.4
+
 services:
   - docker
 
 install:
-  - travis_retry make install-php
+  - travis_retry composer install # This is a crutch to use travis tokens for github API instead of needing our own
+  # Commented out for efficiency reasons
+  # - travis_retry make install-php
   - make install-js
 
 before_script:
