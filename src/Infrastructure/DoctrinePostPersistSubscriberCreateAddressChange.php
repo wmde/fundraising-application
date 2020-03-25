@@ -44,24 +44,28 @@ class DoctrinePostPersistSubscriberCreateAddressChange implements EventSubscribe
 		$this->entityManager->flush();
 	}
 
+	/**
+	 * @param Donation|MembershipApplication $entity
+	 *
+	 * @return AddressChange
+	 */
 	private function createAddressChange( object $entity ): AddressChange {
 		$addressChangeBuilder = AddressChangeBuilder::create();
-		$name = null;
 		$data = $entity->getDecodedData();
 
 		if ( $entity instanceof Donation ) {
 			$addressChangeBuilder->forDonation( $entity->getId() );
 
-			if ( !isset( $data['adresstyp'] ) || $data['adresstyp'] == DonorName::PERSON_PRIVATE ) {
+			if ( !isset( $data['adresstyp'] ) || $data['adresstyp'] === DonorName::PERSON_PRIVATE ) {
 				$addressChangeBuilder->forPerson();
-			} elseif ( $data['adresstyp'] == DonorName::PERSON_COMPANY ) {
+			} elseif ( $data['adresstyp'] === DonorName::PERSON_COMPANY ) {
 				$addressChangeBuilder->forCompany();
 			}
 
 		} elseif ( $entity instanceof MembershipApplication ) {
 			$addressChangeBuilder->forMembership( $entity->getId() );
 
-			if ( $entity->getCompany() == null || $entity->getCompany() == '' ) {
+			if ( $entity->getCompany() === null || $entity->getCompany() === '' ) {
 				$addressChangeBuilder->forPerson();
 			} else {
 				$addressChangeBuilder->forCompany();
