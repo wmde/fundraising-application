@@ -120,7 +120,6 @@
 
 		"phpunit/phpunit": "~7.0",
 		"codeception/specify": "~1.1",
-		"jeroen/nyancat-phpunit-resultprinter": "~2.2",
 		"ockcyp/covers-validator": "~1.0",
 		"mikey179/vfsstream": "~1.6",
 		"wmde/psr-log-test-doubles": "~2.1",
