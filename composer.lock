@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "abfb667289fcc623862a686ef6a0c796",
+    "content-hash": "b4513d8513541891338aa09b723b8b14",
     "packages": [
         {
             "name": "airbrake/phpbrake",
-            "version": "v0.7.2",
+            "version": "v0.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/airbrake/phpbrake.git",
-                "reference": "19d06e2f787b2600c64ff4db9af8181155e5f7fb"
+                "reference": "d34f171897941157aeb1949f9d8b69dca003479b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/airbrake/phpbrake/zipball/19d06e2f787b2600c64ff4db9af8181155e5f7fb",
-                "reference": "19d06e2f787b2600c64ff4db9af8181155e5f7fb",
+                "url": "https://api.github.com/repos/airbrake/phpbrake/zipball/d34f171897941157aeb1949f9d8b69dca003479b",
+                "reference": "d34f171897941157aeb1949f9d8b69dca003479b",
                 "shasum": ""
             },
             "require": {
@@ -26,7 +26,7 @@
                 "php": ">=5.4"
             },
             "require-dev": {
-                "monolog/monolog": "^1.22",
+                "monolog/monolog": "^1.22|^2.0",
                 "phpunit/phpunit": "^5.7",
                 "squizlabs/php_codesniffer": "^2.9"
             },
@@ -57,7 +57,7 @@
                 "logging",
                 "notifier"
             ],
-            "time": "2020-01-15T07:51:01+00:00"
+            "time": "2020-03-24T14:50:19+00:00"
         },
         {
             "name": "behat/transliterator",
@@ -2401,16 +2401,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801"
+                "reference": "0f73288fd15629204f9d42b7055f72dacbe811fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/446d54b4cb6bf489fc9d75f55843658e6f25d801",
-                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/0f73288fd15629204f9d42b7055f72dacbe811fc",
+                "reference": "0f73288fd15629204f9d42b7055f72dacbe811fc",
                 "shasum": ""
             },
             "require": {
@@ -2444,7 +2444,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2019-11-01T11:05:21+00:00"
+            "time": "2020-03-23T09:12:05+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -5118,63 +5118,6 @@
                 "versions"
             ],
             "time": "2018-06-13T13:22:40+00:00"
-        },
-        {
-            "name": "jeroen/nyancat-phpunit-resultprinter",
-            "version": "v2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JeroenDeDauw/nyancat-phpunit-resultprinter.git",
-                "reference": "1e296f2bf0b16fc54c9d0af7f7fc2ae6756fe166"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JeroenDeDauw/nyancat-phpunit-resultprinter/zipball/1e296f2bf0b16fc54c9d0af7f7fc2ae6756fe166",
-                "reference": "1e296f2bf0b16fc54c9d0af7f7fc2ae6756fe166",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1",
-                "whatthejeff/nyancat-scoreboard": "~1.1"
-            },
-            "replace": {
-                "whatthejeff/nyancat-phpunit-resultprinter": "*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7.0|^8.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "NyanCat\\": "src/NyanCat"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeff Welch",
-                    "email": "whatthejeff@gmail.com",
-                    "homepage": "http://whatthejeff.com"
-                }
-            ],
-            "description": "Nyan Cat result printer for PHPUnit",
-            "homepage": "http://github.com/whatthejeff/nyancat-phpunit-resultprinter",
-            "keywords": [
-                "cat",
-                "nyan",
-                "phpunit",
-                "rainbow",
-                "tests"
-            ],
-            "time": "2020-02-25T00:33:37+00:00"
         },
         {
             "name": "matthiasnoback/symfony-config-test",
@@ -8267,113 +8210,6 @@
                 "validate"
             ],
             "time": "2020-02-14T12:15:55+00:00"
-        },
-        {
-            "name": "whatthejeff/fab",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/whatthejeff/fab.git",
-                "reference": "1f9d9cdc354cabda0d7b72b7e2ab5fdfb747b8ef"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/whatthejeff/fab/zipball/1f9d9cdc354cabda0d7b72b7e2ab5fdfb747b8ef",
-                "reference": "1f9d9cdc354cabda0d7b72b7e2ab5fdfb747b8ef",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Fab": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeff Welch",
-                    "email": "whatthejeff@gmail.com"
-                }
-            ],
-            "description": "Make your output fabulous!",
-            "homepage": "http://github.com/whatthejeff/fab",
-            "keywords": [
-                "colorful",
-                "fab",
-                "fabulous",
-                "rainbow"
-            ],
-            "time": "2013-02-14T01:28:47+00:00"
-        },
-        {
-            "name": "whatthejeff/nyancat-scoreboard",
-            "version": "v1.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/whatthejeff/nyancat-scoreboard.git",
-                "reference": "ab5e68605d4950f299684f4e161d56e96be6994c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/whatthejeff/nyancat-scoreboard/zipball/ab5e68605d4950f299684f4e161d56e96be6994c",
-                "reference": "ab5e68605d4950f299684f4e161d56e96be6994c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3",
-                "whatthejeff/fab": "~1.0"
-            },
-            "require-dev": {
-                "pear-pear/pear": "1.9.4",
-                "phpunit/php-code-coverage": "1.3.*@dev",
-                "phpunit/phpunit": "3.8.*@dev",
-                "phpunit/phpunit-mock-objects": "1.3.*@dev"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "NyanCat": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeff Welch",
-                    "email": "whatthejeff@gmail.com"
-                }
-            ],
-            "description": "Nyan Cat Scoreboard",
-            "homepage": "http://github.com/whatthejeff/nyancat-scoreboard",
-            "keywords": [
-                "cat",
-                "nyan",
-                "rainbow",
-                "scoreboard",
-                "tests"
-            ],
-            "time": "2014-02-12T22:16:49+00:00"
         },
         {
             "name": "wmde/fundraising-frontend-content",
