@@ -20,6 +20,8 @@ const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
 
+localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'campaigns.address_type.preselection' ] } );
+
 describe( 'Address.vue', () => {
 	let wrapper: any;
 	beforeEach( () => {

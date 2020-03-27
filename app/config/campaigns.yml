@@ -63,12 +63,14 @@ compact_design:
   param_only: true
 
 address_type:
-  description:
+  description: Test if the address type not being preselected changes the user behaviour of entering nonsense address data.
   reference: "https://phabricator.wikimedia.org/T247228"
   start: "2020-04-01"
   end: "2020-07-15"
   buckets:
     - "preselection"
     - "no_preselection"
+  default_bucket: "preselection"
   url_key: addrpre
-  active: true
+  active: false
+  param_only: false
