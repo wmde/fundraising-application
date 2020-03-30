@@ -4,7 +4,7 @@ This directory contains the Ansible deployment files for the code of the fundrai
 
 The deployment scripts are structured in two phases - building the archive and all its PHP and Javascript dependencies on the "local" 
 machine (the machine that runs the playbook) and then deploying the archive to the server. The deployment is also made 
-in fashion that the old version will run until the new version is fully deployed and then the switch is made.   
+in fashion that the old version will run until the new version is fully deployed and then the switch is made.
 
 ## Deploy the application
 
@@ -39,29 +39,55 @@ To roll back ("undo") a deployment, log in to the server, change the symlink to 
 
 ## Deploying a release that needs database changes
 
+Database changes take the form of [Doctrine migration scripts](https://www.doctrine-project.org/projects/doctrine-migrations/en/2.2/reference/introduction.html), which are part of the application.
+
+### 1. Deploy activating new version
 Call the playbook (in this case for the test server) with the `skip_symlink` variable:
 
     ansible-playbook -i inventory/test --extra-vars 'skip_symlink=1' deployment.yml
 
-This won't change the `html` symlink.
+This won't change the `html` symlink that links to the current version. 
 
-Afterwards, you login to the server, change to the new release directory (the timestamped directory, *not* the `html`) and use 
-[Doctrine migrations](https://www.doctrine-project.org/projects/doctrine-migrations/en/2.0/reference/managing-migrations.html)
-to update the database. 
+Write down the release name, e.g. `release-201908161015`.
 
-Before running the migration you have to set the application environment variable that will be used in the Doctrine `cli-config.php` configuration file. You can find the name of the application environment in the `environment_name` variable of the deployment inventory. Common names are `uat` (User Acceptance Testing) and `prod` (Production).
+### 2. Activate Maintenance mode (if needed)
+If your migration scripts take longer than a few seconds to run, you must put the application into maintenance mode, taking the application offline. Please coordinate the right maintenance period with the product manager and Fundraising OPs.
+
+Use the maintenance mode Ansible playbook (not part of this Git repository but in the private Wikimedia Germany fundraising infrastructure GitHub repository) to display a static HTMl page instead of the Fundraising Application: 
+
+    ansible-playbook -i inventory/servers.ini -b --ask-become-pass --extra-vars "maintenance_mode_status='On'"  maintenance_mode.yml
+
+You can add the parameters `-l fundraising_frontend_test` or `-l fundraising_frontend_production` to put only one environment into maintenance mode.
+
+The contents of the maintenance mode files are stored at https://github.com/wmde/fundraising-maintenance
+
+### 3. Run migration scripts
+Login to the server of the fundraising application (test or production), change to the new release directory (the timestamped directory, *not* the `html`).
+
+Before running the migration script you have to set the application environment variable that will be used in the Doctrine `cli-config.php` configuration file. You can find the name of the application environment in the `environment_name` variable of the deployment inventory. Common names are `uat` (User Acceptance Testing) and `prod` (Production).
 
     export APP_ENV=prod
 
-Check the migrations directory of FundraisingStore for the migration name you want to run (usually a timestamp like `20190109000000`). Then run the following command (replacing ``MIGRATION_NAME` ) :
+Check the migrations directory of FundraisingStore (`wmde/fundraising-store/migrations`) for the migration name you want to run (usually a timestamp like `20190109000000`). Then run the following command (replacing `MIGRATION_NAME` ) :
 
-    vendor/bin/doctrine-migrations migrations:execute --configuration=vendor/wmde/fundraising-store/migrations.yml 20190109000000
+    vendor/bin/doctrine-migrations migrations:execute --configuration=vendor/wmde/fundraising-store/migrations.yml MIGRATION_NAME
 
-When the migration is finished with the database changes, do a new deployment to ensure the symlink is changed and the cache is purged. 
+### 4. Change the symlink
+
+Change to the directory containing the relases. Change the symlink to the release you noted in step 1 (replacing the `TIMESTAMP` placeholder):
+
+    rm html && ln -s release-TIMESTAMP html
+
+### 5. Deactivate Maintenance mode (if active)
+If you put the application into maintenance mode, you need to activate the fundraising application again.
+
+Use the maintenance mode Ansible playbook (not part of this Git repository but in the private Wikimedia Germany fundraising infrastructure GitHub repository): 
+
+    ansible-playbook -i inventory/servers.ini -b --ask-become-pass --extra-vars "maintenance_mode_status='Off'"  maintenance_mode.yml
 
 ## Preparing a new server for deployment
 
-### Prerequisites on the Server
+### Prerequisites on the server
 The application requires the following infrastructure to be set up already on the server:
 
 - PHP 7 (with intl and [kontocheck extension](http://kontocheck.sourceforge.net/))
@@ -71,18 +97,21 @@ The application requires the following infrastructure to be set up already on th
 
 Ansible scripts that set up this infrastructure are at the Wikimedia Germany fundraising infrastructure GitHub repository (private).  
 
-On the machine that does the deployment, you need to have Git, [Ansible](http://ansible.com/), PHP 7 and Node.js to be installed.
-
 ### Create the logging directories file on the server
 
 Log in to the server and create the directory **`/usr/share/nginx/www/DOMAIN_NAME/logs`** - for the application logs (can be identical to web server log, must be writable by PHP-FPM process)
+
+### Prerequisites on the deployment machine
+On the machine that does the deployment, you need to have Docker, Git and [Ansible](http://ansible.com/) installed. 
+
+For each domain you want to deploy to, you need an *inventory file* and *configuration file*. You must decide which application environment (`dev`, `uat` or `prod`) you want to run. In the following commands, replace the `<ENVIRONMENT>` placeholder with the environment name. 
 
 ### Create inventory files on the deployment machine
 Inventory files contain server/environment specific information.
 
 Duplicate the example file `deployment/inventory/production_example` and set server names and file paths (as determined by the server setup). You need a separate file for each domain you want to deploy to, e.g. test and production.
 
-If you want to bring the testing server more in line with the development environment, set the `environment_name` value to `dev`.
+Set the `environment_name` value to `<ENVIRONMENT>` (see above).
 
 For security reasons the contents of the `inventory` directory are not in the Git repository, except for the example. **Do not check in your inventory files.**
 
@@ -90,13 +119,6 @@ For security reasons the contents of the `inventory` directory are not in the Gi
 
 Log in to the deployment machine and in the configuration directory, create a new directory for the domain name.
 
-In the new directory create the file `config.prod.json` with all the necessary application data. You need to configure the credentials for the database, MCP and Paypal. You don't need to change values that are similar to values in `app/config/config.dist.json`.
+In the new directory create the file `config.<ENVIRONMENT>.json` with all the necessary application data. You need to configure the credentials for the database, MCP and Paypal. You don't need to change values that are similar to values in `app/config/config.dist.json`.
 
-If you want to bring the testing server more in line with the development environment, name the file `config.dev.json`.
-
-The configurations are kept in a local Git repository, so you should commit and push your changes.  
-
-## Test if the deployment works in all environments
-There is a Vagrant configuration for setting up three servers for test, staging and production in `deployment/test/Vagrantfile`. The LEMP stack for the three machines can be installed by running the Ansible playbook from the repository https://github.com/gbirke/wikimedia-fundraising-devbox and the inventory file `deployment/test/inventory`. When the machines are ready, the deployment can be tested with
-
-    ansible-playbook -i test/inventory deployment.yml
+The configurations are kept in a local Git repository, so you should commit and push your changes.
