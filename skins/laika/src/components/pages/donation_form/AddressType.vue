@@ -29,18 +29,19 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel, AddressTypes } from '@/view_models/AddressTypeModel';
 
 export default Vue.extend( {
 	name: 'AddressType',
 	data: function () {
 		return {
-			type: AddressTypeModel.PERSON,
+			type: this.$props.initialAddressType ? AddressTypes.get( this.$props.initialAddressType ) : null,
 		};
 	},
 	props: {
 		disabledAddressTypes: Array,
 		disabledAnonymousType: Boolean,
+		initialAddressType: String,
 	},
 	computed: {
 		AddressTypeModel: {

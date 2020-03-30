@@ -2,19 +2,22 @@ import { MutationTree } from 'vuex';
 import { Validity } from '@/view_models/Validity';
 import { Helper } from '@/store/util';
 import {
-	VALIDATE_INPUT,
-	MARK_EMPTY_FIELDS_INVALID,
 	BEGIN_ADDRESS_VALIDATION,
-	FINISH_ADDRESS_VALIDATION,
 	BEGIN_EMAIL_VALIDATION,
+	FINISH_ADDRESS_VALIDATION,
 	FINISH_EMAIL_VALIDATION,
-	SET_ADDRESS_TYPE,
+	INITIALIZE_ADDRESS,
+	MARK_EMPTY_FIELDS_INVALID,
 	SET_ADDRESS_FIELD,
 	SET_ADDRESS_FIELDS,
+	SET_ADDRESS_TYPE,
 	SET_NEWSLETTER_OPTIN,
 	SET_RECEIPT_OPTOUT,
+	SET_VALIDITY,
+	VALIDATE_INPUT,
 } from '@/store/address/mutationTypes';
 import { AddressState, InputField } from '@/view_models/Address';
+import { FieldInitialization } from '@/store/address/types';
 
 export const mutations: MutationTree<AddressState> = {
 	[ VALIDATE_INPUT ]( state: AddressState, field: InputField ) {
@@ -32,6 +35,9 @@ export const mutations: MutationTree<AddressState> = {
 				state.validity[ fieldName ] = Validity.INVALID;
 			}
 		} );
+		if ( state.validity.addressType === Validity.INCOMPLETE ) {
+			state.validity.addressType = Validity.INVALID;
+		}
 	},
 	[ BEGIN_ADDRESS_VALIDATION ]( state: AddressState ) {
 		state.serverSideValidationCount++;
@@ -78,5 +84,14 @@ export const mutations: MutationTree<AddressState> = {
 	},
 	[ SET_RECEIPT_OPTOUT ]( state: AddressState, optOut ) {
 		state.receiptOptOut = optOut;
+	},
+	[ SET_VALIDITY ]( state: AddressState, { name, value } ) {
+		state.validity[ name ] = value;
+	},
+	[ INITIALIZE_ADDRESS ]( state: AddressState, fields: FieldInitialization[] ) {
+		fields.forEach( ( field: FieldInitialization ) => {
+			state.validity[ field.name ] = field.validity;
+			state.values[ field.name ] = field.value;
+		} );
 	},
 };

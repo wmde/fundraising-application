@@ -19,7 +19,8 @@ import { FeatureTogglePlugin } from '@/FeatureToggle';
 const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
-localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'campaigns.anon_form_display.address_type' ] } );
+
+localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'campaigns.address_type.preselection' ] } );
 
 describe( 'Address.vue', () => {
 	let wrapper: any;

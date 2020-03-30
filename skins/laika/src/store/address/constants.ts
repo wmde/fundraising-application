@@ -6,8 +6,8 @@ export interface AddressRequirements {
 }
 
 export const REQUIRED_FIELDS: AddressRequirements = {
-	[ AddressTypeModel.PERSON ]: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email' ],
-	[ AddressTypeModel.COMPANY ]: [ 'companyName', 'street', 'postcode', 'city', 'email' ],
+	[ AddressTypeModel.PERSON ]: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'email', 'addressType' ],
+	[ AddressTypeModel.COMPANY ]: [ 'companyName', 'street', 'postcode', 'city', 'email', 'addressType' ],
 	[ AddressTypeModel.ANON ]: [],
 };
 

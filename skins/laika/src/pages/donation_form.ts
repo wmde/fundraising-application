@@ -8,10 +8,12 @@ import { createStore } from '@/store/donation_store';
 import Component from '@/components/pages/DonationForm.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 import { action } from '@/store/util';
-import { NS_PAYMENT } from '@/store/namespaces';
+import { NS_ADDRESS, NS_PAYMENT } from '@/store/namespaces';
 import { initializePayment } from '@/store/payment/actionTypes';
 import { FeatureTogglePlugin } from '@/FeatureToggle';
 import { bucketIdToCssClass } from '@/bucket_id_to_css_class';
+import { createFeatureTogglePlugin } from '@/store/create_feature_toggle_plugin';
+import { initializeAddress } from '@/store/address/actionTypes';
 
 const PAGE_IDENTIFIER = 'donation-form',
 	COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
@@ -29,7 +31,7 @@ interface DonationFormModel {
 }
 
 const pageData = new PageDataInitializer<DonationFormModel>( '#app' );
-const store = createStore();
+const store = createStore( [ createFeatureTogglePlugin( pageData.selectedBuckets ) ] );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
@@ -40,13 +42,16 @@ const i18n = new VueI18n( {
 
 Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
 
-store.dispatch( action( NS_PAYMENT, initializePayment ), {
-	// convert German-Formatted amount, see DonationFormPresenter
-	amount: pageData.applicationVars.initialFormValues.amount.replace( ',', '' ).replace( /^000$/, '0' ),
-	type: pageData.applicationVars.initialFormValues.paymentType,
-	paymentIntervalInMonths: String( pageData.applicationVars.initialFormValues.paymentIntervalInMonths ),
-	isCustomAmount: pageData.applicationVars.initialFormValues.isCustomAmount,
-} ).then( paymentDataComplete => {
+Promise.all( [
+	store.dispatch( action( NS_PAYMENT, initializePayment ), {
+		// convert German-Formatted amount, see DonationFormPresenter
+		amount: pageData.applicationVars.initialFormValues.amount.replace( ',', '' ).replace( /^000$/, '0' ),
+		type: pageData.applicationVars.initialFormValues.paymentType,
+		paymentIntervalInMonths: String( pageData.applicationVars.initialFormValues.paymentIntervalInMonths ),
+		isCustomAmount: pageData.applicationVars.initialFormValues.isCustomAmount,
+	} ),
+	store.dispatch( action( NS_ADDRESS, initializeAddress ), [] ),
+] ).then( ( [ paymentDataComplete, _ ] ) => {
 
 	new Vue( {
 		store,

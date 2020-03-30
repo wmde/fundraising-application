@@ -56,7 +56,6 @@ import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import PaymentBankData from '@/components/shared/PaymentBankData.vue';
-import TwoStepAddressType from '@/components/pages/donation_form/TwoStepAddressType.vue';
 import SubmitValues from '@/components/pages/update_address/SubmitValues.vue';
 import axios, { AxiosResponse } from 'axios';
 import { trackDynamicForm, trackFormSubmission } from '@/tracking';
@@ -74,7 +73,6 @@ export default Vue.extend( {
 		Name,
 		Postal,
 		AddressType,
-		TwoStepAddressType,
 		ReceiptOptOut,
 		Email,
 		NewsletterOptIn,

@@ -12,6 +12,7 @@ export const getters: GetterTree<AddressState, any> = {
 	},
 	addressType: ( state: AddressState ): AddressTypeModel => state.addressType,
 	addressTypeIsNotAnon: ( state: AddressState, getters ): boolean => getters.addressType !== AddressTypeModel.ANON,
+	addressTypeIsInvalid: ( state: AddressState ): boolean => state.validity.addressType === Validity.INVALID,
 	fullName: ( state: AddressState ): string => {
 		// Duplicating code from DonorName PHP class
 		const address = state.values;
