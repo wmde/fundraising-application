@@ -52,7 +52,10 @@ class FallbackRequestValueReader {
 	}
 
 	private function logDeprecationWarning( string $deprecatedParameterName ): void {
-		$this->logger->warning( "Some application is still submitting the deprecated form parameter '{$deprecatedParameterName}'" );
+		$this->logger->warning(
+			"Some application is still submitting the deprecated form parameter '{$deprecatedParameterName}'",
+			[ 'referrer' => $this->request->headers->get( 'referer' ) ]
+		);
 	}
 
 }
