@@ -69,6 +69,9 @@ describe( 'MembershipAddress', () => {
 			expect( getters.invalidFields(
 				newMinimalStore( {
 					addressType: AddressTypeModel.PERSON,
+					validity: {
+						addressType: Validity.INCOMPLETE
+					}
 				} ),
 				null,
 				null,

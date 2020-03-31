@@ -60,10 +60,13 @@ describe( 'Address', () => {
 	describe( 'Getters/invalidFields', () => {
 		const requiredFields = REQUIRED_FIELDS[ AddressTypeModel.PERSON ];
 
-		it( 'does not return unrequired fields as invalid when they are not set', () => {
+		it( 'does not return non-required fields as invalid when they are not set', () => {
 			expect( getters.invalidFields(
 				newMinimalStore( {
 					addressType: AddressTypeModel.PERSON,
+					validity: {
+						addressType: Validity.INCOMPLETE
+					}
 				} ),
 				null,
 				null,
