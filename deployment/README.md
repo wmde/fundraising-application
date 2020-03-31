@@ -68,9 +68,9 @@ Before running the migration script you have to set the application environment 
 
     export APP_ENV=prod
 
-Check the migrations directory of FundraisingStore (`wmde/fundraising-store/migrations`) for the migration name you want to run (usually a timestamp like `20190109000000`). Then run the following command (replacing `MIGRATION_NAME` ) :
+Then run the `migrate` command:
 
-    vendor/bin/doctrine-migrations migrations:execute --configuration=vendor/wmde/fundraising-store/migrations.yml MIGRATION_NAME
+    vendor/bin/doctrine-migrations migrations:migrate --configuration=vendor/wmde/fundraising-store/migrations.yml
 
 ### 4. Change the symlink
 
