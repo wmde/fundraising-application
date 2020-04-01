@@ -62,7 +62,9 @@ You can add the parameters `-l fundraising_frontend_test` or `-l fundraising_fro
 The contents of the maintenance mode files are stored at https://github.com/wmde/fundraising-maintenance
 
 ### 3. Run migration scripts
-Login to the server of the fundraising application (test or production), change to the new release directory (the timestamped directory, *not* the `html`).
+Login to the server of the fundraising application (test server or production server, depending on your use case).
+In /usr/share/ngix/www/ you can find the folder of the server you want to migrate. The folder contains the release directories.
+Change into the new release directory (the timestamped directory, *not* the `html`).
 
 Before running the migration script you have to set the application environment variable that will be used in the Doctrine `cli-config.php` configuration file. You can find the name of the application environment in the `environment_name` variable of the deployment inventory. Common names are `uat` (User Acceptance Testing) and `prod` (Production).
 
