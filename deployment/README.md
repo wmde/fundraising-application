@@ -62,7 +62,7 @@ You can add the parameters `-l fundraising_frontend_test` or `-l fundraising_fro
 The contents of the maintenance mode files are stored at https://github.com/wmde/fundraising-maintenance
 
 ### 3. Run migration scripts
-Login to the server of the fundraising application (test server or production server, depending on your use case).
+Login to the server of the fundraising application (test server or production server, depending on which version you want to deploy).
 In `/usr/share/ngix/www/` you can find the directory namend after the domain of the server you want to migrate. The directory contains the the last 5 releases, each in its own directory.
 Change into the new release directory (the timestamped directory, *not* the `html`).
 
