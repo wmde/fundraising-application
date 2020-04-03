@@ -46,6 +46,33 @@ describe( 'BankData', () => {
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
 	} );
 
+	it( 'validates (non-german) IBANs with letters correctly and sets the bank data to the store on success', () => {
+		const wrapper = mount( BankData, {
+			localVue,
+			propsData: {
+				validateBankDataUrl: '/check-iban',
+				validateLegacyBankDataUrl: '/generate-iban',
+			},
+			store: createStore(),
+			mocks: {
+				$t: () => {},
+			},
+		} );
+		const store = wrapper.vm.$store;
+		store.dispatch = jest.fn();
+
+		const iban = wrapper.find( '#iban' );
+		wrapper.setData( { accountId: 'NL18ABNA0484869868 ' } );
+		iban.trigger( 'blur' );
+		const expectedAction = action( NS_BANKDATA, setBankData );
+		const expectedPayload = {
+			validationUrl: '/check-iban',
+			requestParams: { iban: 'NL18ABNA0484869868 ' },
+		} as BankAccountRequest;
+
+		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
+	} );
+
 	it( 'validates legacy bank data correctly and sets it in the store on success', () => {
 		const wrapper = mount( BankData, {
 			localVue,
@@ -119,7 +146,7 @@ describe( 'BankData', () => {
 		store.dispatch = jest.fn();
 
 		const iban = wrapper.find( '#iban' );
-		wrapper.setData( { accountId: 'DE123456051ABCINVALID' } );
+		wrapper.setData( { accountId: 'DE123456051äh?' } );
 		iban.trigger( 'blur' );
 
 		const expectedAction = action( NS_BANKDATA, markBankDataAsInvalid );

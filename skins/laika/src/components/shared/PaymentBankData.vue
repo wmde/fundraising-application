@@ -142,7 +142,7 @@ export default Vue.extend( {
 			return this.bankId === '';
 		},
 		looksLikeIban: function () {
-			return /^[A-Z]{2}([0-9\s]+)?$/i.test( this.$data.accountId );
+			return /^[A-Z]{2}([A-Z0-9\s]+)?$/i.test( this.$data.accountId );
 		},
 		looksLikeBankAccountNumber: function () {
 			return /^\d+$/.test( this.$data.accountId );
