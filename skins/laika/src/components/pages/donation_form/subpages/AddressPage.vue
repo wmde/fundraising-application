@@ -18,6 +18,7 @@
 				:validate-bank-data-url="validateBankDataUrl"
 				:validate-legacy-bank-data-url="validateLegacyBankDataUrl"
 				:countries="countries"
+				:is-direct-debit-from-banner="isDirectDebitFromBanner"
 				ref="address">
 		</address-fields>
 			<div class="summary-wrapper has-margin-top-18 has-outside-border">
@@ -119,6 +120,11 @@ export default Vue.extend( {
 		paymentWasInitialized: {
 			get(): boolean {
 				return this.$store.state[ NS_PAYMENT ].initialized;
+			},
+		},
+		isDirectDebitFromBanner: {
+			get(): boolean {
+				return this.paymentWasInitialized && this.$store.getters[ 'payment/isDirectDebitPayment' ];
 			},
 		},
 	},

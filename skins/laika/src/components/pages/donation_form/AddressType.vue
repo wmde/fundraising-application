@@ -22,7 +22,7 @@
 					:native-value="AddressTypeModel.ANON"
 					@change.native="setAddressType()">
 				{{ $t( 'donation_form_addresstype_option_anonymous' ) }}
-				<div v-show="isDirectDebitFromBanner" class="has-margin-top-18">{{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }}</div>
+				<div v-show="isDirectDebitFromBanner" class="info-message has-margin-top-18">{{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }}</div>
 			</b-radio>
 		</div>
     </fieldset>
@@ -31,7 +31,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import { AddressTypeModel, AddressTypes } from '@/view_models/AddressTypeModel';
-import { NS_PAYMENT } from '@/store/namespaces';
 
 export default Vue.extend( {
 	name: 'AddressType',
@@ -44,16 +43,12 @@ export default Vue.extend( {
 		disabledAddressTypes: Array,
 		disabledAnonymousType: Boolean,
 		initialAddressType: String,
+		isDirectDebitFromBanner: Boolean,
 	},
 	computed: {
 		AddressTypeModel: {
 			get: function () {
 				return AddressTypeModel;
-			},
-		},
-		isDirectDebitFromBanner: {
-			get(): boolean {
-				return this.$store.state[ NS_PAYMENT ].initialized && this.$store.getters[ 'payment/isDirectDebitPayment' ];
 			},
 		},
 	},
