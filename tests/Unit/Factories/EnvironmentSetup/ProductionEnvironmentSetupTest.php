@@ -13,15 +13,16 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  * @covers \WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\ProductionEnvironmentSetup
  */
 class ProductionEnvironmentSetupTest extends TestCase {
-	public function testEnvironmentSetsUpLoggingAndCaching() {
+	public function testEnvironmentSetsUpEnvironmentDependentServices() {
 		$expectedSetters = [
 			'setLogger',
 			'setPaypalLogger',
 			'setSofortLogger',
 			'setSofortLogger',
-			'enableCaching'
+			'enableCaching',
+			'setDoctrineConfiguration'
 		];
-		$supportingGetters = [ 'getLoggingPath' ];
+		$supportingGetters = [ 'getLoggingPath', 'getWritableApplicationDataPath' ];
 		/** @var FunFunFactory&MockObject $factory */
 		$factory = $this->createMock( FunFunFactory::class );
 		foreach ( $expectedSetters as $setterName ) {

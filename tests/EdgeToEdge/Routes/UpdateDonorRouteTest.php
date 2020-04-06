@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
-use WMDE\Fundraising\Store\DonationData;
+use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 
 /**
  * @license GNU GPL v2+

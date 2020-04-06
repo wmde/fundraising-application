@@ -13,12 +13,13 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  * @covers \WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup
  */
 class DevelopmentEnvironmentSetupTest extends TestCase {
-	public function testEnvironmentSetsUpLogging() {
+	public function testEnvironmentSetsUpLoggingAndDoctrineConfiguration() {
 		$expectedSetters = [
 			'setLogger',
 			'setPaypalLogger',
 			'setSofortLogger',
 			'setSofortLogger',
+			'setDoctrineConfiguration',
 		];
 		$supportingGetters = [ 'getLoggingPath' ];
 		/** @var FunFunFactory&MockObject $factory */

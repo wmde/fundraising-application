@@ -8,13 +8,13 @@ use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Entities\Donation as DoctrineDonation;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation as DoctrineDonation;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Store\DonationData;
+use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 
 /**
  * @licence GNU GPL v2+

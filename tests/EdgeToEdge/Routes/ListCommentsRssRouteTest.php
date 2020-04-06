@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -31,6 +31,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 
 	public function testWhenAreComments_theyAreInTheRss(): void {
 		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
+			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$this->persistEvilComment( $factory->getEntityManager() );

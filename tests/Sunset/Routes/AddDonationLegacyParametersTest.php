@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Sunset\Routes;
 
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;

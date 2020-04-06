@@ -8,11 +8,10 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Events;
-use Exception;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Entities\MembershipApplication;
 
 class DoctrinePostPersistSubscriberCreateAddressChange implements EventSubscriber {

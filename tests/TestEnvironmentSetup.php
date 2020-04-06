@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
+use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\Translation\Translator;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -20,5 +21,6 @@ class TestEnvironmentSetup implements EnvironmentSetup {
 
 		// disabling translations in tests (will result in returned keys we can more easily test for)
 		$factory->setTranslator( new Translator( 'zz_ZZ' ) );
+		$factory->setDoctrineConfiguration( Setup::createConfiguration( true ) );
 	}
 }

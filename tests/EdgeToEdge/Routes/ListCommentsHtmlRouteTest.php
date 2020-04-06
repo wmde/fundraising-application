@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
@@ -31,6 +31,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 	public function testWhenAreThreeComments_listSizeIsShownAsThree(): void {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+			$factory->disableDoctrineSubscribers();
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
 
@@ -45,7 +46,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	private function createThreeComments( EntityManager $entityManager ): void {
 		$this->persistFirstComment( $entityManager );
 		$this->persistSecondComment( $entityManager );
-		$this->persistEvilComment( $entityManager );
+		$this->persistMaliciousComment( $entityManager );
 		$entityManager->flush();
 	}
 
@@ -69,18 +70,19 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$entityManager->persist( $secondDonation );
 	}
 
-	private function persistEvilComment( EntityManager $entityManager ): void {
-		$secondDonation = new Donation();
-		$secondDonation->setPublicRecord( 'Third name & company' );
-		$secondDonation->setComment( 'Third <script> comment' );
-		$secondDonation->setAmount( '9001' );
-		$secondDonation->setCreationTime( new DateTime( '1984-03-03' ) );
-		$secondDonation->setIsPublic( true );
-		$entityManager->persist( $secondDonation );
+	private function persistMaliciousComment( EntityManager $entityManager ): void {
+		$maliciousDonation = new Donation();
+		$maliciousDonation->setPublicRecord( 'Third name & company' );
+		$maliciousDonation->setComment( 'Third <script> comment' );
+		$maliciousDonation->setAmount( '9001' );
+		$maliciousDonation->setCreationTime( new DateTime( '1984-03-03' ) );
+		$maliciousDonation->setIsPublic( true );
+		$entityManager->persist( $maliciousDonation );
 	}
 
 	public function testWhenAreComments_theyAreInTheHtml(): void {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+			$factory->disableDoctrineSubscribers();
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
 
@@ -117,6 +119,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 	public function testCommentsGetEscaped(): void {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+			$factory->disableDoctrineSubscribers();
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
 
@@ -130,6 +133,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
 		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+			$factory->disableDoctrineSubscribers();
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
 

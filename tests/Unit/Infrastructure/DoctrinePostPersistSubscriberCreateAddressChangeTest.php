@@ -11,7 +11,7 @@ use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeId;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Entities\MembershipApplication;
 use WMDE\Fundraising\Frontend\Infrastructure\DoctrinePostPersistSubscriberCreateAddressChange;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\EntityManagerSpy;
@@ -46,9 +46,7 @@ class DoctrinePostPersistSubscriberCreateAddressChangeTest extends TestCase {
 	}
 
 	public function testCreateDonation_createsAddressChange(): void {
-		$donation = new Donation();
-		$donation->setId( 1 );
-		$donation->encodeAndSetData( [ 'adresstyp' => DonorName::PERSON_PRIVATE ] );
+		$donation = $this->newDonation( DonorName::PERSON_PRIVATE );
 
 		$entityManager = new EntityManagerSpy();
 		$lifeCycleEventArgs = new LifecycleEventArgs( $donation, $entityManager );
@@ -61,9 +59,7 @@ class DoctrinePostPersistSubscriberCreateAddressChangeTest extends TestCase {
 	}
 
 	public function testCreateDonation_hasCorrectExternalIdType(): void {
-		$donation = new Donation();
-		$donation->setId( 1 );
-		$donation->encodeAndSetData( [ 'adresstyp' => DonorName::PERSON_PRIVATE ] );
+		$donation = $this->newDonation( DonorName::PERSON_PRIVATE );
 
 		$entityManager = new EntityManagerSpy();
 		$lifeCycleEventArgs = new LifecycleEventArgs( $donation, $entityManager );
@@ -95,9 +91,7 @@ class DoctrinePostPersistSubscriberCreateAddressChangeTest extends TestCase {
 	}
 
 	public function testCreatePersonalFromDonation_hasCorrectAddressType(): void {
-		$donation = new Donation();
-		$donation->setId( 1 );
-		$donation->encodeAndSetData( [ 'adresstyp' => DonorName::PERSON_PRIVATE ] );
+		$donation = $this->newDonation( DonorName::PERSON_PRIVATE );
 
 		$entityManager = new EntityManagerSpy();
 		$lifeCycleEventArgs = new LifecycleEventArgs( $donation, $entityManager );
@@ -109,8 +103,7 @@ class DoctrinePostPersistSubscriberCreateAddressChangeTest extends TestCase {
 	}
 
 	public function testCreateFromDonationWithNoAdressyp_defaultsToPrivate(): void {
-		$donation = new Donation();
-		$donation->setId( 1 );
+		$donation = $this->newDonation();
 
 		$entityManager = new EntityManagerSpy();
 		$lifeCycleEventArgs = new LifecycleEventArgs( $donation, $entityManager );
@@ -122,9 +115,7 @@ class DoctrinePostPersistSubscriberCreateAddressChangeTest extends TestCase {
 	}
 
 	public function testCreateCompanyFromDonation_hasCorrectAddressType(): void {
-		$donation = new Donation();
-		$donation->setId( 1 );
-		$donation->encodeAndSetData( [ 'adresstyp' => DonorName::PERSON_COMPANY ] );
+		$donation = $this->newDonation( DonorName::PERSON_COMPANY );
 
 		$entityManager = new EntityManagerSpy();
 		$lifeCycleEventArgs = new LifecycleEventArgs( $donation, $entityManager );
@@ -160,5 +151,15 @@ class DoctrinePostPersistSubscriberCreateAddressChangeTest extends TestCase {
 		$subscriber->postPersist( $lifeCycleEventArgs );
 
 		$this->assertTrue( $entityManager->getEntity()->isCompanyAddress() );
+	}
+
+	private function newDonation( ?string $addressType = null ): Donation {
+		$donation = new Donation();
+		$donation->setDonorFullName( 'Bob the Builder' );
+		$donation->setId( 1 );
+		if ( $addressType ) {
+			$donation->encodeAndSetData( [ 'adresstyp' => $addressType ] );
+		}
+		return $donation;
 	}
 }
