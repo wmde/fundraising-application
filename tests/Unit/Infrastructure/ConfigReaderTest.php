@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 use FileFetcher\SimpleFileFetcher;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
@@ -16,7 +17,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
+class ConfigReaderTest extends TestCase {
 
 	/**
 	 * @var vfsStreamDirectory
@@ -109,7 +110,7 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testWhenInstanceFileDoesNotExist_exceptionIsThrown(): void {
-		$reader = new \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader( new SimpleFileFetcher(), $this->distPath, $this->emptyPath . 'foo' );
+		$reader = new ConfigReader( new SimpleFileFetcher(), $this->distPath, $this->emptyPath . 'foo' );
 
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessageMatches( '/Cannot read config file at path.*/' );
@@ -129,7 +130,7 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 	public function testWhenConfigJsonIsNotArray_exceptionIsThrown(): void {
 		$notArrayPath = vfsStream::newFile( 'not-array.json' )->at( $this->dir )->withContent( '42' )->url();
 
-		$reader = new \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader( new SimpleFileFetcher(), $notArrayPath );
+		$reader = new ConfigReader( new SimpleFileFetcher(), $notArrayPath );
 
 		$this->expectException( RuntimeException::class );
 		$this->expectExceptionMessageMatches( '/No valid config data found in config file at path.*/' );
