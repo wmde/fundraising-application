@@ -63,20 +63,16 @@ The contents of the maintenance mode files are stored at https://github.com/wmde
 
 ### 3. Run migration scripts
 Login to the server of the fundraising application (test server or production server, depending on which version you want to deploy).
-In `/usr/share/ngix/www/` you can find the directory namend after the domain of the server you want to migrate. The directory contains the the last 5 releases, each in its own directory.
+In `/usr/share/ngix/www/` you can find the directory named after the domain of the server you want to migrate. The directory contains the the last 5 releases, each in its own directory.
 Change into the new release directory (the timestamped directory, *not* the `html`).
 
-Before running the migration script you have to set the application environment variable that will be used in the Doctrine `cli-config.php` configuration file. You can find the name of the application environment in the `environment_name` variable of the deployment inventory. Common names are `uat` (User Acceptance Testing) and `prod` (Production).
-
-    export APP_ENV=prod
-
-Then run the `migrate` command:
+Run the `migrate` command:
 
     vendor/bin/doctrine-migrations migrations:migrate --configuration=vendor/wmde/fundraising-store/migrations.yml
 
 ### 4. Change the symlink
 
-Change to the directory containing the relases. Change the symlink to the release you noted in step 1 (replacing the `TIMESTAMP` placeholder):
+Change to the directory containing the releases. Change the symlink to the release you noted in step 1 (replacing the `TIMESTAMP` placeholder):
 
     rm html && ln -s release-TIMESTAMP html
 
