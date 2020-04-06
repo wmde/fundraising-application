@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
@@ -33,6 +33,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 	public function testRouteShowsComments(): void {
 		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
+			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
@@ -93,6 +94,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 	public function testGivenLimitSmallerThanCommentCount_onlySoManyCommentsAreShown(): void {
 		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
+			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
@@ -110,6 +112,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 	public function testGivenJsonpCallback_jsonIsWrappedInCallback(): void {
 		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
+			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
@@ -135,6 +138,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
 		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
+			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();

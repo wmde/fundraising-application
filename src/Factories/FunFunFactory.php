@@ -10,6 +10,7 @@ use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\VoidCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use FileFetcher\ErrorLoggingFileFetcher;
@@ -41,18 +42,17 @@ use WMDE\Fundraising\AddressChangeContext\UseCases\ChangeAddress\ChangeAddressUs
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\DonationContext\Authorization\DonationTokenFetcher;
-use WMDE\Fundraising\DonationContext\Authorization\RandomTokenGenerator;
 use WMDE\Fundraising\DonationContext\Authorization\TokenGenerator;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineCommentFinder;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationEventLogger;
-use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationPrePersistSubscriber;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationTokenFetcher;
 use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
+use WMDE\Fundraising\DonationContext\DonationContextFactory;
 use WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationEventLogger;
@@ -92,7 +92,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\DoctrinePostPersistSubscriberCreateAddressChange;
-use WMDE\Fundraising\Frontend\Infrastructure\Validation\FallbackRequestValueReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
@@ -212,21 +211,21 @@ use WMDE\FunValidators\Validators\TextPolicyValidator;
  */
 class FunFunFactory implements ServiceProviderInterface {
 
-	private $config;
+	/**
+	 * @var array<string, mixed>
+	 */
+	private array $config;
+
+	private Container $pimple;
+
+	private bool $addDoctrineSubscribers = true;
 
 	/**
-	 * @var Container
+	 * @var array<string, mixed>
 	 */
-	private $pimple;
+	private array $sharedObjects;
 
-	private $addDoctrineSubscribers = true;
-
-	private $sharedObjects;
-
-	/**
-	 * @var Stopwatch|null
-	 */
-	private $profiler = null;
+	private ?Stopwatch $profiler = null;
 
 	public function __construct( array $config ) {
 		$this->config = $config;
@@ -272,17 +271,21 @@ class FunFunFactory implements ServiceProviderInterface {
 		};
 
 		$container['entity_manager'] = function() {
+			$donationContextFactory = $this->getDonationContextFactory();
 			$entityManager = ( new StoreFactory(
 				$this->getConnection(),
-				$this->getVarPath() . '/doctrine_proxies',
+				$this->getWritableApplicationDataPath() . '/doctrine_proxies',
 				[],
 				[
+					DonationContextFactory::ENTITY_NAMESPACE => $donationContextFactory->newMappingDriver(),
 					'WMDE\Fundraising\AddressChangeContext\Domain\Model' => new XmlDriver( __DIR__ . '/../../vendor/wmde/fundraising-address-change/config/DoctrineClassMapping' )
 				]
 			) )
 				->getEntityManager();
 			if ( $this->addDoctrineSubscribers ) {
-				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineDonationPrePersistSubscriber() );
+				foreach ( $donationContextFactory->newEventSubscribers() as $eventSubscriber ) {
+					$entityManager->getEventManager()->addEventSubscriber( $eventSubscriber );
+				}
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineMembershipApplicationPrePersistSubscriber() );
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrinePostPersistSubscriberCreateAddressChange( $entityManager ) );
 			}
@@ -484,13 +487,6 @@ class FunFunFactory implements ServiceProviderInterface {
 				),
 				$this->config['creditcard']['access-key'],
 				$this->config['creditcard']['testmode']
-			);
-		};
-
-		$container['donation_token_generator'] = function() {
-			return new RandomTokenGenerator(
-				$this->config['token-length'],
-				new \DateInterval( $this->config['token-validity-timestamp'] )
 			);
 		};
 
@@ -762,20 +758,20 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['sofort_logger'];
 	}
 
-	private function getVarPath(): string {
+	public function getWritableApplicationDataPath(): string {
 		return __DIR__ . '/../../var';
 	}
 
 	public function getCachePath(): string {
-		return $this->getVarPath() . '/cache';
+		return $this->getWritableApplicationDataPath() . '/cache';
 	}
 
 	public function getLoggingPath(): string {
-		return $this->getVarPath() . '/log';
+		return $this->getWritableApplicationDataPath() . '/log';
 	}
 
 	private function getSharedResourcesPath(): string {
-		return $this->getVarPath() . '/shared';
+		return $this->getWritableApplicationDataPath() . '/shared';
 	}
 
 	public function newAddSubscriptionUseCase(): AddSubscriptionUseCase {
@@ -1197,10 +1193,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	public function getDonationTokenGenerator(): TokenGenerator {
-		return $this->pimple['donation_token_generator'];
-	}
-
 	public function getMembershipTokenGenerator(): MembershipTokenGenerator {
 		return $this->pimple['fundraising.membership.application.token_generator'];
 	}
@@ -1503,13 +1495,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	private function newDoctrineDonationPrePersistSubscriber(): DoctrineDonationPrePersistSubscriber {
-		return new DoctrineDonationPrePersistSubscriber(
-			$this->getDonationTokenGenerator(),
-			$this->getDonationTokenGenerator()
-		);
-	}
-
 	private function newDoctrineMembershipApplicationPrePersistSubscriber(): DoctrineMembershipApplicationPrePersistSubscriber {
 		return new DoctrineMembershipApplicationPrePersistSubscriber(
 			$this->getMembershipTokenGenerator(),
@@ -1522,7 +1507,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function setDonationTokenGenerator( TokenGenerator $tokenGenerator ): void {
-		$this->pimple['donation_token_generator'] = $tokenGenerator;
+		$this->getDonationContextFactory()->setTokenGenerator( $tokenGenerator );
 	}
 
 	public function setMembershipTokenGenerator( MembershipTokenGenerator $tokenGenerator ): void {
@@ -1642,7 +1627,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function getFilePrefix(): string {
-		$prefixContentFile = $this->getVarPath() . '/file_prefix.txt';
+		$prefixContentFile = $this->getWritableApplicationDataPath() . '/file_prefix.txt';
 		if ( !file_exists( $prefixContentFile ) ) {
 			return '';
 		}
@@ -1874,6 +1859,24 @@ class FunFunFactory implements ServiceProviderInterface {
 			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/membershipTypes.json' );
 			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/validations.json' );
 			return $translationsCollector;
+		} );
+	}
+
+	public function setDoctrineConfiguration( ?Configuration $doctrineConfiguration ): FunFunFactory {
+		$this->sharedObjects[Configuration::class] = $doctrineConfiguration;
+		return $this;
+	}
+
+	private function getDoctrineConfiguration(): Configuration {
+		if ( !isset( $this->sharedObjects[Configuration::class] ) ) {
+			throw new \LogicException( 'Environment-specific Doctrine configuration was not initialized!' );
+		}
+		return $this->sharedObjects[Configuration::class];
+	}
+
+	private function getDonationContextFactory(): DonationContextFactory {
+		return $this->createSharedObject( DonationContextFactory::class, function (): DonationContextFactory {
+			return new DonationContextFactory( $this->config, $this->getDoctrineConfiguration() );
 		} );
 	}
 }

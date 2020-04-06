@@ -11,7 +11,7 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Entities\Donation;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
