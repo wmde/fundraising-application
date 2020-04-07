@@ -1841,7 +1841,23 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getUseOfFundsRenderer(): \Closure {
-		return $this->getChoiceFactory()->getUseOfFundsResponse( $this );
+		if ( $this->config['skin'] === 'laika' ) {
+			$this->getTranslationCollector()->addTranslationFile( $this->getI18nDirectory() . '/messages/useOfFundsMessages.json' );
+			$template = $this->getLayoutTemplate( 'Funds_Usage.html.twig', [
+				'use_of_funds_content' => $this->getApplicationOfFundsContent(),
+				'use_of_funds_messages' => $this->getApplicationOfFundsMessages()
+			] );
+			return function() use ( $template )  {
+				return $template->render( [] );
+			};
+		} elseif ( $this->config['skin'] === 'test' ) {
+			// we don't care what happens in test
+			return function() {
+				return 'Test rendering: Use of funds';
+			};
+		}
+
+		throw new \InvalidArgumentException( 'Unsupported skin for use of funds:' . $this->config['skin'] );
 	}
 
 	/**
