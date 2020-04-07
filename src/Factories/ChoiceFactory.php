@@ -23,25 +23,6 @@ class ChoiceFactory {
 		$this->featureToggle = $featureToggle;
 	}
 
-	public function getUseOfFundsResponse( FunFunFactory $factory ): \Closure {
-		if ( $this->featureToggle->featureIsActive( 'campaigns.skins.laika' ) ) {
-			$factory->getTranslationCollector()->addTranslationFile( $factory->getI18nDirectory() . '/messages/useOfFundsMessages.json' );
-			$template = $factory->getLayoutTemplate( 'Funds_Usage.html.twig', [
-				'use_of_funds_content' => $factory->getApplicationOfFundsContent(),
-				'use_of_funds_messages' => $factory->getApplicationOfFundsMessages()
-			] );
-			return function() use ( $template )  {
-				return $template->render( [] );
-			};
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.skins.test' ) ) {
-			// we don't care what happens in test
-			return function() {
-				return 'Test rendering: Use of funds';
-			};
-		}
-		throw new UnknownChoiceDefinition( 'Use of funds configuration failure.' );
-	}
-
 	public function getMembershipCallToActionTemplate(): string {
 		if ( $this->featureToggle->featureIsActive( 'campaigns.membership_call_to_action.regular' ) ) {
 			return 'partials/donation_confirmation/feature_toggle/call_to_action_regular.html.twig';
