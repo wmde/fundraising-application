@@ -12,7 +12,7 @@ use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
-use WMDE\Fundraising\Entities\MembershipApplication;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineEntities\MembershipApplication;
 
 class DoctrinePostPersistSubscriberCreateAddressChange implements EventSubscriber {
 
