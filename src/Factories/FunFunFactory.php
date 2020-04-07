@@ -152,6 +152,7 @@ use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipTokenGenerator;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationAuthorizer;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
@@ -235,16 +236,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private function newPimple(): Container {
 		$container = new Container();
-		$container->register(
-			new MembershipContextFactory(
-				[
-					// Explicitly passing redundantly - repeated use could be a case for config parameters
-					// http://symfony.com/doc/current/service_container/parameters.html#parameters-in-configuration-files
-					'token-length' => $this->config['token-length'],
-					'token-validity-timestamp' => $this->config['token-validity-timestamp']
-				]
-			)
-		);
 		$this->register( $container );
 		return $container;
 	}
@@ -272,12 +263,14 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		$container['entity_manager'] = function() {
 			$donationContextFactory = $this->getDonationContextFactory();
+			$membershipContextFactory = $this->getMembershipContextFactory();
 			$entityManager = ( new StoreFactory(
 				$this->getConnection(),
 				$this->getWritableApplicationDataPath() . '/doctrine_proxies',
 				[],
 				[
 					DonationContextFactory::ENTITY_NAMESPACE => $donationContextFactory->newMappingDriver(),
+					MembershipContextFactory::ENTITY_NAMESPACE => $membershipContextFactory->newMappingDriver(),
 					'WMDE\Fundraising\AddressChangeContext\Domain\Model' => new XmlDriver( __DIR__ . '/../../vendor/wmde/fundraising-address-change/config/DoctrineClassMapping' )
 				]
 			) )
@@ -286,7 +279,9 @@ class FunFunFactory implements ServiceProviderInterface {
 				foreach ( $donationContextFactory->newEventSubscribers() as $eventSubscriber ) {
 					$entityManager->getEventManager()->addEventSubscriber( $eventSubscriber );
 				}
-				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrineMembershipApplicationPrePersistSubscriber() );
+				foreach ( $membershipContextFactory->newEventSubscribers() as $eventSubscriber ) {
+					$entityManager->getEventManager()->addEventSubscriber( $eventSubscriber );
+				}
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrinePostPersistSubscriberCreateAddressChange( $entityManager ) );
 			}
 
@@ -1193,10 +1188,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	public function getMembershipTokenGenerator(): MembershipTokenGenerator {
-		return $this->pimple['fundraising.membership.application.token_generator'];
-	}
-
 	public function newDonationConfirmationPresenter(): DonationConfirmationHtmlPresenter {
 		return new DonationConfirmationHtmlPresenter(
 			new TwigTemplate(
@@ -1310,18 +1301,20 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {
 		return new CancelMembershipApplicationUseCase(
-			$this->newMembershipApplicationAuthorizer( $updateToken ),
+			$this->getMembershipApplicationAuthorizer( $updateToken ),
 			$this->getMembershipApplicationRepository(),
 			$this->newCancelMembershipApplicationMailer()
 		);
 	}
 
-	private function newMembershipApplicationAuthorizer(
+	private function getMembershipApplicationAuthorizer(
 		string $updateToken = null, string $accessToken = null ): ApplicationAuthorizer {
-
-		$this->pimple['fundraising.membership.application.authorizer.update_token'] = $updateToken;
-		$this->pimple['fundraising.membership.application.authorizer.access_token'] = $accessToken;
-		return $this->pimple['fundraising.membership.application.authorizer'];
+		return $this->createSharedObject(
+			ApplicationAuthorizer::class,
+			function () use ( $accessToken, $updateToken ): ApplicationAuthorizer {
+				return new DoctrineApplicationAuthorizer( $this->getEntityManager(), $updateToken, $accessToken );
+			}
+		);
 	}
 
 	public function setMembershipApplicationRepository( ApplicationRepository $applicationRepository ): void {
@@ -1332,8 +1325,8 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->pimple['membership_application_repository'];
 	}
 
-	public function setMembershipApplicationAuthorizerClass( string $class ): void {
-		$this->pimple['fundraising.membership.application.authorizer.class'] = $class;
+	public function setMembershipApplicationAuthorizer( ApplicationAuthorizer $authorizer ): void {
+		$this->sharedObjects[ApplicationAuthorizer::class] = $authorizer;
 	}
 
 	private function newCancelMembershipApplicationMailer(): MembershipTemplateMailerInterface {
@@ -1351,7 +1344,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	public function newMembershipApplicationConfirmationUseCase( ShowApplicationConfirmationPresenter $presenter, string $accessToken ): ShowApplicationConfirmationUseCase {
 		return new ShowApplicationConfirmationUseCase(
 			$presenter,
-			$this->newMembershipApplicationAuthorizer( null, $accessToken ),
+			$this->getMembershipApplicationAuthorizer( null, $accessToken ),
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher()
 		);
@@ -1420,7 +1413,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	public function newMembershipApplicationSubscriptionSignupNotificationUseCase( string $updateToken ): HandleSubscriptionSignupNotificationUseCase {
 		return new HandleSubscriptionSignupNotificationUseCase(
 			$this->getMembershipApplicationRepository(),
-			$this->newMembershipApplicationAuthorizer( $updateToken ),
+			$this->getMembershipApplicationAuthorizer( $updateToken ),
 			$this->newApplyForMembershipMailer(),
 			$this->getLogger()
 		);
@@ -1429,7 +1422,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	public function newMembershipApplicationSubscriptionPaymentNotificationUseCase( string $updateToken ): HandleSubscriptionPaymentNotificationUseCase {
 		return new HandleSubscriptionPaymentNotificationUseCase(
 			$this->getMembershipApplicationRepository(),
-			$this->newMembershipApplicationAuthorizer( $updateToken ),
+			$this->getMembershipApplicationAuthorizer( $updateToken ),
 			$this->newApplyForMembershipMailer(),
 			$this->getLogger()
 		);
@@ -1495,23 +1488,16 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	private function newDoctrineMembershipApplicationPrePersistSubscriber(): DoctrineMembershipApplicationPrePersistSubscriber {
-		return new DoctrineMembershipApplicationPrePersistSubscriber(
-			$this->getMembershipTokenGenerator(),
-			$this->getMembershipTokenGenerator()
-		);
-	}
-
 	private function newDoctrinePostPersistSubscriberCreateAddressChange( EntityManager $entityManager ): DoctrinePostPersistSubscriberCreateAddressChange {
 		return new DoctrinePostPersistSubscriberCreateAddressChange( $entityManager );
 	}
 
 	public function setDonationTokenGenerator( TokenGenerator $tokenGenerator ): void {
-		$this->getDonationContextFactory()->setTokenGenerator( $tokenGenerator );
+		$this->sharedObjects[ TokenGenerator::class ] = $tokenGenerator;
 	}
 
 	public function setMembershipTokenGenerator( MembershipTokenGenerator $tokenGenerator ): void {
-		$this->pimple['fundraising.membership.application.token_generator'] = $tokenGenerator;
+		$this->sharedObjects[MembershipTokenGenerator::class] = $tokenGenerator;
 	}
 
 	public function disableDoctrineSubscribers(): void {
@@ -1876,7 +1862,22 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private function getDonationContextFactory(): DonationContextFactory {
 		return $this->createSharedObject( DonationContextFactory::class, function (): DonationContextFactory {
-			return new DonationContextFactory( $this->config, $this->getDoctrineConfiguration() );
+			return new DonationContextFactory( $this->config, $this->getDoctrineConfiguration(), $this->sharedObjects[ TokenGenerator::class ] ?? null );
+		} );
+	}
+
+	private function getMembershipContextFactory(): MembershipContextFactory {
+		return $this->createSharedObject( MembershipContextFactory::class, function (): MembershipContextFactory {
+			return new MembershipContextFactory(
+				[
+					// Explicitly passing redundantly - repeated use could be a case for config parameters
+					// http://symfony.com/doc/current/service_container/parameters.html#parameters-in-configuration-files
+					'token-length' => $this->config['token-length'],
+					'token-validity-timestamp' => $this->config['token-validity-timestamp']
+				],
+				$this->getDoctrineConfiguration(),
+				$this->sharedObjects[MembershipTokenGenerator::class] ?? null
+			);
 		} );
 	}
 }

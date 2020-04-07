@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "811a5556973b78c9e8acf80c99c94905",
+    "content-hash": "edcf9dc4c56152694c31520f798fc2ad",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -5194,29 +5194,28 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "dev-master",
+            "version": "dev-remove-fundraising-store",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "eec7f3ca2b0b08e2aee2ce5d1c856a664da06ff6"
+                "reference": "89d228eeab83408b1f170e1a18753a3905fed8f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/eec7f3ca2b0b08e2aee2ce5d1c856a664da06ff6",
-                "reference": "eec7f3ca2b0b08e2aee2ce5d1c856a664da06ff6",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/89d228eeab83408b1f170e1a18753a3905fed8f5",
+                "reference": "89d228eeab83408b1f170e1a18753a3905fed8f5",
                 "shasum": ""
             },
             "require": {
-                "doctrine/orm": "~2.5",
-                "php": ">=7.3",
-                "pimple/pimple": "~3.0",
+                "doctrine/orm": "~2.7",
+                "gedmo/doctrine-extensions": "^2.4",
+                "php": ">=7.4",
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~1.0",
                 "wmde/fun-validators": "~1.0",
-                "wmde/fundraising-payments": "@dev",
-                "wmde/fundraising-store": "@dev"
+                "wmde/fundraising-payments": "@dev"
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
@@ -5250,7 +5249,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2020-04-06T09:22:02+00:00"
+            "time": "2020-04-29T15:48:38+00:00"
         },
         {
             "name": "wmde/fundraising-payments",

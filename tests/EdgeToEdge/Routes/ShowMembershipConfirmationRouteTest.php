@@ -121,7 +121,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 		$membershipApplication = ValidMembershipApplication::newDomainEntity();
 
 		$client = $this->createClient( [], function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
-			$factory->setMembershipApplicationAuthorizerClass( SucceedingAuthorizer::class );
+			$factory->setMembershipApplicationAuthorizer( new SucceedingAuthorizer() );
 
 			$applicationRepository = new FakeApplicationRepository( $membershipApplication );
 			$applicationRepository->throwOnRead();
