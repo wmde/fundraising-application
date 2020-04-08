@@ -52,7 +52,7 @@ import { mapGetters } from 'vuex';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
-import { NS_ADDRESS, NS_PAYMENT } from '@/store/namespaces';
+import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import PaymentBankData from '@/components/shared/PaymentBankData.vue';
