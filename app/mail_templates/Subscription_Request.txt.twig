@@ -1,5 +1,3 @@
-{$ greeting_generator.createFormalGreeting( subscription.address.lastName, subscription.address.salutation, subscription.address.title )|raw $}
-
 {$ mail_content('subscription_request', {
     'confirm_subscription_link': url( 'confirm-subscription', { confirmationCode: subscription.confirmationCode } ),
     'day_of_the_week': "now"|date("N")|trans({}, 'daysOfTheWeek')

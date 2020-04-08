@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "edcf9dc4c56152694c31520f798fc2ad",
+    "content-hash": "7bbf7412cbbb3da171eeadbe91a233fc",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -5369,25 +5369,25 @@
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "dev-master",
+            "version": "dev-remove-fundraising-store",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "9c9efcb4c0d8d42c257a4878313e7879e3af75a4"
+                "reference": "4d257ed5eaa99a4dbcac60d47ccd3f6e1ee31246"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/9c9efcb4c0d8d42c257a4878313e7879e3af75a4",
-                "reference": "9c9efcb4c0d8d42c257a4878313e7879e3af75a4",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/4d257ed5eaa99a4dbcac60d47ccd3f6e1ee31246",
+                "reference": "4d257ed5eaa99a4dbcac60d47ccd3f6e1ee31246",
                 "shasum": ""
             },
             "require": {
-                "doctrine/orm": "~2.5",
-                "php": ">=7.3",
+                "doctrine/orm": "~2.7",
+                "gedmo/doctrine-extensions": "^2.4",
+                "php": ">=7.4",
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
-                "wmde/fun-validators": "~1.0",
-                "wmde/fundraising-store": "@dev"
+                "wmde/fun-validators": "~1.0"
             },
             "require-dev": {
                 "ockcyp/covers-validator": "~1.0",
@@ -5416,7 +5416,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for fundraising subcriptions",
-            "time": "2020-04-06T12:59:21+00:00"
+            "time": "2020-04-23T12:04:40+00:00"
         }
     ],
     "packages-dev": [

@@ -4,7 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
-use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -17,12 +18,10 @@ use WMDE\FunValidators\ValidationResponse;
  */
 class AddSubscriptionHandler {
 
-	private $ffFactory;
-	private $app;
+	private FunFunFactory $ffFactory;
 
-	public function __construct( FunFunFactory $ffFactory, Application $app ) {
+	public function __construct( FunFunFactory $ffFactory ) {
 		$this->ffFactory = $ffFactory;
-		$this->app = $app;
 	}
 
 	public function handle( Request $request ): Response {
@@ -32,7 +31,7 @@ class AddSubscriptionHandler {
 
 		if ( $request->query->has( 'callback' ) ) {
 			return $this->handleJsonp( $request, $responseModel );
-		} elseif ( $this->app['request_stack.is_json'] ) {
+		} elseif ( $request->attributes->get( 'request_stack.is_json', false ) ) {
 			return $this->handleJson( $responseModel );
 		} else {
 			return $this->handleHtml( $request, $responseModel );
@@ -42,35 +41,11 @@ class AddSubscriptionHandler {
 	private function createSubscriptionRequest( Request $request ): SubscriptionRequest {
 		$subscriptionRequest = new SubscriptionRequest();
 
-		$this->addAddressDataFromRequest( $subscriptionRequest, $request );
-
 		$subscriptionRequest->setEmail( $request->get( 'email', '' ) );
-
-		$subscriptionRequest->setWikiloginFromValues( [
-			$request->request->get( 'wikilogin' ),
-			$request->cookies->get( 'spenden_wikilogin' ),
-		] );
-
-		$this->addTrackingDataFromRequest( $subscriptionRequest, $request );
-
-		return $subscriptionRequest;
-	}
-
-	private function addAddressDataFromRequest( SubscriptionRequest $subscriptionRequest, Request $request ) {
-		$subscriptionRequest->setAddress( $request->get( 'address', '' ) );
-		$subscriptionRequest->setCity( $request->get( 'city', '' ) );
-		$subscriptionRequest->setPostcode( $request->get( 'postcode', '' ) );
-
-		$subscriptionRequest->setFirstName( $request->get( 'firstName', '' ) );
-		$subscriptionRequest->setLastName( $request->get( 'lastName', '' ) );
-		$subscriptionRequest->setSalutation( $request->get( 'salutation', '' ) );
-		$subscriptionRequest->setTitle( $request->get( 'title', '' ) );
-
-	}
-
-	private function addTrackingDataFromRequest( SubscriptionRequest $subscriptionRequest, Request $request ) {
 		$subscriptionRequest->setSource( $request->get( 'source', '' ) );
 		$subscriptionRequest->setTrackingString( $request->attributes->get( 'trackingCode', '' ) );
+
+		return $subscriptionRequest;
 	}
 
 	private function handleHtml( Request $request, ValidationResponse $responseModel ): Response {
@@ -82,7 +57,7 @@ class AddSubscriptionHandler {
 		}
 
 		if ( $responseModel->isSuccessful() ) {
-			return $this->app->redirect( $this->app['url_generator']->generate('page', [
+			return new RedirectResponse( $this->ffFactory->getUrlGenerator()->generateAbsoluteUrl( 'page', [
 				'pageName' => $responseModel->needsModeration() ? 'Subscription_Moderation' : 'Subscription_Success'
 			] ) );
 		}
@@ -92,12 +67,11 @@ class AddSubscriptionHandler {
 		);
 	}
 
-	private function handleJson( ValidationResponse $responseModel ): Response {
-		return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) );
+	private function handleJson( ValidationResponse $responseModel ): JsonResponse {
+		return JsonResponse::create( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) );
 	}
 
 	private function handleJsonp( Request $request, ValidationResponse $responseModel ): Response {
-		return $this->app->json( $this->ffFactory->newAddSubscriptionJsonPresenter()->present( $responseModel ) )
-			->setCallback( $request->query->get( 'callback' ) );
+		return $this->handleJson( $responseModel )->setCallback( $request->query->get( 'callback' ) );
 	}
 }

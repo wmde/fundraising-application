@@ -1,9 +1,15 @@
 {% extends 'Base_Layout.html.twig' %}
 
 {% block main %}
+    {# TODO Either throw away HTML presenter or create Vue class that integrates with rendered web_content   #}
     {% if error_message %}
-        {$ include( 'Warning_Page.html.twig', { 'message': error_message|trans( {}, 'validations' ) } ) $}
+        {$ error_message|trans( {}, 'validations' ) $}
     {% else %}
-        {$ include( 'Subscription_Confirmed.html.twig' ) $}
+
+        <div class="static-content">
+            {$ web_content( 'subscription/confirmation' ) $}
+        </div>
     {% endif %}
 {% endblock %}
+
+

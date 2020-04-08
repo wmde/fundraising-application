@@ -167,8 +167,8 @@ class Routes {
 		// Form for this is provided by route page/Subscription_Form
 		$app->match(
 			'contact/subscribe',
-			function ( Application $app, Request $request ) use ( $ffFactory ) {
-				return ( new AddSubscriptionHandler( $ffFactory, $app ) )
+			function ( Request $request ) use ( $ffFactory ) {
+				return ( new AddSubscriptionHandler( $ffFactory ) )
 					->handle( $request );
 			}
 		)
