@@ -5,10 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\HttpKernel\Client;
-use WMDE\Fundraising\Entities\Address;
-use WMDE\Fundraising\Entities\Subscription;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\SubscriptionContext\Domain\Model\Subscription;
 
 /**
  * @licence GNU GPL v2+
@@ -16,21 +15,11 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
-	private function newSubscriptionAddress(): Address {
-		$address = new Address();
-		$address->setSalutation( 'Herr' );
-		$address->setFirstName( 'Nyan' );
-		$address->setLastName( 'Cat' );
-		$address->setTitle( 'Dr.' );
-		return $address;
-	}
-
 	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
 			$subscription = new Subscription();
 			$subscription->setConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );
-			$subscription->setAddress( $this->newSubscriptionAddress() );
 
 			$factory->getSubscriptionRepository()->storeSubscription( $subscription );
 
@@ -41,12 +30,12 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 			$response = $client->getResponse();
 
 			$this->assertSame( 200, $response->getStatusCode() );
-			$this->assertStringContainsString( 'Subscription confirmed.', $response->getContent() );
+			$this->assertStringContainsString( 'Vielen Dank für die Verifizierung Ihrer E-Mailadresse', $response->getContent() );
 		} );
 	}
 
 	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound(): void {
-		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
+		$client = $this->createClient( [ 'skin' => 'laika' ], null, self::DISABLE_DEBUG );
 
 		$client->request(
 			'GET',
@@ -70,11 +59,10 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
 			$subscription = new Subscription();
 			$subscription->setConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );
-			$subscription->setAddress( $this->newSubscriptionAddress() );
 			$subscription->markAsConfirmed();
 
 			$factory->getSubscriptionRepository()->storeSubscription( $subscription );

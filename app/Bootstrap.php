@@ -31,7 +31,7 @@ class Bootstrap {
 
 		$app->before(
 			function ( Request $request, Application $app ) {
-				$app['request_stack.is_json'] = in_array( 'application/json', $request->getAcceptableContentTypes() );
+				$request->attributes->set( 'request_stack.is_json', in_array( 'application/json', $request->getAcceptableContentTypes() ) );
 
 				$request->attributes->set( 'trackingCode', TrackingDataSelector::getFirstNonEmptyValue( [
 					$request->cookies->get( 'spenden_tracking' ),
@@ -86,8 +86,8 @@ class Bootstrap {
 			);
 		} );
 
-		$app->error( function ( NotFoundHttpException $e ) use ( $ffFactory, $app ) {
-			if ( $app['request_stack.is_json'] ) {
+		$app->error( function ( NotFoundHttpException $e, Request $request ) use ( $ffFactory, $app ) {
+			if ( $request->attributes->get( 'request_stack.is_json', false ) ) {
 				return $app->json( [ 'ERR' => $e->getMessage() ], 404, [ 'X-Status-Code' => 404 ] );
 			}
 
@@ -120,7 +120,7 @@ class Bootstrap {
 				]
 			);
 
-			if ( $app['request_stack.is_json'] ) {
+			if ( $request->attributes->get( 'request_stack.is_json', false ) ) {
 				return $app->json( [
 					'ERR' => $e->getMessage()
 				] );

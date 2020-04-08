@@ -157,7 +157,6 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracke
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationPrePersistSubscriber;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
@@ -197,6 +196,7 @@ use WMDE\Fundraising\SubscriptionContext\DataAccess\DoctrineSubscriptionReposito
 use WMDE\Fundraising\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\LoggingSubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
+use WMDE\Fundraising\SubscriptionContext\SubscriptionContextFactory;
 use WMDE\Fundraising\SubscriptionContext\UseCases\AddSubscription\AddSubscriptionUseCase;
 use WMDE\Fundraising\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 use WMDE\Fundraising\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
@@ -264,6 +264,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		$container['entity_manager'] = function() {
 			$donationContextFactory = $this->getDonationContextFactory();
 			$membershipContextFactory = $this->getMembershipContextFactory();
+			$subscriptionContextFactory = new SubscriptionContextFactory();
 			$entityManager = ( new StoreFactory(
 				$this->getConnection(),
 				$this->getWritableApplicationDataPath() . '/doctrine_proxies',
@@ -271,6 +272,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				[
 					DonationContextFactory::ENTITY_NAMESPACE => $donationContextFactory->newMappingDriver(),
 					MembershipContextFactory::ENTITY_NAMESPACE => $membershipContextFactory->newMappingDriver(),
+					SubscriptionContextFactory::ENTITY_NAMESPACE => $subscriptionContextFactory->newMappingDriver(),
 					'WMDE\Fundraising\AddressChangeContext\Domain\Model' => new XmlDriver( __DIR__ . '/../../vendor/wmde/fundraising-address-change/config/DoctrineClassMapping' )
 				]
 			) )
@@ -280,6 +282,9 @@ class FunFunFactory implements ServiceProviderInterface {
 					$entityManager->getEventManager()->addEventSubscriber( $eventSubscriber );
 				}
 				foreach ( $membershipContextFactory->newEventSubscribers() as $eventSubscriber ) {
+					$entityManager->getEventManager()->addEventSubscriber( $eventSubscriber );
+				}
+				foreach ( $subscriptionContextFactory->newEventSubscribers() as $eventSubscriber ) {
 					$entityManager->getEventManager()->addEventSubscriber( $eventSubscriber );
 				}
 				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrinePostPersistSubscriberCreateAddressChange( $entityManager ) );
@@ -318,15 +323,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		$container['mail_validator'] = function() {
 			return new EmailValidator( new InternetDomainNameValidator() );
-		};
-
-		$container['subscription_validator'] = function() {
-			return new SubscriptionValidator(
-				$this->getEmailValidator(),
-				$this->newTextPolicyValidator( 'fields' ),
-				$this->newSubscriptionDuplicateValidator(),
-				$this->newHonorificValidator()
-			);
 		};
 
 		$container['template_name_validator'] = function() {
@@ -606,7 +602,12 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function getSubscriptionValidator(): SubscriptionValidator {
-		return $this->pimple['subscription_validator'];
+		return $this->createSharedObject( SubscriptionValidator::class, function(): SubscriptionValidator {
+			return new SubscriptionValidator(
+				$this->getEmailValidator(),
+				$this->newSubscriptionDuplicateValidator(),
+			);
+		} );
 	}
 
 	public function getEmailValidator(): EmailValidator {
@@ -845,7 +846,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ): void {
-		$this->pimple['subscription_validator'] = $subscriptionValidator;
+		$this->sharedObjects[SubscriptionValidator::class] = $subscriptionValidator;
 	}
 
 	public function newGetInTouchUseCase(): GetInTouchUseCase {
@@ -1493,7 +1494,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function setDonationTokenGenerator( TokenGenerator $tokenGenerator ): void {
-		$this->sharedObjects[ TokenGenerator::class ] = $tokenGenerator;
+		$this->sharedObjects[TokenGenerator::class] = $tokenGenerator;
 	}
 
 	public function setMembershipTokenGenerator( MembershipTokenGenerator $tokenGenerator ): void {
@@ -1862,7 +1863,11 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private function getDonationContextFactory(): DonationContextFactory {
 		return $this->createSharedObject( DonationContextFactory::class, function (): DonationContextFactory {
-			return new DonationContextFactory( $this->config, $this->getDoctrineConfiguration(), $this->sharedObjects[ TokenGenerator::class ] ?? null );
+			return new DonationContextFactory(
+				$this->config,
+				$this->getDoctrineConfiguration(),
+				$this->sharedObjects[TokenGenerator::class] ?? null
+			);
 		} );
 	}
 

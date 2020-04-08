@@ -1,5 +1,3 @@
-mail_introduction_male_formal
-
 subscription_request
 
 name_head_of_fundraising
