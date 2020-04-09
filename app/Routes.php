@@ -8,12 +8,11 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use WMDE\Euro\Euro;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
@@ -26,7 +25,6 @@ use WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\AddSubscriptionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PageDisplayHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
@@ -164,13 +162,9 @@ class Routes {
 		)
 			->bind( self::SHOW_PAGE );
 
-		// Form for this is provided by route page/Subscription_Form
 		$app->match(
 			'contact/subscribe',
-			function ( Request $request ) use ( $ffFactory ) {
-				return ( new AddSubscriptionHandler( $ffFactory ) )
-					->handle( $request );
-			}
+			AddSubscriptionController::class . '::addSubscription'
 		)
 			->method( 'GET|POST' )
 			->bind( self::SUBSCRIBE );

@@ -13,17 +13,21 @@ use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySp
  * @licence GNU GPL v2+
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ *
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController
+ * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter
+ * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter
  */
 class AddSubscriptionRouteTest extends WebRouteTestCase {
 
-	private $validFormInput = [
+	private array $validFormInput = [
 		'email' => 'jeroendedauw@gmail.com',
 		'wikilogin' => true,
 		'tracking' => 'test/blue',
 		'source' => 'testCampaign',
 	];
 
-	private $invalidFormInput = [
+	private array $invalidFormInput = [
 		'email' => 'not an email',
 		'wikilogin' => true
 	];

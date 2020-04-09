@@ -32,6 +32,9 @@ class Bootstrap {
 		$app->before(
 			function ( Request $request, Application $app ) {
 				$request->attributes->set( 'request_stack.is_json', in_array( 'application/json', $request->getAcceptableContentTypes() ) );
+				if ( in_array( 'application/javascript', $request->getAcceptableContentTypes() ) && $request->get( 'callback', null ) ) {
+					$request->attributes->set( 'request_stack.is_json', true );
+				}
 
 				$request->attributes->set( 'trackingCode', TrackingDataSelector::getFirstNonEmptyValue( [
 					$request->cookies->get( 'spenden_tracking' ),
