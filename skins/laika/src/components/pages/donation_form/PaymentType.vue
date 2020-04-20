@@ -11,8 +11,11 @@
 						:disabled="disabledPaymentTypes.indexOf( paymentType ) > -1"
 						@change.native="setType">
 					{{ $t( paymentType ) }}
-					<div v-show=" disabledPaymentTypes.indexOf( paymentType ) > -1" class="has-text-dark-lighter has-margin-top-18">
+					<div v-show="isDisabledPaymentType( paymentType ) && paymentType==='SUB'" class="has-text-dark-lighter has-margin-top-18">
 						{{ $t( 'donation_form_SUB_payment_type_info' ) }}
+					</div>
+					<div v-show="isDisabledPaymentType( paymentType ) && paymentType==='BEZ'" class="has-text-dark-lighter has-margin-top-18">
+						{{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }}
 					</div>
 				</b-radio>
 			</div>
@@ -48,6 +51,9 @@ export default Vue.extend( {
 	methods: {
 		setType(): void {
 			this.$emit( 'payment-type-selected', this.$data.selectedType );
+		},
+		isDisabledPaymentType( paymentType: string ): Boolean {
+			return this.$props.disabledPaymentTypes.indexOf( paymentType ) > -1;
 		},
 	},
 	watch: {

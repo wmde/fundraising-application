@@ -24,7 +24,6 @@
 				:disabled-payment-types="disabledPaymentTypes"
 				v-on:payment-type-selected="sendTypeToStore"
 		></payment-type>
-		<div v-show="disabledPaymentTypes.indexOf( 'BEZ' ) > -1 " class="has-margin-top-18">{{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }}</div>
 	</div>
 </template>
 
