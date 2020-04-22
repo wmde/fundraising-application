@@ -52,4 +52,32 @@ describe( 'AddressType.vue', () => {
 		expect( wrapper.emitted( event )[ 0 ] ).toEqual( [ AddressTypeModel.COMPANY ] );
 		expect( wrapper.emitted( event )[ 1 ] ).toEqual( [ AddressTypeModel.PERSON ] );
 	} );
+
+	it( 'renders hint only if payment is direct debit from the banner', () => {
+		const wrapper = mount( AddressType, {
+			localVue,
+			mocks: {
+				$t: () => { },
+			},
+			propsData: {
+				disabledAddressTypes: [ AddressTypeModel.ANON ],
+				isDirectDebitFromBanner: true,
+			},
+		} );
+		expect( wrapper.find( '.info-message' ).isVisible() ).toBe( true );
+	} );
+
+	it( 'does not render hint if payment is not direct debit from the banner', () => {
+		const wrapper = mount( AddressType, {
+			localVue,
+			mocks: {
+				$t: () => { },
+			},
+			propsData: {
+				disabledAddressTypes: [ AddressTypeModel.ANON ],
+				isDirectDebitFromBanner: false,
+			},
+		} );
+		expect( wrapper.find( '.info-message' ).isVisible() ).toBe( false );
+	} );
 } );

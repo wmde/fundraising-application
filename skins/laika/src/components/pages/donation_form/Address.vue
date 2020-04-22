@@ -9,6 +9,7 @@
 					slot="campaigns.address_type.no_preselection"
 					v-on:address-type="setAddressType( $event )"
 					:disabledAddressTypes="disabledAddressTypes"
+					:is-direct-debit-from-banner="isDirectDebitFromBanner"
 					:initial-address-type="null">
 			</address-type>
 
@@ -16,6 +17,7 @@
 					slot="campaigns.address_type.preselection"
 					v-on:address-type="setAddressType( $event )"
 					:disabledAddressTypes="disabledAddressTypes"
+					:is-direct-debit-from-banner="isDirectDebitFromBanner"
 					initial-address-type="person">
 			</address-type>
 			<div
@@ -141,6 +143,7 @@ export default Vue.extend( {
 		validateBankDataUrl: String,
 		validateLegacyBankDataUrl: String,
 		countries: Array as () => Array<String>,
+		isDirectDebitFromBanner: Boolean,
 	},
 	computed: {
 		fieldErrors: {
