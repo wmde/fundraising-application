@@ -104,7 +104,7 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 		$reader = new ConfigReader( new SimpleFileFetcher(), $this->distPath . 'foo', $this->emptyPath );
 
 		$this->expectException( RuntimeException::class );
-		$this->expectExceptionMessageRegExp( '/Cannot read config file at path.*/' );
+		$this->expectExceptionMessageMatches( '/Cannot read config file at path.*/' );
 		$reader->getConfig();
 	}
 
@@ -112,7 +112,7 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 		$reader = new \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader( new SimpleFileFetcher(), $this->distPath, $this->emptyPath . 'foo' );
 
 		$this->expectException( RuntimeException::class );
-		$this->expectExceptionMessageRegExp( '/Cannot read config file at path.*/' );
+		$this->expectExceptionMessageMatches( '/Cannot read config file at path.*/' );
 		$reader->getConfig();
 	}
 
@@ -122,7 +122,7 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 		$reader = new ConfigReader( new SimpleFileFetcher(), $notJsonPath );
 
 		$this->expectException( RuntimeException::class );
-		$this->expectExceptionMessageRegExp( '/No valid config data found in config file at path.*/' );
+		$this->expectExceptionMessageMatches( '/No valid config data found in config file at path.*/' );
 		$reader->getConfig();
 	}
 
@@ -132,7 +132,7 @@ class ConfigReaderTest extends \PHPUnit\Framework\TestCase {
 		$reader = new \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader( new SimpleFileFetcher(), $notArrayPath );
 
 		$this->expectException( RuntimeException::class );
-		$this->expectExceptionMessageRegExp( '/No valid config data found in config file at path.*/' );
+		$this->expectExceptionMessageMatches( '/No valid config data found in config file at path.*/' );
 		$reader->getConfig();
 	}
 

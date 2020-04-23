@@ -25,14 +25,14 @@ class PayPalNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenVerifyingInvalidRequest_externalServiceReturnsAnError(): void {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
-		$this->expectExceptionMessageRegExp( '/did not confirm/' );
+		$this->expectExceptionMessageMatches( '/did not confirm/' );
 
 		$this->verifier->verify( $this->newPostRequest() );
 	}
 
 	public function testWhenVerifyingValidRequest_externalServiceReturnsAnError(): void {
 		$this->expectException( PayPalPaymentNotificationVerifierException::class );
-		$this->expectExceptionMessageRegExp( '/did not confirm/' );
+		$this->expectExceptionMessageMatches( '/did not confirm/' );
 
 		$this->verifier->verify( $this->newPostRequest() );
 	}
