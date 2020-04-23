@@ -6,9 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\AddressChange\Domain\Model\Address;
-use WMDE\Fundraising\AddressChange\Domain\Model\AddressChange;
+use WMDE\Fundraising\AddressChangeContext\Domain\Model\Address;
+use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
+use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeId;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Entities\Donation;
 use WMDE\Fundraising\Entities\MembershipApplication;
@@ -18,7 +19,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\EntityManagerSpy;
 class DoctrinePostPersistSubscriberCreateAddressChangeTest extends TestCase {
 
 	public function testNonApplicableEntity_doesNothing(): void {
-		$identifier = '77c12190-d97a-4564-9d88-160be51dd134';
+		$identifier = AddressChangeId::fromString( '77c12190-d97a-4564-9d88-160be51dd134' );
 		$address = Address::newCompanyAddress( 'Bank of Duckburg', 'At the end of teh road', '1234', 'Duckburg', 'DE' );
 		$addressChange = AddressChangeBuilder::create( $identifier, $address )->forPerson()->forDonation( 1 )->build();
 

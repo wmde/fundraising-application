@@ -4971,12 +4971,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "31cc2708a790af2ecd961230bda541d4eea50f0a"
+                "reference": "7a2e8232eda592ced49a152fa68aab670bdb731f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/31cc2708a790af2ecd961230bda541d4eea50f0a",
-                "reference": "31cc2708a790af2ecd961230bda541d4eea50f0a",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/7a2e8232eda592ced49a152fa68aab670bdb731f",
+                "reference": "7a2e8232eda592ced49a152fa68aab670bdb731f",
                 "shasum": ""
             },
             "require": {
@@ -5021,7 +5021,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/FundraisingDonations",
-            "time": "2020-04-07T08:04:53+00:00"
+            "time": "2020-04-23T08:09:39+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -5089,28 +5089,28 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "03b3285ee97dbbb77e00abf18092ff6b4502f02f"
+                "reference": "3b0ad624f1fad1b5557c86baecd57ffead948c9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/03b3285ee97dbbb77e00abf18092ff6b4502f02f",
-                "reference": "03b3285ee97dbbb77e00abf18092ff6b4502f02f",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/3b0ad624f1fad1b5557c86baecd57ffead948c9a",
+                "reference": "3b0ad624f1fad1b5557c86baecd57ffead948c9a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1",
+                "php": ">=7.4",
                 "sofort/sofortlib-php": "^3.2",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~1.0",
                 "wmde/fun-validators": "~1.0"
             },
             "require-dev": {
-                "mediawiki/mediawiki-codesniffer": "~13.0",
-                "ockcyp/covers-validator": "~0.7.1",
-                "phpstan/phpstan": "~0.8.0",
-                "phpunit/phpunit": "~7.1",
+                "mediawiki/mediawiki-codesniffer": "~26.0",
+                "ockcyp/covers-validator": "~1.1.1",
+                "phpstan/phpstan": "~0.12.0",
+                "phpunit/phpunit": "~8.5",
                 "slevomat/coding-standard": "~4.0",
-                "squizlabs/php_codesniffer": "~3.0"
+                "squizlabs/php_codesniffer": "~3.2"
             },
             "type": "library",
             "extra": {
@@ -5132,7 +5132,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2020-01-30T13:31:09+00:00"
+            "time": "2020-04-23T08:25:20+00:00"
         },
         {
             "name": "wmde/fundraising-store",
@@ -6918,16 +6918,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "8.5.3",
+            "version": "8.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "67750516bc02f300e2742fed2f50177f8f37bedf"
+                "reference": "8474e22d7d642f665084ba5ec780626cbd1efd23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/67750516bc02f300e2742fed2f50177f8f37bedf",
-                "reference": "67750516bc02f300e2742fed2f50177f8f37bedf",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8474e22d7d642f665084ba5ec780626cbd1efd23",
+                "reference": "8474e22d7d642f665084ba5ec780626cbd1efd23",
                 "shasum": ""
             },
             "require": {
@@ -6997,7 +6997,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2020-03-31T08:52:04+00:00"
+            "time": "2020-04-23T04:39:42+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

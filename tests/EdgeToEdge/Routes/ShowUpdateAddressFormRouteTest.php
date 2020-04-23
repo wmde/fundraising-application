@@ -35,7 +35,7 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 
 				$this->performRequest(
 					$client,
-					$addressChange->getCurrentIdentifier()
+					$addressChange->getCurrentIdentifier()->__toString()
 				);
 
 				$response = $client->getResponse();
@@ -45,7 +45,7 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 					$appElement->getAttribute( 'data-application-vars' )
 				);
 				$this->assertTrue( $response->isOk() );
-				$this->assertSame( $addressChange->getCurrentIdentifier(), $dataVars->addressToken );
+				$this->assertSame( $addressChange->getCurrentIdentifier()->__toString(), $dataVars->addressToken );
 			}
 		);
 	}

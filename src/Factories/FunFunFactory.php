@@ -35,9 +35,9 @@ use Twig_SimpleFunction;
 use WMDE\Clock\SystemClock;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\AddressChange\Domain\AddressChangeRepository;
-use WMDE\Fundraising\AddressChange\DataAccess\DoctrineAddressChangeRepository;
-use WMDE\Fundraising\AddressChange\UseCases\ChangeAddress\ChangeAddressUseCase;
+use WMDE\Fundraising\AddressChangeContext\Domain\AddressChangeRepository;
+use WMDE\Fundraising\AddressChangeContext\DataAccess\DoctrineAddressChangeRepository;
+use WMDE\Fundraising\AddressChangeContext\UseCases\ChangeAddress\ChangeAddressUseCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\DonationContext\Authorization\DonationTokenFetcher;
@@ -277,7 +277,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				$this->getVarPath() . '/doctrine_proxies',
 				[],
 				[
-					'WMDE\Fundraising\AddressChange\Domain\Model' => new XmlDriver( __DIR__ . '/../../vendor/wmde/fundraising-address-change/config/DoctrineClassMapping' )
+					'WMDE\Fundraising\AddressChangeContext\Domain\Model' => new XmlDriver( __DIR__ . '/../../vendor/wmde/fundraising-address-change/config/DoctrineClassMapping' )
 				]
 			) )
 				->getEntityManager();
