@@ -68,7 +68,7 @@ CFG;
 		$fileFetcher = new StubFileFetcher( self::VALID_CONFIGURATION );
 		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
 
-		$this->expectExceptionMessageRegExp( '/No campaign configuration files found/' );
+		$this->expectExceptionMessageMatches( '/No campaign configuration files found/' );
 		$loader->loadCampaignConfiguration( 'campaigns.yml' );
 	}
 

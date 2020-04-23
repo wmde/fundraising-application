@@ -212,7 +212,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 		$factory->setContentProvider( $provider );
 
 		$this->expectException( Twig_Error_Runtime::class );
-		$this->expectExceptionMessageRegExp( '/An exception occured rendering \'lorem\'/' );
+		$this->expectExceptionMessageMatches( '/An exception occured rendering \'lorem\'/' );
 
 		$factory->getLayoutTemplate( 'template_with_content.twig' )->render( [] );
 	}

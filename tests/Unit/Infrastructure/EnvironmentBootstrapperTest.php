@@ -40,7 +40,7 @@ class EnvironmentBootstrapperTest extends TestCase {
 		$path = vfsStream::setup( self::CONFIGDIR, null, [
 			'config.dev.json' => '{}'
 		] );
-		$this->expectExceptionMessageRegExp( '/dist/' );
+		$this->expectExceptionMessageMatches( '/dist/' );
 		( new EnvironmentBootstrapper( 'dev' ) )->getConfigurationPathsForEnvironment( $path->url() );
 	}
 
@@ -48,7 +48,7 @@ class EnvironmentBootstrapperTest extends TestCase {
 		$path = vfsStream::setup( self::CONFIGDIR, null, [
 			'config.dist.json' => '{}'
 		] );
-		$this->expectExceptionMessageRegExp( '/dev/' );
+		$this->expectExceptionMessageMatches( '/dev/' );
 		( new EnvironmentBootstrapper( 'dev' ) )->getConfigurationPathsForEnvironment( $path->url() );
 	}
 
