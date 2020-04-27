@@ -20,15 +20,16 @@
 					:is-direct-debit-from-banner="isDirectDebitFromBanner"
 					initial-address-type="person">
 			</address-type>
-			<div
-					class="has-margin-top-18"
-					v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}</div>
 			<span
 					slot="campaigns.address_type.no_preselection"
 					v-if="addressTypeIsInvalid"
 					class="help is-danger">{{ $t( 'donation_form_section_address_error' ) }}
 			</span>
 		</feature-toggle>
+		<div
+				class="has-margin-top-18"
+				v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}
+		</div>
 		<AutofillHandler @autofill="onAutofill" >
 			<name v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
