@@ -54,7 +54,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 				$factory->getEntityManager()->persist( $addressChange );
 				$factory->getEntityManager()->flush();
 
-				$this->doRequestWithValidData( $client, $addressChange->getCurrentIdentifier() );
+				$this->doRequestWithValidData( $client, $addressChange->getCurrentIdentifier()->__toString() );
 				$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 				$response = $client->getResponse();
 
@@ -93,7 +93,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 				$entityManager->persist( $addressChange );
 				$entityManager->flush();
 
-				$this->doRequestWithValidData( $client, $addressChange->getCurrentIdentifier() );
+				$this->doRequestWithValidData( $client, $addressChange->getCurrentIdentifier()->__toString() );
 
 				$entityManager->clear( AddressChange::class );
 				$addressChangeAfterRequest = $entityManager->getRepository( AddressChange::class )->find( $addressChange->getId() );
@@ -111,7 +111,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 				$entityManager->persist( $addressChange );
 				$entityManager->flush();
 
-				$this->doRequestWithValidData( $client, $addressChange->getCurrentIdentifier(), [ 'receiptOptOut' => '1' ] );
+				$this->doRequestWithValidData( $client, $addressChange->getCurrentIdentifier()->__toString(), [ 'receiptOptOut' => '1' ] );
 
 				$entityManager->clear( AddressChange::class );
 				$addressChangeAfterRequest = $entityManager->getRepository( AddressChange::class )->find( $addressChange->getId() );
