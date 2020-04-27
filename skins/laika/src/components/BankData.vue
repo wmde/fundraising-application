@@ -10,8 +10,6 @@
 		</p>
 		<p><strong>{{ $t( 'bank_data_bic')  }}:</strong> {{ $t( 'bank_data_operator_account_bic')  }}</p>
 		<p>{{ $t( 'bank_data_operator_bank_name')  }}</p>
-		<p><strong>{{ $t( 'bank_data_account_number')  }}:</strong> {{ $t( 'bank_data_operator_account_number')  }}</p>
-		<p><strong>{{ $t( 'bank_data_blz')  }}:</strong> {{ $t( 'bank_data_operator_account_blz')  }}</p>
 		<p v-if="bankTransferCode"><strong>{{ $t( 'bank_data_transfer_code' ) }}:</strong> {{ bankTransferCode }}</p>
 	</div>
 </template>
