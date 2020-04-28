@@ -57,6 +57,7 @@ import AddressFields from '@/components/pages/donation_form/Address.vue';
 import DonationSummary from '@/components/DonationSummary.vue';
 import SubmitValues from '@/components/pages/donation_form/SubmitValues.vue';
 import { TrackingData } from '@/view_models/SubmitValues';
+import { Country } from '@/view_models/Country';
 import { action } from '@/store/util';
 import { markEmptyValuesAsInvalid } from '@/store/bankdata/actionTypes';
 import { waitForServerValidationToFinish } from '@/wait_for_server_validation';
@@ -77,7 +78,7 @@ export default Vue.extend( {
 		validateEmailUrl: String,
 		validateBankDataUrl: String,
 		validateLegacyBankDataUrl: String,
-		countries: Array as () => Array<String>,
+		countries: Array as () => Array<Country>,
 		trackingData: Object as () => TrackingData,
 	},
 	computed: {
@@ -103,7 +104,7 @@ export default Vue.extend( {
 					fullName: this.$store.getters[ NS_ADDRESS + '/fullName' ],
 					streetAddress: this.$store.state[ NS_ADDRESS ].values.street,
 					postalCode: this.$store.state[ NS_ADDRESS ].values.postcode,
-					countryCode: this.$store.state[ NS_ADDRESS ].values.country,
+					country: this.$store.state[ NS_ADDRESS ].values.country,
 				};
 			},
 		},

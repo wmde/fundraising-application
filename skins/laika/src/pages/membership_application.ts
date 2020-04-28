@@ -12,9 +12,9 @@ import Component from '@/components/pages/MembershipForm.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 import { InitialMembershipData } from '@/view_models/Address';
 import { initializeBankData } from '@/store/bankdata/actionTypes';
+import { Country } from '@/view_models/Country';
 
-const PAGE_IDENTIFIER = 'membership-application',
-	COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
+const PAGE_IDENTIFIER = 'membership-application';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
@@ -23,6 +23,7 @@ interface MembershipAmountModel {
 	presetAmounts: Array<string>,
 	paymentIntervals: Array<string>,
 	tracking: Array<number>,
+	countries: Array<Country>,
 	urls: any,
 	showMembershipTypeOption: Boolean,
 	initialFormValues: InitialMembershipData,
@@ -57,7 +58,7 @@ function initializePage(): void {
 					validateBankDataUrl: pageData.applicationVars.urls.validateIban,
 					validateLegacyBankDataUrl: pageData.applicationVars.urls.convertBankData,
 					paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
-					addressCountries: COUNTRIES,
+					countries: pageData.applicationVars.countries,
 					showMembershipTypeOption: pageData.applicationVars.showMembershipTypeOption,
 					paymentIntervals: pageData.applicationVars.paymentIntervals,
 				},

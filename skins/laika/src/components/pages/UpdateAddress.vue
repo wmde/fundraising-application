@@ -38,6 +38,7 @@ import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import SubmitValues from '@/components/pages/update_address/SubmitValues.vue';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
 import { Validity } from '@/view_models/Validity';
+import { Country } from '@/view_models/Country';
 import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
@@ -104,13 +105,13 @@ export default Vue.extend( {
 				postcode: {
 					name: 'postcode',
 					value: '',
-					pattern: '^[0-9]{4,5}$',
+					pattern: '^.+$',
 					optionalField: false,
 				},
 				country: {
 					name: 'country',
 					value: 'DE',
-					pattern: '',
+					pattern: '^.+$',
 					optionalField: false,
 				},
 			},
@@ -120,7 +121,7 @@ export default Vue.extend( {
 		validateAddressUrl: String,
 		updateAddressURL: String,
 		isCompany: Boolean,
-		countries: Array as () => Array<String>,
+		countries: Array as () => Array<Country>,
 	},
 	computed: {
 		fieldErrors: {

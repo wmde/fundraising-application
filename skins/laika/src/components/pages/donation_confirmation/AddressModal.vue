@@ -61,6 +61,7 @@ import axios, { AxiosResponse } from 'axios';
 import { trackDynamicForm, trackFormSubmission } from '@/tracking';
 import { mergeValidationResults } from '@/merge_validation_results';
 import { camelizeName } from '@/camlize_name';
+import { Country } from '@/view_models/Country';
 
 export interface SubmittedAddress {
 	addressData: AddressFormData,
@@ -129,7 +130,7 @@ export default Vue.extend( {
 				postcode: {
 					name: 'postcode',
 					value: '',
-					pattern: '^[0-9]{4,5}$',
+					pattern: '^.+$',
 					optionalField: false,
 				},
 				country: {
@@ -155,7 +156,7 @@ export default Vue.extend( {
 		updateDonorUrl: String,
 		validateEmailUrl: String,
 		validateAddressUrl: String,
-		countries: Array as () => Array<String>,
+		countries: Array as () => Array<Country>,
 		hasErrored: Boolean,
 		hasSucceeded: Boolean,
 	},

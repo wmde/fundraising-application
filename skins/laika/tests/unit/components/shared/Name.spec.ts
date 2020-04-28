@@ -64,7 +64,7 @@ function newTestProperties( overrides: Object ) {
 				postcode: {
 					name: 'postcode',
 					value: '',
-					pattern: '[0-9]{4,5}$',
+					pattern: '^.+$',
 					optionalField: false,
 				},
 				country: {

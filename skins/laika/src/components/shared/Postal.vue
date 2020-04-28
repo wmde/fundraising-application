@@ -42,21 +42,25 @@
 		<span v-if="showError.city" class="help is-danger">{{ $t('donation_form_city_error') }}</span>
 		<span v-if="cityValueEqualsPlaceholder" class="help">{{ $t('donation_form_city_placeholder_warning') }}</span>
 	</div>
-	<div class="form-input">
+
+	<div v-bind:class="['form-input', { 'is-invalid': showError.country }]">
 		<label for="country" class="subtitle">{{ $t( 'donation_form_country_label' ) }}</label>
-		<b-field>
-			<b-select
+		<b-field :type="{ 'is-danger': showError.country }">
+			<b-autocomplete
 					class="is-form-input"
-					v-model="formData.country.value"
-					id="country"
+					field="countryFullName"
+					:placeholder="$t( 'form_for_example', { example: countries[0].countryFullName } )"
+					v-model="countryInput"
 					name="country"
-					@blur="$emit('field-changed', 'country')">
-				<option v-for="(countryCode, index) in countries"
-						:value="countryCode"
-						:key="index">{{ $t('donation_form_country_option_' + countryCode ) }}
-				</option>
-			</b-select>
+					id="country"
+					:keep-first="keepFirst"
+					:open-on-focus="openOnFocus"
+					:data="filteredCountries"
+					@focus="() => focusCountryField()"
+					@input="value => changeCountry( value )">
+			</b-autocomplete>
 		</b-field>
+		<span v-if="showError.country" class="help is-danger">{{ $t('donation_form_country_error') }}</span>
 	</div>
 </div>
 </template>
@@ -64,22 +68,51 @@
 <script lang="ts">
 import Vue from 'vue';
 import { AddressValidity, AddressFormData } from '@/view_models/Address';
+import { Country } from '@/view_models/Country';
+
+const DEFAULT_POSTAL_REGEX = '^.+$';
 
 export default Vue.extend( {
 	name: 'postal',
 	props: {
 		showError: Object as () => AddressValidity,
 		formData: Object as () => AddressFormData,
-		countries: Array as () => Array<String>,
+		countries: Array as () => Array<Country>,
 	},
 	data() {
 		return {
 			showWarning: false,
+			keepFirst: true,
+			openOnFocus: true,
+			countryInput: 'Deutschland',
+			countryClicked: false,
+			countryFocused: false,
 		};
 	},
 	methods: {
 		displayStreetWarning() {
 			this.showWarning = /^\D+$/.test( this.formData.street.value );
+		},
+		focusCountryField() {
+			if ( !this.$data.countryClicked ) {
+				this.formData.country.value = '';
+				this.$data.countryInput = '';
+			}
+		},
+		changeCountry( option: String ) {
+			let country = this.$props.countries.find( ( c: Country ) => c.countryFullName === option );
+			if ( country ) {
+				this.formData.postcode.pattern = country.postCodeValidation;
+				this.formData.country.value = country.countryCode;
+			} else {
+				this.formData.postcode.pattern = DEFAULT_POSTAL_REGEX;
+				this.formData.country.value = '';
+			}
+			if ( this.$data.countryClicked ) {
+				this.$emit( 'field-changed', 'country' );
+				this.$emit( 'field-changed', 'postcode' );
+			}
+			this.$data.countryClicked = true;
 		},
 	},
 	computed: {
@@ -91,6 +124,15 @@ export default Vue.extend( {
 		},
 		zipValueEqualsPlaceholder(): boolean {
 			return this.$props.formData.postcode.value === this.$t( 'donation_form_zip_placeholder' );
+		},
+
+		filteredCountries(): Array<Country> {
+			return this.countries.filter( ( countryOption: Country ) => {
+				return countryOption.countryFullName
+					.toString()
+					.toLowerCase()
+					.indexOf( this.$data.countryInput.toLowerCase() ) >= 0;
+			} );
 		},
 	},
 } );

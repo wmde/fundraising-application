@@ -17,6 +17,7 @@ import Vue from 'vue';
 import { TrackingData } from '@/view_models/SubmitValues';
 import PaymentPage from '@/components/pages/donation_form/subpages/PaymentPage.vue';
 import AddressPage from '@/components/pages/donation_form/subpages/AddressPage.vue';
+import { Country } from '@/view_models/Country';
 
 export default Vue.extend( {
 	name: 'DonationForm',
@@ -33,7 +34,7 @@ export default Vue.extend( {
 		paymentAmounts: Array as () => Array<String>,
 		paymentIntervals: Array as () => Array<Number>,
 		paymentTypes: Array as () => Array<String>,
-		addressCountries: Array as () => Array<String>,
+		countries: Array as () => Array<Country>,
 		trackingData: Object as () => TrackingData,
 		startPage: {
 			type: String,
@@ -65,7 +66,7 @@ export default Vue.extend( {
 						validateEmailUrl: this.$props.validateEmailUrl,
 						validateBankDataUrl: this.$props.validateBankDataUrl,
 						validateLegacyBankDataUrl: this.$props.validateLegacyBankDataUrl,
-						countries: this.$props.addressCountries,
+						countries: this.$props.countries,
 						trackingData: this.$props.trackingData,
 					};
 				}

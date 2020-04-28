@@ -93,13 +93,13 @@ export default Vue.extend( {
 				postcode: {
 					name: 'postcode',
 					value: '',
-					pattern: '^[0-9]{4,5}$',
+					pattern: '^.+$',
 					optionalField: false,
 				},
 				country: {
 					name: 'country',
 					value: 'DE',
-					pattern: '',
+					pattern: '^.+$',
 					optionalField: false,
 				},
 				email: {

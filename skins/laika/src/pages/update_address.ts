@@ -8,8 +8,7 @@ import App from '@/components/App.vue';
 import Component from '@/components/pages/UpdateAddress.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 
-const PAGE_IDENTIFIER = 'update-address',
-	COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
+const PAGE_IDENTIFIER = 'update-address';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
@@ -39,7 +38,7 @@ new Vue( {
 				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
 				updateAddressURL: pageData.applicationVars.urls.updateAddress,
 				isCompany: pageData.applicationVars.isCompany,
-				countries: COUNTRIES,
+				countries: pageData.applicationVars.countries,
 			},
 		} ),
 		h( Sidebar, {

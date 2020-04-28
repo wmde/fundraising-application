@@ -2,6 +2,7 @@ import { mount, createLocalVue } from '@vue/test-utils';
 import Postal from '@/components/shared/Postal.vue';
 import Buefy from 'buefy';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import countries from '@/../tests/data/countries';
 
 const localVue = createLocalVue();
 localVue.use( Buefy );
@@ -64,7 +65,7 @@ function newTestProperties( overrides: Object ) {
 				postcode: {
 					name: 'postcode',
 					value: '',
-					pattern: '[0-9]{4,5}$',
+					pattern: '^.+$',
 					optionalField: false,
 				},
 				country: {
@@ -74,7 +75,7 @@ function newTestProperties( overrides: Object ) {
 					optionalField: false,
 				},
 			},
-			countries: [],
+			countries: countries,
 			addressType: AddressTypeModel.PERSON,
 		},
 		overrides
@@ -107,5 +108,31 @@ describe( 'Postal.vue', () => {
 			field = wrapper.find( '#city' );
 		field.trigger( 'blur' );
 		expect( wrapper.emitted( event )![ 0 ] ).toEqual( [ 'city' ] );
+	} );
+
+	it( 'sets the correct postcode regex on country change', async () => {
+		const wrapper = mount( Postal, {
+				localVue,
+				mocks: {
+					$t: () => { },
+				},
+				propsData: newTestProperties( {} ),
+			} ),
+			event = 'field-changed',
+			field = wrapper.find( '#country' );
+
+		field.trigger( 'focus' );
+		wrapper.vm.$data.countryInput = '';
+		field.trigger( 'blur' );
+
+		await wrapper.vm.$nextTick();
+		expect( wrapper.vm.$props.formData.postcode.pattern ).toEqual( '^.+$' );
+
+		field.trigger( 'focus' );
+		wrapper.vm.$data.countryInput = countries[ 0 ].countryFullName;
+		field.trigger( 'blur' );
+
+		await wrapper.vm.$nextTick();
+		expect( wrapper.vm.$props.formData.postcode.pattern ).toEqual( countries[ 0 ].postCodeValidation );
 	} );
 } );

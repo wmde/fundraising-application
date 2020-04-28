@@ -59,6 +59,7 @@ import { action } from '@/store/util';
 import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import { mergeValidationResults } from '@/merge_validation_results';
 import { camelizeName } from '@/camlize_name';
+import { Country } from '@/view_models/Country';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -120,13 +121,13 @@ export default Vue.extend( {
 				postcode: {
 					name: 'postcode',
 					value: '',
-					pattern: '^[0-9]{4,5}$',
+					pattern: '^.+$',
 					optionalField: false,
 				},
 				country: {
 					name: 'country',
 					value: 'DE',
-					pattern: '',
+					pattern: '^.+$',
 					optionalField: false,
 				},
 				email: {
@@ -143,7 +144,7 @@ export default Vue.extend( {
 		validateEmailUrl: String,
 		validateBankDataUrl: String,
 		validateLegacyBankDataUrl: String,
-		countries: Array as () => Array<String>,
+		countries: Array as () => Array<Country>,
 		isDirectDebitFromBanner: Boolean,
 	},
 	computed: {

@@ -2,6 +2,7 @@ import { mount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Buefy from 'buefy';
 import DonationForm from '@/components/pages/DonationForm.vue';
+import countries from '@/../tests/data/countries';
 
 declare global {
 	namespace NodeJS {
@@ -25,7 +26,7 @@ describe( 'DonationForm', () => {
 				paymentTypes: [ 'BEZ', 'PPL', 'UEB', 'BTC' ],
 				validateAmountUrl: 'https://example.com/amount-check',
 				validateAddressUrl: 'https://example.com/address-check',
-				addressCountries: [ 'DE' ],
+				countries: countries,
 				trackingData: { bannerImpressionCount: 0, impressionCount: 0 },
 			},
 			store: new Vuex.Store( {} ),
