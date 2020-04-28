@@ -70,8 +70,8 @@ describe( 'MembershipAddress', () => {
 				newMinimalStore( {
 					addressType: AddressTypeModel.PERSON,
 					validity: {
-						addressType: Validity.INCOMPLETE
-					}
+						addressType: Validity.INCOMPLETE,
+					},
 				} ),
 				null,
 				null,

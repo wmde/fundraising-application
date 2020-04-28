@@ -29,6 +29,7 @@ class SilentLogger implements Logger {
 
 class ConsoleLogger implements Logger {
 	notify( error: object ) {
+		// eslint-disable-next-line
 		console.log( error );
 	}
 }

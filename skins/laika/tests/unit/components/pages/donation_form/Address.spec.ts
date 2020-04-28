@@ -57,8 +57,9 @@ describe( 'Address.vue', () => {
 		}
 	} );
 
-	it( 'does not render postal and receipt opt out if adress type is anonymous', () => {
+	it( 'does not render postal and receipt opt out if adress type is anonymous', async () => {
 		wrapper.find( AddressType ).vm.$emit( 'address-type', AddressTypeModel.ANON );
+		await wrapper.vm.$nextTick();
 		expect( wrapper.contains( Postal ) ).toBe( false );
 		expect( wrapper.contains( ReceiptOptOut ) ).toBe( false );
 	} );

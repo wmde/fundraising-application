@@ -27,6 +27,7 @@ import { NS_PAYMENT } from '@/store/namespaces';
 import { markEmptyValuesAsInvalid } from '@/store/payment/actionTypes';
 import { waitForServerValidationToFinish } from '@/wait_for_server_validation';
 import { trackFormSubmission } from '@/tracking';
+import scrollToFirstError from '@/scroll_to_first_error';
 
 export default Vue.extend( {
 	name: 'PaymentPage',
@@ -48,7 +49,7 @@ export default Vue.extend( {
 						trackFormSubmission( formPayment );
 						this.$emit( 'next-page' );
 					} else {
-						document.getElementsByClassName( 'is-danger' )[ 0 ].scrollIntoView( { behavior: 'smooth', block: 'center', inline: 'nearest' } );
+						scrollToFirstError();
 					}
 				} );
 			} );

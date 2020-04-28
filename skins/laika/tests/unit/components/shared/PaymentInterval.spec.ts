@@ -29,10 +29,10 @@ describe( 'PaymentInterval', () => {
 		wrapper.find( `#interval-${YEARLY}` ).trigger( 'click' );
 
 		expect( wrapper.emitted( 'interval-selected' ) ).toBeTruthy();
-		expect( wrapper.emitted( 'interval-selected' )[ 0 ] ).toEqual( [ String( YEARLY ) ] );
+		expect( wrapper.emitted( 'interval-selected' )![ 0 ] ).toEqual( [ String( YEARLY ) ] );
 	} );
 
-	it( 'updates the selected interval when the incoming property changes', () => {
+	it( 'updates the selected interval when the incoming property changes', async () => {
 		const wrapper = mount( PaymentInterval, {
 			localVue,
 			propsData: {
@@ -46,6 +46,7 @@ describe( 'PaymentInterval', () => {
 
 		// explicitly simulate a prop change from outside of the wrapper
 		wrapper.setProps( { currentInterval: '6' } );
+		await wrapper.vm.$nextTick();
 
 		expect( wrapper.vm.$data.selectedInterval ).toBe( '6' );
 	} );

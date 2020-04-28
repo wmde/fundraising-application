@@ -33,8 +33,8 @@ describe( 'DonationForm', () => {
 				$t: jest.fn(),
 			},
 			stubs: {
-				PaymentPage: '<div class="i-am-payment" />',
-				AddressPage: '<div class="i-am-address-form" />',
+				PaymentPage: { template: '<div class="i-am-payment" />' },
+				AddressPage: { template: '<div class="i-am-address-form" />' },
 			},
 		} );
 	} );
@@ -43,8 +43,9 @@ describe( 'DonationForm', () => {
 		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
 	} );
 
-	it( 'loads Address page when next-page is triggered', () => {
+	it( 'loads Address page when next-page is triggered', async () => {
 		wrapper.vm.$refs.currentPage.$emit( 'next-page' );
+		await wrapper.vm.$nextTick();
 		expect( wrapper.contains( '.i-am-address-form' ) ).toBe( true );
 	} );
 
@@ -54,19 +55,22 @@ describe( 'DonationForm', () => {
 		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
 	} );
 
-	it( 'does not overshoot the first or last page when multiple page change events trigger', () => {
+	it( 'does not overshoot the first or last page when multiple page change events trigger', async () => {
 		wrapper.vm.$refs.currentPage.$emit( 'next-page' );
 		wrapper.vm.$refs.currentPage.$emit( 'next-page' );
 		wrapper.vm.$refs.currentPage.$emit( 'next-page' );
+		await wrapper.vm.$nextTick();
 		expect( wrapper.contains( '.i-am-address-form' ) ).toBe( true );
 
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
+		await wrapper.vm.$nextTick();
 		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
 
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
+		await wrapper.vm.$nextTick();
 		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
 	} );
 

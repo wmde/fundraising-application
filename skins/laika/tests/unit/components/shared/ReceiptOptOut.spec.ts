@@ -29,8 +29,7 @@ describe( 'ReceiptOptOut', () => {
 			event = 'opted-out',
 			checkBox = wrapper.find( '#donation_receipt' );
 		checkBox.trigger( 'click' );
-
-		expect( wrapper.emitted( event )[ 0 ] ).toEqual( [ true ] );
+		expect( wrapper.emitted( event )![ 0 ] ).toEqual( [ true ] );
 	} );
 
 } );

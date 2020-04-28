@@ -49,7 +49,7 @@ describe( 'Supporter.vue', () => {
 		wrapper.find( '.accordion-item > div' ).element.click();
 
 		expect( wrapper.emitted( 'supporter-opened', ) ).toHaveLength( 1 );
-		expect( wrapper.emitted( 'supporter-opened' )[ 0 ] ).toEqual( [ 5 ] );
+		expect( wrapper.emitted( 'supporter-opened' )![ 0 ] ).toEqual( [ 5 ] );
 		expect( wrapper.emitted( 'supporter-closed', ) ).toBeFalsy();
 	} );
 

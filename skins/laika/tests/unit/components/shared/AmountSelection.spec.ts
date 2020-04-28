@@ -21,7 +21,7 @@ describe( 'AmountSelection', () => {
 		wrapper.find( '#amount-29900' ).trigger( 'click' );
 
 		expect( wrapper.emitted( 'amount-selected' ) ).toBeTruthy();
-		expect( wrapper.emitted( 'amount-selected' )[ 0 ] ).toEqual( [ '29900' ] );
+		expect( wrapper.emitted( 'amount-selected' )![ 0 ] ).toEqual( [ '29900' ] );
 	} );
 
 	it( 'emits amount event when custom amount is entered', () => {
@@ -40,7 +40,7 @@ describe( 'AmountSelection', () => {
 		customAmountInput.trigger( 'blur' );
 
 		expect( wrapper.emitted( 'amount-selected' ) ).toBeTruthy();
-		expect( wrapper.emitted( 'amount-selected' )[ 0 ] ).toEqual( [ '2300' ] );
+		expect( wrapper.emitted( 'amount-selected' )![ 0 ] ).toEqual( [ '2300' ] );
 	} );
 
 	it( 'converts custom amounts with decimal point to cent amounts', () => {
@@ -59,7 +59,7 @@ describe( 'AmountSelection', () => {
 		customAmountInput.trigger( 'blur' );
 
 		expect( wrapper.emitted( 'amount-selected' ) ).toBeTruthy();
-		expect( wrapper.emitted( 'amount-selected' )[ 0 ] ).toEqual( [ '1234' ] );
+		expect( wrapper.emitted( 'amount-selected' )![ 0 ] ).toEqual( [ '1234' ] );
 	} );
 
 	it( 'converts custom amounts with comma to cent amounts', () => {
@@ -78,7 +78,7 @@ describe( 'AmountSelection', () => {
 		customAmountInput.trigger( 'blur' );
 
 		expect( wrapper.emitted( 'amount-selected' ) ).toBeTruthy();
-		expect( wrapper.emitted( 'amount-selected' )[ 0 ] ).toEqual( [ '2342' ] );
+		expect( wrapper.emitted( 'amount-selected' )![ 0 ] ).toEqual( [ '2342' ] );
 	} );
 
 	it( 'cuts off cent fractions from custom amounts', () => {
@@ -97,7 +97,7 @@ describe( 'AmountSelection', () => {
 		customAmountInput.trigger( 'blur' );
 
 		expect( wrapper.emitted( 'amount-selected' ) ).toBeTruthy();
-		expect( wrapper.emitted( 'amount-selected' )[ 0 ] ).toEqual( [ '2342' ] );
+		expect( wrapper.emitted( 'amount-selected' )![ 0 ] ).toEqual( [ '2342' ] );
 	} );
 
 	it( 'emits empty string when custom amount is invalid', () => {
@@ -116,7 +116,7 @@ describe( 'AmountSelection', () => {
 		customAmountInput.trigger( 'blur' );
 
 		expect( wrapper.emitted( 'amount-selected' ) ).toBeTruthy();
-		expect( wrapper.emitted( 'amount-selected' )[ 0 ] ).toEqual( [ '' ] );
+		expect( wrapper.emitted( 'amount-selected' )![ 0 ] ).toEqual( [ '' ] );
 	} );
 
 	it( 'does not trigger an amount check when amount is selected and custom amount is empty', () => {
@@ -153,7 +153,7 @@ describe( 'AmountSelection', () => {
 		customAmountInput.trigger( 'blur' );
 
 		expect( wrapper.emitted( 'amount-selected' ) ).toBeTruthy();
-		expect( wrapper.emitted( 'amount-selected' )[ 0 ] ).toEqual( [ '' ] );
+		expect( wrapper.emitted( 'amount-selected' )![ 0 ] ).toEqual( [ '' ] );
 	} );
 
 	it( 'clears selected amount when custom amount is entered', () => {

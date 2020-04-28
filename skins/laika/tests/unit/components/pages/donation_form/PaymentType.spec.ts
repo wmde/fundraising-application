@@ -30,10 +30,10 @@ describe( 'PaymentType', () => {
 		wrapper.find( '#payment-btc' ).trigger( 'click' );
 
 		expect( wrapper.emitted( 'payment-type-selected' ) ).toBeTruthy();
-		expect( wrapper.emitted( 'payment-type-selected' )[ 0 ] ).toEqual( [ 'BTC' ] );
+		expect( wrapper.emitted( 'payment-type-selected' )![ 0 ] ).toEqual( [ 'BTC' ] );
 	} );
 
-	it( 'updates the selected type when the property changes', () => {
+	it( 'updates the selected type when the property changes', async () => {
 		const wrapper = mount( PaymentType, {
 			localVue,
 			propsData: {
@@ -47,7 +47,7 @@ describe( 'PaymentType', () => {
 
 		// explicitly simulate a prop change from outside of the wrapper
 		wrapper.setProps( { currentType: 'PPL' } );
-
+		await wrapper.vm.$nextTick();
 		expect( wrapper.vm.$data.selectedType ).toBe( 'PPL' );
 	} );
 
