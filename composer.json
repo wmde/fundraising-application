@@ -22,7 +22,6 @@
 		"wmde/fundraising-subscriptions": "dev-remove-fundraising-store",
 		"wmde/fundraising-content-provider": "^2.0",
 		"wmde/fundraising-address-change": "@dev",
-		"wmde/fundraising-store": "@dev",
 
 		"symfony/twig-bridge": "^3.3",
 		"symfony/translation": "^3.3",

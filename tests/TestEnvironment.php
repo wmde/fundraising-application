@@ -18,19 +18,10 @@ class TestEnvironment {
 	public static function newInstance( array $config = [] ): self {
 		$bootstrapper = new EnvironmentBootstrapper( 'test', [ 'test' => TestEnvironmentSetup::class ] );
 		$instance = new self( $config, $bootstrapper );
-
-		$installer = $instance->factory->newInstaller();
-
-		try {
-			$installer->uninstall();
-		}
-		catch ( \Exception $ex ) {
-		}
-
-		$installer->install();
-
 		$bootstrapper->getEnvironmentSetupInstance()
 			->setEnvironmentDependentInstances( $instance->factory, $config );
+
+		$instance->rebuildDatabaseSchema();
 
 		return $instance;
 	}
@@ -57,6 +48,18 @@ class TestEnvironment {
 		);
 
 		return $configReader->getConfig();
+	}
+
+	private function rebuildDatabaseSchema(): void {
+		$schemaCreator = new SchemaCreator( $this->factory->getPlainEntityManager() );
+
+		try {
+			$schemaCreator->dropSchema();
+		}
+		catch ( \Exception $ex ) {
+		}
+
+		$schemaCreator->createSchema();
 	}
 
 	public function getFactory(): FunFunFactory {

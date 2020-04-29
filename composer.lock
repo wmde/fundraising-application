@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bbf7412cbbb3da171eeadbe91a233fc",
+    "content-hash": "9e8a0fbd7115536a06bffeb04eb430a8",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -5303,71 +5303,6 @@
             "time": "2020-04-23T08:25:20+00:00"
         },
         {
-            "name": "wmde/fundraising-store",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wmde/FundraisingStore",
-                "reference": "56ebcabaf0ecfd7da8f2d8d6d646a34c989d441e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FundraisingStore/zipball/56ebcabaf0ecfd7da8f2d8d6d646a34c989d441e",
-                "reference": "56ebcabaf0ecfd7da8f2d8d6d646a34c989d441e",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "^2.5",
-                "doctrine/migrations": "~1.8",
-                "doctrine/orm": "^2.5",
-                "gedmo/doctrine-extensions": "^2.4",
-                "php": ">=7.1",
-                "ramsey/uuid": "^3.7",
-                "symfony/yaml": "~4.1"
-            },
-            "require-dev": {
-                "ockcyp/covers-validator": "~0.6.1",
-                "phpunit/phpunit": "~6.2",
-                "squizlabs/php_codesniffer": "~3.0"
-            },
-            "bin": [
-                "cli-config.php"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "10.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "WMDE\\Fundraising\\": "src/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "composer validate --no-interaction",
-                    "vendor/bin/phpunit",
-                    "vendor/bin/covers-validator"
-                ],
-                "cs": [
-                    "@phpcs"
-                ],
-                "ci": [
-                    "@test",
-                    "@cs"
-                ],
-                "phpcs": [
-                    "vendor/bin/phpcs"
-                ]
-            },
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "description": "Persistence services around the fundraising database",
-            "time": "2020-03-17T20:46:33+00:00"
-        },
-        {
             "name": "wmde/fundraising-subscriptions",
             "version": "dev-remove-fundraising-store",
             "source": {
@@ -8871,7 +8806,6 @@
         "wmde/fundraising-payments": 20,
         "wmde/fundraising-subscriptions": 20,
         "wmde/fundraising-address-change": 20,
-        "wmde/fundraising-store": 20,
         "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
