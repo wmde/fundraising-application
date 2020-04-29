@@ -37,6 +37,22 @@ This will
 - (Re-)Create the database structure and generate the Doctrine Proxy classes
 - Build the assets & JavaScript
 
+### Node Sass Errors on OSX/Windows
+When trying to build you might see an error like:
+
+```
+Node Sass could not find a binding for your current environment: Linux 64-bit with Node.js 12.x
+
+Found bindings for the following environments:
+  - OS X 64-bit with Node.js 13.x
+```
+
+This is caused by installing npm packages from outside the container, because it then sets up node sass for your machine rather than inside the container. To fix it do the following:
+
+1. Log into the container: `$ docker-compose exec skin_laika bash`
+2. Delete the node_modules folder: `$ rm -rf node_modules`
+3. Reinstall the packages: `$ npm install`
+
 ## Running the application
 
     docker-compose up
