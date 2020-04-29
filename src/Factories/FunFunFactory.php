@@ -12,7 +12,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
@@ -39,6 +38,7 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\AddressChangeContext\Domain\AddressChangeRepository;
 use WMDE\Fundraising\AddressChangeContext\DataAccess\DoctrineAddressChangeRepository;
 use WMDE\Fundraising\AddressChangeContext\UseCases\ChangeAddress\ChangeAddressUseCase;
+use WMDE\Fundraising\AddressChangeContext\AddressChangeContextFactory;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\DonationContext\Authorization\DonationTokenFetcher;
@@ -190,8 +190,6 @@ use WMDE\Fundraising\PaymentContext\Domain\TransferCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardService;
 use WMDE\Fundraising\PaymentContext\UseCases\CheckIban\CheckIbanUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
-use WMDE\Fundraising\Store\Factory as StoreFactory;
-use WMDE\Fundraising\Store\Installer;
 use WMDE\Fundraising\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\LoggingSubscriptionRepository;
@@ -259,38 +257,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		$container['dbal_connection'] = function() {
 			return DriverManager::getConnection( $this->config['db'] );
-		};
-
-		$container['entity_manager'] = function() {
-			$donationContextFactory = $this->getDonationContextFactory();
-			$membershipContextFactory = $this->getMembershipContextFactory();
-			$subscriptionContextFactory = new SubscriptionContextFactory();
-			$entityManager = ( new StoreFactory(
-				$this->getConnection(),
-				$this->getWritableApplicationDataPath() . '/doctrine_proxies',
-				[],
-				[
-					DonationContextFactory::ENTITY_NAMESPACE => $donationContextFactory->newMappingDriver(),
-					MembershipContextFactory::ENTITY_NAMESPACE => $membershipContextFactory->newMappingDriver(),
-					SubscriptionContextFactory::ENTITY_NAMESPACE => $subscriptionContextFactory->newMappingDriver(),
-					'WMDE\Fundraising\AddressChangeContext\Domain\Model' => new XmlDriver( __DIR__ . '/../../vendor/wmde/fundraising-address-change/config/DoctrineClassMapping' )
-				]
-			) )
-				->getEntityManager();
-			if ( $this->addDoctrineSubscribers ) {
-				foreach ( $donationContextFactory->newEventSubscribers() as $eventSubscriber ) {
-					$entityManager->getEventManager()->addEventSubscriber( $eventSubscriber );
-				}
-				foreach ( $membershipContextFactory->newEventSubscribers() as $eventSubscriber ) {
-					$entityManager->getEventManager()->addEventSubscriber( $eventSubscriber );
-				}
-				foreach ( $subscriptionContextFactory->newEventSubscribers() as $eventSubscriber ) {
-					$entityManager->getEventManager()->addEventSubscriber( $eventSubscriber );
-				}
-				$entityManager->getEventManager()->addEventSubscriber( $this->newDoctrinePostPersistSubscriberCreateAddressChange( $entityManager ) );
-			}
-
-			return $entityManager;
 		};
 
 		$container['subscription_repository'] = function() {
@@ -556,7 +522,44 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getEntityManager(): EntityManager {
-		return $this->pimple['entity_manager'];
+		$factory = $this->getDoctrineFactory();
+		$entityManager = $this->getPlainEntityManager();
+
+		if ( $this->addDoctrineSubscribers ) {
+			$factory->setupEventSubscribers(
+				$entityManager->getEventManager(),
+				$this->newDoctrinePostPersistSubscriberCreateAddressChange( $entityManager )
+			);
+		}
+
+		return $entityManager;
+	}
+
+	/**
+	 * Returns an EntityManager without
+	 * @return EntityManager
+	 */
+	public function getPlainEntityManager(): EntityManager {
+		return $this->createSharedObject( EntityManager::class, function() {
+			return $this->getDoctrineFactory()->getEntityManager();
+		} );
+	}
+
+	private function getDoctrineFactory(): DoctrineFactory {
+		return $this->createSharedObject( DoctrineFactory::class, function() {
+			$donationContextFactory = $this->getDonationContextFactory();
+			$membershipContextFactory = $this->getMembershipContextFactory();
+			$subscriptionContextFactory = new SubscriptionContextFactory();
+			$addressChangeContextFactory = new AddressChangeContextFactory();
+			return new DoctrineFactory(
+				$this->getConnection(),
+				$this->getDoctrineConfiguration(),
+				$donationContextFactory,
+				$membershipContextFactory,
+				$subscriptionContextFactory,
+				$addressChangeContextFactory
+			);
+		} );
 	}
 
 	private function newDonationEventLogger(): DonationEventLogger {
@@ -564,10 +567,6 @@ class FunFunFactory implements ServiceProviderInterface {
 			new DoctrineDonationEventLogger( $this->getEntityManager() ),
 			$this->getLogger()
 		);
-	}
-
-	public function newInstaller(): Installer {
-		return ( new StoreFactory( $this->getConnection() ) )->newInstaller();
 	}
 
 	public function newListCommentsUseCase(): ListCommentsUseCase {
@@ -1495,10 +1494,12 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function setDonationTokenGenerator( TokenGenerator $tokenGenerator ): void {
 		$this->sharedObjects[TokenGenerator::class] = $tokenGenerator;
+		$this->getDonationContextFactory()->setTokenGenerator( $tokenGenerator );
 	}
 
 	public function setMembershipTokenGenerator( MembershipTokenGenerator $tokenGenerator ): void {
 		$this->sharedObjects[MembershipTokenGenerator::class] = $tokenGenerator;
+		$this->getMembershipContextFactory()->setTokenGenerator( $tokenGenerator );
 	}
 
 	public function disableDoctrineSubscribers(): void {
@@ -1864,9 +1865,11 @@ class FunFunFactory implements ServiceProviderInterface {
 	private function getDonationContextFactory(): DonationContextFactory {
 		return $this->createSharedObject( DonationContextFactory::class, function (): DonationContextFactory {
 			return new DonationContextFactory(
-				$this->config,
-				$this->getDoctrineConfiguration(),
-				$this->sharedObjects[TokenGenerator::class] ?? null
+				[
+					'token-length' => $this->config['token-length'],
+					'token-validity-timestamp' => $this->config['token-validity-timestamp']
+				],
+				$this->getDoctrineConfiguration()
 			);
 		} );
 	}
@@ -1875,14 +1878,12 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( MembershipContextFactory::class, function (): MembershipContextFactory {
 			return new MembershipContextFactory(
 				[
-					// Explicitly passing redundantly - repeated use could be a case for config parameters
-					// http://symfony.com/doc/current/service_container/parameters.html#parameters-in-configuration-files
 					'token-length' => $this->config['token-length'],
 					'token-validity-timestamp' => $this->config['token-validity-timestamp']
 				],
-				$this->getDoctrineConfiguration(),
-				$this->sharedObjects[MembershipTokenGenerator::class] ?? null
+				$this->getDoctrineConfiguration()
 			);
 		} );
 	}
+
 }
