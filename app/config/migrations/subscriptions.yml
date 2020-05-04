@@ -1,0 +1,4 @@
+name: Doctrine Migration Scripts for Subscriptions Bounded Context
+migrations_namespace: DoctrineMigrations
+table_name: subscription_migration_versions
+migrations_directory: vendor/wmde/fundraising-subscriptions/migrations
