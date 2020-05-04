@@ -41,6 +41,8 @@ To roll back ("undo") a deployment, log in to the server, change the symlink to 
 
 Database changes take the form of [Doctrine migration scripts](https://www.doctrine-project.org/projects/doctrine-migrations/en/2.2/reference/introduction.html), which are part of the application.
 
+Until we use Doctrine Migrations 3.0 , each bounded context has its own migration configuration file, in `app/config/migrations`. In the examples, replace `migration_config.yml` with the name of the bounded context migration you want to run. 
+
 ### 1. Deploy activating new version
 Call the playbook (in this case for the test server) with the `skip_symlink` variable:
 
@@ -66,9 +68,11 @@ Login to the server of the fundraising application (test server or production se
 In `/usr/share/ngix/www/` you can find the directory named after the domain of the server you want to migrate. The directory contains the the last 5 releases, each in its own directory.
 Change into the new release directory (the timestamped directory, *not* the `html`).
 
-Run the `migrate` command:
+Run the `migrate` command, replacing the `migration_config.yml` file with your own file name:
 
-    vendor/bin/doctrine-migrations migrations:migrate --configuration=vendor/wmde/fundraising-store/migrations.yml
+    vendor/bin/doctrine-migrations migrations:migrate --configuration=app/config/migrations/migration_config.yml
+
+If you want to run migrations from more than one bounded context, you have to run the command multiple times, with a different configuration file!
 
 ### 4. Change the symlink
 

@@ -170,31 +170,32 @@ at [http://localhost:8025/](http://localhost:8025/)
 ### Database migrations
 
 Out of the box, the database should be in a usable state for local development. If you make changes to the database 
-schema, you must provide a migration script for the production database. Store the migration scripts in the `migrations` directory of
-the [FundraisingStore repository](https://github.com/wmde/FundraisingStore/tree/master/migrations).
+schema, you must provide a migration script for the production database. Store the migration scripts in the `migrations`
+directory of the bounded context where you made the changes.
 
-To test you migration in your Docker development environment, deploy the changes in FundraisingStore to the 
-FundraisingFrontend repository and run the `make migration` command.
+To test you migration in your Docker development environment, update the bounded context dependency in composer and run
+the `make migration MIGRATION_CONTEXT=<CTX>` command. Replace the placeholder `<CTX>` with the name of of the configuration 
+file in `app/config/migrations` (without the `.yml` suffix). 
 
 To execute a specific script, run the following command and add the version number of the migration script you want to use.
-As an example, executing `migrations/Version20180612000000.php` would look like this:
+As an example, executing `migrations/Version20180612000000.php` for the subscription context would look like this:
 
 ```
-make migration-execute MIGRATION_VERSION=20180612000000
+make migration-execute MIGRATION_CONTEXT=subscriptions MIGRATION_VERSION=20180612000000
 ```
 
 You can also revert a script (if implemented) through an equivalent `migration-revert` command:
 
 ```
-make migration-revert MIGRATION_VERSION=20180612000000
+make migration-revert  MIGRATION_CONTEXT=subscriptions MIGRATION_VERSION=20180612000000
 ```
 
 Note that Doctrine creates its own `doctrine_migration_versions` table where it stores the status of individual migrations.
 If you run into issues and want to reset the state of a migrations it's best to check that table directly or use the `versions`
-command from doctrine-migrations which supports `--add` and `--delete` paramters:
+command from doctrine-migrations which supports `--add` and `--delete` parameters:
 
 ```
-vendor/wmde/fundraising-store/vendor/doctrine/migrations/bin/doctrine-migrations migrations:version
+vendor/doctrine/migrations/bin/doctrine-migrations migrations:version
 ```
 
 Have a look the the [deployment documentation](deployment/README.md) on how to run the migrations on the server.
