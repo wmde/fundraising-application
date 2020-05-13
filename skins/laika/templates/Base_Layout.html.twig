@@ -39,7 +39,10 @@
 {% endblock %}
 
 {% block scripts %}
-    {% if not assets_path %}
+    {% if assets_path %}
+        <script src="{$ assets_path $}/js/chunk-vendors.js"></script>
+        <script src="{$ assets_path $}/js/chunk-common.js"></script>
+    {% else %}
         <script src="{$ basepath $}/skins/laika/js/chunk-vendors.js"></script>
         {#
            The file `styles.js` is needed due to a webpack error that propagates to the CSS-extract plugin.

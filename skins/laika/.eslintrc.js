@@ -1,16 +1,20 @@
 module.exports = {
 	root: true,
+
 	env: {
 		node: true,
 		es6: true,
 	},
+
 	plugins: [
 		'@typescript-eslint',
 	],
-	'extends': [
+
+	extends: [
 		'wikimedia',
 
 	],
+
 	rules: {
 		'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
@@ -29,8 +33,10 @@ module.exports = {
 		'quote-props': 'off',
 		'valid-jsdoc': 'off',
 	},
-	'parser': 'vue-eslint-parser',
-	'parserOptions': {
+
+	parser: 'vue-eslint-parser',
+
+	parserOptions: {
 		'parser': '@typescript-eslint/parser',
 		'sourceType': 'module',
 		'ecmaVersion': 7,

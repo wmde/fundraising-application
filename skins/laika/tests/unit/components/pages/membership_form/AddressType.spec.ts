@@ -21,7 +21,7 @@ describe( 'AddressType.vue', () => {
 		const person = wrapper.find( '#personal' );
 		person.trigger( 'click' );
 		expect( wrapper.emitted( event ) ).toHaveLength( 2 );
-		expect( wrapper.emitted( event )[ 0 ] ).toEqual( [ AddressTypeModel.COMPANY ] );
-		expect( wrapper.emitted( event )[ 1 ] ).toEqual( [ AddressTypeModel.PERSON ] );
+		expect( wrapper.emitted( event )![ 0 ] ).toEqual( [ AddressTypeModel.COMPANY ] );
+		expect( wrapper.emitted( event )![ 1 ] ).toEqual( [ AddressTypeModel.PERSON ] );
 	} );
 } );

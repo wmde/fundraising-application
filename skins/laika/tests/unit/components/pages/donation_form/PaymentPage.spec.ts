@@ -7,6 +7,16 @@ import Vuex from 'vuex';
 import Buefy from 'buefy';
 import PaymentPage from '@/components/pages/donation_form/subpages/PaymentPage.vue';
 
+jest.mock( '@/tracking', () => {
+	return {
+		trackFormSubmission: jest.fn(),
+	};
+} );
+
+jest.mock( '@/scroll_to_first_error', () => {
+	return jest.fn();
+} );
+
 describe( 'DonationForm', () => {
 	let wrapper: any;
 
@@ -38,7 +48,7 @@ describe( 'DonationForm', () => {
 				$t: jest.fn(),
 			},
 			stubs: {
-				Payment: '<div class="i-am-payment" />',
+				Payment: { template: '<div class="i-am-payment" />' },
 			},
 		} );
 	} );

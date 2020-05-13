@@ -103,7 +103,7 @@ describe( 'BankData', () => {
 		expect( store.dispatch ).toHaveBeenLastCalledWith( expectedAction, expectedPayload );
 	} );
 
-	it( 'disables BIC field for German IBANs and not for other values', () => {
+	it( 'disables BIC field for German IBANs and not for other values', async () => {
 		const wrapper = mount( BankData, {
 			localVue,
 			store: createStore(),
@@ -119,14 +119,17 @@ describe( 'BankData', () => {
 
 		wrapper.setData( { accountId: 'DE12345605171238489890' } );
 		iban.trigger( 'blur' );
+		await wrapper.vm.$nextTick();
 		expect( bic.element.getAttribute( 'disabled' ) ).toMatch( 'disabled' );
 
 		wrapper.setData( { accountId: 'AT12345605171238489890' } );
 		iban.trigger( 'blur' );
+		await wrapper.vm.$nextTick();
 		expect( bic.element.getAttribute( 'disabled' ) ).toMatch( 'disabled' );
 
 		wrapper.setData( { accountId: '34560517' } );
 		iban.trigger( 'blur' );
+		await wrapper.vm.$nextTick();
 		expect( bic.element.getAttribute( 'disabled' ) ).toBeNull();
 	} );
 
@@ -179,7 +182,7 @@ describe( 'BankData', () => {
 		expect( store.dispatch ).toHaveBeenNthCalledWith( 2, expectedAction );
 	} );
 
-	it( 'renders changes from the store in the input fields', () => {
+	it( 'renders changes from the store in the input fields', async () => {
 		const wrapper = mount( BankData, {
 			localVue,
 			store: createStore(),
@@ -191,11 +194,13 @@ describe( 'BankData', () => {
 		const iban = wrapper.find( '#iban' );
 		const bic = wrapper.find( '#bic' );
 		wrapper.setData( { accountId: 'AT12345605171238489890', bankId: 'ABCDDEFFXXX' } );
+		await wrapper.vm.$nextTick();
+
 		expect( ( ( <HTMLInputElement> iban.element ).value ) ).toMatch( 'AT12345605171238489890' );
 		expect( ( ( <HTMLInputElement> bic.element ).value ) ).toMatch( 'ABCDDEFFXXX' );
 	} );
 
-	it( 'renders the bank name set in the store', () => {
+	it( 'renders the bank name set in the store', async () => {
 		const wrapper = mount( BankData, {
 			localVue,
 			store: createStore(),
@@ -206,6 +211,7 @@ describe( 'BankData', () => {
 		const store = wrapper.vm.$store;
 		store.commit( NS_BANKDATA + '/SET_BANKNAME', 'Test Bank' );
 		const iban = wrapper.find( '#bank-name' );
+		await wrapper.vm.$nextTick();
 		expect( iban.text() ).toMatch( 'Test Bank' );
 	} );
 
@@ -223,7 +229,7 @@ describe( 'BankData', () => {
 		expect( bankDataLabels.at( 1 ).text() ).toMatch( 'donation_form_payment_bankdata_bank_default_label' );
 	} );
 
-	it( 'renders the appropriate labels for IBANs', () => {
+	it( 'renders the appropriate labels for IBANs', async () => {
 		const wrapper = mount( BankData, {
 			localVue,
 			store: createStore(),
@@ -234,11 +240,12 @@ describe( 'BankData', () => {
 
 		wrapper.setData( { accountId: 'DE12345605171238489890', bankId: 'ABCDDEFFXXX' } );
 		const bankDataLabels = wrapper.findAll( 'label' );
+		await wrapper.vm.$nextTick();
 		expect( bankDataLabels.at( 0 ).text() ).toMatch( 'donation_form_payment_bankdata_account_iban_label' );
 		expect( bankDataLabels.at( 1 ).text() ).toMatch( 'donation_form_payment_bankdata_bank_bic_label' );
 	} );
 
-	it( 'renders the appropriate labels for legacy bank accounts', () => {
+	it( 'renders the appropriate labels for legacy bank accounts', async () => {
 		const wrapper = mount( BankData, {
 			localVue,
 			store: createStore(),
@@ -249,6 +256,7 @@ describe( 'BankData', () => {
 
 		wrapper.setData( { accountId: '34560517', bankId: '50010517' } );
 		const bankDataLabels = wrapper.findAll( 'label' );
+		await wrapper.vm.$nextTick();
 		expect( bankDataLabels.at( 0 ).text() ).toMatch( 'donation_form_payment_bankdata_account_legacy_label' );
 		expect( bankDataLabels.at( 1 ).text() ).toMatch( 'donation_form_payment_bankdata_bank_legacy_label' );
 	} );
