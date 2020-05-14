@@ -7,11 +7,8 @@
 				<h2 class="title is-size-2 has-margin-top-36 has-margin-bottom-18">{{ topic.name }}</h2>
 				<question
 						v-for="(content, index) in getQuestionsByTopic(topic)"
-						v-on:question-opened="setOpenQuestionId( $event )"
 						:content="content"
-						:key="topic.id+index"
-						:visible-question-id="openQuestionId"
-						:question-id="topic.id+index.toString()">
+						:key="topic.id+index">
 				</question>
 			</li>
 		</ul>
@@ -33,16 +30,7 @@ export default Vue.extend( {
 			type: Object as () => FaqContent,
 		},
 	},
-	data: function (): FaqData {
-		return {
-			openQuestionId: '',
-		};
-	},
 	methods: {
-		setOpenQuestionId: function ( id: string ): void {
-			this.openQuestionId = id;
-		},
-
 		getQuestionsByTopic: function ( topic: Topic ): QuestionModel[] {
 			return this.content.questions.filter( question => question.topic.split( ',' ).indexOf( topic.id ) !== -1 );
 		},
