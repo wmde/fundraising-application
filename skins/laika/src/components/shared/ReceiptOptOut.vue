@@ -3,9 +3,9 @@
 		<b-checkbox type="checkbox" class="is-inline-checkbox"
 			id="donation_receipt"
 			name="receiptOptOut"
-			v-model="optedOut"
+			v-model="receiptNeeded"
 			@change.native="setReceiptOptOut()">
-			{{ $t( 'receipt_opt_out' ) }}
+			{{ message }}
 		</b-checkbox>
 	</div>
 
@@ -18,12 +18,15 @@ export default Vue.extend( {
 	name: 'ReceiptOptOut',
 	data: function () {
 		return {
-			optedOut: false,
+			receiptNeeded: true,
 		};
+	},
+	props: {
+		message: String,
 	},
 	methods: {
 		setReceiptOptOut: function () {
-			this.$emit( 'opted-out', this.optedOut );
+			this.$emit( 'opted-out', !this.receiptNeeded );
 		},
 	},
 } );

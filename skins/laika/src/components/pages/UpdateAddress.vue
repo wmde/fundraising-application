@@ -4,7 +4,7 @@
 			<h1 class="title is-size-1">{{ $t( 'address_change_form_title' ) }}</h1>
 			<legend class="title is-size-6">{{ $t( 'address_change_form_label' ) }}</legend>
 			<div>
-				<receipt-opt-out v-on:opted-out="setReceiptOptedOut( $event )"/>
+				<receipt-opt-out :message="$t( 'receipt_needed_donation_page' )" v-on:opted-out="setReceiptOptedOut( $event )"/>
 				<div> {{ $t( 'address_change_opt_out_hint') }}</div>
 				<name :show-error="fieldErrors"
 						:form-data="formData"
