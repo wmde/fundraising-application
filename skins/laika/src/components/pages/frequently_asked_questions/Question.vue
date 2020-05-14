@@ -1,6 +1,6 @@
 <template>
 	<div class="accordion-item" v-bind:class="[ isOpen ? 'accordion-open' : '' ]">
-		<div @click="toggle()"
+		<div @click="isOpen = !isOpen"
 			:data-content-target="isOpen ? '/page/Häufige Fragen' : ''"
 			:data-track-content="isOpen"
 			:data-content-name="isOpen ? 'Expand' : ''"
@@ -25,24 +25,11 @@ export default Vue.extend( {
 		content: {
 			type: Object as () => QuestionModel,
 		},
-		visibleQuestionId: String,
-		questionId: String,
 	},
-	computed: {
-		isOpen: {
-			get: function (): boolean {
-				return this.questionId === this.visibleQuestionId;
-			},
-		},
-	},
-	methods: {
-		toggle: function () {
-			if ( !this.isOpen ) {
-				this.$emit( 'question-opened', this.questionId );
-			} else {
-				this.$emit( 'question-opened' ); // close the current question when the arrow up icon is clicked
-			}
-		},
+	data() {
+		return {
+			isOpen: false,
+		};
 	},
 } );
 </script>
