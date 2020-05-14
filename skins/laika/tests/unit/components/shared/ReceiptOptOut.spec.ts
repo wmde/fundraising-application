@@ -7,7 +7,7 @@ localVue.use( Buefy );
 
 describe( 'ReceiptOptOut', () => {
 
-	it( 'receipt checkbox is checked on initial render', () => {
+	it( 'receipt checkbox is checked on initial render and can be opted-out from', () => {
 		const wrapper = mount( ReceiptOptOut, {
 				localVue,
 				mocks: {
