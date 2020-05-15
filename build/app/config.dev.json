@@ -118,6 +118,7 @@
     "secure": false,
     "httpOnly": false
   },
+  "user-data-key": "q+57eBH3k9alQE4k45PMXpuTRKj+/n+woQvD7AXQMps=",
   "campaigns": {
     "configurations": [ "campaigns.yml", "campaigns.dev.yml" ]
   },

@@ -95,6 +95,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\DoctrinePostPersistSubscriberCreate
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailSubjectRendererInterface;
@@ -1378,6 +1379,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
 				// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 				'paymentIntervals' => [0, 1, 3, 6, 12],
+				'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 				'messages' => $this->getMessages(),
 				'countries' => json_decode( $this->getCountries() )->countries
 			]
@@ -1892,6 +1894,12 @@ class FunFunFactory implements ServiceProviderInterface {
 				],
 				$this->getDoctrineConfiguration()
 			);
+		} );
+	}
+
+	private function getUserDataKeyGenerator(): UserDataKeyGenerator {
+		return $this->createSharedObject( UserDataKeyGenerator::class, function (): UserDataKeyGenerator {
+			return new UserDataKeyGenerator( $this->config['user-data-key'], new SystemClock() );
 		} );
 	}
 

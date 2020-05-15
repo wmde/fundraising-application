@@ -183,6 +183,7 @@
 		"raw": false,
 		"sameSite": null
 	},
+	"user-data-key": "",
 	"campaigns": {
 		"timezone":  "Europe/Berlin",
 		"configurations": [ "campaigns.yml" ]
