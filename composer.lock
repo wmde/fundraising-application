@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d68a81028c0e9fa560853c9bb09aeba",
+    "content-hash": "d2c5d86e80c2daa0528de392b487b4ee",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -446,6 +446,20 @@
                 "common",
                 "doctrine",
                 "php"
+            ],
+            "funding": [
+                {
+                    "url": "https://www.doctrine-project.org/sponsorship.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://www.patreon.com/phpdoctrine",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fcommon",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-05-15T05:51:54+00:00"
         },
@@ -1807,8 +1821,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_23.zip",
-                "reference": "1.23.0",
-                "shasum": null
+                "reference": "1.23.0"
             },
             "type": "library",
             "autoload": {
@@ -8268,12 +8281,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "24cac34ffc58f2f9f687f78a3da38821ba9b740c"
+                "reference": "b537339b5f0ec88fd0c5c9d743bc40d89bac53be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/24cac34ffc58f2f9f687f78a3da38821ba9b740c",
-                "reference": "24cac34ffc58f2f9f687f78a3da38821ba9b740c",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/b537339b5f0ec88fd0c5c9d743bc40d89bac53be",
+                "reference": "b537339b5f0ec88fd0c5c9d743bc40d89bac53be",
                 "shasum": ""
             },
             "require-dev": {
@@ -8306,7 +8319,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-05-15T13:45:53+00:00"
+            "time": "2020-05-19T08:22:55+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
@@ -8380,9 +8393,11 @@
         "php": ">=7.4",
         "ext-intl": "*",
         "ext-curl": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-sodium": "*"
     },
     "platform-dev": {
         "ext-pdo_sqlite": "*"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }
