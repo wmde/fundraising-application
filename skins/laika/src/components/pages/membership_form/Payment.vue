@@ -3,7 +3,7 @@
 		<payment-interval
 				:payment-intervals="paymentIntervals"
 				:current-interval="interval"
-				:title="$t('membership_form_payment_interval_title')"
+				:title="$t( 'membership_form_payment_interval_title' )"
 				v-on:interval-selected="sendIntervalToStore"
 		></payment-interval>
 		<amount-selection
@@ -11,7 +11,7 @@
 				:payment-amounts="paymentAmounts"
 				:amount="fee"
 				:minimum-amount="getMinimumAmount"
-				:title="$t('membership_form_payment_amount_title')"
+				:title="getAmountTitle"
 				:caption="$t('membership_form_payment_amount_description')"
 				:error="feeIsValid ? '' : $t('membership_form_payment_amount_error')"
 				v-on:amount-selected="sendAmountToStore"
@@ -65,6 +65,13 @@ export default Vue.extend( {
 			get: function () {
 				return ( this as any ).minimumAmount( this.$store.getters[ NS_MEMBERSHIP_ADDRESS + '/addressType' ] );
 			},
+		},
+		getAmountTitle() {
+			const interval = this.$store.state[ NS_MEMBERSHIP_FEE ].values.interval;
+			if ( interval === '' ) {
+				return this.$t( 'membership_form_payment_amount_title' );
+			}
+			return this.$t( `membership_form_payment_amount_title_interval_${interval}` );
 		},
 	},
 	methods: {
