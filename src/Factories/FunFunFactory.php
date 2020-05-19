@@ -1379,6 +1379,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 				'paymentIntervals' => [0, 1, 3, 6, 12],
 				'messages' => $this->getMessages(),
+				'countries' => json_decode( $this->getCountries() )->countries
 			]
 		);
 	}
@@ -1389,8 +1390,16 @@ class FunFunFactory implements ServiceProviderInterface {
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
 			// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 			'paymentIntervals' => [1, 3, 6, 12],
-			'messages' => $this->getMessages()
+			'messages' => $this->getMessages(),
+			'countries' => json_decode( $this->getCountries() )->countries
 		] );
+	}
+
+	public function getCountries(): string {
+		return ( new JsonStringReader(
+			$this->getI18nDirectory() . '/data/countries.json',
+			new SimpleFileFetcher()
+		) )->readAndValidateJson();
 	}
 
 	public function newHandleSofortPaymentNotificationUseCase( string $updateToken ): SofortPaymentNotificationUseCase {

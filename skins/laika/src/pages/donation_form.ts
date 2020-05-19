@@ -14,9 +14,9 @@ import { FeatureTogglePlugin } from '@/FeatureToggle';
 import { bucketIdToCssClass } from '@/bucket_id_to_css_class';
 import { createFeatureTogglePlugin } from '@/store/create_feature_toggle_plugin';
 import { initializeAddress } from '@/store/address/actionTypes';
+import { Country } from '@/view_models/Country';
 
-const PAGE_IDENTIFIER = 'donation-form',
-	COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
+const PAGE_IDENTIFIER = 'donation-form';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
@@ -27,6 +27,7 @@ interface DonationFormModel {
 	paymentTypes: Array<string>,
 	paymentIntervals: Array<number>,
 	tracking: Array<number>,
+	countries: Array<Country>,
 	urls: any
 }
 
@@ -66,7 +67,7 @@ Promise.all( [
 				paymentAmounts: pageData.applicationVars.presetAmounts,
 				paymentIntervals: pageData.applicationVars.paymentIntervals,
 				paymentTypes: pageData.applicationVars.paymentTypes,
-				addressCountries: COUNTRIES,
+				countries: pageData.applicationVars.countries,
 				trackingData: pageData.applicationVars.tracking,
 				bucketClasses: bucketIdToCssClass( pageData.selectedBuckets ),
 			},
@@ -82,7 +83,7 @@ Promise.all( [
 					paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
 					paymentIntervals: pageData.applicationVars.paymentIntervals,
 					paymentTypes: pageData.applicationVars.paymentTypes,
-					addressCountries: COUNTRIES,
+					countries: pageData.applicationVars.countries,
 					trackingData: pageData.applicationVars.tracking,
 					startPage: paymentDataComplete ? 'AddressPage' : 'PaymentPage',
 				},

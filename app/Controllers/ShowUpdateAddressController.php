@@ -34,6 +34,7 @@ class ShowUpdateAddressController {
 					'addressToken' => $addressToken,
 					'isCompany' => $addressChange->isCompanyAddress(),
 					'messages' => $ffFactory->getMessages(),
+					'countries' => json_decode( $ffFactory->getCountries() )->countries,
 					'urls' => array_merge(
 						Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() ),
 						[

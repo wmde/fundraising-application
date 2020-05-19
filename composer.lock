@@ -368,16 +368,16 @@
         },
         {
             "name": "doctrine/common",
-            "version": "2.12.0",
+            "version": "2.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "2053eafdf60c2172ee1373d1b9289ba1db7f1fc6"
+                "reference": "308728eae8d90412d850c155d40b1cfbede549da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/2053eafdf60c2172ee1373d1b9289ba1db7f1fc6",
-                "reference": "2053eafdf60c2172ee1373d1b9289ba1db7f1fc6",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/308728eae8d90412d850c155d40b1cfbede549da",
+                "reference": "308728eae8d90412d850c155d40b1cfbede549da",
                 "shasum": ""
             },
             "require": {
@@ -387,7 +387,7 @@
                 "doctrine/event-manager": "^1.0",
                 "doctrine/inflector": "^1.0",
                 "doctrine/lexer": "^1.0",
-                "doctrine/persistence": "^1.1",
+                "doctrine/persistence": "^1.3.3",
                 "doctrine/reflection": "^1.0",
                 "php": "^7.1"
             },
@@ -447,7 +447,7 @@
                 "doctrine",
                 "php"
             ],
-            "time": "2020-01-10T15:49:25+00:00"
+            "time": "2020-05-15T05:51:54+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -1807,7 +1807,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_23.zip",
-                "reference": "1.23.0"
+                "reference": "1.23.0",
+                "shasum": null
             },
             "type": "library",
             "autoload": {
@@ -4828,16 +4829,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "97962c56be909e75df4c21767e0b0ef8aab2d918"
+                "reference": "3c3da82a805d6281663142ef57ba19dbfb42d517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/97962c56be909e75df4c21767e0b0ef8aab2d918",
-                "reference": "97962c56be909e75df4c21767e0b0ef8aab2d918",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/3c3da82a805d6281663142ef57ba19dbfb42d517",
+                "reference": "3c3da82a805d6281663142ef57ba19dbfb42d517",
                 "shasum": ""
             },
             "require": {
@@ -4881,7 +4882,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2020-04-29T15:31:57+00:00"
+            "time": "2020-05-15T10:01:23+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -5406,16 +5407,16 @@
         },
         {
             "name": "nette/di",
-            "version": "v3.0.3",
+            "version": "v3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/di.git",
-                "reference": "77d69061cbf8f9cfb7363dd983136f51213d3e41"
+                "reference": "34d3e47ebe96229b7671664893a3b1128c102213"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/di/zipball/77d69061cbf8f9cfb7363dd983136f51213d3e41",
-                "reference": "77d69061cbf8f9cfb7363dd983136f51213d3e41",
+                "url": "https://api.github.com/repos/nette/di/zipball/34d3e47ebe96229b7671664893a3b1128c102213",
+                "reference": "34d3e47ebe96229b7671664893a3b1128c102213",
                 "shasum": ""
             },
             "require": {
@@ -5473,7 +5474,7 @@
                 "nette",
                 "static"
             ],
-            "time": "2020-01-20T12:14:54+00:00"
+            "time": "2020-05-14T10:29:59+00:00"
         },
         {
             "name": "nette/finder",
@@ -8267,12 +8268,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "565ca31bb7187b8a7dc0cf947abe70771bbfe1a5"
+                "reference": "24cac34ffc58f2f9f687f78a3da38821ba9b740c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/565ca31bb7187b8a7dc0cf947abe70771bbfe1a5",
-                "reference": "565ca31bb7187b8a7dc0cf947abe70771bbfe1a5",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/24cac34ffc58f2f9f687f78a3da38821ba9b740c",
+                "reference": "24cac34ffc58f2f9f687f78a3da38821ba9b740c",
                 "shasum": ""
             },
             "require-dev": {
@@ -8305,7 +8306,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-05-14T13:46:33+00:00"
+            "time": "2020-05-15T13:45:53+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
@@ -8383,6 +8384,5 @@
     },
     "platform-dev": {
         "ext-pdo_sqlite": "*"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }

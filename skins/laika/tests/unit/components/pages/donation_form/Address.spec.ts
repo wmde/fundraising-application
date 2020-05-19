@@ -15,6 +15,7 @@ import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import { FeatureTogglePlugin } from '@/FeatureToggle';
+import countries from '@/../tests/data/countries';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -29,7 +30,7 @@ describe( 'Address.vue', () => {
 			localVue,
 			propsData: {
 				validateAddressUrl: 'validate-address',
-				countries: [ 'DE' ],
+				countries: countries,
 				initialFormValues: '',
 			},
 			store: createStore(),
@@ -78,9 +79,7 @@ describe( 'Address.vue', () => {
 		store.dispatch = jest.fn();
 		const expectedAction = action( NS_ADDRESS, setAddressField );
 		const firstNameValue = 'Vuetiful';
-		const postCode = '420';
 		wrapper.vm.$data.formData.firstName.value = firstNameValue;
-		wrapper.vm.$data.formData.postcode.value = postCode;
 
 		wrapper.find( Name ).vm.$emit( 'field-changed', 'firstName' );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, {
@@ -88,14 +87,6 @@ describe( 'Address.vue', () => {
 			'optionalField': false,
 			'pattern': '^.+$',
 			'value': firstNameValue,
-		} );
-
-		wrapper.find( Postal ).vm.$emit( 'field-changed', 'postcode' );
-		expect( store.dispatch ).toBeCalledWith( expectedAction, {
-			'name': 'postcode',
-			'optionalField': false,
-			'pattern': '^[0-9]{4,5}$',
-			'value': postCode,
 		} );
 	} );
 

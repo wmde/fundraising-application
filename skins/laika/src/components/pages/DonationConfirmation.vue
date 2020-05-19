@@ -64,6 +64,7 @@ import PaymentNotice from '@/components/pages/donation_confirmation/PaymentNotic
 import SummaryLinks from '@/components/pages/donation_confirmation/SummaryLinks.vue';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import AddressModal, { SubmittedAddress } from '@/components/pages/donation_confirmation/AddressModal.vue';
+import { Country } from '@/view_models/Country';
 
 export default Vue.extend( {
 	name: 'DonationConfirmation',
@@ -89,7 +90,7 @@ export default Vue.extend( {
 		updateDonorUrl: String,
 		validateAddressUrl: String,
 		validateEmailUrl: String,
-		countries: Array as () => Array<String>,
+		countries: Array as () => Array<Country>,
 	},
 	methods: {
 		showAddressModal: function () {

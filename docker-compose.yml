@@ -39,6 +39,8 @@ services:
       - MYSQL_USER=fundraising
       - MYSQL_PASSWORD=INSECURE PASSWORD
       - MYSQL_DATABASE=fundraising
+    ports:
+      - '3307:3306'
     expose:
       - "3306"
     volumes:
