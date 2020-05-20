@@ -4,9 +4,11 @@ import {
 	IntervalData,
 	SetFeePayload,
 	MembershipFee,
+	InitialMembershipFeeValues,
 } from '@/view_models/MembershipFee';
 
 import {
+	initializeMembershipFee,
 	markEmptyFeeAsInvalid,
 	markEmptyValuesAsInvalid,
 	setFee,
@@ -27,6 +29,29 @@ import { Helper } from '@/store/util';
 import { validateFeeDataRemotely } from '@/store/axios';
 
 export const actions = {
+	[ initializeMembershipFee ]( context: ActionContext<MembershipFee, any>, initialData: InitialMembershipFeeValues ) {
+		if ( initialData.fee ) {
+			context.commit( SET_FEE, initialData.fee );
+		}
+
+		if ( initialData.interval ) {
+			context.commit( SET_INTERVAL, initialData.interval );
+			context.commit( SET_INTERVAL_VALIDITY );
+		}
+
+		if ( initialData.fee || initialData.interval ) {
+			context.commit( SET_IS_VALIDATING, true );
+			validateFeeDataRemotely(
+				context,
+				initialData.validateFeeUrl,
+				context.state.values.fee,
+				context.state.values.interval
+			).then( ( validationResult: ValidationResponse ) => {
+				context.commit( SET_FEE_VALIDITY, validationResult.status === 'ERR' ? Validity.INVALID : Validity.VALID );
+				context.commit( SET_IS_VALIDATING, false );
+			} );
+		}
+	},
 	[ markEmptyValuesAsInvalid ]( context: ActionContext<MembershipFee, any> ): void {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
 	},

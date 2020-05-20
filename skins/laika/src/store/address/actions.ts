@@ -4,19 +4,32 @@ import {
 	validateAddress,
 	validateEmail,
 	setAddressType,
-	setNewsletterOptIn, setReceiptOptOut, setAddressField, initializeAddress,
+	setNewsletterOptIn, setReceiptOptOut, validateAddressField, setAddressField, initializeAddress,
 } from '@/store/address/actionTypes';
-import { AddressState, InputField } from '@/view_models/Address';
+import { AddressState, InitialAddressValues, InputField } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
-import { INITIALIZE_ADDRESS, MARK_EMPTY_FIELDS_INVALID } from '@/store/address/mutationTypes';
-import { FieldInitialization } from '@/store/address/types';
+import {
+	BEGIN_ADDRESS_VALIDATION,
+	FINISH_ADDRESS_VALIDATION,
+	FINISH_EMAIL_VALIDATION,
+	INITIALIZE_ADDRESS,
+	MARK_EMPTY_FIELDS_INVALID,
+	SET_ADDRESS_FIELD,
+	SET_ADDRESS_TYPE,
+	SET_NEWSLETTER_OPTIN,
+	SET_RECEIPT_OPTOUT,
+	VALIDATE_INPUT,
+} from '@/store/address/mutationTypes';
 
 export const actions = {
+	[ validateAddressField ]( context: ActionContext<AddressState, any>, field: InputField ) {
+		context.commit( VALIDATE_INPUT, field );
+	},
 	[ setAddressField ]( context: ActionContext<AddressState, any>, field: InputField ) {
 		field.value = field.value.trim();
-		context.commit( 'SET_ADDRESS_FIELD', field );
-		context.commit( 'VALIDATE_INPUT', field );
+		context.commit( SET_ADDRESS_FIELD, field );
+		context.commit( VALIDATE_INPUT, field );
 	},
 	[ validateAddress ]( context: ActionContext<AddressState, any>, validateAddressUrl: string ) {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
@@ -24,7 +37,7 @@ export const actions = {
 			return Promise.resolve( { status: 'ERR', messages: [] } );
 		}
 
-		context.commit( 'BEGIN_ADDRESS_VALIDATION' );
+		context.commit( BEGIN_ADDRESS_VALIDATION );
 		const bodyFormData = new FormData();
 		Object.keys( context.state.values ).forEach(
 			field => bodyFormData.append( field, context.state.values[ field ] )
@@ -35,7 +48,7 @@ export const actions = {
 			data: bodyFormData,
 			headers: { 'Content-Type': 'multipart/form-data' },
 		} ).then( ( validationResult: AxiosResponse<ValidationResponse> ) => {
-			context.commit( 'FINISH_ADDRESS_VALIDATION', validationResult.data );
+			context.commit( FINISH_ADDRESS_VALIDATION, validationResult.data );
 			return validationResult.data;
 		} );
 
@@ -55,22 +68,23 @@ export const actions = {
 			data: bodyFormData,
 			headers: { 'Content-Type': 'multipart/form-data' },
 		} ).then( ( validationResult: AxiosResponse<ValidationResponse> ) => {
-			context.commit( 'FINISH_EMAIL_VALIDATION', validationResult.data );
+			context.commit( FINISH_EMAIL_VALIDATION, validationResult.data );
 			return validationResult.data;
 		} );
 
 	},
 	[ setAddressType ]( context: ActionContext<AddressState, any>, type: AddressTypeModel ) {
-		context.commit( 'SET_ADDRESS_TYPE', type );
+		context.commit( SET_ADDRESS_TYPE, type );
 	},
 	[ setNewsletterOptIn ]( context: ActionContext<AddressState, any>, optIn: boolean ) {
-		context.commit( 'SET_NEWSLETTER_OPTIN', optIn );
+		context.commit( SET_NEWSLETTER_OPTIN, optIn );
 	},
 	[ setReceiptOptOut ]( context: ActionContext<AddressState, any>, optOut: boolean ) {
-		context.commit( 'SET_RECEIPT_OPTOUT', optOut );
+		context.commit( SET_RECEIPT_OPTOUT, optOut );
 	},
-	[ initializeAddress ]( context: ActionContext<AddressState, any>, fields: FieldInitialization[] ): void {
-		context.commit( INITIALIZE_ADDRESS, fields );
+	[ initializeAddress ]( context: ActionContext<AddressState, any>, initialValues: InitialAddressValues ): void {
+		context.commit( SET_ADDRESS_TYPE, initialValues.addressType );
+		context.commit( INITIALIZE_ADDRESS, initialValues.fields );
 	},
 
 };

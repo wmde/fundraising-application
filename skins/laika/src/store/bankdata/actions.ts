@@ -41,6 +41,9 @@ export const actions = {
 		} );
 	},
 	[ initializeBankData ]( context: ActionContext<BankAccount, any>, payload: BankAccountData & { bankName: string} ): void {
+		if ( payload.accountId === '' ) {
+			return;
+		}
 		context.commit( SET_BANKDATA, {
 			accountId: payload.accountId,
 			bankId: payload.bankId,

@@ -87,7 +87,23 @@ export default Vue.extend( {
 			countryInput: 'Deutschland',
 			countryClicked: false,
 			countryFocused: false,
+			countryInitialised: false,
 		};
+	},
+	watch: {
+		'formData.country.value': function ( value ) {
+			if ( this.countryInitialised ) {
+				return;
+			}
+
+			const country = this.countries.find( ( c: Country ) => c.countryCode === value );
+			if ( country !== undefined && this.countryInput !== country.countryFullName ) {
+				this.countryInitialised = true;
+				this.countryInput = country.countryFullName;
+				this.formData.postcode.pattern = country.postCodeValidation;
+				this.$emit( 'field-changed', 'postcode' );
+			}
+		},
 	},
 	methods: {
 		displayStreetWarning() {
@@ -99,7 +115,7 @@ export default Vue.extend( {
 				this.$data.countryInput = '';
 			}
 		},
-		changeCountry( option: String ) {
+		changeCountry( option: string ) {
 			let country = this.$props.countries.find( ( c: Country ) => c.countryFullName === option );
 			if ( country ) {
 				this.formData.postcode.pattern = country.postCodeValidation;

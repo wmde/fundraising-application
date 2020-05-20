@@ -17,7 +17,7 @@ import {
 	VALIDATE_INPUT,
 } from '@/store/address/mutationTypes';
 import { AddressState, InputField } from '@/view_models/Address';
-import { FieldInitialization } from '@/store/address/types';
+import { FieldInitialization } from '@/view_models/FieldInitialization';
 
 export const mutations: MutationTree<AddressState> = {
 	[ VALIDATE_INPUT ]( state: AddressState, field: InputField ) {

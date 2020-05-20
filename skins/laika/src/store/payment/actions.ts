@@ -34,13 +34,13 @@ export const actions = {
 	},
 	[ initializePayment ]( context: ActionContext<DonationPayment, any>, initialValues: InitialPaymentValues ): Promise<boolean> {
 		let amountIsFilled = false, paymentIsFilled = false;
-		if ( initialValues.amount !== '0' ) {
+		if ( initialValues.amount && initialValues.amount !== '0' ) {
 			context.commit( SET_AMOUNT, initialValues.amount );
 			context.commit( SET_AMOUNT_VALIDITY, Validity.VALID );
 			amountIsFilled = true;
 		}
 
-		if ( initialValues.type !== '' ) {
+		if ( initialValues.type && initialValues.type !== '' ) {
 			context.commit( SET_TYPE, initialValues.type );
 			context.commit( SET_TYPE_VALIDITY, Validity.VALID );
 			paymentIsFilled = true;

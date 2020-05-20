@@ -3,6 +3,8 @@ import VueI18n from 'vue-i18n';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import { createStore } from '@/store/donor_update_store';
+import { clearPersistentData } from '@/store/create_data_persister';
+import LocalStorageRepository from '@/store/LocalStorageRepository';
 
 import App from '@/components/App.vue';
 
@@ -10,10 +12,13 @@ import Component from '@/components/pages/DonationConfirmation.vue';
 
 const PAGE_IDENTIFIER = 'donation-confirmation',
 	IS_FULLWIDTH_PAGE = true,
-	ADDRESS_UPDATE_COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ];
+	ADDRESS_UPDATE_COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ],
+	LOCAL_STORAGE_DELETION_NAMESPACES = [ 'donation_form', 'membership_application' ];
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
+
+clearPersistentData( new LocalStorageRepository(), LOCAL_STORAGE_DELETION_NAMESPACES );
 
 const pageData = new PageDataInitializer<any>( '#app' );
 const store = createStore();

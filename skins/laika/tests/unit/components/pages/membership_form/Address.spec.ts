@@ -19,6 +19,7 @@ import {
 } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 import countries from '@/../tests/data/countries';
+import { Validity } from '@/view_models/Validity';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -97,17 +98,35 @@ describe( 'Address.vue', () => {
 		} );
 	} );
 
-	it( 'populates form data if initial data is available', async () => {
+	it( 'populates form data and validates if initial data is available', async () => {
 		const firstName = 'Testina',
 			lastName = 'Testinson',
 			title = 'Prof Dr.';
 		const store = createStore();
 		await store.dispatch( action( NS_MEMBERSHIP_ADDRESS, initializeAddress ), {
-			addressType: addressTypeName( AddressTypeModel.PERSON ),
-			email: 'playthatfunkymusic@example.com',
-			firstName,
-			lastName,
-			title,
+			addressType: AddressTypeModel.PERSON,
+			fields: [
+				{
+					name: 'email',
+					value: 'playthatfunkymusic@example.com',
+					validity: Validity.RESTORED,
+				},
+				{
+					name: 'firstName',
+					value: firstName,
+					validity: Validity.RESTORED,
+				},
+				{
+					name: 'lastName',
+					value: lastName,
+					validity: Validity.RESTORED,
+				},
+				{
+					name: 'title',
+					value: title,
+					validity: Validity.RESTORED,
+				},
+			],
 		} ).then( () => {
 			wrapper = mount( Address, {
 				localVue,
@@ -124,6 +143,8 @@ describe( 'Address.vue', () => {
 		expect( wrapper.vm.$data.formData.firstName.value ).toBe( firstName );
 		expect( wrapper.vm.$data.formData.lastName.value ).toBe( lastName );
 		expect( wrapper.vm.$data.formData.title.value ).toBe( title );
+		expect( store.state.membership_address.validity.firstName ).not.toBe( Validity.RESTORED );
+		expect( store.state.membership_address.validity.lastName ).not.toBe( Validity.RESTORED );
 	} );
 
 } );

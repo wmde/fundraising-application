@@ -15,6 +15,12 @@ export interface BankAccountData {
     bankId: string
 }
 
+export interface InitialBankAccountData {
+    iban?: string
+    bic?: string
+    bankname?: string
+}
+
 export interface BankAccountRequest {
     validationUrl: string
     requestParams: object

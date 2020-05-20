@@ -23,7 +23,7 @@ class UserDataKeyGenerator {
 		$daysSince2020 = abs( $now->diff( new \DateTimeImmutable( self::START_TIME ) )->days );
 		return sodium_bin2base64(
 			sodium_crypto_kdf_derive_from_key(
-				64,
+				32,
 				$daysSince2020,
 				$now->format( 'Ymd' ),
 				sodium_base642bin( $this->masterKey, SODIUM_BASE64_VARIANT_ORIGINAL, '' )
