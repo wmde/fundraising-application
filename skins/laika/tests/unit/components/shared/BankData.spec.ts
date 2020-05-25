@@ -4,6 +4,7 @@ import Buefy from 'buefy';
 import BankData from '@/components/shared/PaymentBankData.vue';
 import { createStore } from '@/store/donation_store';
 import { NS_BANKDATA } from '@/store/namespaces';
+import bankdata from '@/store/bankdata';
 import { action } from '@/store/util';
 import {
 	initializeBankData,
@@ -12,6 +13,7 @@ import {
 	setBankData,
 } from '@/store/bankdata/actionTypes';
 import { BankAccountRequest } from '@/view_models/BankAccount';
+import setTimeout = jest.setTimeout;
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -213,6 +215,83 @@ describe( 'BankData', () => {
 		const iban = wrapper.find( '#bank-name' );
 		await wrapper.vm.$nextTick();
 		expect( iban.text() ).toMatch( 'Test Bank' );
+	} );
+
+	it( 'renders bank code / BIC field when legacy bank account number is entered', async () => {
+		const wrapper = mount( BankData, {
+			localVue,
+			store: createStore(),
+			mocks: {
+				$t: () => {},
+			},
+		} );
+
+		let bankInfoInput = wrapper.find( 'input#bic' );
+		expect( bankInfoInput.isVisible() ).toBe( false );
+
+		wrapper.setData( { accountId: '123' } );
+		await wrapper.vm.$nextTick();
+
+		bankInfoInput = wrapper.find( 'input#bic' );
+		expect( bankInfoInput.isVisible() ).toBe( true );
+	} );
+
+	it( 'renders bank code / BIC field when valid IBAN was validated', async () => {
+		let getters;
+		let store;
+		getters = {
+			bankDataIsValid: () => true,
+			bankDataIsInvalid: () => false,
+			getBankName: () => 'gute Bank',
+		}
+		store = new Vuex.Store( {
+			modules: {
+				[ NS_BANKDATA ]: {
+					namespaced: true,
+					getters,
+				},
+			},
+		} );
+		const wrapper = mount( BankData, {
+			localVue,
+			store,
+			mocks: {
+				$t: () => {},
+			},
+		} );
+		wrapper.setData( { accountId: 'DE89370400440532013000' } );
+
+		let bankInfoInput = wrapper.find( 'input#bic' );
+		expect( bankInfoInput.isVisible() ).toBe( true );
+	} );
+
+	it( 'does not render bank code / BIC field if IBAN is invalid', async () => {
+		let getters;
+		let store;
+		getters = {
+			bankDataIsValid: () => false,
+			bankDataIsInvalid: () => true,
+			getBankName: () => '',
+		}
+		store = new Vuex.Store( {
+			modules: {
+				[ NS_BANKDATA ]: {
+					namespaced: true,
+					getters,
+				},
+			},
+		} );
+		const wrapper = mount( BankData, {
+			localVue,
+			store,
+			mocks: {
+				$t: () => {},
+			},
+		} );
+		wrapper.setData( { accountId: 'DE89370400440532013000' } );
+
+		let bankInfoInput = wrapper.find( 'input#bic' );
+		expect( bankInfoInput.isVisible() ).toBe( false );
 	} );
 
 	it( 'renders the appropriate labels for no value', () => {

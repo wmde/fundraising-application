@@ -18,7 +18,7 @@
 				</b-input>
 			</b-field>
 		</div>
-		<div v-bind:class="['form-input', { 'is-invalid': bankDataIsInvalid }]">
+		<div v-show="isBankFieldEnabled" v-bind:class="['form-input', { 'is-invalid': bankDataIsInvalid }]">
 			<label for="bic" class="subtitle">{{ $t( labels.bic ) }}</label>
 			<b-field>
 				<b-input class="is-medium"
@@ -71,6 +71,9 @@ export default Vue.extend( {
 		isBankIdDisabled(): boolean {
 			return this.looksLikeIban();
 		},
+		isBankFieldEnabled(): boolean {
+			return this.looksLikeBankAccountNumber() || ( this.looksLikeIban() && this.bankDataIsValid );
+		},
 		bankIdentifier: {
 			get: function (): string {
 				if ( this.looksLikeGermanIban() ) {
@@ -87,7 +90,7 @@ export default Vue.extend( {
 				return {
 					iban: 'donation_form_payment_bankdata_account_iban_label',
 					bic: 'donation_form_payment_bankdata_bank_bic_label',
-					bicPlaceholder: 'donation_form_payment_bankdata_bank_bic_placeholder',
+					bicPlaceholder: 'donation_form_payment_bankdata_bank_bic_placeholder2',
 				};
 			} else if ( this.looksLikeBankAccountNumber() ) {
 				return {
@@ -104,6 +107,7 @@ export default Vue.extend( {
 		},
 		...mapGetters( NS_BANKDATA, [
 			'bankDataIsInvalid',
+			'bankDataIsValid',
 			'getBankName',
 		] ),
 	},
