@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling\DomainEventHandler;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -14,7 +14,7 @@ use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
-use WMDE\Fundraising\Frontend\Infrastructure\CreateAddressChangeHandler;
+use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\CreateAddressChangeHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\EntityManagerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\EventDispatcherSpy;
@@ -25,7 +25,7 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\MembershipContext\Domain\Model\PhoneNumber;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\CreateAddressChangeHandler
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\CreateAddressChangeHandler
  */
 class CreateAddressChangeHandlerTest extends TestCase {
 
@@ -40,7 +40,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 		$this->assertEquals(
 			[DonationCreatedEvent::class, MembershipCreatedEvent::class],
-			$dispatcher->getListenedEventClassNames()
+			$dispatcher->getObservedEventClassNames()
 		);
 	}
 
