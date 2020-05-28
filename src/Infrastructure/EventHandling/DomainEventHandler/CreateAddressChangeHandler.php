@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Infrastructure;
+namespace WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler;
 
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;

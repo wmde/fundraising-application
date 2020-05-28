@@ -76,8 +76,6 @@ class ApplyForMembershipController {
 			return $this->newFailureResponse( $httpRequest );
 		}
 
-		$this->logSelectedBuckets( $responseModel );
-
 		return $this->newHttpResponse( $responseModel );
 	}
 
@@ -242,13 +240,6 @@ class ApplyForMembershipController {
 	 */
 	private function filterAutofillCommas( string $value ): string {
 		return trim( preg_replace( ['/,/', '/\s{2,}/'], [' ', ' '], $value ) );
-	}
-
-	private function logSelectedBuckets( ApplyForMembershipResponse $responseModel ) {
-		$this->ffFactory->getBucketLogger()->writeEvent(
-			new MembershipApplicationCreated( $responseModel->getMembershipApplication()->getId() ),
-			...$this->ffFactory->getSelectedBuckets()
-		);
 	}
 
 	private function logValidationErrors( ApplicationValidationResult $validationResult, Request $httpRequest ): void {
