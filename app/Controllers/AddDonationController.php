@@ -54,7 +54,6 @@ class AddDonationController {
 			);
 		}
 
-		$this->logSelectedBuckets( $responseModel );
 		$this->sendTrackingDataIfNeeded( $request, $responseModel );
 		$this->resetSessionState();
 
@@ -232,13 +231,6 @@ class AddDonationController {
 	 */
 	private function filterAutofillCommas( string $value ): string {
 		return trim( preg_replace( ['/,/', '/\s{2,}/'], [' ', ' '], $value ) );
-	}
-
-	private function logSelectedBuckets( AddDonationResponse $responseModel ): void {
-		$this->ffFactory->getBucketLogger()->writeEvent(
-			new DonationCreated( $responseModel->getDonation()->getId() ),
-			...$this->ffFactory->getSelectedBuckets()
-		);
 	}
 
 	/**

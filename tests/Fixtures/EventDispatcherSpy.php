@@ -19,7 +19,7 @@ class EventDispatcherSpy extends EventDispatcher {
 		$this->events[] = $event;
 	}
 
-	public function getListenedEventClassNames(): array {
+	public function getObservedEventClassNames(): array {
 		return array_keys( $this->listeners );
 	}
 }

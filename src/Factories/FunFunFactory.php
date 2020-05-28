@@ -91,7 +91,8 @@ use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\CreateAddressChangeHandler;
+use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler;
+use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\CreateAddressChangeHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
@@ -1793,7 +1794,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		} );
 	}
 
-	public function getBucketLogger(): BucketLogger {
+	private function getBucketLogger(): BucketLogger {
 		return $this->createSharedObject( 'bucketLogger', function () {
 			return new BestEffortBucketLogger(
 				new JsonBucketLogger(
@@ -1927,6 +1928,14 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private function setupEventListeners( EventDispatcher $dispatcher ): void {
 		new CreateAddressChangeHandler( $this->getEntityManager(), $dispatcher );
+		new BucketLoggingHandler(
+			$this->getBucketLogger(),
+			/** @return Bucket[] */
+			function (): array {
+				// Defer execution with anonymous function because buckets might not be selected at call time
+				return $this->getSelectedBuckets();
+			},
+			$dispatcher
+		);
 	}
-
 }

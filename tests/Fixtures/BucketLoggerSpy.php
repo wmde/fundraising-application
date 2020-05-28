@@ -25,4 +25,8 @@ class BucketLoggerSpy implements BucketLogger {
 	public function getFirstEvent(): LoggingEvent {
 		return $this->events[0]['event'];
 	}
+
+	public function getFirstBuckets(): array {
+		return $this->events[0]['buckets'];
+	}
 }
