@@ -91,7 +91,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\DoctrinePostPersistSubscriberCreateAddressChange;
+use WMDE\Fundraising\Frontend\Infrastructure\CreateAddressChangeHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
@@ -532,8 +532,9 @@ class FunFunFactory implements ServiceProviderInterface {
 		if ( $this->addDoctrineSubscribers ) {
 			$factory->setupEventSubscribers(
 				$entityManager->getEventManager(),
-				$this->newDoctrinePostPersistSubscriberCreateAddressChange( $entityManager )
+				// if we have custom Doctrine event subscribers, add them here
 			);
+
 		}
 
 		return $entityManager;
@@ -1504,10 +1505,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	private function newDoctrinePostPersistSubscriberCreateAddressChange( EntityManager $entityManager ): DoctrinePostPersistSubscriberCreateAddressChange {
-		return new DoctrinePostPersistSubscriberCreateAddressChange( $entityManager );
-	}
-
 	public function setDonationTokenGenerator( TokenGenerator $tokenGenerator ): void {
 		$this->sharedObjects[TokenGenerator::class] = $tokenGenerator;
 		$this->getDonationContextFactory()->setTokenGenerator( $tokenGenerator );
@@ -1910,8 +1907,9 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	private function getEventDispatcher(): EventDispatcher {
 		return $this->createSharedObject( EventDispatcher::class, function (): EventDispatcher {
-			return new EventDispatcher();
-			// TODO add listeners
+			$dispatcher = new EventDispatcher();
+			$this->setupEventListeners( $dispatcher );
+			return $dispatcher;
 		} );
 	}
 
@@ -1925,6 +1923,10 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( MembershipEventEmitter::class, function (): MembershipEventEmitter {
 			return new MembershipEventEmitter( $this->getEventDispatcher() );
 		} );
+	}
+
+	private function setupEventListeners( EventDispatcher $dispatcher ): void {
+		new CreateAddressChangeHandler( $this->getEntityManager(), $dispatcher );
 	}
 
 }

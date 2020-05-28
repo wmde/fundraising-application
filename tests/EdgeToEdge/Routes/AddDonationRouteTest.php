@@ -11,6 +11,7 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
@@ -812,6 +813,25 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$this->assertSame( 1, $bucketLogger->getEventCount() );
 			$this->assertInstanceOf( DonationCreated::class, $bucketLogger->getFirstEvent() );
+		} );
+	}
+
+	public function testGivenValidRequest_addressChangeRecordIsCreated(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
+			$client->followRedirects( false );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
+
+			/** @var AddressChange[] $addressChanges */
+			$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
+			$this->assertCount( 1, $addressChanges );
+			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION );
+			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
 		} );
 	}
 }
