@@ -53,7 +53,12 @@ class CreateAddressChangeHandler {
 	}
 
 	private function persistIfNeeded( AddressChange $addressChange ) {
-		// TODO check if $addrssChange for external id and type already exists
+		$countCriteria = [ 'externalId' => $addressChange->getExternalId(), 'externalIdType' => $addressChange->getExternalIdType()];
+		if ( $this->entityManager->getRepository( AddressChange::class )->count( $countCriteria ) > 0 ) {
+			// New donations/memberships should never have address change records, but if they do, let's do nothing
+			// Belt-and-suspenders approach for https://phabricator.wikimedia.org/T253658
+			return;
+		}
 		$this->entityManager->persist( $addressChange );
 		$this->entityManager->flush();
 	}

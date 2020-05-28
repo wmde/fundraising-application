@@ -12,7 +12,7 @@ class EventDispatcher {
 	/**
 	 * @var callable[][]
 	 */
-	private array $listeners = [];
+	protected array $listeners = [];
 
 	public function addEventListener( string $eventClassName, callable $listener ): self {
 		assert( class_exists( $eventClassName ) );
