@@ -766,7 +766,7 @@
     "user-data-key": {
       "type": "string",
       "title": "User data encryption key",
-      "description": "Base64-encoded 256 bit key. This key will be used for deriving the daily sub-keys for encrypting user data on the client. You gan generate a key with PHP like this: printf( \"%s\\n\", sodium_bin2base64( sodium_crypto_kdf_keygen() ));",
+      "description": "Base64-encoded 256 bit key. This key will be used for deriving the daily sub-keys for encrypting user data on the client. You can generate a key with PHP like this: printf( \"%s\\n\", sodium_bin2base64( sodium_crypto_kdf_keygen(), SODIUM_BASE64_VARIANT_ORIGINAL ) );",
       "minLength": 44,
       "maxLength": 44
     },
