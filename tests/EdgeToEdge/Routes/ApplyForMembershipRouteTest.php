@@ -9,6 +9,7 @@ use Monolog\Logger;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
@@ -561,5 +562,23 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				}
 			}
 		);
+	}
+
+	public function testGivenValidRequest_AddressChangeRecordIsCreated(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$this->newValidHttpParameters()
+			);
+
+			/** @var AddressChange[] $addressChanges */
+			$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
+			$this->assertCount( 1, $addressChanges );
+			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_MEMBERSHIP );
+			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
+		} );
 	}
 }

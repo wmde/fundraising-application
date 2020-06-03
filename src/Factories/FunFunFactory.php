@@ -91,7 +91,10 @@ use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
-use WMDE\Fundraising\Frontend\Infrastructure\DoctrinePostPersistSubscriberCreateAddressChange;
+use WMDE\Fundraising\Frontend\Infrastructure\CreateAddressChangeHandler;
+use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
+use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
+use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
@@ -529,8 +532,9 @@ class FunFunFactory implements ServiceProviderInterface {
 		if ( $this->addDoctrineSubscribers ) {
 			$factory->setupEventSubscribers(
 				$entityManager->getEventManager(),
-				$this->newDoctrinePostPersistSubscriberCreateAddressChange( $entityManager )
+				// if we have custom Doctrine event subscribers, add them here
 			);
+
 		}
 
 		return $entityManager;
@@ -1034,7 +1038,8 @@ class FunFunFactory implements ServiceProviderInterface {
 			$this->newDonationConfirmationMailer(),
 			$this->newBankTransferCodeGenerator(),
 			$this->newDonationTokenFetcher(),
-			new InitialDonationStatusPicker()
+			new InitialDonationStatusPicker(),
+			$this->getDonationEventEmitter()
 		);
 	}
 
@@ -1244,7 +1249,8 @@ class FunFunFactory implements ServiceProviderInterface {
 			$this->newApplyForMembershipPolicyValidator(),
 			$this->newMembershipApplicationTracker(),
 			$this->newMembershipApplicationPiwikTracker(),
-			$this->getPaymentDelayCalculator()
+			$this->getPaymentDelayCalculator(),
+			$this->getMembershipEventEmitter()
 		);
 	}
 
@@ -1497,10 +1503,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new CreditCardNotificationPresenter(
 			$this->config['creditcard']['return-url']
 		);
-	}
-
-	private function newDoctrinePostPersistSubscriberCreateAddressChange( EntityManager $entityManager ): DoctrinePostPersistSubscriberCreateAddressChange {
-		return new DoctrinePostPersistSubscriberCreateAddressChange( $entityManager );
 	}
 
 	public function setDonationTokenGenerator( TokenGenerator $tokenGenerator ): void {
@@ -1901,6 +1903,30 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( UserDataKeyGenerator::class, function (): UserDataKeyGenerator {
 			return new UserDataKeyGenerator( $this->config['user-data-key'], new SystemClock() );
 		} );
+	}
+
+	private function getEventDispatcher(): EventDispatcher {
+		return $this->createSharedObject( EventDispatcher::class, function (): EventDispatcher {
+			$dispatcher = new EventDispatcher();
+			$this->setupEventListeners( $dispatcher );
+			return $dispatcher;
+		} );
+	}
+
+	private function getDonationEventEmitter(): DonationEventEmitter {
+		return $this->createSharedObject( DonationEventEmitter::class, function (): DonationEventEmitter {
+			return new DonationEventEmitter( $this->getEventDispatcher() );
+		} );
+	}
+
+	private function getMembershipEventEmitter(): MembershipEventEmitter {
+		return $this->createSharedObject( MembershipEventEmitter::class, function (): MembershipEventEmitter {
+			return new MembershipEventEmitter( $this->getEventDispatcher() );
+		} );
+	}
+
+	private function setupEventListeners( EventDispatcher $dispatcher ): void {
+		new CreateAddressChangeHandler( $this->getEntityManager(), $dispatcher );
 	}
 
 }
