@@ -243,7 +243,7 @@ describe( 'BankData', () => {
 			bankDataIsValid: () => true,
 			bankDataIsInvalid: () => false,
 			getBankName: () => 'gute Bank',
-		}
+		};
 		store = new Vuex.Store( {
 			modules: {
 				[ NS_BANKDATA ]: {
@@ -272,7 +272,7 @@ describe( 'BankData', () => {
 			bankDataIsValid: () => false,
 			bankDataIsInvalid: () => true,
 			getBankName: () => '',
-		}
+		};
 		store = new Vuex.Store( {
 			modules: {
 				[ NS_BANKDATA ]: {

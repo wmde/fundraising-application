@@ -17,12 +17,14 @@
 		"wmde/email-address": "~1.0",
 		"wmde/euro": "~1.0",
 		"wmde/clock": "~1.0",
-		"wmde/fundraising-donations": "~2.0.0",
-		"wmde/fundraising-memberships": "~2.0.0",
-		"wmde/fundraising-payments": "~1.0",
-		"wmde/fundraising-subscriptions": "~1.0",
+		"wmde/fundraising-donations": "~2.0.1",
+		"wmde/fundraising-memberships": "~2.0.1",
+		"wmde/fundraising-payments": "~1.0.1",
+		"wmde/fundraising-subscriptions": "~1.0.1",
 		"wmde/fundraising-content-provider": "^2.0",
 		"wmde/fundraising-address-change": "@dev",
+		"wmde/freezable-value-object": "~1.0",
+		"wmde/fun-validators": "~2.0.0",
 
 		"symfony/twig-bridge": "^3.3",
 		"symfony/translation": "^3.3",
@@ -31,8 +33,6 @@
 		"symfony/http-foundation": "^3.3",
 
 		"airbrake/phpbrake": "~0.7",
-		"wmde/freezable-value-object": "~1.0",
-		"wmde/fun-validators": "~1.0",
 		"jeroen/file-fetcher": "~4.0",
 		"psr/log": "~1.0",
 		"monolog/monolog": "~1.17",
@@ -112,6 +112,11 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/wmde/fundraising-address-change",
+			"no-api": true
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/wmde/fun-validators",
 			"no-api": true
 		}
 	],
