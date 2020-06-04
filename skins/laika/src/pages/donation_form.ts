@@ -18,6 +18,7 @@ import { createInitialDonationAddressValues, createInitialDonationPaymentValues 
 import LocalStorageRepository from '@/store/LocalStorageRepository';
 import { initializeAddress } from '@/store/address/actionTypes';
 import { Country } from '@/view_models/Country';
+import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
 
 const PAGE_IDENTIFIER = 'donation-form';
 const FORM_NAMESPACE = 'donation_form';
@@ -44,6 +45,7 @@ const dataPersister = createDataPersister(
 );
 const store = createStore( [
 	dataPersister.getPlugin( persistenceItems ),
+	createTrackFormErrorsPlugin( FORM_NAMESPACE ),
 ] );
 
 const i18n = new VueI18n( {

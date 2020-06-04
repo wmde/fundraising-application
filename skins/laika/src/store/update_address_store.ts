@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import Vuex, { StoreOptions } from 'vuex';
+import Vuex, { Store, StoreOptions } from 'vuex';
 import createAddress from '@/store/address';
 import { NS_ADDRESS } from './namespaces';
 import { REQUIRED_FIELDS_ADDRESS_UPDATE } from '@/store/address/constants';
 
 Vue.use( Vuex );
 
-export function createStore() {
+export function createStore( plugins: Array< ( s: Store<any> ) => void > = [] ) {
 	const storeBundle: StoreOptions<any> = {
 		modules: {
 			[ NS_ADDRESS ]: createAddress( REQUIRED_FIELDS_ADDRESS_UPDATE ),
@@ -17,6 +17,7 @@ export function createStore() {
 				return state[ NS_ADDRESS ].isValidating;
 			},
 		},
+		plugins,
 	};
 
 	return new Vuex.Store<any>( storeBundle );
