@@ -28,4 +28,5 @@ module.exports = {
 			babelConfig: true,
 		},
 	},
+	setupFilesAfterEnv: [ './jest.setup.js' ],
 };

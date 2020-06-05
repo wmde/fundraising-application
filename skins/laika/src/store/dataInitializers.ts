@@ -8,6 +8,7 @@ import { addressTypeFromName } from '@/view_models/AddressTypeModel';
 import { InitialPaymentValues } from '@/view_models/Payment';
 import { BankAccountData, InitialBankAccountData } from '@/view_models/BankAccount';
 import { InitialMembershipFeeValues } from '@/view_models/MembershipFee';
+import { trackFormFieldRestored } from '@/tracking';
 
 const replaceInitialValue = ( defaultValue: any, replacement: any ): any => {
 	if ( replacement !== undefined && replacement !== null && replacement !== '' ) {
@@ -33,6 +34,7 @@ export const createInitialDonationAddressValues = ( dataPersister: DataPersister
 		const value = dataPersister.getInitialValue( field );
 		if ( value ) {
 			addressPersistItems.push( { name: field, value: value, validity: Validity.RESTORED } );
+			trackFormFieldRestored( field, value );
 		}
 	} );
 
@@ -83,6 +85,7 @@ export const createInitialMembershipAddressValues = ( dataPersister: DataPersist
 		const value = dataPersister.getInitialValue( field );
 		if ( value ) {
 			addressPersistItems.push( { name: field, value: value, validity: Validity.RESTORED } );
+			trackFormFieldRestored( field, value );
 		} else if ( initialFormValues.has( field ) ) {
 			// We consider all non-empty values from the backend valid because they come from the donation and were validated there
 			addressPersistItems.push( { name: field, value: initialFormValues.get( field ), validity: Validity.VALID } );
