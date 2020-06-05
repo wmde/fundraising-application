@@ -54,4 +54,13 @@ class ChoiceFactory {
 			return Euro::newFromCents( $amount );
 		}, $amountOption );
 	}
+
+	public function getAddressType(): ?string {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.address_type.no_preselection' ) ) {
+			return null;
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.address_type.preselection' ) ) {
+			return 'person';
+		}
+		throw new UnknownChoiceDefinition( 'Address type configuration failure.' );
+	}
 }

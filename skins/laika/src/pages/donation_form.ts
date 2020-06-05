@@ -13,7 +13,6 @@ import persistenceItems from '@/store/data_persistence/donation_form';
 import { initializePayment } from '@/store/payment/actionTypes';
 import { FeatureTogglePlugin } from '@/FeatureToggle';
 import { bucketIdToCssClass } from '@/bucket_id_to_css_class';
-import { createFeatureTogglePlugin } from '@/store/create_feature_toggle_plugin';
 import { createDataPersister } from '@/store/create_data_persister';
 import { createInitialDonationAddressValues, createInitialDonationPaymentValues } from '@/store/dataInitializers';
 import LocalStorageRepository from '@/store/LocalStorageRepository';
@@ -44,7 +43,6 @@ const dataPersister = createDataPersister(
 	pageData.applicationVars.userDataKey
 );
 const store = createStore( [
-	createFeatureTogglePlugin( pageData.selectedBuckets ),
 	dataPersister.getPlugin( persistenceItems ),
 ] );
 

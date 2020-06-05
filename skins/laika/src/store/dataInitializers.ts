@@ -30,6 +30,10 @@ const nullifyZeroString = ( value: string ): string|null => {
 export const createInitialDonationAddressValues = ( dataPersister: DataPersister, initialFormValues: any ): InitialAddressValues => {
 	const addressPersistItems: FieldInitialization[] = [];
 
+	if ( initialFormValues.addressType ) {
+		initialFormValues.addressType = addressTypeFromName( initialFormValues.addressType );
+	}
+
 	persistenceAddress( NS_ADDRESS ).fields.forEach( field => {
 		const value = dataPersister.getInitialValue( field );
 		if ( value ) {
@@ -39,7 +43,7 @@ export const createInitialDonationAddressValues = ( dataPersister: DataPersister
 	} );
 
 	return {
-		addressType: replaceInitialValue( addressTypeFromName( initialFormValues.addressType ), dataPersister.getInitialValue( 'addressType' ) ),
+		addressType: replaceInitialValue( initialFormValues.addressType, dataPersister.getInitialValue( 'addressType' ) ),
 		fields: addressPersistItems,
 	};
 };

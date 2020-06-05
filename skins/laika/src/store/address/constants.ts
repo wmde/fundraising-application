@@ -9,6 +9,7 @@ export const REQUIRED_FIELDS: AddressRequirements = {
 	[ AddressTypeModel.PERSON ]: [ 'salutation', 'firstName', 'lastName', 'street', 'postcode', 'city', 'country', 'email', 'addressType' ],
 	[ AddressTypeModel.COMPANY ]: [ 'companyName', 'street', 'postcode', 'city', 'country', 'email', 'addressType' ],
 	[ AddressTypeModel.ANON ]: [],
+	[ AddressTypeModel.UNSET ]: [ 'addressType' ],
 };
 
 export const REQUIRED_FIELDS_ADDRESS_UPDATE: AddressRequirements = {
