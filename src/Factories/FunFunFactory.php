@@ -1399,6 +1399,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
 			// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 			'paymentIntervals' => [1, 3, 6, 12],
+			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 			'messages' => $this->getMessages(),
 			'countries' => json_decode( $this->getCountries() )->countries
 		] );
@@ -1786,6 +1787,10 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( ChoiceFactory::class, function (): ChoiceFactory {
 			return new ChoiceFactory( $this->getFeatureToggle() );
 		} );
+	}
+
+	public function getAddressType(): ?string {
+		return $this->getChoiceFactory()->getAddressType();
 	}
 
 	public function getBucketSelector(): BucketSelector {

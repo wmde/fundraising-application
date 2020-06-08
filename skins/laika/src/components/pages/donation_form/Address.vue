@@ -3,29 +3,16 @@
 		<AutofillHandler @autofill="onAutofill" >
 			<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
 		</AutofillHandler>
-		<feature-toggle>
-
-			<address-type
-					slot="campaigns.address_type.no_preselection"
-					v-on:address-type="setAddressType( $event )"
-					:disabledAddressTypes="disabledAddressTypes"
-					:is-direct-debit-from-banner="isDirectDebitFromBanner"
-					:initial-address-type="null">
-			</address-type>
-
-			<address-type
-					slot="campaigns.address_type.preselection"
-					v-on:address-type="setAddressType( $event )"
-					:disabledAddressTypes="disabledAddressTypes"
-					:is-direct-debit-from-banner="isDirectDebitFromBanner"
-					initial-address-type="person">
-			</address-type>
-			<span
-					slot="campaigns.address_type.no_preselection"
-					v-if="addressTypeIsInvalid"
-					class="help is-danger">{{ $t( 'donation_form_section_address_error' ) }}
-			</span>
-		</feature-toggle>
+		<address-type
+				v-on:address-type="setAddressType( $event )"
+				:disabledAddressTypes="disabledAddressTypes"
+				:is-direct-debit-from-banner="isDirectDebitFromBanner"
+				:initial-address-type="addressTypeName">
+		</address-type>
+		<span
+				v-if="addressTypeIsInvalid"
+				class="help is-danger">{{ $t( 'donation_form_section_address_error' ) }}
+		</span>
 		<div
 				class="has-margin-top-18"
 				v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}
@@ -51,10 +38,18 @@ import Email from '@/components/shared/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { mapGetters } from 'vuex';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
+import {
+	validateAddressField,
+	setAddressField,
+	validateAddress,
+	validateEmail,
+	setReceiptOptOut,
+	setAddressType,
+	validateAddressType,
+} from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import { mergeValidationResults } from '@/merge_validation_results';
@@ -173,10 +168,23 @@ export default Vue.extend( {
 			'addressTypeIsNotAnon',
 			'addressTypeIsInvalid',
 		] ),
+		addressTypeName(): string {
+			return addressTypeName( this.$store.state.address.addressType );
+		},
+	},
+	mounted() {
+		Object.entries( this.$data.formData ).forEach( ( formItem ) => {
+			const key: string = formItem[ 0 ];
+			this.$data.formData[ key ].value = this.$store.state.address.values[ key ];
+			if ( this.$store.state[ NS_ADDRESS ].validity[ key ] === Validity.RESTORED ) {
+				this.$store.dispatch( action( NS_ADDRESS, validateAddressField ), this.$data.formData[ key ] );
+			}
+		} );
 	},
 	methods: {
 		validateForm(): Promise<ValidationResult> {
 			return Promise.all( [
+				this.$store.dispatch( action( NS_ADDRESS, validateAddressType ), this.$store.state.address.addressType ),
 				this.$store.dispatch( action( NS_ADDRESS, validateAddress ), this.$props.validateAddressUrl ),
 				this.$store.dispatch( action( NS_ADDRESS, validateEmail ), this.$props.validateEmailUrl ),
 			] ).then( mergeValidationResults );

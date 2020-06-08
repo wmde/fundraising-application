@@ -43,7 +43,7 @@ class NewDonationController {
 				$interval,
 				$validationResult->isSuccessful(),
 				$trackingInfo,
-				$request->get( 'addressType', 'person' ),
+				$request->get( 'addressType', $ffFactory->getAddressType() ),
 				Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
 			)
 		);

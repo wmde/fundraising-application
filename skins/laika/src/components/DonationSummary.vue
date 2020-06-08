@@ -50,6 +50,7 @@ const addressTypeRenderers = {
 	[ addressTypeName( AddressTypeModel.PERSON ) ]: PrivateDonorRenderer,
 	[ addressTypeName( AddressTypeModel.COMPANY ) ]: CompanyDonorRenderer,
 	[ addressTypeName( AddressTypeModel.ANON ) ]: AnonymousDonorRenderer,
+	[ addressTypeName( AddressTypeModel.UNSET ) ]: AnonymousDonorRenderer,
 };
 
 export default Vue.extend( {

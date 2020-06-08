@@ -12,10 +12,11 @@ import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vu
 import { createStore } from '@/store/donation_store';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { NS_ADDRESS } from '@/store/namespaces';
-import { setAddressField, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
+import { setAddressField, setReceiptOptOut, setAddressType, initializeAddress } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import { FeatureTogglePlugin } from '@/FeatureToggle';
 import countries from '@/../tests/data/countries';
+import { Validity } from '@/view_models/Validity';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -112,6 +113,35 @@ describe( 'Address.vue', () => {
 			'pattern': '^(.+)@(.+)\\.(.+)$',
 			'value': testEmail,
 		} );
+	} );
+
+	it( 'populates form data and validates if initial data is available', async () => {
+		const firstName = { name: 'firstName', value: 'Spooky', validity: Validity.RESTORED };
+		const lastName = { name: 'lastName', value: 'Magoo', validity: Validity.RESTORED };
+		const initialData = {
+			addressType: AddressTypeModel.PERSON,
+			fields: [ firstName, lastName ],
+		};
+
+		const store = createStore();
+		await store.dispatch( action( NS_ADDRESS, initializeAddress ), initialData ).then( () => {
+			wrapper = mount( Address, {
+				localVue,
+				propsData: {
+					validateAddressUrl: 'validate-address',
+					countries: countries,
+				},
+				store,
+				mocks: {
+					$t: () => { },
+				},
+			} );
+		} );
+
+		expect( wrapper.vm.$data.formData.firstName.value ).toBe( firstName.value );
+		expect( wrapper.vm.$data.formData.lastName.value ).toBe( lastName.value );
+		expect( store.state.address.validity.firstName ).not.toBe( Validity.RESTORED );
+		expect( store.state.address.validity.lastName ).not.toBe( Validity.RESTORED );
 	} );
 
 } );

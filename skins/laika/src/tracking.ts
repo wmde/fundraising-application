@@ -13,3 +13,7 @@ export function trackDynamicForm() {
 export function trackFormSubmission( formElement: HTMLFormElement ) {
 	_paq.push( [ 'FormAnalytics::trackFormSubmit', formElement ] );
 }
+
+export function trackFormFieldRestored( field: string, value: string ) {
+	_paq.push( [ 'trackEvent', 'Form Field Restored', field, value ] );
+}

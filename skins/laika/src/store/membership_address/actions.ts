@@ -5,37 +5,62 @@ import {
 	validateAddress,
 	validateEmail,
 	setAddressType,
+	validateAddressField,
 	setAddressField,
 	setReceiptOptOut,
 	setDate,
 	setMembershipType,
 } from '@/store/membership_address/actionTypes';
-import { MembershipAddressState, InputField, InitialMembershipData, AddressState } from '@/view_models/Address';
+import { MembershipAddressState, InputField, InitialMembershipAddressValues } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
-import { addressTypeFromName, AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
-import { MARK_EMPTY_FIELDS_INVALID } from '@/store/membership_address/mutationTypes';
+import {
+	BEGIN_ADDRESS_VALIDATION,
+	BEGIN_EMAIL_VALIDATION,
+	FINISH_ADDRESS_VALIDATION,
+	FINISH_EMAIL_VALIDATION,
+	MARK_EMPTY_FIELDS_INVALID,
+	SET_ADDRESS_FIELD,
+	SET_ADDRESS_FIELD_VALIDITY,
+	SET_ADDRESS_TYPE,
+	SET_DATE,
+	SET_MEMBERSHIP_TYPE,
+	SET_MEMBERSHIP_TYPE_VALIDITY,
+	SET_RECEIPT_OPTOUT,
+	VALIDATE_INPUT,
+} from '@/store/membership_address/mutationTypes';
 import { Validity } from '@/view_models/Validity';
+import { FieldInitialization } from '@/view_models/FieldInitialization';
 
 export const actions = {
-	[ initializeAddress ]( context: ActionContext<MembershipAddressState, any>, initialData: InitialMembershipData ) {
-		context.commit( 'SET_ADDRESS_TYPE', addressTypeFromName( initialData.addressType ) );
-		Object.entries( initialData ).forEach( ( [ name, value ] ) => {
-			if ( name === 'addressType' ) {
-				return;
-			}
-			if ( !value ) {
-				return;
-			}
-			context.commit( 'SET_ADDRESS_FIELD', { name, value } );
-			// We consider all non-empty values valid because they come from the donation and were validated there
-			context.commit( 'SET_ADDRESS_FIELD_VALIDITY', { name, validity: Validity.VALID } );
+	[ initializeAddress ]( context: ActionContext<MembershipAddressState, any>, initialData: InitialMembershipAddressValues ) {
+
+		if ( initialData.addressType ) {
+			context.commit( SET_ADDRESS_TYPE, initialData.addressType );
+		}
+
+		if ( initialData.membershipType ) {
+			context.commit( SET_MEMBERSHIP_TYPE, initialData.membershipType );
+			context.commit( SET_MEMBERSHIP_TYPE_VALIDITY, Validity.VALID );
+		}
+
+		if ( initialData.date ) {
+			context.commit( SET_DATE, initialData.date );
+		}
+
+		initialData.fields.forEach( ( field: FieldInitialization ) => {
+			context.commit( SET_ADDRESS_FIELD, { name: field.name, value: field.value } );
+			context.commit( SET_ADDRESS_FIELD_VALIDITY, { name: field.name, validity: field.validity } );
 		} );
+	},
+	[ validateAddressField ]( context: ActionContext<MembershipAddressState, any>, field: InputField ) {
+		context.commit( VALIDATE_INPUT, field );
 	},
 	[ setAddressField ]( context: ActionContext<MembershipAddressState, any>, field: InputField ) {
 		field.value = field.value.trim();
-		context.commit( 'SET_ADDRESS_FIELD', field );
-		context.commit( 'VALIDATE_INPUT', field );
+		context.commit( SET_ADDRESS_FIELD, field );
+		context.commit( VALIDATE_INPUT, field );
 	},
 	[ validateAddress ]( context: ActionContext<MembershipAddressState, any>, validateAddressUrl: string ) {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
@@ -43,7 +68,7 @@ export const actions = {
 			return Promise.resolve( { status: 'ERR', messages: [] } );
 		}
 
-		context.commit( 'BEGIN_ADDRESS_VALIDATION' );
+		context.commit( BEGIN_ADDRESS_VALIDATION );
 		const bodyFormData = new FormData();
 		Object.keys( context.state.values ).forEach(
 			field => bodyFormData.append( field, context.state.values[ field ] )
@@ -54,7 +79,7 @@ export const actions = {
 			data: bodyFormData,
 			headers: { 'Content-Type': 'multipart/form-data' },
 		} ).then( ( validationResult: AxiosResponse<ValidationResponse> ) => {
-			context.commit( 'FINISH_ADDRESS_VALIDATION', validationResult.data );
+			context.commit( FINISH_ADDRESS_VALIDATION, validationResult.data );
 			return validationResult.data;
 		} );
 
@@ -65,7 +90,7 @@ export const actions = {
 			return Promise.resolve( { status: 'ERR', messages: [] } );
 		}
 
-		context.commit( 'BEGIN_EMAIL_VALIDATION' );
+		context.commit( BEGIN_EMAIL_VALIDATION );
 		const bodyFormData = new FormData();
 		bodyFormData.append( 'email', context.state.values.email );
 
@@ -74,26 +99,26 @@ export const actions = {
 			data: bodyFormData,
 			headers: { 'Content-Type': 'multipart/form-data' },
 		} ).then( ( validationResult: AxiosResponse<ValidationResponse> ) => {
-			context.commit( 'FINISH_EMAIL_VALIDATION', validationResult.data );
+			context.commit( FINISH_EMAIL_VALIDATION, validationResult.data );
 			return validationResult.data;
 		} );
 
 	},
 	[ setAddressType ]( context: ActionContext<MembershipAddressState, any>, type: AddressTypeModel ) {
-		context.commit( 'SET_ADDRESS_TYPE', type );
+		context.commit( SET_ADDRESS_TYPE, type );
 		if ( type === AddressTypeModel.COMPANY && context.getters.membershipType === MembershipTypeModel.ACTIVE ) {
-			context.commit( 'SET_MEMBERSHIP_TYPE_VALIDITY', Validity.INVALID );
+			context.commit( SET_MEMBERSHIP_TYPE_VALIDITY, Validity.INVALID );
 		}
 	},
 	[ setDate ]( context: ActionContext<MembershipAddressState, any>, date: string ) {
 		context.commit( 'SET_DATE', date );
 	},
 	[ setReceiptOptOut ]( context: ActionContext<MembershipAddressState, any>, optOut: boolean ) {
-		context.commit( 'SET_RECEIPT_OPTOUT', optOut );
+		context.commit( SET_RECEIPT_OPTOUT, optOut );
 	},
 	[ setMembershipType ]( context: ActionContext<MembershipAddressState, any>, type: MembershipTypeModel ) {
-		context.commit( 'SET_MEMBERSHIP_TYPE', type );
-		context.commit( 'SET_MEMBERSHIP_TYPE_VALIDITY', Validity.VALID );
+		context.commit( SET_MEMBERSHIP_TYPE, type );
+		context.commit( SET_MEMBERSHIP_TYPE_VALIDITY, Validity.VALID );
 	},
 
 };

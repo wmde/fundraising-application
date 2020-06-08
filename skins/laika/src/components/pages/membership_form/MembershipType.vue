@@ -66,6 +66,9 @@ export default Vue.extend( {
 			},
 		},
 	},
+	mounted() {
+		this.$data.selectedType = this.$store.state[ NS_MEMBERSHIP_ADDRESS ].membershipType;
+	},
 	methods: {
 		setType(): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setMembershipType ), this.$data.selectedType );

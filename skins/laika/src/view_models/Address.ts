@@ -2,6 +2,7 @@ import { Validity } from './Validity';
 import { AddressTypeModel } from './AddressTypeModel';
 import { MembershipTypeModel } from './MembershipTypeModel';
 import { AddressRequirements } from '@/store/address/constants';
+import { FieldInitialization } from '@/view_models/FieldInitialization';
 
 export interface AddressValidity {
     [key: string]: boolean
@@ -43,6 +44,18 @@ export interface MembershipAddressState {
     receiptOptOut: boolean,
     values: FormValues,
     validity: FormValidity,
+}
+
+export interface InitialAddressValues {
+    addressType: AddressTypeModel,
+    fields: FieldInitialization[],
+}
+
+export interface InitialMembershipAddressValues {
+    addressType?: AddressTypeModel,
+    membershipType?: MembershipTypeModel,
+    date?: string,
+    fields: FieldInitialization[],
 }
 
 export interface InitialMembershipData {

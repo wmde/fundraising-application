@@ -1,5 +1,6 @@
 export enum Validity {
 	INVALID,
 	VALID,
-	INCOMPLETE
+	INCOMPLETE,
+	RESTORED
 }

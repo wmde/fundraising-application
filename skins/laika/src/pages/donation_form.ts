@@ -9,14 +9,18 @@ import Component from '@/components/pages/DonationForm.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 import { action } from '@/store/util';
 import { NS_ADDRESS, NS_PAYMENT } from '@/store/namespaces';
+import persistenceItems from '@/store/data_persistence/donation_form';
 import { initializePayment } from '@/store/payment/actionTypes';
 import { FeatureTogglePlugin } from '@/FeatureToggle';
 import { bucketIdToCssClass } from '@/bucket_id_to_css_class';
-import { createFeatureTogglePlugin } from '@/store/create_feature_toggle_plugin';
+import { createDataPersister } from '@/store/create_data_persister';
+import { createInitialDonationAddressValues, createInitialDonationPaymentValues } from '@/store/dataInitializers';
+import LocalStorageRepository from '@/store/LocalStorageRepository';
 import { initializeAddress } from '@/store/address/actionTypes';
 import { Country } from '@/view_models/Country';
 
 const PAGE_IDENTIFIER = 'donation-form';
+const FORM_NAMESPACE = 'donation_form';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
@@ -28,11 +32,19 @@ interface DonationFormModel {
 	paymentIntervals: Array<number>,
 	tracking: Array<number>,
 	countries: Array<Country>,
-	urls: any
+	urls: any,
+	userDataKey: string
 }
 
 const pageData = new PageDataInitializer<DonationFormModel>( '#app' );
-const store = createStore( [ createFeatureTogglePlugin( pageData.selectedBuckets ) ] );
+const dataPersister = createDataPersister(
+	new LocalStorageRepository(),
+	FORM_NAMESPACE,
+	pageData.applicationVars.userDataKey
+);
+const store = createStore( [
+	dataPersister.getPlugin( persistenceItems ),
+] );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
@@ -43,55 +55,57 @@ const i18n = new VueI18n( {
 
 Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
 
-Promise.all( [
-	store.dispatch( action( NS_PAYMENT, initializePayment ), {
-		// convert German-Formatted amount, see DonationFormPresenter
-		amount: pageData.applicationVars.initialFormValues.amount.replace( ',', '' ).replace( /^000$/, '0' ),
-		type: pageData.applicationVars.initialFormValues.paymentType,
-		paymentIntervalInMonths: String( pageData.applicationVars.initialFormValues.paymentIntervalInMonths ),
-		isCustomAmount: pageData.applicationVars.initialFormValues.isCustomAmount,
-	} ),
-	store.dispatch( action( NS_ADDRESS, initializeAddress ), [] ),
-] ).then( ( [ paymentDataComplete, _ ] ) => {
+dataPersister.decryptInitialValues( persistenceItems ).then( () => {
+	Promise.all( [
+		store.dispatch(
+			action( NS_PAYMENT, initializePayment ),
+			createInitialDonationPaymentValues( dataPersister, pageData.applicationVars.initialFormValues )
+		),
+		store.dispatch(
+			action( NS_ADDRESS, initializeAddress ),
+			createInitialDonationAddressValues( dataPersister, pageData.applicationVars.initialFormValues )
+		),
+	] ).then( ( [ paymentDataComplete, _ ] ) => {
 
-	new Vue( {
-		store,
-		i18n,
-		render: h => h( App, {
-			props: {
-				assetsPath: pageData.assetsPath,
-				pageIdentifier: PAGE_IDENTIFIER,
-				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
-				validateEmailUrl: pageData.applicationVars.urls.validateEmail,
-				validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
-				paymentAmounts: pageData.applicationVars.presetAmounts,
-				paymentIntervals: pageData.applicationVars.paymentIntervals,
-				paymentTypes: pageData.applicationVars.paymentTypes,
-				countries: pageData.applicationVars.countries,
-				trackingData: pageData.applicationVars.tracking,
-				bucketClasses: bucketIdToCssClass( pageData.selectedBuckets ),
-			},
-		},
-		[
-			h( Component, {
+		new Vue( {
+			store,
+			i18n,
+			render: h => h( App, {
 				props: {
+					assetsPath: pageData.assetsPath,
+					pageIdentifier: PAGE_IDENTIFIER,
 					validateAddressUrl: pageData.applicationVars.urls.validateAddress,
 					validateEmailUrl: pageData.applicationVars.urls.validateEmail,
 					validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
-					validateBankDataUrl: pageData.applicationVars.urls.validateIban,
-					validateLegacyBankDataUrl: pageData.applicationVars.urls.convertBankData,
-					paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
+					paymentAmounts: pageData.applicationVars.presetAmounts,
 					paymentIntervals: pageData.applicationVars.paymentIntervals,
 					paymentTypes: pageData.applicationVars.paymentTypes,
 					countries: pageData.applicationVars.countries,
 					trackingData: pageData.applicationVars.tracking,
-					startPage: paymentDataComplete ? 'AddressPage' : 'PaymentPage',
+					bucketClasses: bucketIdToCssClass( pageData.selectedBuckets ),
 				},
-			} ),
-			h( Sidebar, {
-				slot: 'sidebar',
-			} ),
-		] ),
-	} ).$mount( '#app' );
+			},
+			[
+				h( Component, {
+					props: {
+						validateAddressUrl: pageData.applicationVars.urls.validateAddress,
+						validateEmailUrl: pageData.applicationVars.urls.validateEmail,
+						validateAmountUrl: pageData.applicationVars.urls.validateDonationAmount,
+						validateBankDataUrl: pageData.applicationVars.urls.validateIban,
+						validateLegacyBankDataUrl: pageData.applicationVars.urls.convertBankData,
+						paymentAmounts: pageData.applicationVars.presetAmounts.map( a => Number( a ) * 100 ),
+						paymentIntervals: pageData.applicationVars.paymentIntervals,
+						paymentTypes: pageData.applicationVars.paymentTypes,
+						countries: pageData.applicationVars.countries,
+						trackingData: pageData.applicationVars.tracking,
+						startPage: paymentDataComplete ? 'AddressPage' : 'PaymentPage',
+					},
+				} ),
+				h( Sidebar, {
+					slot: 'sidebar',
+				} ),
+			] ),
+		} ).$mount( '#app' );
+	} );
 
 } );

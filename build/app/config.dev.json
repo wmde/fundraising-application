@@ -44,8 +44,8 @@
       "name": "Webmaster"
     }
   },
-  "donation-timeframe-limit": "PT1s",
-  "membership-application-timeframe-limit": "PT1s",
+  "donation-timeframe-limit": "PT1S",
+  "membership-application-timeframe-limit": "PT1S",
   "purging-secret": "purgeme",
   "paypal-donation": {
     "base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",

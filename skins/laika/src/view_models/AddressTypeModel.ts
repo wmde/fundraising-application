@@ -2,18 +2,21 @@ export enum AddressTypeModel {
     PERSON,
     COMPANY,
     ANON,
+	UNSET,
 }
 
 export const AddressTypeNames = new Map<number, string>( [
 	[ AddressTypeModel.ANON, 'anonym' ],
 	[ AddressTypeModel.PERSON, 'person' ],
 	[ AddressTypeModel.COMPANY, 'firma' ],
+	[ AddressTypeModel.UNSET, 'unset' ],
 ] );
 
 export const AddressTypes = new Map<string, number>( [
 	[ 'anonym', AddressTypeModel.ANON ],
 	[ 'person', AddressTypeModel.PERSON ],
 	[ 'firma', AddressTypeModel.COMPANY ],
+	[ 'unset', AddressTypeModel.UNSET ],
 ] );
 
 export function addressTypeName( t: AddressTypeModel ): string {

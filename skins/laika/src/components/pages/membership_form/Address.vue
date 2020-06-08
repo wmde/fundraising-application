@@ -29,7 +29,7 @@ import { AddressValidity, AddressFormData, ValidationResult } from '@/view_model
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/membership_address/actionTypes';
+import { validateAddressField, setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 import { mergeValidationResults } from '@/merge_validation_results';
 import { camelizeName } from '@/camlize_name';
@@ -142,6 +142,10 @@ export default Vue.extend( {
 				return;
 			}
 			this.formData[ name ].value = value;
+
+			if ( this.$store.state[ NS_MEMBERSHIP_ADDRESS ].validity[ name ] === Validity.RESTORED ) {
+				this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, validateAddressField ), this.$data.formData[ name ] );
+			}
 		} );
 	},
 	methods: {
