@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use Symfony\Component\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\FunValidators\ValidationResponse;
 
@@ -15,20 +14,16 @@ use WMDE\FunValidators\ValidationResponse;
  */
 class ConfirmSubscriptionHtmlPresenter {
 
-	private $template;
-	private $translator;
+	private TwigTemplate $template;
 
-	public function __construct( TwigTemplate $template, TranslatorInterface $translator ) {
+	public function __construct( TwigTemplate $template ) {
 		$this->template = $template;
-		$this->translator = $translator;
 	}
 
 	public function present( ValidationResponse $confirmationResponse ): string {
 		$contextVariables = [];
 		if ( ! $confirmationResponse->isSuccessful() ) {
-			$contextVariables['error_message'] = $this->translator->trans(
-				$confirmationResponse->getValidationErrors()[0]->getMessageIdentifier()
-			);
+			$contextVariables['error_message'] = $confirmationResponse->getValidationErrors()[0]->getMessageIdentifier();
 		}
 		return $this->template->render( $contextVariables );
 	}

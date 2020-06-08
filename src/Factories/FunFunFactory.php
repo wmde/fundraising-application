@@ -625,24 +625,22 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newAddSubscriptionHtmlPresenter(): AddSubscriptionHtmlPresenter {
-		return new AddSubscriptionHtmlPresenter( $this->getLayoutTemplate( 'Subscription_Form.html.twig' ), $this->getTranslator() );
+		return new AddSubscriptionHtmlPresenter( $this->getLayoutTemplate( 'Subscription_Form.html.twig' ) );
 	}
 
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
 		return new ConfirmSubscriptionHtmlPresenter(
-			$this->getLayoutTemplate( 'Confirm_Subscription.twig' ),
-			$this->getTranslator()
+			$this->getLayoutTemplate( 'Confirm_Subscription.twig' )
 		);
 	}
 
 	public function newAddSubscriptionJsonPresenter(): AddSubscriptionJsonPresenter {
-		return new AddSubscriptionJsonPresenter( $this->getTranslator() );
+		return new AddSubscriptionJsonPresenter();
 	}
 
 	public function newGetInTouchHtmlPresenter(): GetInTouchHtmlPresenter {
 		return new GetInTouchHtmlPresenter(
 			$this->getLayoutTemplate( 'Contact_Form.html.twig' ),
-			$this->getTranslator(),
 			$this->getGetInTouchCategories()
 		);
 	}

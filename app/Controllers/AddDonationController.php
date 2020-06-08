@@ -253,7 +253,7 @@ class AddDonationController {
 				'Validation field "%s" with value "%s" failed with: %s',
 				$constraintViolation->getSource(),
 				$constraintViolation->getValue(),
-				$this->ffFactory->getTranslator()->trans( $constraintViolation->getMessageIdentifier() )
+				$constraintViolation->getMessageIdentifier()
 			);
 		}
 		$this->ffFactory->getLogger()->warning(

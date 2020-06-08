@@ -203,7 +203,7 @@ class Routes {
 					return $app->json(
 						[
 							'status' => 'ERR',
-							'message' => $ffFactory->getTranslator()->trans( 'comment_failure_access_denied' ),
+							'message' => 'comment_failure_access_denied',
 						]
 					);
 				}
@@ -214,7 +214,7 @@ class Routes {
 					return $app->json(
 						[
 							'status' => 'OK',
-							'message' => $ffFactory->getTranslator()->trans( $response->getSuccessMessage() ),
+							'message' => $response->getSuccessMessage(),
 						]
 					);
 				}
@@ -222,7 +222,7 @@ class Routes {
 				return $app->json(
 					[
 						'status' => 'ERR',
-						'message' => $ffFactory->getTranslator()->trans( $response->getErrorMessage() ),
+						'message' => $response->getErrorMessage(),
 					]
 				);
 			}
