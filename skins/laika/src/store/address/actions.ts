@@ -8,9 +8,11 @@ import {
 	setReceiptOptOut,
 	validateAddressField,
 	setAddressField,
-	initializeAddress, validateAddressType,
+	initializeAddress,
+	validateAddressType,
+	validateCountry,
 } from '@/store/address/actionTypes';
-import { AddressState, InitialAddressValues, InputField } from '@/view_models/Address';
+import { AddressState, CountryValidationFields, InitialAddressValues, InputField, MembershipAddressState } from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import {
@@ -26,6 +28,7 @@ import {
 	VALIDATE_INPUT,
 } from '@/store/address/mutationTypes';
 import { Validity } from '@/view_models/Validity';
+import { FieldInitialization } from '@/store/address/types';
 
 export const actions = {
 	[ validateAddressField ]( context: ActionContext<AddressState, any>, field: InputField ) {
@@ -35,6 +38,12 @@ export const actions = {
 		field.value = field.value.trim();
 		context.commit( SET_ADDRESS_FIELD, field );
 		context.commit( VALIDATE_INPUT, field );
+	},
+	[ validateCountry ]( context: ActionContext<AddressState, any>, countryValidation: CountryValidationFields ) {
+		context.commit( SET_ADDRESS_FIELD, countryValidation.country );
+		context.commit( VALIDATE_INPUT, countryValidation.country );
+		context.commit( SET_ADDRESS_FIELD, countryValidation.postcode );
+		context.commit( VALIDATE_INPUT, countryValidation.postcode );
 	},
 	[ validateAddress ]( context: ActionContext<AddressState, any>, validateAddressUrl: string ) {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );

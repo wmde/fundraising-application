@@ -29,7 +29,15 @@ import { AddressValidity, AddressFormData, ValidationResult } from '@/view_model
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
-import { validateAddressField, setAddressField, validateAddress, validateEmail, setReceiptOptOut, setAddressType } from '@/store/membership_address/actionTypes';
+import {
+	setAddressField,
+	validateAddress,
+	validateEmail,
+	setReceiptOptOut,
+	setAddressType,
+	validateCountry,
+	validateAddressField,
+} from '@/store/membership_address/actionTypes';
 import { action } from '@/store/util';
 import { mergeValidationResults } from '@/merge_validation_results';
 import { camelizeName } from '@/camlize_name';
@@ -149,7 +157,11 @@ export default Vue.extend( {
 		} );
 	},
 	methods: {
-		validateForm(): Promise<ValidationResult> {
+		async validateForm(): Promise<ValidationResult> {
+			await this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, validateCountry ), {
+				country: this.$data.formData.country,
+				postcode: this.$data.formData.postcode,
+			} );
 			return Promise.all( [
 				this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, validateAddress ), this.$props.validateAddressUrl ),
 				this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, validateEmail ), this.$props.validateEmailUrl ),

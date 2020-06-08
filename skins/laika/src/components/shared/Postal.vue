@@ -56,8 +56,9 @@
 					:keep-first="keepFirst"
 					:open-on-focus="openOnFocus"
 					:data="filteredCountries"
-					@focus="() => focusCountryField()"
-					@input="value => changeCountry( value )">
+					@focus="focusCountryField"
+					@input="changeCountry"
+					@blur="blurCountryField">
 			</b-autocomplete>
 		</b-field>
 		<span v-if="showError.country" class="help is-danger">{{ $t('donation_form_country_error') }}</span>
@@ -110,25 +111,33 @@ export default Vue.extend( {
 			this.showWarning = /^\D+$/.test( this.formData.street.value );
 		},
 		focusCountryField() {
+			this.$data.countryFocused = true;
 			if ( !this.$data.countryClicked ) {
 				this.formData.country.value = '';
 				this.$data.countryInput = '';
+				this.$data.countryClicked = true;
 			}
 		},
-		changeCountry( option: string ) {
+		blurCountryField() {
+			this.$data.countryFocused = false;
+			this.$emit( 'field-changed', 'country' );
+		},
+		changeCountry( option: String ) {
 			let country = this.$props.countries.find( ( c: Country ) => c.countryFullName === option );
+			this.formData.postcode.pattern = DEFAULT_POSTAL_REGEX;
 			if ( country ) {
-				this.formData.postcode.pattern = country.postCodeValidation;
+				if ( country.postCodeValidation !== '' ) {
+					this.formData.postcode.pattern = country.postCodeValidation;
+				}
 				this.formData.country.value = country.countryCode;
 			} else {
-				this.formData.postcode.pattern = DEFAULT_POSTAL_REGEX;
 				this.formData.country.value = '';
 			}
-			if ( this.$data.countryClicked ) {
+			// Blur sometimes runs before input/select events but then has no value
+			// so we need to re-validate if input happened while not focused
+			if ( !this.$data.countryFocused ) {
 				this.$emit( 'field-changed', 'country' );
-				this.$emit( 'field-changed', 'postcode' );
 			}
-			this.$data.countryClicked = true;
 		},
 	},
 	computed: {
@@ -143,12 +152,14 @@ export default Vue.extend( {
 		},
 
 		filteredCountries(): Array<Country> {
-			return this.countries.filter( ( countryOption: Country ) => {
+			const filteredCountries = this.countries.filter( ( countryOption: Country ) => {
 				return countryOption.countryFullName
 					.toString()
 					.toLowerCase()
 					.indexOf( this.$data.countryInput.toLowerCase() ) >= 0;
 			} );
+
+			return filteredCountries.length > 0 ? filteredCountries : this.countries;
 		},
 	},
 } );
