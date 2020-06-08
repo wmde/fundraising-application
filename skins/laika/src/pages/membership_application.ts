@@ -57,14 +57,10 @@ const i18n = new VueI18n( {
 } );
 
 const store = createStore( [
-<<<<<<< HEAD
 	dataPersister.getPlugin( persistenceItems ),
-] );
-=======
 	createTrackFormErrorsPlugin( FORM_NAMESPACE ),
 ]
 );
->>>>>>> Create and integrate tracking store plugin
 
 dataPersister.decryptInitialValues( persistenceItems ).then( () => {
 
