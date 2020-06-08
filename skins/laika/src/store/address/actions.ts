@@ -28,7 +28,6 @@ import {
 	VALIDATE_INPUT,
 } from '@/store/address/mutationTypes';
 import { Validity } from '@/view_models/Validity';
-import { FieldInitialization } from '@/store/address/types';
 
 export const actions = {
 	[ validateAddressField ]( context: ActionContext<AddressState, any>, field: InputField ) {

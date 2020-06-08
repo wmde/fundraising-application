@@ -59,6 +59,11 @@
 					@focus="focusCountryField"
 					@input="changeCountry"
 					@blur="blurCountryField">
+					<template slot-scope="props">
+						<span v-bind:class="{ 'is-last-frequent': isLastFrequent( props.index ) }">
+							{{ props.option.countryFullName }}
+						</span>
+					</template>
 			</b-autocomplete>
 		</b-field>
 		<span v-if="showError.country" class="help is-danger">{{ $t('donation_form_country_error') }}</span>
@@ -109,6 +114,14 @@ export default Vue.extend( {
 	methods: {
 		displayStreetWarning() {
 			this.showWarning = /^\D+$/.test( this.formData.street.value );
+		},
+		isLastFrequent( index: number ) {
+			const thisCountry = this.$props.countries[ index ];
+			const nextCountry = this.$props.countries[ index + 1 ];
+			if ( nextCountry === undefined ) {
+				return false;
+			}
+			return thisCountry.isFrequentCountry && !nextCountry.isFrequentCountry;
 		},
 		focusCountryField() {
 			this.$data.countryFocused = true;
