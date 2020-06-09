@@ -87,7 +87,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 					'lastName' => 'De Dauw',
 					'companyName' => '',
 					'street' => 'Nyan Street',
-					'postcode' => '1234',
+					'postcode' => '12345',
 					'city' => 'Berlin',
 					'country' => 'DE',
 					'email' => 'foo@bar.baz',

@@ -1062,7 +1062,14 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newAddressValidator(): AddressValidator {
-		return new AddressValidator();
+		$countries = json_decode( $this->getCountries() )->countries;
+
+		$postcodeValidation = [];
+		foreach ( $countries as $country ) {
+			$postcodeValidation[$country->countryCode] = "/{$country->postCodeValidation}/";
+		}
+
+		return new AddressValidator( $postcodeValidation );
 	}
 
 	public function newUpdateDonorUseCase( string $updateToken, string $accessToken ): UpdateDonorUseCase {
