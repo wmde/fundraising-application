@@ -27,7 +27,7 @@ use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Translation\TranslatorInterface as SymfonyTranslatorInterface;
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
@@ -99,6 +99,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitte
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
@@ -125,7 +127,7 @@ use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
-use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
@@ -799,7 +801,7 @@ class FunFunFactory implements ServiceProviderInterface {
 					'greeting_generator' => $this->getGreetingGenerator()
 				]
 			),
-			new BasicMailSubjectRenderer( $this->getTranslator(), 'mail_subject_subscription' )
+			new BasicMailSubjectRenderer( $this->getMailTranslator(), 'mail_subject_subscription' )
 		);
 	}
 
@@ -811,7 +813,7 @@ class FunFunFactory implements ServiceProviderInterface {
 					'Subscription_Confirmation.txt.twig',
 					[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			new BasicMailSubjectRenderer( $this->getTranslator(), 'mail_subject_subscription_confirmed' )
+			new BasicMailSubjectRenderer( $this->getMailTranslator(), 'mail_subject_subscription_confirmed' )
 		);
 	}
 
@@ -825,7 +827,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getGreetingGenerator(): GreetingGenerator {
 		return $this->createSharedObject( GreetingGenerator::class, function (): GreetingGenerator {
-			return new GreetingGenerator( $this->getTranslator() );
+			return new GreetingGenerator( $this->getMailTranslator() );
 		} );
 	}
 
@@ -865,7 +867,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->newTemplateMailer(
 			$this->getSuborganizationMessenger(),
 			new TwigTemplate( $this->getMailerTwig(), 'Contact_Confirm_to_User.txt.twig' ),
-			new BasicMailSubjectRenderer( $this->getTranslator(), 'mail_subject_getintouch' )
+			new BasicMailSubjectRenderer( $this->getMailTranslator(), 'mail_subject_getintouch' )
 		);
 	}
 
@@ -972,11 +974,11 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new ErrorPageHtmlPresenter( $this->getLayoutTemplate( 'Access_Denied.twig' ) );
 	}
 
-	public function getTranslator(): TranslatorInterface {
+	public function getTranslator(): SymfonyTranslatorInterface {
 		return $this->pimple['translator'];
 	}
 
-	public function setTranslator( TranslatorInterface $translator ): void {
+	public function setTranslator( SymfonyTranslatorInterface $translator ): void {
 		$this->pimple['translator'] = $translator;
 	}
 
@@ -1033,7 +1035,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				'Donation_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			new BasicMailSubjectRenderer( $this->getTranslator(), 'mail_subject_confirm_cancellation' )
+			new BasicMailSubjectRenderer( $this->getMailTranslator(), 'mail_subject_confirm_cancellation' )
 		);
 	}
 
@@ -1104,7 +1106,7 @@ class FunFunFactory implements ServiceProviderInterface {
 					]
 				),
 				new DonationConfirmationMailSubjectRenderer(
-					$this->getTranslator(),
+					$this->getMailTranslator(),
 					'mail_subject_confirm_donation',
 					'mail_subject_confirm_donation_promise'
 				)
@@ -1244,7 +1246,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newCreditCardPaymentUrlGenerator(): CreditCardPaymentUrlGenerator {
 		return new CreditCardPaymentUrlGenerator(
-			$this->getTranslator(),
+			$this->getCreditCardTranslator(),
 			$this->newCreditCardUrlGenerator()
 		);
 	}
@@ -1278,7 +1280,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
 			new MembershipConfirmationMailSubjectRenderer(
-				$this->getTranslator(),
+				$this->getMailTranslator(),
 				'mail_subject_confirm_membership_application_active',
 				'mail_subject_confirm_membership_application_sustaining'
 			)
@@ -1359,7 +1361,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				'Membership_Application_Cancellation_Confirmation.txt.twig',
 				[ 'greeting_generator' => $this->getGreetingGenerator() ]
 			),
-			new BasicMailSubjectRenderer( $this->getTranslator(), 'mail_subject_confirm_membership_application_cancellation' )
+			new BasicMailSubjectRenderer( $this->getMailTranslator(), 'mail_subject_confirm_membership_application_cancellation' )
 		);
 	}
 
@@ -1956,5 +1958,22 @@ class FunFunFactory implements ServiceProviderInterface {
 			},
 			$dispatcher
 		);
+	}
+
+	private function getCreditCardTranslator(): TranslatorInterface {
+		$translator = new JsonTranslator( new SimpleFileFetcher() );
+		return $translator->addFile( $this->getI18nDirectory() . '/messages/paymentIntervals.json' );
+	}
+
+	private function getMailTranslator(): TranslatorInterface {
+		return $this->createSharedObject( TranslatorInterface::class . '::MailTranslator', function (): TranslatorInterface {
+			$translator = new JsonTranslator( new SimpleFileFetcher() );
+			// TODO use mail.json later
+			return $translator->addFile( $this->getI18nDirectory() . '/messages/messages.json' );
+		} );
+	}
+
+	public function setMailTranslator( TranslatorInterface $translator ): void {
+		$this->sharedObjects[TranslatorInterface::class . '::MailTranslator'] = $translator;
 	}
 }

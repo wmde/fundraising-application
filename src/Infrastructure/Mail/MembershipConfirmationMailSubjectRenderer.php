@@ -4,18 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
  * @license GNU GPL v2+
  */
 class MembershipConfirmationMailSubjectRenderer implements MailSubjectRendererInterface {
 
-	private $translator;
-	private $activeMembershipSubject;
-	private $sustainingMembershipSubject;
+	private TranslatorInterface $translator;
+	private string $activeMembershipSubject;
+	private string $sustainingMembershipSubject;
 
 	public function __construct( TranslatorInterface $translator, string $activeMembershipSubject, string $sustainingMembershipSubject ) {
 		$this->translator = $translator;

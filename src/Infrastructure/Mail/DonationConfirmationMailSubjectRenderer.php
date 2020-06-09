@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
@@ -12,9 +12,9 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
  */
 class DonationConfirmationMailSubjectRenderer implements MailSubjectRendererInterface {
 
-	private $translator;
-	private $defaultSubjectKey;
-	private $bankTransferSubjectKey;
+	private TranslatorInterface $translator;
+	private string $defaultSubjectKey;
+	private string $bankTransferSubjectKey;
 
 	public function __construct( TranslatorInterface $translator, string $defaultSubjectKey, string $bankTransferSubjectKey ) {
 		$this->translator = $translator;

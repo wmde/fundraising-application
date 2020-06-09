@@ -4,10 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
 
@@ -15,12 +17,9 @@ use WMDE\Fundraising\Frontend\App\MailTemplates;
  * @licence GNU GPL v2+
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
+class MailTemplatesTest extends TestCase {
 
-	/**
-	 * @var FunFunFactory
-	 */
-	private $factory;
+	private FunFunFactory $factory;
 
 	public function setUp(): void {
 		$this->createMissingTestFiles();
@@ -51,6 +50,7 @@ class MailTemplatesTest extends \PHPUnit\Framework\TestCase {
 		$contentProvider->method( 'getMail' )->willReturnArgument( 0 );
 
 		$ffFactory->setContentProvider( $contentProvider );
+		$ffFactory->setMailTranslator( new FakeTranslator() );
 
 		$app = Bootstrap::initializeApplication( $ffFactory );
 		$app->flush();
