@@ -145,6 +145,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\DonorUpdateHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ErrorPageHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\ExceptionHtmlPresenterInterface;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
@@ -957,12 +958,20 @@ class FunFunFactory implements ServiceProviderInterface {
 		return new ErrorPageHtmlPresenter( $this->getLayoutTemplate( 'Error_Page.html.twig' ) );
 	}
 
-	public function newInternalErrorHtmlPresenter(): InternalErrorHtmlPresenter {
-		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Error_Page.html.twig' ) );
+	public function getInternalErrorHtmlPresenter(): ExceptionHtmlPresenterInterface {
+		$presenter = $this->createSharedObject( ExceptionHtmlPresenterInterface::class, function (): ExceptionHtmlPresenterInterface {
+			return new InternalErrorHtmlPresenter();
+		} );
+		$presenter->setTemplate( $this->getLayoutTemplate( 'Error_Page.html.twig' ) );
+		return $presenter;
 	}
 
-	public function newAccessDeniedHtmlPresenter(): InternalErrorHtmlPresenter {
-		return new InternalErrorHtmlPresenter( $this->getLayoutTemplate( 'Access_Denied.twig' ) );
+	public function setInternalErrorHtmlPresenter( ExceptionHtmlPresenterInterface $presenter ): void {
+		$this->sharedObjects[ExceptionHtmlPresenterInterface::class] = $presenter;
+	}
+
+	public function newAccessDeniedHtmlPresenter(): ErrorPageHtmlPresenter {
+		return new ErrorPageHtmlPresenter( $this->getLayoutTemplate( 'Access_Denied.twig' ) );
 	}
 
 	public function getTranslator(): TranslatorInterface {

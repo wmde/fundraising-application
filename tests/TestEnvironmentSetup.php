@@ -8,6 +8,7 @@ use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\Translation\Translator;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DevelopmentInternalErrorHtmlPresenter;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 
 /**
@@ -22,5 +23,6 @@ class TestEnvironmentSetup implements EnvironmentSetup {
 		// disabling translations in tests (will result in returned keys we can more easily test for)
 		$factory->setTranslator( new Translator( 'zz_ZZ' ) );
 		$factory->setDoctrineConfiguration( Setup::createConfiguration( true ) );
+		$factory->setInternalErrorHtmlPresenter( new DevelopmentInternalErrorHtmlPresenter() );
 	}
 }

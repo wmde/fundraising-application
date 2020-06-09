@@ -10,6 +10,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
 
 class ProductionEnvironmentSetup implements EnvironmentSetup {
 

@@ -20,7 +20,7 @@ class ProductionEnvironmentSetupTest extends TestCase {
 			'setSofortLogger',
 			'setSofortLogger',
 			'enableCaching',
-			'setDoctrineConfiguration'
+			'setDoctrineConfiguration',
 		];
 		$supportingGetters = [ 'getLoggingPath', 'getWritableApplicationDataPath' ];
 		/** @var FunFunFactory&MockObject $factory */

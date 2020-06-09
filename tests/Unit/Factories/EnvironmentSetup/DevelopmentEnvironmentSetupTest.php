@@ -20,6 +20,7 @@ class DevelopmentEnvironmentSetupTest extends TestCase {
 			'setSofortLogger',
 			'setSofortLogger',
 			'setDoctrineConfiguration',
+			'setInternalErrorHtmlPresenter',
 		];
 		$supportingGetters = [ 'getLoggingPath' ];
 		/** @var FunFunFactory&MockObject $factory */
