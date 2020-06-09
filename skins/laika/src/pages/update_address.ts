@@ -7,14 +7,18 @@ import { createStore } from '@/store/update_address_store';
 import App from '@/components/App.vue';
 import Component from '@/components/pages/UpdateAddress.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
+import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
 
 const PAGE_IDENTIFIER = 'update-address';
+const FORM_NAMESPACE = 'update_address';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
 const pageData = new PageDataInitializer<any>( '#app' );
-const store = createStore();
+const store = createStore( [
+	createTrackFormErrorsPlugin( FORM_NAMESPACE ),
+] );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,

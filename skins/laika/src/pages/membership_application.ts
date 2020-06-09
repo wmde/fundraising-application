@@ -22,6 +22,7 @@ import { InitialMembershipData } from '@/view_models/Address';
 import { initializeBankData } from '@/store/bankdata/actionTypes';
 import { Country } from '@/view_models/Country';
 import { initializeMembershipFee } from '@/store/membership_fee/actionTypes';
+import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
 
 const PAGE_IDENTIFIER = 'membership-application';
 const FORM_NAMESPACE = 'membership_application';
@@ -57,7 +58,9 @@ const i18n = new VueI18n( {
 
 const store = createStore( [
 	dataPersister.getPlugin( persistenceItems ),
-] );
+	createTrackFormErrorsPlugin( FORM_NAMESPACE ),
+]
+);
 
 dataPersister.decryptInitialValues( persistenceItems ).then( () => {
 
