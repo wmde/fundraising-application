@@ -16,10 +16,13 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedMessageTranslator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
@@ -403,6 +406,12 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
+			$translator = $this->createMock( TranslatorInterface::class );
+			$translator->expects( $this->once() )
+				->method( 'trans' )
+				->with( 'paypal_item_name_donation' )
+				->willReturn( 'Ihre Spende' );
+			$factory->setPaymentProviderItemsTranslator( $translator );
 
 			$client->followRedirects( false );
 
@@ -414,7 +423,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 			$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
-			$this->assertStringContainsString( 'item_name=item_name_donation', $response->getContent() );
+			$this->assertStringContainsString( 'item_name=Ihre+Spende', $response->getContent() );
 		} );
 	}
 

@@ -1117,14 +1117,14 @@ class FunFunFactory implements ServiceProviderInterface {
 	public function newPayPalUrlGeneratorForDonations(): PayPalUrlGenerator {
 		return new PayPalUrlGenerator(
 			$this->getPayPalUrlConfigForDonations(),
-			$this->getTranslator()->trans( 'item_name_donation' )
+			$this->getPaymentProviderItemsTranslator()->trans( 'paypal_item_name_donation' )
 		);
 	}
 
 	public function newPayPalUrlGeneratorForMembershipApplications(): PayPalUrlGenerator {
 		return new PayPalUrlGenerator(
 			$this->getPayPalUrlConfigForMembershipApplications(),
-			$this->getTranslator()->trans( 'item_name_membership' )
+			$this->getPaymentProviderItemsTranslator()->trans( 'paypal_item_name_membership' )
 		);
 	}
 
@@ -1141,7 +1141,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		return new SofortUrlGenerator(
 			new SofortConfig(
-				$this->getTranslator()->trans( 'item_name_donation', [], 'messages' ),
+				$this->getPaymentProviderItemsTranslator()->trans( 'sofort_item_name_donation' ),
 				$config['return-url'],
 				$config['cancel-url'],
 				$config['notification-url']
@@ -1246,7 +1246,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newCreditCardPaymentUrlGenerator(): CreditCardPaymentUrlGenerator {
 		return new CreditCardPaymentUrlGenerator(
-			$this->getCreditCardTranslator(),
+			$this->getPaymentProviderItemsTranslator(),
 			$this->newCreditCardUrlGenerator()
 		);
 	}
@@ -1960,9 +1960,17 @@ class FunFunFactory implements ServiceProviderInterface {
 		);
 	}
 
-	private function getCreditCardTranslator(): TranslatorInterface {
-		$translator = new JsonTranslator( new SimpleFileFetcher() );
-		return $translator->addFile( $this->getI18nDirectory() . '/messages/paymentIntervals.json' );
+	private function getPaymentProviderItemsTranslator(): TranslatorInterface {
+		return $this->createSharedObject( TranslatorInterface::class . '::PaymentProviderItemTranslator', function (): TranslatorInterface {
+			$translator = new JsonTranslator( new SimpleFileFetcher() );
+			return $translator
+				->addFile( $this->getI18nDirectory() . '/messages/paymentIntervals.json' )
+				->addFile( $this->getI18nDirectory() . '/messages/paymentProvider.json' );
+		} );
+	}
+
+	public function setPaymentProviderItemsTranslator( TranslatorInterface $translator ): void {
+		$this->sharedObjects[TranslatorInterface::class . '::PaymentProviderItemTranslator'] = $translator;
 	}
 
 	private function getMailTranslator(): TranslatorInterface {

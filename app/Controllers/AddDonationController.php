@@ -25,12 +25,12 @@ use WMDE\FunValidators\ConstraintViolation;
  */
 class AddDonationController {
 
-	private $app;
-	private $ffFactory;
+	private Application $app;
+	private FunFunFactory $ffFactory;
 	/**
 	 * @var FallbackRequestValueReader
 	 */
-	private $legacyRequestValueReader;
+	private FallbackRequestValueReader $legacyRequestValueReader;
 
 	public function handle( FunFunFactory $ffFactory, Request $request, Application $app ): Response {
 		$this->app = $app;

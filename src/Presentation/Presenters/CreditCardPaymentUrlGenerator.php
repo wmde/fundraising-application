@@ -27,10 +27,15 @@ class CreditCardPaymentUrlGenerator {
 		return $this->urlGenerator->generateUrl(
 			$personalInfo ? $personalInfo->getName()->getFirstName() : '',
 			$personalInfo ? $personalInfo->getName()->getLastName() : '',
-			$this->translator->trans( 'paytext_cc' ) . ' ' .
-				$this->translator->trans(
-					(string) $response->getDonation()->getPaymentIntervalInMonths()
-				),
+			$this->translator->trans(
+				'credit_card_item_name_donation',
+				[
+					'%interval%' =>
+						$this->translator->trans(
+							(string) $response->getDonation()->getPaymentIntervalInMonths()
+						)
+				]
+			),
 			$response->getDonation()->getId(),
 			$response->getAccessToken(),
 			$response->getUpdateToken(),
