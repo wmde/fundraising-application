@@ -8,6 +8,7 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
@@ -182,7 +183,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->request(
 				'POST',
@@ -191,18 +192,27 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			);
 			$client->followRedirect();
 
-			$response = $client->getResponse()->getContent();
+			$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-			$this->assertStringContainsString( '5,51 €', $response );
-			$this->assertStringContainsString( 'donation.interval: 0', $response );
-			$this->assertStringContainsString( 'DE12500105170648489890', $response );
-			$this->assertStringContainsString( 'INGDDEFFXXX', $response );
-			$this->assertStringContainsString( 'ING-DiBa', $response );
-			$this->assertStringContainsString( 'Prof. Dr. Karla Kennichnich', $response );
-			$this->assertStringContainsString( 'Lehmgasse 12', $response );
-			$this->assertStringContainsString( '<span id="confirm-postcode">12345</span> <span id="confirm-city">Einort</span>', $response );
-			$this->assertStringContainsString( 'karla@kennichnich.de', $response );
-			$this->assertStringContainsString( 'send-info', $response );
+			$this->assertObjectHasAttribute( 'donation', $applicationVars );
+			$this->assertSame( 5.51, $applicationVars->donation->amount );
+			$this->assertSame( 0, $applicationVars->donation->interval );
+			$this->assertSame( 'BEZ', $applicationVars->donation->paymentType );
+			$this->assertTrue( $applicationVars->donation->optsIntoNewsletter );
+			$this->assertTrue( $applicationVars->donation->optsIntoDonationReceipt );
+
+			$this->assertObjectHasAttribute( 'bankData', $applicationVars );
+			$this->assertSame( 'DE12500105170648489890', $applicationVars->bankData->iban );
+			$this->assertSame( 'INGDDEFFXXX', $applicationVars->bankData->bic );
+			$this->assertSame( 'ING-DiBa', $applicationVars->bankData->bankname );
+
+			$this->assertObjectHasAttribute( 'address', $applicationVars );
+			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $applicationVars->address->fullName );
+			$this->assertSame( 'Lehmgasse 12', $applicationVars->address->streetAddress );
+			$this->assertSame( '12345', $applicationVars->address->postalCode );
+			$this->assertSame( 'Einort', $applicationVars->address->city );
+			$this->assertSame( 'DE', $applicationVars->address->countryCode );
+			$this->assertSame( 'karla@kennichnich.de', $applicationVars->address->email );
 		} );
 	}
 
@@ -842,5 +852,11 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION );
 			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
 		} );
+	}
+
+	private function getDataApplicationVars( Crawler $crawler ): object {
+		/** @var \DOMElement $appElement */
+		$appElement = $crawler->filter( '#app' )->getNode( 0 );
+		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
 	}
 }

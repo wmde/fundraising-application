@@ -3,7 +3,7 @@
 {% block main %}
     {# TODO Either throw away HTML presenter or create Vue class that integrates with rendered web_content   #}
     {% if error_message %}
-        {$ error_message|trans( {}, 'validations' ) $}
+        {$ error_message $}
     {% else %}
 
         <div class="static-content">

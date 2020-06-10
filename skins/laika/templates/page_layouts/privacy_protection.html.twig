@@ -1,6 +1,6 @@
 {% extends 'Base_Layout.html.twig' %}
 {% set page_works_without_js = true %}
-{% set title = page_id|trans({}, 'pageTitles') %}
+{% set title = site_metadata.page_titles[page_id] %}
 {% set content = web_content("pages/#{page_id}") %}
 
 {% block main %}

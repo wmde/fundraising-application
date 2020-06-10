@@ -40,17 +40,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidPostRequest_confirmationPageContainsDonationData(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-
-			$donation = $this->newStoredDonation( $factory );
-
-			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
-
-			$this->assertDonationDataInResponse( $donation, $responseContent );
-		} );
-	}
-
 	public function testGivenAnonymousDonation_confirmationPageReflectsThat(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->newBookedAnonymousPayPalDonation( $factory );

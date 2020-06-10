@@ -343,10 +343,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				$twigFactory->newFileSystemLoader(),
 				$twigFactory->newArrayLoader(), // This is just a fallback for testing
 			] );
-			$extensions = [
-				$twigFactory->newTranslationExtension( $this->getTranslator() ),
-				new Twig_Extensions_Extension_Intl()
-			];
+			$extensions = [];
 			$filters = [
 				$twigFactory->newFilePrefixFilter(
 					$this->getFilePrefixer()
@@ -737,6 +734,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			'honorifics' => $this->getHonorifics()->getList(),
 			'piwik' => $this->config['piwik'],
 			'locale' => $this->config['locale'],
+			'site_metadata' => $this->getSiteMetaData(),
 			'selectedBuckets' => BucketRenderer::renderBuckets( ...$this->getSelectedBuckets() ),
 		];
 	}
@@ -1983,5 +1981,12 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function setMailTranslator( TranslatorInterface $translator ): void {
 		$this->sharedObjects[TranslatorInterface::class . '::MailTranslator'] = $translator;
+	}
+
+	private function getSiteMetaData(): array {
+		$fileFetcher = new SimpleFileFetcher();
+		$metadata = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/siteMetadata.json' ), true );
+		$metadata['page_titles'] = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/pageTitles.json' ), true );
+		return $metadata;
 	}
 }

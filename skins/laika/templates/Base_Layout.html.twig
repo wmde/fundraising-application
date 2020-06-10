@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width" />
 
-    <title>{% block title %}{$ 'wikimedia_title_line' | trans $}{% endblock %}</title>
+    <title>{% block title %}{$ site_metadata.title $}{% endblock %}</title>
 
     <meta name="format-detection" content="telephone=no" />
     <meta name="title" content="{$ block('title') $}" />
-    <meta name="description" content="{$ 'wikimedia_call_to_action' | trans $}" />
+    <meta name="description" content="{$ site_metadata.wikimedia_call_to_action $}" />
 
-    <meta property="og:title" content="{$ 'wikimedia_call_to_action' | trans $}" />
+    <meta property="og:title" content="{$ site_metadata.wikimedia_call_to_action $}" />
     <meta property="og:type" content="non_profit" />
     <meta property="og:url" content="https://spenden.wikimedia.de/" />
     <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Wikipedia_svg_logo-de.svg/200px-Wikipedia_svg_logo-de.svg.png" />
-    <meta property="og:site_name" content="{$ 'wikimedia_organization_title' | trans $}" />
-    <meta property="og:description" content="{$ 'wikimedia_description' | trans $}" />
+    <meta property="og:site_name" content="{$ site_metadata.wikimedia_organization_title $}" />
+    <meta property="og:description" content="{$ site_metadata.wikimedia_description $}" />
 
     <link rel="preconnect" href="{$ piwik.baseUrl $}">
     <link rel="shortcut icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/images/favicon.ico" />
@@ -32,7 +32,7 @@
     data-application-messages="{$ translations()|e('html_attr') $}" 
     data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
         <noscript>
-                <h2>{$ 'no_javascript_title' | trans $}</h2>
+                <h2>{$ site_metadata.no_javascript_header $}</h2>
                 {$ web_content( 'pages/no_javascript' ) $}
         </noscript>
     </div>

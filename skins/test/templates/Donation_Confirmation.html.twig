@@ -1,10 +1,10 @@
-{$ donation.amount|localizedcurrency('EUR', 'de_DE') $}
-{$ ( 'donation_payment_interval_' ~ donation.interval ) | trans $}
+{$ donation.amount $}
+{$ ( 'donation_payment_interval_' ~ donation.interval ) $}
 
 {% if donation.paymentType == 'PPL' or donation.paymentType == 'MCP' %}
-	Ihre Spende per {$ donation.paymentType|trans({}, 'paymentTypes') $} {$ donation.status|trans({}, 'paymentStatus') $}.
+	Ihre Spende per {$ donation.paymentType $} {$ donation.status $}.
 {% elseif donation.paymentType == 'BEZ' %}
-	Sie zahlen per {$ donation.paymentType|trans({}, 'paymentTypes') $}
+	Sie zahlen per {$ donation.paymentType $}
 {% endif %}
 
 {% if address and not address.isAnonymous %}

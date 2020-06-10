@@ -5,8 +5,8 @@
 		 data-application-messages="{$ translations()|e('html_attr') $}"
 		 data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
 		<noscript>
-			<h2>{$ 'page_not_found_header' | trans $}</h2>
-			<p>{$ 'page_not_found' | trans | raw $}<p>
+			<h2>{$ site_metadata.page_not_found_header $}</h2>
+			<p>{$ site_metadata.page_not_found | raw $}<p>
 		</noscript>
 	</div>
 {% endblock %}

@@ -5,8 +5,8 @@
          data-application-messages="{$ translations()|e('html_attr') $}"
          data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
         <noscript>
-            <h2>{$ 'access_denied_header' | trans $}</h2>
-            <p>{$ message | default( 'access_denied' ) | trans | raw $}<p>
+            <h2>{$ site_metadata.access_denied_header $}</h2>
+            <p>{$ message | default( site_metadata.access_denied ) | raw $}<p>
         </noscript>
     </div>
 {% endblock %}
