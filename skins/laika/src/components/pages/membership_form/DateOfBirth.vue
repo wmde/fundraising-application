@@ -36,7 +36,9 @@ export default Vue.extend( {
 	},
 	mounted() {
 		this.$data.date = this.$store.state[ NS_MEMBERSHIP_ADDRESS ].values.date;
-		this.validateDate();
+		if ( this.$data.date !== '' ) {
+			this.validateDate();
+		}
 	},
 	methods: {
 		setDate: function () {

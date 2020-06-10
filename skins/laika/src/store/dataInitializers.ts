@@ -38,12 +38,14 @@ export const createInitialDonationAddressValues = ( dataPersister: DataPersister
 		const value = dataPersister.getInitialValue( field );
 		if ( value ) {
 			addressPersistItems.push( { name: field, value: value, validity: Validity.RESTORED } );
-			trackFormFieldRestored( field, value );
+			trackFormFieldRestored( 'donation', field );
 		}
 	} );
 
 	return {
 		addressType: replaceInitialValue( initialFormValues.addressType, dataPersister.getInitialValue( 'addressType' ) ),
+		newsletterOptIn: replaceInitialValue( false, dataPersister.getInitialValue( 'newsletter' ) ),
+		receiptOptOut: replaceInitialValue( false, dataPersister.getInitialValue( 'receiptOptOut' ) ),
 		fields: addressPersistItems,
 	};
 };
@@ -59,8 +61,10 @@ export const createInitialDonationPaymentValues = ( dataPersister: DataPersister
 		);
 	}
 
-	if ( initialFormValues.paymentIntervalInMonths !== undefined ) {
-		initialFormValues.paymentIntervalInMonths = nullifyZeroString(
+	let paymentIntervalInMonths = replaceInitialValue( '0', dataPersister.getInitialValue( 'interval' ) );
+	if ( initialFormValues.paymentIntervalInMonths !== undefined && initialFormValues.paymentIntervalInMonths !== null ) {
+		paymentIntervalInMonths = replaceInitialValue(
+			paymentIntervalInMonths,
 			String( initialFormValues.paymentIntervalInMonths )
 		);
 	}
@@ -68,7 +72,7 @@ export const createInitialDonationPaymentValues = ( dataPersister: DataPersister
 	return {
 		amount: replaceInitialValue( dataPersister.getInitialValue( 'amount' ), initialFormValues.amount ),
 		type: replaceInitialValue( dataPersister.getInitialValue( 'type' ), initialFormValues.paymentType ),
-		paymentIntervalInMonths: replaceInitialValue( dataPersister.getInitialValue( 'interval' ), initialFormValues.paymentIntervalInMonths ),
+		paymentIntervalInMonths: paymentIntervalInMonths,
 		isCustomAmount: initialFormValues.isCustomAmount,
 	};
 };
@@ -89,7 +93,7 @@ export const createInitialMembershipAddressValues = ( dataPersister: DataPersist
 		const value = dataPersister.getInitialValue( field );
 		if ( value ) {
 			addressPersistItems.push( { name: field, value: value, validity: Validity.RESTORED } );
-			trackFormFieldRestored( field, value );
+			trackFormFieldRestored( 'membership_application', field );
 		} else if ( initialFormValues.has( field ) ) {
 			// We consider all non-empty values from the backend valid because they come from the donation and were validated there
 			addressPersistItems.push( { name: field, value: initialFormValues.get( field ), validity: Validity.VALID } );
@@ -100,6 +104,7 @@ export const createInitialMembershipAddressValues = ( dataPersister: DataPersist
 		addressType: replaceInitialValue( initialFormValues.get( 'addressType' ), dataPersister.getInitialValue( 'addressType' ) ),
 		membershipType: replaceInitialValue( initialFormValues.get( 'membershipType' ), dataPersister.getInitialValue( 'membershipType' ) ),
 		date: dataPersister.getInitialValue( 'date' ),
+		receiptOptOut: replaceInitialValue( false, dataPersister.getInitialValue( 'receiptOptOut' ) ),
 		fields: addressPersistItems,
 	};
 };

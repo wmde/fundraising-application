@@ -28,7 +28,10 @@ class NewDonationController {
 			$amount = Euro::newFromCents( 0 );
 		}
 		$paymentType = (string) $request->get( 'paymentType', $legacyValueReader->getPaymentType() );
-		$interval = intval( $request->get( 'interval', $legacyValueReader->getInterval() ) );
+		$interval = $request->get( 'interval', $legacyValueReader->getInterval() );
+		if ( $interval !== null ) {
+			$interval = intval( $interval );
+		}
 
 		$validationResult = $ffFactory->newPaymentDataValidator()->validate( $amount, $paymentType );
 

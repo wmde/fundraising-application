@@ -18,11 +18,12 @@ export default Vue.extend( {
 	name: 'ReceiptOptOut',
 	data: function () {
 		return {
-			receiptNeeded: true,
+			receiptNeeded: this.$props.initialReceiptNeeded,
 		};
 	},
 	props: {
 		message: String,
+		initialReceiptNeeded: Boolean,
 	},
 	methods: {
 		setReceiptOptOut: function () {

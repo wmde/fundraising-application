@@ -48,6 +48,8 @@ export interface MembershipAddressState {
 
 export interface InitialAddressValues {
     addressType: AddressTypeModel,
+    newsletterOptIn: boolean,
+    receiptOptOut: boolean,
     fields: FieldInitialization[],
 }
 
@@ -55,6 +57,7 @@ export interface InitialMembershipAddressValues {
     addressType?: AddressTypeModel,
     membershipType?: MembershipTypeModel,
     date?: string,
+    receiptOptOut: boolean,
     fields: FieldInitialization[],
 }
 
