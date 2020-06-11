@@ -34,8 +34,8 @@ describe( 'AddressPage', () => {
 		} );
 	} );
 
-	it( 'sends directDebitFromBanner property value "true" if payment type is direct debit and from banner', async () => {
-		expect( wrapper.find( Address ).vm.$options.propsData.isDirectDebitFromBanner ).toBe( false );
+	it( 'sends directDebit property value "true" if payment type is direct debit', async () => {
+		expect( wrapper.find( Address ).vm.$options.propsData.isDirectDebit ).toBe( false );
 
 		return store.dispatch( action( NS_PAYMENT, initializePayment ), {
 			amount: '100',
@@ -43,13 +43,13 @@ describe( 'AddressPage', () => {
 			paymentIntervalInMonths: '0',
 			isCustomAmount: false,
 		} ).then( () => {
-			expect( wrapper.find( Address ).vm.$options.propsData.isDirectDebitFromBanner ).toBe( true );
+			expect( wrapper.find( Address ).vm.$options.propsData.isDirectDebit ).toBe( true );
 		} );
 
 	} );
 
-	it( 'sends directDebitFromBanner property value "false" if payment type is not direct debit', async () => {
-		expect( wrapper.find( Address ).vm.$options.propsData.isDirectDebitFromBanner ).toBe( false );
+	it( 'sends directDebit property value "false" if payment type is not direct debit', async () => {
+		expect( wrapper.find( Address ).vm.$options.propsData.isDirectDebit ).toBe( false );
 
 		return store.dispatch( action( NS_PAYMENT, initializePayment ), {
 			amount: '100',
@@ -57,7 +57,7 @@ describe( 'AddressPage', () => {
 			paymentIntervalInMonths: '0',
 			isCustomAmount: false,
 		} ).then( () => {
-			expect( wrapper.find( Address ).vm.$options.propsData.isDirectDebitFromBanner ).toBe( false );
+			expect( wrapper.find( Address ).vm.$options.propsData.isDirectDebit ).toBe( false );
 		} );
 
 	} );

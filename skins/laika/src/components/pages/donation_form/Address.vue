@@ -6,7 +6,7 @@
 		<address-type
 				v-on:address-type="setAddressType( $event )"
 				:disabledAddressTypes="disabledAddressTypes"
-				:is-direct-debit-from-banner="isDirectDebitFromBanner"
+				:is-direct-debit="isDirectDebit"
 				:initial-address-type="addressTypeName">
 		</address-type>
 		<span
@@ -140,7 +140,7 @@ export default Vue.extend( {
 		validateBankDataUrl: String,
 		validateLegacyBankDataUrl: String,
 		countries: Array as () => Array<Country>,
-		isDirectDebitFromBanner: Boolean,
+		isDirectDebit: Boolean,
 	},
 	computed: {
 		fieldErrors: {
@@ -151,11 +151,6 @@ export default Vue.extend( {
 					}
 					return validity;
 				}, ( {} as AddressValidity ) );
-			},
-		},
-		isDirectDebit: {
-			get: function (): boolean {
-				return this.$store.getters[ 'payment/isDirectDebitPayment' ];
 			},
 		},
 		disabledAddressTypes: {
