@@ -2,8 +2,8 @@ import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
+import { contactFormValidationPatterns } from '@/validation';
 import App from '@/components/App.vue';
-
 import Component from '@/components/pages/Contact.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 
@@ -37,6 +37,7 @@ new Vue( {
 		h( Component, {
 			props: {
 				contactData: pageData.applicationVars,
+				validationPatterns: contactFormValidationPatterns,
 			},
 		} ),
 		h( Sidebar, {

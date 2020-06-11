@@ -6,6 +6,7 @@ import { createStore } from '@/store/membership_store';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { action } from '@/store/util';
 import { setDate } from '@/store/membership_address/actionTypes';
+import { dateOfBirthValidationPattern } from '@/validation';
 
 const localVue = createLocalVue();
 localVue.use( Buefy );
@@ -20,6 +21,9 @@ describe( 'DateOfBirth.vue', () => {
 			mocks: {
 				$t: () => { },
 			},
+			propsData: {
+				validationPattern: dateOfBirthValidationPattern,
+			},
 		} );
 		expect( wrapper.vm.$data.dateHasError ).toBe( false );
 	} );
@@ -30,6 +34,9 @@ describe( 'DateOfBirth.vue', () => {
 				store: createStore(),
 				mocks: {
 					$t: () => { },
+				},
+				propsData: {
+					validationPattern: dateOfBirthValidationPattern,
 				},
 			} ),
 			birthDate = wrapper.find( '#birthDate' );
@@ -61,6 +68,9 @@ describe( 'DateOfBirth.vue', () => {
 			store: createStore(),
 			mocks: {
 				$t: () => { },
+			},
+			propsData: {
+				validationPattern: dateOfBirthValidationPattern,
 			},
 		} );
 		const store = wrapper.vm.$store;

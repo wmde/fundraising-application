@@ -3,6 +3,7 @@ import Postal from '@/components/shared/Postal.vue';
 import Buefy from 'buefy';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 import countries from '@/../tests/data/countries';
+import { addressValidationPatterns } from '@/validation';
 
 const localVue = createLocalVue();
 localVue.use( Buefy );
@@ -77,6 +78,7 @@ function newTestProperties( overrides: Object ) {
 			},
 			countries: countries,
 			addressType: AddressTypeModel.PERSON,
+			postCodeValidation: addressValidationPatterns.postcode,
 		},
 		overrides
 	);
@@ -126,7 +128,7 @@ describe( 'Postal.vue', () => {
 		field.trigger( 'blur' );
 
 		await wrapper.vm.$nextTick();
-		expect( wrapper.vm.$props.formData.postcode.pattern ).toEqual( '^.+$' );
+		expect( wrapper.vm.$props.formData.postcode.pattern ).toEqual( addressValidationPatterns.postcode );
 
 		field.trigger( 'focus' );
 		wrapper.vm.$data.countryInput = countries[ 0 ].countryFullName;

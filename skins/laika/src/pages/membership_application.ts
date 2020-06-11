@@ -23,6 +23,7 @@ import { initializeBankData } from '@/store/bankdata/actionTypes';
 import { Country } from '@/view_models/Country';
 import { initializeMembershipFee } from '@/store/membership_fee/actionTypes';
 import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
+import { addressValidationPatterns, dateOfBirthValidationPattern } from '@/validation';
 
 const PAGE_IDENTIFIER = 'membership-application';
 const FORM_NAMESPACE = 'membership_application';
@@ -108,6 +109,8 @@ dataPersister.decryptInitialValues( persistenceItems ).then( () => {
 						countries: pageData.applicationVars.countries,
 						showMembershipTypeOption: pageData.applicationVars.showMembershipTypeOption,
 						paymentIntervals: pageData.applicationVars.paymentIntervals,
+						addressValidationPatterns: addressValidationPatterns,
+						dateOfBirthValidationPattern: dateOfBirthValidationPattern,
 					},
 				} ),
 				h( Sidebar, {
