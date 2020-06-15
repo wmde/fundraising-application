@@ -27,7 +27,6 @@
 		"wmde/fun-validators": "~2.0.0",
 
 		"symfony/twig-bridge": "^3.3",
-		"symfony/translation": "^3.3",
 		"symfony/console": "^3.3",
 		"symfony/stopwatch": "^3.3",
 		"symfony/http-foundation": "^3.3",

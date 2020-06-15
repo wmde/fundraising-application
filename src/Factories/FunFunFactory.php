@@ -27,7 +27,6 @@ use Swift_MailTransport;
 use Swift_NullTransport;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
-use Symfony\Component\Translation\TranslatorInterface as SymfonyTranslatorInterface;
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
@@ -301,21 +300,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		$container['contact_validator'] = function() {
 			return new GetInTouchValidator( $this->getEmailValidator() );
-		};
-
-		$container['translator'] = function() {
-			$translationFactory = new TranslationFactory();
-			$loaders = [
-				'json' => $translationFactory->newJsonLoader()
-			];
-			$locale = $this->config['locale'];
-			$messagesPath = $this->getI18nDirectory() . $this->config['translation']['message-dir'];
-			$translator = $translationFactory->create( $loaders, $locale );
-			foreach ($this->config['translation']['files'] as $domain => $file) {
-				$translator->addResource( 'json', $messagesPath . '/' . $file, $locale, $domain );
-			}
-
-			return $translator;
 		};
 
 		// In the future, this could be locale-specific or filled from a DB table
@@ -979,14 +963,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newAccessDeniedHtmlPresenter(): ErrorPageHtmlPresenter {
 		return new ErrorPageHtmlPresenter( $this->getLayoutTemplate( 'Access_Denied.twig' ) );
-	}
-
-	public function getTranslator(): SymfonyTranslatorInterface {
-		return $this->pimple['translator'];
-	}
-
-	public function setTranslator( SymfonyTranslatorInterface $translator ): void {
-		$this->pimple['translator'] = $translator;
 	}
 
 	private function newTwigFactory( array $twigConfig ): TwigFactory {

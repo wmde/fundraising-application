@@ -20,8 +20,6 @@ class TestEnvironmentSetup implements EnvironmentSetup {
 		$factory->setSkinTwigEnvironment( new \Twig_Environment() );
 		$factory->setUrlGenerator( new FakeUrlGenerator() );
 
-		// disabling translations in tests (will result in returned keys we can more easily test for)
-		$factory->setTranslator( new Translator( 'zz_ZZ' ) );
 		$factory->setDoctrineConfiguration( Setup::createConfiguration( true ) );
 		$factory->setInternalErrorHtmlPresenter( new DevelopmentInternalErrorHtmlPresenter() );
 	}
