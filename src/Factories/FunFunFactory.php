@@ -31,6 +31,7 @@ use Symfony\Component\Translation\TranslatorInterface as SymfonyTranslatorInterf
 use TNvpServiceDispatcher;
 use Twig_Environment;
 use Twig_Extensions_Extension_Intl;
+use Twig_SimpleFilter;
 use Twig_SimpleFunction;
 use WMDE\Clock\SystemClock;
 use WMDE\EmailAddress\EmailAddress;
@@ -370,6 +371,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		};
 
 		$container['mailer_twig'] = function() {
+			$mailTranslator = $this->getMailTranslator();
 			$twigFactory = $this->newTwigFactory( $this->config['mailer-twig'] );
 			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
 
@@ -378,10 +380,29 @@ class FunFunFactory implements ServiceProviderInterface {
 				$twigFactory->newArrayLoader(), // This is just a fallback for testing
 			] );
 			$extensions = [
-				$twigFactory->newTranslationExtension( $this->getTranslator() ),
 				new Twig_Extensions_Extension_Intl(),
 			];
-			$filters = [];
+			$filters = [
+				new Twig_SimpleFilter(
+					'payment_interval',
+					/** @var int|string $interval */
+					function( $interval ) use ( $mailTranslator ): string {
+						return $mailTranslator->trans( "donation_payment_interval_{$interval}" );
+					}
+				),
+				new Twig_SimpleFilter(
+					'payment_method',
+					function( string $method ) use ( $mailTranslator ): string {
+						return $mailTranslator->trans( $method );
+					}
+				),
+				new Twig_SimpleFilter(
+					'membership_type',
+					function( string $membershipType ) use ( $mailTranslator ): string {
+						return $mailTranslator->trans( $membershipType );
+					}
+				),
+			];
 			$functions = [
 				new Twig_SimpleFunction(
 					'mail_content',
@@ -399,6 +420,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			];
 
 			$twigEnvironment = new Twig_Environment();
+			$twigEnvironment->addGlobal( 'day_of_the_week', $this->getDayOfWeekName() );
 
 			return $configurator->getEnvironment( $twigEnvironment, $loaders, $extensions, $filters, $functions );
 		};
@@ -1974,8 +1996,11 @@ class FunFunFactory implements ServiceProviderInterface {
 	private function getMailTranslator(): TranslatorInterface {
 		return $this->createSharedObject( TranslatorInterface::class . '::MailTranslator', function (): TranslatorInterface {
 			$translator = new JsonTranslator( new SimpleFileFetcher() );
-			// TODO use mail.json later
-			return $translator->addFile( $this->getI18nDirectory() . '/messages/messages.json' );
+			// TODO use mail.json (only with used keys) instead of messages.json when the translation handling has been deployed to prod
+			return $translator
+				->addFile( $this->getI18nDirectory() . '/messages/messages.json' )
+				->addFile( $this->getI18nDirectory() . '/messages/paymentTypes.json' )
+				->addFile( $this->getI18nDirectory() . '/messages/membershipTypes.json' );
 		} );
 	}
 
@@ -1988,5 +2013,11 @@ class FunFunFactory implements ServiceProviderInterface {
 		$metadata = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/siteMetadata.json' ), true );
 		$metadata['page_titles'] = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/pageTitles.json' ), true );
 		return $metadata;
+	}
+
+	private function getDayOfWeekName(): string {
+		$fileFetcher = new SimpleFileFetcher();
+		$daysOfWeek = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/daysOfTheWeek.json' ), true );
+		return $daysOfWeek[date( 'N' )];
 	}
 }

@@ -6,8 +6,6 @@ namespace WMDE\Fundraising\Frontend\Factories;
 
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use RuntimeException;
-use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
 use Twig_SimpleFilter;
@@ -66,10 +64,6 @@ class TwigFactory {
 	public function newArrayLoader(): Twig_Loader_Array {
 		$templates = $this->config['loaders']['array'] ?? [];
 		return new Twig_Loader_Array( $templates );
-	}
-
-	public function newTranslationExtension( TranslatorInterface $translator ): TranslationExtension {
-		return new TranslationExtension( $translator );
 	}
 
 	public function newFilePrefixFilter( FilePrefixer $filePrefixer ): Twig_SimpleFilter {

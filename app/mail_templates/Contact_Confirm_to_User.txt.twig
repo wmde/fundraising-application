@@ -1,6 +1,4 @@
-{$ mail_content('contact_confirm_to_user', {
-    'day_of_the_week': "now"|date("N")|trans({}, 'daysOfTheWeek')
-}) $}
+{$ mail_content('contact_confirm_to_user', { 'day_of_the_week': day_of_the_week }) $}
 
 -------------------------------------
 {$ mail_content('address_of_suborganization') $}
