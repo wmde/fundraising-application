@@ -333,98 +333,6 @@ class FunFunFactory implements ServiceProviderInterface {
 			] );
 		};
 
-		$container['twig'] = function() {
-			$config = $this->config['twig'];
-			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
-
-			$twigFactory = $this->newTwigFactory( $config );
-			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
-
-			$loaders = array_filter( [
-				$twigFactory->newFileSystemLoader(),
-				$twigFactory->newArrayLoader(), // This is just a fallback for testing
-			] );
-			$extensions = [];
-			$filters = [
-				$twigFactory->newFilePrefixFilter(
-					$this->getFilePrefixer()
-				)
-			];
-			$functions = [
-				new Twig_SimpleFunction(
-					'web_content',
-					function( string $name, array $context = [] ): string {
-						return $this->getContentProvider()->getWeb( $name, $context );
-					},
-					[ 'is_safe' => [ 'html' ] ]
-				),
-				new Twig_SimpleFunction(
-					'translations',
-					function(): string {
-						return json_encode( $this-> getTranslationCollector()->collectTranslations() );
-					},
-					[ 'is_safe' => [ 'html' ] ]
-				),
-			];
-
-			return $configurator->getEnvironment( $this->pimple['skin_twig_environment'], $loaders, $extensions, $filters, $functions );
-		};
-
-		$container['mailer_twig'] = function() {
-			$mailTranslator = $this->getMailTranslator();
-			$twigFactory = $this->newTwigFactory( $this->config['mailer-twig'] );
-			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
-
-			$loaders = array_filter( [
-				$twigFactory->newFileSystemLoader(),
-				$twigFactory->newArrayLoader(), // This is just a fallback for testing
-			] );
-			$extensions = [
-				new Twig_Extensions_Extension_Intl(),
-			];
-			$filters = [
-				new Twig_SimpleFilter(
-					'payment_interval',
-					/** @var int|string $interval */
-					function( $interval ) use ( $mailTranslator ): string {
-						return $mailTranslator->trans( "donation_payment_interval_{$interval}" );
-					}
-				),
-				new Twig_SimpleFilter(
-					'payment_method',
-					function( string $method ) use ( $mailTranslator ): string {
-						return $mailTranslator->trans( $method );
-					}
-				),
-				new Twig_SimpleFilter(
-					'membership_type',
-					function( string $membershipType ) use ( $mailTranslator ): string {
-						return $mailTranslator->trans( $membershipType );
-					}
-				),
-			];
-			$functions = [
-				new Twig_SimpleFunction(
-					'mail_content',
-					function( string $name, array $context = [] ): string {
-						return $this->getContentProvider()->getMail( $name, $context );
-					},
-					[ 'is_safe' => [ 'all' ] ]
-				),
-				new Twig_SimpleFunction(
-					'url',
-					function( string $name, array $parameters = [] ): string {
-						return $this->getUrlGenerator()->generateAbsoluteUrl( $name, $parameters );
-					}
-				)
-			];
-
-			$twigEnvironment = new Twig_Environment();
-			$twigEnvironment->addGlobal( 'day_of_the_week', $this->getDayOfWeekName() );
-
-			return $configurator->getEnvironment( $twigEnvironment, $loaders, $extensions, $filters, $functions );
-		};
-
 		$container['messenger_suborganization'] = function() {
 			return new Messenger(
 				new Swift_MailTransport(),
@@ -721,11 +629,99 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getSkinTwig(): Twig_Environment {
-		return $this->pimple['twig'];
+		return $this->createSharedObject( Twig_Environment::class . '::Skin', function(): Twig_Environment {
+			$config = $this->config['twig'];
+			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
+
+			$twigFactory = $this->newTwigFactory( $config );
+			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
+
+			$loaders = array_filter( [
+				$twigFactory->newFileSystemLoader(),
+				$twigFactory->newArrayLoader(), // This is just a fallback for testing
+			] );
+			$extensions = [];
+			$filters = [
+				$twigFactory->newFilePrefixFilter(
+					$this->getFilePrefixer()
+				)
+			];
+			$functions = [
+				new Twig_SimpleFunction(
+					'web_content',
+					function( string $name, array $context = [] ): string {
+						return $this->getContentProvider()->getWeb( $name, $context );
+					},
+					[ 'is_safe' => [ 'html' ] ]
+				),
+				new Twig_SimpleFunction(
+					'translations',
+					function(): string {
+						return json_encode( $this-> getTranslationCollector()->collectTranslations() );
+					},
+					[ 'is_safe' => [ 'html' ] ]
+				),
+			];
+
+			return $configurator->getEnvironment( $this->pimple['skin_twig_environment'], $loaders, $extensions, $filters, $functions );
+		} );
 	}
 
 	public function getMailerTwig(): Twig_Environment {
-		return $this->pimple['mailer_twig'];
+		return $this->createSharedObject( Twig_Environment::class . '::Mailer', function (): Twig_Environment {
+			$mailTranslator = $this->getMailTranslator();
+			$twigFactory = $this->newTwigFactory( $this->config['mailer-twig'] );
+			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
+
+			$loaders = array_filter( [
+				$twigFactory->newFileSystemLoader(),
+				$twigFactory->newArrayLoader(), // This is just a fallback for testing
+			] );
+			$extensions = [
+				new Twig_Extensions_Extension_Intl(),
+			];
+			$filters = [
+				new Twig_SimpleFilter(
+					'payment_interval',
+					/** @var int|string $interval */
+					function( $interval ) use ( $mailTranslator ): string {
+						return $mailTranslator->trans( "donation_payment_interval_{$interval}" );
+					}
+				),
+				new Twig_SimpleFilter(
+					'payment_method',
+					function( string $method ) use ( $mailTranslator ): string {
+						return $mailTranslator->trans( $method );
+					}
+				),
+				new Twig_SimpleFilter(
+					'membership_type',
+					function( string $membershipType ) use ( $mailTranslator ): string {
+						return $mailTranslator->trans( $membershipType );
+					}
+				),
+			];
+			$functions = [
+				new Twig_SimpleFunction(
+					'mail_content',
+					function( string $name, array $context = [] ): string {
+						return $this->getContentProvider()->getMail( $name, $context );
+					},
+					[ 'is_safe' => [ 'all' ] ]
+				),
+				new Twig_SimpleFunction(
+					'url',
+					function( string $name, array $parameters = [] ): string {
+						return $this->getUrlGenerator()->generateAbsoluteUrl( $name, $parameters );
+					}
+				)
+			];
+
+			$twigEnvironment = new Twig_Environment();
+			$twigEnvironment->addGlobal( 'day_of_the_week', $this->getDayOfWeekName() );
+
+			return $configurator->getEnvironment( $twigEnvironment, $loaders, $extensions, $filters, $functions );
+		} );
 	}
 
 	/**
