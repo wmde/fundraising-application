@@ -128,6 +128,12 @@
 	.dropdown-item {
 		font-size: 1rem;
 	}
+	.is-last-frequent {
+		display: block;
+		border-bottom: 1px solid $fun-color-gray-light-solid;
+		padding-bottom: 20px;
+		margin-bottom: 10px;
+	}
 }
 
 button.is-main {

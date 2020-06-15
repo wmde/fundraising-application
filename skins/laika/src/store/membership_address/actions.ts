@@ -10,8 +10,14 @@ import {
 	setReceiptOptOut,
 	setDate,
 	setMembershipType,
+	validateCountry,
 } from '@/store/membership_address/actionTypes';
-import { MembershipAddressState, InputField, InitialMembershipAddressValues } from '@/view_models/Address';
+import {
+	MembershipAddressState,
+	InputField,
+	CountryValidationFields,
+	InitialMembershipAddressValues,
+} from '@/view_models/Address';
 import { ValidationResponse } from '@/store/ValidationResponse';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import { MembershipTypeModel } from '@/view_models/MembershipTypeModel';
@@ -61,6 +67,12 @@ export const actions = {
 		field.value = field.value.trim();
 		context.commit( SET_ADDRESS_FIELD, field );
 		context.commit( VALIDATE_INPUT, field );
+	},
+	[ validateCountry ]( context: ActionContext<MembershipAddressState, any>, countryValidation: CountryValidationFields ) {
+		context.commit( SET_ADDRESS_FIELD, countryValidation.country );
+		context.commit( VALIDATE_INPUT, countryValidation.country );
+		context.commit( SET_ADDRESS_FIELD, countryValidation.postcode );
+		context.commit( VALIDATE_INPUT, countryValidation.postcode );
 	},
 	[ validateAddress ]( context: ActionContext<MembershipAddressState, any>, validateAddressUrl: string ) {
 		context.commit( MARK_EMPTY_FIELDS_INVALID );
