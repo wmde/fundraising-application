@@ -16,11 +16,9 @@ describe( 'MembershipInfo', () => {
 		const wrapper = mount( MembershipInfo, {
 			localVue,
 			propsData: {
-				confirmationData: {
-					donation: {
-						id: testId,
-						accessToken: testAccessToken,
-					},
+				donation: {
+					id: testId,
+					accessToken: testAccessToken,
 				},
 			},
 			store: createStore(),

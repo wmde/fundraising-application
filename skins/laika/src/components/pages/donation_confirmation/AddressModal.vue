@@ -62,11 +62,7 @@ import { trackDynamicForm, trackFormSubmission } from '@/tracking';
 import { mergeValidationResults } from '@/merge_validation_results';
 import { camelizeName } from '@/camlize_name';
 import { Country } from '@/view_models/Country';
-
-export interface SubmittedAddress {
-	addressData: AddressFormData,
-	addressType: string
-}
+import { AddressValidation } from '@/view_models/Validation';
 
 export default Vue.extend( {
 	name: 'AddressModal',
@@ -88,61 +84,61 @@ export default Vue.extend( {
 				salutation: {
 					name: 'salutation',
 					value: '',
-					pattern: '^(Herr|Frau)$',
+					pattern: this.$props.addressValidationPatterns.salutation,
 					optionalField: false,
 				},
 				title: {
 					name: 'title',
 					value: '',
-					pattern: '',
+					pattern: this.$props.addressValidationPatterns.title,
 					optionalField: true,
 				},
 				companyName: {
 					name: 'companyName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.companyName,
 					optionalField: false,
 				},
 				firstName: {
 					name: 'firstName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.firstName,
 					optionalField: false,
 				},
 				lastName: {
 					name: 'lastName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.lastName,
 					optionalField: false,
 				},
 				street: {
 					name: 'street',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.street,
 					optionalField: false,
 				},
 				city: {
 					name: 'city',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.city,
 					optionalField: false,
 				},
 				postcode: {
 					name: 'postcode',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.postcode,
 					optionalField: false,
 				},
 				country: {
 					name: 'country',
 					value: 'DE',
-					pattern: '',
+					pattern: this.$props.addressValidationPatterns.country,
 					optionalField: false,
 				},
 				email: {
 					name: 'email',
 					value: '',
-					pattern: '^(.+)@(.+)\\.(.+)$',
+					pattern: this.$props.addressValidationPatterns.email,
 					optionalField: false,
 				},
 			},
@@ -159,6 +155,7 @@ export default Vue.extend( {
 		countries: Array as () => Array<Country>,
 		hasErrored: Boolean,
 		hasSucceeded: Boolean,
+		addressValidationPatterns: Object as () => AddressValidation,
 	},
 	computed: {
 		fieldErrors: {

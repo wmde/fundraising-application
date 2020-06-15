@@ -8,6 +8,7 @@ import App from '@/components/App.vue';
 import Component from '@/components/pages/UpdateAddress.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
+import { addressValidationPatterns } from '@/validation';
 
 const PAGE_IDENTIFIER = 'update-address';
 const FORM_NAMESPACE = 'update_address';
@@ -43,6 +44,7 @@ new Vue( {
 				updateAddressURL: pageData.applicationVars.urls.updateAddress,
 				isCompany: pageData.applicationVars.isCompany,
 				countries: pageData.applicationVars.countries,
+				addressValidationPatterns: addressValidationPatterns,
 			},
 		} ),
 		h( Sidebar, {

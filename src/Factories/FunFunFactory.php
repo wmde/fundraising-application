@@ -1201,7 +1201,8 @@ class FunFunFactory implements ServiceProviderInterface {
 					]
 				)
 			),
-			$this->getUrlGenerator()
+			$this->getUrlGenerator(),
+			json_decode( $this->getCountries() )->countries
 		);
 	}
 

@@ -24,15 +24,16 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { Donation } from '@/view_models/Donation';
 
 export default Vue.extend( {
 	name: 'MembershipInfo',
-	props: [
-		'confirmationData',
-	],
+	props: {
+		donation: Object as () => Donation,
+	},
 	computed: {
 		membershipApplicationUrl(): string {
-			const donation = this.confirmationData.donation;
+			const donation = this.$props.donation;
 			return `apply-for-membership?donationId=${donation.id}&donationAccessToken=${donation.accessToken}&type=sustaining`;
 		},
 	},

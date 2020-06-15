@@ -5,14 +5,14 @@ import { DEFAULT_LOCALE } from '@/locales';
 import { createStore } from '@/store/donor_update_store';
 import { clearPersistentData } from '@/store/create_data_persister';
 import LocalStorageRepository from '@/store/LocalStorageRepository';
-
 import App from '@/components/App.vue';
-
 import Component from '@/components/pages/DonationConfirmation.vue';
+import { addressValidationPatterns } from '@/validation';
+import { Country } from '@/view_models/Country';
+import { Donation } from '@/view_models/Donation';
 
 const PAGE_IDENTIFIER = 'donation-confirmation',
 	IS_FULLWIDTH_PAGE = true,
-	ADDRESS_UPDATE_COUNTRIES = [ 'DE', 'AT', 'CH', 'BE', 'IT', 'LI', 'LU' ],
 	LOCAL_STORAGE_DELETION_NAMESPACES = [ 'donation_form', 'membership_application' ];
 
 Vue.config.productionTip = false;
@@ -20,7 +20,15 @@ Vue.use( VueI18n );
 
 clearPersistentData( new LocalStorageRepository(), LOCAL_STORAGE_DELETION_NAMESPACES );
 
-const pageData = new PageDataInitializer<any>( '#app' );
+interface DonationConfirmationModel {
+	urls: { [ key: string ]: string },
+	countries: Array<Country>,
+	donation: Donation,
+	address: Object,
+	addressType: String,
+}
+
+const pageData = new PageDataInitializer<DonationConfirmationModel>( '#app' );
 const store = createStore();
 
 const i18n = new VueI18n( {
@@ -43,11 +51,16 @@ new Vue( {
 	[
 		h( Component, {
 			props: {
-				confirmationData: pageData.applicationVars,
-				countries: ADDRESS_UPDATE_COUNTRIES,
+				donation: pageData.applicationVars.donation,
+				address: pageData.applicationVars.address,
+				addressType: pageData.applicationVars.addressType,
+				countries: pageData.applicationVars.countries,
 				validateAddressUrl: pageData.applicationVars.urls.validateAddress,
 				validateEmailUrl: pageData.applicationVars.urls.validateEmail,
 				updateDonorUrl: pageData.applicationVars.urls.updateDonor,
+				cancelDonationUrl: pageData.applicationVars.urls.cancelDonation,
+				postCommentUrl: pageData.applicationVars.urls.postComment,
+				addressValidationPatterns: addressValidationPatterns,
 			},
 		} ),
 	] ),

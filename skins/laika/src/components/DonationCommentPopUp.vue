@@ -1,7 +1,7 @@
 <template>
 	<form id="laika-comment" name="laika-comment" v-on:submit.prevent="postComment" method="post" ref="form" class="modal-card">
-		<input type="hidden" name="donationId" :value="confirmationData.donation.id"/>
-		<input type="hidden" name="updateToken" :value="confirmationData.donation.updateToken">
+		<input type="hidden" name="donationId" :value="donation.id"/>
+		<input type="hidden" name="updateToken" :value="donation.updateToken">
 		<input type="hidden" name="isAnonymous" value="1" />
 		<div v-if="commentHasBeenSubmitted">
 			<p v-html="serverResponse"></p>
@@ -47,6 +47,7 @@ import Vue from 'vue';
 import axios, { AxiosResponse } from 'axios';
 import { trackDynamicForm, trackFormSubmission } from '@/tracking';
 import { addressTypeFromName, AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { Donation } from '@/view_models/Donation';
 
 export default Vue.extend( {
 	name: 'DonationCommentPopUp',
@@ -59,13 +60,15 @@ export default Vue.extend( {
 			serverResponse: '',
 		};
 	},
-	props: [
-		'confirmationData',
-	],
+	props: {
+		donation: Object as () => Donation,
+		addressType: String,
+		postCommentUrl: String,
+	},
 	computed: {
 		showPublishAuthor: {
 			get(): boolean {
-				return addressTypeFromName( this.$props.confirmationData.addressType ) !== AddressTypeModel.ANON;
+				return addressTypeFromName( this.$props.addressType ) !== AddressTypeModel.ANON;
 			},
 		},
 	},
@@ -77,7 +80,7 @@ export default Vue.extend( {
 			let form = this.$refs.form as HTMLFormElement;
 			trackFormSubmission( form );
 			const jsonForm = new FormData( form );
-			axios.post( this.$props.confirmationData.urls.postComment, jsonForm )
+			axios.post( this.$props.postCommentUrl, jsonForm )
 				.then( ( validationResult: AxiosResponse<any> ) => {
 					if ( validationResult.data.status === 'OK' ) {
 						this.$data.commentErrored = false;

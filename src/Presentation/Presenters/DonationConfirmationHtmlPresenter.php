@@ -18,16 +18,18 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  */
 class DonationConfirmationHtmlPresenter {
 
-	private $template;
-	private $donationMembershipApplicationAdapter;
-	private $urlGenerator;
-	private $donorDataFormatter;
+	private TwigTemplate $template;
+	private DonationMembershipApplicationAdapter $donationMembershipApplicationAdapter;
+	private UrlGenerator $urlGenerator;
+	private DonorDataFormatter $donorDataFormatter;
+	private array $countries;
 
-	public function __construct( TwigTemplate $template, UrlGenerator $urlGenerator ) {
+	public function __construct( TwigTemplate $template, UrlGenerator $urlGenerator, array $countries ) {
 		$this->template = $template;
 		$this->urlGenerator = $urlGenerator;
 		$this->donationMembershipApplicationAdapter = new DonationMembershipApplicationAdapter();
 		$this->donorDataFormatter = new DonorDataFormatter();
+		$this->countries = $countries;
 	}
 
 	public function present( Donation $donation, string $updateToken, string $accessToken,
@@ -55,6 +57,7 @@ class DonationConfirmationHtmlPresenter {
 				'updateToken' => $updateToken,
 				'accessToken' => $accessToken
 			],
+			'countries' => $this->countries,
 			'addressType' => $this->donorDataFormatter->getAddressType( $donation ),
 			'address' => $this->donorDataFormatter->getAddressArguments( $donation ),
 			'bankData' => $this->donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),
