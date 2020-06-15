@@ -9,6 +9,7 @@ use Monolog\Handler\ErrorLogHandler;
 use Monolog\Logger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DevelopmentInternalErrorHtmlPresenter;
 
 class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 
@@ -20,12 +21,19 @@ class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 		$this->setPaypalLogger( $factory );
 		$this->setSofortLogger( $factory );
 		$this->setDoctrineConfiguration( $factory );
+		$this->setErrorPageHtmlPresenter( $factory );
 	}
 
 	private function setApplicationLogger( FunFunFactory $factory, array $loggingConfig ) {
 		$factory->setLogger(
 			( new LoggerFactory( $loggingConfig ) )
 				->getLogger()
+		);
+	}
+
+	private function setErrorPageHtmlPresenter( FunFunFactory $factory ) {
+		$factory->setInternalErrorHtmlPresenter(
+			new DevelopmentInternalErrorHtmlPresenter()
 		);
 	}
 

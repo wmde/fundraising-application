@@ -13,7 +13,8 @@ Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
 interface ErrorModel {
-	message: string
+	message: string,
+	trace: string,
 }
 
 const pageData = new PageDataInitializer<ErrorModel>( '#app' );
@@ -37,6 +38,7 @@ new Vue( {
 		h( Component, {
 			props: {
 				errorMessage: pageData.applicationVars.message,
+				errorTrace: pageData.applicationVars.trace,
 			},
 		} ),
 		h( Sidebar, {

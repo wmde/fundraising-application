@@ -83,7 +83,7 @@ class Bootstrap {
 
 		$app->error( function ( AccessDeniedException $e ) use ( $ffFactory ) {
 			return new Response(
-				$ffFactory->newAccessDeniedHtmlPresenter()->present( $e ),
+				$ffFactory->newAccessDeniedHtmlPresenter()->present( $e->getMessage() ),
 				403,
 				[ 'X-Status-Code' => 403 ]
 			);
@@ -130,7 +130,7 @@ class Bootstrap {
 			}
 
 			return new Response(
-				$ffFactory->newInternalErrorHtmlPresenter()->present( $e ),
+				$ffFactory->getInternalErrorHtmlPresenter()->present( $e ),
 				$code
 			);
 		} );

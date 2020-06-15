@@ -7,9 +7,10 @@
 
 		<pre v-if="errorMessage">
 			{{ errorMessage }}
+			{{ errorTrace }}
 		</pre>
 
-		<p>
+		<p :class="{ 'has-margin-top-18' : !errorMessage }">
 			<a href="/"><span v-html="$t( 'error_pages_return_to_donation' )"></span></a>
 		</p>
 	</div>
@@ -18,6 +19,6 @@
 <script>
 export default {
 	name: 'Error',
-	props: [ 'errorMessage' ],
+	props: [ 'errorMessage', 'errorTrace' ],
 };
 </script>
