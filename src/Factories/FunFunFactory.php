@@ -157,7 +157,6 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
-use WMDE\Fundraising\Frontend\Validation\TemplateNameValidator;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationAuthorizer;
 use WMDE\Fundraising\MembershipContext\Authorization\ApplicationTokenFetcher;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipTokenGenerator;
@@ -298,10 +297,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		$container['mail_validator'] = function() {
 			return new EmailValidator( new InternetDomainNameValidator() );
-		};
-
-		$container['template_name_validator'] = function() {
-			return new TemplateNameValidator( $this->getSkinTwig() );
 		};
 
 		$container['contact_validator'] = function() {
@@ -547,10 +542,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function getEmailValidator(): EmailValidator {
 		return $this->pimple['mail_validator'];
-	}
-
-	public function getTemplateNameValidator(): TemplateNameValidator {
-		return $this->pimple['template_name_validator'];
 	}
 
 	public function newAddSubscriptionHtmlPresenter(): AddSubscriptionHtmlPresenter {
