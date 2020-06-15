@@ -30,7 +30,7 @@ class DonationFormPresenter {
 		$this->isCustomDonationAmountValidator = $isCustomDonationAmountValidator;
 	}
 
-	public function present( Euro $amount, string $paymentType, int $paymentInterval, bool $paymentDataIsValid,
+	public function present( Euro $amount, string $paymentType, ?int $paymentInterval, bool $paymentDataIsValid,
 							 DonationTrackingInfo $trackingInfo, ?string $addressType, array $urlEndpoints ): string {
 		return $this->template->render( [
 			'initialFormValues' => [

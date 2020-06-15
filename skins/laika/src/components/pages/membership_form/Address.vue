@@ -8,7 +8,11 @@
 		<AutofillHandler @autofill="onAutofill">
 			<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"/>
 			<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"/>
-			<receipt-opt-out :message="$t( 'receipt_needed_membership_page' )" v-on:opted-out="setReceiptOptedOut( $event )"/>
+			<receipt-opt-out
+					:message="$t( 'receipt_needed_membership_page' )"
+					:initial-receipt-needed="receiptNeeded"
+					v-on:opted-out="setReceiptOptedOut( $event )"
+			/>
 			<date-of-birth v-if="isPerson"/>
 			<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"/>
 		</AutofillHandler>
@@ -141,6 +145,9 @@ export default Vue.extend( {
 			'email',
 			'isPerson',
 		] ),
+		receiptNeeded(): Boolean {
+			return !this.$store.state[ NS_MEMBERSHIP_ADDRESS ].receiptOptOut;
+		},
 	},
 	mounted() {
 		Object.entries( this.$store.state[ NS_MEMBERSHIP_ADDRESS ].values ).forEach( ( entry ) => {

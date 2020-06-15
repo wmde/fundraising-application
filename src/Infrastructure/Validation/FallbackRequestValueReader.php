@@ -43,12 +43,12 @@ class FallbackRequestValueReader {
 		return '';
 	}
 
-	public function getInterval(): int {
+	public function getInterval(): ?int {
 		if ($this->request->get( 'periode' ) !== null ) {
 			$this->logDeprecationWarning( 'periode' );
-			return intval( $this->request->get( 'periode', 0 ) );
+			return intval( $this->request->get( 'periode' ) );
 		}
-		return 0;
+		return null;
 	}
 
 	private function logDeprecationWarning( string $deprecatedParameterName ): void {

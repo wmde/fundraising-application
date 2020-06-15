@@ -20,7 +20,12 @@
 		<AutofillHandler @autofill="onAutofill" >
 			<name v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
 			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
-			<receipt-opt-out :message="$t( 'receipt_needed_donation_page' )" v-if="addressTypeIsNotAnon" v-on:opted-out="setReceiptOptedOut( $event )"/>
+			<receipt-opt-out
+					:message="$t( 'receipt_needed_donation_page' )"
+					:initial-receipt-needed="receiptNeeded"
+					v-if="addressTypeIsNotAnon"
+					v-on:opted-out="setReceiptOptedOut( $event )"
+			/>
 			<email v-if="addressTypeIsNotAnon" :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"></email>
 			<newsletter-opt-in v-if="addressTypeIsNotAnon"></newsletter-opt-in>
 		</AutofillHandler>
@@ -165,6 +170,9 @@ export default Vue.extend( {
 		] ),
 		addressTypeName(): string {
 			return addressTypeName( this.$store.state.address.addressType );
+		},
+		receiptNeeded(): Boolean {
+			return !this.$store.state.address.receiptOptOut;
 		},
 	},
 	mounted() {

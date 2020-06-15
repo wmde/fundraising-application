@@ -55,6 +55,8 @@ export const actions = {
 			context.commit( SET_DATE, initialData.date );
 		}
 
+		context.commit( SET_RECEIPT_OPTOUT, initialData.receiptOptOut );
+
 		initialData.fields.forEach( ( field: FieldInitialization ) => {
 			context.commit( SET_ADDRESS_FIELD, { name: field.name, value: field.value } );
 			context.commit( SET_ADDRESS_FIELD_VALIDITY, { name: field.name, validity: field.validity } );

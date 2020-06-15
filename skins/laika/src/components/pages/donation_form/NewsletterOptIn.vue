@@ -23,6 +23,9 @@ export default Vue.extend( {
 			newsletterOptIn: false,
 		};
 	},
+	mounted() {
+		this.$data.newsletterOptIn = this.$store.state.address.newsletterOptIn;
+	},
 	methods: {
 		setNewsletterOptIn: function () {
 			this.$store.dispatch( action( NS_ADDRESS, setNewsletterOptIn ), this.$data.newsletterOptIn );

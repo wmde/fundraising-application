@@ -14,10 +14,10 @@ export function trackFormSubmission( formElement: HTMLFormElement ) {
 	_paq.push( [ 'FormAnalytics::trackFormSubmit', formElement ] );
 }
 
-export function trackFormFieldRestored( field: string, value: string ) {
-	_paq.push( [ 'trackEvent', 'Form Field Restored', field, value ] );
+export function trackFormFieldRestored( formName: string, formFieldName: string ) {
+	_paq.push( [ 'trackEvent', 'Form Field Restored', formName, formFieldName ] );
 }
 
 export function trackFormValidationErrors( formName: string, formFieldName: string ) {
-	_paq.push( [ 'trackEvent', formName, formFieldName ] );
+	_paq.push( [ 'trackEvent', 'Form Field Invalid', formName, formFieldName ] );
 }

@@ -110,6 +110,8 @@ export const actions = {
 		} else {
 			context.commit( SET_VALIDITY, { name: 'addressType', value: Validity.INCOMPLETE } );
 		}
+		context.commit( SET_NEWSLETTER_OPTIN, initialValues.newsletterOptIn );
+		context.commit( SET_RECEIPT_OPTOUT, initialValues.receiptOptOut );
 		context.commit( INITIALIZE_ADDRESS, initialValues.fields );
 	},
 
