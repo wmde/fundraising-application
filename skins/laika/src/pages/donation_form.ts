@@ -19,7 +19,7 @@ import LocalStorageRepository from '@/store/LocalStorageRepository';
 import { initializeAddress } from '@/store/address/actionTypes';
 import { Country } from '@/view_models/Country';
 import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
-import { addressValidationPatterns } from '@/validation';
+import { AddressValidation } from '@/view_models/Validation';
 
 const PAGE_IDENTIFIER = 'donation-form';
 const FORM_NAMESPACE = 'donation_form';
@@ -35,7 +35,8 @@ interface DonationFormModel {
 	tracking: Array<number>,
 	countries: Array<Country>,
 	urls: any,
-	userDataKey: string
+	userDataKey: string,
+	addressValidationPatterns: AddressValidation
 }
 
 const pageData = new PageDataInitializer<DonationFormModel>( '#app' );
@@ -101,7 +102,7 @@ dataPersister.decryptInitialValues( persistenceItems ).then( () => {
 						paymentTypes: pageData.applicationVars.paymentTypes,
 						countries: pageData.applicationVars.countries,
 						trackingData: pageData.applicationVars.tracking,
-						addressValidationPatterns: addressValidationPatterns,
+						addressValidationPatterns: pageData.applicationVars.addressValidationPatterns,
 						startPage: paymentDataComplete ? 'AddressPage' : 'PaymentPage',
 					},
 				} ),

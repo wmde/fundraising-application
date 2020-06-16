@@ -284,7 +284,10 @@ class Routes {
 			'contact/get-in-touch',
 			function () use ( $ffFactory ) {
 				return $ffFactory->getLayoutTemplate( 'Contact_Form.html.twig' )->render(
-					[ 'contact_categories' => $ffFactory->getGetInTouchCategories() ]
+					[
+						'contact_categories' => $ffFactory->getGetInTouchCategories(),
+						'contactFormValidationPatterns' => json_decode( $ffFactory->getValidationRules() )->contactForm,
+					]
 				);
 			}
 		)->bind( self::GET_IN_TOUCH );

@@ -1048,13 +1048,19 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function newAddressValidator(): AddressValidator {
 		$countries = json_decode( $this->getCountries() )->countries;
+		$validation = json_decode( $this->getValidationRules() )->address;
 
 		$postcodeValidation = [];
 		foreach ( $countries as $country ) {
 			$postcodeValidation[$country->countryCode] = "/{$country->postCodeValidation}/";
 		}
 
-		return new AddressValidator( $postcodeValidation );
+		$addressValidation = [];
+		foreach ( $validation as $key => $pattern ) {
+			$addressValidation[$key] = "/{$pattern}/";
+		}
+
+		return new AddressValidator( $postcodeValidation, $addressValidation );
 	}
 
 	public function newUpdateDonorUseCase( string $updateToken, string $accessToken ): UpdateDonorUseCase {
@@ -1202,7 +1208,8 @@ class FunFunFactory implements ServiceProviderInterface {
 				)
 			),
 			$this->getUrlGenerator(),
-			json_decode( $this->getCountries() )->countries
+			json_decode( $this->getCountries() )->countries,
+			json_decode( $this->getValidationRules() )->address,
 		);
 	}
 
@@ -1380,25 +1387,36 @@ class FunFunFactory implements ServiceProviderInterface {
 				// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 				'paymentIntervals' => [0, 1, 3, 6, 12],
 				'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
-				'countries' => json_decode( $this->getCountries() )->countries
+				'countries' => json_decode( $this->getCountries() )->countries,
+				'addressValidationPatterns' => json_decode( $this->getValidationRules() )->address,
 			]
 		);
 	}
 
 	public function getMembershipApplicationFormTemplate(): TwigTemplate {
+		$validation = json_decode( $this->getValidationRules() );
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
 			// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 			'paymentIntervals' => [1, 3, 6, 12],
 			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
-			'countries' => json_decode( $this->getCountries() )->countries
+			'countries' => json_decode( $this->getCountries() )->countries,
+			'addressValidationPatterns' => $validation->address,
+			'dateOfBirthValidationPattern' => $validation->dateOfBirth,
 		] );
 	}
 
 	public function getCountries(): string {
 		return ( new JsonStringReader(
 			$this->getI18nDirectory() . '/data/countries.json',
+			new SimpleFileFetcher()
+		) )->readAndValidateJson();
+	}
+
+	public function getValidationRules(): string {
+		return ( new JsonStringReader(
+			$this->getI18nDirectory() . '/data/validation.json',
 			new SimpleFileFetcher()
 		) )->readAndValidateJson();
 	}

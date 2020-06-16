@@ -7,9 +7,9 @@ import { clearPersistentData } from '@/store/create_data_persister';
 import LocalStorageRepository from '@/store/LocalStorageRepository';
 import App from '@/components/App.vue';
 import Component from '@/components/pages/DonationConfirmation.vue';
-import { addressValidationPatterns } from '@/validation';
 import { Country } from '@/view_models/Country';
 import { Donation } from '@/view_models/Donation';
+import { AddressValidation } from '@/view_models/Validation';
 
 const PAGE_IDENTIFIER = 'donation-confirmation',
 	IS_FULLWIDTH_PAGE = true,
@@ -26,6 +26,7 @@ interface DonationConfirmationModel {
 	donation: Donation,
 	address: Object,
 	addressType: String,
+	addressValidationPatterns: AddressValidation,
 }
 
 const pageData = new PageDataInitializer<DonationConfirmationModel>( '#app' );
@@ -60,7 +61,7 @@ new Vue( {
 				updateDonorUrl: pageData.applicationVars.urls.updateDonor,
 				cancelDonationUrl: pageData.applicationVars.urls.cancelDonation,
 				postCommentUrl: pageData.applicationVars.urls.postComment,
-				addressValidationPatterns: addressValidationPatterns,
+				addressValidationPatterns: pageData.applicationVars.addressValidationPatterns,
 			},
 		} ),
 	] ),

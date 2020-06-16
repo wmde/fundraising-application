@@ -23,13 +23,15 @@ class DonationConfirmationHtmlPresenter {
 	private UrlGenerator $urlGenerator;
 	private DonorDataFormatter $donorDataFormatter;
 	private array $countries;
+	private object $validation;
 
-	public function __construct( TwigTemplate $template, UrlGenerator $urlGenerator, array $countries ) {
+	public function __construct( TwigTemplate $template, UrlGenerator $urlGenerator, array $countries, object $validation ) {
 		$this->template = $template;
 		$this->urlGenerator = $urlGenerator;
 		$this->donationMembershipApplicationAdapter = new DonationMembershipApplicationAdapter();
 		$this->donorDataFormatter = new DonorDataFormatter();
 		$this->countries = $countries;
+		$this->validation = $validation;
 	}
 
 	public function present( Donation $donation, string $updateToken, string $accessToken,
@@ -58,6 +60,7 @@ class DonationConfirmationHtmlPresenter {
 				'accessToken' => $accessToken
 			],
 			'countries' => $this->countries,
+			'addressValidationPatterns' => $this->validation,
 			'addressType' => $this->donorDataFormatter->getAddressType( $donation ),
 			'address' => $this->donorDataFormatter->getAddressArguments( $donation ),
 			'bankData' => $this->donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),

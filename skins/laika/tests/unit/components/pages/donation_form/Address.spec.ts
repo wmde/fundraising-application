@@ -17,7 +17,7 @@ import { action } from '@/store/util';
 import { FeatureTogglePlugin } from '@/FeatureToggle';
 import countries from '@/../tests/data/countries';
 import { Validity } from '@/view_models/Validity';
-import { addressValidationPatterns } from '@/validation';
+import { addressValidationPatterns } from '../../../../data/validation';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );

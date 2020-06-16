@@ -6,7 +6,7 @@ import { createStore } from '@/store/membership_store';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { action } from '@/store/util';
 import { setDate } from '@/store/membership_address/actionTypes';
-import { dateOfBirthValidationPattern } from '@/validation';
+import { dateOfBirthValidationPattern } from '../../../../data/validation';
 
 const localVue = createLocalVue();
 localVue.use( Buefy );

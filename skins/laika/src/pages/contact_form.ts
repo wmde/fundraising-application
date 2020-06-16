@@ -2,21 +2,22 @@ import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
-import { contactFormValidationPatterns } from '@/validation';
 import App from '@/components/App.vue';
 import Component from '@/components/pages/Contact.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
+import { ContactFormValidation } from '@/view_models/Validation';
 
 const PAGE_IDENTIFIER = 'contact-form';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
-interface ErrorModel {
-	message: string
+interface ContactFormModel {
+	message: string,
+	contactFormValidationPatterns: ContactFormValidation
 }
 
-const pageData = new PageDataInitializer<ErrorModel>( '#app' );
+const pageData = new PageDataInitializer<ContactFormModel>( '#app' );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
@@ -37,7 +38,7 @@ new Vue( {
 		h( Component, {
 			props: {
 				contactData: pageData.applicationVars,
-				validationPatterns: contactFormValidationPatterns,
+				validationPatterns: pageData.applicationVars.contactFormValidationPatterns,
 			},
 		} ),
 		h( Sidebar, {

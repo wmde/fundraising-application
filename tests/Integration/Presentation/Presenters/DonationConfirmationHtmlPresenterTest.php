@@ -32,7 +32,8 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 		$presenter = new DonationConfirmationHtmlPresenter(
 			$this->newTwigTemplateMock( $expectedParameters ),
 			new FakeUrlGenerator(),
-			[]
+			[],
+			(object) []
 		);
 
 		$donation = ValidDonation::newBookedAnonymousPayPalDonation();
@@ -70,6 +71,7 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 				'addComment' => '/such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'
 			],
 			'countries' => [],
+			'addressValidationPatterns' => (object) [],
 			'addressType' => 'anonym'
 
 		];
@@ -91,7 +93,8 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 		$presenter = new DonationConfirmationHtmlPresenter(
 			$this->newTwigTemplateMock( $expectedParameters ),
 			new FakeUrlGenerator(),
-			[]
+			[],
+			(object) []
 		);
 
 		$donation = ValidDonation::newIncompleteAnonymousPayPalDonation();

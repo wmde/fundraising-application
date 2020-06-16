@@ -125,14 +125,14 @@ export default Vue.extend( {
 				firstname: {
 					name: 'name',
 					value: this.$props.contactData.firstname ? this.$props.contactData.firstname : '',
-					pattern: this.$props.validationPatterns.firstname,
+					pattern: this.$props.validationPatterns.firstName,
 					optionalField: true,
 					validity: Validity.VALID,
 				},
 				lastname: {
 					name: 'lastname',
 					value: this.$props.contactData.lastname ? this.$props.contactData.lastname : '',
-					pattern: this.$props.validationPatterns.lastname,
+					pattern: this.$props.validationPatterns.lastName,
 					optionalField: true,
 					validity: Validity.VALID,
 				},
