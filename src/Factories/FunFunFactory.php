@@ -585,13 +585,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		) )->readAndValidateJson();
 	}
 
-	public function getMessages(): string {
-		return ( new JsonStringReader(
-			$this->getI18nDirectory() . '/messages/messages.json',
-			new SimpleFileFetcher()
-		) )->readAndValidateJson();
-	}
-
 	public function getSupportersList(): string {
 		return ( new JsonStringReader(
 			$this->getI18nDirectory() . '/data/supporters.json',
@@ -1386,7 +1379,6 @@ class FunFunFactory implements ServiceProviderInterface {
 				// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 				'paymentIntervals' => [0, 1, 3, 6, 12],
 				'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
-				'messages' => $this->getMessages(),
 				'countries' => json_decode( $this->getCountries() )->countries
 			]
 		);
@@ -1399,7 +1391,6 @@ class FunFunFactory implements ServiceProviderInterface {
 			// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 			'paymentIntervals' => [1, 3, 6, 12],
 			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
-			'messages' => $this->getMessages(),
 			'countries' => json_decode( $this->getCountries() )->countries
 		] );
 	}
