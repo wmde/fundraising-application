@@ -1,7 +1,7 @@
 {% if cancellationSuccessful %}
-	{$ 'membership-cancellation-header'|trans({}) $}
-	{$ 'membership-cancellation-text'|trans( { '%membership.id%': membershipId } )|raw $}
+	{$ 'membership-cancellation-header' $}
+	{$ 'membership-cancellation-text'| raw $}
 {% else %}
-	{$ 'membership-cancellation-failed-header'|trans({}) $}
-	{$ 'membership-cancellation-failed-text'|trans( { '%membership.id%': membershipId } )|raw $}
+	{$ 'membership-cancellation-failed-header' $}
+	{$ 'membership-cancellation-failed-text' | raw $}
 {% endif %}

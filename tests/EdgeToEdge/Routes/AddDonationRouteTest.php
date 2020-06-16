@@ -8,6 +8,7 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
@@ -16,10 +17,13 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedMessageTranslator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
@@ -179,7 +183,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->request(
 				'POST',
@@ -188,18 +192,27 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			);
 			$client->followRedirect();
 
-			$response = $client->getResponse()->getContent();
+			$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-			$this->assertStringContainsString( '5,51 €', $response );
-			$this->assertStringContainsString( 'donation.interval: 0', $response );
-			$this->assertStringContainsString( 'DE12500105170648489890', $response );
-			$this->assertStringContainsString( 'INGDDEFFXXX', $response );
-			$this->assertStringContainsString( 'ING-DiBa', $response );
-			$this->assertStringContainsString( 'Prof. Dr. Karla Kennichnich', $response );
-			$this->assertStringContainsString( 'Lehmgasse 12', $response );
-			$this->assertStringContainsString( '<span id="confirm-postcode">12345</span> <span id="confirm-city">Einort</span>', $response );
-			$this->assertStringContainsString( 'karla@kennichnich.de', $response );
-			$this->assertStringContainsString( 'send-info', $response );
+			$this->assertObjectHasAttribute( 'donation', $applicationVars );
+			$this->assertSame( 5.51, $applicationVars->donation->amount );
+			$this->assertSame( 0, $applicationVars->donation->interval );
+			$this->assertSame( 'BEZ', $applicationVars->donation->paymentType );
+			$this->assertTrue( $applicationVars->donation->optsIntoNewsletter );
+			$this->assertTrue( $applicationVars->donation->optsIntoDonationReceipt );
+
+			$this->assertObjectHasAttribute( 'bankData', $applicationVars );
+			$this->assertSame( 'DE12500105170648489890', $applicationVars->bankData->iban );
+			$this->assertSame( 'INGDDEFFXXX', $applicationVars->bankData->bic );
+			$this->assertSame( 'ING-DiBa', $applicationVars->bankData->bankname );
+
+			$this->assertObjectHasAttribute( 'address', $applicationVars );
+			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $applicationVars->address->fullName );
+			$this->assertSame( 'Lehmgasse 12', $applicationVars->address->streetAddress );
+			$this->assertSame( '12345', $applicationVars->address->postalCode );
+			$this->assertSame( 'Einort', $applicationVars->address->city );
+			$this->assertSame( 'DE', $applicationVars->address->countryCode );
+			$this->assertSame( 'karla@kennichnich.de', $applicationVars->address->email );
 		} );
 	}
 
@@ -403,6 +416,12 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
+			$translator = $this->createMock( TranslatorInterface::class );
+			$translator->expects( $this->once() )
+				->method( 'trans' )
+				->with( 'paypal_item_name_donation' )
+				->willReturn( 'Ihre Spende' );
+			$factory->setPaymentProviderItemsTranslator( $translator );
 
 			$client->followRedirects( false );
 
@@ -414,7 +433,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 			$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
-			$this->assertStringContainsString( 'item_name=item_name_donation', $response->getContent() );
+			$this->assertStringContainsString( 'item_name=Ihre+Spende', $response->getContent() );
 		} );
 	}
 
@@ -833,5 +852,11 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION );
 			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
 		} );
+	}
+
+	private function getDataApplicationVars( Crawler $crawler ): object {
+		/** @var \DOMElement $appElement */
+		$appElement = $crawler->filter( '#app' )->getNode( 0 );
+		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
 	}
 }

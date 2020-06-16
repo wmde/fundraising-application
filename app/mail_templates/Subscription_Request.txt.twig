@@ -1,6 +1,6 @@
 {$ mail_content('subscription_request', {
     'confirm_subscription_link': url( 'confirm-subscription', { confirmationCode: subscription.confirmationCode } ),
-    'day_of_the_week': "now"|date("N")|trans({}, 'daysOfTheWeek')
+    'day_of_the_week': day_of_the_week
 }) $}
 
 {$ mail_content('name_head_of_fundraising') $}

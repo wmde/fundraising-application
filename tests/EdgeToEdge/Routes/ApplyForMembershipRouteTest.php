@@ -14,6 +14,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineEntities\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
@@ -404,7 +405,14 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
-		$client = $this->createClient();
+		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+			$translator = $this->createMock( TranslatorInterface::class );
+			$translator->expects( $this->once() )
+				->method( 'trans' )
+				->with( 'paypal_item_name_membership' )
+				->willReturn( 'Ihre Mitgliedschaft bei Wikimedia' );
+			$factory->setPaymentProviderItemsTranslator( $translator );
+		} );
 		$client->followRedirects( false );
 
 		$client->request(
@@ -415,7 +423,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertSame( 302, $response->getStatusCode() );
-		$this->assertStringContainsString( 'item_name=item_name_membership', $response->getContent() );
+		$this->assertStringContainsString( 'item_name=Ihre+Mitgliedschaft+bei+Wikimedia', $response->getContent() );
 	}
 
 	public function testCommasInStreetNamesAreRemoved(): void {

@@ -21,25 +21,4 @@ class ValidationController {
 		] );
 	}
 
-	// phpcs:disable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment
-	/**
-	 * @deprecated This is not used by client side code
-	 */
-	// phpcs:enable SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment
-	public function validateDonationPayment( Request $request, FunFunFactory $ffFactory ): Response {
-		$amount = (float) $ffFactory->newDecimalNumberFormatter()->parse( $request->get( 'amount', '0' ) );
-		$validator = $ffFactory->newPaymentDataValidator();
-		$validationResult = $validator->validate( $amount, (string) $request->get( 'paymentType', '' ) );
-
-		if ( $validationResult->isSuccessful() ) {
-			return new JsonResponse( [ 'status' => 'OK' ] );
-		}
-
-		$errors = [];
-		foreach( $validationResult->getViolations() as $violation ) {
-			$errors[$violation->getSource()] = $ffFactory->getTranslator()->trans( $violation->getMessageIdentifier() );
-		}
-		return new JsonResponse( [ 'status' => 'ERR', 'messages' => $errors ] );
-	}
-
 }

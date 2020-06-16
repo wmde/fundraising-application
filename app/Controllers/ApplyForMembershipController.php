@@ -247,8 +247,8 @@ class ApplyForMembershipController {
 		foreach ( $validationResult->getViolations() as $constraintViolationSource => $constraintViolation ) {
 			$formattedConstraintViolations['validation_errors'][] = sprintf(
 				'Validation for field "%s" failed: "%s"',
-				$this->ffFactory->getTranslator()->trans( $constraintViolationSource ),
-				$this->ffFactory->getTranslator()->trans( $constraintViolation )
+				$constraintViolationSource,
+				$constraintViolation
 			);
 		}
 		$formattedConstraintViolations['request_data'] = $httpRequest->request->all();

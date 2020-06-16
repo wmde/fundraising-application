@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use Symfony\Component\Translation\TranslatorInterface;
 use WMDE\FunValidators\ValidationResponse;
 use WMDE\FunValidators\ConstraintViolation;
 
@@ -14,12 +13,6 @@ use WMDE\FunValidators\ConstraintViolation;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class AddSubscriptionJsonPresenter {
-
-	private $translator;
-
-	public function __construct( TranslatorInterface $translator ) {
-		$this->translator = $translator;
-	}
 
 	public function present( ValidationResponse $subscriptionResponse ): array {
 		if ( $subscriptionResponse->isSuccessful() ) {
@@ -37,12 +30,7 @@ class AddSubscriptionJsonPresenter {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */
 		foreach ( $response->getValidationErrors() as $constraintViolation ) {
-			$message = $this->translator->trans(
-				$constraintViolation->getMessageIdentifier(),
-				(array) $constraintViolation,
-				'validations'
-			);
-			$errors[$constraintViolation->getSource()] = $message;
+			$errors[$constraintViolation->getSource()] = $constraintViolation->getMessageIdentifier();
 		}
 		return [ 'status' => 'ERR', 'errors' => $errors ];
 	}

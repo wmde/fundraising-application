@@ -4,37 +4,37 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
-use Symfony\Component\Translation\Translator;
-use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer
  */
-class MembershipConfirmationMailSubjectRendererTest extends \PHPUnit\Framework\TestCase {
+class MembershipConfirmationMailSubjectRendererTest extends TestCase {
 
-
-	public function testGivenPaypalPayment_defaultSubjectLineIsPrinted() {
-		$templateArguments['donation']['paymentType'] = PaymentMethod::PAYPAL;
+	public function testGivenActiveMembership_activeSubjectLineIsPrinted() {
+		$templateArguments['membershipType'] = Application::ACTIVE_MEMBERSHIP;
 		$this->assertSame(
-			'mail_subject_confirm_donation',
-			$this->newDonationConfirmationMailSubjectRenderer()->render( $templateArguments )
+			'mail_subject_confirm_membership_application_active',
+			$this->newMembershipConfirmationMailSubjectRenderer()->render( $templateArguments )
 		);
 	}
 
-	public function testGivenBankTransferPayment_bankTransferSubjectLineIsPrinted() {
-		$templateArguments['donation']['paymentType'] = PaymentMethod::BANK_TRANSFER;
+	public function testGivenSustainingMembership_sustainingSubjectLineIsPrinted() {
+		$templateArguments['membershipType'] = Application::SUSTAINING_MEMBERSHIP;
 		$this->assertSame(
-			'mail_subject_confirm_donation_promise',
-			$this->newDonationConfirmationMailSubjectRenderer()->render( $templateArguments )
+			'mail_subject_confirm_membership_application_sustaining',
+			$this->newMembershipConfirmationMailSubjectRenderer()->render( $templateArguments )
 		);
 	}
 
-	public function newDonationConfirmationMailSubjectRenderer(): DonationConfirmationMailSubjectRenderer {
-		return new DonationConfirmationMailSubjectRenderer(
-			new Translator( 'zz_ZZ' ),
-			'mail_subject_confirm_donation',
-			'mail_subject_confirm_donation_promise'
+	public function newMembershipConfirmationMailSubjectRenderer(): MembershipConfirmationMailSubjectRenderer {
+		return new MembershipConfirmationMailSubjectRenderer(
+			new FakeTranslator(),
+			'mail_subject_confirm_membership_application_active',
+			'mail_subject_confirm_membership_application_sustaining'
 		);
 	}
 }

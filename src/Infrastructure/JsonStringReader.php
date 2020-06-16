@@ -6,6 +6,9 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use FileFetcher\FileFetcher;
 
+/**
+ * @deprecated See https://phabricator.wikimedia.org/T254880
+ */
 class JsonStringReader {
 
 	private $file;

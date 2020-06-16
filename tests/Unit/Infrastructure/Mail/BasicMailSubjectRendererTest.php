@@ -4,14 +4,15 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
-use Symfony\Component\Translation\Translator;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer
  */
-class BasicMailSubjectRendererTest extends \PHPUnit\Framework\TestCase {
+class BasicMailSubjectRendererTest extends TestCase {
 
 	public function testGivenDonation_givenSubjectLineIsReturned() {
 		$templateArguments['donation']['paymentType'] = PaymentMethod::PAYPAL;
@@ -23,7 +24,7 @@ class BasicMailSubjectRendererTest extends \PHPUnit\Framework\TestCase {
 
 	public function newDonationConfirmationMailSubjectRenderer(): BasicMailSubjectRenderer {
 		return new BasicMailSubjectRenderer(
-			new Translator( 'zz_ZZ' ),
+			new FakeTranslator(),
 			'mail_subject_getintouch'
 		);
 	}

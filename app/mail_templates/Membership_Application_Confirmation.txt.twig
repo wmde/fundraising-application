@@ -7,18 +7,16 @@
 
 {$ mail_content('membership_application_confirmation/intro', {
     'formatted_amount': formattedAmount,
-    'donation_interval': paymentIntervalInMonths|trans({}, 'paymentIntervals'),
-    'membership_type': membershipType|trans({}, 'membershipTypes'),
+    'donation_interval': paymentIntervalInMonths|payment_interval,
+    'membership_type': membershipType|membership_type,
 }) $}
 
 {$ mail_content('membership_application_confirmation/contact', {
-    'membership_type': membershipType|trans({}, 'membershipTypes'),
+    'membership_type': membershipType|membership_type,
 }) $} {% if hasReceiptEnabled == false %} {$- mail_content('membership_application_confirmation/receipt') $} {% endif %}
 
 
-{$ mail_content('membership_application_confirmation/outro', {
-        'day_of_the_week': "now"|date("N")|trans({}, 'daysOfTheWeek')
-}) $}
+{$ mail_content('membership_application_confirmation/outro', { 'day_of_the_week': day_of_the_week } ) $}
 
 {$ mail_content('name_head_of_organization') $}
 {$ mail_content('title_head_of_organization') $}

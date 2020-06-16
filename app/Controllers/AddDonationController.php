@@ -25,12 +25,12 @@ use WMDE\FunValidators\ConstraintViolation;
  */
 class AddDonationController {
 
-	private $app;
-	private $ffFactory;
+	private Application $app;
+	private FunFunFactory $ffFactory;
 	/**
 	 * @var FallbackRequestValueReader
 	 */
-	private $legacyRequestValueReader;
+	private FallbackRequestValueReader $legacyRequestValueReader;
 
 	public function handle( FunFunFactory $ffFactory, Request $request, Application $app ): Response {
 		$this->app = $app;
@@ -253,7 +253,7 @@ class AddDonationController {
 				'Validation field "%s" with value "%s" failed with: %s',
 				$constraintViolation->getSource(),
 				$constraintViolation->getValue(),
-				$this->ffFactory->getTranslator()->trans( $constraintViolation->getMessageIdentifier() )
+				$constraintViolation->getMessageIdentifier()
 			);
 		}
 		$this->ffFactory->getLogger()->warning(

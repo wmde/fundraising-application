@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\App\Controllers;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\TranslatorInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\FunValidators\ConstraintViolation;
@@ -36,7 +35,6 @@ class ValidateAddressController {
 			return $this->newSuccessResponse();
 		} else {
 			return $this->newErrorResponse(
-				$ffFactory->getTranslator(),
 				new ConstraintViolation(
 					$this->getAddressType( $request ),
 					self::VIOLATION_UNKNOWN_ADDRESS_TYPE,
@@ -54,7 +52,7 @@ class ValidateAddressController {
 			return $this->newSuccessResponse();
 		}
 
-		return $this->newErrorResponse( $ffFactory->getTranslator(), ...$violations );
+		return $this->newErrorResponse( ...$violations );
 	}
 
 	private function getPersonViolations( Request $request ): array {
@@ -89,11 +87,11 @@ class ValidateAddressController {
 		return new JsonResponse( [ 'status' => 'OK' ] );
 	}
 
-	private function newErrorResponse( TranslatorInterface $translator, ConstraintViolation ...$violations ): Response {
+	private function newErrorResponse( ConstraintViolation ...$violations ): Response {
 		$errors = [];
 
 		foreach ( $violations as $violation ) {
-			$errors[$violation->getSource()] = $translator->trans( $violation->getMessageIdentifier() );
+			$errors[$violation->getSource()] = $violation->getMessageIdentifier();
 		}
 
 		return new JsonResponse( [ 'status' => 'ERR', 'messages' => $errors ] );

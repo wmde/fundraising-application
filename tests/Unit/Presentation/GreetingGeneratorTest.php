@@ -6,7 +6,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Translator;
-use WMDE\Fundraising\Frontend\Presentation\GreetingGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 
 class GreetingGeneratorTest extends TestCase {
 
@@ -114,6 +115,6 @@ class GreetingGeneratorTest extends TestCase {
 	}
 
 	private function getGreetingGenerator(): GreetingGenerator {
-		return new GreetingGenerator( new Translator( 'zz_ZZ' ) );
+		return new GreetingGenerator( new FakeTranslator() );
 	}
 }

@@ -61,10 +61,6 @@ class Routes {
 	public const UPDATE_DONOR = 'update-donor';
 	public const VALIDATE_ADDRESS = 'validate-donor-address';
 	public const VALIDATE_DONATION_AMOUNT = 'validate-donation-amount';
-	/**
-	 * @deprecated This is not used by client side code
-	 */
-	public const VALIDATE_DONATION_PAYMENT = 'validate-donation-payment';
 	public const VALIDATE_EMAIL = 'validate-email';
 	public const VALIDATE_MEMBERSHIP_FEE = 'validate-fee';
 	public const VALIDATE_IBAN = 'check-iban';
@@ -74,11 +70,6 @@ class Routes {
 			'validate-email',
 			ValidationController::class . '::validateEmail'
 		)->bind( self::VALIDATE_EMAIL );
-
-		$app->post(
-			'validate-payment-data',
-			ValidationController::class . '::validateDonationPayment'
-		)->bind( self::VALIDATE_DONATION_PAYMENT );
 
 		$app->post(
 			'validate-address', // Validates donor information. This route is named badly.
@@ -212,7 +203,7 @@ class Routes {
 					return $app->json(
 						[
 							'status' => 'ERR',
-							'message' => $ffFactory->getTranslator()->trans( 'comment_failure_access_denied' ),
+							'message' => 'comment_failure_access_denied',
 						]
 					);
 				}
@@ -223,7 +214,7 @@ class Routes {
 					return $app->json(
 						[
 							'status' => 'OK',
-							'message' => $ffFactory->getTranslator()->trans( $response->getSuccessMessage() ),
+							'message' => $response->getSuccessMessage(),
 						]
 					);
 				}
@@ -231,7 +222,7 @@ class Routes {
 				return $app->json(
 					[
 						'status' => 'ERR',
-						'message' => $ffFactory->getTranslator()->trans( $response->getErrorMessage() ),
+						'message' => $response->getErrorMessage(),
 					]
 				);
 			}
@@ -546,7 +537,6 @@ class Routes {
 			'validateDonationAmount' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_DONATION_AMOUNT ),
 			'validateAddress' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_ADDRESS ),
 			'validateEmail' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_EMAIL ),
-			'validatePayment' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_DONATION_PAYMENT ),
 			'validateIban' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_IBAN ),
 			'validateMembershipFee' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_MEMBERSHIP_FEE ),
 			'convertBankData' => $urlGenerator->generateAbsoluteUrl( self::CONVERT_BANKDATA ),

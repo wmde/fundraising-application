@@ -2,9 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Presentation;
-
-use Symfony\Component\Translation\TranslatorInterface;
+namespace WMDE\Fundraising\Frontend\Infrastructure\Translation;
 
 /**
  * @license GNU GPL v2+
@@ -15,7 +13,7 @@ class GreetingGenerator {
 	private const GREETING_FEMALE = 'Frau';
 	private const GREETING_FAMILY = 'Familie';
 
-	private $translator;
+	private TranslatorInterface $translator;
 
 	public function __construct( TranslatorInterface $translator ) {
 		$this->translator = $translator;
