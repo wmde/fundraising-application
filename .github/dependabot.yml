@@ -7,19 +7,28 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    reviewers:
+      - "wmde/funtech-core"
       
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    reviewers:
+      - "wmde/funtech-core"
       
   - package-ecosystem: "composer" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    reviewers:
+      - "wmde/funtech-core"
 
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/skins/laika" # Location of package manifests
     schedule:
       interval: "daily"
+    reviewers:
+      - "wmde/funtech-core"
+
 
