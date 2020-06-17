@@ -8,7 +8,7 @@
 		<pre v-if="errorMessage">
 			{{ errorMessage }}
 		</pre>
-		<div style="background-color: whitesmoke;font-family: monospace;white-space: pre; overflow: scroll; padding: 1.25rem 1.5rem;">
+		<div v-if="errorMessage" style="background-color: whitesmoke;font-family: monospace;white-space: pre; overflow: scroll; padding: 1.25rem 1.5rem;">
 			<div v-for="(trace, idx) in errorTrace" :key="idx">
 				<span>{{idx}} - </span>
 				<span v-if="trace.class">{{ trace.class }}{{ trace.type }}{{ trace.function }}</span>
