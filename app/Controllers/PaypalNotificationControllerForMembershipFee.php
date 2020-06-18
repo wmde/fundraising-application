@@ -2,8 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
+namespace WMDE\Fundraising\Frontend\App\Controllers;
 
+use Doctrine\ORM\Query\Parameter;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,26 +16,19 @@ use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotifica
 use WMDE\Fundraising\PaymentContext\ResponseModel\PaypalNotificationResponse;
 use WMDE\Fundraising\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
 
-/**
- * @license GNU GPL v2+
- * @author Kai Nissen < kai.nissen@wikimedia.de >
- */
-class PayPalNotificationHandlerForMembershipFee {
+class PaypalNotificationControllerForMembershipFee {
 
 	const TYPE_SUBSCRIPTION_SIGNUP = 'subscr_signup';
 	const TYPE_SUBSCRIPTION_PAYMENT = 'subscr_payment';
 
-	private $ffFactory;
-
-	public function __construct( FunFunFactory $ffFactory ) {
-		$this->ffFactory = $ffFactory;
-	}
 
 	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
+		$post = $request->request;
+
 		try {
-			$this->ffFactory->getPayPalMembershipFeeNotificationVerifier()->verify( $post->all() );
+			$ffFactory->getPayPalMembershipFeeNotificationVerifier()->verify( $post->all() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
-			$this->ffFactory->getPaypalLogger()->log( LogLevel::ERROR, $e->getMessage(), [
+			$ffFactory->getPaypalLogger()->log( LogLevel::ERROR, $e->getMessage(), [
 				'post_vars' => $post->all()
 			] );
 			return $this->createErrorResponse( $e );
@@ -42,11 +36,11 @@ class PayPalNotificationHandlerForMembershipFee {
 
 		switch ( $post->get( 'txn_type' ) ) {
 			case self::TYPE_SUBSCRIPTION_SIGNUP:
-				$useCase = $this->ffFactory->newMembershipApplicationSubscriptionSignupNotificationUseCase( $this->getUpdateToken( $post ) );
+				$useCase = $ffFactory->newMembershipApplicationSubscriptionSignupNotificationUseCase( $this->getUpdateToken( $post ) );
 				$response = $useCase->handleNotification( $this->newSubscriptionSignupRequestFromPost( $post ) );
 				break;
 			case self::TYPE_SUBSCRIPTION_PAYMENT:
-				$useCase = $this->ffFactory->newMembershipApplicationSubscriptionPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
+				$useCase = $ffFactory->newMembershipApplicationSubscriptionPaymentNotificationUseCase( $this->getUpdateToken( $post ) );
 				$response = $useCase->handleNotification( $this->newSubscriptionPaymentRequestFromPost( $post ) );
 				break;
 			default:
@@ -54,7 +48,7 @@ class PayPalNotificationHandlerForMembershipFee {
 				break;
 		}
 
-		$this->logResponseIfNeeded( $response, $post );
+		$this->logResponseIfNeeded( $ffFactory, $response, $post );
 
 		return new Response( '', Response::HTTP_OK ); # PayPal expects an empty response
 	}
@@ -127,7 +121,7 @@ class PayPalNotificationHandlerForMembershipFee {
 		}
 	}
 
-	private function logResponseIfNeeded( PaypalNotificationResponse $response, ParameterBag $post ) {
+	private function logResponseIfNeeded( FunFunFactory $ffFactory, PaypalNotificationResponse $response, ParameterBag $post ) {
 		if ( $response->notificationWasHandled() ) {
 			return;
 		}
@@ -137,7 +131,7 @@ class PayPalNotificationHandlerForMembershipFee {
 		$logLevel = $response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO;
 		unset( $context['message'] );
 		$context['post_vars'] = $post->all();
-		$this->ffFactory->getPaypalLogger()->log( $logLevel, $message, $context );
+		$ffFactory->getPaypalLogger()->log( $logLevel, $message, $context );
 	}
 
 }
