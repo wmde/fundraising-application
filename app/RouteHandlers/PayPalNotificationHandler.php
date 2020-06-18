@@ -31,6 +31,11 @@ class PayPalNotificationHandler {
 	public function handle( Request $request ): Response {
 		$post = $request->request;
 
+		if ( !$this->requestIsForPaymentCompletion( $post ) ) {
+			$this->ffFactory->getPaypalLogger()->log( LogLevel::INFO, self::MSG_NOT_HANDLED, [ 'post_vars' => $post->all() ] );
+			return new Response( '', Response::HTTP_OK );
+		}
+
 		try {
 			$this->ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
@@ -38,11 +43,6 @@ class PayPalNotificationHandler {
 				'post_vars' => $request->request->all()
 			] );
 			return $this->createErrorResponse( $e );
-		}
-
-		if ( !$this->requestIsForPaymentCompletion( $post ) ) {
-			$this->ffFactory->getPaypalLogger()->log( LogLevel::INFO, self::MSG_NOT_HANDLED, [ 'post_vars' => $post->all() ] );
-			return new Response( '', Response::HTTP_OK );
 		}
 
 		$useCase = $this->ffFactory->newHandlePayPalPaymentCompletionNotificationUseCase( $this->getUpdateToken( $post ) );
