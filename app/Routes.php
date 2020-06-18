@@ -286,7 +286,7 @@ class Routes {
 				return $ffFactory->getLayoutTemplate( 'Contact_Form.html.twig' )->render(
 					[
 						'contact_categories' => $ffFactory->getGetInTouchCategories(),
-						'contactFormValidationPatterns' => json_decode( $ffFactory->getValidationRules() )->contactForm,
+						'contactFormValidationPatterns' => $ffFactory->getValidationRules()->contactForm,
 					]
 				);
 			}
