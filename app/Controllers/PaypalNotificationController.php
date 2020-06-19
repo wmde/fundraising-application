@@ -17,6 +17,7 @@ use WMDE\Fundraising\PaymentContext\RequestModel\PayPalPaymentNotificationReques
 class PaypalNotificationController {
 
 	private const MSG_NOT_HANDLED = 'PayPal request not handled';
+	private const PAYPAL_LOG_FILTER = [ 'payer_email', 'payer_id' ];
 
 	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
 		$post = $request->request;
@@ -29,8 +30,12 @@ class PaypalNotificationController {
 		try {
 			$ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
 		} catch ( PayPalPaymentNotificationVerifierException $e ) {
+			$parametersToLog = $post->all();
+			foreach ( self::PAYPAL_LOG_FILTER as $remove ) {
+				unset( $parametersToLog[$remove] );
+			}
 			$ffFactory->getPaypalLogger()->log( LogLevel::ERROR, $e->getMessage(), [
-				'post_vars' => $post->all()
+				'post_vars' => $parametersToLog
 			] );
 			return $this->createErrorResponse( $e );
 		}
