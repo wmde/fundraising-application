@@ -13,6 +13,7 @@ use WMDE\Fundraising\PaymentContext\Infrastructure\FakeCreditCardService;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @licence GNU GPL v2+
@@ -47,6 +48,46 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 			$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
 			$this->assertStringContainsString( 'msg=', $client->getResponse()->getContent() );
+		} );
+	}
+
+	public function testGivenNonBillingRequest_applicationIndicatesError(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setCreditCardService( new FakeCreditCardService() );
+			$client->request(
+				Request::METHOD_GET,
+				self::PATH,
+				[
+					'function' => 'error',
+					'errorcode' => 'ipg04',
+					'errormessage' => 'Card used is not permitted',
+				]
+			);
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+			$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
+			$this->assertStringContainsString( 'msg=Function "error" not supported by this end point', $client->getResponse()->getContent() );
+		} );
+	}
+
+	public function testGivenNonBillingRequest_applicationLogsRequest(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setCreditCardService( new FakeCreditCardService() );
+			$logger = new LoggerSpy();
+			$factory->setCreditCardLogger( $logger );
+			$client->request(
+				Request::METHOD_GET,
+				self::PATH,
+				[
+					'function' => 'error',
+					'errorcode' => 'ipg04',
+					'errormessage' => 'Card used is not permitted',
+				]
+			);
+
+			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$firstCallContext = $logger->getFirstLogCall()->getContext();
+			$this->assertSame( 'ipg04', $firstCallContext['errorcode'] );
+			$this->assertSame( 'Card used is not permitted', $firstCallContext['errormessage'] );
 		} );
 	}
 
