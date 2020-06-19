@@ -17,6 +17,8 @@ use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\NewDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
+use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
@@ -26,8 +28,6 @@ use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\PageDisplayHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\PayPalNotificationHandlerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -405,9 +405,7 @@ class Routes {
 
 		$app->post(
 			'handle-paypal-payment-notification',
-			function ( Request $request ) use ( $ffFactory ) {
-				return ( new PayPalNotificationHandler( $ffFactory ) )->handle( $request );
-			}
+			PayPalNotificationController::class . '::handle'
 		);
 
 		$app->post(
@@ -439,10 +437,9 @@ class Routes {
 
 		$app->post(
 			'handle-paypal-membership-fee-payments',
-			function ( Request $request ) use ( $ffFactory ) {
-				return ( new PayPalNotificationHandlerForMembershipFee( $ffFactory ) )->handle( $request->request );
-			}
+			PayPalNotificationControllerForMembershipFee::class . '::handle'
 		);
+
 
 		$app->get(
 			'/',
@@ -465,9 +462,7 @@ class Routes {
 		// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url
 		$app->post(
 			'/spenden/paypal_handler.php',
-			function ( Request $request ) use ( $ffFactory ) {
-				return ( new PayPalNotificationHandler( $ffFactory ) )->handle( $request );
-			}
+			PayPalNotificationController::class . '::handle'
 		);
 
 		// redirect display page requests from old URLs
