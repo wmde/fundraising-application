@@ -209,6 +209,42 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testGivenPersonalPaypalInfosOnError_PrivateInfoIsExcludedFromGettingLogged(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setPayPalPaymentNotificationVerifier(
+				$this->newNonNetworkUsingNotificationVerifier()
+			);
+
+			$logger = new LoggerSpy();
+			$factory->setPaypalLogger( $logger );
+
+			$requestData = $this->newHttpParamsForPayment();
+			$requestData['mc_currency'] = 'unsupportedCurrencyTM';
+			$requestData['payer_email'] = 'IshouldNotGetLogged@privatestuff.de';
+			$requestData['payer_id'] = '123456personalID';
+
+			$client->request(
+				Request::METHOD_POST,
+				self::PATH,
+				$requestData
+			);
+
+			$this->assertSame( 'Unsupported currency', $client->getResponse()->getContent() );
+
+			$this->assertSame(
+				[ 'Unsupported currency' ],
+				$logger->getLogCalls()->getMessages()
+			);
+
+			$loggedDataAsString = implode( $logger->getLogCalls()->getFirstCall()->getContext()['post_vars'] );
+
+			$this->assertStringNotContainsString( 'IshouldNotGetLogged@privatestuff.de', $loggedDataAsString );
+			$this->assertStringNotContainsString( '123456personalID', $loggedDataAsString );
+
+			$this->assertStringContainsString( 'unsupportedCurrencyTM', $loggedDataAsString );
+		} );
+	}
+
 	public function testGivenFailingVerification_applicationReturnsError(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
