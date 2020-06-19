@@ -8,6 +8,7 @@ use Doctrine\ORM\Tools\Setup;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
@@ -24,6 +25,7 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 		$this->setApplicationLogger( $factory, $loggingConfig );
 		$this->setPaypalLogger( $factory );
 		$this->setSofortLogger( $factory );
+		$this->setCreditCardLogger( $factory );
 		$this->setDoctrineConfiguration( $factory );
 	}
 
@@ -35,30 +37,28 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 	}
 
 	private function setPaypalLogger( FunFunFactory $factory ) {
-		$logger = new Logger( 'paypal' );
-
-		$streamHandler = new StreamHandler(
-			$factory->getLoggingPath() . '/paypal.log'
-		);
-		$streamHandler->setFormatter( new JsonFormatter() );
-		$logger->pushHandler( $streamHandler );
-
-		$factory->setPaypalLogger( $logger );
+		$factory->setPaypalLogger( $this->createStreamLoggerForPayment( 'paypal', $factory->getLoggingPath() ) );
 	}
 
 	private function setSofortLogger( FunFunFactory $factory ) {
-		$logger = new Logger( 'sofort' );
-
-		$streamHandler = new StreamHandler( $factory->getLoggingPath() . '/sofort.log' );
-		$streamHandler->setFormatter( new JsonFormatter() );
-		$logger->pushHandler( $streamHandler );
-
-		$factory->setSofortLogger( $logger );
+		$factory->setSofortLogger( $this->createStreamLoggerForPayment( 'sofort', $factory->getLoggingPath() ) );
 	}
 
 	private function setDoctrineConfiguration( FunFunFactory $factory ) {
 		// Setup will choose its own caching (APCu, Redis, Memcached, Array) based on the PHP environment and its extensions.
 		// See https://phabricator.wikimedia.org/T249338
 		$factory->setDoctrineConfiguration( Setup::createConfiguration( false, $factory->getWritableApplicationDataPath() . '/doctrine_proxies' ) );
+	}
+
+	private function setCreditCardLogger( FunFunFactory $factory ) {
+		$factory->setCreditCardLogger( $this->createStreamLoggerForPayment( 'creditcard', $factory->getLoggingPath() ) );
+	}
+
+	private function createStreamLoggerForPayment( string $paymentName, string $loggingPath ): LoggerInterface {
+		$logger = new Logger( $paymentName );
+		$streamHandler = new StreamHandler( $loggingPath . '/' . $paymentName . '.log' );
+		$streamHandler->setFormatter( new JsonFormatter() );
+		$logger->pushHandler( $streamHandler );
+		return $logger;
 	}
 }

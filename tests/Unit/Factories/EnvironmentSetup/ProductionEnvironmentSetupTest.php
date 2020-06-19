@@ -18,7 +18,7 @@ class ProductionEnvironmentSetupTest extends TestCase {
 			'setLogger',
 			'setPaypalLogger',
 			'setSofortLogger',
-			'setSofortLogger',
+			'setCreditCardLogger',
 			'enableCaching',
 			'setDoctrineConfiguration',
 		];
