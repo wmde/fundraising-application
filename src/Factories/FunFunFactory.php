@@ -1974,4 +1974,14 @@ class FunFunFactory implements ServiceProviderInterface {
 		$daysOfWeek = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/daysOfTheWeek.json' ), true );
 		return $daysOfWeek[date( 'N' )];
 	}
+
+	public function getCreditCardLogger(): LoggerInterface {
+		return $this->createSharedObject( LoggerInterface::class . '::CreditCard', function (): LoggerInterface {
+			return new NullLogger();
+		} );
+	}
+
+	public function setCreditCardLogger( LoggerInterface $logger ): void {
+		$this->sharedObjects[LoggerInterface::class . '::CreditCard'] = $logger;
+	}
 }
