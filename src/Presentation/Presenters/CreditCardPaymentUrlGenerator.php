@@ -32,7 +32,7 @@ class CreditCardPaymentUrlGenerator {
 				[
 					'%interval%' =>
 						$this->translator->trans(
-							(string) $response->getDonation()->getPaymentIntervalInMonths()
+							'payment_interval_' . $response->getDonation()->getPaymentIntervalInMonths()
 						)
 				]
 			),
