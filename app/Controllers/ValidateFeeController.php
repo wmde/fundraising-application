@@ -17,6 +17,7 @@ class ValidateFeeController {
 
 	private const ERROR_RESPONSE_MAP = [
 		ValidateFeeResult::ERROR_TOO_LOW => 'too-low',
+		ValidateFeeResult::ERROR_INTERVAL_INVALID => 'interval-invalid',
 		'not-money' => 'not-money'
 	];
 
