@@ -29,6 +29,10 @@
 	margin-top: $column-gap * 2;
 }
 
+.title + .form-input .subtitle {
+	margin-top: 0;
+}
+
 .is-danger, .help {
 	font-size: 1em;
 }

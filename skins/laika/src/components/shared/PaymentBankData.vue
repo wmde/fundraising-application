@@ -1,7 +1,6 @@
 <template>
 	<fieldset class="has-margin-bottom-36">
 		<legend class="title is-size-5">{{ $t( 'donation_form_payment_bankdata_title' ) }}</legend>
-		<legend class="form-caption">{{ $t( 'donation_form_payment_bankdata_legend' ) }}</legend>
 		<div v-bind:class="['form-input', { 'is-invalid': bankDataIsInvalid }]">
 			<label for="iban" class="subtitle">{{ $t( labels.iban ) }}</label>
 			<b-field>
