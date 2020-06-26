@@ -4,9 +4,9 @@ import { SET_ADDRESS_FIELD } from '@/store/address/mutationTypes';
 
 export default ( namespace: string ) => {
 	return {
+		storageKey: 'address',
 		mutationType: DataPersistenceMutationType.KEY_VALUE_PAIR,
-		key: 'address',
-		mutation: mutation( namespace, SET_ADDRESS_FIELD ),
+		mutationKey: mutation( namespace, SET_ADDRESS_FIELD ),
 		fields: [
 			'salutation',
 			'title',

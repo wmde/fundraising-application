@@ -1,11 +1,11 @@
 import { DataPersistenceItem, DataPersister } from '@/view_models/DataPersistence';
 
 export class InactiveDataPersister implements DataPersister {
-	decryptInitialValues( items: DataPersistenceItem[] ): Promise<void> {
+	initialize( items: DataPersistenceItem[] ): Promise<void> {
 		return Promise.resolve( undefined );
 	}
 
-	getInitialValue( key: string ): string | null {
+	getValue( key: string ): string | null {
 		return null;
 	}
 
@@ -13,10 +13,10 @@ export class InactiveDataPersister implements DataPersister {
 		return () => {};
 	}
 
-	load( key: string ): Promise<string | null> {
+	loadFromRepository( key: string ): Promise<string | null> {
 		return Promise.resolve( null );
 	}
 
-	save( key: string, data: string ): void {
+	saveToRepository( key: string, data: string ): void {
 	}
 }

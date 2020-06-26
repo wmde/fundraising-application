@@ -19,11 +19,11 @@ export default class FakeDataPersister implements DataPersister {
 		this.repository = new FakeDataPersistenceRepository();
 	}
 
-	async decryptInitialValues( items: DataPersistenceItem[] ): Promise<void> {
+	async initialize( items: DataPersistenceItem[] ): Promise<void> {
 		return Promise.resolve( undefined );
 	}
 
-	getInitialValue( key: string ): any {
+	getValue( key: string ): any {
 		const item = this.initialValues.find( item => item.key === key );
 		return item ? item.value : null;
 	}
@@ -32,11 +32,11 @@ export default class FakeDataPersister implements DataPersister {
 		return () => {};
 	}
 
-	async load( key: string ): Promise<null | string> {
+	async loadFromRepository( key: string ): Promise<null | string> {
 		return Promise.resolve( null );
 	}
 
-	async save( key: string, data: string ): Promise<void> {
+	async saveToRepository( key: string, data: string ): Promise<void> {
 		return Promise.resolve( undefined );
 	}
 }

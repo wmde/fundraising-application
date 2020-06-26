@@ -16,14 +16,14 @@ export class ActiveDataPersister implements DataPersister {
 		this.initialValues = [];
 	}
 
-	async save( key: string, data: string ) {
+	async saveToRepository( key: string, data: string ) {
 		const encrypted = await this.dataEncryptor.encrypt( data );
 		if ( encrypted !== undefined ) {
 			this.repository.setItem( `${this.keyNamespace}/${key}`, encrypted );
 		}
 	}
 
-	async load( key: string ) {
+	async loadFromRepository( key: string ) {
 		const data = this.repository.getItem( `${this.keyNamespace}/${key}` );
 
 		if ( !data ) {
@@ -41,17 +41,17 @@ export class ActiveDataPersister implements DataPersister {
 	getPlugin( items: DataPersistenceItem[] ) {
 		return ( store: Store<any> ) => {
 			store.subscribe( ( mutation: MutationPayload, state: any ) => {
-				const persistenceItem = items.find( item => item.mutation === mutation.type );
+				const persistenceItem = items.find( item => item.mutationKey === mutation.type );
 				if ( !persistenceItem ) {
 					return;
 				}
 				switch ( persistenceItem.mutationType ) {
 					case DataPersistenceMutationType.VALUE:
-						this.save( persistenceItem.key, JSON.stringify( mutation.payload ) );
+						this.saveToRepository( persistenceItem.storageKey, JSON.stringify( mutation.payload ) );
 						break;
 					case DataPersistenceMutationType.KEY_VALUE_PAIR:
 						if ( persistenceItem.fields.includes( mutation.payload.name ) ) {
-							this.save( mutation.payload.name, JSON.stringify( mutation.payload.value ) );
+							this.saveToRepository( mutation.payload.name, JSON.stringify( mutation.payload.value ) );
 						}
 						break;
 				}
@@ -59,30 +59,30 @@ export class ActiveDataPersister implements DataPersister {
 		};
 	}
 
-	async decryptInitialValues( items: DataPersistenceItem[] ) {
+	async initialize( items: DataPersistenceItem[] ) {
 		for ( const item of items ) {
 			switch ( item.mutationType ) {
 				case DataPersistenceMutationType.VALUE:
-					await this.decryptInitialValue( item.key );
+					await this.decryptValue( item.storageKey );
 					break;
 				case DataPersistenceMutationType.KEY_VALUE_PAIR:
 					for ( let i = 0; i < item.fields.length; i++ ) {
-						await this.decryptInitialValue( item.fields[ i ] );
+						await this.decryptValue( item.fields[ i ] );
 					}
 					break;
 			}
 		}
 	}
 
-	async decryptInitialValue( key: string ) {
-		await this.load( key ).then( result => {
+	async decryptValue( key: string ) {
+		await this.loadFromRepository( key ).then( result => {
 			if ( result ) {
 				this.initialValues.push( { key: key, value: JSON.parse( result ) } );
 			}
 		} );
 	}
 
-	getInitialValue( key: string ) {
+	getValue( key: string ) {
 		const initialValue = this.initialValues.find( item => item.key === key );
 		return initialValue ? initialValue.value : null;
 	}
