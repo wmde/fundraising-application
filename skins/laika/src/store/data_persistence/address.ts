@@ -1,4 +1,4 @@
-import { DataPersistenceMutationType } from '@/view_models/DataPersistenceItem';
+import { DataPersistenceMutationType } from '@/view_models/DataPersistence';
 import { mutation } from '@/store/util';
 import { SET_ADDRESS_FIELD } from '@/store/address/mutationTypes';
 

@@ -61,7 +61,7 @@ export interface InitialAddressValues {
 export interface InitialMembershipAddressValues {
     addressType?: AddressTypeModel,
     membershipType?: MembershipTypeModel,
-    date?: string,
+    date?: string|null,
     receiptOptOut: boolean,
     fields: FieldInitialization[],
 }

@@ -7,7 +7,7 @@ import {
 	SET_RECEIPT_OPTOUT,
 } from '@/store/membership_address/mutationTypes';
 import { SET_FEE, SET_INTERVAL } from '@/store/membership_fee/mutationTypes';
-import { DataPersistenceMutationType } from '@/view_models/DataPersistenceItem';
+import { DataPersistenceMutationType } from '@/view_models/DataPersistence';
 import address from '@/store/data_persistence/address';
 
 export default [

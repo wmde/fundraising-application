@@ -1,7 +1,7 @@
 import { FieldInitialization } from '@/view_models/FieldInitialization';
 import persistenceAddress from '@/store/data_persistence/address';
 import { Validity } from '@/view_models/Validity';
-import { DataPersister } from '@/store/data_persistence/DataPersister';
+import { DataPersister } from '@/view_models/DataPersistence';
 import { NS_ADDRESS, NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { InitialAddressValues, InitialMembershipAddressValues } from '@/view_models/Address';
 import { addressTypeFromName } from '@/view_models/AddressTypeModel';

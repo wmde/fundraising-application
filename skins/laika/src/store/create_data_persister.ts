@@ -1,9 +1,15 @@
 import { DataPersistenceRepository } from '@/view_models/DataPersistenceRepository';
 import { SubtleDataEncryptor } from '@/store/SubtleDataEncryptor';
-import { DataPersister } from '@/store/data_persistence/DataPersister';
+import { DataPersister } from '@/view_models/DataPersistence';
+import { ActiveDataPersister } from '@/store/data_persistence/ActiveDataPersister';
+import { InactiveDataPersister } from '@/store/data_persistence/InactiveDataPersister';
 
 export const createDataPersister = ( repository: DataPersistenceRepository, keyNamespace: string, passphrase: string ): DataPersister => {
-	return new DataPersister(
+	if ( window.crypto === undefined || TextEncoder === undefined ) {
+		return new InactiveDataPersister();
+	}
+
+	return new ActiveDataPersister(
 		new SubtleDataEncryptor( passphrase ),
 		repository,
 		keyNamespace
