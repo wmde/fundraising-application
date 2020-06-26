@@ -114,6 +114,7 @@ import Vue from 'vue';
 import { FormData } from '@/view_models/Contact';
 import { Helper } from '@/store/util';
 import { Validity } from '@/view_models/Validity';
+import { ContactFormValidation } from '@/view_models/Validation';
 import { trackFormSubmission } from '@/tracking';
 
 export default Vue.extend( {
@@ -123,59 +124,60 @@ export default Vue.extend( {
 			formData: {
 				firstname: {
 					name: 'name',
-					value: this.contactData.firstname ? this.contactData.firstname : '',
-					pattern: '^.+$',
+					value: this.$props.contactData.firstname ? this.$props.contactData.firstname : '',
+					pattern: this.$props.validationPatterns.firstName,
 					optionalField: true,
 					validity: Validity.VALID,
 				},
 				lastname: {
 					name: 'lastname',
-					value: this.contactData.lastname ? this.contactData.lastname : '',
-					pattern: '^.+$',
+					value: this.$props.contactData.lastname ? this.$props.contactData.lastname : '',
+					pattern: this.$props.validationPatterns.lastName,
 					optionalField: true,
 					validity: Validity.VALID,
 				},
 				donationNumber: {
 					name: 'donationNumber',
-					value: this.contactData.donationNumber ? this.contactData.donationNumber : '',
-					pattern: '^[0-9]*$',
+					value: this.$props.contactData.donationNumber ? this.$props.contactData.donationNumber : '',
+					pattern: this.$props.validationPatterns.donationNumber,
 					optionalField: true,
 					validity: Validity.VALID,
 				},
 				email: {
 					name: 'email',
-					value: this.contactData.email ? this.contactData.email : '',
-					pattern: '^(.+)@(.+)\\.(.+)$',
+					value: this.$props.contactData.email ? this.$props.contactData.email : '',
+					pattern: this.$props.validationPatterns.email,
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
 				},
 				topic: {
 					name: 'topic',
-					value: this.contactData.category ? this.$i18n.t( this.contactData.category ) as string : '',
-					pattern: '^.+$',
+					value: this.$props.contactData.category ? this.$i18n.t( this.$props.contactData.category ) as string : '',
+					pattern: this.$props.validationPatterns.topic,
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
 				},
 				subject: {
 					name: 'subject',
-					value: this.contactData.subject ? this.contactData.subject : '',
-					pattern: '^.+$',
+					value: this.$props.contactData.subject ? this.$props.contactData.subject : '',
+					pattern: this.$props.validationPatterns.subject,
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
 				},
 				comment: {
 					name: 'comment',
-					value: this.contactData.messageBody ? this.contactData.messageBody : '',
-					pattern: '(\n|.)+',
+					value: this.$props.contactData.messageBody ? this.$props.contactData.messageBody : '',
+					pattern: this.$props.validationPatterns.comment,
 					optionalField: false,
 					validity: Validity.INCOMPLETE,
 				},
 			},
 		};
 	},
-	props: [
-		'contactData',
-	],
+	props: {
+		contactData: Object,
+		validationPatterns: Object as () => ContactFormValidation,
+	},
 	computed: {
 		Validity: {
 			get() {

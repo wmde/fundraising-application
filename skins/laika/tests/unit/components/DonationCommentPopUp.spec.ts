@@ -56,9 +56,7 @@ describe( 'DonationCommentPopUp', () => {
 	it( 'displays anyonmous comment toggle for private / company donations', () => {
 		const wrapper = mount( DonationCommentPopUp, {
 			localVue,
-			propsData: {
-				confirmationData: getDefaultConfirmationData( false ),
-			},
+			propsData: getDefaultConfirmationData( false ),
 			store: createStore(),
 			mocks: {
 				$t: ( key: string ) => key,
@@ -71,9 +69,7 @@ describe( 'DonationCommentPopUp', () => {
 	it( 'hides anyonmous comment toggle for anonymous donations', () => {
 		const wrapper = mount( DonationCommentPopUp, {
 			localVue,
-			propsData: {
-				confirmationData: getDefaultConfirmationData( true ),
-			},
+			propsData: getDefaultConfirmationData( true ),
 			store: createStore(),
 			mocks: {
 				$t: ( key: string ) => key,

@@ -76,14 +76,13 @@ import Vue from 'vue';
 import { AddressValidity, AddressFormData } from '@/view_models/Address';
 import { Country } from '@/view_models/Country';
 
-const DEFAULT_POSTAL_REGEX = '^.+$';
-
 export default Vue.extend( {
 	name: 'postal',
 	props: {
 		showError: Object as () => AddressValidity,
 		formData: Object as () => AddressFormData,
 		countries: Array as () => Array<Country>,
+		postCodeValidation: String,
 	},
 	data() {
 		return {
@@ -137,7 +136,7 @@ export default Vue.extend( {
 		},
 		changeCountry( option: String ) {
 			let country = this.$props.countries.find( ( c: Country ) => c.countryFullName === option );
-			this.formData.postcode.pattern = DEFAULT_POSTAL_REGEX;
+			this.formData.postcode.pattern = this.$props.postCodeValidation;
 			if ( country ) {
 				if ( country.postCodeValidation !== '' ) {
 					this.formData.postcode.pattern = country.postCodeValidation;

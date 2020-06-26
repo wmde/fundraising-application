@@ -20,6 +20,7 @@ import {
 import { action } from '@/store/util';
 import countries from '@/../tests/data/countries';
 import { Validity } from '@/view_models/Validity';
+import { addressValidationPatterns } from '../../../../data/validation';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -33,6 +34,7 @@ describe( 'Address.vue', () => {
 			propsData: {
 				validateAddressUrl: 'validate-address',
 				countries: countries,
+				addressValidationPatterns: addressValidationPatterns,
 			},
 			store: createStore(),
 			mocks: {
@@ -69,7 +71,7 @@ describe( 'Address.vue', () => {
 		expect( store.dispatch ).toBeCalledWith( expectedAction, {
 			'name': 'firstName',
 			'optionalField': false,
-			'pattern': '^.+$',
+			'pattern': addressValidationPatterns.firstName,
 			'value': firstNameValue,
 		} );
 	} );
@@ -133,6 +135,7 @@ describe( 'Address.vue', () => {
 				propsData: {
 					validateAddressUrl: 'validate-address',
 					countries: countries,
+					addressValidationPatterns: addressValidationPatterns,
 				},
 				store,
 				mocks: {

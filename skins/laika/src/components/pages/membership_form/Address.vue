@@ -7,13 +7,19 @@
 		<h1 class="has-margin-top-36 title is-size-5">{{ $t( 'donation_form_section_address_title' ) }}</h1>
 		<AutofillHandler @autofill="onAutofill">
 			<name :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"/>
-			<postal :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"/>
+			<postal
+					:show-error="fieldErrors"
+					:form-data="formData"
+					:countries="countries"
+					:post-code-validation="addressValidationPatterns.postcode"
+					v-on:field-changed="onFieldChange"
+			/>
 			<receipt-opt-out
 					:message="$t( 'receipt_needed_membership_page' )"
 					:initial-receipt-needed="receiptNeeded"
 					v-on:opted-out="setReceiptOptedOut( $event )"
 			/>
-			<date-of-birth v-if="isPerson"/>
+			<date-of-birth v-if="isPerson" :validation-pattern="dateOfBirthValidationPattern"/>
 			<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"/>
 		</AutofillHandler>
 	</div>
@@ -31,6 +37,7 @@ import Email from '@/components/shared/Email.vue';
 import AutofillHandler from '@/components/shared/AutofillHandler.vue';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
 import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressValidation } from '@/view_models/Validation';
 import { Validity } from '@/view_models/Validity';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import {
@@ -63,61 +70,61 @@ export default Vue.extend( {
 				salutation: {
 					name: 'salutation',
 					value: '',
-					pattern: '^(Herr|Frau)$',
+					pattern: this.$props.addressValidationPatterns.salutation,
 					optionalField: false,
 				},
 				title: {
 					name: 'title',
 					value: '',
-					pattern: '',
+					pattern: this.$props.addressValidationPatterns.title,
 					optionalField: true,
 				},
 				companyName: {
 					name: 'companyName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.companyName,
 					optionalField: false,
 				},
 				firstName: {
 					name: 'firstName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.firstName,
 					optionalField: false,
 				},
 				lastName: {
 					name: 'lastName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.lastName,
 					optionalField: false,
 				},
 				street: {
 					name: 'street',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.street,
 					optionalField: false,
 				},
 				city: {
 					name: 'city',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.city,
 					optionalField: false,
 				},
 				postcode: {
 					name: 'postcode',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.postcode,
 					optionalField: false,
 				},
 				country: {
 					name: 'country',
 					value: 'DE',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.country,
 					optionalField: false,
 				},
 				email: {
 					name: 'email',
 					value: '',
-					pattern: '^(.+)@(.+)\\.(.+)$',
+					pattern: this.$props.addressValidationPatterns.email,
 					optionalField: false,
 				},
 			},
@@ -128,6 +135,8 @@ export default Vue.extend( {
 		validateEmailUrl: String,
 		countries: Array as () => Array<String>,
 		initialFormValues: [ Object, String ],
+		addressValidationPatterns: Object as () => AddressValidation,
+		dateOfBirthValidationPattern: String,
 	},
 	computed: {
 		fieldErrors: {

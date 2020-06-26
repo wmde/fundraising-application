@@ -107,3 +107,8 @@ export interface ValidationResult {
 export interface PostData {
     [key: string]: string
 }
+
+export interface SubmittedAddress {
+    addressData: AddressFormData,
+    addressType: string
+}

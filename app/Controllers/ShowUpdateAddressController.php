@@ -33,7 +33,8 @@ class ShowUpdateAddressController {
 				[
 					'addressToken' => $addressToken,
 					'isCompany' => $addressChange->isCompanyAddress(),
-					'countries' => json_decode( $ffFactory->getCountries() )->countries,
+					'countries' => $ffFactory->getCountries(),
+					'addressValidationPatterns' => $ffFactory->getValidationRules()->address,
 					'urls' => array_merge(
 						Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() ),
 						[

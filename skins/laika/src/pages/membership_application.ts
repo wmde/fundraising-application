@@ -23,6 +23,7 @@ import { initializeBankData } from '@/store/bankdata/actionTypes';
 import { Country } from '@/view_models/Country';
 import { initializeMembershipFee } from '@/store/membership_fee/actionTypes';
 import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
+import { AddressValidation } from '@/view_models/Validation';
 
 const PAGE_IDENTIFIER = 'membership-application';
 const FORM_NAMESPACE = 'membership_application';
@@ -38,7 +39,9 @@ interface MembershipAmountModel {
 	urls: any,
 	showMembershipTypeOption: Boolean,
 	initialFormValues: InitialMembershipData,
-	userDataKey: string
+	userDataKey: string,
+	addressValidationPatterns: AddressValidation,
+	dateOfBirthValidationPattern: String,
 }
 
 const pageData = new PageDataInitializer<MembershipAmountModel>( '#app' );
@@ -108,6 +111,8 @@ dataPersister.decryptInitialValues( persistenceItems ).then( () => {
 						countries: pageData.applicationVars.countries,
 						showMembershipTypeOption: pageData.applicationVars.showMembershipTypeOption,
 						paymentIntervals: pageData.applicationVars.paymentIntervals,
+						addressValidationPatterns: pageData.applicationVars.addressValidationPatterns,
+						dateOfBirthValidationPattern: pageData.applicationVars.dateOfBirthValidationPattern,
 					},
 				} ),
 				h( Sidebar, {

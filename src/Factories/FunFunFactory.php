@@ -1047,14 +1047,20 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function newAddressValidator(): AddressValidator {
-		$countries = json_decode( $this->getCountries() )->countries;
+		$countries = $this->getCountries();
+		$validation = $this->getValidationRules();
 
 		$postcodeValidation = [];
 		foreach ( $countries as $country ) {
 			$postcodeValidation[$country->countryCode] = "/{$country->postCodeValidation}/";
 		}
 
-		return new AddressValidator( $postcodeValidation );
+		$addressValidation = [];
+		foreach ( $validation->address as $key => $pattern ) {
+			$addressValidation[$key] = "/{$pattern}/";
+		}
+
+		return new AddressValidator( $postcodeValidation, $addressValidation );
 	}
 
 	public function newUpdateDonorUseCase( string $updateToken, string $accessToken ): UpdateDonorUseCase {
@@ -1201,7 +1207,9 @@ class FunFunFactory implements ServiceProviderInterface {
 					]
 				)
 			),
-			$this->getUrlGenerator()
+			$this->getUrlGenerator(),
+			$this->getCountries(),
+			$this->getValidationRules()->address,
 		);
 	}
 
@@ -1379,27 +1387,42 @@ class FunFunFactory implements ServiceProviderInterface {
 				// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 				'paymentIntervals' => [0, 1, 3, 6, 12],
 				'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
-				'countries' => json_decode( $this->getCountries() )->countries
+				'countries' => $this->getCountries(),
+				'addressValidationPatterns' => $this->getValidationRules()->address,
 			]
 		);
 	}
 
 	public function getMembershipApplicationFormTemplate(): TwigTemplate {
+		$validation = $this->getValidationRules();
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
 			// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 			'paymentIntervals' => [1, 3, 6, 12],
 			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
-			'countries' => json_decode( $this->getCountries() )->countries
+			'countries' => $this->getCountries(),
+			'addressValidationPatterns' => $validation->address,
+			'dateOfBirthValidationPattern' => $validation->dateOfBirth,
 		] );
 	}
 
-	public function getCountries(): string {
-		return ( new JsonStringReader(
+	public function getCountries(): array {
+		$json = ( new JsonStringReader(
 			$this->getI18nDirectory() . '/data/countries.json',
 			new SimpleFileFetcher()
 		) )->readAndValidateJson();
+
+		return ( json_decode( $json ) )->countries;
+	}
+
+	public function getValidationRules(): object {
+		$json = ( new JsonStringReader(
+			$this->getI18nDirectory() . '/data/validation.json',
+			new SimpleFileFetcher()
+		) )->readAndValidateJson();
+
+		return json_decode( $json );
 	}
 
 	public function newHandleSofortPaymentNotificationUseCase( string $updateToken ): SofortPaymentNotificationUseCase {

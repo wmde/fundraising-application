@@ -19,6 +19,7 @@
 				:validate-legacy-bank-data-url="validateLegacyBankDataUrl"
 				:countries="countries"
 				:is-direct-debit="isDirectDebit"
+				:address-validation-patterns="addressValidationPatterns"
 				ref="address">
 		</address-fields>
 			<div class="summary-wrapper has-margin-top-18 has-outside-border">
@@ -57,6 +58,7 @@ import AddressFields from '@/components/pages/donation_form/Address.vue';
 import DonationSummary from '@/components/DonationSummary.vue';
 import SubmitValues from '@/components/pages/donation_form/SubmitValues.vue';
 import { TrackingData } from '@/view_models/SubmitValues';
+import { AddressValidation } from '@/view_models/Validation';
 import { Country } from '@/view_models/Country';
 import { action } from '@/store/util';
 import { markEmptyValuesAsInvalid } from '@/store/bankdata/actionTypes';
@@ -80,6 +82,7 @@ export default Vue.extend( {
 		validateLegacyBankDataUrl: String,
 		countries: Array as () => Array<Country>,
 		trackingData: Object as () => TrackingData,
+		addressValidationPatterns: Object as () => AddressValidation,
 	},
 	computed: {
 		paymentSummary: {

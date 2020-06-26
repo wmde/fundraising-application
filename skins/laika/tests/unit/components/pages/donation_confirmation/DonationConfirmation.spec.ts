@@ -43,9 +43,7 @@ describe( 'DonationConfirmation', () => {
 		let confirmationData = getDefaultConfirmationData();
 		const wrapper = mount( DonationConfirmation, {
 			localVue,
-			propsData: {
-				confirmationData: confirmationData,
-			},
+			propsData: confirmationData,
 			store: createStore(),
 			mocks: {
 				$t: ( key: string ) => key,
@@ -60,9 +58,7 @@ describe( 'DonationConfirmation', () => {
 		confirmationData.donation.paymentType = 'PPL';
 		const wrapper = mount( DonationConfirmation, {
 			localVue,
-			propsData: {
-				confirmationData: confirmationData,
-			},
+			propsData: confirmationData,
 			store: createStore(),
 			mocks: {
 				$t: ( key: string ) => key,

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9293214eed0c6f6b3b5d65496b1fbac",
+    "content-hash": "db5c21e4c71cbb538c2718bf0a05a4e5",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -5557,16 +5557,16 @@
         },
         {
             "name": "wmde/fun-validators",
-            "version": "v2.0.0",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators",
-                "reference": "d8dd33dcb879ca34d40313d0a3826473f0ac9183"
+                "reference": "70d2af1579f820715e33f42cac0c22b6c6843e8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/d8dd33dcb879ca34d40313d0a3826473f0ac9183",
-                "reference": "d8dd33dcb879ca34d40313d0a3826473f0ac9183",
+                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/70d2af1579f820715e33f42cac0c22b6c6843e8c",
+                "reference": "70d2af1579f820715e33f42cac0c22b6c6843e8c",
                 "shasum": ""
             },
             "require": {
@@ -5600,7 +5600,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "General and shared validation services created as part of the WMDE fundraising software",
-            "time": "2020-05-05T17:48:17+00:00"
+            "time": "2020-06-17T14:53:10+00:00"
         },
         {
             "name": "wmde/fundraising-address-change",
@@ -5712,16 +5712,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v2.0.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "48a7dca800067b6f84290212e37345ce348521c2"
+                "reference": "56149db872d5f07ab1dceeb75ceaf3ee79ab1746"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/48a7dca800067b6f84290212e37345ce348521c2",
-                "reference": "48a7dca800067b6f84290212e37345ce348521c2",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/56149db872d5f07ab1dceeb75ceaf3ee79ab1746",
+                "reference": "56149db872d5f07ab1dceeb75ceaf3ee79ab1746",
                 "shasum": ""
             },
             "require": {
@@ -5733,8 +5733,8 @@
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~1.0",
-                "wmde/fun-validators": "~2.0.0",
-                "wmde/fundraising-payments": "~1.0.1"
+                "wmde/fun-validators": "~3.0.0",
+                "wmde/fundraising-payments": "~1.0.0"
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
@@ -5742,7 +5742,7 @@
                 "mikey179/vfsstream": "~1.6",
                 "ockcyp/covers-validator": "@dev",
                 "phpmd/phpmd": "~2.6",
-                "phpstan/phpstan": "^0.11",
+                "phpstan/phpstan": "^0.12",
                 "phpunit/phpunit": "~8.0",
                 "slevomat/coding-standard": "^3.0",
                 "squizlabs/php_codesniffer": "~3.5",
@@ -5765,20 +5765,20 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2020-06-03T12:03:09+00:00"
+            "time": "2020-06-18T07:21:59+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v2.0.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "6a2721667495224fcafb216a45532b2679cec60f"
+                "reference": "839150588ecdb89460967cfa7b1a58057e8b7feb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/6a2721667495224fcafb216a45532b2679cec60f",
-                "reference": "6a2721667495224fcafb216a45532b2679cec60f",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/839150588ecdb89460967cfa7b1a58057e8b7feb",
+                "reference": "839150588ecdb89460967cfa7b1a58057e8b7feb",
                 "shasum": ""
             },
             "require": {
@@ -5789,8 +5789,8 @@
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~1.0",
-                "wmde/fun-validators": "~2.0.0",
-                "wmde/fundraising-payments": "@dev"
+                "wmde/fun-validators": "~3.0.0",
+                "wmde/fundraising-payments": "~1.0.0"
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
@@ -5824,20 +5824,20 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2020-06-03T12:18:34+00:00"
+            "time": "2020-06-18T07:22:34+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "1d81686ebe0fe58b9e02e7240ebaddfff43ee88c"
+                "reference": "a88d8c7a47c0ac543fcbcda554fc817e043389aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/1d81686ebe0fe58b9e02e7240ebaddfff43ee88c",
-                "reference": "1d81686ebe0fe58b9e02e7240ebaddfff43ee88c",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/a88d8c7a47c0ac543fcbcda554fc817e043389aa",
+                "reference": "a88d8c7a47c0ac543fcbcda554fc817e043389aa",
                 "shasum": ""
             },
             "require": {
@@ -5845,7 +5845,7 @@
                 "sofort/sofortlib-php": "^3.2",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~1.0",
-                "wmde/fun-validators": "~v2.0.0"
+                "wmde/fun-validators": "~v3.0.0"
             },
             "require-dev": {
                 "mediawiki/mediawiki-codesniffer": "~26.0",
@@ -5875,20 +5875,20 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2020-06-03T11:11:46+00:00"
+            "time": "2020-06-18T06:50:03+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "8291e84f35378c4b751bde02b50e9cf3fe24c893"
+                "reference": "ba212d38d9330545c01ef7cfc9aa343632ed5e15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/8291e84f35378c4b751bde02b50e9cf3fe24c893",
-                "reference": "8291e84f35378c4b751bde02b50e9cf3fe24c893",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/ba212d38d9330545c01ef7cfc9aa343632ed5e15",
+                "reference": "ba212d38d9330545c01ef7cfc9aa343632ed5e15",
                 "shasum": ""
             },
             "require": {
@@ -5897,7 +5897,7 @@
                 "php": ">=7.4",
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
-                "wmde/fun-validators": "~2.0.0"
+                "wmde/fun-validators": "~3.0.0"
             },
             "require-dev": {
                 "ockcyp/covers-validator": "~1.0",
@@ -5926,7 +5926,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for fundraising subcriptions",
-            "time": "2020-06-03T12:13:01+00:00"
+            "time": "2020-06-18T07:45:31+00:00"
         }
     ],
     "packages-dev": [
@@ -6501,20 +6501,19 @@
         },
         {
             "name": "nette/php-generator",
-            "version": "v3.4.0",
+            "version": "v3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/php-generator.git",
-                "reference": "ea2c8e8d6439f0a4e3cd3431c572b51a8131539b"
+                "reference": "7051954c534cebafd650efe8b145ac75b223cb66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/php-generator/zipball/ea2c8e8d6439f0a4e3cd3431c572b51a8131539b",
-                "reference": "ea2c8e8d6439f0a4e3cd3431c572b51a8131539b",
+                "url": "https://api.github.com/repos/nette/php-generator/zipball/7051954c534cebafd650efe8b145ac75b223cb66",
+                "reference": "7051954c534cebafd650efe8b145ac75b223cb66",
                 "shasum": ""
             },
             "require": {
-                "ext-tokenizer": "*",
                 "nette/utils": "^2.4.2 || ^3.0",
                 "php": ">=7.1"
             },
@@ -6562,7 +6561,7 @@
                 "php",
                 "scaffolding"
             ],
-            "time": "2020-05-26T16:32:45+00:00"
+            "time": "2020-06-19T14:31:47+00:00"
         },
         {
             "name": "nette/robot-loader",

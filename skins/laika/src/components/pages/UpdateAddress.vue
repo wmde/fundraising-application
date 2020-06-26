@@ -14,6 +14,7 @@
 				<postal :show-error="fieldErrors"
 						:form-data="formData"
 						:countries="countries"
+						:post-code-validation="addressValidationPatterns.postcode"
 						v-on:field-changed="onFieldChange">
 				</postal>
 				<submit-values :tracking-data="{}"></submit-values>
@@ -43,6 +44,7 @@ import { NS_ADDRESS } from '@/store/namespaces';
 import { setAddressField, validateAddress, setReceiptOptOut, setAddressType } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import { AddressValidation } from '@/view_models/Validation';
 import { mapGetters } from 'vuex';
 import { trackFormSubmission } from '@/tracking';
 
@@ -63,55 +65,55 @@ export default Vue.extend( {
 				salutation: {
 					name: 'salutation',
 					value: '',
-					pattern: '^(Herr|Frau)$',
+					pattern: this.$props.addressValidationPatterns.salutation,
 					optionalField: false,
 				},
 				title: {
 					name: 'title',
 					value: '',
-					pattern: '',
+					pattern: this.$props.addressValidationPatterns.title,
 					optionalField: true,
 				},
 				companyName: {
 					name: 'companyName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.companyName,
 					optionalField: false,
 				},
 				firstName: {
 					name: 'firstName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.firstName,
 					optionalField: false,
 				},
 				lastName: {
 					name: 'lastName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.lastName,
 					optionalField: false,
 				},
 				street: {
 					name: 'street',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.street,
 					optionalField: false,
 				},
 				city: {
 					name: 'city',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.city,
 					optionalField: false,
 				},
 				postcode: {
 					name: 'postcode',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.postcode,
 					optionalField: false,
 				},
 				country: {
 					name: 'country',
 					value: 'DE',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.country,
 					optionalField: false,
 				},
 			},
@@ -122,6 +124,7 @@ export default Vue.extend( {
 		updateAddressURL: String,
 		isCompany: Boolean,
 		countries: Array as () => Array<Country>,
+		addressValidationPatterns: Object as () => AddressValidation,
 	},
 	computed: {
 		fieldErrors: {

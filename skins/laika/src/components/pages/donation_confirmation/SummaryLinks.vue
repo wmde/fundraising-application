@@ -8,14 +8,16 @@
 			<donation-comment-pop-up
 				v-on:disable-comment-link="commentLinkIsDisabled = true"
 				v-if="openCommentPopUp"
-				:confirmation-data="confirmationData"
+				:donation="donation"
+				:address-type="addressType"
+				:post-comment-url="postCommentUrl"
 			/>
 		</b-modal>
 		<div id="cancel-link" v-if="donationCanBeCanceled">
-			<form class="has-margin-top-18" :action="confirmationData.urls.cancelDonation" method="post">
+			<form class="has-margin-top-18" :action="cancelDonationUrl" method="post">
 				<a href="javascript:" onclick="parentNode.submit();">{{ $t( 'donation_confirmation_cancel_button' ) }}</a>
-				<input type="hidden" name="sid" :value="confirmationData.donation.id"/>
-				<input type="hidden" name="utoken" :value="confirmationData.donation.updateToken">
+				<input type="hidden" name="sid" :value="donation.id"/>
+				<input type="hidden" name="utoken" :value="donation.updateToken">
 			</form>
 		</div>
 	</div>
@@ -23,6 +25,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import DonationCommentPopUp from '@/components/DonationCommentPopUp.vue';
+import { Donation } from '@/view_models/Donation';
 
 export default Vue.extend( {
 	name: 'SummaryLinks',
@@ -35,15 +38,18 @@ export default Vue.extend( {
 			commentLinkIsDisabled: false,
 		};
 	},
-	props: [
-		'confirmationData',
-	],
+	props: {
+		donation: Object as () => Donation,
+		addressType: String,
+		cancelDonationUrl: String,
+		postCommentUrl: String,
+	},
 	computed: {
 		donationCanBeCanceled(): boolean {
-			return this.confirmationData.donation.paymentType === 'BEZ';
+			return this.$props.donation.paymentType === 'BEZ';
 		},
 		donationCanBeCommented(): boolean {
-			return this.confirmationData.donation.paymentType !== 'UEB';
+			return this.$props.donation.paymentType !== 'UEB';
 		},
 	},
 	methods: {

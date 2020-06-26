@@ -19,7 +19,14 @@
 		</div>
 		<AutofillHandler @autofill="onAutofill" >
 			<name v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :address-type="addressType" v-on:field-changed="onFieldChange"></name>
-			<postal v-if="addressTypeIsNotAnon" :show-error="fieldErrors" :form-data="formData" :countries="countries" v-on:field-changed="onFieldChange"></postal>
+			<postal
+					v-if="addressTypeIsNotAnon"
+					:show-error="fieldErrors"
+					:form-data="formData"
+					:countries="countries"
+					:post-code-validation="addressValidationPatterns.postcode"
+					v-on:field-changed="onFieldChange"
+			></postal>
 			<receipt-opt-out
 					:message="$t( 'receipt_needed_donation_page' )"
 					:initial-receipt-needed="receiptNeeded"
@@ -60,6 +67,7 @@ import PaymentBankData from '@/components/shared/PaymentBankData.vue';
 import { mergeValidationResults } from '@/merge_validation_results';
 import { camelizeName } from '@/camlize_name';
 import { Country } from '@/view_models/Country';
+import { AddressValidation } from '@/view_models/Validation';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -79,61 +87,61 @@ export default Vue.extend( {
 				salutation: {
 					name: 'salutation',
 					value: '',
-					pattern: '^(Herr|Frau)$',
+					pattern: this.$props.addressValidationPatterns.salutation,
 					optionalField: false,
 				},
 				title: {
 					name: 'title',
 					value: '',
-					pattern: '',
+					pattern: this.$props.addressValidationPatterns.title,
 					optionalField: true,
 				},
 				companyName: {
 					name: 'companyName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.companyName,
 					optionalField: false,
 				},
 				firstName: {
 					name: 'firstName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.firstName,
 					optionalField: false,
 				},
 				lastName: {
 					name: 'lastName',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.lastName,
 					optionalField: false,
 				},
 				street: {
 					name: 'street',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.street,
 					optionalField: false,
 				},
 				city: {
 					name: 'city',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.city,
 					optionalField: false,
 				},
 				postcode: {
 					name: 'postcode',
 					value: '',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.postcode,
 					optionalField: false,
 				},
 				country: {
 					name: 'country',
 					value: 'DE',
-					pattern: '^.+$',
+					pattern: this.$props.addressValidationPatterns.country,
 					optionalField: false,
 				},
 				email: {
 					name: 'email',
 					value: '',
-					pattern: '^(.+)@(.+)\\.(.+)$',
+					pattern: this.$props.addressValidationPatterns.email,
 					optionalField: false,
 				},
 			},
@@ -146,6 +154,7 @@ export default Vue.extend( {
 		validateLegacyBankDataUrl: String,
 		countries: Array as () => Array<Country>,
 		isDirectDebit: Boolean,
+		addressValidationPatterns: Object as () => AddressValidation,
 	},
 	computed: {
 		fieldErrors: {

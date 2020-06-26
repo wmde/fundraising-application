@@ -8,6 +8,8 @@ import App from '@/components/App.vue';
 import Component from '@/components/pages/UpdateAddress.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
+import { AddressValidation } from '@/view_models/Validation';
+import { Country } from '@/view_models/Country';
 
 const PAGE_IDENTIFIER = 'update-address';
 const FORM_NAMESPACE = 'update_address';
@@ -15,7 +17,14 @@ const FORM_NAMESPACE = 'update_address';
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
-const pageData = new PageDataInitializer<any>( '#app' );
+interface UpdateAddressModel {
+	isCompany: boolean,
+	countries: Array<Country>,
+	urls: any,
+	addressValidationPatterns: AddressValidation
+}
+
+const pageData = new PageDataInitializer<UpdateAddressModel>( '#app' );
 const store = createStore( [
 	createTrackFormErrorsPlugin( FORM_NAMESPACE ),
 ] );
@@ -43,6 +52,7 @@ new Vue( {
 				updateAddressURL: pageData.applicationVars.urls.updateAddress,
 				isCompany: pageData.applicationVars.isCompany,
 				countries: pageData.applicationVars.countries,
+				addressValidationPatterns: pageData.applicationVars.addressValidationPatterns,
 			},
 		} ),
 		h( Sidebar, {

@@ -17,17 +17,13 @@ describe( 'SummaryLinks', () => {
 		const wrapper = mount( MembershipInfo, {
 			localVue,
 			propsData: {
-				confirmationData: {
-					donation: {
-						id: testId,
-						accessToken: testAccessToken,
-						updateToken: testUpdateToken,
-						paymentType: 'BEZ',
-					},
-					urls: {
-						cancelDonation: 'cancel-donation?id=' + testId + '&updateToken=' + testUpdateToken,
-					},
+				donation: {
+					id: testId,
+					accessToken: testAccessToken,
+					updateToken: testUpdateToken,
+					paymentType: 'BEZ',
 				},
+				cancelDonationUrl: 'cancel-donation?id=' + testId + '&updateToken=' + testUpdateToken,
 			},
 			store: createStore(),
 			mocks: {
@@ -43,17 +39,13 @@ describe( 'SummaryLinks', () => {
 		const wrapper = mount( MembershipInfo, {
 			localVue,
 			propsData: {
-				confirmationData: {
-					donation: {
-						id: testId,
-						accessToken: testAccessToken,
-						updateToken: testUpdateToken,
-						paymentType: 'UEB',
-					},
-					urls: {
-						cancelDonation: 'cancel-donation?id=' + testId + '&updateToken=' + testUpdateToken,
-					},
+				donation: {
+					id: testId,
+					accessToken: testAccessToken,
+					updateToken: testUpdateToken,
+					paymentType: 'UEB',
 				},
+				cancelDonationUrl: 'cancel-donation?id=' + testId + '&updateToken=' + testUpdateToken,
 			},
 			store: createStore(),
 			mocks: {
@@ -68,17 +60,13 @@ describe( 'SummaryLinks', () => {
 		const wrapper = mount( MembershipInfo, {
 			localVue,
 			propsData: {
-				confirmationData: {
-					donation: {
-						id: testId,
-						accessToken: testAccessToken,
-						updateToken: testUpdateToken,
-						paymentType: 'BEZ',
-					},
-					urls: {
-						cancelDonation: 'cancel-donation',
-					},
+				donation: {
+					id: testId,
+					accessToken: testAccessToken,
+					updateToken: testUpdateToken,
+					paymentType: 'BEZ',
 				},
+				cancelDonationUrl: 'cancel-donation',
 			},
 			store: createStore(),
 			mocks: {
@@ -98,17 +86,13 @@ describe( 'SummaryLinks', () => {
 		const wrapper = mount( MembershipInfo, {
 			localVue,
 			propsData: {
-				confirmationData: {
-					donation: {
-						id: 1,
-						accessToken: testAccessToken,
-						updateToken: testUpdateToken,
-						paymentType: 'UEB',
-					},
-					urls: {
-						cancelDonation: 'cancel-donation',
-					},
+				donation: {
+					id: 1,
+					accessToken: testAccessToken,
+					updateToken: testUpdateToken,
+					paymentType: 'UEB',
 				},
+				cancelDonationUrl: 'cancel-donation',
 			},
 			store: createStore(),
 			mocks: {

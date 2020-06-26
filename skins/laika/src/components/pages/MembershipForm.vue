@@ -19,6 +19,7 @@ import PaymentPage from '@/components/pages/membership_form/subpages/PaymentPage
 import AddressPage from '@/components/pages/membership_form/subpages/AddressPage.vue';
 import { trackFormSubmission } from '@/tracking';
 import { Country } from '@/view_models/Country';
+import { AddressValidation } from '@/view_models/Validation';
 
 export default Vue.extend( {
 	name: 'MembershipForm',
@@ -36,6 +37,8 @@ export default Vue.extend( {
 		paymentIntervals: Array as () => Array<String>,
 		countries: Array as () => Array<Country>,
 		showMembershipTypeOption: Boolean,
+		addressValidationPatterns: Object as () => AddressValidation,
+		dateOfBirthValidationPattern: String,
 	},
 	data: function () {
 		return {
@@ -57,6 +60,8 @@ export default Vue.extend( {
 						validateEmailUrl: this.$props.validateEmailUrl,
 						countries: this.$props.countries,
 						showMembershipTypeOption: this.$props.showMembershipTypeOption,
+						addressValidationPatterns: this.$props.addressValidationPatterns,
+						dateOfBirthValidationPattern: this.$props.dateOfBirthValidationPattern,
 					};
 				}
 				return {
