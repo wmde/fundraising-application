@@ -1,8 +1,7 @@
 import { Store } from 'vuex';
 import { DataEncryptor } from '@/view_models/DataEncryptor';
-import { DataPersister } from '@/store/data_persistence/DataPersister';
 import { DataPersistenceRepository } from '@/view_models/DataPersistenceRepository';
-import { DataPersistenceItem } from '@/view_models/DataPersistenceItem';
+import { DataPersistenceItem, DataPersister } from '@/view_models/DataPersistence';
 import { FakeDataEncryptor } from './FakeDataEncryptor';
 import FakeDataPersistenceRepository from './FakeDataPersistenceRepository';
 
@@ -18,10 +17,6 @@ export default class FakeDataPersister implements DataPersister {
 		this.dataEncryptor = new FakeDataEncryptor();
 		this.keyNamespace = 'not a real namespace';
 		this.repository = new FakeDataPersistenceRepository();
-	}
-
-	async decryptInitialValue( key: string ): Promise<void> {
-		return Promise.resolve( undefined );
 	}
 
 	async decryptInitialValues( items: DataPersistenceItem[] ): Promise<void> {

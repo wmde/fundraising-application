@@ -2,7 +2,7 @@ import { mutation } from '@/store/util';
 import { NS_ADDRESS, NS_PAYMENT } from '@/store/namespaces';
 import { SET_AMOUNT, SET_INTERVAL, SET_TYPE } from '@/store/payment/mutationTypes';
 import { SET_ADDRESS_TYPE, SET_NEWSLETTER_OPTIN, SET_RECEIPT_OPTOUT } from '@/store/address/mutationTypes';
-import { DataPersistenceMutationType } from '@/view_models/DataPersistenceItem';
+import { DataPersistenceMutationType } from '@/view_models/DataPersistence';
 import address from '@/store/data_persistence/address';
 
 export default [

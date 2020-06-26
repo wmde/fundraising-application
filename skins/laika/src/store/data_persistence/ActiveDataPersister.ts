@@ -1,9 +1,9 @@
 import { DataEncryptor } from '@/view_models/DataEncryptor';
 import { DataPersistenceRepository } from '@/view_models/DataPersistenceRepository';
-import { DataPersistenceItem, DataPersistenceMutationType } from '@/view_models/DataPersistenceItem';
+import { DataPersistenceItem, DataPersistenceMutationType, DataPersister } from '@/view_models/DataPersistence';
 import { MutationPayload, Store } from 'vuex';
 
-export class DataPersister {
+export class ActiveDataPersister implements DataPersister {
 	dataEncryptor: DataEncryptor;
 	repository: DataPersistenceRepository;
 	keyNamespace: string;
