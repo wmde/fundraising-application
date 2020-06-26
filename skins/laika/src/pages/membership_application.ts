@@ -65,7 +65,7 @@ const store = createStore( [
 ]
 );
 
-dataPersister.decryptInitialValues( persistenceItems ).then( () => {
+dataPersister.initialize( persistenceItems ).then( () => {
 
 	// The PHP serialization sends the initial form data as an empty array (instead of empty object)
 	// when donation was anonymous so converting it to a map makes it consistent

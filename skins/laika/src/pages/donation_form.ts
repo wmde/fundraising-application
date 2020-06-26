@@ -59,7 +59,7 @@ const i18n = new VueI18n( {
 
 Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
 
-dataPersister.decryptInitialValues( persistenceItems ).then( () => {
+dataPersister.initialize( persistenceItems ).then( () => {
 	Promise.all( [
 		store.dispatch(
 			action( NS_PAYMENT, initializePayment ),

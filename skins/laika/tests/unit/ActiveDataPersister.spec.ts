@@ -14,7 +14,7 @@ describe( 'Data Persister', () => {
 			testKey,
 		);
 
-		await dataPersister.save( testItemKey, testItemData );
+		await dataPersister.saveToRepository( testItemKey, testItemData );
 		const storedItem = fakeDataPersistenceRepository.getItem( `${testKey}/${testItemKey}` );
 
 		expect( storedItem ).not.toBeNull();
@@ -31,8 +31,8 @@ describe( 'Data Persister', () => {
 			testKey,
 		);
 
-		await dataPersister.save( testItemKey, testItemData );
-		const decoded = await dataPersister.load( testItemKey );
+		await dataPersister.saveToRepository( testItemKey, testItemData );
+		const decoded = await dataPersister.loadFromRepository( testItemKey );
 
 		expect( decoded ).toEqual( testItemData );
 	} );
@@ -48,8 +48,8 @@ describe( 'Data Persister', () => {
 			testKey,
 		);
 
-		await dataPersister.save( testItemKey, testItemData );
-		await dataPersister.load( testItemKey );
+		await dataPersister.saveToRepository( testItemKey, testItemData );
+		await dataPersister.loadFromRepository( testItemKey );
 
 		expect( testDataPersistenceRepository.getItem( testItemKey ) ).toBeNull();
 	} );

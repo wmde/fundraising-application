@@ -35,7 +35,7 @@ export const createInitialDonationAddressValues = ( dataPersister: DataPersister
 	}
 
 	persistenceAddress( NS_ADDRESS ).fields.forEach( field => {
-		const value = dataPersister.getInitialValue( field );
+		const value = dataPersister.getValue( field );
 		if ( value ) {
 			addressPersistItems.push( { name: field, value: value, validity: Validity.RESTORED } );
 			trackFormFieldRestored( 'donation', field );
@@ -43,9 +43,9 @@ export const createInitialDonationAddressValues = ( dataPersister: DataPersister
 	} );
 
 	return {
-		addressType: replaceInitialValue( initialFormValues.addressType, dataPersister.getInitialValue( 'addressType' ) ),
-		newsletterOptIn: replaceInitialValue( false, dataPersister.getInitialValue( 'newsletter' ) ),
-		receiptOptOut: replaceInitialValue( false, dataPersister.getInitialValue( 'receiptOptOut' ) ),
+		addressType: replaceInitialValue( initialFormValues.addressType, dataPersister.getValue( 'addressType' ) ),
+		newsletterOptIn: replaceInitialValue( false, dataPersister.getValue( 'newsletter' ) ),
+		receiptOptOut: replaceInitialValue( false, dataPersister.getValue( 'receiptOptOut' ) ),
 		fields: addressPersistItems,
 	};
 };
@@ -61,7 +61,7 @@ export const createInitialDonationPaymentValues = ( dataPersister: DataPersister
 		);
 	}
 
-	let paymentIntervalInMonths = replaceInitialValue( '0', dataPersister.getInitialValue( 'interval' ) );
+	let paymentIntervalInMonths = replaceInitialValue( '0', dataPersister.getValue( 'interval' ) );
 	if ( initialFormValues.paymentIntervalInMonths !== undefined && initialFormValues.paymentIntervalInMonths !== null ) {
 		paymentIntervalInMonths = replaceInitialValue(
 			paymentIntervalInMonths,
@@ -70,8 +70,8 @@ export const createInitialDonationPaymentValues = ( dataPersister: DataPersister
 	}
 
 	return {
-		amount: replaceInitialValue( dataPersister.getInitialValue( 'amount' ), initialFormValues.amount ),
-		type: replaceInitialValue( dataPersister.getInitialValue( 'type' ), initialFormValues.paymentType ),
+		amount: replaceInitialValue( dataPersister.getValue( 'amount' ), initialFormValues.amount ),
+		type: replaceInitialValue( dataPersister.getValue( 'type' ), initialFormValues.paymentType ),
 		paymentIntervalInMonths: paymentIntervalInMonths,
 		isCustomAmount: initialFormValues.isCustomAmount,
 	};
@@ -90,7 +90,7 @@ export const createInitialMembershipAddressValues = ( dataPersister: DataPersist
 	}
 
 	persistenceAddress( NS_MEMBERSHIP_ADDRESS ).fields.forEach( field => {
-		const value = dataPersister.getInitialValue( field );
+		const value = dataPersister.getValue( field );
 		if ( value ) {
 			addressPersistItems.push( { name: field, value: value, validity: Validity.RESTORED } );
 			trackFormFieldRestored( 'membership_application', field );
@@ -101,10 +101,10 @@ export const createInitialMembershipAddressValues = ( dataPersister: DataPersist
 	} );
 
 	return {
-		addressType: replaceInitialValue( initialFormValues.get( 'addressType' ), dataPersister.getInitialValue( 'addressType' ) ),
-		membershipType: replaceInitialValue( initialFormValues.get( 'membershipType' ), dataPersister.getInitialValue( 'membershipType' ) ),
-		date: dataPersister.getInitialValue( 'date' ),
-		receiptOptOut: replaceInitialValue( false, dataPersister.getInitialValue( 'receiptOptOut' ) ),
+		addressType: replaceInitialValue( initialFormValues.get( 'addressType' ), dataPersister.getValue( 'addressType' ) ),
+		membershipType: replaceInitialValue( initialFormValues.get( 'membershipType' ), dataPersister.getValue( 'membershipType' ) ),
+		date: dataPersister.getValue( 'date' ),
+		receiptOptOut: replaceInitialValue( false, dataPersister.getValue( 'receiptOptOut' ) ),
 		fields: addressPersistItems,
 	};
 };
@@ -115,8 +115,8 @@ export const createInitialMembershipAddressValues = ( dataPersister: DataPersist
 export const createInitialMembershipFeeValues = ( dataPersister: DataPersister, validateFeeUrl: string ): InitialMembershipFeeValues => {
 	return {
 		validateFeeUrl: validateFeeUrl,
-		fee: dataPersister.getInitialValue( 'fee' ),
-		interval: dataPersister.getInitialValue( 'interval' ),
+		fee: dataPersister.getValue( 'fee' ),
+		interval: dataPersister.getValue( 'interval' ),
 	};
 };
 
