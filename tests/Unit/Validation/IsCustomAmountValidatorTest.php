@@ -4,9 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
-use PHPUnit\Framework\TestCase;
 
 class IsCustomAmountValidatorTest extends TestCase {
 

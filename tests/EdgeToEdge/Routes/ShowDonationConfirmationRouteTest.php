@@ -9,17 +9,17 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
-use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
+use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
@@ -31,7 +31,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_confirmationPageContainsDonationData(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-
 			$donation = $this->newStoredDonation( $factory );
 
 			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );

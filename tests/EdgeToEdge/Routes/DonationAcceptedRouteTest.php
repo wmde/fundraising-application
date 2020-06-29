@@ -6,13 +6,13 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class DonationAcceptedRouteTest extends WebRouteTestCase {
@@ -21,7 +21,7 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 	const CORRECT_UPDATE_TOKEN = 'Correct update token';
 
 	public function testGivenInvalidUpdateToken_errorIsReturned(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$existingDonationId = $this->storeDonation( $factory );
 
 			$client->request(
@@ -50,8 +50,7 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenKnownIdAndValidUpdateToken_successIsReturned(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
-
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$existingDonationId = $this->storeDonation( $factory );
 
 			$client->request(

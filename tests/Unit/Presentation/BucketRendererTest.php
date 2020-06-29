@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
-use PHPUnit\Framework\TestCase;
 
 class BucketRendererTest extends TestCase {
 	private $campaign1;
@@ -22,7 +22,6 @@ class BucketRendererTest extends TestCase {
 		$this->campaign2 = new Campaign( 'second_campaign', 's', $start, $end, true );
 	}
 
-
 	public function testGivenNoBuckets_itReturnsEmptyArray() {
 		$this->assertSame( [], BucketRenderer::renderBuckets() );
 	}
@@ -32,7 +31,7 @@ class BucketRendererTest extends TestCase {
 			new Bucket( 'default', $this->campaign1, true )
 		);
 
-		$this->assertEquals( ['campaigns.first_campaign.default'], $templateParams );
+		$this->assertEquals( [ 'campaigns.first_campaign.default' ], $templateParams );
 	}
 
 	public function testMultipleOneBuckets_itReturnsTheirId() {

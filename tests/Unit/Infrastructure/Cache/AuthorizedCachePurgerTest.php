@@ -5,14 +5,14 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Cache;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\CachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\CachePurgingException;
-use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger
  *
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class AuthorizedCachePurgerTest extends \PHPUnit\Framework\TestCase {

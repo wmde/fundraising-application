@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingEmailValidator;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class GetInTouchRouteTest extends WebRouteTestCase {
@@ -41,7 +41,6 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidRequest_validationFails(): void {
-
 		$client = $this->createClient();
 
 		$crawler = $client->request(
@@ -73,7 +72,6 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenGetRequest_formShownWithoutErrors(): void {
-
 		$client = $this->createClient();
 
 		$crawler = $client->request(

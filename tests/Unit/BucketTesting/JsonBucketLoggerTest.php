@@ -56,7 +56,7 @@ class JsonBucketLoggerTest extends TestCase {
 	public function testGivenEventMetadata_itIsLogged() {
 		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent() );
 
-		$this->assertLogValue( (object) [ 'id' => 123, 'some_fact' => 'water_is_wet' ], 'metadata' );
+		$this->assertLogValue( (object)[ 'id' => 123, 'some_fact' => 'water_is_wet' ], 'metadata' );
 	}
 
 	public function testGivenBuckets_theyAreOutputWithTheirCampaigns() {
@@ -67,7 +67,7 @@ class JsonBucketLoggerTest extends TestCase {
 		);
 
 		$this->assertLogValue(
-			(object) [ 'test1' => 'first', 'test2' => 'second' ],
+			(object)[ 'test1' => 'first', 'test2' => 'second' ],
 			'buckets'
 		);
 	}
@@ -132,7 +132,7 @@ class JsonBucketLoggerTest extends TestCase {
 		$logWriter->writeEvent( new FakeBucketLoggingEvent() );
 		$logWriter->writeEvent( new FakeBucketLoggingEvent() );
 
-		foreach( $this->logWriter->getWriteCalls() as $line ) {
+		foreach ( $this->logWriter->getWriteCalls() as $line ) {
 			$logData = json_decode( $line, false );
 			$this->assertSame( JSON_ERROR_NONE, json_last_error(), 'JSON should be valid' );
 			$this->assertIsObject( $logData );

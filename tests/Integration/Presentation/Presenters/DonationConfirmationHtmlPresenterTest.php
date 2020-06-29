@@ -6,15 +6,15 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter
  *
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class DonationConfirmationHtmlPresenterTest extends TestCase {
 
@@ -33,7 +33,7 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			$this->newTwigTemplateMock( $expectedParameters ),
 			new FakeUrlGenerator(),
 			[],
-			(object) []
+			(object)[]
 		);
 
 		$donation = ValidDonation::newBookedAnonymousPayPalDonation();
@@ -71,7 +71,7 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 				'addComment' => '/such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'
 			],
 			'countries' => [],
-			'addressValidationPatterns' => (object) [],
+			'addressValidationPatterns' => (object)[],
 			'addressType' => 'anonym'
 
 		];
@@ -94,7 +94,7 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			$this->newTwigTemplateMock( $expectedParameters ),
 			new FakeUrlGenerator(),
 			[],
-			(object) []
+			(object)[]
 		);
 
 		$donation = ValidDonation::newIncompleteAnonymousPayPalDonation();

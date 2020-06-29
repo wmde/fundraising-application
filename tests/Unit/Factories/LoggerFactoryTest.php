@@ -8,8 +8,8 @@ use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use org\bovigo\vfs\vfsStream;
-use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\SupportHandler;
 
 class LoggerFactoryTest extends TestCase {
@@ -21,7 +21,7 @@ class LoggerFactoryTest extends TestCase {
 					'level' => 'WARNING'
 				]
 			]
-		]);
+		] );
 		$logger = $factory->getLogger();
 		$this->assertCount( 1, $logger->getHandlers() );
 		$firstHandler = $logger->getHandlers()[0]; /** @var StreamHandler $firstHandler */
@@ -39,7 +39,7 @@ class LoggerFactoryTest extends TestCase {
 					'level' => 'ERROR'
 				]
 			]
-		]);
+		] );
 		$logger = $factory->getLogger();
 		$this->assertCount( 1, $logger->getHandlers() );
 		$firstHandler = $logger->getHandlers()[0]; /** @var StreamHandler $firstHandler */
@@ -59,7 +59,7 @@ class LoggerFactoryTest extends TestCase {
 					'host' => 'http://errbit:8080'
 				]
 			],
-		]);
+		] );
 		$logger = $factory->getLogger();
 		$this->assertCount( 1, $logger->getHandlers() );
 		$firstHandler = $logger->getHandlers()[0]; /** @var SupportHandler $firstHandler */
@@ -67,16 +67,15 @@ class LoggerFactoryTest extends TestCase {
 		$this->assertSame( Logger::ERROR, $firstHandler->getLevel() );
 	}
 
-
 	public function missingErrbitConfigParamsProvider(): iterable {
 		$validParams = [
 			'projectId' => 1,
 			'projectKey' => 'fd8794457af0da70882c850eb486524f',
 			'host' => 'http://errbit:8080'
 		];
-		yield [ array_merge( $validParams, ['projectId' => '' ] ) ];
-		yield [ array_merge( $validParams, ['projectKey' => null ] ) ];
-		yield [ array_merge( $validParams, ['host' => '' ] ) ];
+		yield [ array_merge( $validParams, [ 'projectId' => '' ] ) ];
+		yield [ array_merge( $validParams, [ 'projectKey' => null ] ) ];
+		yield [ array_merge( $validParams, [ 'host' => '' ] ) ];
 		yield [ [
 		'projectId' => '',
 			'projectKey' => '',
@@ -98,7 +97,7 @@ class LoggerFactoryTest extends TestCase {
 					'host' => $invalidConfigParams['host']
 				]
 			],
-		]);
+		] );
 		$this->expectException( \InvalidArgumentException::class );
 		$logger = $factory->getLogger();
 	}
@@ -106,9 +105,9 @@ class LoggerFactoryTest extends TestCase {
 	public function testGivenUnknownLogType_exceptionIsThrown(): void {
 		$factory = new LoggerFactory( [
 			'handlers' => [
-				['method' => 'nonExistingInvalidHandler']
+				[ 'method' => 'nonExistingInvalidHandler' ]
 			]
-		]);
+		] );
 		$this->expectException( \InvalidArgumentException::class );
 		$factory->getLogger();
 	}
@@ -127,7 +126,7 @@ class LoggerFactoryTest extends TestCase {
 					'level' => 'WARNING'
 				]
 			],
-		]);
+		] );
 		$logger = $factory->getLogger();
 		$this->assertCount( 2, $logger->getHandlers() );
 		$firstHandler = $logger->getHandlers()[0]; /** @var StreamHandler $firstHandler */
@@ -152,7 +151,7 @@ class LoggerFactoryTest extends TestCase {
 					'level' => 'WARNING'
 				]
 			],
-		]);
+		] );
 
 		$this->expectException( \InvalidArgumentException::class );
 		$factory->getLogger();

@@ -12,7 +12,7 @@ use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiryFetchingExcep
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {

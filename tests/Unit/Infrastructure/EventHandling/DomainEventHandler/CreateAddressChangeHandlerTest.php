@@ -39,7 +39,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 		new CreateAddressChangeHandler( $entityManager, $dispatcher );
 
 		$this->assertEquals(
-			[DonationCreatedEvent::class, MembershipCreatedEvent::class],
+			[ DonationCreatedEvent::class, MembershipCreatedEvent::class ],
 			$dispatcher->getObservedEventClassNames()
 		);
 	}
@@ -64,7 +64,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 			return $addressChange->getExternalId() === self::DONATION_ID &&
 				$addressChange->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION &&
 				$addressChange->isPersonalAddress();
-		 }));
+			} ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
 		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, new Donor(
@@ -84,7 +84,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 				return $addressChange->getExternalId() === self::DONATION_ID &&
 					$addressChange->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION &&
 					$addressChange->isCompanyAddress();
-			}));
+			} ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
 		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, new Donor(
@@ -104,7 +104,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 				return $addressChange->getExternalId() === self::MEMBERSHIP_ID &&
 					$addressChange->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_MEMBERSHIP &&
 					$addressChange->isPersonalAddress();
-			}));
+			} ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
 		$handler->onMembershipCreated( new MembershipCreatedEvent( self::MEMBERSHIP_ID, new Applicant(
@@ -125,7 +125,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 				return $addressChange->getExternalId() === self::MEMBERSHIP_ID &&
 					$addressChange->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_MEMBERSHIP &&
 					$addressChange->isCompanyAddress();
-			}));
+			} ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
 		$handler->onMembershipCreated( new MembershipCreatedEvent( self::MEMBERSHIP_ID, new Applicant(
@@ -141,7 +141,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 		$addressChangeRepo = $this->createMock( EntityRepository::class );
 		$addressChangeRepo->expects( $this->once() )
 			->method( 'count' )
-			->with( $this->equalTo( ['externalId' => self::DONATION_ID, 'externalIdType' => AddressChange::EXTERNAL_ID_TYPE_DONATION ] ) )
+			->with( $this->equalTo( [ 'externalId' => self::DONATION_ID, 'externalIdType' => AddressChange::EXTERNAL_ID_TYPE_DONATION ] ) )
 			->willReturn( 1 );
 		$entityManager = $this->createMock( EntityManager::class );
 		$entityManager->method( 'getRepository' )->willReturn( $addressChangeRepo );

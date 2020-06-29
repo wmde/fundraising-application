@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Clock\StubClock;
 use WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator

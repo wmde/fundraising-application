@@ -4,9 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Cookie;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder

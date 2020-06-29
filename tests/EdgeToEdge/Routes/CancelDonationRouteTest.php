@@ -9,15 +9,15 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation as DoctrineDonation;
+use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
+use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class CancelDonationRouteTest extends WebRouteTestCase {
@@ -40,7 +40,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCancellationIsSuccessful_cookieIsCleared(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$client->getCookieJar()->set( new Cookie( 'donation_timestamp', '49152 B.C.' ) );
 
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
@@ -62,8 +62,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidUpdateToken_confirmationPageIsShown(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
-
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
 
 			$client->request(
@@ -90,7 +89,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidUpdateToken_resultIsError(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
 
 			$client->request(
@@ -115,7 +114,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		 */
 		$doctrineDonation = $entityManager->getRepository( DoctrineDonation::class )->find( $donation->getId() );
 
-		$doctrineDonation->modifyDataObject( function( DonationData $data ): void {
+		$doctrineDonation->modifyDataObject( function ( DonationData $data ): void {
 			$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
 			$data->setUpdateTokenExpiry( date( 'Y-m-d H:i:s', time() + 60 * 60 ) );
 		} );
@@ -127,7 +126,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMailDeliveryFails_noticeIsDisplayed(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
 			$factory->setSuborganizationMessenger( $this->newThrowingMessenger() );
 

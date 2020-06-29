@@ -13,7 +13,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
  *
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  *
  * @requires extension konto_check

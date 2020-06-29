@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class ThrowingCampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 
@@ -22,6 +22,5 @@ class ThrowingCampaignConfigurationLoader implements CampaignConfigurationLoader
 	public function loadCampaignConfiguration( string ...$configFiles ): array {
 		throw $this->exception;
 	}
-
 
 }

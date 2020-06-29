@@ -12,11 +12,11 @@ use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\MinBucketCountRule;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\DefaultBucketRule;
+use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\MinBucketCountRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\StartAndEndTimeRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\UniqueBucketRule;
+use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingCampaignConfigurationLoader;
 

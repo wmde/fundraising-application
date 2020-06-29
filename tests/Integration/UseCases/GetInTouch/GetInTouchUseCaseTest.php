@@ -6,17 +6,17 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GetInTouch;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
+use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\FunValidators\ValidationResult;
-use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase
  *
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {

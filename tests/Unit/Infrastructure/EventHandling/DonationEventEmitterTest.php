@@ -1,11 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling;
 
-use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationEvent;
 

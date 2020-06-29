@@ -7,13 +7,13 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\FunValidators\ValidationResponse;
 use WMDE\FunValidators\ConstraintViolation;
+use WMDE\FunValidators\ValidationResponse;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter
  *
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class ConfirmSubscriptionHtmlPresenterTest extends TestCase {

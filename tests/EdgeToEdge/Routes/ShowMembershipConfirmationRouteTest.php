@@ -9,15 +9,15 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FakeApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
-use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 

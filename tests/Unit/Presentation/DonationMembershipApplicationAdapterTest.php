@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationPayment;
@@ -11,13 +12,12 @@ use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorAddress;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
+use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
-use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
-use PHPUnit\Framework\TestCase;
 
 class DonationMembershipApplicationAdapterTest extends TestCase {
 
@@ -185,7 +185,6 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 	}
 
 	public function testDefaultValidationStateIsEmpty(): void {
-
 		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getBankTransferPayment() );
 		$donation = new Donation( null, Donation::STATUS_NEW, null, $payment, false, new DonationTrackingInfo, null );
 		$adapter = new DonationMembershipApplicationAdapter();
@@ -204,19 +203,18 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 		$adapter = new DonationMembershipApplicationAdapter();
 
 		$this->assertEquals(
-			['address' => true],
+			[ 'address' => true ],
 			$adapter->getInitialValidationState( $donation )
 		);
 	}
 
 	public function testDonationWithDirectDebitAndIbanHasValidBankData(): void {
-
 		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getDirectDebitPayment() );
 		$donation = new Donation( null, Donation::STATUS_NEW, null, $payment, false, new DonationTrackingInfo, null );
 		$adapter = new DonationMembershipApplicationAdapter();
 
 		$this->assertEquals(
-			['bankData' => true],
+			[ 'bankData' => true ],
 			$adapter->getInitialValidationState( $donation )
 		);
 	}

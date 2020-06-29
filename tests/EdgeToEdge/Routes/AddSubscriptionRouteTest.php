@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  *
@@ -33,7 +33,6 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	];
 
 	public function testValidSubscriptionRequestGetsPersisted(): void {
-
 		$subscriptionRepository = new SubscriptionRepositorySpy();
 
 		$client = $this->createClient( [ 'skin' => 'laika' ], function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
@@ -55,7 +54,6 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'jeroendedauw@gmail.com', $subscription->getEmail() );
 		$this->assertSame( 'test/blue', $subscription->getTracking() );
 		$this->assertSame( 'testCampaign', $subscription->getSource() );
-
 	}
 
 	public function testGivenValidDataAndNoContentType_routeReturnsRedirectToSucccessPage(): void {
@@ -95,10 +93,10 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			'/contact/subscribe',
 			$this->validFormInput,
 			[],
-			['HTTP_ACCEPT' => 'application/json']
+			[ 'HTTP_ACCEPT' => 'application/json' ]
 		);
 		$response = $client->getResponse();
-		$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
+		$this->assertJsonSuccessResponse( [ 'status' => 'OK' ], $response );
 	}
 
 	public function testGivenInvalidDataAndJSONContentType_routeReturnsErrorResult(): void {
@@ -109,7 +107,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			'/contact/subscribe',
 			$this->invalidFormInput,
 			[],
-			['HTTP_ACCEPT' => 'application/json']
+			[ 'HTTP_ACCEPT' => 'application/json' ]
 		);
 
 		$response = $client->getResponse();
@@ -128,10 +126,10 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			'/contact/subscribe',
 			array_merge(
 				$this->validFormInput,
-				['callback' => 'test']
+				[ 'callback' => 'test' ]
 			),
 			[],
-			['HTTP_ACCEPT' => 'application/javascript']
+			[ 'HTTP_ACCEPT' => 'application/javascript' ]
 		);
 
 		$response = $client->getResponse();

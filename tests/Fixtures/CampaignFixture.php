@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class CampaignFixture {
 
@@ -18,7 +18,7 @@ class CampaignFixture {
 		string $bucketName = 'test',
 		bool $isDefault = Bucket::DEFAULT
 	): Bucket {
-		if ($campaign === null) {
+		if ( $campaign === null ) {
 			$campaign = self::createCampaign();
 		}
 		$bucket = new Bucket( $bucketName, $campaign, $isDefault );

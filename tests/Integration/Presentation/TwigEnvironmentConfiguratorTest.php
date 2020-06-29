@@ -5,22 +5,22 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Twig_Environment;
 use Twig_Error_Loader;
 use Twig_Error_Runtime;
 use Twig_LoaderInterface;
-use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
-use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;
-use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 use WMDE\Fundraising\ContentProvider\ContentException;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
+use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
+use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
+use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class TwigEnvironmentConfiguratorTest extends TestCase {
@@ -39,7 +39,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 
 		$this->assertSame(
 			'Meeow!',
-			$factory->getLayoutTemplate( 'variableReplacement.twig' )->render( ['testvar' => 'Meeow!'] )
+			$factory->getLayoutTemplate( 'variableReplacement.twig' )->render( [ 'testvar' => 'Meeow!' ] )
 		);
 	}
 
@@ -69,7 +69,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 			],
 			'/tmp/fun'
 		);
-		$twig = $environmentConfigurator->getEnvironment( $this->newTwigEnvironment(), [$firstLoader, $secondLoader, $thirdLoader], [], [] );
+		$twig = $environmentConfigurator->getEnvironment( $this->newTwigEnvironment(), [ $firstLoader, $secondLoader, $thirdLoader ], [], [] );
 		$result = $twig->render( 'Canis_silvestris' );
 		$this->assertSame( 'Meeow!', $result );
 	}
@@ -153,7 +153,7 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 
 		$provider = $this->getMockContentProvider();
 		$provider->method( 'getWeb' )
-			->with( 'lorem', ['state' => 'fine'] )
+			->with( 'lorem', [ 'state' => 'fine' ] )
 			->willReturn( 'ipsum. all is <strong>fine</strong>.' );
 
 		$factory->setContentProvider( $provider );
@@ -192,7 +192,6 @@ class TwigEnvironmentConfiguratorTest extends TestCase {
 	}
 
 	public function testSandboxedWebContentDoesntExist_exceptionIsThrown(): void {
-
 		$factory = TestEnvironment::newInstance( [
 			'twig' => [
 				'loaders' => [

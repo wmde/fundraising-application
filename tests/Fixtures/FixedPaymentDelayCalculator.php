@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class FixedPaymentDelayCalculator implements PaymentDelayCalculator {

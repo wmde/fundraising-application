@@ -9,20 +9,20 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
@@ -82,7 +82,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			new Response( 200, [], $responseBody )
 		] );
 		$handlerStack = HandlerStack::create( $mock );
-		return new GuzzleClient( ['handler' => $handlerStack ] );
+		return new GuzzleClient( [ 'handler' => $handlerStack ] );
 	}
 
 	private function assertPayPalDataGotPersisted( DonationRepository $donationRepo, array $request ): void {

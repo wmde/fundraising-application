@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class RouteNotFoundTest extends WebRouteTestCase {
@@ -27,9 +27,9 @@ class RouteNotFoundTest extends WebRouteTestCase {
 
 	public function testGivenUnknownRouteAndJSONRquest_responseIsJSON(): void {
 		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
-		$client->request( 'GET', '/kittens', [], [], ['HTTP_Accept' => 'application/json'] );
+		$client->request( 'GET', '/kittens', [], [], [ 'HTTP_Accept' => 'application/json' ] );
 
-		$this->assertJsonResponse( ['ERR' => 'No route found for "GET /kittens"'], $client->getResponse() );
+		$this->assertJsonResponse( [ 'ERR' => 'No route found for "GET /kittens"' ], $client->getResponse() );
 	}
 
 }

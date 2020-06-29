@@ -17,9 +17,9 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
-use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
@@ -30,7 +30,7 @@ use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as Sofor
 use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  *
@@ -45,7 +45,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_donationGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-
 			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -297,7 +296,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-
 			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->followRedirects( false );
 
@@ -702,7 +700,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setNullMessenger();
@@ -720,7 +717,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				'/donation/add',
 				$this->newValidMobilePayPalInput(),
 				[],
-				['REMOTE_ADDR' => '10.1.2.3']
+				[ 'REMOTE_ADDR' => '10.1.2.3' ]
 			);
 
 			$client->getResponse();
@@ -755,7 +752,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				'/donation/add',
 				array_merge(
 					$this->newValidBankTransferInput(),
-					['mbt' => '1']
+					[ 'mbt' => '1' ]
 				)
 			);
 

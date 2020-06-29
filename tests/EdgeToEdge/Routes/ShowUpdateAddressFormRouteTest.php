@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 
@@ -27,7 +27,6 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-
 				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 
 				$factory->getEntityManager()->persist( $addressChange );
@@ -54,7 +53,6 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-
 				$this->performRequest(
 					$client,
 					self::INVALID_TOKEN

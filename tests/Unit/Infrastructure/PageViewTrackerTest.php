@@ -5,13 +5,13 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ServerSideTrackerSpy;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\ServerSideTrackerSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  */
 class PageViewTrackerTest extends TestCase {

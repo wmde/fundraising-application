@@ -24,7 +24,6 @@ class StreamLogWriterTest extends TestCase {
 		$this->logPath = self::EXISTING_DIRECTORY . '/buckets.log';
 	}
 
-
 	public function testHappyPath() {
 		$logWriter = $this->newLogWriter();
 

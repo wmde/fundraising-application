@@ -32,7 +32,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 	public function testWhenUserVisitsThePage_cookieIsSet(): void {
 		$client = $this->createClient(
 			[ 'campaigns' => [ 'timezone' => 'UTC' ] ],
-			function( FunFunFactory $ffactory, array $config ) {
+			function ( FunFunFactory $ffactory, array $config ) {
 			$ffactory->setCampaignConfigurationLoader(
 				new OverridingCampaignConfigurationLoader(
 					$ffactory->getCampaignConfigurationLoader(),
@@ -46,7 +46,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 		$cookie = $client->getCookieJar()->get( self::COOKIE_NAME );
 		$this->assertNotEmpty( $cookie->getValue() );
 		$this->assertFalse( $cookie->isExpired() );
-		$this->assertSame( '2099-12-31 00:00:00', date( 'Y-m-d H:i:s', (int) $cookie->getExpiresTime() ) );
+		$this->assertSame( '2099-12-31 00:00:00', date( 'Y-m-d H:i:s', (int)$cookie->getExpiresTime() ) );
 	}
 
 	public function testWhenUserVisitsThePageWithUrlParams_cookieIsChanged(): void {
@@ -70,7 +70,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 
 	public function testWhenCampaignsAreInactive_cookieExpiresAtEndOfSession(): void {
 		$client = $this->createClient( [ 'campaigns' => [ 'timezone' => 'UTC' ] ],
-			function( FunFunFactory $ffactory, array $config ) {
+			function ( FunFunFactory $ffactory, array $config ) {
 				$ffactory->setCampaignConfigurationLoader(
 					new OverridingCampaignConfigurationLoader(
 						$ffactory->getCampaignConfigurationLoader(),

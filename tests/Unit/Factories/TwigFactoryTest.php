@@ -4,9 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Factories;
 
-use WMDE\Fundraising\Frontend\Factories\TwigFactory;
-use Twig_Loader_Filesystem;
 use PHPUnit\Framework\TestCase;
+use Twig_Loader_Filesystem;
+use WMDE\Fundraising\Frontend\Factories\TwigFactory;
 
 class TwigFactoryTest extends TestCase {
 

@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\AmountFormatter
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class AmountFormatterTest extends \PHPUnit\Framework\TestCase {
@@ -30,13 +30,13 @@ class AmountFormatterTest extends \PHPUnit\Framework\TestCase {
 	public function testGivenUSLocaleAndFractionalAmount_amountIsFormattedAsUSString(): void {
 		$formatter = new AmountFormatter( 'en_US' );
 		$euro = Euro::newFromCents( 2342 );
-		$this->assertEquals( '23.42', $formatter->format( $euro ) );
+		$this->assertSame( '23.42', $formatter->format( $euro ) );
 	}
 
 	public function testGivenUSLocaleAndIntegerAmount_amountIsFormattedAsUSString(): void {
 		$formatter = new AmountFormatter( 'en_US' );
 		$euro = Euro::newFromInt( 23 );
-		$this->assertEquals( '23.00', $formatter->format( $euro ) );
+		$this->assertSame( '23.00', $formatter->format( $euro ) );
 	}
 
 	public function testGivenUnknownLocale_exceptionIsThrown(): void {

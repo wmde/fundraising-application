@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  */
 class ServerSideTrackerSpy implements ServerSideTracker {

@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Routes;
 
-use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
-use WMDE\Fundraising\PaymentContext\RequestModel\SofortNotificationRequest;
 use DateTime;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
+use WMDE\Fundraising\PaymentContext\RequestModel\SofortNotificationRequest;
 
 class SofortNotificationRequestTest extends TestCase {
 

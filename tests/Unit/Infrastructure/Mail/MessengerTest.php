@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class MessengerTest extends \PHPUnit\Framework\TestCase {
 

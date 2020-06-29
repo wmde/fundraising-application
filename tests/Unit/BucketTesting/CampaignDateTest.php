@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
-use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 
 class CampaignDateTest extends TestCase {
 

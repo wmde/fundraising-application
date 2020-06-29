@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class ListCommentsJsonRouteTest extends WebRouteTestCase {
@@ -32,7 +32,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testRouteShowsComments(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
@@ -93,7 +93,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitSmallerThanCommentCount_onlySoManyCommentsAreShown(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
@@ -111,7 +111,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenJsonpCallback_jsonIsWrappedInCallback(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
@@ -137,7 +137,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
