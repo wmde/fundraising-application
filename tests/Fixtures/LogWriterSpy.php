@@ -14,7 +14,7 @@ class LogWriterSpy implements LogWriter {
 		return $this->entries;
 	}
 
-	public function write( string $logEntry ) {
+	public function write( string $logEntry ): void {
 		$this->entries[] = $logEntry;
 	}
 

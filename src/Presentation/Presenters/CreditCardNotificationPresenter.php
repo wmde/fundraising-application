@@ -44,6 +44,9 @@ class CreditCardNotificationPresenter {
 	 * Response format expected by 3rd party
 	 *
 	 * @see https://www.micropayment.de/help/documentation/
+	 *
+	 * @param array $result
+	 * @return string
 	 */
 	private function render( array $result ): string {
 		return implode(

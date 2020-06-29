@@ -7,10 +7,6 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 use InvalidArgumentException;
 
 /**
- * Class PaymentTypesSettings
- *
- * @package WMDE\Fundraising\Frontend\Presentation
- *
  * Takes a config like the following and provides read and write interface
  *
  * [
@@ -50,6 +46,7 @@ class PaymentTypesSettings {
 	}
 
 	/**
+	 * @param string $settingName
 	 * @return string[]
 	 */
 	private function getPaymentTypesWhereSettingIsTrue( string $settingName ): array {

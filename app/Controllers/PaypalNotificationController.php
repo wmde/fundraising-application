@@ -45,7 +45,8 @@ class PaypalNotificationController {
 		$response = $useCase->handleNotification( $this->newUseCaseRequestFromPost( $post ) );
 		$this->logResponseIfNeeded( $ffFactory, $response, $post );
 
-		return new Response( '', Response::HTTP_OK ); # PayPal expects an empty response
+		// PayPal expects an empty response
+		return new Response( '', Response::HTTP_OK );
 	}
 
 	private function getUpdateToken( ParameterBag $postRequest ): string {
@@ -81,6 +82,7 @@ class PaypalNotificationController {
 	}
 
 	private function newUseCaseRequestFromPost( ParameterBag $postRequest ): PayPalPaymentNotificationRequest {
+		// we're not using Euro class for amounts to avoid exceptions on fees or other fields where the value is < 0
 		return ( new PayPalPaymentNotificationRequest() )
 			->setTransactionType( $postRequest->get( 'txn_type', '' ) )
 			->setTransactionId( $postRequest->get( 'txn_id', '' ) )
@@ -98,7 +100,7 @@ class PaypalNotificationController {
 			->setPayerAddressStatus( $postRequest->get( 'address_status', '' ) )
 			->setInternalId( (int)$postRequest->get( 'item_number', 0 ) )
 			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) )
-			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) ) // No Euro class to avoid exceptions on fees < 0
+			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) )
 			->setAmountGross( Euro::newFromString( $postRequest->get( 'mc_gross', '0' ) ) )
 			->setSettleAmount( Euro::newFromString( $postRequest->get( 'settle_amount', '0' ) ) )
 			->setPaymentTimestamp( $postRequest->get( 'payment_date', '' ) )

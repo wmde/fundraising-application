@@ -21,9 +21,6 @@ class TranslationsCollector {
 		$this->translationFiles[] = $transFile;
 	}
 
-	/**
-	 * @throws FileFetchingException
-	 */
 	public function collectTranslations(): array {
 		$result = [];
 

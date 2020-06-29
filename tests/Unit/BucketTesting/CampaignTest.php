@@ -9,6 +9,10 @@ use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\Campaign
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\Bucket
+ */
 class CampaignTest extends TestCase {
 
 	public function testBucketsAddedGetAnIndexInTheOrderTheyWereAdded() {

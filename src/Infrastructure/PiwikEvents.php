@@ -12,15 +12,15 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  */
 class PiwikEvents {
 
-	const SCOPE_VISIT = 'visit';
-	const SCOPE_PAGE = 'page';
+	public const SCOPE_VISIT = 'visit';
+	public const SCOPE_PAGE = 'page';
 
-	const EVENT_SET_CUSTOM_VARIABLE = 'setCustomVariable';
-	const EVENT_TRACK_GOAL = 'trackGoal';
+	private const EVENT_SET_CUSTOM_VARIABLE = 'setCustomVariable';
+	private const EVENT_TRACK_GOAL = 'trackGoal';
 
-	const CUSTOM_VARIABLE_PAYMENT_TYPE = 1;
-	const CUSTOM_VARIABLE_AMOUNT = 2;
-	const CUSTOM_VARIABLE_PAYMENT_INTERVAL = 3;
+	public const CUSTOM_VARIABLE_PAYMENT_TYPE = 1;
+	public const CUSTOM_VARIABLE_AMOUNT = 2;
+	public const CUSTOM_VARIABLE_PAYMENT_INTERVAL = 3;
 
 	private $variableNames = [
 		1 => 'Payment',

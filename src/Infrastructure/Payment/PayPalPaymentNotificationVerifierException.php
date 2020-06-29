@@ -10,10 +10,9 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Payment;
  */
 class PayPalPaymentNotificationVerifierException extends \RuntimeException {
 
-	const ERROR_UNKNOWN = 0;
-	const ERROR_UNSUPPORTED_STATUS = 1;
-	const ERROR_WRONG_RECEIVER = 2;
-	const ERROR_VERIFICATION_FAILED = 3;
-	const ERROR_UNSUPPORTED_CURRENCY = 4;
+	public const ERROR_UNSUPPORTED_STATUS = 1;
+	public const ERROR_WRONG_RECEIVER = 2;
+	public const ERROR_VERIFICATION_FAILED = 3;
+	public const ERROR_UNSUPPORTED_CURRENCY = 4;
 
 }

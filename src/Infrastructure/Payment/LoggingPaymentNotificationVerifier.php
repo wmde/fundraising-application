@@ -14,7 +14,7 @@ use Psr\Log\LogLevel;
  */
 class LoggingPaymentNotificationVerifier implements PaymentNotificationVerifier {
 
-	const CONTEXT_EXCEPTION_KEY = 'exception';
+	private const CONTEXT_EXCEPTION_KEY = 'exception';
 
 	private $verifier;
 	private $logger;

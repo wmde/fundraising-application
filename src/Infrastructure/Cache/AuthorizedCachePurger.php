@@ -10,9 +10,9 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Cache;
  */
 class AuthorizedCachePurger {
 
-	const RESULT_SUCCESS = 0;
-	const RESULT_ERROR = 1;
-	const RESULT_ACCESS_DENIED = 2;
+	public const RESULT_SUCCESS = 0;
+	public const RESULT_ERROR = 1;
+	public const RESULT_ACCESS_DENIED = 2;
 
 	private $expectedSecret;
 	private $cachePurger;

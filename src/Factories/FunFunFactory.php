@@ -606,7 +606,8 @@ class FunFunFactory implements ServiceProviderInterface {
 
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
-				$twigFactory->newArrayLoader(), // This is just a fallback for testing
+				// This is just a fallback for testing
+				$twigFactory->newArrayLoader(),
 			] );
 			$extensions = [];
 			$filters = [
@@ -643,7 +644,8 @@ class FunFunFactory implements ServiceProviderInterface {
 
 			$loaders = array_filter( [
 				$twigFactory->newFileSystemLoader(),
-				$twigFactory->newArrayLoader(), // This is just a fallback for testing
+				// This is just a fallback for testing
+				$twigFactory->newArrayLoader(),
 			] );
 			$extensions = [
 				new Twig_Extensions_Extension_Intl(),
@@ -1686,6 +1688,9 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	/**
 	 * If the pathname does not start with a slash, make the path absolute to root dir of application
+	 *
+	 * @param string $path
+	 * @return string
 	 */
 	private function getAbsolutePath( string $path ): string {
 		if ( $path[0] === '/' ) {
@@ -1733,6 +1738,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	/**
+	 * @param string $presetType
 	 * @return Euro[]
 	 */
 	public function getPresetAmountsSettings( string $presetType ): array {
@@ -1871,6 +1877,8 @@ class FunFunFactory implements ServiceProviderInterface {
 	 * for front-end related strings and any backend strings would be separated into individual files
 	 * to avoid unnecessary strings being loaded on the client side
 	 * @see https://phabricator.wikimedia.org/T225105
+	 *
+	 * @return TranslationsCollector
 	 */
 	public function getTranslationCollector(): TranslationsCollector {
 		return $this->createSharedObject( TranslationsCollector::class, function (): TranslationsCollector {

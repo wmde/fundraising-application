@@ -79,9 +79,6 @@ class ApplyForMembershipController {
 		return $this->newHttpResponse( $responseModel );
 	}
 
-	/**
-	 * @throws \InvalidArgumentException
-	 */
 	private function callUseCase( Request $httpRequest ): ApplyForMembershipResponse {
 		$applyForMembershipRequest = $this->createMembershipRequest( $httpRequest );
 
@@ -156,9 +153,6 @@ class ApplyForMembershipController {
 		);
 	}
 
-	/**
-	 * @throws \InvalidArgumentException
-	 */
 	private function addFeeToRequestModel( ApplyForMembershipRequest $requestModel, Request $httpRequest ) {
 		$requestModel->setPaymentAmountInEuros( Euro::newFromCents(
 			intval( $httpRequest->request->get( 'membership_fee', '' ) )

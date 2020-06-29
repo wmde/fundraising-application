@@ -28,12 +28,6 @@ class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterfac
 		$this->cache = $cache;
 	}
 
-	/**
-	 * @throws FileFetchingException
-	 * @throws ParseException
-	 * @throws \RuntimeException
-	 * @throws InvalidConfigurationException
-	 */
 	public function loadCampaignConfiguration( string ...$configFiles ): array {
 		$cacheKey = $this->getCacheKey( ...$configFiles );
 		if ( $this->cache->contains( $cacheKey ) ) {

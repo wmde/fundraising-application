@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Cli\CampaignConfigValidation;
 
+use FileFetcher\SimpleFileFetcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -21,9 +22,9 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
  */
 class ValidateCampaignConfigCommand extends Command {
 
-	const NAME = 'app:validate:campaigns';
-	const ERROR_RETURN_CODE = 1;
-	const OK_RETURN_CODE = 0;
+	private const NAME = 'app:validate:campaigns';
+	private const RETURN_CODE_OK = 0;
+	private const RETURN_CODE_ERROR = 1;
 
 	protected function configure(): void {
 		$this->setName( self::NAME )
@@ -60,7 +61,7 @@ class ValidateCampaignConfigCommand extends Command {
 			$validator = new CampaignValidator( $campaignCollection, $errorLogger );
 
 			if ( $validator->isPassing() ) {
-				return self::OK_RETURN_CODE;
+				return self::RETURN_CODE_OK;
 			}
 		}
 
@@ -68,7 +69,7 @@ class ValidateCampaignConfigCommand extends Command {
 			$output->writeln( $error );
 		}
 		$output->writeln( 'Campaign YAML validation failed.' );
-		return self::ERROR_RETURN_CODE;
+		return self::RETURN_CODE_ERROR;
 	}
 
 	private function getFactory( string $environment ): FunFunFactory {
@@ -77,7 +78,7 @@ class ValidateCampaignConfigCommand extends Command {
 			throw new FileNotFoundException( null, 0, null, $environmentConfigPath );
 		}
 		$configReader = new ConfigReader(
-			new \FileFetcher\SimpleFileFetcher(),
+			new SimpleFileFetcher(),
 			__DIR__ . '/../../app/config/config.dist.json',
 			$environmentConfigPath
 		);

@@ -7,8 +7,9 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 interface LogWriter {
 
 	/**
+	 * @param string $logEntry
 	 * @throws LoggingError
 	 */
-	public function write( string $logEntry );
+	public function write( string $logEntry ): void;
 
 }

@@ -20,7 +20,7 @@ class StreamLogWriter implements LogWriter {
 	 * @param string $logEntry
 	 * @throws LoggingError
 	 */
-	public function write( string $logEntry ) {
+	public function write( string $logEntry ): void {
 		$this->openStreamIfNeeded();
 		fwrite(
 			$this->stream,
@@ -33,8 +33,9 @@ class StreamLogWriter implements LogWriter {
 			return;
 		}
 		$this->createPathIfNeeded();
-		$this->stream = @fopen( $this->url, 'a' );
-		if ( $this->stream === false ) {
+		try {
+			$this->stream = fopen( $this->url, 'a' );
+		} catch ( \Exception $e ) {
 			throw new LoggingError( 'Could not open ' . $this->url );
 		}
 	}
@@ -51,7 +52,11 @@ class StreamLogWriter implements LogWriter {
 
 	public function __destruct() {
 		if ( is_resource( $this->stream ) ) {
-			@fclose( $this->stream );
+			try {
+				fclose( $this->stream );
+			} catch ( \Exception $e ) {
+				throw new LoggingError( 'Could not close log file properly' );
+			}
 		}
 	}
 

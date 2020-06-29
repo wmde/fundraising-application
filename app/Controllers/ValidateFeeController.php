@@ -43,9 +43,6 @@ class ValidateFeeController {
 		return $this->newJsonErrorResponse( $response->getErrorCode() );
 	}
 
-	/**
-	 * @throws InvalidArgumentException
-	 */
 	private function euroFromRequest( Request $httpRequest ): Euro {
 		$currentFeeString = $httpRequest->request->get( 'membershipFee', '' );
 		if ( !ctype_digit( $currentFeeString ) ) {

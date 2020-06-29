@@ -47,11 +47,11 @@ class BucketSelector {
 
 	private function selectBucketWithStrategies( array $selectionStrategies, Campaign $campaign ): Bucket {
 		foreach ( $selectionStrategies as $strategy ) {
-			if ( $bucket = $strategy->selectBucketForCampaign( $campaign ) ) {
+			$bucket = $strategy->selectBucketForCampaign( $campaign );
+			if ( $bucket ) {
 				return $bucket;
 			}
 		}
 		throw new LogicException( 'Fallback bucket selection class must always return a bucket.' );
 	}
-
 }

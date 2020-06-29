@@ -17,11 +17,10 @@ class ParameterBucketSelection implements BucketSelectionStrategy {
 
 	public function selectBucketForCampaign( Campaign $campaign ): ?Bucket {
 		$urlKey = $campaign->getUrlKey();
-		if ( isset( $this->parameters[$urlKey] ) &&
-				$bucket = $campaign->getBucketByIndex( $this->parameters[$urlKey] ) ) {
-			return $bucket;
+		if ( !isset( $this->parameters[$urlKey] ) ) {
+			return null;
 		}
-		return null;
+		return $campaign->getBucketByIndex( $this->parameters[$urlKey] );
 	}
 
 }

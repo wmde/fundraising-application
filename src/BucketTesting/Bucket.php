@@ -8,8 +8,9 @@ class Bucket {
 	private $name;
 	private $campaign;
 	private $defaultBucket;
-	const DEFAULT = true;
-	const NON_DEFAULT = false;
+
+	public const DEFAULT = true;
+	public const NON_DEFAULT = false;
 
 	public function __construct( string $name, Campaign $campaign, bool $defaultBucket ) {
 		$this->name = $name;

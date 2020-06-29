@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Cli\CampaignConfigValidation;
 
+use FileFetcher\SimpleFileFetcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -22,12 +23,12 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
  */
 class ValidateCampaignCodeUtilizationCommand extends Command {
 
-	const NAME = 'app:validate:campaigns:utilization';
-	const ERROR_RETURN_CODE = 1;
-	const OK_RETURN_CODE = 0;
+	private const NAME = 'app:validate:campaigns:utilization';
+	private const RETURN_CODE_OK = 0;
+	private const RETURN_CODE_ERROR = 1;
 
 	/** @see \WMDE\Fundraising\Frontend\Factories\ChoiceFactory */
-	const CHOICE_FACTORY_LOCATION = 'src/Factories/ChoiceFactory.php';
+	private const CHOICE_FACTORY_LOCATION = 'src/Factories/ChoiceFactory.php';
 
 	protected function configure(): void {
 		$this->setName( self::NAME )
@@ -59,14 +60,14 @@ class ValidateCampaignCodeUtilizationCommand extends Command {
 		);
 
 		if ( $validator->isPassing() ) {
-			return self::OK_RETURN_CODE;
+			return self::RETURN_CODE_OK;
 		}
 
 		foreach ( $errorLogger->getErrors() as $error ) {
 			$output->writeln( $error );
 		}
 		$output->writeln( 'Campaign utilization validation failed.' );
-		return self::ERROR_RETURN_CODE;
+		return self::RETURN_CODE_ERROR;
 	}
 
 	private function getFactory( string $environment ): FunFunFactory {
@@ -75,7 +76,7 @@ class ValidateCampaignCodeUtilizationCommand extends Command {
 			throw new FileNotFoundException( null, 0, null, $environmentConfigPath );
 		}
 		$configReader = new ConfigReader(
-			new \FileFetcher\SimpleFileFetcher(),
+			new SimpleFileFetcher(),
 			__DIR__ . '/../../app/config/config.dist.json',
 			$environmentConfigPath
 		);
