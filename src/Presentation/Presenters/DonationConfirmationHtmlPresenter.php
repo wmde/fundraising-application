@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 /**
  * Render the confirmation pages for donations
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class DonationConfirmationHtmlPresenter {
 
@@ -43,7 +43,6 @@ class DonationConfirmationHtmlPresenter {
 
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken,
 		array $urlEndpoints ): array {
-
 		return [
 			'donation' => [
 				'id' => $donation->getId(),

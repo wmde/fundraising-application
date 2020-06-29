@@ -21,7 +21,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\FunValidators\ConstraintViolation;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class AddDonationController {
 
@@ -73,7 +73,7 @@ class AddDonationController {
 	}
 
 	private function newHttpResponse( AddDonationResponse $responseModel ): Response {
-		switch( $responseModel->getDonation()->getPaymentMethodId() ) {
+		switch ( $responseModel->getDonation()->getPaymentMethodId() ) {
 			case PaymentMethod::DIRECT_DEBIT:
 			case PaymentMethod::BANK_TRANSFER:
 				return new RedirectResponse(
@@ -117,8 +117,6 @@ class AddDonationController {
 				throw new \LogicException( 'This code should not be reached' );
 		}
 	}
-
-
 
 	private function createDonationRequest( Request $request ): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
@@ -190,7 +188,7 @@ class AddDonationController {
 		}
 	}
 
-	private function getAmountFromRequest ( Request $request ): int {
+	private function getAmountFromRequest( Request $request ): int {
 		if ( $request->request->has( 'amount' ) ) {
 			return intval( $request->get( 'amount' ) );
 		}
@@ -230,7 +228,7 @@ class AddDonationController {
 	 * @return string
 	 */
 	private function filterAutofillCommas( string $value ): string {
-		return trim( preg_replace( ['/,/', '/\s{2,}/'], [' ', ' '], $value ) );
+		return trim( preg_replace( [ '/,/', '/\s{2,}/' ], [ ' ', ' ' ], $value ) );
 	}
 
 	/**

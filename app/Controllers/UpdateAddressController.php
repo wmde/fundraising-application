@@ -12,12 +12,11 @@ use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class UpdateAddressController {
 
 	public function updateAddress( Request $request, FunFunFactory $ffFactory ): Response {
-
 		$addressToken = $request->get( 'addressToken', '' );
 		if ( $addressToken === '' ) {
 			throw new AccessDeniedException();
@@ -94,7 +93,7 @@ class UpdateAddressController {
 			[ 'firstName', 'lastName' ] : [ 'company' ];
 		$requiredFields = array_merge( $requiredNameFiels, $requirePostalFields );
 		$allFieldsAreEmpty = true;
-		foreach( $requiredFields as $field ) {
+		foreach ( $requiredFields as $field ) {
 			if ( $params->get( $field, '' ) !== '' ) {
 				$allFieldsAreEmpty = false;
 				break;

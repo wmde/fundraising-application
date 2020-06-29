@@ -6,5 +6,4 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\EventHandling;
 
 interface DomainEventEmitter {
 
-
 }

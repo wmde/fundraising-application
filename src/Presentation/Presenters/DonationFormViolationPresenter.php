@@ -7,14 +7,14 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidationResult as Result;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataValidationResult;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataValidationResult;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\FunValidators\ConstraintViolation;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
@@ -142,7 +142,7 @@ class DonationFormViolationPresenter {
 		];
 		return array_reduce(
 			$violations,
-			function( $validationResult, ConstraintViolation $violation ) use ( $fieldGroups ) {
+			function ( $validationResult, ConstraintViolation $violation ) use ( $fieldGroups ) {
 				$validationResult[$fieldGroups[$violation->getSource()]] = false;
 				return $validationResult;
 			},

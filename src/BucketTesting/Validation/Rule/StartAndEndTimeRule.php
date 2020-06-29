@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class StartAndEndTimeRule {
 

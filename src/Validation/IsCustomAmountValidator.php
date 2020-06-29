@@ -8,6 +8,7 @@ use WMDE\Euro\Euro;
 
 class IsCustomAmountValidator {
 	private $validAmounts;
+
 	/**
 	 * IsCustomAmountValidator constructor.
 	 * @param Euro[] $validAmounts

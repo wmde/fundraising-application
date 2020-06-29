@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class DonationConfirmationMailSubjectRenderer implements MailSubjectRendererInterface {
 

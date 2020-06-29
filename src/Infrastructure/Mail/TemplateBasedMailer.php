@@ -5,16 +5,20 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
+use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
-class TemplateBasedMailer implements DonationTemplateMailerInterface, MembershipTemplateMailerInterface,
-	SubscriptionTemplateMailerInterface, GetInTouchMailerInterface {
+class TemplateBasedMailer implements
+	DonationTemplateMailerInterface,
+	MembershipTemplateMailerInterface,
+	SubscriptionTemplateMailerInterface,
+	GetInTouchMailerInterface
+{
 
 	private $messenger;
 	private $template;
@@ -27,7 +31,7 @@ class TemplateBasedMailer implements DonationTemplateMailerInterface, Membership
 	}
 
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @throws \RuntimeException
 	 */
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {

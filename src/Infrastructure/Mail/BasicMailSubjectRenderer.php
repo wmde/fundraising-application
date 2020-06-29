@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class BasicMailSubjectRenderer implements MailSubjectRendererInterface {
 

@@ -41,7 +41,7 @@ class DoctrineFactory {
 	}
 
 	public function getEntityManager(): EntityManager {
-		if ( is_null( $this->entityManager ) ) {
+		if ( $this->entityManager === null ) {
 			$this->entityManager = $this->newEntityManager();
 		}
 		return $this->entityManager;

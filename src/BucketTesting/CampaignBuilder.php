@@ -8,7 +8,7 @@ use DateTime;
 use DateTimeZone;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class CampaignBuilder {
 
@@ -22,7 +22,7 @@ class CampaignBuilder {
 
 	public function getCampaigns( array $campaignConfig ): array {
 		$campaigns = [];
-		foreach( $campaignConfig as $name => $config ) {
+		foreach ( $campaignConfig as $name => $config ) {
 			$campaign = new Campaign(
 				$name,
 				$config['url_key'],

@@ -13,10 +13,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Twig_Environment;
 use Twig_Error;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
+use WMDE\Fundraising\Frontend\App\MailTemplates;
 use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
-use WMDE\Fundraising\Frontend\App\MailTemplates;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
 
@@ -28,7 +28,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
  * - run it again after the changes, dumping to another folder
  * - then diffing the resulting folders
  *
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class RenderMailTemplatesCommand extends Command {
 
@@ -125,13 +125,13 @@ class RenderMailTemplatesCommand extends Command {
 	 * @param OutputInterface $output Command output
 	 */
 	private function renderTemplates( array $testData, Twig_Environment $twig, string $outputPath, OutputInterface $output ): void {
-		foreach( $testData as $templateFileName => $templateSettings ) {
+		foreach ( $testData as $templateFileName => $templateSettings ) {
 
 			if ( empty( $templateSettings['variants'] ) ) {
 				$templateSettings['variants'] = [ '' => [] ];
 			}
 
-			foreach( $templateSettings['variants'] as $variantName => $additionalContext ) {
+			foreach ( $templateSettings['variants'] as $variantName => $additionalContext ) {
 				$outputName =
 					$outputPath .
 					basename( $templateFileName, '.txt.twig' ) .
@@ -157,7 +157,7 @@ class RenderMailTemplatesCommand extends Command {
 							)
 						)
 					);
-				} catch( Twig_Error $e ) {
+				} catch ( Twig_Error $e ) {
 					$output->writeln( '' );
 					$output->writeln( '<error>' . $e->getMessage() . '</error>' );
 					$output->writeln( var_export( $e->getSourceContext(), true ) );

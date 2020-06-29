@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\BucketTesting;
 /**
  * Value object for defining campaigns
  *
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class Campaign {
 
@@ -91,7 +91,7 @@ class Campaign {
 
 	public function getDefaultBucket(): Bucket {
 		$bucket = $this->getBucketByIndex( $this->defaultBucketIndex );
-		if ( is_null( $bucket ) ) {
+		if ( $bucket === null ) {
 			throw new \LogicException( 'No default bucket was added to this campaign' );
 		}
 		return $bucket;

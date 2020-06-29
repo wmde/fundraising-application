@@ -13,14 +13,13 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
 use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotification\SubscriptionSignupRequest;
-use WMDE\Fundraising\PaymentContext\ResponseModel\PaypalNotificationResponse;
 use WMDE\Fundraising\PaymentContext\RequestModel\PayPalPaymentNotificationRequest;
+use WMDE\Fundraising\PaymentContext\ResponseModel\PaypalNotificationResponse;
 
 class PaypalNotificationControllerForMembershipFee {
 
 	const TYPE_SUBSCRIPTION_SIGNUP = 'subscr_signup';
 	const TYPE_SUBSCRIPTION_PAYMENT = 'subscr_payment';
-
 
 	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
 		$post = $request->request;

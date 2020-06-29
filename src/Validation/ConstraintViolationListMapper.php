@@ -24,7 +24,7 @@ class ConstraintViolationListMapper {
 
 		foreach ( $violations as $violation ) {
 			/** @var ConstraintViolationInterface $violation */
-			$entryErrors = (array) $this->propertyAccessor->getValue( $errors, $violation->getPropertyPath() );
+			$entryErrors = (array)$this->propertyAccessor->getValue( $errors, $violation->getPropertyPath() );
 			$entryErrors[] = $violation->getMessage();
 			$this->propertyAccessor->setValue( $errors, $violation->getPropertyPath(), $entryErrors );
 		}

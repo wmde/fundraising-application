@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\BucketTesting;
 
@@ -34,6 +34,5 @@ class CampaignCollection implements IteratorAggregate {
 	public function getIterator(): ArrayIterator {
 		return new ArrayIterator( $this->campaigns );
 	}
-
 
 }

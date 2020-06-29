@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
-class BucketSelectionServiceProvider  implements ServiceProviderInterface, BootableProviderInterface {
+class BucketSelectionServiceProvider implements ServiceProviderInterface, BootableProviderInterface {
 
 	private const COOKIE_NAME = 'spenden_ttg';
 
@@ -32,7 +32,7 @@ class BucketSelectionServiceProvider  implements ServiceProviderInterface, Boota
 	}
 
 	public function boot( Application $app ) {
-		$app->before( function( Request $request ): void {
+		$app->before( function ( Request $request ): void {
 			parse_str( $request->cookies->get( self::COOKIE_NAME, '' ), $cookieValues );
 			$selector = $this->factory->getBucketSelector();
 			$this->factory->setSelectedBuckets( $selector->selectBuckets( $cookieValues, $request->query->all() ) );
@@ -58,7 +58,7 @@ class BucketSelectionServiceProvider  implements ServiceProviderInterface, Boota
 
 	private function getParameterArrayFromSelectedBuckets(): array {
 		return array_map(
-			function( Bucket $bucket ) {
+			function ( Bucket $bucket ) {
 				return $bucket->getParameters();
 			},
 			$this->factory->getSelectedBuckets()
@@ -67,7 +67,7 @@ class BucketSelectionServiceProvider  implements ServiceProviderInterface, Boota
 
 	private function getCookieLifetime(): ?int {
 		$mostDistantCampaign = $this->factory->getCampaignCollection()->getMostDistantCampaign();
-		if ( is_null( $mostDistantCampaign ) ) {
+		if ( $mostDistantCampaign === null ) {
 			return null;
 		}
 		return $mostDistantCampaign->getEndTimestamp()->getTimestamp();

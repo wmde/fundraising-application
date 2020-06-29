@@ -6,5 +6,6 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 
 interface LoggingEvent {
 	public function getMetaData(): array;
+
 	public function getName(): string;
 }

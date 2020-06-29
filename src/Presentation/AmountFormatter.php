@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 use WMDE\Euro\Euro;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class AmountFormatter {

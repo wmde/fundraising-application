@@ -14,7 +14,7 @@ use Psr\Log\LogLevel;
 use WMDE\Fundraising\Frontend\Infrastructure\SupportHandler;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class LoggerFactory {
 
@@ -45,15 +45,15 @@ class LoggerFactory {
 				return new StreamHandler( $config['url'], $config['level'] );
 
 			case self::TYPE_ERRBIT:
-				if( empty( $config['projectId'] ) || empty( $config['projectKey'] ) || empty( $config['host'] ) ) {
+				if ( empty( $config['projectId'] ) || empty( $config['projectKey'] ) || empty( $config['host'] ) ) {
 					throw new \InvalidArgumentException( 'You need to configure project ID, projectKey and host for errbit logging' );
 				}
-				$notifier = new Notifier([
+				$notifier = new Notifier( [
 					'projectId' => $config['projectId'],
 					'projectKey' => $config['projectKey'],
 					'host' => $config['host'],
 					'environment' => getenv( 'APP_ENV' ) ?: 'dev'
-				]);
+				] );
 
 				return new SupportHandler(
 					new AirbrakeHandler( $notifier, $config['level'] ),

@@ -9,7 +9,7 @@ use WMDE\FunValidators\ValidationResult;
 use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class FieldTextPolicyValidator {
@@ -27,7 +27,7 @@ class FieldTextPolicyValidator {
 			return new ValidationResult();
 		}
 
-		if ( $this->textPolicyValidator->textIsHarmless( (string) $value ) ) {
+		if ( $this->textPolicyValidator->textIsHarmless( (string)$value ) ) {
 			return new ValidationResult();
 		}
 

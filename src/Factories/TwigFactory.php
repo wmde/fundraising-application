@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
-use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use RuntimeException;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
 use Twig_SimpleFilter;
+use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;
 
 class TwigFactory {
@@ -41,8 +41,7 @@ class TwigFactory {
 		$appRoot = realpath( __DIR__ . '/../..' ) . '/';
 		if ( is_string( $config['template-dir'] ) ) {
 			return $this->convertToAbsolute( $appRoot, [ $config['template-dir'] ] );
-		}
-		elseif ( is_array( $config['template-dir'] ) ) {
+		} elseif ( is_array( $config['template-dir'] ) ) {
 			return $this->convertToAbsolute( $appRoot, $config['template-dir'] );
 		}
 
@@ -51,7 +50,7 @@ class TwigFactory {
 
 	private function convertToAbsolute( string $root, array $dirs ): array {
 		return array_map(
-				function( $dir ) use ( $root ) {
+				function ( $dir ) use ( $root ) {
 					if ( strlen( $dir ) === 0 || $dir[0] !== '/' ) {
 						$dir = $root . $dir;
 					}

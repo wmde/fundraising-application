@@ -12,7 +12,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class IbanController {
 
@@ -30,6 +30,5 @@ class IbanController {
 
 		$generateIbanResponse = $ffFactory->newGenerateIbanUseCase()->generateIban( $generateIbanRequest );
 		return new JsonResponse( $ffFactory->newIbanPresenter()->present( $generateIbanResponse ) );
-
 	}
 }

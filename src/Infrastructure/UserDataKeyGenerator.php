@@ -30,8 +30,6 @@ class UserDataKeyGenerator {
 			),
 			SODIUM_BASE64_VARIANT_ORIGINAL
 		);
-
 	}
-
 
 }

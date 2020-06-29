@@ -18,7 +18,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class ValidateCampaignCodeUtilizationCommand extends Command {
 

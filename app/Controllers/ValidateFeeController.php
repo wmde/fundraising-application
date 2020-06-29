@@ -48,7 +48,7 @@ class ValidateFeeController {
 	 */
 	private function euroFromRequest( Request $httpRequest ): Euro {
 		$currentFeeString = $httpRequest->request->get( 'membershipFee', '' );
-		if( !ctype_digit( $currentFeeString ) ) {
+		if ( !ctype_digit( $currentFeeString ) ) {
 			throw new InvalidArgumentException();
 		}
 		return Euro::newFromCents(

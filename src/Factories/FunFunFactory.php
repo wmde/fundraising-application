@@ -35,10 +35,10 @@ use Twig_SimpleFunction;
 use WMDE\Clock\SystemClock;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\AddressChangeContext\Domain\AddressChangeRepository;
-use WMDE\Fundraising\AddressChangeContext\DataAccess\DoctrineAddressChangeRepository;
-use WMDE\Fundraising\AddressChangeContext\UseCases\ChangeAddress\ChangeAddressUseCase;
 use WMDE\Fundraising\AddressChangeContext\AddressChangeContextFactory;
+use WMDE\Fundraising\AddressChangeContext\DataAccess\DoctrineAddressChangeRepository;
+use WMDE\Fundraising\AddressChangeContext\Domain\AddressChangeRepository;
+use WMDE\Fundraising\AddressChangeContext\UseCases\ChangeAddress\ChangeAddressUseCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\DonationContext\Authorization\DonationTokenFetcher;
@@ -96,19 +96,16 @@ use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\Cr
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
+use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
-use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\Validation\InternetDomainNameValidator;
-use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailSubjectRendererInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailTemplateFilenameTraversable;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckBankDataGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
@@ -119,15 +116,18 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVe
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
-use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator;
+use WMDE\Fundraising\Frontend\Infrastructure\Validation\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
-use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
@@ -145,9 +145,9 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonorUpdateHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ErrorPageHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\ExceptionHtmlPresenterInterface;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\ExceptionHtmlPresenterInterface;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
@@ -213,7 +213,7 @@ use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class FunFunFactory implements ServiceProviderInterface {
 
@@ -246,64 +246,64 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function register( Container $container ): void {
-		$container['logger'] = function() {
+		$container['logger'] = function () {
 			return new NullLogger();
 		};
 
-		$container['paypal_logger'] = function() {
+		$container['paypal_logger'] = function () {
 			return new NullLogger();
 		};
 
-		$container['sofort_logger'] = function() {
+		$container['sofort_logger'] = function () {
 			return new NullLogger();
 		};
 
-		$container['profiler_data_collector'] = function() {
+		$container['profiler_data_collector'] = function () {
 			return new ProfilerDataCollector();
 		};
 
-		$container['dbal_connection'] = function() {
+		$container['dbal_connection'] = function () {
 			return DriverManager::getConnection( $this->config['db'] );
 		};
 
-		$container['subscription_repository'] = function() {
+		$container['subscription_repository'] = function () {
 			return new LoggingSubscriptionRepository(
 				new DoctrineSubscriptionRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 		};
 
-		$container['donation_repository'] = function() {
+		$container['donation_repository'] = function () {
 			return new LoggingDonationRepository(
 				new DoctrineDonationRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 		};
 
-		$container['membership_application_repository'] = function() {
+		$container['membership_application_repository'] = function () {
 			return new LoggingApplicationRepository(
 				new DoctrineApplicationRepository( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 		};
 
-		$container['comment_repository'] = function() {
+		$container['comment_repository'] = function () {
 			return new LoggingCommentFinder(
 				new DoctrineCommentFinder( $this->getEntityManager() ),
 				$this->getLogger()
 			);
 		};
 
-		$container['mail_validator'] = function() {
+		$container['mail_validator'] = function () {
 			return new EmailValidator( new InternetDomainNameValidator() );
 		};
 
-		$container['contact_validator'] = function() {
+		$container['contact_validator'] = function () {
 			return new GetInTouchValidator( $this->getEmailValidator() );
 		};
 
 		// In the future, this could be locale-specific or filled from a DB table
-		$container['honorifics'] = function() {
+		$container['honorifics'] = function () {
 			return new Honorifics( [
 				'' => 'Kein Titel',
 				'Dr.' => 'Dr.',
@@ -312,7 +312,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			] );
 		};
 
-		$container['messenger_suborganization'] = function() {
+		$container['messenger_suborganization'] = function () {
 			return new Messenger(
 				new Swift_MailTransport(),
 				$this->getSubOrganizationEmailAddress(),
@@ -320,7 +320,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			);
 		};
 
-		$container['messenger_organization'] = function() {
+		$container['messenger_organization'] = function () {
 			return new Messenger(
 				new Swift_MailTransport(),
 				$this->getOrganizationEmailAddress(),
@@ -328,7 +328,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			);
 		};
 
-		$container['paypal-payment-notification-verifier'] = function() {
+		$container['paypal-payment-notification-verifier'] = function () {
 			return new LoggingPaymentNotificationVerifier(
 				new PayPalPaymentNotificationVerifier(
 					new Client(),
@@ -339,7 +339,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			);
 		};
 
-		$container['paypal-membership-fee-notification-verifier'] = function() {
+		$container['paypal-membership-fee-notification-verifier'] = function () {
 			return new LoggingPaymentNotificationVerifier(
 				new PayPalPaymentNotificationVerifier(
 					new Client(),
@@ -350,7 +350,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			);
 		};
 
-		$container['credit-card-api-service'] = function() {
+		$container['credit-card-api-service'] = function () {
 			return new McpCreditCardService(
 				new TNvpServiceDispatcher(
 					'IMcpCreditcardService_v1_5',
@@ -361,15 +361,15 @@ class FunFunFactory implements ServiceProviderInterface {
 			);
 		};
 
-		$container['page_cache'] = function() {
+		$container['page_cache'] = function () {
 			return new VoidCache();
 		};
 
-		$container['rendered_page_cache'] = function() {
+		$container['rendered_page_cache'] = function () {
 			return new VoidCache();
 		};
 
-		$container['campaign_cache'] = function() {
+		$container['campaign_cache'] = function () {
 			return new VoidCache();
 		};
 
@@ -382,7 +382,7 @@ class FunFunFactory implements ServiceProviderInterface {
 		};
 
 		$container['content_page_selector'] = function () {
-			$json = (new SimpleFileFetcher())->fetchFile( $this->getI18nDirectory() . '/data/pages.json' );
+			$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/pages.json' );
 			$config = json_decode( $json, true ) ?? [];
 
 			return new PageSelector( $config );
@@ -398,7 +398,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			] );
 		};
 
-		$container['payment-delay-calculator'] = function() {
+		$container['payment-delay-calculator'] = function () {
 			return new DefaultPaymentDelayCalculator( $this->getPaymentDelayInDays() );
 		};
 
@@ -455,13 +455,13 @@ class FunFunFactory implements ServiceProviderInterface {
 	 * @return EntityManager
 	 */
 	public function getPlainEntityManager(): EntityManager {
-		return $this->createSharedObject( EntityManager::class, function() {
+		return $this->createSharedObject( EntityManager::class, function () {
 			return $this->getDoctrineFactory()->getEntityManager();
 		} );
 	}
 
 	private function getDoctrineFactory(): DoctrineFactory {
-		return $this->createSharedObject( DoctrineFactory::class, function() {
+		return $this->createSharedObject( DoctrineFactory::class, function () {
 			$donationContextFactory = $this->getDonationContextFactory();
 			$membershipContextFactory = $this->getMembershipContextFactory();
 			$subscriptionContextFactory = new SubscriptionContextFactory();
@@ -516,7 +516,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function getSubscriptionValidator(): SubscriptionValidator {
-		return $this->createSharedObject( SubscriptionValidator::class, function(): SubscriptionValidator {
+		return $this->createSharedObject( SubscriptionValidator::class, function (): SubscriptionValidator {
 			return new SubscriptionValidator(
 				$this->getEmailValidator(),
 				$this->newSubscriptionDuplicateValidator(),
@@ -597,7 +597,7 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function getSkinTwig(): Twig_Environment {
-		return $this->createSharedObject( Twig_Environment::class . '::Skin', function(): Twig_Environment {
+		return $this->createSharedObject( Twig_Environment::class . '::Skin', function (): Twig_Environment {
 			$config = $this->config['twig'];
 			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
 
@@ -617,15 +617,15 @@ class FunFunFactory implements ServiceProviderInterface {
 			$functions = [
 				new Twig_SimpleFunction(
 					'web_content',
-					function( string $name, array $context = [] ): string {
+					function ( string $name, array $context = [] ): string {
 						return $this->getContentProvider()->getWeb( $name, $context );
 					},
 					[ 'is_safe' => [ 'html' ] ]
 				),
 				new Twig_SimpleFunction(
 					'translations',
-					function(): string {
-						return json_encode( $this-> getTranslationCollector()->collectTranslations() );
+					function (): string {
+						return json_encode( $this->getTranslationCollector()->collectTranslations() );
 					},
 					[ 'is_safe' => [ 'html' ] ]
 				),
@@ -652,19 +652,19 @@ class FunFunFactory implements ServiceProviderInterface {
 				new Twig_SimpleFilter(
 					'payment_interval',
 					/** @var int|string $interval */
-					function( $interval ) use ( $mailTranslator ): string {
+					function ( $interval ) use ( $mailTranslator ): string {
 						return $mailTranslator->trans( "donation_payment_interval_{$interval}" );
 					}
 				),
 				new Twig_SimpleFilter(
 					'payment_method',
-					function( string $method ) use ( $mailTranslator ): string {
+					function ( string $method ) use ( $mailTranslator ): string {
 						return $mailTranslator->trans( $method );
 					}
 				),
 				new Twig_SimpleFilter(
 					'membership_type',
-					function( string $membershipType ) use ( $mailTranslator ): string {
+					function ( string $membershipType ) use ( $mailTranslator ): string {
 						return $mailTranslator->trans( $membershipType );
 					}
 				),
@@ -672,14 +672,14 @@ class FunFunFactory implements ServiceProviderInterface {
 			$functions = [
 				new Twig_SimpleFunction(
 					'mail_content',
-					function( string $name, array $context = [] ): string {
+					function ( string $name, array $context = [] ): string {
 						return $this->getContentProvider()->getMail( $name, $context );
 					},
 					[ 'is_safe' => [ 'all' ] ]
 				),
 				new Twig_SimpleFunction(
 					'url',
-					function( string $name, array $parameters = [] ): string {
+					function ( string $name, array $parameters = [] ): string {
 						return $this->getUrlGenerator()->generateAbsoluteUrl( $name, $parameters );
 					}
 				)
@@ -1385,7 +1385,7 @@ class FunFunFactory implements ServiceProviderInterface {
 				'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
 				'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
 				// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
-				'paymentIntervals' => [0, 1, 3, 6, 12],
+				'paymentIntervals' => [ 0, 1, 3, 6, 12 ],
 				'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 				'countries' => $this->getCountries(),
 				'addressValidationPatterns' => $this->getValidationRules()->address,
@@ -1399,7 +1399,7 @@ class FunFunFactory implements ServiceProviderInterface {
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
 			// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
-			'paymentIntervals' => [1, 3, 6, 12],
+			'paymentIntervals' => [ 1, 3, 6, 12 ],
 			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 			'countries' => $this->getCountries(),
 			'addressValidationPatterns' => $validation->address,
@@ -1589,15 +1589,15 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	public function enableCaching(): void {
-		$this->pimple['page_cache'] = function() {
+		$this->pimple['page_cache'] = function () {
 			return new FilesystemCache( $this->getCachePath() . '/pages/raw' );
 		};
 
-		$this->pimple['rendered_page_cache'] = function() {
+		$this->pimple['rendered_page_cache'] = function () {
 			return new FilesystemCache( $this->getCachePath() . '/pages/rendered' );
 		};
 
-		$this->pimple['campaign_cache'] = function() {
+		$this->pimple['campaign_cache'] = function () {
 			return new FilesystemCache( $this->getCachePath() . '/campaigns' );
 		};
 	}
@@ -1852,12 +1852,12 @@ class FunFunFactory implements ServiceProviderInterface {
 				'use_of_funds_content' => $this->getApplicationOfFundsContent(),
 				'use_of_funds_messages' => $this->getApplicationOfFundsMessages()
 			] );
-			return function() use ( $template )  {
+			return function () use ( $template )  {
 				return $template->render( [] );
 			};
 		} elseif ( $this->config['skin'] === 'test' ) {
 			// we don't care what happens in test
-			return function() {
+			return function () {
 				return 'Test rendering: Use of funds';
 			};
 		}

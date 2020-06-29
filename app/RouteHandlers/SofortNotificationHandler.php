@@ -5,12 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
 
 use DateTime;
-use Sofort\SofortLib\Notification;
-use UnexpectedValueException;
 use Psr\Log\LogLevel;
+use Sofort\SofortLib\Notification;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use UnexpectedValueException;
 use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\PaymentContext\RequestModel\SofortNotificationRequest;
@@ -34,7 +33,7 @@ class SofortNotificationHandler {
 
 		try {
 			$useCaseRequest = $this->newUseCaseRequest();
-		} catch ( UnexpectedValueException $e )  {
+		} catch ( UnexpectedValueException $e ) {
 			$this->logWebRequest( [ 'message' => $e->getMessage() ], LogLevel::ERROR );
 			return new Response( 'Bad request', Response::HTTP_BAD_REQUEST );
 		}

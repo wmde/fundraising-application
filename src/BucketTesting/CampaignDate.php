@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\BucketTesting;
 use DateTimeZone;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class CampaignDate extends \DateTimeImmutable {
 

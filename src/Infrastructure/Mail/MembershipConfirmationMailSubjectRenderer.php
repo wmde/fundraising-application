@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class MembershipConfirmationMailSubjectRenderer implements MailSubjectRendererInterface {
 

@@ -7,13 +7,13 @@ namespace WMDE\Fundraising\Frontend\App\Controllers;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
+use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class ShowDonationConfirmationController {

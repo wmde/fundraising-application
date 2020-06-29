@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 /**
  * Server-Side triggering of page view tracking
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  */
 interface ServerSideTracker {

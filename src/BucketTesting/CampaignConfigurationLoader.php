@@ -14,7 +14,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 

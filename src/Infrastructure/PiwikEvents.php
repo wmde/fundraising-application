@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 /**
  * Simple wrapper for tracking methods in Piwik's API
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class PiwikEvents {
