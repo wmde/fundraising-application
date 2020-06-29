@@ -128,9 +128,8 @@
 		"mikey179/vfsstream": "~1.6",
 		"wmde/psr-log-test-doubles": "~2.1",
 
-		"squizlabs/php_codesniffer": "~3.3",
+		"mediawiki/mediawiki-codesniffer": "^31.0",
 		"phpmd/phpmd": "~2.6",
-		"slevomat/coding-standard": "^4.6",
 
 		"symfony/browser-kit": "^3.2",
 		"silex/web-profiler": "~2.0",
