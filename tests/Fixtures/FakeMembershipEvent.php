@@ -8,5 +8,4 @@ use WMDE\Fundraising\MembershipContext\Domain\Event;
 
 class FakeMembershipEvent implements Event {
 
-
 }

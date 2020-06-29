@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class UpdateAddressRouteTest extends WebRouteTestCase {
 
@@ -24,7 +24,6 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
-
 				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 
 				$factory->getEntityManager()->persist( $addressChange );
@@ -33,7 +32,7 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 				$client->request(
 					Request::METHOD_POST,
 					self::PATH . '?addressToken=' . $addressChange->getCurrentIdentifier(),
-					[  ]
+					[]
 				);
 
 				$dataVars = $this->getDataApplicationVars( $client->getCrawler() );

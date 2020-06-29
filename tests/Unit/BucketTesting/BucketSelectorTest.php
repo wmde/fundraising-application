@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
@@ -175,7 +175,7 @@ class BucketSelectorTest extends TestCase {
 
 		$this->assertSame(
 			[ $alternativeBucket ],
-			$bucketSelector->selectBuckets( ['t1' => 1], [] ),
+			$bucketSelector->selectBuckets( [ 't1' => 1 ], [] ),
 			);
 		$this->assertFalse( $this->bucketSelectionStrategy->bucketWasSelected(), 'Bucket not should be selected by fallback selection strategy' );
 	}

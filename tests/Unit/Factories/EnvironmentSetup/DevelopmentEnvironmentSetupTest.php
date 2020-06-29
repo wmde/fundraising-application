@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Factories\EnvironmentSetup;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**

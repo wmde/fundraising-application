@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class OverridingCampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 
@@ -34,6 +34,5 @@ class OverridingCampaignConfigurationLoader implements CampaignConfigurationLoad
 		);
 		return call_user_func( $this->modifyConfiguration, $newConfig );
 	}
-
 
 }

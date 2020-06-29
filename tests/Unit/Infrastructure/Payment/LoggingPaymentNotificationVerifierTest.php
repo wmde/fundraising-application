@@ -14,7 +14,7 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
@@ -37,7 +37,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase
 	private function newThrowingVerifier( PayPalPaymentNotificationVerifierException $exception = null ): PayPalPaymentNotificationVerifier {
 		$verifier = $this->createMock( PayPalPaymentNotificationVerifier::class );
 
-		if ( is_null( $exception ) ) {
+		if ( $exception === null ) {
 			$exception = new PayPalPaymentNotificationVerifierException( 'reticulation of splines failed' );
 		}
 

@@ -4,9 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation\ContentPage;
 
-use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
-use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
+use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 
 class PageSelectorTest extends TestCase {
 	/**

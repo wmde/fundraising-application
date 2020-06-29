@@ -7,16 +7,16 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiry;
-use WMDE\Fundraising\PaymentContext\Infrastructure\FakeCreditCardService;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiry;
+use WMDE\Fundraising\PaymentContext\Infrastructure\FakeCreditCardService;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {

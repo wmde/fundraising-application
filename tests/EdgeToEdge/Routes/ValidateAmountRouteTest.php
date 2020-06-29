@@ -42,6 +42,6 @@ class ValidateAmountRouteTest extends WebRouteTestCase {
 		yield [ [ 'amount' => '12,34' ], [ 'amount' => 'Amount must be in cents.' ] ];
 		yield [ [ 'amount' => '12' ], [ 'amount' => 'Amount too low' ] ];
 		yield [ [ 'amount' => '12879342897234879234' ], [ 'amount' => 'Amount too high' ] ];
-		yield [ [ ], [ 'amount' => 'Amount must be in cents.' ] ];
+		yield [ [], [ 'amount' => 'Amount must be in cents.' ] ];
 	}
 }

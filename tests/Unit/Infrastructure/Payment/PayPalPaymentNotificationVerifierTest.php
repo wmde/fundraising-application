@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVe
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
@@ -161,7 +161,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 		$handlerStack = HandlerStack::create( $mock );
 		$handlerStack->push( $history );
 		$this->expectedRequestparameters = $expectedParams;
-		return new Client( ['handler' => $handlerStack ] );
+		return new Client( [ 'handler' => $handlerStack ] );
 	}
 
 	private function newFailingClient(): Client {
@@ -169,7 +169,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 			new Response( 500, [], 'Internal Server Error - Paypal is overwhelmed' )
 		] );
 		$handlerStack = HandlerStack::create( $mock );
-		return new Client( ['handler' => $handlerStack ] );
+		return new Client( [ 'handler' => $handlerStack ] );
 	}
 
 	private function assertVerificationParametersWereSent(): void {

@@ -11,7 +11,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 class TranslationsCollectorTest extends TestCase {
 
 	public function testGivenOneFileItReturnsTheContents(): void {
-
 		$testFile = [ 'test.json' => '{"mail_subject_getintouch": "Sie haben gefragt, wir werden antworten"}' ];
 
 		$translationsCollector = new TranslationsCollector( new InMemoryFileFetcher( $testFile ) );
@@ -39,18 +38,15 @@ class TranslationsCollectorTest extends TestCase {
 	}
 
 	public function testGivenNoFileReturnsEmptyArray(): void {
-
 		$translationsCollector = new TranslationsCollector( new InMemoryFileFetcher( [] ) );
 		$actual = $translationsCollector->collectTranslations();
 		$this->assertEquals( [], $actual );
-
 	}
 
 	/**
 	 * @dataProvider invalidJSONProvider
 	 */
 	public function testGivenWrongJSONFormatThrowsException( string $testJSONs ): void {
-
 		$testFile = [ 'test.json' => $testJSONs ];
 
 		$translationsCollector = new TranslationsCollector( new InMemoryFileFetcher( $testFile ) );

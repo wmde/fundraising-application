@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class PurgeCacheRouteTest extends WebRouteTestCase {

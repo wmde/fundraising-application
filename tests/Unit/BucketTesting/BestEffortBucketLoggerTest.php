@@ -5,13 +5,13 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingError;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
-use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
 

@@ -12,14 +12,14 @@ use GuzzleHttp\Psr7\Stream;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
-use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
@@ -80,7 +80,7 @@ class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 			new Response( 200, [], $responseBody )
 		] );
 		$handlerStack = HandlerStack::create( $mock );
-		return new GuzzleClient( ['handler' => $handlerStack ] );
+		return new GuzzleClient( [ 'handler' => $handlerStack ] );
 	}
 
 	public function testWhenPaymentProviderDoesNotVerify_errorCodeIsReturned(): void {

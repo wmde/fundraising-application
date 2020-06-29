@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
@@ -21,7 +21,7 @@ class SupportHandlerTest extends TestCase {
 		$loggerForHandlerErrors = $this->createMock( LoggerInterface::class );
 		$loggerForHandlerErrors->expects( $this->never() )->method( $this->anything() );
 		$supportHandler = new SupportHandler( new NullHandler(), $loggerForHandlerErrors );
-		$supportHandler->handle( [ 'level'=>LogLevel::CRITICAL ] );
+		$supportHandler->handle( [ 'level' => LogLevel::CRITICAL ] );
 	}
 
 	public function testGivenWrappedMainHandlerThrowsException_loggerForHandlerErrorsLogsThisException(): void {

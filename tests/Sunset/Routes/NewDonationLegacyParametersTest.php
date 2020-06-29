@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Sunset\Routes;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class NewDonationLegacyParametersTest extends WebRouteTestCase {
 

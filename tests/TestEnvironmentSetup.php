@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\DevelopmentInternalErrorHt
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class TestEnvironmentSetup implements EnvironmentSetup {
 	public function setEnvironmentDependentInstances( FunFunFactory $factory, array $configuration ) {

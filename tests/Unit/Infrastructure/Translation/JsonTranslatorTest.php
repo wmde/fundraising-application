@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Translation;
 
 use FileFetcher\InMemoryFileFetcher;
-use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator
@@ -34,7 +34,6 @@ class JsonTranslatorTest extends TestCase {
 
 		$this->assertSame( 'Sie spenden 5 EUR monatlich', $translatedText );
 	}
-
 
 	public function testGivenAnUnkownTranslationKey_translatorThrowsAnException(): void {
 		$translator = new JsonTranslator( $this->newTranslationSource() );

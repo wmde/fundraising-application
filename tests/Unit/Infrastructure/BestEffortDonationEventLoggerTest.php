@@ -14,7 +14,7 @@ use WMDE\Fundraising\DonationContext\Tests\Fixtures\DonationEventLoggerSpy;
 /**
  * @covers \WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {

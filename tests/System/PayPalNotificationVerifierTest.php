@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVe
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class PayPalNotificationVerifierTest extends \PHPUnit\Framework\TestCase {

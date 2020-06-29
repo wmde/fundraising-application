@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class ListCommentsRssRouteTest extends WebRouteTestCase {
@@ -30,7 +30,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenAreComments_theyAreInTheRss(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ): void {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );

@@ -4,16 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
-use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
+use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase {

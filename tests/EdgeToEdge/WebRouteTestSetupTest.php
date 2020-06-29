@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class WebRouteTestSetupTest extends WebRouteTestCase {
@@ -24,7 +24,7 @@ class WebRouteTestSetupTest extends WebRouteTestCase {
 
 	private function removeDatabaseNames( string ...$tableNames ): array {
 		return array_map(
-			function( string $tableName ) {
+			function ( string $tableName ) {
 				$parts = explode( '.', $tableName );
 				return end( $parts );
 			},

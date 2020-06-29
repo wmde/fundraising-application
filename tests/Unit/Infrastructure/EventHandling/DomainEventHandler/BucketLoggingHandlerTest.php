@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling\DomainEventHandler;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
@@ -12,7 +13,6 @@ use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler;
-use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\EventDispatcherSpy;
@@ -31,7 +31,7 @@ class BucketLoggingHandlerTest extends TestCase {
 		$logger = new BucketLoggerSpy();
 		$eventDispatcher = new EventDispatcherSpy();
 
-		new BucketLoggingHandler( $logger, [$this, 'getBuckets'], $eventDispatcher );
+		new BucketLoggingHandler( $logger, [ $this, 'getBuckets' ], $eventDispatcher );
 
 		$this->assertEquals(
 			[ DonationCreatedEvent::class, MembershipCreatedEvent::class ],
@@ -42,7 +42,7 @@ class BucketLoggingHandlerTest extends TestCase {
 	public function testOnDonationCreatedHandlerLogsDonationIdAndBucket(): void {
 		$logger = new BucketLoggerSpy();
 		$eventDispatcher = $this->createMock( EventDispatcher::class );
-		$handler = new BucketLoggingHandler( $logger, [$this, 'getBuckets'], $eventDispatcher );
+		$handler = new BucketLoggingHandler( $logger, [ $this, 'getBuckets' ], $eventDispatcher );
 
 		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, null ) );
 
@@ -55,7 +55,7 @@ class BucketLoggingHandlerTest extends TestCase {
 	public function testOnMembershipCreatedHandlerLogsDonationIdAndBucket(): void {
 		$logger = new BucketLoggerSpy();
 		$eventDispatcher = $this->createMock( EventDispatcher::class );
-		$handler = new BucketLoggingHandler( $logger, [$this, 'getBuckets'], $eventDispatcher );
+		$handler = new BucketLoggingHandler( $logger, [ $this, 'getBuckets' ], $eventDispatcher );
 
 		$handler->onMembershipCreated(
 			new MembershipCreatedEvent( self::MEMBERSHIP_ID,

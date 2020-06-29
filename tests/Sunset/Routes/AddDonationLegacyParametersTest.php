@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class AddDonationLegacyParametersTest extends WebRouteTestCase {
 
@@ -30,7 +30,6 @@ class AddDonationLegacyParametersTest extends WebRouteTestCase {
 
 	public function testGivenLegacyParameters_donationGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-
 			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );

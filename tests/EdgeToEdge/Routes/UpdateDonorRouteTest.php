@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
+use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDoctrineDonation;
@@ -15,10 +16,9 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
-use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class UpdateDonorRouteTest extends WebRouteTestCase {
 

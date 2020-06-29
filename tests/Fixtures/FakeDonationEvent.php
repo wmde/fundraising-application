@@ -8,5 +8,4 @@ use WMDE\Fundraising\DonationContext\Domain\Event;
 
 class FakeDonationEvent implements Event {
 
-
 }

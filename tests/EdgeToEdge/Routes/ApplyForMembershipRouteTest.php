@@ -10,23 +10,23 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
-use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineEntities\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
-use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  *
  * @requires extension konto_check
  */
@@ -55,7 +55,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testGivenGetRequestSustainingMembership_formIsShown(): void {
 		$client = $this->createClient();
 
-		$crawler = $client->request( 'GET', 'apply-for-membership', ['type' => 'sustaining'] );
+		$crawler = $client->request( 'GET', 'apply-for-membership', [ 'type' => 'sustaining' ] );
 
 		$this->assertCount(
 			1,
@@ -405,7 +405,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
-		$client = $this->createClient( [], function( FunFunFactory $factory ) {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
 			$translator = $this->createMock( TranslatorInterface::class );
 			$translator->expects( $this->once() )
 				->method( 'trans' )
@@ -428,7 +428,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testCommasInStreetNamesAreRemoved(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-
 			$params = $this->newValidHttpParameters();
 			$params['strasse'] = 'Nyan, street, ';
 			$client->request(
@@ -451,7 +450,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testWhenCompaniesApply_salutationIsSetToFixedValue(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-
 			$params = $this->newValidHttpParametersForCompanies();
 			$result = $client->request(
 				'POST',

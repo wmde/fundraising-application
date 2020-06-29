@@ -7,13 +7,13 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class AddCommentPostRouteTest extends WebRouteTestCase {
@@ -38,7 +38,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithoutTokens_resultIsError(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -70,7 +70,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithValidParameters_resultIsSuccess(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -90,7 +90,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithUnknownDonationId_resultIsError(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -110,7 +110,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithInvalidUpdateToken_resultIsError(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -130,7 +130,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithEmoticons_resultIsError(): void {
-		$this->createEnvironment( [], function( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(

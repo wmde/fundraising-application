@@ -7,14 +7,14 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
+use WMDE\Fundraising\Frontend\App\MailTemplates;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
-use WMDE\Fundraising\Frontend\App\MailTemplates;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class MailTemplatesTest extends TestCase {
@@ -76,7 +76,7 @@ class MailTemplatesTest extends TestCase {
 			$templateTestData['variants'] = [ '' => [] ];
 		}
 
-		foreach( $templateTestData['variants'] as $variantName => $additionalContext ) {
+		foreach ( $templateTestData['variants'] as $variantName => $additionalContext ) {
 			$filePath = $this->createTestFilePath( $templateFileName, $variantName );
 
 			$content = MailFormatter::format( $this->factory->getMailerTwig()->render(
@@ -115,4 +115,3 @@ class MailTemplatesTest extends TestCase {
 	}
 
 }
-

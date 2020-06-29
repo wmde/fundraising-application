@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper

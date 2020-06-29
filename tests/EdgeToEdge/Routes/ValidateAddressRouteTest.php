@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class ValidateAddressRouteTest extends WebRouteTestCase {
@@ -24,7 +24,7 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 
-		$this->assertJsonSuccessResponse( ['status' => 'OK'], $response );
+		$this->assertJsonSuccessResponse( [ 'status' => 'OK' ], $response );
 	}
 
 	public function testGivenInvalidCompanyAddress_validationReturnsErrorMessage(): void {

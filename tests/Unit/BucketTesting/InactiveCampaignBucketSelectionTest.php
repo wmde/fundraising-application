@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\InactiveCampaignBucketSelection;
-use PHPUnit\Framework\TestCase;
 
 class InactiveCampaignBucketSelectionTest extends TestCase {
 
