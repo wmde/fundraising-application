@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class CreditCardNotificationPresenter {
@@ -49,7 +49,7 @@ class CreditCardNotificationPresenter {
 		return implode(
 			'',
 			array_map(
-				function( $key, $value ): string {
+				function ( $key, $value ): string {
 					return $key . self::VALUE_ASSIGNMENT . $value . self::ARG_SEPARATOR;
 				},
 				array_keys( $result ),

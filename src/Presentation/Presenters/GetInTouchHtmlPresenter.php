@@ -5,13 +5,13 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\FunValidators\ValidationResponse;
 use WMDE\FunValidators\ConstraintViolation;
+use WMDE\FunValidators\ValidationResponse;
 
 /**
  * Render the contact form with errors
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class GetInTouchHtmlPresenter {

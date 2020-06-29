@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 /**
  * Encapsulates a list of honorifics for the current locale.
  *
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class Honorifics {

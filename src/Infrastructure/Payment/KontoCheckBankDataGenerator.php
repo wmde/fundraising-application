@@ -13,7 +13,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 /**
  * TODO: move to own KontoCheck library?
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Christoph Fischer < christoph.fischer@wikimedia.de >
  */
 class KontoCheckBankDataGenerator implements BankDataGenerator {

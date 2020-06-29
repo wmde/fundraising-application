@@ -10,7 +10,7 @@ use RuntimeException;
 use stdClass;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class ConfigReader {
@@ -41,7 +41,7 @@ class ConfigReader {
 		}
 
 		$configs = array_map(
-			function( string $path ) {
+			function ( string $path ) {
 				return $this->getFileConfig( $path );
 			},
 			$this->configPaths

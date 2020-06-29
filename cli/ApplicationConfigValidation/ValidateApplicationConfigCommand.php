@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class ValidateApplicationConfigCommand extends Command {

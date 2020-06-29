@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use DateTime;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
+use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
@@ -15,10 +16,9 @@ use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
-use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationConfirmationPresenter {
 

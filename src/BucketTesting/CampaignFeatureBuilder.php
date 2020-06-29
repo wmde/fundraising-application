@@ -15,7 +15,7 @@ use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
 /**
  * Build a Doorkeeper feature set from a list of campaigns
  *
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class CampaignFeatureBuilder {
 

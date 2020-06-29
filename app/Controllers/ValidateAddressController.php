@@ -13,7 +13,7 @@ use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\Validators\AddressValidator;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class ValidateAddressController {
 

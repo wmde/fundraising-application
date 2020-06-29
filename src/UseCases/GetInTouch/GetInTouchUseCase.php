@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\FunValidators\ValidationResponse;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class GetInTouchUseCase {
 
@@ -21,7 +21,6 @@ class GetInTouchUseCase {
 
 	public function __construct( GetInTouchValidator $validator, OperatorMailer $operatorMailer,
 		GetInTouchMailerInterface $userMailer ) {
-
 		$this->validator = $validator;
 		$this->operatorMailer = $operatorMailer;
 		$this->userMailer = $userMailer;

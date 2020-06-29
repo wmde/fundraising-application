@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCard;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class CreditCardPaymentUrlGenerator {
 

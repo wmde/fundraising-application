@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Tim Eulitz < tim.eulitz@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */

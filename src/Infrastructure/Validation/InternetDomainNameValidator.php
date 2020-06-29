@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Validation;
 use WMDE\FunValidators\DomainNameValidator;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class InternetDomainNameValidator implements DomainNameValidator {
 

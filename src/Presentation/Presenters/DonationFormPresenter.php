@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class DonationFormPresenter {
@@ -52,4 +52,3 @@ class DonationFormPresenter {
 	}
 
 }
-

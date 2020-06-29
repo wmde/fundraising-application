@@ -12,7 +12,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
  * Class prepares donor data for presentation
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class DonorDataFormatter {
 

@@ -39,14 +39,14 @@ class BucketSelector {
 		];
 
 		$buckets = [];
-		foreach( $this->campaigns as $campaign ) {
+		foreach ( $this->campaigns as $campaign ) {
 			$buckets[] = $this->selectBucketWithStrategies( $selectionStrategies, $campaign );
 		}
 		return $buckets;
 	}
 
 	private function selectBucketWithStrategies( array $selectionStrategies, Campaign $campaign ): Bucket {
-		foreach( $selectionStrategies as $strategy ) {
+		foreach ( $selectionStrategies as $strategy ) {
 			if ( $bucket = $strategy->selectBucketForCampaign( $campaign ) ) {
 				return $bucket;
 			}

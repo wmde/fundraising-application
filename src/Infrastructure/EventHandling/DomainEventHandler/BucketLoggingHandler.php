@@ -24,8 +24,8 @@ class BucketLoggingHandler {
 	public function __construct( BucketLogger $bucketLogger, callable $getSelectedBuckets, EventDispatcher $dispatcher ) {
 		$this->bucketLogger = $bucketLogger;
 		$this->getSelectedBuckets = $getSelectedBuckets;
-		$dispatcher->addEventListener( DonationCreatedEvent::class, [$this, 'onDonationCreated' ] )
-			->addEventListener( MembershipCreatedEvent::class, [$this, 'onMembershipCreated'] );
+		$dispatcher->addEventListener( DonationCreatedEvent::class, [ $this, 'onDonationCreated' ] )
+			->addEventListener( MembershipCreatedEvent::class, [ $this, 'onMembershipCreated' ] );
 	}
 
 	public function onDonationCreated( DonationCreatedEvent $event ): void {

@@ -8,7 +8,7 @@ use Twig_Environment;
 use Twig_Lexer;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
@@ -48,9 +48,9 @@ class TwigEnvironmentConfigurator {
 		}
 
 		$twig->setLexer( new Twig_Lexer( $twig, [
-			'tag_comment' => ['{#', '#}'],
-			'tag_block' => ['{%', '%}'],
-			'tag_variable' => ['{$', '$}']
+			'tag_comment' => [ '{#', '#}' ],
+			'tag_block' => [ '{%', '%}' ],
+			'tag_variable' => [ '{$', '$}' ]
 		] ) );
 
 		$this->setDefaultTwigVariables( $twig );

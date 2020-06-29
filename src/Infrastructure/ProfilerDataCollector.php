@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
  * NOT via the $data array field. The result of getFoo is accessible via
  * collector.foo in the template.
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class ProfilerDataCollector extends DataCollector {
@@ -41,7 +41,7 @@ class ProfilerDataCollector extends DataCollector {
 			'service' => $serviceName,
 			'function' => $functionName,
 			'arguments' => array_map(
-				function( $argument ) {
+				function ( $argument ) {
 					if ( strstr( json_encode( $argument ), 'password' ) === false ) {
 						return $argument;
 					}

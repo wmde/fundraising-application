@@ -7,14 +7,14 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorResponse;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
-use WMDE\Fundraising\Frontend\Presentation\DonorDataFormatter;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
+use WMDE\Fundraising\Frontend\Presentation\DonorDataFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
  * Render the confirmation pages for donations with additional form to enter / update donation data
  *
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class DonorUpdateHtmlPresenter {
 

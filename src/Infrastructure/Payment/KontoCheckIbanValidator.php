@@ -12,7 +12,7 @@ use WMDE\FunValidators\ValidationResult;
 /**
  * TODO: move to own KontoCheck library?
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Leszek Manicki <leszek.manicki@wikimedia.de>
  * @author Kai Nissen <leszek.manicki@wikimedia.de>
  */

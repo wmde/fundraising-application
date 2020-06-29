@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Cli\CampaignConfigValidation\ValidateCampaignCodeU
 use WMDE\Fundraising\Frontend\Cli\CampaignConfigValidation\ValidateCampaignConfigCommand;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class FundraisingCli {
@@ -26,16 +26,19 @@ class FundraisingCli {
 		$this->registerCommands();
 		return $this->app;
 	}
+
 	private function setApplicationInfo(): void {
 		$this->app->setName( 'Fundraising Console' );
 		$this->app->setVersion( '2.0' );
 	}
+
 	private function registerCommands(): void {
 		$this->app->add( new ValidateApplicationConfigCommand() );
 		$this->app->add( new ValidateCampaignConfigCommand() );
 		$this->app->add( new ValidateCampaignCodeUtilizationCommand() );
 		$this->app->add( new RenderMailTemplatesCommand() );
 	}
+
 	public function run(): void {
 		$this->newApplication()->run();
 	}

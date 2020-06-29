@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 /**
  * Present the result of the donation cancellation request
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class CancelDonationHtmlPresenter {

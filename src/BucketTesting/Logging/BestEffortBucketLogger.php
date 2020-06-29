@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class BestEffortBucketLogger implements BucketLogger {
 

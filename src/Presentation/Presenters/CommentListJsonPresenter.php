@@ -8,14 +8,14 @@ use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentWithAmount;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentList;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class CommentListJsonPresenter {
 
 	public function present( CommentList $commentList ): array {
 		// TODO Translate keys into English once old skins are phased out
 		return array_map(
-			function( CommentWithAmount $comment ) {
+			function ( CommentWithAmount $comment ) {
 				return [
 					'betrag' => $comment->getDonationAmount(),
 					'spender' => $comment->getAuthorName(),

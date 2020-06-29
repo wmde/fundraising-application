@@ -9,7 +9,7 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentList;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class CommentListHtmlPresenter {
@@ -23,7 +23,7 @@ class CommentListHtmlPresenter {
 	public function present( CommentList $commentList, int $pageNumber ): string {
 		return $this->template->render( [
 			'comments' => array_map(
-				function( CommentWithAmount $comment ) {
+				function ( CommentWithAmount $comment ) {
 					return [
 						'amount' => $comment->getDonationAmount(),
 						'author' => $comment->getAuthorName(),

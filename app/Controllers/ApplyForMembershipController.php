@@ -22,7 +22,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class ApplyForMembershipController {
 
@@ -181,7 +181,7 @@ class ApplyForMembershipController {
 	}
 
 	private function newHttpResponse( ApplyForMembershipResponse $responseModel ): Response {
-		switch( $responseModel->getMembershipApplication()->getPayment()->getPaymentMethod()->getId() ) {
+		switch ( $responseModel->getMembershipApplication()->getPayment()->getPaymentMethod()->getId() ) {
 			case PaymentMethod::DIRECT_DEBIT:
 				$httpResponse = $this->newDirectDebitResponse( $responseModel );
 				break;
@@ -228,7 +228,6 @@ class ApplyForMembershipController {
 				date( self::TIMESTAMP_FORMAT )
 			)
 		);
-
 	}
 
 	/**
@@ -239,7 +238,7 @@ class ApplyForMembershipController {
 	 * @return string
 	 */
 	private function filterAutofillCommas( string $value ): string {
-		return trim( preg_replace( ['/,/', '/\s{2,}/'], [' ', ' '], $value ) );
+		return trim( preg_replace( [ '/,/', '/\s{2,}/' ], [ ' ', ' ' ], $value ) );
 	}
 
 	private function logValidationErrors( ApplicationValidationResult $validationResult, Request $httpRequest ): void {

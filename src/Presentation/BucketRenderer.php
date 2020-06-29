@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 
 /**
  * Prepares a list of buckets into template variables
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class BucketRenderer {
 

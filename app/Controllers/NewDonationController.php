@@ -27,7 +27,7 @@ class NewDonationController {
 		catch ( \InvalidArgumentException $ex ) {
 			$amount = Euro::newFromCents( 0 );
 		}
-		$paymentType = (string) $request->get( 'paymentType', $legacyValueReader->getPaymentType() );
+		$paymentType = (string)$request->get( 'paymentType', $legacyValueReader->getPaymentType() );
 		$interval = $request->get( 'interval', $legacyValueReader->getInterval() );
 		if ( $interval !== null ) {
 			$interval = intval( $interval );

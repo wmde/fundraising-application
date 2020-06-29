@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 /**
  * Render an error page
  *
- * @licence GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class ErrorPageHtmlPresenter {
 

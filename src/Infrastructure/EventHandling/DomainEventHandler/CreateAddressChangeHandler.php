@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler;
 
 use Doctrine\ORM\EntityManager;
-use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
+use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\MembershipContext\Domain\Event\MembershipCreatedEvent;
@@ -17,8 +17,8 @@ class CreateAddressChangeHandler {
 
 	public function __construct( EntityManager $entityManager, EventDispatcher $dispatcher ) {
 		$this->entityManager = $entityManager;
-		$dispatcher->addEventListener( DonationCreatedEvent::class, [$this, 'onDonationCreated'] )
-			->addEventListener( MembershipCreatedEvent::class, [$this, 'onMembershipCreated'] );
+		$dispatcher->addEventListener( DonationCreatedEvent::class, [ $this, 'onDonationCreated' ] )
+			->addEventListener( MembershipCreatedEvent::class, [ $this, 'onMembershipCreated' ] );
 	}
 
 	public function onDonationCreated( DonationCreatedEvent $event ): void {
@@ -53,7 +53,7 @@ class CreateAddressChangeHandler {
 	}
 
 	private function persistIfNeeded( AddressChange $addressChange ) {
-		$countCriteria = [ 'externalId' => $addressChange->getExternalId(), 'externalIdType' => $addressChange->getExternalIdType()];
+		$countCriteria = [ 'externalId' => $addressChange->getExternalId(), 'externalIdType' => $addressChange->getExternalIdType() ];
 		if ( $this->entityManager->getRepository( AddressChange::class )->count( $countCriteria ) > 0 ) {
 			// New donations/memberships should never have address change records, but if they do, let's do nothing
 			// Belt-and-suspenders approach for https://phabricator.wikimedia.org/T253658

@@ -16,14 +16,13 @@ class SupportHandler extends AbstractHandler {
 		parent::__construct();
 		$this->wrappedErrorProneHandler = $wrappedErrorProneHandler;
 		$this->loggerForHandlerErrors = $loggerForHandlerErrors;
-
 	}
 
 	public function handle( array $record ): bool {
 		try {
 			return $this->wrappedErrorProneHandler->handle( $record );
 		} catch ( \Throwable $e ) {
-			$this->loggerForHandlerErrors->error( $e->getMessage(), ['exception' => $e] );
+			$this->loggerForHandlerErrors->error( $e->getMessage(), [ 'exception' => $e ] );
 		}
 		return false;
 	}

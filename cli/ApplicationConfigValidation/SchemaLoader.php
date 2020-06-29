@@ -8,7 +8,7 @@ use FileFetcher\FileFetcher;
 use FileFetcher\FileFetchingException;
 
 /**
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class SchemaLoader {
@@ -27,7 +27,7 @@ class SchemaLoader {
 		}
 		$schema = json_decode( $schemaString );
 		if ( $schema === null ) {
-			throw new ConfigValidationException( 'Error parsing the schema file: ' .json_last_error_msg() );
+			throw new ConfigValidationException( 'Error parsing the schema file: ' . json_last_error_msg() );
 		}
 		if ( !is_object( $schema ) ) {
 			throw new ConfigValidationException( 'Schema must be a JSON object.' );

@@ -6,9 +6,9 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Validation;
 
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\MinBucketCountRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\CampaignValidationRuleInterface;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\DefaultBucketRule;
+use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\MinBucketCountRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\StartAndEndTimeRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\UniqueBucketRule;
 
@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\UniqueBucketRule;
  * YAML validity is checked in during loading of campaign configuration
  *
  * @see \WMDE\Fundraising\Frontend\BucketTesting\CampaignConfiguration
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class CampaignValidator {
 

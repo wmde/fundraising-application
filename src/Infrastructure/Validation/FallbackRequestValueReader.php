@@ -38,13 +38,13 @@ class FallbackRequestValueReader {
 	public function getPaymentType(): string {
 		if ( $this->request->get( 'zahlweise' ) !== null ) {
 			$this->logDeprecationWarning( 'zahlweise' );
-			return (string) $this->request->get( 'zahlweise', '' );
+			return (string)$this->request->get( 'zahlweise', '' );
 		}
 		return '';
 	}
 
 	public function getInterval(): ?int {
-		if ($this->request->get( 'periode' ) !== null ) {
+		if ( $this->request->get( 'periode' ) !== null ) {
 			$this->logDeprecationWarning( 'periode' );
 			return intval( $this->request->get( 'periode' ) );
 		}
