@@ -14,9 +14,9 @@ use WMDE\FunValidators\Validators\TextPolicyValidator;
  */
 class FieldTextPolicyValidator {
 
-	const VIOLATION_MESSAGE = 'This field has unacceptable language or URLs in it';
+	private const VIOLATION_MESSAGE = 'This field has unacceptable language or URLs in it';
 
-	private $textPolicyValidator;
+	private TextPolicyValidator $textPolicyValidator;
 
 	public function __construct( TextPolicyValidator $textPolicyValidator ) {
 		$this->textPolicyValidator = $textPolicyValidator;

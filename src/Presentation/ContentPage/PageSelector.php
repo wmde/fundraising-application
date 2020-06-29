@@ -12,9 +12,6 @@ class PageSelector {
 		$this->config = $config;
 	}
 
-	/**
-	 * @throws PageNotFoundException
-	 */
 	public function getPageId( string $slug ): string {
 		$pageId = array_search( $slug, $this->config );
 

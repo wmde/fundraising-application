@@ -18,8 +18,8 @@ use WMDE\Fundraising\PaymentContext\ResponseModel\PaypalNotificationResponse;
 
 class PaypalNotificationControllerForMembershipFee {
 
-	const TYPE_SUBSCRIPTION_SIGNUP = 'subscr_signup';
-	const TYPE_SUBSCRIPTION_PAYMENT = 'subscr_payment';
+	private const TYPE_SUBSCRIPTION_SIGNUP = 'subscr_signup';
+	private const TYPE_SUBSCRIPTION_PAYMENT = 'subscr_payment';
 
 	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
 		$post = $request->request;
@@ -49,7 +49,8 @@ class PaypalNotificationControllerForMembershipFee {
 
 		$this->logResponseIfNeeded( $ffFactory, $response, $post );
 
-		return new Response( '', Response::HTTP_OK ); # PayPal expects an empty response
+		// PayPal expects an empty response
+		return new Response( '', Response::HTTP_OK );
 	}
 
 	private function getUpdateToken( ParameterBag $postRequest ): string {
@@ -82,6 +83,7 @@ class PaypalNotificationControllerForMembershipFee {
 	}
 
 	private function newSubscriptionPaymentRequestFromPost( ParameterBag $postRequest ): PayPalPaymentNotificationRequest {
+		// we're not using Euro class for amounts to avoid exceptions on fees or other fields where the value is < 0
 		return ( new PayPalPaymentNotificationRequest() )
 			->setTransactionType( $postRequest->get( 'txn_type', '' ) )
 			->setTransactionId( $postRequest->get( 'txn_id', '' ) )
@@ -99,7 +101,7 @@ class PaypalNotificationControllerForMembershipFee {
 			->setPayerAddressStatus( $postRequest->get( 'address_status', '' ) )
 			->setInternalId( (int)$postRequest->get( 'item_number', 0 ) )
 			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) )
-			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) ) // No Euro class to avoid exceptions on fees < 0
+			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) )
 			->setAmountGross( Euro::newFromString( $postRequest->get( 'mc_gross', '0' ) ) )
 			->setSettleAmount( Euro::newFromString( $postRequest->get( 'settle_amount', '0' ) ) )
 			->setPaymentTimestamp( $postRequest->get( 'payment_date', '' ) )

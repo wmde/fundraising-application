@@ -56,7 +56,8 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 			$this->baseUrl,
 			[
 				RequestOptions::FORM_PARAMS => array_merge( [ 'cmd' => '_notify-validate' ], $request ),
-				RequestOptions::HTTP_ERRORS => false // disable throwing exceptions, return status instead
+				// disable throwing exceptions, return status instead
+				RequestOptions::HTTP_ERRORS => false
 			]
 		);
 

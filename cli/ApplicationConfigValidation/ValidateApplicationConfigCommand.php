@@ -21,10 +21,10 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
  */
 class ValidateApplicationConfigCommand extends Command {
 
-	const NAME = 'app:validate:config';
-	const DEFAULT_SCHEMA = __DIR__ . '/../../app/config/schema.json';
-	const ERROR_RETURN_CODE = 1;
-	const OK_RETURN_CODE = 0;
+	private const NAME = 'app:validate:config';
+	private const DEFAULT_SCHEMA = __DIR__ . '/../../app/config/schema.json';
+	private const RETURN_CODE_OK = 0;
+	private const RETURN_CODE_ERROR = 1;
 
 	protected function configure(): void {
 		$this->setName( self::NAME )
@@ -62,21 +62,16 @@ class ValidateApplicationConfigCommand extends Command {
 
 		$validator->validate( $configObject, $schema );
 		if ( $validator->isValid() ) {
-			return self::OK_RETURN_CODE;
+			return self::RETURN_CODE_OK;
 		}
 
 		foreach ( $validator->getErrors() as $error ) {
 			$output->writeln( ValidationErrorRenderer::render( $error ) );
 		}
 
-		return self::ERROR_RETURN_CODE;
+		return self::RETURN_CODE_ERROR;
 	}
 
-	/**
-	 * @throws \RuntimeException
-	 * @param array $configFiles
-	 * @return \stdClass
-	 */
 	private function loadConfigObjectFromFiles( array $configFiles ): \stdClass {
 		$configReader = new ConfigReader(
 			new SimpleFileFetcher(),

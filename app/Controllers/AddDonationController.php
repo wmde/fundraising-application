@@ -85,7 +85,6 @@ class AddDonationController {
 						]
 					)
 				);
-				break;
 			case PaymentMethod::PAYPAL:
 				return new RedirectResponse(
 					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
@@ -96,7 +95,6 @@ class AddDonationController {
 						$responseModel->getAccessToken()
 					)
 				);
-				break;
 			case PaymentMethod::SOFORT:
 				return new RedirectResponse(
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
@@ -107,12 +105,10 @@ class AddDonationController {
 						$responseModel->getAccessToken()
 					)
 				);
-				break;
 			case PaymentMethod::CREDIT_CARD:
 				return new RedirectResponse(
 					$this->ffFactory->newCreditCardPaymentUrlGenerator()->buildUrl( $responseModel )
 				);
-				break;
 			default:
 				throw new \LogicException( 'This code should not be reached' );
 		}

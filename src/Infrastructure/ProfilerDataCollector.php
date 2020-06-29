@@ -24,6 +24,9 @@ class ProfilerDataCollector extends DataCollector {
 
 	/**
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 * @param Request $request
+	 * @param Response $response
+	 * @param \Exception|null $exception
 	 */
 	public function collect( Request $request, Response $response, \Exception $exception = null ): void {
 	}

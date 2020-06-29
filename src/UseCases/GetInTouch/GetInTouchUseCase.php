@@ -26,9 +26,6 @@ class GetInTouchUseCase {
 		$this->userMailer = $userMailer;
 	}
 
-	/**
-	 * @throws \RuntimeException
-	 */
 	public function processContactRequest( GetInTouchRequest $request ): ValidationResponse {
 		$validationResult = $this->validator->validate( $request );
 

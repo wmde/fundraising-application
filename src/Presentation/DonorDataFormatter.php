@@ -64,7 +64,7 @@ class DonorDataFormatter {
 	}
 
 	/**
-	 * Maps the membership application's status to a translatable message key
+	 * Map donation status to a translatable message key
 	 *
 	 * @param string $status
 	 * @return string
@@ -89,11 +89,11 @@ class DonorDataFormatter {
 	}
 
 	public function getDonationDate(): string {
-		// TODO use locale to determine the date format
 		return ( new \DateTime() )->format( 'd.m.Y' );
 	}
 
 	public function getHideBannerCookieDuration(): string {
-		return '15552000'; // 180 days
+		// 180 days
+		return '15552000';
 	}
 }

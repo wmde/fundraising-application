@@ -26,16 +26,10 @@ class Messenger {
 		$this->operatorName = $operatorName;
 	}
 
-	/**
-	 * @throws RuntimeException
-	 */
 	public function sendMessageToUser( Message $messageContent, EmailAddress $recipient ): void {
 		$this->sendMessage( $this->createMessage( $messageContent, $recipient ) );
 	}
 
-	/**
-	 * @throws RuntimeException
-	 */
 	public function sendMessageToOperator( Message $messageContent, EmailAddress $replyTo = null ): void {
 		$this->sendMessage( $this->createMessage( $messageContent, $this->operatorAddress, $replyTo ) );
 	}

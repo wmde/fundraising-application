@@ -32,6 +32,15 @@ class CookieBuilder {
 
 	/**
 	 * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+	 *
+	 * @param string $name
+	 * @param string $value
+	 * @param int|null $expire
+	 * @param string|null $path
+	 * @param string|null $domain
+	 * @param bool|null $raw
+	 * @param string|null $sameSite
+	 * @return Cookie
 	 */
 	public function newCookie( string $name, string $value, ?int $expire = null, ?string $path = null, ?string $domain = null,
 								?bool $raw = false, ?string $sameSite = null ): Cookie {

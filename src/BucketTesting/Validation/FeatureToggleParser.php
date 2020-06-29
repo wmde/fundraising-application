@@ -16,9 +16,10 @@ use PhpParser\ParserFactory;
 class FeatureToggleParser {
 
 	/** @see \WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle::featureIsActive */
-	const FEATURE_TOGGLE_METHOD_NAME = 'featureIsActive';
+	private const FEATURE_TOGGLE_METHOD_NAME = 'featureIsActive';
 
 	/**
+	 * @param string $choiceFactoryLocation
 	 * @return string[]
 	 */
 	public static function getFeatureToggleChecks( string $choiceFactoryLocation ): array {

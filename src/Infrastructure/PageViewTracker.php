@@ -10,7 +10,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  */
 class PageViewTracker {
 
-	const TRACKING_TITLE_PAYPAL_REDIRECT = 'Redirection from mobile banner to PayPal';
+	private const TRACKING_TITLE_PAYPAL_REDIRECT = 'Redirection from mobile banner to PayPal';
 
 	private $tracker;
 	private $trackingUrlBase;

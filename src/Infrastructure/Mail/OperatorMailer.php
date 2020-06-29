@@ -21,9 +21,6 @@ class OperatorMailer {
 		$this->template = $template;
 	}
 
-	/**
-	 * @throws \RuntimeException
-	 */
 	public function sendMailToOperator( EmailAddress $replyToAddress, string $subject, array $templateArguments = [] ): void {
 		$this->messenger->sendMessageToOperator(
 			new Message(
@@ -33,5 +30,4 @@ class OperatorMailer {
 			$replyToAddress
 		);
 	}
-
 }
