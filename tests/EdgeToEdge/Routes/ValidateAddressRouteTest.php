@@ -7,8 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController
  */
 class ValidateAddressRouteTest extends WebRouteTestCase {
 

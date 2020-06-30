@@ -17,7 +17,7 @@ use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenera
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
 
 /**
- * @license GPL-2.0-or-later
+ * @covers \WMDE\Fundraising\Frontend\App\Routes
  */
 class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 

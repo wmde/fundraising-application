@@ -5,18 +5,18 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\System;
 
 use GuzzleHttp\Client;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException
  */
-class PayPalNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
+class PayPalNotificationVerifierTest extends TestCase {
 
-	/** @var PayPalPaymentNotificationVerifier */
-	private $verifier;
+	private PayPalPaymentNotificationVerifier $verifier;
 
 	public function setUp(): void {
 		$config = TestEnvironment::newInstance( [] )->getConfig();

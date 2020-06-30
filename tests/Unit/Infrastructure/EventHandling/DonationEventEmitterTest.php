@@ -9,6 +9,9 @@ use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationEvent;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter
+ */
 class DonationEventEmitterTest extends TestCase {
 
 	public function testEmitterDispatchesEvent(): void {

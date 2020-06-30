@@ -10,6 +10,9 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader
+ */
 class WordListFileReaderTest extends TestCase {
 
 	public function testGivenEmptyString_anEmptyListIsReturned(): void {

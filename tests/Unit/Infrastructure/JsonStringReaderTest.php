@@ -6,9 +6,13 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use FileFetcher\InMemoryFileFetcher;
 use FileFetcher\ThrowingFileFetcher;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 
-class JsonStringReaderTest extends \PHPUnit\Framework\TestCase {
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader
+ */
+class JsonStringReaderTest extends TestCase {
 
 	public function testGivenFailingFileFetcher_exceptionIsThrown() {
 		$this->expectException( \RuntimeException::class );

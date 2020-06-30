@@ -19,18 +19,16 @@ use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenera
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee
  */
 class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 
-	const MEMBERSHIP_APPLICATION_ID = 1;
-	const UPDATE_TOKEN = 'some token';
-	const BASE_URL = 'https://that.paymentprovider.com/';
-	const EMAIL_ADDRESS = 'paypaldev-facilitator@wikimedia.de';
-	const ITEM_NAME = 'Your membership';
-	const VERIFICATION_SUCCESSFUL = 'VERIFIED';
-	const VERIFICATION_FAILED = 'INVALID';
+	private const MEMBERSHIP_APPLICATION_ID = 1;
+	private const UPDATE_TOKEN = 'some token';
+	private const BASE_URL = 'https://that.paymentprovider.com/';
+	private const EMAIL_ADDRESS = 'paypaldev-facilitator@wikimedia.de';
+	private const VERIFICATION_SUCCESSFUL = 'VERIFIED';
+	private const VERIFICATION_FAILED = 'INVALID';
 
 	public function testGivenValidSubscriptionSignupRequest_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {

@@ -5,10 +5,12 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\Translator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator
+ */
 class GreetingGeneratorTest extends TestCase {
 
 	public function testGivenNoLastNameForFormalGreeting_neutralGreetingIsGenerated(): void {

@@ -22,9 +22,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController
  */
 class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 

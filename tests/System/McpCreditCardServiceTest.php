@@ -5,16 +5,15 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\System;
 
 use IMcpCreditcardService_v1_5;
+use PHPUnit\Framework\TestCase;
 use TNvpServiceDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService
  */
-class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
+class McpCreditCardServiceTest extends TestCase {
 
 	const TEST_MODE = 1;
 	const CARD_NUMBER = '4111111111111111';

@@ -17,18 +17,17 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVe
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier
  * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
 
-	const VALID_ACCOUNT_EMAIL = 'foerderpp@wikimedia.de';
-	const INVALID_ACCOUNT_EMAIL = 'this.is.not@my.email.address';
-	const DUMMY_API_URL = 'https://dummy-url.com';
-	const VALID_PAYMENT_STATUS = 'Completed';
-	const INVALID_PAYMENT_STATUS = 'Unknown';
-	const ITEM_NAME = 'My donation';
-	const CURRENCY_EUR = 'EUR';
-	const RECURRING_NO_PAYMENT = 'recurring_payment_suspended_due_to_max_failed_payment';
+	private const VALID_ACCOUNT_EMAIL = 'foerderpp@wikimedia.de';
+	private const INVALID_ACCOUNT_EMAIL = 'this.is.not@my.email.address';
+	private const DUMMY_API_URL = 'https://dummy-url.com';
+	private const VALID_PAYMENT_STATUS = 'Completed';
+	private const INVALID_PAYMENT_STATUS = 'Unknown';
+	private const ITEM_NAME = 'My donation';
+	private const CURRENCY_EUR = 'EUR';
+	private const RECURRING_NO_PAYMENT = 'recurring_payment_suspended_due_to_max_failed_payment';
 
 	private $expectedRequestparameters;
 	private $receivedRequests;

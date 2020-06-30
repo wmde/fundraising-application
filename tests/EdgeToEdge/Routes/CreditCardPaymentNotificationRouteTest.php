@@ -16,8 +16,7 @@ use WMDE\Fundraising\PaymentContext\Infrastructure\FakeCreditCardService;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController
  */
 class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 

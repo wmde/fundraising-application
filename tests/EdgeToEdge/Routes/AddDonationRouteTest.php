@@ -22,8 +22,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedMessageTranslator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
@@ -39,7 +37,7 @@ use WMDE\FunValidators\Validators\EmailValidator;
  */
 class AddDonationRouteTest extends WebRouteTestCase {
 
-	const SOME_TOKEN = 'SomeToken';
+	private const SOME_TOKEN = 'SomeToken';
 
 	private const ADD_DONATION_PATH = '/donation/add';
 

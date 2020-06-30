@@ -9,6 +9,9 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\PaymentContext\RequestModel\SofortNotificationRequest;
 
+/**
+ * @covers \WMDE\Fundraising\PaymentContext\RequestModel\SofortNotificationRequest
+ */
 class SofortNotificationRequestTest extends TestCase {
 
 	public function testValidRequest_requestIsConstructed(): void {

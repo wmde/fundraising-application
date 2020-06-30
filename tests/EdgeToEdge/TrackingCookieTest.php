@@ -7,15 +7,14 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 use Symfony\Component\BrowserKit\Cookie;
 
 /**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @covers \WMDE\Fundraising\Frontend\App\Bootstrap
  */
 class TrackingCookieTest extends WebRouteTestCase {
 
-	const PARAM_NAME_CAMPAIGN = 'piwik_campaign';
-	const PARAM_NAME_KEYWORD = 'piwik_kwd';
+	private const PARAM_NAME_CAMPAIGN = 'piwik_campaign';
+	private const PARAM_NAME_KEYWORD = 'piwik_kwd';
 
-	const COOKIE_NAME = 'spenden_tracking';
+	private const COOKIE_NAME = 'spenden_tracking';
 
 	public function testWhenTrackingParamsArePassed_valuesAreStoredInCookie(): void {
 		$client = $this->createClient();

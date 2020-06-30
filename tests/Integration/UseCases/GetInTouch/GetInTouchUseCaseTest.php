@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GetInTouch;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
@@ -19,15 +20,15 @@ use WMDE\FunValidators\ValidationResult;
  * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
-class GetInTouchUseCaseTest extends \PHPUnit\Framework\TestCase {
+class GetInTouchUseCaseTest extends TestCase {
 
-	const INQUIRER_FIRST_NAME = 'Curious';
-	const INQUIRER_LAST_NAME = 'Guy';
-	const INQUIRER_EMAIL_ADDRESS = 'curious.guy@alltheguys.com';
-	const INQUIRER_DONATION_NUMBER = '123456';
-	const INQUIRY_SUBJECT = 'Please let me know';
-	const INQUIRY_CATEGORY = 'Other';
-	const INQUIRY_MESSAGE = 'What is it you do?';
+	private const INQUIRER_FIRST_NAME = 'Curious';
+	private const INQUIRER_LAST_NAME = 'Guy';
+	private const INQUIRER_EMAIL_ADDRESS = 'curious.guy@alltheguys.com';
+	private const INQUIRER_DONATION_NUMBER = '123456';
+	private const INQUIRY_SUBJECT = 'Please let me know';
+	private const INQUIRY_CATEGORY = 'Other';
+	private const INQUIRY_MESSAGE = 'What is it you do?';
 
 	private $validator;
 

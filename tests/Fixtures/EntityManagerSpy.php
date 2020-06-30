@@ -8,13 +8,14 @@ use Doctrine\ORM\EntityManager;
 
 class EntityManagerSpy extends EntityManager {
 
+	/** @var mixed */
 	private $entity;
 
 	public function __construct() {
 	}
 
 	/**
-	 * @param $entity
+	 * @param mixed $entity
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */

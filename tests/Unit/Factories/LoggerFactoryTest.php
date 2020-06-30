@@ -12,6 +12,9 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\SupportHandler;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Factories\LoggerFactory
+ */
 class LoggerFactoryTest extends TestCase {
 	public function testGivenErrorHandlerConfiguration_itReturnsErrorLoggingHandler(): void {
 		$factory = new LoggerFactory( [

@@ -4,9 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 
-class FilePrefixerTest extends \PHPUnit\Framework\TestCase {
+/**
+ * @covers \WMDE\Fundraising\Frontend\Presentation\FilePrefixer
+ */
+class FilePrefixerTest extends TestCase {
 
 	public function testGivenNoFilePrefixes_fileNameIsNotChanged(): void {
 		$prefixer = new FilePrefixer( '' );

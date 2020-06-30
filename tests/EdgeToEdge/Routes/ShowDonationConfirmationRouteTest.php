@@ -19,8 +19,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoad
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 
 /**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController
  */
 class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 

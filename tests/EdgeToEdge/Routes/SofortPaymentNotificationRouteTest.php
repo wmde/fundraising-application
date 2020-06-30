@@ -17,6 +17,9 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler
+ */
 class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	private const VALID_TOKEN = 'my-secret_token';

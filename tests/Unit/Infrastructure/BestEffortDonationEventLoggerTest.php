@@ -15,12 +15,11 @@ use WMDE\Fundraising\DonationContext\Tests\Fixtures\DonationEventLoggerSpy;
  * @covers \WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger
  *
  * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 
-	const DONATION_ID = 1337;
-	const MESSAGE = 'a semi-important event has occured';
+	private const DONATION_ID = 1337;
+	private const MESSAGE = 'a semi-important event has occured';
 
 	public function testLogDataIsPassed(): void {
 		$eventLogger = new DonationEventLoggerSpy();

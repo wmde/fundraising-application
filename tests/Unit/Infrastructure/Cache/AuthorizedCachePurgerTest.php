@@ -17,8 +17,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\Cache\CachePurgingException;
  */
 class AuthorizedCachePurgerTest extends \PHPUnit\Framework\TestCase {
 
-	const CORRECT_SECRET = 'correct secret';
-	const WRONG_SECRET = 'wrong secret';
+	private const CORRECT_SECRET = 'correct secret';
+	private const WRONG_SECRET = 'wrong secret';
 
 	public function testWhenSecretMatches_purgeHappens(): void {
 		$cachePurger = $this->newCachePurger();

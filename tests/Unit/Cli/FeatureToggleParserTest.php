@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\FeatureToggleParser;
  */
 class FeatureToggleParserTest extends \PHPUnit\Framework\TestCase {
 
-	const CHOICE_FACTORY_LOCATION = 'tests/Fixtures/FakeChoiceFactory/FakeInconsistentChoiceFactory.php';
+	private const CHOICE_FACTORY_LOCATION = 'tests/Fixtures/FakeChoiceFactory/FakeInconsistentChoiceFactory.php';
 
 	public function testWhenChoiceFactoryIsParsed_correctFeatureToggleChecksAreReturned(): void {
 		$this->assertSame(
