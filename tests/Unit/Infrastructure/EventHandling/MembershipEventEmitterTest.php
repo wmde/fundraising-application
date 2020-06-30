@@ -9,6 +9,9 @@ use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeMembershipEvent;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter
+ */
 class MembershipEventEmitterTest extends TestCase {
 
 	public function testEmitterDispatchesEvent(): void {

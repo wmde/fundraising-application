@@ -22,6 +22,9 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\MembershipContext\Domain\Model\PhoneNumber;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler
+ */
 class BucketLoggingHandlerTest extends TestCase {
 
 	private const DONATION_ID = 23;

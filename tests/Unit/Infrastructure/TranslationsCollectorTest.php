@@ -8,6 +8,9 @@ use FileFetcher\InMemoryFileFetcher;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector
+ */
 class TranslationsCollectorTest extends TestCase {
 
 	public function testGivenOneFileItReturnsTheContents(): void {

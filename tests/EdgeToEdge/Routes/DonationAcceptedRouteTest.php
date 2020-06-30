@@ -12,13 +12,12 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController
  */
 class DonationAcceptedRouteTest extends WebRouteTestCase {
 
-	const WRONG_UPDATE_TOKEN = 'Wrong update token';
-	const CORRECT_UPDATE_TOKEN = 'Correct update token';
+	private const WRONG_UPDATE_TOKEN = 'Wrong update token';
+	private const CORRECT_UPDATE_TOKEN = 'Correct update token';
 
 	public function testGivenInvalidUpdateToken_errorIsReturned(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {

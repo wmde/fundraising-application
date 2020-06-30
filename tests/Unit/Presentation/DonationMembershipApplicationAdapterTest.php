@@ -19,6 +19,9 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter
+ */
 class DonationMembershipApplicationAdapterTest extends TestCase {
 
 	public function testCompleteDonation_isCorrectlyConvertedToArray(): void {

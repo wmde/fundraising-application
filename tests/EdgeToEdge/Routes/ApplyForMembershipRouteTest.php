@@ -26,7 +26,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 
 /**
- * @license GPL-2.0-or-later
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController
  *
  * @requires extension konto_check
  */

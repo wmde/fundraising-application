@@ -16,8 +16,8 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class GenerateIbanRouteTest extends WebRouteTestCase {
 
-	const INVALID_ACCOUNT_NUMBER = '1015754241';
-	const VALID_ACCOUNT_NUMBER = '1015754243';
+	private const INVALID_ACCOUNT_NUMBER = '1015754241';
+	private const VALID_ACCOUNT_NUMBER = '1015754243';
 
 	public function testGivenInvalidBankAccountData_failureResponseIsReturned(): void {
 		$client = $this->createClient();

@@ -8,8 +8,7 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\MailTemplateFilenameTraversable
  */
 class MailTemplateFilenameTraversableTest extends TestCase {
 

@@ -9,6 +9,9 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfiguration;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignConfiguration
+ */
 class CampaignConfigurationTest extends TestCase {
 
 	use ConfigurationTestCaseTrait;

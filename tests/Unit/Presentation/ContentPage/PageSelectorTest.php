@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector
+ */
 class PageSelectorTest extends TestCase {
 	/**
 	 * @var PageSelector

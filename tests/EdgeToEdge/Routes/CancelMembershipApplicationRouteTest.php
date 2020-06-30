@@ -12,8 +12,7 @@ use WMDE\Fundraising\MembershipContext\DataAccess\MembershipApplicationData;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 
 /**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * @covers \WMDE\Fundraising\Frontend\App\Routes
  */
 class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 

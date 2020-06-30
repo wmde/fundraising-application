@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 use Twig_Loader_Filesystem;
 use WMDE\Fundraising\Frontend\Factories\TwigFactory;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Factories\TwigFactory
+ */
 class TwigFactoryTest extends TestCase {
 
 	public function testNewFilesystemLoaderCreatesInstance(): void {

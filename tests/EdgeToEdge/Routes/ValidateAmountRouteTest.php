@@ -7,6 +7,9 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController
+ */
 class ValidateAmountRouteTest extends WebRouteTestCase {
 
 	private const PATH = '/validate-donation-amount';

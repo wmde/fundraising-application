@@ -18,13 +18,13 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
 /**
- * @license GPL-2.0-or-later
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController
  */
 class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	private const PATH = 'donation/update';
-	const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
-	const INVALID_UPDATE_TOKEN = '2ba905fe68e61f3a681d8faf689bfeeb8c942b5b';
+	private const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
+	private const INVALID_UPDATE_TOKEN = '2ba905fe68e61f3a681d8faf689bfeeb8c942b5b';
 
 	public function testWhenCorrectPrivatePersonDataIsPosted_addressIsChanged(): void {
 		$this->createEnvironment(

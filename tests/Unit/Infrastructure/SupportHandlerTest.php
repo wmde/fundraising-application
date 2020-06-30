@@ -14,6 +14,9 @@ use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\SupportHandler;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\SupportHandler
+ */
 class SupportHandlerTest extends TestCase {
 
 	public function testGivenWrappedMainHandlerHandlesRecord_loggerForHandlerErrorsLogsNothing(): void {

@@ -10,6 +10,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Presentation\BucketRenderer
+ */
 class BucketRendererTest extends TestCase {
 	private $campaign1;
 	private $campaign2;

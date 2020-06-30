@@ -5,8 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 /**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @covers \WMDE\Fundraising\Frontend\App\Bootstrap
  */
 class TrimValuesTest extends WebRouteTestCase {
 

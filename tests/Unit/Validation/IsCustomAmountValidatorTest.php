@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator
+ */
 class IsCustomAmountValidatorTest extends TestCase {
 
 	public function testValidate() {

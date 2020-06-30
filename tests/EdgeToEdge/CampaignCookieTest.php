@@ -7,16 +7,14 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 use Symfony\Component\BrowserKit\Cookie as BrowserKitCookie;
 use Symfony\Component\HttpFoundation\Cookie;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedCampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
 /**
- * Class CampaignCookieTest
- * @package WMDE\Fundraising\Frontend\Tests\EdgeToEdge
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider
  */
 class CampaignCookieTest extends WebRouteTestCase {
 
-	const COOKIE_NAME = 'spenden_ttg';
+	private const COOKIE_NAME = 'spenden_ttg';
 
 	const TEST_CAMPAIGN_CONFIG = [
 		'awesome_feature' => [

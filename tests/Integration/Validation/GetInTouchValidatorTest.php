@@ -12,8 +12,7 @@ use WMDE\FunValidators\ValidationResult;
 use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * @covers \WMDE\Fundraising\Frontend\Validation\GetInTouchValidator
  */
 class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
 

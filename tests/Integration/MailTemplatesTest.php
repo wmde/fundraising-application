@@ -14,8 +14,9 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
+ * This is for testing the mail template output, no classes are covered
+ *
+ * @coversNothing
  */
 class MailTemplatesTest extends TestCase {
 

@@ -21,7 +21,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader;
  */
 class CampaignConfigurationLoaderTest extends TestCase {
 
-	const VALID_CONFIGURATION = <<<CFG
+	private const VALID_CONFIGURATION = <<<CFG
 campaign1:
   url_key: c1
   start: "2015-01-01"
@@ -31,7 +31,7 @@ campaign1:
   default_bucket: foo
 CFG;
 
-	const OVERRIDE_CONFIGURATION = <<<CFG
+	private const OVERRIDE_CONFIGURATION = <<<CFG
 campaign1:
   active: false
   default_bucket: bar
@@ -107,7 +107,8 @@ CFG;
 		$filesystem->method( 'exists' )->willReturn( false );
 		$fileFetcher = new ThrowingFileFetcher();
 		$cache = new ArrayCache();
-		$cacheKey = md5( 'campaigns.yml' ); // TODO find better way to hide this implementation detail
+		// @see CampaignConfigurationLoader::getCacheKey
+		$cacheKey = md5( 'campaigns.yml' );
 		$cache->save( $cacheKey, $campaignConfig );
 		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, $cache );
 

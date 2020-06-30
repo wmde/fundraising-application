@@ -37,9 +37,10 @@ class BucketSelectorTest extends TestCase {
 		);
 		$this->defaultBucket = new Bucket( 'a', $this->campaign, Bucket::DEFAULT );
 		$this->alternativeBucket = new Bucket( 'b', $this->campaign, Bucket::NON_DEFAULT );
+		// Add buckets in the right order, so default bucket has index 0 and alternative bucket has index 1
 		$this->campaign
-			->addBucket( $this->defaultBucket )      // default bucket has index 0
-			->addBucket( $this->alternativeBucket ); // alternative bucket has index 1
+			->addBucket( $this->defaultBucket )
+			->addBucket( $this->alternativeBucket );
 		$this->campaignCollection = new CampaignCollection( $this->campaign );
 		$this->bucketSelectionStrategy = new BucketSelectionSpy( new RandomBucketSelection() );
 	}

@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
 /**
- * @license GPL-2.0-or-later
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController
  */
 class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 

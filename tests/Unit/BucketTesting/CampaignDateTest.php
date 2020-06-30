@@ -7,6 +7,9 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignDate
+ */
 class CampaignDateTest extends TestCase {
 
 	public function testGivenNoTimezone_newInstanceHasUTC() {

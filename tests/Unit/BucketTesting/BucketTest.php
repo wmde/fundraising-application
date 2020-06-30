@@ -9,6 +9,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\Bucket
+ */
 class BucketTest extends TestCase {
 
 	private function newCampaign(): Campaign {

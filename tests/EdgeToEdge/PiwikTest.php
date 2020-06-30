@@ -5,8 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 /**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
+ * Check if basic tracking parameters are rendered inside the HTML
+ *
+ * @coversNothing
  */
 class PiwikTest extends WebRouteTestCase {
 

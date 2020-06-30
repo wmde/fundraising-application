@@ -17,13 +17,13 @@ use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiryFetchingExcep
  */
 class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 
-	const ACCESS_KEY = 'pink fluffy unicorns';
-	const CUSTOMER_ID = '31333333333333333337';
+	private const ACCESS_KEY = 'pink fluffy unicorns';
+	private const CUSTOMER_ID = '31333333333333333337';
 
-	const EXPIRY_MONTH = 5;
-	const EXPIRY_YEAR = 2020;
+	private const EXPIRY_MONTH = 5;
+	private const EXPIRY_YEAR = 2020;
 
-	const VALID_RETURN_DATA = [
+	private const VALID_RETURN_DATA = [
 		'expiryMonth' => self::EXPIRY_MONTH,
 		'expiryYear' => self::EXPIRY_YEAR,
 	];

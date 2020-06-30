@@ -10,8 +10,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Domain\Model\Subscription;
 
 /**
- * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
+ * @covers \WMDE\Fundraising\Frontend\App\Routes
  */
 class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 

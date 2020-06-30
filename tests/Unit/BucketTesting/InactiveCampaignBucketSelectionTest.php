@@ -10,10 +10,12 @@ use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\InactiveCampaignBucketSelection;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\InactiveCampaignBucketSelection
+ */
 class InactiveCampaignBucketSelectionTest extends TestCase {
 
-	/** @var CampaignDate */
-	private $now;
+	private CampaignDate $now;
 
 	protected function setUp(): void {
 		$this->now = new CampaignDate();
