@@ -16,7 +16,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 
 	private const COOKIE_NAME = 'spenden_ttg';
 
-	const TEST_CAMPAIGN_CONFIG = [
+	private const TEST_CAMPAIGN_CONFIG = [
 		'awesome_feature' => [
 			'url_key' => 'omg',
 			'start' => '2018-01-01',
