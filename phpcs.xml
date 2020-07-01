@@ -31,6 +31,10 @@
 
         <!-- TODO: Add CodeSniffer UnusedUseSniff instead & configure it for Doctrine -->
         <exclude name="MediaWiki.Classes.UnusedUseStatement.UnusedUse" />
+
+		<!-- Allow assert - we use it for some domain-specific sanity checks where the type system would -->
+		<!-- TODO: Add sniff to make sure assert is only called with boolean expressions -->
+		<exclude name="MediaWiki.Usage.ForbiddenFunctions.assert" />
     </rule>
 
     <rule ref="Generic.Files.LineLength">
