@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class PurgeCacheRouteTest extends WebRouteTestCase {
 
-	const INVALID_SECRET = 'pedo mellon a minno';
+	private const INVALID_SECRET = 'pedo mellon a minno';
 
 	public function testGivenInvalidSecret_responseIsReturned(): void {
 		$client = $this->createClient();

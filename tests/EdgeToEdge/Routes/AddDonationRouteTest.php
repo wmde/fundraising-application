@@ -730,7 +730,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			'addressType' => 'anonym',
 			'piwik_campaign' => 'test',
 			'piwik_kwd' => 'gelb',
-			'mbt' => '1' // mobile tracking param
+			// 'mbt' is the mobile tracking param that triggers a redirect to paypal for anonymous donations
+			'mbt' => '1'
 		];
 	}
 

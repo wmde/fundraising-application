@@ -121,7 +121,8 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		return [
 			'function' => self::FUNCTION,
 			'donation_id' => (string)self::DONATION_ID,
-			'amount' => 1337, // Should match ValidDonation::DONATION_AMOUNT
+			// Amount should match ValidDonation::DONATION_AMOUNT
+			'amount' => 1337,
 			'transactionId' => self::TRANSACTION_ID,
 			'customerId' => self::CUSTOMER_ID,
 			'sessionId' => self::SESSION_ID,

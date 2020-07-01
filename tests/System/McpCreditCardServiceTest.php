@@ -15,11 +15,11 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  */
 class McpCreditCardServiceTest extends TestCase {
 
-	const TEST_MODE = 1;
-	const CARD_NUMBER = '4111111111111111';
-	const CARD_CVC2 = '666';
-	const CARD_EXPIRY_MONTH = '11';
-	const CARD_EXPIRY_YEAR = '2020';
+	private const TEST_MODE = 1;
+	private const CARD_NUMBER = '4111111111111111';
+	private const CARD_CVC2 = '666';
+	private const CARD_EXPIRY_MONTH = '11';
+	private const CARD_EXPIRY_YEAR = '2020';
 
 	/** @var IMcpCreditcardService_v1_5 */
 	private $dispatcher;
