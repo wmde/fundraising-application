@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <ruleset>
 	
-    <file>app/Controllers</file>
-    <file>app/RouteHandlers</file>
+    <file>app</file>
     <file>src/</file>
     <file>tests/</file>
     <file>cli/</file>
