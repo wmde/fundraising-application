@@ -14,8 +14,8 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
-use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
+use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\NewDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee;
@@ -72,7 +72,8 @@ class Routes {
 		)->bind( self::VALIDATE_EMAIL );
 
 		$app->post(
-			'validate-address', // Validates donor information. This route is named badly.
+			// This route is named badly, it validates **donor** information.
+			'validate-address',
 			ValidateAddressController::class . '::validate'
 		)->bind( self::VALIDATE_ADDRESS );
 
@@ -295,7 +296,7 @@ class Routes {
 		$app->get(
 			'faq',
 			function () use ( $ffFactory ) {
-				$ffFactory->getTranslationCollector()->addTranslationFile($ffFactory->getI18nDirectory() . '/messages/faqMessages.json' );
+				$ffFactory->getTranslationCollector()->addTranslationFile( $ffFactory->getI18nDirectory() . '/messages/faqMessages.json' );
 				return $ffFactory->getLayoutTemplate( 'Frequent_Questions.html.twig' )->render(
 					[
 						'faq_content' => $ffFactory->getFaqContent(),
@@ -426,7 +427,6 @@ class Routes {
 		$app->get(
 			'donation-accepted',
 			function ( Request $request ) use ( $app, $ffFactory ) {
-
 				$eventHandler = $ffFactory->newDonationAcceptedEventHandler(
 					$request->query->get( 'update_token', '' )
 				);
@@ -442,7 +442,6 @@ class Routes {
 			'handle-paypal-membership-fee-payments',
 			PayPalNotificationControllerForMembershipFee::class . '::handle'
 		);
-
 
 		$app->get(
 			'/',

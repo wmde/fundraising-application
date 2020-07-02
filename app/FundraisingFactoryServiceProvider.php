@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  *
  * Inspired by https://github.com/derrabus/silex-psr11-provider
  *
- * @license GNU GPL v2+
+ * @license GPL-2.0-or-later
  */
 class FundraisingFactoryServiceProvider implements ServiceProviderInterface {
 

@@ -12,8 +12,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use WMDE\Fundraising\Frontend\App\AccessDeniedException;
-use WMDE\Fundraising\Frontend\App\FundraisingFactoryServiceProvider;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
@@ -54,7 +52,7 @@ class Bootstrap {
 			Application::EARLY_EVENT
 		);
 
-		$app->before( function( Request $request ) {
+		$app->before( function ( Request $request ) {
 			foreach ( [ $request->request, $request->query ] as $parameterBag ) {
 				foreach ( $parameterBag->keys() as $key ) {
 					if ( is_string( $parameterBag->get( $key ) ) ) {
@@ -64,8 +62,8 @@ class Bootstrap {
 			}
 		}, Application::EARLY_EVENT );
 
-		$app->after( function( Request $request, Response $response ) {
-			if( $response instanceof JsonResponse ) {
+		$app->after( function ( Request $request, Response $response ) {
+			if ( $response instanceof JsonResponse ) {
 				$response->setEncodingOptions( JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 			}
 
@@ -100,7 +98,6 @@ class Bootstrap {
 				[ 'X-Status-Code' => 404 ]
 			);
 		} );
-
 
 		$app->error( function ( \Exception $e, Request $request, $code ) use ( $ffFactory, $app ) {
 			if ( $app['debug'] ) {
