@@ -1,49 +1,16 @@
 <?xml version="1.0"?>
 <ruleset>
-
+	
     <file>app/Controllers</file>
     <file>app/RouteHandlers</file>
     <file>src/</file>
     <file>tests/</file>
     <file>cli/</file>
 
-    <arg name="bootstrap" value="./vendor/mediawiki/mediawiki-codesniffer/utils/bootstrap-ci.php"/>
     <arg name="extensions" value="php"/>
     <arg name="encoding" value="UTF-8"/>
     <arg value="p" />
     <arg value="s" />
 
-    <rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
-        <!-- we'll define our own line length rule that ignores long test names -->
-        <exclude name="Generic.Files.LineLength" />
-
-        <!-- Docblocks should be completely optional, type annotations are better -->
-        <exclude name="MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate" />
-        <exclude name="MediaWiki.Commenting.FunctionComment.MissingDocumentationProtected" />
-        <exclude name="MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic" />
-
-        <!-- Ignore unknown annotations -->
-        <!-- TODO: Define our own set of allowed annotations -->
-        <exclude name="MediaWiki.Commenting.FunctionAnnotations.UnrecognizedAnnotation" />
-
-        <!-- Allow indentation in Docblock annotations for setting Doctrine indexes -->
-        <exclude name="MediaWiki.Commenting.DocComment.SpacingDocTag" />
-
-        <!-- TODO: Add CodeSniffer UnusedUseSniff instead & configure it for Doctrine -->
-        <exclude name="MediaWiki.Classes.UnusedUseStatement.UnusedUse" />
-
-		<!-- Allow assert - we use it for some domain-specific sanity checks where the type system would -->
-		<!-- TODO: Add sniff to make sure assert is only called with boolean expressions -->
-		<exclude name="MediaWiki.Usage.ForbiddenFunctions.assert" />
-    </rule>
-
-    <rule ref="Generic.Files.LineLength">
-        <properties>
-            <!-- More than 120 will throw a warning ... -->
-            <property name="lineLimit" value="120" />
-            <!-- ... but we will most probably never throw an error -->
-            <property name="absoluteLineLimit" value="9999" />
-        </properties>
-        <exclude-pattern>*/tests/*</exclude-pattern>
-    </rule>
+	<rule ref="./vendor/wmde/fundraising-phpcs/WMDE/Fundraising"/>
 </ruleset>

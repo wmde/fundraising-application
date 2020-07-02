@@ -75,11 +75,6 @@
 		},
 		{
 			"type": "vcs",
-			"url": "https://github.com/wmde/FundraisingStore",
-			"no-api": true
-		},
-		{
-			"type": "vcs",
 			"url": "https://github.com/wmde/fundraising-donations",
 			"no-api": true
 		},
@@ -117,6 +112,11 @@
 			"type": "vcs",
 			"url": "https://github.com/wmde/fun-validators",
 			"no-api": true
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/wmde/fundraising-phpcs",
+			"no-api": true
 		}
 	],
 	"require-dev": {
@@ -128,7 +128,7 @@
 		"mikey179/vfsstream": "~1.6",
 		"wmde/psr-log-test-doubles": "~2.1",
 
-		"mediawiki/mediawiki-codesniffer": "^31.0",
+		"wmde/fundraising-phpcs": "~1.0",
 		"phpmd/phpmd": "~2.6",
 
 		"symfony/browser-kit": "^3.2",

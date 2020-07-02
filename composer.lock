@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "756f310689927dc37a326766e91be2a3",
+    "content-hash": "2543250a6e82142122002122dc5b2500",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -5999,16 +5999,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.10.0",
+            "version": "1.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "5796d127b0c4ff505b77455148ea9d5269d99758"
+                "reference": "969b211f9a51aa1f6c01d1d2aef56d3bd91598e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/5796d127b0c4ff505b77455148ea9d5269d99758",
-                "reference": "5796d127b0c4ff505b77455148ea9d5269d99758",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/969b211f9a51aa1f6c01d1d2aef56d3bd91598e5",
+                "reference": "969b211f9a51aa1f6c01d1d2aef56d3bd91598e5",
                 "shasum": ""
             },
             "require": {
@@ -6049,7 +6049,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-28T07:02:41+00:00"
+            "time": "2020-06-29T13:22:24+00:00"
         },
         {
             "name": "nette/bootstrap",
@@ -8972,12 +8972,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "52ad6746dcacd3e2222017c199a10c35760d74d3"
+                "reference": "8afff0302169c007601b25329bc7249ee9f32c10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/52ad6746dcacd3e2222017c199a10c35760d74d3",
-                "reference": "52ad6746dcacd3e2222017c199a10c35760d74d3",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/8afff0302169c007601b25329bc7249ee9f32c10",
+                "reference": "8afff0302169c007601b25329bc7249ee9f32c10",
                 "shasum": ""
             },
             "require-dev": {
@@ -9010,7 +9010,31 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-06-25T11:57:34+00:00"
+            "time": "2020-07-01T14:28:14+00:00"
+        },
+        {
+            "name": "wmde/fundraising-phpcs",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wmde/fundraising-phpcs",
+                "reference": "4b0a409bafba78f4b5a671eba8dae2a33649a86f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wmde/fundraising-phpcs/zipball/4b0a409bafba78f4b5a671eba8dae2a33649a86f",
+                "reference": "4b0a409bafba78f4b5a671eba8dae2a33649a86f",
+                "shasum": ""
+            },
+            "require": {
+                "mediawiki/mediawiki-codesniffer": "^31.0"
+            },
+            "type": "library",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "PHP coding style for the WMDE FUN team",
+            "time": "2020-07-02T14:36:04+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
