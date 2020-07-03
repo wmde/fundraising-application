@@ -114,7 +114,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
-use WMDE\Fundraising\Frontend\Infrastructure\ProfilerDataCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
@@ -256,10 +255,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 		$container['sofort_logger'] = function () {
 			return new NullLogger();
-		};
-
-		$container['profiler_data_collector'] = function () {
-			return new ProfilerDataCollector();
 		};
 
 		$container['dbal_connection'] = function () {
@@ -1622,10 +1617,6 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function setSofortLogger( LoggerInterface $logger ): void {
 		$this->pimple['sofort_logger'] = $logger;
-	}
-
-	public function getProfilerDataCollector(): ProfilerDataCollector {
-		return $this->pimple['profiler_data_collector'];
 	}
 
 	private function newIbanValidator(): KontoCheckIbanValidator {

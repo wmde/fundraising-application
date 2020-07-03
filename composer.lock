@@ -1953,16 +1953,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.5.0",
+            "version": "v4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "53c2753d756f5adb586dca79c2ec0e2654dd9463"
+                "reference": "c346bbfafe2ff60680258b631afb730d186ed864"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/53c2753d756f5adb586dca79c2ec0e2654dd9463",
-                "reference": "53c2753d756f5adb586dca79c2ec0e2654dd9463",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/c346bbfafe2ff60680258b631afb730d186ed864",
+                "reference": "c346bbfafe2ff60680258b631afb730d186ed864",
                 "shasum": ""
             },
             "require": {
@@ -2001,7 +2001,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2020-06-03T07:24:19+00:00"
+            "time": "2020-07-02T17:12:47+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -5263,12 +5263,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-address-change",
-                "reference": "9439519e7efd689dc0ec6b58a3ef8b3a2c723bc9"
+                "reference": "855ddd1f2f92b42aece82ebb3d0f19dacb236c7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/9439519e7efd689dc0ec6b58a3ef8b3a2c723bc9",
-                "reference": "9439519e7efd689dc0ec6b58a3ef8b3a2c723bc9",
+                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/855ddd1f2f92b42aece82ebb3d0f19dacb236c7e",
+                "reference": "855ddd1f2f92b42aece82ebb3d0f19dacb236c7e",
                 "shasum": ""
             },
             "require": {
@@ -5284,8 +5284,7 @@
                 "phpstan/phpstan": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
                 "phpunit/phpunit": "~9.2",
-                "slevomat/coding-standard": "^4.6",
-                "squizlabs/php_codesniffer": "~3.5"
+                "wmde/fundraising-phpcs": "~1.0"
             },
             "type": "library",
             "autoload": {
@@ -5302,7 +5301,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Address change use case for fundraising application",
-            "time": "2020-06-19T07:56:29+00:00"
+            "time": "2020-07-03T07:43:00+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
@@ -5367,16 +5366,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v2.0.2",
+            "version": "v2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "56149db872d5f07ab1dceeb75ceaf3ee79ab1746"
+                "reference": "9aed850fb5f9747dda7beda08e1c74d8e46c0894"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/56149db872d5f07ab1dceeb75ceaf3ee79ab1746",
-                "reference": "56149db872d5f07ab1dceeb75ceaf3ee79ab1746",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/9aed850fb5f9747dda7beda08e1c74d8e46c0894",
+                "reference": "9aed850fb5f9747dda7beda08e1c74d8e46c0894",
                 "shasum": ""
             },
             "require": {
@@ -5395,12 +5394,11 @@
                 "codeception/specify": "~1.0",
                 "ext-pdo_sqlite": "*",
                 "mikey179/vfsstream": "~1.6",
-                "ockcyp/covers-validator": "@dev",
+                "ockcyp/covers-validator": "^1.2",
                 "phpmd/phpmd": "~2.6",
                 "phpstan/phpstan": "^0.12",
-                "phpunit/phpunit": "~8.0",
-                "slevomat/coding-standard": "^3.0",
-                "squizlabs/php_codesniffer": "~3.5",
+                "phpunit/phpunit": "~9.2",
+                "wmde/fundraising-phpcs": "~1.0",
                 "wmde/psr-log-test-doubles": "~2.1"
             },
             "type": "library",
@@ -5420,20 +5418,20 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2020-06-18T07:21:59+00:00"
+            "time": "2020-07-02T12:33:01+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v2.0.2",
+            "version": "v2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "839150588ecdb89460967cfa7b1a58057e8b7feb"
+                "reference": "7b9440a8729c0f7a2665381db5ede56ae1067831"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/839150588ecdb89460967cfa7b1a58057e8b7feb",
-                "reference": "839150588ecdb89460967cfa7b1a58057e8b7feb",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/7b9440a8729c0f7a2665381db5ede56ae1067831",
+                "reference": "7b9440a8729c0f7a2665381db5ede56ae1067831",
                 "shasum": ""
             },
             "require": {
@@ -5449,12 +5447,11 @@
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
-                "ockcyp/covers-validator": "~1.0",
+                "ockcyp/covers-validator": "~1.2",
                 "phpstan/phpstan": "~0.11",
                 "phpstan/phpstan-phpunit": "^0.12.6",
-                "phpunit/phpunit": "~8.0",
-                "slevomat/coding-standard": "~4.6",
-                "squizlabs/php_codesniffer": "~3.5",
+                "phpunit/phpunit": "~9.2",
+                "wmde/fundraising-phpcs": "~1.0",
                 "wmde/psr-log-test-doubles": "~2.2"
             },
             "type": "library",
@@ -5479,20 +5476,20 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2020-06-18T07:22:34+00:00"
+            "time": "2020-07-02T16:20:18+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "a88d8c7a47c0ac543fcbcda554fc817e043389aa"
+                "reference": "b5cd50172fea7317b2f75835af718b7f4275d520"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/a88d8c7a47c0ac543fcbcda554fc817e043389aa",
-                "reference": "a88d8c7a47c0ac543fcbcda554fc817e043389aa",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/b5cd50172fea7317b2f75835af718b7f4275d520",
+                "reference": "b5cd50172fea7317b2f75835af718b7f4275d520",
                 "shasum": ""
             },
             "require": {
@@ -5503,12 +5500,10 @@
                 "wmde/fun-validators": "~v3.0.0"
             },
             "require-dev": {
-                "mediawiki/mediawiki-codesniffer": "~26.0",
-                "ockcyp/covers-validator": "~1.1.1",
+                "ockcyp/covers-validator": "~1.2",
                 "phpstan/phpstan": "~0.12.0",
                 "phpunit/phpunit": "~8.5",
-                "slevomat/coding-standard": "~4.0",
-                "squizlabs/php_codesniffer": "~3.2"
+                "wmde/fundraising-phpcs": "~1.0"
             },
             "type": "library",
             "extra": {
@@ -5530,20 +5525,20 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2020-06-18T06:50:03+00:00"
+            "time": "2020-07-03T06:51:20+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "ba212d38d9330545c01ef7cfc9aa343632ed5e15"
+                "reference": "0589bf78b53fe0816bd20573cebab8bb5587a70d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/ba212d38d9330545c01ef7cfc9aa343632ed5e15",
-                "reference": "ba212d38d9330545c01ef7cfc9aa343632ed5e15",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/0589bf78b53fe0816bd20573cebab8bb5587a70d",
+                "reference": "0589bf78b53fe0816bd20573cebab8bb5587a70d",
                 "shasum": ""
             },
             "require": {
@@ -5557,9 +5552,8 @@
             "require-dev": {
                 "ockcyp/covers-validator": "~1.0",
                 "phpstan/phpstan": "~0.11",
-                "phpunit/phpunit": "~8.5",
-                "slevomat/coding-standard": "~4.5",
-                "squizlabs/php_codesniffer": "~3.5"
+                "phpunit/phpunit": "~9.2",
+                "wmde/fundraising-phpcs": "~1.0"
             },
             "type": "library",
             "extra": {
@@ -5581,7 +5575,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for fundraising subcriptions",
-            "time": "2020-06-18T07:45:31+00:00"
+            "time": "2020-07-03T07:44:39+00:00"
         }
     ],
     "packages-dev": [
