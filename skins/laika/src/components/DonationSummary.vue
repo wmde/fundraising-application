@@ -59,6 +59,7 @@ export default Vue.extend( {
 		'address',
 		'addressType',
 		'payment',
+		'countries',
 	],
 	methods: {
 		getSummary: function () {
@@ -67,9 +68,10 @@ export default Vue.extend( {
 			const formattedAmount = this.payment.amount.toFixed( 2 ).replace( '.', ',' );
 			const paymentType = this.$t( this.payment.paymentType );
 			const personType = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );
+			const countryObject = this.countries.find( c => ( c.countryCode === this.address.countryCode || c.countryCode === this.address.country ) );
 			let address = this.$t( 'donation_confirmation_review_address_missing' );
 			if ( addressTypeRenderer.canRender( this.address ) ) {
-				const country = this.address.countryCode ? this.$t( 'donation_form_country_option_' + this.address.countryCode ) : '';
+				const country = countryObject ? countryObject.countryFullName : '';
 				address = addressTypeRenderer.renderAddress( this.address, country );
 			}
 

@@ -6,6 +6,7 @@
 						:address="currentAddress"
 						:address-type="currentAddressType"
 						:payment="donation"
+						:countries="countries"
 				>
 					<div class="title is-size-5">{{ $t( 'donation_confirmation_topbox_intro' ) }}</div>
 				</donation-summary>

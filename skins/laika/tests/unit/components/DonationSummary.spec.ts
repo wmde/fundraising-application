@@ -7,6 +7,20 @@ describe( 'DonationForm', () => {
 		interval: 12,
 		amount: 14.99,
 	};
+	const countries = [
+		{
+			'countryCode': 'DE',
+			'countryFullName': 'Deutschland',
+			'isFrequentCountry': true,
+			'postCodeValidation': '^[0-9]{5}$',
+		},
+		{
+			'countryCode': 'AT',
+			'countryFullName': 'Österreich',
+			'isFrequentCountry': true,
+			'postCodeValidation': '^[0-9]{4}$',
+		},
+	];
 
 	const findTranslationCallParams = ( messageKey: string, calls: any[] ) => calls.find( call => call[ 0 ] === messageKey )[ 1 ];
 
@@ -28,6 +42,7 @@ describe( 'DonationForm', () => {
 				address,
 				payment,
 				addressType: 'person',
+				countries,
 			},
 			mocks: { $t },
 		} );
@@ -51,6 +66,7 @@ describe( 'DonationForm', () => {
 				address,
 				payment,
 				addressType: 'firma',
+				countries,
 			},
 			mocks: { $t },
 		} );
@@ -67,6 +83,7 @@ describe( 'DonationForm', () => {
 				payment,
 				address: {},
 				addressType: 'person',
+				countries,
 			},
 			mocks: { $t },
 		} );

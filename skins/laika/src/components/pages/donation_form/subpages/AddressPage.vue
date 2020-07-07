@@ -23,7 +23,7 @@
 				ref="address">
 		</address-fields>
 			<div class="summary-wrapper has-margin-top-18 has-outside-border">
-				<donation-summary :payment="paymentSummary" :address-type="addressType" :address="addressSummary">
+				<donation-summary :payment="paymentSummary" :address-type="addressType" :address="addressSummary" :countries="countries">
 					<div class="title is-size-5">{{ $t( 'donation_confirmation_review_headline' ) }}</div>
 				</donation-summary>
 				<submit-values :tracking-data="{}"></submit-values>

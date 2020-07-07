@@ -35,6 +35,20 @@ function getDefaultConfirmationData(): any {
 			paymentType: 'UEB',
 			updateToken: 'd387cebd6cc05efbd117545492cb0e99',
 		},
+		countries: [
+			{
+				'countryCode': 'DE',
+				'countryFullName': 'Deutschland',
+				'isFrequentCountry': true,
+				'postCodeValidation': '^[0-9]{5}$',
+			},
+			{
+				'countryCode': 'AT',
+				'countryFullName': 'Österreich',
+				'isFrequentCountry': true,
+				'postCodeValidation': '^[0-9]{4}$',
+			},
+		],
 	};
 }
 
