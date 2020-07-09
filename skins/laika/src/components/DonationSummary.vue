@@ -68,6 +68,7 @@ export default Vue.extend( {
 			const formattedAmount = this.payment.amount.toFixed( 2 ).replace( '.', ',' );
 			const paymentType = this.$t( this.payment.paymentType );
 			const personType = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );
+			// address.country is from store.address, address.countryCode is from donation confirmation
 			const countryObject = this.countries.find( c => ( c.countryCode === this.address.countryCode || c.countryCode === this.address.country ) );
 			let address = this.$t( 'donation_confirmation_review_address_missing' );
 			if ( addressTypeRenderer.canRender( this.address ) ) {
