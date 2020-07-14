@@ -14,7 +14,7 @@ class LoggingCampaignConfigurationLoader implements CampaignConfigurationLoaderI
 	private $actualCampaignConfigurationLoader;
 	private $errorLogger;
 
-	public function __construct( CampaignConfigurationLoaderInterface $campaignConfigurationLoader, ValidationErrorLogger $errorLogger ) {
+	public function __construct( CampaignConfigurationLoaderInterface $campaignConfigurationLoader, CampaignErrorCollection $errorLogger ) {
 		$this->errorLogger = $errorLogger;
 		$this->actualCampaignConfigurationLoader = $campaignConfigurationLoader;
 	}

@@ -8,12 +8,12 @@ use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
+use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\DefaultBucketRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\MinBucketCountRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\StartAndEndTimeRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\UniqueBucketRule;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 
 /**
@@ -22,7 +22,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 class CampaignValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenValidCampaignIsSupplied_validationPasses(): void {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$campaign = CampaignFixture::createCampaign();
 		CampaignFixture::createBucket( $campaign, 'test_1', Bucket::DEFAULT );
 		CampaignFixture::createBucket( $campaign, 'test_2', Bucket::NON_DEFAULT );
@@ -33,7 +33,7 @@ class CampaignValidatorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testWhenNoDefaultBucketIsSupplied_validationFails(): void {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$campaign = CampaignFixture::createCampaign();
 
 		$rule = new DefaultBucketRule();
@@ -42,7 +42,7 @@ class CampaignValidatorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testWhenCampaignEndTimeIsLowerThanOrEqualToStartTime_validationFails(): void {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$campaign = new Campaign(
 			'test_campaign',
 			'test_campaign',
@@ -56,7 +56,7 @@ class CampaignValidatorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testWhenCampaignBucketsAreNotUnique_validationFails(): void {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$campaign = CampaignFixture::createCampaign();
 		CampaignFixture::createBucket( $campaign );
 		CampaignFixture::createBucket( $campaign );
@@ -67,7 +67,7 @@ class CampaignValidatorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testWhenCampaignHasLessThanTwoBuckets_validationFails(): void {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$campaign = CampaignFixture::createCampaign();
 		CampaignFixture::createBucket( $campaign );
 

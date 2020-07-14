@@ -27,7 +27,7 @@ class CampaignValidator {
 	/** @var CampaignValidationRuleInterface[] $rules */
 	private $rules = [];
 
-	public function __construct( CampaignCollection $campaignCollection, ValidationErrorLogger $errorLogger ) {
+	public function __construct( CampaignCollection $campaignCollection, CampaignErrorCollection $errorLogger ) {
 		$this->campaignCollection = $campaignCollection;
 		$this->errorLogger = $errorLogger;
 		$this->rules = [ new DefaultBucketRule(), new StartAndEndTimeRule(), new UniqueBucketRule(), new MinBucketCountRule() ];

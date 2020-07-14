@@ -10,13 +10,13 @@ use Symfony\Component\Yaml\Exception\ParseException;
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
+use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\DefaultBucketRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\MinBucketCountRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\StartAndEndTimeRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\UniqueBucketRule;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingCampaignConfigurationLoader;
 
@@ -27,7 +27,7 @@ class LoggingCampaignConfigurationLoaderTest extends \PHPUnit\Framework\TestCase
 
 	/** @dataProvider throwablesDataProvider */
 	public function testWhenCampaignConfigurationLoaderThrowsThrowable_exceptionIsProperlyHandled( \Throwable $throwable, string $expectedMessage ): void {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$loader = $this->newThrowingLoader( $throwable, $errorLogger );
 		$loader->loadCampaignConfiguration( '' );
 		$this->assertEquals( [ $expectedMessage ], $errorLogger->getErrors() );
@@ -58,7 +58,7 @@ class LoggingCampaignConfigurationLoaderTest extends \PHPUnit\Framework\TestCase
 		];
 	}
 
-	private function newThrowingLoader( \Throwable $e, ValidationErrorLogger $errorLogger ): LoggingCampaignConfigurationLoader {
+	private function newThrowingLoader( \Throwable $e, CampaignErrorCollection $errorLogger ): LoggingCampaignConfigurationLoader {
 		return new LoggingCampaignConfigurationLoader(
 			new ThrowingCampaignConfigurationLoader( $e ),
 			$errorLogger

@@ -12,9 +12,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
+use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\FeatureToggleParser;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
@@ -51,7 +51,7 @@ class ValidateCampaignCodeUtilizationCommand extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$validator = new CampaignUtilizationValidator(
 			$this->getCampaigns( $input->getArgument( 'environment' ) ),
 			[ 'campaigns.skins.test' ],

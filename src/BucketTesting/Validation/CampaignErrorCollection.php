@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Validation;
 
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 
-class ValidationErrorLogger {
+class CampaignErrorCollection {
 
 	private $errors = [];
 
