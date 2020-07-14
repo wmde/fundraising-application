@@ -5,14 +5,14 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule;
 
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 
 /**
  * @license GPL-2.0-or-later
  */
 class UniqueBucketRule {
 
-	public function validate( Campaign $campaign, ValidationErrorLogger $errorLogger ): bool {
+	public function validate( Campaign $campaign, CampaignErrorCollection $errorLogger ): bool {
 		$buckets = [];
 		$valid = true;
 		foreach ( $campaign->getBuckets() as $bucket ) {

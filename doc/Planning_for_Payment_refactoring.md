@@ -23,7 +23,8 @@ Payment data is extracted as array, depending on payment type
 **Suggestion:** Add `getData` or `asArray` to `PaymentMethod` interface
 
 ### Redirect/display template based on payment type
-```AddDonationController.php
+```
+AddDonationController.php
 ApplyForMembershipController.php
 ``` 
 Payment data is used for instantiating subclasses of redirects/presenters

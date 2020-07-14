@@ -11,9 +11,9 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
@@ -48,7 +48,7 @@ class ValidateCampaignConfigCommand extends Command {
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
 		$environment = $input->getArgument( 'environment' );
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$factory = $this->getFactory( $environment );
 		$factory->setCampaignConfigurationLoader(
 			new LoggingCampaignConfigurationLoader(

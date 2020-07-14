@@ -22,7 +22,7 @@ class CampaignUtilizationValidator {
 		CampaignCollection $campaignCollection,
 		array $ignoredBuckets,
 		array $featureToggles,
-		ValidationErrorLogger $errorLogger
+		CampaignErrorCollection $errorLogger
 	) {
 		$this->campaignCollection = $campaignCollection;
 		$this->errorLogger = $errorLogger;

@@ -6,9 +6,9 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 
 use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
+use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\FeatureToggleParser;
-use WMDE\Fundraising\Frontend\BucketTesting\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 
 /**
@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenCampaignConfigurationMatchesChoiceFactory_validationPasses(): void {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$campaignCollection = $this->newTestCampaignCollection();
 		$validator = new CampaignUtilizationValidator(
 			$campaignCollection,
@@ -29,7 +29,7 @@ class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testWhenCampaignConfigurationHasUnimplementedBuckets_validationFails(): void {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$campaignCollection = $this->newTestCampaignCollection();
 
 		CampaignFixture::createBucket(
@@ -51,7 +51,7 @@ class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testWhenCampaignConfigurationIsMissingImplementedBuckets_validationFails(): void {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 
 		$campaign01 = CampaignFixture::createCampaign();
 		CampaignFixture::createBucket( $campaign01, 'test_bucket_a', Bucket::DEFAULT );
@@ -78,7 +78,7 @@ class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testWhenCampaignBucketsAreImplementedInconsistently_validationFails(): void {
-		$errorLogger = new ValidationErrorLogger();
+		$errorLogger = new CampaignErrorCollection();
 		$campaignCollection = $this->newTestCampaignCollection();
 
 		$validator = new CampaignUtilizationValidator(
