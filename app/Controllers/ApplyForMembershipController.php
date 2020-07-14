@@ -236,8 +236,9 @@ class ApplyForMembershipController {
 	}
 
 	private function logValidationErrors( ApplicationValidationResult $validationResult, Request $httpRequest ): void {
+		$violations = $validationResult->getViolations();
 		$formattedConstraintViolations = [];
-		foreach ( $validationResult->getViolations() as $constraintViolationSource => $constraintViolation ) {
+		foreach ( $violations as $constraintViolationSource => $constraintViolation ) {
 			$formattedConstraintViolations['validation_errors'][] = sprintf(
 				'Validation for field "%s" failed: "%s"',
 				$constraintViolationSource,
@@ -245,8 +246,9 @@ class ApplyForMembershipController {
 			);
 		}
 		$formattedConstraintViolations['request_data'] = $httpRequest->request->all();
-		$this->ffFactory->getLogger()->warning(
+		$this->ffFactory->getValidationErrorLogger()->logViolations(
 			'Unexpected server-side form validation errors.',
+			array_keys( $violations ),
 			$formattedConstraintViolations
 		);
 	}

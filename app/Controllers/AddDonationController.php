@@ -241,17 +241,22 @@ class AddDonationController {
 	 * @param ConstraintViolation[] $constraintViolations
 	 */
 	private function logValidationErrors( array $constraintViolations ): void {
+		$fields = [];
 		$formattedConstraintViolations = [];
 		foreach ( $constraintViolations as $constraintViolation ) {
+			$source = $constraintViolation->getSource();
+			$fields[] = $source;
 			$formattedConstraintViolations['validation_errors'][] = sprintf(
 				'Validation field "%s" with value "%s" failed with: %s',
-				$constraintViolation->getSource(),
+				$source,
 				$constraintViolation->getValue(),
 				$constraintViolation->getMessageIdentifier()
 			);
 		}
-		$this->ffFactory->getLogger()->warning(
+
+		$this->ffFactory->getValidationErrorLogger()->logViolations(
 			'Unexpected server-side form validation errors.',
+			$fields,
 			$formattedConstraintViolations
 		);
 	}

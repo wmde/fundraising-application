@@ -122,6 +122,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
@@ -2005,5 +2006,11 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function setCreditCardLogger( LoggerInterface $logger ): void {
 		$this->sharedObjects[LoggerInterface::class . '::CreditCard'] = $logger;
+	}
+
+	public function getValidationErrorLogger(): ValidationErrorLogger {
+		return $this->createSharedObject( ValidationErrorLogger::class, function (): ValidationErrorLogger {
+			return new ValidationErrorLogger( $this->getLogger() );
+		} );
 	}
 }
