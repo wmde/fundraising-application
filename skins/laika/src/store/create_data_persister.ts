@@ -5,7 +5,7 @@ import { ActiveDataPersister } from '@/store/data_persistence/ActiveDataPersiste
 import { InactiveDataPersister } from '@/store/data_persistence/InactiveDataPersister';
 
 export const createDataPersister = ( repository: DataPersistenceRepository, keyNamespace: string, passphrase: string ): DataPersister => {
-	if ( window.crypto === undefined || TextEncoder === undefined ) {
+	if ( typeof window.crypto === 'undefined' || typeof TextEncoder === 'undefined' ) {
 		return new InactiveDataPersister();
 	}
 
