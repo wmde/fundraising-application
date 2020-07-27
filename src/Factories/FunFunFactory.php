@@ -574,13 +574,6 @@ class FunFunFactory implements ServiceProviderInterface {
 		) )->readAndValidateJson();
 	}
 
-	public function getFaqMessages(): string {
-		return ( new JsonStringReader(
-			$this->getI18nDirectory() . '/messages/faqMessages.json',
-			new SimpleFileFetcher()
-		) )->readAndValidateJson();
-	}
-
 	public function getSupportersList(): string {
 		return ( new JsonStringReader(
 			$this->getI18nDirectory() . '/data/supporters.json',

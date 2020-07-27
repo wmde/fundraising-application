@@ -1,6 +1,6 @@
 <template>
 	<div id="faq">
-		<h1 class="title is-size-1">{{ $t('page_title') }}</h1>
+		<h1 class="title is-size-1">{{ $t('faq_headline') }}</h1>
 		<ul>
 			<li v-for="( topic, index ) in content.topics"
 				:key="index">
@@ -18,7 +18,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Question from '@/components/pages/frequently_asked_questions/Question.vue';
-import { FaqContent, Topic, FaqData, QuestionModel } from '@/view_models/faq';
+import { FaqContent, Topic, QuestionModel } from '@/view_models/faq';
 
 export default Vue.extend( {
 	name: 'faq',

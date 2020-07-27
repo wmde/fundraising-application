@@ -1,7 +1,3 @@
-export interface FaqData {
-	openQuestionId: string
-}
-
 export interface QuestionModel {
 	question : string,
 	visibleText : string,
