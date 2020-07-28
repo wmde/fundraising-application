@@ -32,12 +32,11 @@
 	<div v-bind:class="['form-input', { 'is-invalid': showError.city }]">
 		<label for="city" class="subtitle">{{ $t( 'donation_form_city_label' ) }}</label>
 		<b-field :type="{ 'is-danger': showError.city }">
-			<b-input type="text"
-					id="city"
-					:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_city_placeholder' ) } )"
-					v-model="formData.city.value"
-					@blur="$emit('field-changed', 'city')">
-			</b-input>
+			<AutocompleteCity
+			:placeholder="'whatevs'"
+			:show-error="showError.city"
+			:postcode="formData.postcode.value"
+			/>
 		</b-field>
 		<span v-if="showError.city" class="help is-danger">{{ $t('donation_form_city_error') }}</span>
 		<span v-if="cityValueEqualsPlaceholder" class="help">{{ $t('donation_form_city_placeholder_warning') }}</span>
@@ -73,11 +72,15 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import AutocompleteCity from '@/components/shared/AutocompleteCity.vue';
 import { AddressValidity, AddressFormData } from '@/view_models/Address';
 import { Country } from '@/view_models/Country';
 
 export default Vue.extend( {
 	name: 'postal',
+	components: {
+		AutocompleteCity,
+	},
 	props: {
 		showError: Object as () => AddressValidity,
 		formData: Object as () => AddressFormData,
