@@ -1,10 +1,10 @@
 export const postalLocalities = [
 	{
-		locality: 'Mushroom Kingdom City',
+		locality: 'Takeshi\'s Castle',
 		postcode: '99999',
 	},
 	{
-		locality: 'Takeshi\'s Castle',
+		locality: 'Mushroom Kingdom City',
 		postcode: '99999',
 	},
 	{
@@ -18,6 +18,10 @@ export const postalLocalities = [
 	{
 		locality: 'Ba Sing Se',
 		postcode: '12300',
+	},
+	{
+		locality: 'Satan City',
+		postcode: '66666',
 	},
 	{
 		locality: 'Satan City',

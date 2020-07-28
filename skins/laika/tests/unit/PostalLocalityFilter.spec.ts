@@ -1,32 +1,43 @@
 import { CSVPostalLocalityFilter } from '@/PostalLocalityFilter';
+import { postalLocalities } from '../data/postalLocalities';
 
 describe( 'Postal Locality Filter', () => {
-	const validPostCode = '10115';
-	const invalidPostCode = '_234A';
-	const emptyPostCode = '';
-	const
+	const validPostcode = '99999';
+	const invalidPostcode = '_234A';
+	const emptyPostcode = '';
+	const tooLongPostcode = '1234567';
+	const tooShortPostcode = '123';
+	const validPostcodeWithDuplicateResult = '66666';
 
-	it( 'retrieves localities with valid postcode', () => {
-		const expectedLocalities = [ 'City1', 'Town1', 'Village1' ];
-		const filter = new CSVPostalLocalityFilter();
-		const localities = filter.getPostalLocalities( validPostCode );
+	it( 'retrieves localities alphabetically sorted with valid postcode', () => {
+		const expectedLocalities = [ 'Mushroom Kingdom City', 'Takeshi\'s Castle' ];
+		const filter = new CSVPostalLocalityFilter( postalLocalities );
+		const localities = filter.getPostalLocalities( validPostcode );
 
 		expect( localities ).toEqual( expectedLocalities );
 	} );
 
 	it( 'returns no data on invalid postcode', () => {
-		const filter = new CSVPostalLocalityFilter();
-		const localities = filter.getPostalLocalities( invalidPostCode );
+		const filter = new CSVPostalLocalityFilter( postalLocalities );
 
+		let localities = filter.getPostalLocalities( invalidPostcode );
+		expect( localities ).toEqual( [] );
+
+		localities = filter.getPostalLocalities( emptyPostcode );
+		expect( localities ).toEqual( [] );
+
+		localities = filter.getPostalLocalities( tooLongPostcode );
+		expect( localities ).toEqual( [] );
+
+		localities = filter.getPostalLocalities( tooShortPostcode );
 		expect( localities ).toEqual( [] );
 	} );
 
 	it( 'returns no duplicate results', () => {
-		fail( 'not implemented' );
-	} );
+		const filter = new CSVPostalLocalityFilter( postalLocalities );
+		const localities = filter.getPostalLocalities( validPostcodeWithDuplicateResult );
 
-	it( 'returns results alphabetically sorted', () => {
-		fail( 'not implemented' );
+		expect( localities ).toEqual( [ 'Satan City' ] );
 	} );
 
 } );
