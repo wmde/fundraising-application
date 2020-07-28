@@ -19,6 +19,7 @@ import PaymentPage from '@/components/pages/donation_form/subpages/PaymentPage.v
 import AddressPage from '@/components/pages/donation_form/subpages/AddressPage.vue';
 import { Country } from '@/view_models/Country';
 import { AddressValidation } from '@/view_models/Validation';
+import { PostalLocalityFilter } from '@/PostalLocalityFilter';
 
 export default Vue.extend( {
 	name: 'DonationForm',
@@ -38,6 +39,7 @@ export default Vue.extend( {
 		countries: Array as () => Array<Country>,
 		trackingData: Object as () => TrackingData,
 		addressValidationPatterns: Object as () => AddressValidation,
+		postalLocalityFilter: Object as () => PostalLocalityFilter,
 		startPage: {
 			type: String,
 			default: () => 'PaymentPage',
@@ -71,6 +73,7 @@ export default Vue.extend( {
 						countries: this.$props.countries,
 						trackingData: this.$props.trackingData,
 						addressValidationPatterns: this.$props.addressValidationPatterns,
+						postalLocalityFilter: this.$props.postalLocalityFilter,
 					};
 				}
 				return {

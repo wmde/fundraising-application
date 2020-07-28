@@ -20,6 +20,7 @@
 				:countries="countries"
 				:is-direct-debit="isDirectDebit"
 				:address-validation-patterns="addressValidationPatterns"
+				:postal-locality-filter="postalLocalityFilter"
 				ref="address">
 		</address-fields>
 			<div class="summary-wrapper has-margin-top-18 has-outside-border">
@@ -66,6 +67,7 @@ import { waitForServerValidationToFinish } from '@/wait_for_server_validation';
 import PaymentSummary from '@/components/pages/donation_form/PaymentSummary.vue';
 import { discardInitialization } from '@/store/payment/actionTypes';
 import { trackFormSubmission } from '@/tracking';
+import { PostalLocalityFilter } from '@/PostalLocalityFilter';
 
 export default Vue.extend( {
 	name: 'AddressPage',
@@ -83,6 +85,7 @@ export default Vue.extend( {
 		countries: Array as () => Array<Country>,
 		trackingData: Object as () => TrackingData,
 		addressValidationPatterns: Object as () => AddressValidation,
+		postalLocalityFilter: Object as () => PostalLocalityFilter,
 	},
 	computed: {
 		paymentSummary: {

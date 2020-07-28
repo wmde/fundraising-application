@@ -20,6 +20,8 @@ import { initializeAddress } from '@/store/address/actionTypes';
 import { Country } from '@/view_models/Country';
 import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
 import { AddressValidation } from '@/view_models/Validation';
+import { CSVPostalLocalityFilter } from '@/PostalLocalityFilter';
+import parseCSV from '@/csv_parser';
 
 const PAGE_IDENTIFIER = 'donation-form';
 const FORM_NAMESPACE = 'donation_form';
@@ -69,7 +71,10 @@ dataPersister.initialize( persistenceItems ).then( () => {
 			action( NS_ADDRESS, initializeAddress ),
 			createInitialDonationAddressValues( dataPersister, pageData.applicationVars.initialFormValues )
 		),
-	] ).then( ( [ paymentDataComplete, _ ] ) => {
+		parseCSV( '/zuordnung_plz_ort.csv' ),
+	] ).then( ( [ paymentDataComplete, _, postcodeData ] ) => {
+
+		const postalLocalityFilter = new CSVPostalLocalityFilter( postcodeData.data );
 
 		new Vue( {
 			store,
@@ -104,6 +109,7 @@ dataPersister.initialize( persistenceItems ).then( () => {
 						trackingData: pageData.applicationVars.tracking,
 						addressValidationPatterns: pageData.applicationVars.addressValidationPatterns,
 						startPage: paymentDataComplete ? 'AddressPage' : 'PaymentPage',
+						postalLocalityFilter: postalLocalityFilter,
 					},
 				} ),
 				h( Sidebar, {

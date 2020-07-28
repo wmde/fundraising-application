@@ -33,9 +33,13 @@
 		<label for="city" class="subtitle">{{ $t( 'donation_form_city_label' ) }}</label>
 		<b-field :type="{ 'is-danger': showError.city }">
 			<AutocompleteCity
-			:placeholder="'whatevs'"
-			:show-error="showError.city"
-			:postcode="formData.postcode.value"
+				id="city"
+				:city="formData.city"
+				:placeholder="'donation_form_city_placeholder'"
+				:show-error="showError.city"
+				:postcode="formData.postcode.value"
+				:postal-locality-filter="postalLocalityFilter"
+				v-on:field-changed="$emit('field-changed', 'city')"
 			/>
 		</b-field>
 		<span v-if="showError.city" class="help is-danger">{{ $t('donation_form_city_error') }}</span>
@@ -75,6 +79,7 @@ import Vue from 'vue';
 import AutocompleteCity from '@/components/shared/AutocompleteCity.vue';
 import { AddressValidity, AddressFormData } from '@/view_models/Address';
 import { Country } from '@/view_models/Country';
+import { PostalLocalityFilter } from '@/PostalLocalityFilter';
 
 export default Vue.extend( {
 	name: 'postal',
@@ -86,6 +91,7 @@ export default Vue.extend( {
 		formData: Object as () => AddressFormData,
 		countries: Array as () => Array<Country>,
 		postCodeValidation: String,
+		postalLocalityFilter: Object as () => PostalLocalityFilter,
 	},
 	data() {
 		return {

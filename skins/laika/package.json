@@ -16,6 +16,7 @@
     "bulma-helpers": "^0.3.10",
     "core-js": "^3.6.4",
     "jsonp": "^0.2.1",
+    "papaparse": "^5.2.0",
     "vue": "^2.6.11",
     "vue-i18n": "^8.17.5",
     "vuex": "^3.4.0"
@@ -25,6 +26,7 @@
     "@types/jest": "^25.2.1",
     "@types/jsonp": "^0.2.0",
     "@types/moxios": "^0.4.9",
+    "@types/papaparse": "^5.0.6",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
     "@vue/cli-plugin-babel": "^4.3.1",

@@ -25,6 +25,7 @@
 					:form-data="formData"
 					:countries="countries"
 					:post-code-validation="addressValidationPatterns.postcode"
+					:postal-locality-filter="postalLocalityFilter"
 					v-on:field-changed="onFieldChange"
 			></postal>
 			<receipt-opt-out
@@ -68,6 +69,7 @@ import { mergeValidationResults } from '@/merge_validation_results';
 import { camelizeName } from '@/camlize_name';
 import { Country } from '@/view_models/Country';
 import { AddressValidation } from '@/view_models/Validation';
+import { PostalLocalityFilter } from '@/PostalLocalityFilter';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -155,6 +157,7 @@ export default Vue.extend( {
 		countries: Array as () => Array<Country>,
 		isDirectDebit: Boolean,
 		addressValidationPatterns: Object as () => AddressValidation,
+		postalLocalityFilter: Object as () => PostalLocalityFilter,
 	},
 	computed: {
 		fieldErrors: {
