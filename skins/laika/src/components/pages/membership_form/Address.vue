@@ -12,6 +12,7 @@
 					:form-data="formData"
 					:countries="countries"
 					:post-code-validation="addressValidationPatterns.postcode"
+					:postal-locality-resource="postalLocalityResource"
 					v-on:field-changed="onFieldChange"
 			/>
 			<receipt-opt-out
@@ -52,6 +53,7 @@ import {
 import { action } from '@/store/util';
 import { mergeValidationResults } from '@/merge_validation_results';
 import { camelizeName } from '@/camlize_name';
+import { PostalLocalityResource } from '@/PostalLocalityResource';
 
 export default Vue.extend( {
 	name: 'Address',
@@ -137,6 +139,7 @@ export default Vue.extend( {
 		initialFormValues: [ Object, String ],
 		addressValidationPatterns: Object as () => AddressValidation,
 		dateOfBirthValidationPattern: String,
+		postalLocalityResource: Object as () => PostalLocalityResource,
 	},
 	computed: {
 		fieldErrors: {

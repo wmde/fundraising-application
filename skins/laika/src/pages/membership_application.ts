@@ -24,6 +24,7 @@ import { Country } from '@/view_models/Country';
 import { initializeMembershipFee } from '@/store/membership_fee/actionTypes';
 import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
 import { AddressValidation } from '@/view_models/Validation';
+import { PostalLocalityResource } from '@/PostalLocalityResource';
 
 const PAGE_IDENTIFIER = 'membership-application';
 const FORM_NAMESPACE = 'membership_application';
@@ -45,7 +46,7 @@ interface MembershipAmountModel {
 }
 
 const pageData = new PageDataInitializer<MembershipAmountModel>( '#app' );
-
+const postalLocalityResource = new PostalLocalityResource( pageData.applicationVars.urls.getPostalLocalities );
 const dataPersister = createDataPersister(
 	new LocalStorageRepository(),
 	FORM_NAMESPACE,
@@ -113,6 +114,7 @@ dataPersister.initialize( persistenceItems ).then( () => {
 						paymentIntervals: pageData.applicationVars.paymentIntervals,
 						addressValidationPatterns: pageData.applicationVars.addressValidationPatterns,
 						dateOfBirthValidationPattern: pageData.applicationVars.dateOfBirthValidationPattern,
+						postalLocalityResource: postalLocalityResource,
 					},
 				} ),
 				h( Sidebar, {

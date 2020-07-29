@@ -20,6 +20,7 @@ import AddressPage from '@/components/pages/membership_form/subpages/AddressPage
 import { trackFormSubmission } from '@/tracking';
 import { Country } from '@/view_models/Country';
 import { AddressValidation } from '@/view_models/Validation';
+import { PostalLocalityResource } from '@/PostalLocalityResource';
 
 export default Vue.extend( {
 	name: 'MembershipForm',
@@ -39,6 +40,7 @@ export default Vue.extend( {
 		showMembershipTypeOption: Boolean,
 		addressValidationPatterns: Object as () => AddressValidation,
 		dateOfBirthValidationPattern: String,
+		postalLocalityResource: Object as () => PostalLocalityResource,
 	},
 	data: function () {
 		return {
@@ -62,6 +64,7 @@ export default Vue.extend( {
 						showMembershipTypeOption: this.$props.showMembershipTypeOption,
 						addressValidationPatterns: this.$props.addressValidationPatterns,
 						dateOfBirthValidationPattern: this.$props.dateOfBirthValidationPattern,
+						postalLocalityResource: this.$props.postalLocalityResource,
 					};
 				}
 				return {

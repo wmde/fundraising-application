@@ -8,6 +8,7 @@
 				:countries="countries"
 				:address-validation-patterns="addressValidationPatterns"
 				:date-of-birth-validation-pattern="dateOfBirthValidationPattern"
+				:postal-locality-resource="postalLocalityResource"
 				ref="address">
 		</address-fields>
 		<div class="level has-margin-top-18">
@@ -28,6 +29,7 @@ import MembershipType from '@/components/pages/membership_form//MembershipType.v
 import AddressFields from '@/components/pages/membership_form/Address.vue';
 import { NS_MEMBERSHIP_ADDRESS } from '@/store/namespaces';
 import { AddressValidation } from '@/view_models/Validation';
+import { PostalLocalityResource } from '@/PostalLocalityResource';
 
 export default Vue.extend( {
 	name: 'AddressPage',
@@ -42,6 +44,7 @@ export default Vue.extend( {
 		showMembershipTypeOption: Boolean,
 		addressValidationPatterns: Object as () => AddressValidation,
 		dateOfBirthValidationPattern: String,
+		postalLocalityResource: Object as () => PostalLocalityResource,
 	},
 	methods: {
 		next() {
