@@ -122,5 +122,6 @@
   "campaigns": {
     "configurations": [ "campaigns.yml", "campaigns.dev.yml" ]
   },
-  "assets-path": "http://localhost:7072"
+  "assets-path": "http://localhost:7072",
+  "postal-localities-base-path": "temp_localities.json"
 }

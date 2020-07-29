@@ -152,6 +152,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\PostalLocalityJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
@@ -875,6 +876,19 @@ class FunFunFactory implements ServiceProviderInterface {
 		$cutoffDateTime = new \DateTime();
 		$cutoffDateTime->sub( new \DateInterval( $this->config['subscription-interval'] ) );
 		return $cutoffDateTime;
+	}
+
+	public function newPostalLocalityJsonPresenter(): PostalLocalityJsonPresenter {
+		return new PostalLocalityJsonPresenter( $this->getPostalLocalities() );
+	}
+
+	public function getPostalLocalities(): array {
+		$json = ( new JsonStringReader(
+			$this->getAbsolutePath( $this->config[ 'postal-localities-base-path' ] ),
+			new SimpleFileFetcher()
+		) )->readAndValidateJson();
+
+		return ( json_decode( $json ) );
 	}
 
 	private function newHonorificValidator(): AllowedValuesValidator {

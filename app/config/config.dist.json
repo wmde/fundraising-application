@@ -195,5 +195,6 @@
 				"level": "DEBUG"
 			}
 		]
-	}
+	},
+	"postal-localities-base-path": "temp_localities.json"
 }

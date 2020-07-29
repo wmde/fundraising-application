@@ -38,7 +38,7 @@
 				:placeholder="'donation_form_city_placeholder'"
 				:show-error="showError.city"
 				:postcode="formData.postcode.value"
-				:postal-locality-filter="postalLocalityFilter"
+				:postal-locality-resource="postalLocalityResource"
 				v-on:field-changed="$emit('field-changed', 'city')"
 			/>
 		</b-field>
@@ -79,7 +79,7 @@ import Vue from 'vue';
 import AutocompleteCity from '@/components/shared/AutocompleteCity.vue';
 import { AddressValidity, AddressFormData } from '@/view_models/Address';
 import { Country } from '@/view_models/Country';
-import { PostalLocalityFilter } from '@/PostalLocalityFilter';
+import { PostalLocalityResource } from '@/PostalLocalityResource';
 
 export default Vue.extend( {
 	name: 'postal',
@@ -91,7 +91,7 @@ export default Vue.extend( {
 		formData: Object as () => AddressFormData,
 		countries: Array as () => Array<Country>,
 		postCodeValidation: String,
-		postalLocalityFilter: Object as () => PostalLocalityFilter,
+		postalLocalityResource: Object as () => PostalLocalityResource,
 	},
 	data() {
 		return {

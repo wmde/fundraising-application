@@ -20,8 +20,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { PostalLocalityFilter } from '@/PostalLocalityFilter';
+import { PostalLocalityResource } from '@/PostalLocalityResource';
 import { InputField } from '@/view_models/Address';
+
+const postcodePattern = /^[0-9]{5}$/;
 
 export default Vue.extend( {
 	name: 'AutocompleteCity',
@@ -30,25 +32,37 @@ export default Vue.extend( {
 		city: Object as () => InputField,
 		showError: Boolean,
 		postcode: String,
-		postalLocalityFilter: Object as () => PostalLocalityFilter,
+		postalLocalityResource: Object as () => PostalLocalityResource,
 	},
 	data() {
 		return {
 			postalLocalities: [],
 			focused: false,
+			currentPostcode: '',
 		};
 	},
 	mounted() {
-		this.filterPostalLocalities( this.$props.postcode );
+		this.getPostalLocalities( this.$props.postcode );
 	},
 	watch: {
 		'postcode': function ( value ) {
-			this.filterPostalLocalities( value );
+			if ( !postcodePattern.test( value ) ) {
+				return;
+			}
+			if ( value === this.$data.currentPostcode ) {
+				return;
+			}
+			this.$data.currentPostcode = value;
+			this.getPostalLocalities( value );
 		},
 	},
 	methods: {
-		filterPostalLocalities( postcode: string ) {
-			this.$data.postalLocalities = this.$props.postalLocalityFilter.getPostalLocalities( postcode );
+		getPostalLocalities( postcode: string ) {
+			this.$props.postalLocalityResource.getPostalLocalities( postcode ).then(
+				( localities: Array<string> ) => {
+					this.$data.postalLocalities = localities;
+				}
+			);
 		},
 		onFocus() {
 			this.$data.focused = true;

@@ -64,8 +64,22 @@ class Routes {
 	public const VALIDATE_EMAIL = 'validate-email';
 	public const VALIDATE_MEMBERSHIP_FEE = 'validate-fee';
 	public const VALIDATE_IBAN = 'check-iban';
+	public const API_GET_POSTAL_LOCALITIES = 'api/v1/postal-localities.json';
+
 
 	public static function initializeRoutes( Application $app, FunFunFactory $ffFactory ): Application {
+
+		$app->get(
+			self::API_GET_POSTAL_LOCALITIES,
+			function ( Request $request ) use ( $app, $ffFactory ) {
+
+				return $app->json(
+					$ffFactory->newPostalLocalityJsonPresenter()
+						->present( $request->query->get('postcode', '') )
+				);
+			}
+		)->bind( self::API_GET_POSTAL_LOCALITIES );
+
 		$app->post(
 			'validate-email',
 			ValidationController::class . '::validateEmail'
@@ -540,6 +554,7 @@ class Routes {
 			'cancelDonation' => $urlGenerator->generateAbsoluteUrl( self::CANCEL_DONATION ),
 			'cancelMembership' => $urlGenerator->generateAbsoluteUrl( self::CANCEL_MEMBERSHIP ),
 			'postComment' => $urlGenerator->generateAbsoluteUrl( self::POST_COMMENT ),
+			'getPostalLocalities' => $urlGenerator->generateAbsoluteUrl( self::API_GET_POSTAL_LOCALITIES ),
 		];
 	}
 }

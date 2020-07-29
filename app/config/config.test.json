@@ -89,5 +89,6 @@
 			"campaigns.yml",
 			"campaigns.test.yml"
 		]
-	}
+	},
+	"postal-localities-base-path": "temp_localities.json"
 }
