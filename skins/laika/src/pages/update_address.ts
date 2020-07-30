@@ -10,6 +10,7 @@ import Sidebar from '@/components/layout/Sidebar.vue';
 import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
 import { AddressValidation } from '@/view_models/Validation';
 import { Country } from '@/view_models/Country';
+import { PostalLocalityResource } from '@/PostalLocalityResource';
 
 const PAGE_IDENTIFIER = 'update-address';
 const FORM_NAMESPACE = 'update_address';
@@ -25,6 +26,7 @@ interface UpdateAddressModel {
 }
 
 const pageData = new PageDataInitializer<UpdateAddressModel>( '#app' );
+const postalLocalityResource = new PostalLocalityResource( pageData.applicationVars.urls.getPostalLocalities );
 const store = createStore( [
 	createTrackFormErrorsPlugin( FORM_NAMESPACE ),
 ] );
@@ -53,6 +55,7 @@ new Vue( {
 				isCompany: pageData.applicationVars.isCompany,
 				countries: pageData.applicationVars.countries,
 				addressValidationPatterns: pageData.applicationVars.addressValidationPatterns,
+				postalLocalityResource: postalLocalityResource,
 			},
 		} ),
 		h( Sidebar, {

@@ -15,6 +15,7 @@
 						:form-data="formData"
 						:countries="countries"
 						:post-code-validation="addressValidationPatterns.postcode"
+						:postal-locality-resource="postalLocalityResource"
 						v-on:field-changed="onFieldChange">
 				</postal>
 				<submit-values :tracking-data="{}"></submit-values>
@@ -47,6 +48,7 @@ import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeMode
 import { AddressValidation } from '@/view_models/Validation';
 import { mapGetters } from 'vuex';
 import { trackFormSubmission } from '@/tracking';
+import { PostalLocalityResource } from '@/PostalLocalityResource';
 
 export default Vue.extend( {
 	name: 'UpdateAddress',
@@ -125,6 +127,7 @@ export default Vue.extend( {
 		isCompany: Boolean,
 		countries: Array as () => Array<Country>,
 		addressValidationPatterns: Object as () => AddressValidation,
+		postalLocalityResource: Object as () => PostalLocalityResource,
 	},
 	computed: {
 		fieldErrors: {
