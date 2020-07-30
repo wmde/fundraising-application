@@ -13,6 +13,8 @@ use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
+use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantAddress;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
@@ -76,7 +78,46 @@ class ApplyForMembershipController {
 			return $this->newFailureResponse( $httpRequest );
 		}
 
+		$this->sendUnknownCityTrackingDataIfNeeded(
+			$responseModel->getMembershipApplication()->getApplicant()->getPhysicalAddress()
+		);
+
 		return $this->newHttpResponse( $responseModel );
+	}
+
+	private function sendUnknownCityTrackingDataIfNeeded( ApplicantAddress $address ) {
+		if ( !$this->shouldTrackUnknownCity( $address ) ) {
+			return;
+		}
+
+		$city = $address->getCity();
+		$postcode = $address->getPostalCode();
+
+		$this->ffFactory->getEventTracker()->trackEvent(
+			'Form Submission Event',
+			'Unknown City',
+			"{$city}|{$postcode}"
+		);
+	}
+
+	private function shouldTrackUnknownCity( ApplicantAddress $address ): bool {
+		if ( $address->getCountryCode() != 'DE' ) {
+			return false;
+		}
+
+		$localities = array_filter(
+			$this->ffFactory->getPostalLocalities(),
+			function ( $entry ) use ( $address ) {
+				return $entry->postcode === $address->getPostalCode()
+					&& $entry->locality === $address->getCity();
+			}
+		);
+
+		if ( count( $localities ) > 0 ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private function callUseCase( Request $httpRequest ): ApplyForMembershipResponse {

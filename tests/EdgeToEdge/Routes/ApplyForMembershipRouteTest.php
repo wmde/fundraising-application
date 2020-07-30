@@ -14,6 +14,7 @@ use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\EventTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
@@ -585,6 +586,73 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->assertCount( 1, $addressChanges );
 			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_MEMBERSHIP );
 			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
+		} );
+	}
+
+	public function testWhenAddressWithUnknownCityIsSubmitted_logsToPiwikTracker(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+
+			$tracker = $this->getMockBuilder( EventTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->once() )
+				->method( 'trackEvent' );
+			$factory->setEventTracker( $tracker );
+
+			$application = $this->newValidHttpParameters();
+			$application['ort'] = 'New Donk City';
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$application
+			);
+
+			$client->getResponse();
+		} );
+	}
+
+	public function testWhenAddressWithKnownCityIsSubmitted_piwikTrackerIsNotCalled(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+
+			$tracker = $this->getMockBuilder( EventTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->never() )
+				->method( 'trackEvent' );
+			$factory->setEventTracker( $tracker );
+
+			$application = $this->newValidHttpParameters();
+			$application['city'] = 'Berlin';
+			$application['postcode'] = '14059';
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$application
+			);
+
+			$client->getResponse();
+		} );
+	}
+
+	public function testWhenNonGermanAddressIsSubmitted_piwikTrackerIsNotCalled(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+
+			$tracker = $this->getMockBuilder( EventTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->never() )
+				->method( 'trackEvent' );
+			$factory->setEventTracker( $tracker );
+
+			$application = $this->newValidHttpParameters();
+			$application['country'] = 'IE';
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$application
+			);
+
+			$client->getResponse();
 		} );
 	}
 }
