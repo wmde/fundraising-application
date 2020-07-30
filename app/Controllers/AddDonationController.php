@@ -54,13 +54,14 @@ class AddDonationController {
 			);
 		}
 
-		$this->sendTrackingDataIfNeeded( $request, $responseModel );
+		$this->sendPageTrackingDataIfNeeded( $request, $responseModel );
+		$this->sendUnknownCityTrackingDataIfNeeded( $addDonationRequest );
 		$this->resetSessionState();
 
 		return $this->newHttpResponse( $responseModel );
 	}
 
-	private function sendTrackingDataIfNeeded( Request $request, AddDonationResponse $responseModel ) {
+	private function sendPageTrackingDataIfNeeded( Request $request, AddDonationResponse $responseModel ) {
 		if ( $request->get( 'mbt', '' ) !== '1' || !$responseModel->getDonation()->hasExternalPayment() ) {
 			return;
 		}
@@ -70,6 +71,41 @@ class AddDonationController {
 		$keyword = $trackingCode[1] ?? '';
 
 		$this->ffFactory->getPageViewTracker()->trackPaypalRedirection( $campaign, $keyword, $request->getClientIp() );
+	}
+
+	private function sendUnknownCityTrackingDataIfNeeded( AddDonationRequest $request ) {
+		if ( !$this->shouldTrackUnknownCity( $request ) ) {
+			return;
+		}
+
+		$city = $request->getDonorCity();
+		$postcode = $request->getDonorPostalCode();
+
+		$this->ffFactory->getEventTracker()->trackEvent(
+			'Form Submission Event',
+			'Unknown City',
+			"{$city}|{$postcode}"
+		);
+	}
+
+	private function shouldTrackUnknownCity( AddDonationRequest $request ): bool {
+		if ( $request->donorIsAnonymous() || $request->getDonorCountryCode() != 'DE' ) {
+			return false;
+		}
+
+		$localities = array_filter(
+			$this->ffFactory->getPostalLocalities(),
+			function ( $entry ) use ( $request ) {
+				return $entry->postcode === $request->getDonorPostalCode()
+					&& $entry->locality === $request->getDonorCity();
+			}
+		);
+
+		if ( count( $localities ) > 0 ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private function newHttpResponse( AddDonationResponse $responseModel ): Response {

@@ -14,6 +14,8 @@ interface ServerSideTracker {
 
 	public function trackPageView( string $url, string $title ): void;
 
+	public function trackEvent( string $category, string $action, string $eventData ): void;
+
 	public function setIp( string $ip ): void;
 
 }

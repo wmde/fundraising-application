@@ -21,6 +21,10 @@ class PiwikServerSideTracker implements ServerSideTracker {
 		$this->tracker->doTrackPageView( $title );
 	}
 
+	public function trackEvent( string $category, string $action, string $eventData ): void {
+		$this->tracker->doTrackEvent( $category, $action, $eventData );
+	}
+
 	public function setIp( string $ip ): void {
 		$this->tracker->setIp( $ip );
 	}

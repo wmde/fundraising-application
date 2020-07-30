@@ -96,6 +96,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\Cr
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
+use WMDE\Fundraising\Frontend\Infrastructure\EventTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
@@ -2026,5 +2027,15 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( ValidationErrorLogger::class, function (): ValidationErrorLogger {
 			return new ValidationErrorLogger( $this->getLogger() );
 		} );
+	}
+
+	public function getEventTracker() {
+		return $this->createSharedObject( EventTracker::class, function (): EventTracker {
+			return new EventTracker( $this->newServerSideTracker() );
+		} );
+	}
+
+	public function setEventTracker( EventTracker $tracker ) {
+		$this->sharedObjects[EventTracker::class] = $tracker;
 	}
 }

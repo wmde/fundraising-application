@@ -13,6 +13,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 class ServerSideTrackerSpy implements ServerSideTracker {
 
 	private $pageViews = [];
+	private $events = [];
 
 	private $ips = [];
 
@@ -35,4 +36,11 @@ class ServerSideTrackerSpy implements ServerSideTracker {
 		return $this->ips;
 	}
 
+	public function trackEvent( string $category, string $action, string $eventData ): void {
+		$this->events[] = [
+			'category' => $category,
+			'action' => $action,
+			'eventData' => $eventData,
+		];
+	}
 }

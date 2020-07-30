@@ -17,6 +17,7 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\EventTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
@@ -757,6 +758,97 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 			$client->getResponse();
 		} );
+	}
+
+	public function testWhenAddressWithUnknownCityIsSubmitted_logsToPiwikTracker(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setNullMessenger();
+			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
+			$client->followRedirects( false );
+
+			$tracker = $this->getMockBuilder( EventTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->once() )
+				->method( 'trackEvent' );
+			$factory->setEventTracker( $tracker );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidBankTransferInput(),
+			);
+
+			$client->getResponse();
+		} );
+	}
+
+	public function testWhenAddressWithKnownCityIsSubmitted_piwikTrackerIsNotCalled(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setNullMessenger();
+			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
+			$client->followRedirects( false );
+
+			$tracker = $this->getMockBuilder( EventTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->never() )
+				->method( 'trackEvent' );
+			$factory->setEventTracker( $tracker );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidKnownCityInput(),
+			);
+
+			$client->getResponse();
+		} );
+	}
+
+	public function testWhenAnonymousDonationIsSubmitted_piwikTrackerIsNotCalled(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setNullMessenger();
+			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
+			$client->followRedirects( false );
+
+			$tracker = $this->getMockBuilder( EventTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->never() )
+				->method( 'trackEvent' );
+			$factory->setEventTracker( $tracker );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newAnonymousFormInput(),
+			);
+
+			$client->getResponse();
+		} );
+	}
+
+	public function testWhenNonGermanAddressIsSubmitted_piwikTrackerIsNotCalled(): void {
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setNullMessenger();
+			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
+			$client->followRedirects( false );
+
+			$tracker = $this->getMockBuilder( EventTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->never() )
+				->method( 'trackEvent' );
+			$factory->setEventTracker( $tracker );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newFrenchDonorFormInput(),
+			);
+
+			$client->getResponse();
+		} );
+	}
+
+	private function newValidKnownCityInput(): array {
+		$input = $this->newValidBankTransferInput();
+		$input['city'] = 'Berlin';
+		$input['postcode'] = '14059';
+		return $input;
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
