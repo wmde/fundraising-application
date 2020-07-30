@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PostalLocalityJsonPresenter;
 use WMDE\Fundraising\Frontend\Tests\Data\TestPostalLocalities;
 
+/**
+ * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\PostalLocalityJsonPresenter
+ */
 class PostalLocalityJsonPresenterTest extends TestCase {
 
 	private const VALID_POSTCODE = '99999';
@@ -18,16 +21,14 @@ class PostalLocalityJsonPresenterTest extends TestCase {
 	private const VALID_POSTCODE_WITH_DUPLICATE_RESULT = '66666';
 
 	public function testGivenValidPostcodeReturnsSortedLocalities() {
-
 		$postalLocalityJsonPresenter = new PostalLocalityJsonPresenter( TestPostalLocalities::data() );
-		$expectedLocalities =  [ 'Mushroom Kingdom City', 'Takeshi\'s Castle' ];
+		$expectedLocalities = [ 'Mushroom Kingdom City', 'Takeshi\'s Castle' ];
 		$filteredLocalities = $postalLocalityJsonPresenter->present( self::VALID_POSTCODE );
 
 		$this->assertEquals( $expectedLocalities, $filteredLocalities );
 	}
 
 	public function testGivenInvalidPostcodeReturnsEmptyArray() {
-
 		$postalLocalityJsonPresenter = new PostalLocalityJsonPresenter( TestPostalLocalities::data() );
 
 		$filteredLocalities = $postalLocalityJsonPresenter->present( self::INVALID_POSTCODE );
@@ -44,12 +45,10 @@ class PostalLocalityJsonPresenterTest extends TestCase {
 	}
 
 	public function testReturnsNoDuplicateResults() {
-
 		$postalLocalityJsonPresenter = new PostalLocalityJsonPresenter( TestPostalLocalities::data() );
 
 		$filteredLocality = $postalLocalityJsonPresenter->present( self::VALID_POSTCODE_WITH_DUPLICATE_RESULT );
 
 		$this->assertEquals( [ 'Satan City' ], $filteredLocality );
-
 	}
 }

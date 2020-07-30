@@ -39,4 +39,4 @@ export const postalLocalities = [
 		locality: 'Entenhausen',
 		postcode: '232388',
 	},
-]
+];

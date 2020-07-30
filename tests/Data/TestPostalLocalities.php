@@ -6,49 +6,48 @@ namespace WMDE\Fundraising\Frontend\Tests\Data;
 
 class TestPostalLocalities {
 
-	static function data() {
+	public static function data() {
 		return [
-			( object )[
+			(object)[
 				'locality' => 'Takeshi\'s Castle',
 				'postcode' => '99999',
 			],
-			( object )[
+			(object)[
 				'locality' => 'Mushroom Kingdom City',
 				'postcode' => '99999',
 			],
-			( object )[
+			(object)[
 				'locality' => 'Alabastia',
 				'postcode' => '10000',
 			],
-			( object )[
+			(object)[
 				'locality' => 'FÜN-Stadt',
 				'postcode' => '12000',
 			],
-			( object )[
+			(object)[
 				'locality' => 'Ba Sing Se',
 				'postcode' => '12300',
 			],
-			( object )[
+			(object)[
 				'locality' => 'Satan City',
 				'postcode' => '66666',
 			],
-			( object )[
+			(object)[
 				'locality' => 'Satan City',
 				'postcode' => '66666',
 			],
-			( object )[
+			(object)[
 				'locality' => 'Gotham City',
 				'postcode' => '12121',
 			],
-			( object )[
+			(object)[
 				'locality' => 'Kleinstes-Kaff-der-Welt',
 				'postcode' => '45678',
 			],
-			( object )[
+			(object)[
 				'locality' => 'Entenhausen',
 				'postcode' => '232388',
 			],
 		];
-
 	}
 }

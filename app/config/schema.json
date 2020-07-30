@@ -72,6 +72,12 @@
       "description": "Base url of web assets. Can be a full URL, a path (without trailing slash), or blank. Can be used in dev mode to point to an asset server for a specific skin",
       "default": ""
     },
+    "postal-localities-base-path": {
+      "type": "string",
+      "title": "URL to cities endpoint",
+      "description": "Base url of the endpoint that does the city by postcode lookup",
+      "default": ""
+    },
     "skin": {
       "type": "string",
       "title": "Skin name to use",

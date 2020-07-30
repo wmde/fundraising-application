@@ -14,7 +14,7 @@ class PostalLocalityJsonPresenter {
 	}
 
 	public function present( string $postcode ): array {
-		if( !$this->isValidPostcode( $postcode ) ) {
+		if ( !$this->isValidPostcode( $postcode ) ) {
 			return [];
 		}
 
@@ -30,10 +30,10 @@ class PostalLocalityJsonPresenter {
 
 		sort( $filteredResults );
 
-		return  $filteredResults;
+		return $filteredResults;
 	}
 
-	private function isValidPostcode ( string $postcode ): bool {
+	private function isValidPostcode( string $postcode ): bool {
 		if ( $postcode === '' ) {
 			return false;
 		}

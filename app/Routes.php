@@ -66,16 +66,13 @@ class Routes {
 	public const VALIDATE_IBAN = 'check-iban';
 	public const API_GET_POSTAL_LOCALITIES = 'api/v1/postal-localities.json';
 
-
 	public static function initializeRoutes( Application $app, FunFunFactory $ffFactory ): Application {
-
 		$app->get(
 			self::API_GET_POSTAL_LOCALITIES,
 			function ( Request $request ) use ( $app, $ffFactory ) {
-
 				return $app->json(
 					$ffFactory->newPostalLocalityJsonPresenter()
-						->present( $request->query->get('postcode', '') )
+						->present( $request->query->get( 'postcode', '' ) )
 				);
 			}
 		)->bind( self::API_GET_POSTAL_LOCALITIES );

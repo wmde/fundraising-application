@@ -35,6 +35,7 @@ describe( 'Address.vue', () => {
 				validateAddressUrl: 'validate-address',
 				countries: countries,
 				addressValidationPatterns: addressValidationPatterns,
+				postalLocalityResource: { getPostalLocalities: async () => {} },
 			},
 			store: createStore(),
 			mocks: {
@@ -136,6 +137,7 @@ describe( 'Address.vue', () => {
 					validateAddressUrl: 'validate-address',
 					countries: countries,
 					addressValidationPatterns: addressValidationPatterns,
+					postalLocalityResource: { getPostalLocalities: async () => {} },
 				},
 				store,
 				mocks: {

@@ -79,6 +79,7 @@ function newTestProperties( overrides: Object ) {
 			countries: countries,
 			addressType: AddressTypeModel.PERSON,
 			postCodeValidation: addressValidationPatterns.postcode,
+			postalLocalityResource: { getPostalLocalities: async () => {} },
 		},
 		overrides
 	);
@@ -107,9 +108,9 @@ describe( 'Postal.vue', () => {
 				propsData: newTestProperties( {} ),
 			} ),
 			event = 'field-changed',
-			field = wrapper.find( '#city' );
+			field = wrapper.find( '#post-code' );
 		field.trigger( 'blur' );
-		expect( wrapper.emitted( event )![ 0 ] ).toEqual( [ 'city' ] );
+		expect( wrapper.emitted( event )![ 0 ] ).toEqual( [ 'postcode' ] );
 	} );
 
 	it( 'sets the correct postcode regex on country change', async () => {
