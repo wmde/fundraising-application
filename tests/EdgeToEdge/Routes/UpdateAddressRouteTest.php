@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\EventTracker;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
@@ -146,5 +147,87 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 		/** @var \DOMElement $appElement */
 		$appElement = $crawler->filter( '#app' )->getNode( 0 );
 		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
+	}
+
+	public function testWhenAddressWithUnknownCityIsSubmitted_logsToPiwikTracker(): void {
+		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
+			$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )
+				->forPerson()
+				->build();
+
+			$factory->getEntityManager()->persist( $addressChange );
+			$factory->getEntityManager()->flush();
+
+			$tracker = $this->getMockBuilder( EventTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->once() )->method( 'trackEvent' );
+			$factory->setEventTracker( $tracker );
+
+			$this->doRequestWithValidData(
+				$client,
+				$addressChange->getCurrentIdentifier()->__toString(),
+				[
+					'receiptOptOut' => '1',
+					'postcode' => '12345',
+					'city' => 'Villa Kunterbunt',
+				]
+			);
+
+			$client->getResponse();
+		} );
+	}
+
+	public function testWhenAddressWithKnownCityIsSubmitted_piwikTrackerIsNotCalled(): void {
+		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
+			$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )
+				->forPerson()
+				->build();
+
+			$factory->getEntityManager()->persist( $addressChange );
+			$factory->getEntityManager()->flush();
+
+			$tracker = $this->getMockBuilder( EventTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->never() )->method( 'trackEvent' );
+			$factory->setEventTracker( $tracker );
+
+			$this->doRequestWithValidData(
+				$client,
+				$addressChange->getCurrentIdentifier()->__toString(),
+				[
+					'receiptOptOut' => '1',
+					'postcode' => '14059',
+					'city' => 'Berlin',
+				]
+			);
+
+			$client->getResponse();
+		} );
+	}
+
+	public function testWhenNonGermanAddressIsSubmitted_piwikTrackerIsNotCalled(): void {
+		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
+			$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )
+				->forPerson()
+				->build();
+
+			$factory->getEntityManager()->persist( $addressChange );
+			$factory->getEntityManager()->flush();
+
+			$tracker = $this->getMockBuilder( EventTracker::class )->disableOriginalConstructor()->getMock();
+			$tracker->expects( $this->never() )->method( 'trackEvent' );
+			$factory->setEventTracker( $tracker );
+
+			$this->doRequestWithValidData(
+				$client,
+				$addressChange->getCurrentIdentifier()->__toString(),
+				[
+					'receiptOptOut' => '1',
+					'postcode' => '14059',
+					'city' => 'Berlin',
+					'country' => 'IE'
+				]
+			);
+
+			$client->getResponse();
+		} );
 	}
 }

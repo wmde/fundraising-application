@@ -32,7 +32,44 @@ class UpdateAddressController {
 			return new Response( $ffFactory->newErrorPageHtmlPresenter()->present( implode( "\n", $response->getErrors() ) ) );
 		}
 
+		$this->sendUnknownCityTrackingDataIfNeeded( $ffFactory, $addressChangeRequest );
+
 		return new Response( $ffFactory->getLayoutTemplate( 'AddressUpdateSuccess.html.twig' )->render( $request->request->all() ) );
+	}
+
+	private function sendUnknownCityTrackingDataIfNeeded( FunFunFactory $ffFactory, ChangeAddressRequest $request ) {
+		if ( !$this->shouldTrackUnknownCity( $ffFactory, $request ) ) {
+			return;
+		}
+
+		$city = $request->getCity();
+		$postcode = $request->getPostcode();
+
+		$ffFactory->getEventTracker()->trackEvent(
+			'Form Submission Event',
+			'Unknown City',
+			"{$city}|{$postcode}"
+		);
+	}
+
+	private function shouldTrackUnknownCity( FunFunFactory $ffFactory, ChangeAddressRequest $request ): bool {
+		if ( $request->getCountry() != 'DE' ) {
+			return false;
+		}
+
+		$localities = array_filter(
+			$ffFactory->getPostalLocalities(),
+			function ( $entry ) use ( $request ) {
+				return $entry->postcode === $request->getPostcode()
+					&& $entry->locality === $request->getCity();
+			}
+		);
+
+		if ( count( $localities ) > 0 ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private function newAddressChangeRequestFromParams( string $addressToken, ParameterBag $params ): ChangeAddressRequest {
