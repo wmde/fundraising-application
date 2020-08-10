@@ -34,6 +34,8 @@ current_dir = html
 # e.g. when config_dir is /home/deploy/etc/www, the file /home/deploy/etc/www/spenden.wikimedia.de/config.prod.json must exist
 config_dir = /home/deploy/configurations
 
+# The number of past releases to keep in the app_dir. Previous releases are deleted as a last step of the deploy process
+keep_releases = 5
 
 # Just the localhost, don't change
 [local]

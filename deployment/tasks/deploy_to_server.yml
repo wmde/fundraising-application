@@ -5,11 +5,15 @@
 # Most other variables come from the inventory file.
 
 - name: Create release directory
-  file: path={{ app_dir }}/{{ release_name }} state=directory
+  file:
+    path: "{{ app_dir }}/{{ release_name }}"
+    state: directory
 
 - block:
     - name: Expand release tarball
-      unarchive: src={{ local_archive }} dest={{ app_dir }}/{{ release_name }}
+      unarchive:
+        src: "{{ local_archive }}"
+        dest: "{{ app_dir }}/{{ release_name }}"
 
     - name: Set app directory ownership
       file:
@@ -39,10 +43,14 @@
       failed_when: decode_json_config.stdout != "0"
 
     - name: Validate config file against schema
-      command: ./console app:validate:config app/config/config.dist.json app/config/config.{{ environment_name }}.json chdir={{ app_dir }}/{{ release_name }}
+      command: ./console app:validate:config app/config/config.dist.json app/config/config.{{ environment_name }}.json
+      args:
+        chdir: "{{ app_dir }}/{{ release_name }}"
 
     - name: Validate campaign YAML files
-      command: ./console app:validate:campaigns chdir={{ app_dir }}/{{ release_name }} {{ environment_name }}
+      command: ./console app:validate:campaigns {{ environment_name }}
+      args:
+        chdir: "{{ app_dir }}/{{ release_name }}"
 
     - name: Create var dir
       file:
@@ -82,9 +90,8 @@
 
     - name: Create symlink to shared dir
       file:
-        src: "{{ app_dir }}/{{ shared_dir }}"
-        dest: "{{ app_dir }}/{{ release_name }}/var/shared"
-        state: link
+        path: "{{ app_dir }}/{{ release_name }}/var/shared"
+        state: directory
 
     - name: Create var/doctrine_proxies dir
       file:
@@ -95,7 +102,9 @@
          mode: '775'
 
     - name: Create Doctrine proxy classes
-      command: vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies chdir={{ app_dir }}/{{ release_name }}
+      command: vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
+      args:
+        chdir: "{{ app_dir }}/{{ release_name }}"
       environment:
         APP_ENV: "{{ environment_name }}"
 
@@ -114,14 +123,6 @@
 
     - fail:
         msg: "An error occured during deployment on server"
-
-- name: Download cachetool for clearing PHP-FPM opcache (if needed)
-  get_url:
-    url: http://gordalina.github.io/cachetool/downloads/cachetool.phar
-    dest: "{{ app_dir }}/cachetool.phar"
-
-- name: Clear PHP-FPM opcache
-  command: php {{ app_dir }}/cachetool.phar opcache:reset --fcgi=/var/run/php/php{{ php_version }}-fpm.sock
 
 - name: Remove old releases
   shell: ls -d1 --format single-column {{ app_dir }}/{{ release_prefix }}* | sort -n | head -n -{{ keep_releases }} | xargs -I % rm -rf %

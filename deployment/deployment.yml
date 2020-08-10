@@ -11,8 +11,7 @@
   hosts: webservers
   vars:
     app_owner: deploy
-    app_group: www-data
-    keep_releases: 5
+    app_group: wwwusers
   tasks:
     - name: Generate release timestamp
       local_action: command date '+%Y%m%d%H%M%S'

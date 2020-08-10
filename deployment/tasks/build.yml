@@ -8,7 +8,11 @@
 # All other variables come from the inventory file.
 
 - name: Checkout code
-  git: repo=https://github.com/wmde/FundraisingFrontend.git dest={{ build_dir }} version={{ build_branch }} force=yes
+  git:
+    repo: https://github.com/wmde/FundraisingFrontend.git
+    dest: "{{ build_dir }}"
+    version: "{{ build_branch }}"
+    force: yes
 
 - name: Install PHP dependencies
   make:
@@ -42,4 +46,6 @@
       DOCKER_FLAGS: ""
 
 - name: Create tarball
-  shell: tar -czf {{ build_dir }}.tar.gz --exclude=".git" --exclude=node_modules --exclude=var -C {{ build_dir }} . warn=no
+  shell: tar -czf {{ build_dir }}.tar.gz --exclude=".git" --exclude=node_modules --exclude=var -C {{ build_dir }} .
+  args:
+    warn: no
