@@ -75,16 +75,19 @@ use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPa
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
+use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignFeatureBuilder;
+use WMDE\Fundraising\Frontend\BucketTesting\DataAccess\DoctrineBucketLogRepository;
 use WMDE\Fundraising\Frontend\BucketTesting\DoorkeeperFeatureToggle;
 use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
+use WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamLogWriter;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
@@ -462,13 +465,15 @@ class FunFunFactory implements ServiceProviderInterface {
 			$membershipContextFactory = $this->getMembershipContextFactory();
 			$subscriptionContextFactory = new SubscriptionContextFactory();
 			$addressChangeContextFactory = new AddressChangeContextFactory();
+			$bucketTestingContextFactory = new BucketTestingContextFactory();
 			return new DoctrineFactory(
 				$this->getConnection(),
 				$this->getDoctrineConfiguration(),
 				$donationContextFactory,
 				$membershipContextFactory,
 				$subscriptionContextFactory,
-				$addressChangeContextFactory
+				$addressChangeContextFactory,
+				$bucketTestingContextFactory
 			);
 		} );
 	}
@@ -1806,9 +1811,8 @@ class FunFunFactory implements ServiceProviderInterface {
 	private function getBucketLogger(): BucketLogger {
 		return $this->createSharedObject( 'bucketLogger', function () {
 			return new BestEffortBucketLogger(
-				new JsonBucketLogger(
-					new StreamLogWriter( $this->getSharedResourcesPath() . '/buckets.log' ),
-					new SystemClock()
+				new DatabaseBucketLogger(
+					new DoctrineBucketLogRepository( $this->getEntityManager() )
 				),
 				$this->getLogger()
 			);
