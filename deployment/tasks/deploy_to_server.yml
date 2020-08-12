@@ -6,26 +6,20 @@
 
 - name: Create release directory
   file:
-    path: "{{ app_dir }}/{{ release_name }}"
+    path: "{{ release_directory }}"
     state: directory
 
 - block:
     - name: Expand release tarball
       unarchive:
         src: "{{ local_archive }}"
-        dest: "{{ app_dir }}/{{ release_name }}"
-
-    - name: Set app directory ownership
-      file:
-        path: "{{ app_dir }}/{{ release_name }}"
-        owner: "{{app_owner}}"
-        group: "{{app_group}}"
-        recurse: yes
+        dest: "{{ release_directory }}"
 
     - name: Copy config file
       copy:
-        src: "{{ config_dir }}/{{ inventory_hostname }}/config.{{ environment_name }}.json"
-        dest: "{{ app_dir }}/{{ release_name }}/app/config/config.{{ environment_name }}.json"
+        # TODO make config src branch-specific for test_branch deploys (using the config for test-spenden-2 by default)
+        src: "{{ config_dir }}/config.{{ environment_name }}.json"
+        dest: "{{ release_directory }}/app/config/config.{{ environment_name }}.json"
         owner: "{{app_owner}}"
         group: "{{app_group}}"
 
@@ -33,35 +27,35 @@
       copy:
         content: >
           APP_ENV={{ environment_name }}
-        dest: "{{ app_dir }}/{{ release_name }}/.env"
+        dest: "{{ release_directory }}/.env"
         owner: "{{app_owner}}"
         group: "{{app_group}}"
 
     - name: Check if configuration file is valid JSON
-      command: php -r 'json_decode( file_get_contents( "{{ app_dir }}/{{ release_name }}/app/config/config.{{ environment_name }}.json" ) ); echo json_last_error();'
+      command: php -r 'json_decode( file_get_contents( "{{ release_directory }}/app/config/config.{{ environment_name }}.json" ) ); echo json_last_error();'
       register: decode_json_config
       failed_when: decode_json_config.stdout != "0"
 
     - name: Validate config file against schema
       command: ./console app:validate:config app/config/config.dist.json app/config/config.{{ environment_name }}.json
       args:
-        chdir: "{{ app_dir }}/{{ release_name }}"
+        chdir: "{{ release_directory }}"
 
     - name: Validate campaign YAML files
       command: ./console app:validate:campaigns {{ environment_name }}
       args:
-        chdir: "{{ app_dir }}/{{ release_name }}"
+        chdir: "{{ release_directory }}"
 
     - name: Create var dir
       file:
-        path: "{{ app_dir }}/{{ release_name }}/var"
+        path: "{{ release_directory }}/var"
         owner: "{{app_owner}}"
         group: "{{app_group}}"
         state: directory
 
     - name: Create var/cache dir
       file:
-        path: "{{ app_dir }}/{{ release_name }}/var/cache"
+        path: "{{ release_directory }}/var/cache"
         owner: "{{app_owner}}"
         group: "{{app_group}}"
         state: directory
@@ -70,32 +64,34 @@
     - name: Create web resources (content) symlink
       file:
         src: "{{ app_dir }}/{{ content_directory }}/resources"
-        dest: "{{ app_dir }}/{{ release_name }}/web/resources"
+        dest: "{{ release_directory }}/web/resources"
         owner: "{{app_owner}}"
         group: "{{app_group}}"
         state: link
 
     - name: Create cache-busting prefix
       copy:
-         dest: "{{ app_dir }}/{{ release_name }}/var/file_prefix.txt"
-         content: "{{ release_name|hash('md5') }}"
+         dest: "{{ release_directory }}/var/file_prefix.txt"
+         content: "{{ release_name | hash( 'md5' ) }}"
          owner: "{{app_owner}}"
          group: "{{app_group}}"
+
 
     - name: Create symlink to log dir
       file:
         src: "{{ app_dir }}/{{ logs_dir }}"
-        dest: "{{ app_dir }}/{{ release_name }}/var/log"
+        dest: "{{ release_directory }}/var/log"
         state: link
 
-    - name: Create symlink to shared dir
+    # TODO: Remove this task when https://phabricator.wikimedia.org/T202285 is done
+    - name: Create shared dir
       file:
-        path: "{{ app_dir }}/{{ release_name }}/var/shared"
+        path: "{{ release_directory }}/var/shared"
         state: directory
 
     - name: Create var/doctrine_proxies dir
       file:
-         path: "{{ app_dir }}/{{ release_name }}/var/doctrine_proxies"
+         path: "{{ release_directory }}/var/doctrine_proxies"
          state: directory
          owner: "{{app_owner}}"
          group: "{{app_group}}"
@@ -104,26 +100,25 @@
     - name: Create Doctrine proxy classes
       command: vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
       args:
-        chdir: "{{ app_dir }}/{{ release_name }}"
+        chdir: "{{ release_directory }}"
       environment:
         APP_ENV: "{{ environment_name }}"
 
-    - name: Symlink the release
+    - name: Symlink the document root of release
       file:
-        src: "{{ app_dir }}/{{ release_name }}"
-        dest: "{{ app_dir }}/{{ current_dir }}"
+        src: "{{ release_directory }}/web"
+        dest: "{{ deploy_base }}/{{ domain }}/{{ document_root }}"
         state: link
       when: skip_symlink is undefined
 
   rescue:
     - name: Remove directory of failed release
       file:
-        path: "{{ app_dir }}/{{ release_name }}"
+        path: "{{ release_directory }}"
         state: absent
+      when: no_cleanup_on_error is not defined and is_atomic_deploy
 
     - fail:
         msg: "An error occured during deployment on server"
 
-- name: Remove old releases
-  shell: ls -d1 --format single-column {{ app_dir }}/{{ release_prefix }}* | sort -n | head -n -{{ keep_releases }} | xargs -I % rm -rf %
-  ignore_errors: yes # In case there is a file that can't be deleted for some reason
+

@@ -7,11 +7,21 @@
 #
 # All other variables come from the inventory file.
 
+- name: Print error message if branch to use is unclear
+  fail:
+    msg: |
+      Please specify "build_branch" or "test_branch" as an Ansible variable.
+      "test_branch" triggers overwrite mode and a deploy to a test server.
+      You can specify the variable in the inventory file (for the [local] server)
+      or on the command line with the "-e" parameter.
+  when: build_branch is not defined and test_branch is not defined
+
+
 - name: Checkout code
   git:
     repo: https://github.com/wmde/FundraisingFrontend.git
     dest: "{{ build_dir }}"
-    version: "{{ build_branch }}"
+    version: "{{ test_branch | default( build_branch ) }}"
     force: yes
 
 - name: Install PHP dependencies

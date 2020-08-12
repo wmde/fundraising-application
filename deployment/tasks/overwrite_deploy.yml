@@ -1,0 +1,36 @@
+- name: Download latest version of deploy state
+  git:
+      repo: git@github.com:wmde/fundraising-deploy-hosts.git
+      dest: "{{ deploy_host_dir }}"
+      version: main
+      force: yes
+  delegate_to: 127.0.0.1
+
+- name: Determine the dynamic hostname
+  command: "./get_deploy_host {{ test_branch }}"
+  args:
+    chdir: "{{ deploy_host_dir }}"
+  register: dynamic_deploy_host
+  delegate_to: 127.0.0.1
+
+- name: Commit new deployments file
+  command: "./commit_deployments"
+  args:
+    chdir: "{{ deploy_host_dir }}"
+  delegate_to: 127.0.0.1
+  register: deployments_file
+  changed_when: deployments_file.stdout != ""
+
+- name: Set release_directory and domain override for test deploys
+  set_fact:
+    # By default, all test pool installations share the log and content dir with the original, non-dynamic domain from the config file
+    app_dir: "{{ deploy_base }}/{{ domain | default( dynamic_deploy_host.stdout, true ) | trim }}"
+    domain: "{{ dynamic_deploy_host.stdout | trim }}"
+    release_directory: "{{ deploy_base }}/{{ dynamic_deploy_host.stdout | trim }}/current-release"
+
+- name: Delete previous release
+  file:
+      path: "{{ release_directory }}"
+      state: absent
+  failed_when:
+

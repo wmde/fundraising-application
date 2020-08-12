@@ -8,20 +8,41 @@
         build_dir: "/tmp/fundraising-build-{{ hostvars[inventory_hostname]['inventory_file'] | basename }}"
 
 - name: Deploy the created archive to the server
-  hosts: webservers
-  vars:
-    app_owner: deploy
-    app_group: wwwusers
+  hosts: webserver
   tasks:
-    - name: Generate release timestamp
-      local_action: command date '+%Y%m%d%H%M%S'
-      register: release_timestamp
-      delegate_to: 127.0.0.1
+    - name: Set atomic deploy
+      set_fact:
+        is_atomic_deploy: "{{ test_branch is not defined and overwrite_mode is not defined }}"
+
+    - name: force production deploys to be atomic
+      fail:
+        msg: "You must not use overwrite deploy mode for the 'prod' environment. Don't use 'test_branch' or 'overwrite_mode' variables."
+      when: not is_atomic_deploy and environment_name == "prod"
+
+    - name: Set release_name
+      set_fact:
+        release_name: "{{ release_prefix }}{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}{{ ansible_date_time.hour }}{{ ansible_date_time.minute }}"
+      run_once: true
+
+    - name: Set release_directory for overwrite deploys
+      include_tasks: tasks/overwrite_deploy.yml
+      when: not is_atomic_deploy
+
+    - name: Set release_directory for atomic deploys
+      set_fact:
+        release_directory: "{{ deploy_base }}/{{ domain }}/{{ release_name }}"
+        app_dir: "{{ deploy_base }}/{{ domain }}"
+      when: is_atomic_deploy
 
     - include_tasks: tasks/deploy_to_server.yml
       vars:
-        release_name: "{{ release_prefix }}{{ release_timestamp.stdout }}"
         local_archive: "/tmp/fundraising-build-{{ hostvars[inventory_hostname]['inventory_file'] | basename }}.tar.gz"
 
     - name: Check if the website is reachable
-      uri: "url=https://{{ inventory_hostname }}/"
+      uri:
+        url: "https://{{ domain }}/"
+
+    - name: Remove old releases
+      shell: ls -d1 --format single-column {{ app_dir }}/{{ release_prefix }}* | sort -n | head -n -{{ keep_releases }} | xargs -I % rm -rf %
+      ignore_errors: yes # In case there is a file that can't be deleted for some reason
+      when: is_atomic_deploy
