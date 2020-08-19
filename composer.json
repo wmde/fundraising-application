@@ -135,7 +135,7 @@
 		"silex/web-profiler": "~2.0",
 		"sorien/silex-dbal-profiler": "~2.0",
 		"wmde/fundraising-frontend-content": "dev-test",
-		"symfony/css-selector": "^3.2",
+		"symfony/css-selector": "^5.1",
 		"phpstan/phpstan": "^0.11",
 		"matthiasnoback/symfony-config-test": "^4.0"
 	},
