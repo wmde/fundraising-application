@@ -60,7 +60,13 @@ This will also trigger the "overwrite" deploy mode automatically (see the previo
 
 By default, all test pool installations share the same `log` and `fundraising-frontent-content` with the original, 
 non-dynamic `domain` application directory from the config file, usually `test-spenden-2.wikimedia.de`. 
-If you want individual directories for your test branch deploy, set `domain` to `None`.  
+If you want individual directories for your test branch deploy, set `domain` to `None`.
+
+The test pool installations use the *application configuration file* from the `domain` variable, usually 
+`files/configs/test-spenden-2.wikimedia.de/config.uat.json`. If you want to provide a different file, put it in a 
+directory  in `files/configs`. Name the directory with the branch you're deploying with the `test_branch` variable, e.g. 
+`files/configs/my-feature/config.uat.json`. You should clean up these directories from time to time, 
+ideally before merging the feature branch (editing the configuration files for test and production).
 
 If you are testing functionality of external payment providers, you should *not* use the testing pool. 
 This is because the test environments of the external payment providers use the same test domain, 
@@ -68,31 +74,41 @@ https://test-spenden-2.wikimedia.de and changing the domain in the payment provi
 If you want to deploy to the regular test domain, you can use either atomic deploy mode or set `overwrite_mode=1` 
 instead of setting `test_branch`.
 
+## Using encrypted configuration files
+
+The group-specific Ansible variables and the configuration files for the application are encrypted with 
+[Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html). See the documentation for how to
+view and edit them.
+
+To run the deploy playbook, you must provide Ansible with the vault password. The following examples use the `--ask-vault-pass`
+parameter that prompts you for the password. You can use `--vault-password-file` instead to store the vault password in 
+a secure location. See https://docs.ansible.com/ansible/latest/user_guide/vault.html#providing-vault-passwords 
+
 ## Example Ansible commands
 
 All commands assume you're in the `deployment` directory, but you can change paths as needed.
 
 To deploy, run the following command:
 
-    ansible-playbook -i inventory/test deployment.yml
+    ansible-playbook -i inventory/test --ask-vault-pass deployment.yml
 
 `inventory/test` is the path to your inventory file. Use a different inventory file to deploy to a different environment.
 
 To deploy a branch to the testing pool in overwrite mode run the following command:
 
-    ansible-playbook -i inventory/test --extra-vars 'test_branch=test' deployment.yml
+    ansible-playbook -i inventory/test --extra-vars 'test_branch=test' --ask-vault-pass deployment.yml
 
 To deploy a branch to the test server in overwrite mode, without using the testing pool, run the following command:
 
-    ansible-playbook -i inventory/test --extra-vars 'overwrite_mode=1' deployment.yml
+    ansible-playbook -i inventory/test --extra-vars 'overwrite_mode=1' --ask-vault-pass deployment.yml
 
 To deploy a different branch than `master` in "atomic" mode, run the following command:
 
-    ansible-playbook -i inventory/test --extra-vars 'build_branch=test' deployment.yml
+    ansible-playbook -i inventory/test --extra-vars 'build_branch=test' --ask-vault-pass deployment.yml
     
 To deploy with a different environment (`dev` instead of `prod`), than the one configured in the inventory, run the following command:
 
-    ansible-playbook -i inventory/test --extra-vars 'environment_name=dev' deployment.yml
+    ansible-playbook -i inventory/test --extra-vars 'environment_name=dev' --ask-vault-pass deployment.yml
 
 ## Rolling back atomic deployments
 In "Atomic" deploy mode, the web server delivers the old version of the application while the deployment playbook is running.

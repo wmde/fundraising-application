@@ -28,10 +28,11 @@
       include_tasks: tasks/overwrite_deploy.yml
       when: not is_atomic_deploy
 
-    - name: Set release_directory for atomic deploys
+    - name: Set variables for atomic deploys
       set_fact:
         release_directory: "{{ deploy_base }}/{{ domain }}/{{ release_name }}"
         app_dir: "{{ deploy_base }}/{{ domain }}"
+        config_file: "files/configs/{{ domain }}/config.{{ environment_name }}.json"
       when: is_atomic_deploy
 
     - include_tasks: tasks/deploy_to_server.yml

@@ -17,19 +17,18 @@
 
     - name: Copy config file
       copy:
-        # TODO make config src branch-specific for test_branch deploys (using the config for test-spenden-2 by default)
-        src: "{{ config_dir }}/config.{{ environment_name }}.json"
+        src: "{{ config_file }}"
         dest: "{{ release_directory }}/app/config/config.{{ environment_name }}.json"
-        owner: "{{app_owner}}"
-        group: "{{app_group}}"
+        owner: "{{ app_owner }}"
+        group: "{{ app_group }}"
 
     - name: Create .env file
       copy:
         content: >
           APP_ENV={{ environment_name }}
         dest: "{{ release_directory }}/.env"
-        owner: "{{app_owner}}"
-        group: "{{app_group}}"
+        owner: "{{ app_owner }}"
+        group: "{{ app_group }}"
 
     - name: Check if configuration file is valid JSON
       command: php -r 'json_decode( file_get_contents( "{{ release_directory }}/app/config/config.{{ environment_name }}.json" ) ); echo json_last_error();'

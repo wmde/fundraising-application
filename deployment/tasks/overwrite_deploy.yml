@@ -21,12 +21,24 @@
   register: deployments_file
   changed_when: deployments_file.stdout != ""
 
+- name: Preserve original domain from group vars
+  set_fact:
+      original_domain: "{{ domain }}"
+
 - name: Set release_directory and domain override for test deploys
   set_fact:
-    # By default, all test pool installations share the log and content dir with the original, non-dynamic domain from the config file
-    app_dir: "{{ deploy_base }}/{{ domain | default( dynamic_deploy_host.stdout, true ) | trim }}"
+    # By default, all test pool installations share the log and content dir with the original, non-dynamic domain from the inventory file
+    app_dir: "{{ deploy_base }}/{{ original_domain }}"
     domain: "{{ dynamic_deploy_host.stdout | trim }}"
     release_directory: "{{ deploy_base }}/{{ dynamic_deploy_host.stdout | trim }}/current-release"
+
+- name: Find available config file
+  set_fact:
+      config_file: "{{ lookup('first_found', configfiles ) }}"
+  vars:
+      configfiles:
+          - "files/configs/{{ test_branch }}/config.{{ environment_name }}.json"
+          - "files/configs/{{ original_domain }}/config.{{ environment_name }}.json"
 
 - name: Delete previous release
   file:
