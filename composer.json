@@ -42,7 +42,7 @@
 		"piwik/piwik-php-tracker": "^1.0",
 		"guzzlehttp/guzzle": "^6.0",
 		"symfony/validator": "^4.0",
-		"symfony/property-access": "^4.0",
+		"symfony/property-access": "^5.1",
 		"symfony/config": "^4.1",
 		"symfony/filesystem": "^4.1",
 		"symfony/yaml": "^4.1",
