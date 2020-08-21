@@ -106,13 +106,13 @@
     - name: Symlink the document root of release to current-release
       file:
         src: "{{ release_directory }}/web"
-        dest: "{{ deploy_base }}/{{ domain }}/current-release"
+        dest: "{{ deploy_base }}/{{ domain }}/current-release-{{ document_root }}"
         state: link
-      when: skip_symlink is undefined and is_atomic_deploy
+      when: skip_symlink is undefined
 
     - name: Symlink the current-release folder to htdocs
       file:
-        src: "{{ deploy_base }}/{{ domain }}/current-release"
+        src: "{{ deploy_base }}/{{ domain }}/current-release-{{ document_root }}"
         dest: "{{ deploy_base }}/{{ domain }}/{{ document_root }}"
         state: link
       when: skip_symlink is undefined
