@@ -43,29 +43,29 @@ describe( 'Address.vue', () => {
 		} );
 	} );
 	it( 'renders components which are part of the donation address page', () => {
-		expect( wrapper.contains( Name ) ).toBe( true );
-		expect( wrapper.contains( Postal ) ).toBe( true );
-		expect( wrapper.contains( ReceiptOptOut ) ).toBe( true );
-		expect( wrapper.contains( AddressType ) ).toBe( true );
-		expect( wrapper.contains( Email ) ).toBe( true );
-		expect( wrapper.contains( NewsletterOptIn ) ).toBe( true );
+		expect( wrapper.findComponent( Name ).exists() ).toBe( true );
+		expect( wrapper.findComponent( Postal ).exists() ).toBe( true );
+		expect( wrapper.findComponent( ReceiptOptOut ).exists() ).toBe( true );
+		expect( wrapper.findComponent( AddressType ).exists() ).toBe( true );
+		expect( wrapper.findComponent( Email ).exists() ).toBe( true );
+		expect( wrapper.findComponent( NewsletterOptIn ).exists() ).toBe( true );
 	} );
 
 	it( 'renders Bank Data component only if payment is direct debit', () => {
-		expect( wrapper.contains( PaymentBankData ) ).toBe( false );
+		expect( wrapper.findComponent( PaymentBankData ).exists() ).toBe( false );
 		// Stub payment option direct debit (BEZ) being selected
 		const comp = wrapper.vm.$options!.computed;
 		if ( typeof comp.isDirectDebit === 'function' ) {
 			comp.isDirectDebit = jest.fn( () => true );
-			expect( wrapper.contains( PaymentBankData ) ).toBe( true );
+			expect( wrapper.findComponent( PaymentBankData ).exists() ).toBe( true );
 		}
 	} );
 
 	it( 'does not render postal and receipt opt out if adress type is anonymous', async () => {
-		wrapper.find( AddressType ).vm.$emit( 'address-type', AddressTypeModel.ANON );
+		wrapper.findComponent( AddressType ).vm.$emit( 'address-type', AddressTypeModel.ANON );
 		await wrapper.vm.$nextTick();
-		expect( wrapper.contains( Postal ) ).toBe( false );
-		expect( wrapper.contains( ReceiptOptOut ) ).toBe( false );
+		expect( wrapper.findComponent( Postal ).exists() ).toBe( false );
+		expect( wrapper.findComponent( ReceiptOptOut ).exists() ).toBe( false );
 	} );
 
 	it( 'sets address type in store when it receives address-type event', () => {
@@ -73,7 +73,7 @@ describe( 'Address.vue', () => {
 		store.dispatch = jest.fn();
 		const expectedAction = action( NS_ADDRESS, setAddressType );
 		const expectedPayload = AddressTypeModel.ANON;
-		wrapper.find( AddressType ).vm.$emit( 'address-type', AddressTypeModel.ANON );
+		wrapper.findComponent( AddressType ).vm.$emit( 'address-type', AddressTypeModel.ANON );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
 	} );
 
@@ -84,7 +84,7 @@ describe( 'Address.vue', () => {
 		const firstNameValue = 'Vuetiful';
 		wrapper.vm.$data.formData.firstName.value = firstNameValue;
 
-		wrapper.find( Name ).vm.$emit( 'field-changed', 'firstName' );
+		wrapper.findComponent( Name ).vm.$emit( 'field-changed', 'firstName' );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, {
 			'name': 'firstName',
 			'optionalField': false,
@@ -98,7 +98,7 @@ describe( 'Address.vue', () => {
 		store.dispatch = jest.fn();
 		const expectedAction = action( NS_ADDRESS, setReceiptOptOut );
 		const expectedPayload = true;
-		wrapper.find( ReceiptOptOut ).vm.$emit( 'opted-out', true );
+		wrapper.findComponent( ReceiptOptOut ).vm.$emit( 'opted-out', true );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
 	} );
 
@@ -108,7 +108,7 @@ describe( 'Address.vue', () => {
 		store.dispatch = jest.fn();
 		wrapper.vm.$data.formData.email.value = testEmail;
 		const expectedAction = action( NS_ADDRESS, setAddressField );
-		wrapper.find( Email ).vm.$emit( 'field-changed', 'email' );
+		wrapper.findComponent( Email ).vm.$emit( 'field-changed', 'email' );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, {
 			'name': 'email',
 			'optionalField': false,

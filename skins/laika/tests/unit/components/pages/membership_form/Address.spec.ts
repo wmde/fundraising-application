@@ -43,12 +43,12 @@ describe( 'Address.vue', () => {
 		} );
 	} );
 	it( 'renders components which are part of the donation address page', () => {
-		expect( wrapper.contains( Name ) ).toBe( true );
-		expect( wrapper.contains( Postal ) ).toBe( true );
-		expect( wrapper.contains( ReceiptOptOut ) ).toBe( true );
-		expect( wrapper.contains( AddressType ) ).toBe( true );
-		expect( wrapper.contains( Email ) ).toBe( true );
-		expect( wrapper.contains( DateOfBirth ) ).toBe( true );
+		expect( wrapper.findComponent( Name ).exists() ).toBe( true );
+		expect( wrapper.findComponent( Postal ).exists() ).toBe( true );
+		expect( wrapper.findComponent( ReceiptOptOut ).exists() ).toBe( true );
+		expect( wrapper.findComponent( AddressType ).exists() ).toBe( true );
+		expect( wrapper.findComponent( Email ).exists() ).toBe( true );
+		expect( wrapper.findComponent( DateOfBirth ).exists() ).toBe( true );
 	} );
 
 	it( 'sets address type in store when it receives address-type event', () => {
@@ -56,7 +56,7 @@ describe( 'Address.vue', () => {
 		store.dispatch = jest.fn();
 		const expectedAction = action( NS_MEMBERSHIP_ADDRESS, setAddressType );
 		const expectedPayload = AddressTypeModel.PERSON;
-		wrapper.find( AddressType ).vm.$emit( 'address-type', AddressTypeModel.PERSON );
+		wrapper.findComponent( AddressType ).vm.$emit( 'address-type', AddressTypeModel.PERSON );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
 	} );
 
@@ -67,7 +67,7 @@ describe( 'Address.vue', () => {
 		const firstNameValue = 'Vuetiful';
 		wrapper.vm.$data.formData.firstName.value = firstNameValue;
 
-		wrapper.find( Name ).vm.$emit( 'field-changed', 'firstName' );
+		wrapper.findComponent( Name ).vm.$emit( 'field-changed', 'firstName' );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, {
 			'name': 'firstName',
 			'optionalField': false,
@@ -81,7 +81,7 @@ describe( 'Address.vue', () => {
 		store.dispatch = jest.fn();
 		const expectedAction = action( NS_MEMBERSHIP_ADDRESS, setReceiptOptOut );
 		const expectedPayload = true;
-		wrapper.find( ReceiptOptOut ).vm.$emit( 'opted-out', true );
+		wrapper.findComponent( ReceiptOptOut ).vm.$emit( 'opted-out', true );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, expectedPayload );
 	} );
 
@@ -91,7 +91,7 @@ describe( 'Address.vue', () => {
 		store.dispatch = jest.fn();
 		wrapper.vm.$data.formData.email.value = testEmail;
 		const expectedAction = action( NS_MEMBERSHIP_ADDRESS, setAddressField );
-		wrapper.find( Email ).vm.$emit( 'field-changed', 'email' );
+		wrapper.findComponent( Email ).vm.$emit( 'field-changed', 'email' );
 		expect( store.dispatch ).toBeCalledWith( expectedAction, {
 			'name': 'email',
 			'optionalField': false,

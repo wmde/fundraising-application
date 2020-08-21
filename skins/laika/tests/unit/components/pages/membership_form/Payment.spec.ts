@@ -31,7 +31,7 @@ describe( 'Payment.vue', () => {
 
 		const interval1 = wrapper.find( '#interval-1 input' );
 		const interval12 = wrapper.find( '#interval-12 input' );
-		const amountSelection = wrapper.find( AmountSelection );
+		const amountSelection = wrapper.findComponent( AmountSelection );
 
 		expect( amountSelection.vm.$props.title ).toEqual( 'membership_form_payment_amount_title' );
 

@@ -25,8 +25,8 @@ describe( 'Supporter.vue', () => {
 				$t: ( key: string ) => key,
 			},
 		} );
-		expect( wrapper.find( '.mdi-arrow-up' ).isVisible() ).toBe( true );
-		expect( wrapper.find( '.accordion-content' ).isVisible() ).toBe( true );
+		expect( wrapper.find( '.mdi-arrow-up' ).element ).toBeVisible();
+		expect( wrapper.find( '.accordion-content' ).element ).toBeVisible();
 		expect( wrapper.find( '.accordion-content' ).text() ).toMatch( sampleText );
 	} );
 
@@ -92,8 +92,8 @@ describe( 'Supporter.vue', () => {
 				$t: ( key: string ) => key,
 			},
 		} );
-		expect( wrapper.find( '.mdi-arrow-down' ).isVisible() ).toBe( true );
-		expect( wrapper.find( '.accordion-content' ).isVisible() ).toBe( false );
+		expect( wrapper.find( '.mdi-arrow-down' ).element ).toBeVisible();
+		expect( wrapper.find( '.accordion-content' ).element ).not.toBeVisible();
 	} );
 
 	it( 'disables comment functionality and hides arrows if no comment is supplied', () => {
