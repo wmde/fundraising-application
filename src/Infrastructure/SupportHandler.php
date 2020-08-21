@@ -5,14 +5,15 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use Monolog\Handler\AbstractHandler;
+use Monolog\Handler\HandlerInterface;
 use Psr\Log\LoggerInterface;
 
 class SupportHandler extends AbstractHandler {
 
-	private $wrappedErrorProneHandler;
-	private $loggerForHandlerErrors;
+	private HandlerInterface $wrappedErrorProneHandler;
+	private LoggerInterface $loggerForHandlerErrors;
 
-	public function __construct( AbstractHandler $wrappedErrorProneHandler, LoggerInterface $loggerForHandlerErrors ) {
+	public function __construct( HandlerInterface $wrappedErrorProneHandler, LoggerInterface $loggerForHandlerErrors ) {
 		parent::__construct();
 		$this->wrappedErrorProneHandler = $wrappedErrorProneHandler;
 		$this->loggerForHandlerErrors = $loggerForHandlerErrors;
