@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 
 use Psr\Log\LoggerInterface;
-use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 
 /**
  * @license GPL-2.0-or-later

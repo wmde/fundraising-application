@@ -5,10 +5,10 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignDate
+ * @covers \WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate
  */
 class CampaignDateTest extends TestCase {
 

@@ -7,9 +7,9 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling\Doma
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
-use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
-use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
-use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler;

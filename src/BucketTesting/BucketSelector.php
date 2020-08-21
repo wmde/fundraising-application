@@ -5,11 +5,14 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use LogicException;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
 class BucketSelector {
 
-	private $campaigns;
-	private $fallbackSelectionStrategy;
+	private CampaignCollection $campaigns;
+	private BucketSelectionStrategy $fallbackSelectionStrategy;
 
 	public function __construct( CampaignCollection $campaigns, BucketSelectionStrategy $fallbackSelectionStrategy ) {
 		$this->campaigns = $campaigns;

@@ -2,8 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 
-use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\BucketLoggingRepository;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\BucketLog;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\BucketLogBucket;
 
@@ -30,7 +30,7 @@ class DatabaseBucketLogger implements BucketLogger {
 
 	private function addBucketLogBuckets( BucketLog $bucketLog, array $buckets ): void {
 		foreach ( $buckets as $bucket ) {
-			$bucketLog->getBuckets()->add( new BucketLogBucket(
+			$bucketLog->addBucket( new BucketLogBucket(
 				$bucket->getName(),
 				$bucket->getCampaign()->getName()
 			) );

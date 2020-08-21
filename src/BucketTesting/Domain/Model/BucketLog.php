@@ -40,7 +40,16 @@ class BucketLog {
 		return $this->eventName;
 	}
 
+	/**
+	 * This is only used in tests
+	 *
+	 * @return Collection
+	 */
 	public function getBuckets(): Collection {
 		return $this->buckets;
+	}
+
+	public function addBucket( BucketLogBucket $bucket ) {
+		$this->buckets->add( $bucket );
 	}
 }

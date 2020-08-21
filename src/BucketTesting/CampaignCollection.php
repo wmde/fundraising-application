@@ -6,9 +6,12 @@ namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use ArrayIterator;
 use IteratorAggregate;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 
 class CampaignCollection implements IteratorAggregate {
-	private $campaigns;
+
+	/* @var Campaign[] */
+	private array $campaigns;
 
 	public function __construct( Campaign ...$campaigns ) {
 		$this->campaigns = $campaigns;
