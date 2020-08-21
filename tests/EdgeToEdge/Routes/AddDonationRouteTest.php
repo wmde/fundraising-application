@@ -261,7 +261,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( true, $donation->getDonorOptsIntoNewsletter() );
 
 			$this->assertSame( 'Z', $donation->getStatus() );
-			$this->assertRegExp( '/^(XW)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
+			$this->assertMatchesRegularExpression( '/^(XW)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
 		} );
 	}
 
@@ -482,7 +482,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$donation = $this->getDonationFromDatabase( $factory );
 
 			$this->assertSame( 'X', $donation->getStatus() );
-			$this->assertRegExp( '/^(XR)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
+			$this->assertMatchesRegularExpression( '/^(XR)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
 
 			$this->assertTrue( $client->getResponse()->isRedirect( 'https://bankingpin.please' ) );
 		} );
