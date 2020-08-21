@@ -37,7 +37,7 @@ describe( 'Payment', () => {
 			validateAmountUrl: 'https://example.com/amount-check',
 		};
 
-		wrapper.find( AmountSelection ).vm.$emit( 'amount-selected', '1500' );
+		wrapper.findComponent( AmountSelection ).vm.$emit( 'amount-selected', '1500' );
 
 		expect( store.dispatch ).toBeCalledWith( action( NS_PAYMENT, setAmount ), expectedPayload );
 	} );
@@ -59,7 +59,7 @@ describe( 'Payment', () => {
 		const store = wrapper.vm.$store;
 		store.dispatch = jest.fn();
 
-		wrapper.find( PaymentInterval ).vm.$emit( 'interval-selected', 6 );
+		wrapper.findComponent( PaymentInterval ).vm.$emit( 'interval-selected', 6 );
 
 		expect( store.dispatch ).toBeCalledWith( action( NS_PAYMENT, setInterval ), 6 );
 	} );
@@ -81,7 +81,7 @@ describe( 'Payment', () => {
 		const store = wrapper.vm.$store;
 		store.dispatch = jest.fn();
 
-		wrapper.find( PaymentType ).vm.$emit( 'payment-type-selected', 'PPL' );
+		wrapper.findComponent( PaymentType ).vm.$emit( 'payment-type-selected', 'PPL' );
 
 		expect( store.dispatch ).toBeCalledWith( action( NS_PAYMENT, setType ), 'PPL' );
 	} );

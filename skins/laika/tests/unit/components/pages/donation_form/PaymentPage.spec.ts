@@ -67,7 +67,7 @@ describe( 'DonationForm', () => {
 		store.dispatch = jest.fn().mockResolvedValue( true );
 		getters[ 'payment/paymentDataIsValid' ].mockReturnValueOnce( false );
 		wrapper.find( '#next' ).trigger( 'click' );
-		expect( wrapper.contains( '.i-am-address-form' ) ).toBe( false );
-		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
+		expect( wrapper.find( '.i-am-address-form' ).exists() ).toBe( false );
+		expect( wrapper.find( '.i-am-payment' ).exists() ).toBe( true );
 	} );
 } );

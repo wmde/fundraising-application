@@ -27,6 +27,7 @@
     ]
   },
   "include": [
+    "jest.dom.ts",
     "src/**/*.ts",
     "src/**/*.vue",
     "tests/**/*.ts"

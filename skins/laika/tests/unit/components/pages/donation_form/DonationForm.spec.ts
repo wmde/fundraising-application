@@ -41,19 +41,19 @@ describe( 'DonationForm', () => {
 	} );
 
 	it( 'displays Payment page by default ', () => {
-		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
+		expect( wrapper.find( '.i-am-payment' ).exists() ).toBe( true );
 	} );
 
 	it( 'loads Address page when next-page is triggered', async () => {
 		wrapper.vm.$refs.currentPage.$emit( 'next-page' );
 		await wrapper.vm.$nextTick();
-		expect( wrapper.contains( '.i-am-address-form' ) ).toBe( true );
+		expect( wrapper.find( '.i-am-address-form' ).exists() ).toBe( true );
 	} );
 
 	it( 'loads Payment component on the previous page', () => {
 		wrapper.vm.$refs.currentPage.$emit( 'next-page' );
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
-		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
+		expect( wrapper.find( '.i-am-payment' ).exists() ).toBe( true );
 	} );
 
 	it( 'does not overshoot the first or last page when multiple page change events trigger', async () => {
@@ -61,18 +61,18 @@ describe( 'DonationForm', () => {
 		wrapper.vm.$refs.currentPage.$emit( 'next-page' );
 		wrapper.vm.$refs.currentPage.$emit( 'next-page' );
 		await wrapper.vm.$nextTick();
-		expect( wrapper.contains( '.i-am-address-form' ) ).toBe( true );
+		expect( wrapper.find( '.i-am-address-form' ).exists() ).toBe( true );
 
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
 		await wrapper.vm.$nextTick();
-		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
+		expect( wrapper.find( '.i-am-payment' ).exists() ).toBe( true );
 
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
 		wrapper.vm.$refs.currentPage.$emit( 'previous-page' );
 		await wrapper.vm.$nextTick();
-		expect( wrapper.contains( '.i-am-payment' ) ).toBe( true );
+		expect( wrapper.find( '.i-am-payment' ).exists() ).toBe( true );
 	} );
 
 } );
