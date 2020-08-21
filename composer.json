@@ -34,7 +34,7 @@
 		"airbrake/phpbrake": "~0.7",
 		"jeroen/file-fetcher": "~6.0",
 		"psr/log": "~1.0",
-		"monolog/monolog": "~1.17",
+		"monolog/monolog": "~2.1",
 		"swiftmailer/swiftmailer": "~6.2",
 		"twig/extensions": "^1.3",
 		"micropayment-de/service-client": "~1.23",
