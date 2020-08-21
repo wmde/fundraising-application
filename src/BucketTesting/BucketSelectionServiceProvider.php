@@ -10,13 +10,14 @@ use Silex\Api\BootableProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class BucketSelectionServiceProvider implements ServiceProviderInterface, BootableProviderInterface {
 
 	private const COOKIE_NAME = 'spenden_ttg';
 
-	private $factory;
+	private FunFunFactory $factory;
 
 	public function __construct( FunFunFactory $factory ) {
 		$this->factory = $factory;

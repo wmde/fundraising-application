@@ -9,10 +9,10 @@ use RemotelyLiving\Doorkeeper\Features\Feature;
 use RemotelyLiving\Doorkeeper\Rules\StringHash;
 use RemotelyLiving\Doorkeeper\Rules\TimeAfter;
 use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
-use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
-use WMDE\Fundraising\Frontend\BucketTesting\Campaign;
-use WMDE\Fundraising\Frontend\BucketTesting\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignFeatureBuilder;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignFeatureBuilder

@@ -14,6 +14,7 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\AddressChangeContext\AddressChangeContextFactory;
 use WMDE\Fundraising\DonationContext\DonationContextFactory;
+use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\SubscriptionContext\SubscriptionContextFactory;
 
@@ -27,7 +28,7 @@ class DoctrineFactory {
 	/**
 	 * @param Connection $connection
 	 * @param Configuration $config
-	 * @param DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory ...$contextFactories
+	 * @param DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory|BucketTestingContextFactory ...$contextFactories
 	 */
 	public function __construct( Connection $connection, Configuration $config, ...$contextFactories ) {
 		$this->connection = $connection;

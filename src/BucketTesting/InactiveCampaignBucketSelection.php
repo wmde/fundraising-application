@@ -4,12 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\BucketTesting;
 
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
+
 /**
  * @license GPL-2.0-or-later
  */
 class InactiveCampaignBucketSelection implements BucketSelectionStrategy {
 
-	private $now;
+	private CampaignDate $now;
 
 	public function __construct( CampaignDate $now ) {
 		$this->now = $now;

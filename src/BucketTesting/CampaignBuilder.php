@@ -6,14 +6,17 @@ namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use DateTime;
 use DateTimeZone;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
 /**
  * @license GPL-2.0-or-later
  */
 class CampaignBuilder {
 
-	private $timezone;
-	private $utc;
+	private DateTimeZone $timezone;
+	private DateTimeZone $utc;
 
 	public function __construct( DateTimeZone $timezone ) {
 		$this->timezone = $timezone;

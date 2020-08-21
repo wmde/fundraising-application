@@ -11,6 +11,8 @@ use RemotelyLiving\Doorkeeper\Rules\RuleInterface;
 use RemotelyLiving\Doorkeeper\Rules\StringHash;
 use RemotelyLiving\Doorkeeper\Rules\TimeAfter;
 use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 
 /**
  * Build a Doorkeeper feature set from a list of campaigns
@@ -19,7 +21,8 @@ use RemotelyLiving\Doorkeeper\Rules\TimeBefore;
  */
 class CampaignFeatureBuilder {
 
-	private $campaigns;
+	/* @var Campaign[] */
+	private array $campaigns;
 
 	public function __construct( Campaign ...$campaigns ) {
 		$this->campaigns = $campaigns;

@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 
 use DateTime;
 use WMDE\Clock\Clock;
-use WMDE\Fundraising\Frontend\BucketTesting\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 
 /**
  * Logs the event info, the bucket data and the time as a JSON-encoded string
