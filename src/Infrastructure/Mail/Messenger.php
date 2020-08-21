@@ -14,9 +14,9 @@ use WMDE\EmailAddress\EmailAddress;
  */
 class Messenger {
 
-	private $mailTransport;
-	private $operatorAddress;
-	private $operatorName;
+	private Swift_Transport $mailTransport;
+	private EmailAddress $operatorAddress;
+	private string $operatorName;
 
 	public function __construct( Swift_Transport $mailTransport,
 								 EmailAddress $operatorAddress,
@@ -36,7 +36,7 @@ class Messenger {
 
 	private function createMessage( Message $messageContent, EmailAddress $recipient,
 									EmailAddress $replyTo = null ): Swift_Message {
-		$message = Swift_Message::newInstance( $messageContent->getSubject(), $messageContent->getMessageBody() );
+		$message = new Swift_Message( $messageContent->getSubject(), $messageContent->getMessageBody() );
 		$message->setFrom( $this->operatorAddress->getNormalizedAddress(), $this->operatorName );
 		$message->setTo( $recipient->getNormalizedAddress() );
 
