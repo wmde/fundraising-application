@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "407200d070ac4b367f2fefa8478f8dea",
+    "content-hash": "9452cbed0a2936a75069186109f48a88",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -1634,35 +1634,38 @@
         },
         {
             "name": "jeroen/file-fetcher",
-            "version": "4.4.0",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JeroenDeDauw/FileFetcher.git",
-                "reference": "7cd70a514bb95123d501daefbd20e4726953c462"
+                "reference": "7a17d947e268e351efc42386d4454a41b07ad481"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JeroenDeDauw/FileFetcher/zipball/7cd70a514bb95123d501daefbd20e4726953c462",
-                "reference": "7cd70a514bb95123d501daefbd20e4726953c462",
+                "url": "https://api.github.com/repos/JeroenDeDauw/FileFetcher/zipball/7a17d947e268e351efc42386d4454a41b07ad481",
+                "reference": "7a17d947e268e351efc42386d4454a41b07ad481",
                 "shasum": ""
             },
             "require": {
-                "jeroen/simple-cache": "~2.0",
                 "php": ">=7.1",
                 "psr/log": "~1.0"
             },
             "require-dev": {
                 "ockcyp/covers-validator": "~1.0",
                 "phpmd/phpmd": "~2.6",
-                "phpstan/phpstan": "~0.9.2",
-                "phpunit/phpunit": "~6.1",
+                "phpstan/phpstan": "~0.10.1",
+                "phpunit/phpunit": "~7.2",
                 "squizlabs/php_codesniffer": "~3.2",
                 "wmde/psr-log-test-doubles": "~2.1"
+            },
+            "suggest": {
+                "jeroen/file-fetcher-cache ": "Provides a SimpleCache (PSR-16) decorator for file fetchers",
+                "jeroen/file-fetcher-stopwatch": "Provides a Symfony Stopwatch decorator for file fetchers"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.4.x-dev"
+                    "dev-master": "6.0.x-dev"
                 }
             },
             "autoload": {
@@ -1672,7 +1675,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2.0-or-later"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -1685,64 +1688,22 @@
             "description": "Simple file fetching interface",
             "homepage": "https://github.com/JeroenDeDauw/FileFetcher",
             "keywords": [
+                "Test Doubles",
                 "cache",
                 "curl",
                 "file fetcher",
                 "file_get_contents",
+                "http",
+                "http client",
+                "http request",
+                "interface",
+                "mocks",
+                "request",
+                "spies",
+                "stubs",
                 "wget"
             ],
-            "time": "2018-05-31T16:18:49+00:00"
-        },
-        {
-            "name": "jeroen/simple-cache",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JeroenDeDauw/SimpleCache.git",
-                "reference": "159a72cf2ba7b7506495914d294d9e423700bd54"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JeroenDeDauw/SimpleCache/zipball/159a72cf2ba7b7506495914d294d9e423700bd54",
-                "reference": "159a72cf2ba7b7506495914d294d9e423700bd54",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "replace": {
-                "jeroen-de-dauw/simple-cache": "*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "SimpleCache\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Jeroen De Dauw",
-                    "email": "jeroendedauw@gmail.com",
-                    "homepage": "http://jeroendedauw.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Small library defining a minimalistic caching interface and provides some basic implementations",
-            "homepage": "https://github.com/JeroenDeDauw/SimpleCache",
-            "keywords": [
-                "cache",
-                "simplecache"
-            ],
-            "time": "2014-08-19T00:36:41+00:00"
+            "time": "2019-01-17T11:44:23+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
