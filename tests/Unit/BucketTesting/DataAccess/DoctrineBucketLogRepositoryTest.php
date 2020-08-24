@@ -32,18 +32,21 @@ class DoctrineBucketLogRepositoryTest extends TestCase {
 		$doctrineBucketLogRepository = new DoctrineBucketLogRepository( $this->entityManager );
 
 		$bucketLog = new BucketLog( 99999, 'test_event' );
-		$bucketLog->getBuckets()->add( new BucketLogBucket( 'test_bucket', 'test_campaign' ) );
+		$bucketLog->addBucket( 'test_bucket', 'test_campaign' );
 
 		$doctrineBucketLogRepository->storeBucketLog( $bucketLog );
 
 		/** @var BucketLog[] $bucketLogs */
 		$bucketLogs = $this->getOrmRepository()->findAll();
+		$bucketLog = $bucketLogs[0];
+		$bucketLogBucket = $bucketLog->getBuckets()[0];
 
 		$this->assertCount( 1, $bucketLogs );
-		$this->assertEquals( 99999, $bucketLogs[0]->getExternalId() );
-		$this->assertEquals( 'test_event', $bucketLogs[0]->getEventName() );
-		$this->assertCount( 1, $bucketLogs[0]->getBuckets() );
-		$this->assertEquals( 'test_bucket', $bucketLogs[0]->getBuckets()[0]->getName() );
-		$this->assertEquals( 'test_campaign', $bucketLogs[0]->getBuckets()[0]->getCampaign() );
+		$this->assertEquals( 99999, $bucketLog->getExternalId() );
+		$this->assertEquals( 'test_event', $bucketLog->getEventName() );
+		$this->assertCount( 1, $bucketLog->getBuckets() );
+		$this->assertEquals( 'test_bucket', $bucketLogBucket->getName() );
+		$this->assertEquals( 'test_campaign', $bucketLogBucket->getCampaign() );
+		$this->assertEquals( $bucketLog, $bucketLogBucket->getBucketLog() );
 	}
 }

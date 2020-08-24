@@ -11,7 +11,8 @@ class BucketLogBucket {
 	private string $name;
 	private string $campaign;
 
-	public function __construct( string $name, string $campaign ) {
+	public function __construct( BucketLog $bucketLog, string $name, string $campaign ) {
+		$this->bucketLog = $bucketLog;
 		$this->name = $name;
 		$this->campaign = $campaign;
 	}

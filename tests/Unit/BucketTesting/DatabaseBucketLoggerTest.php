@@ -72,12 +72,17 @@ class DatabaseBucketLoggerTest extends TestCase {
 
 		/** @var BucketLog[] $bucketLogs */
 		$bucketLogs = $this->getOrmRepository()->findAll();
+		$bucketLog = $bucketLogs[0];
+		$bucketLogBucket1 = $bucketLog->getBuckets()[0];
+		$bucketLogBucket2 = $bucketLog->getBuckets()[1];
 
-		$this->assertCount( 2, $bucketLogs[0]->getBuckets() );
-		$this->assertEquals( $bucket1->getName(), $bucketLogs[0]->getBuckets()[0]->getName() );
-		$this->assertEquals( $bucket1->getCampaign()->getName(), $bucketLogs[0]->getBuckets()[0]->getCampaign() );
-		$this->assertEquals( $bucket2->getName(), $bucketLogs[0]->getBuckets()[1]->getName() );
-		$this->assertEquals( $bucket2->getCampaign()->getName(), $bucketLogs[0]->getBuckets()[1]->getCampaign() );
+		$this->assertCount( 2, $bucketLog->getBuckets() );
+		$this->assertEquals( $bucket1->getName(), $bucketLogBucket1->getName() );
+		$this->assertEquals( $bucket1->getCampaign()->getName(), $bucketLogBucket1->getCampaign() );
+		$this->assertEquals( $bucketLog, $bucketLogBucket1->getBucketLog() );
+		$this->assertEquals( $bucket2->getName(), $bucketLogBucket2->getName() );
+		$this->assertEquals( $bucket2->getCampaign()->getName(), $bucketLogBucket2->getCampaign() );
+		$this->assertEquals( $bucketLog, $bucketLogBucket2->getBucketLog() );
 	}
 
 	public function testWhenNotPassedEntityIdThrowsException() {
