@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@airbrake/browser": "^1.4.1",
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "buefy": "^0.8.17",
     "bulma-helpers": "^0.3.12",
     "core-js": "^3.6.4",
