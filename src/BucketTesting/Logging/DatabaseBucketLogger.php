@@ -30,10 +30,10 @@ class DatabaseBucketLogger implements BucketLogger {
 
 	private function addBucketLogBuckets( BucketLog $bucketLog, array $buckets ): void {
 		foreach ( $buckets as $bucket ) {
-			$bucketLog->addBucket( new BucketLogBucket(
+			$bucketLog->addBucket(
 				$bucket->getName(),
 				$bucket->getCampaign()->getName()
-			) );
+			);
 		}
 	}
 }

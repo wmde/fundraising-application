@@ -49,7 +49,7 @@ class BucketLog {
 		return $this->buckets;
 	}
 
-	public function addBucket( BucketLogBucket $bucket ) {
-		$this->buckets->add( $bucket );
+	public function addBucket( string $bucketName, string $campaign ) {
+		$this->buckets->add( new BucketLogBucket( $this, $bucketName, $campaign ) );
 	}
 }
