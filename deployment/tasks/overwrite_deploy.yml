@@ -40,9 +40,9 @@
           - "files/configs/{{ test_branch }}/config.{{ environment_name }}.json"
           - "files/configs/{{ original_domain }}/config.{{ environment_name }}.json"
 
-- name: Delete previous release
-  file:
-      path: "{{ release_directory }}"
-      state: absent
-  failed_when:
+#- name: Delete previous release
+#  file:
+#      path: "{{ release_directory }}"
+#      state: absent
+#  failed_when:
 
