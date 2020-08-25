@@ -36,12 +36,12 @@
   "i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n",
   "contact-info": {
     "organization": {
-      "email": "fake-address@example.com",
-      "name": "Webmaster"
+      "email": "mitglieder@wikimedia.de",
+      "name": "Wikimedia Deutschland e. V."
     },
     "suborganization": {
-      "email": "fake-address@example.com",
-      "name": "Webmaster"
+      "email": "spenden@wikimedia.de",
+      "name": "Wikimedia Fördergesellschaft mbH"
     }
   },
   "donation-timeframe-limit": "PT1S",
@@ -122,5 +122,11 @@
   "campaigns": {
     "configurations": [ "campaigns.yml", "campaigns.dev.yml" ]
   },
-  "assets-path": "http://localhost:7072"
+  "assets-path": "http://localhost:7072",
+  "smtp": {
+    "host": "mailhog",
+    "username": "NOT A USERNAME",
+    "password": "NOT A PASSWORD",
+    "port": 1025
+  }
 }

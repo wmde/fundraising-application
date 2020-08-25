@@ -23,8 +23,8 @@ use Psr\Log\NullLogger;
 use RemotelyLiving\Doorkeeper\Doorkeeper;
 use RemotelyLiving\Doorkeeper\Features\Set;
 use RemotelyLiving\Doorkeeper\Requestor;
-use Swift_MailTransport;
 use Swift_NullTransport;
+use Swift_SmtpTransport;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
 use TNvpServiceDispatcher;
@@ -309,22 +309,6 @@ class FunFunFactory implements ServiceProviderInterface {
 				'Prof.' => 'Prof.',
 				'Prof. Dr.' => 'Prof. Dr.'
 			] );
-		};
-
-		$container['messenger_suborganization'] = function () {
-			return new Messenger(
-				new Swift_MailTransport(),
-				$this->getSubOrganizationEmailAddress(),
-				$this->config['contact-info']['suborganization']['name']
-			);
-		};
-
-		$container['messenger_organization'] = function () {
-			return new Messenger(
-				new Swift_MailTransport(),
-				$this->getOrganizationEmailAddress(),
-				$this->config['contact-info']['organization']['name']
-			);
 		};
 
 		$container['paypal-payment-notification-verifier'] = function () {
@@ -900,28 +884,52 @@ class FunFunFactory implements ServiceProviderInterface {
 	}
 
 	private function getSuborganizationMessenger(): Messenger {
-		return $this->pimple['messenger_suborganization'];
+		return $this->createSharedObject( Messenger::class . 'suborganization', function (): Messenger {
+			return new Messenger(
+				$this->getSmtpTransport(),
+				$this->getSubOrganizationEmailAddress(),
+				$this->config['contact-info']['suborganization']['name']
+			);
+		} );
 	}
 
 	public function setSuborganizationMessenger( Messenger $messenger ): void {
-		$this->pimple['messenger_suborganization'] = $messenger;
+		$this->sharedObjects[Messenger::class . 'suborganization'] = $messenger;
 	}
 
 	private function getOrganizationMessenger(): Messenger {
-		return $this->pimple['messenger_organization'];
+		return $this->createSharedObject( Messenger::class . 'organization', function (): Messenger {
+			return new Messenger(
+				$this->getSmtpTransport(),
+				$this->getOrganizationEmailAddress(),
+				$this->config['contact-info']['organization']['name']
+			);
+		} );
 	}
 
 	public function setOrganizationMessenger( Messenger $messenger ): void {
-		$this->pimple['messenger_organization'] = $messenger;
+		$this->sharedObjects[Messenger::class . 'organization'] = $messenger;
+	}
+
+	private function getSmtpTransport(): Swift_SmtpTransport {
+		return $this->createSharedObject( Swift_SmtpTransport::class, function (): Swift_SmtpTransport {
+			return ( new Swift_SmtpTransport(
+				$this->config['smtp']['host'],
+				$this->config['smtp']['port'],
+				$this->config['smtp']['encryption']
+			) )
+				->setUsername( $this->config['smtp']['username'] )
+				->setPassword( $this->config['smtp']['password'] );
+		} );
 	}
 
 	public function setNullMessenger(): void {
 		$this->setSuborganizationMessenger( new Messenger(
-			Swift_NullTransport::newInstance(),
+			new Swift_NullTransport(),
 			$this->getSubOrganizationEmailAddress()
 		) );
 		$this->setOrganizationMessenger( new Messenger(
-			Swift_NullTransport::newInstance(),
+			new Swift_NullTransport(),
 			$this->getOrganizationEmailAddress()
 		) );
 	}

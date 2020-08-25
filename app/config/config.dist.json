@@ -195,5 +195,12 @@
 				"level": "DEBUG"
 			}
 		]
+	},
+	"smtp": {
+		"host": "localhost",
+		"username": "",
+		"password": "",
+		"port": 25,
+		"encryption": ""
 	}
 }
