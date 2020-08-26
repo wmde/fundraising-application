@@ -22,7 +22,7 @@ class LoggerFactory {
 	private const TYPE_FILE = 'file';
 	private const TYPE_ERRBIT = 'errbit';
 
-	private $config;
+	private array $config;
 
 	public function __construct( array $config ) {
 		$this->config = $config;
@@ -52,7 +52,7 @@ class LoggerFactory {
 					'projectId' => $config['projectId'],
 					'projectKey' => $config['projectKey'],
 					'host' => $config['host'],
-					'environment' => getenv( 'APP_ENV' ) ?: 'dev'
+					'environment' => $_ENV['APP_ENV'] ?: 'dev'
 				] );
 
 				return new SupportHandler(
