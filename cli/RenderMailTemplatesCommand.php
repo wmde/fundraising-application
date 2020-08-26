@@ -80,7 +80,7 @@ class RenderMailTemplatesCommand extends Command {
 	}
 
 	private function getDefaultConfig(): array {
-		$bootstrapper = new EnvironmentBootstrapper( getenv( 'APP_ENV' ) ?: 'dev' );
+		$bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?: 'dev' );
 		$configReader = new ConfigReader(
 			new SimpleFileFetcher(),
 			...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/../app/config' )

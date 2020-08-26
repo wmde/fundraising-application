@@ -19,7 +19,7 @@ $ffFactory = call_user_func( function() {
 	$dotenv = Dotenv\Dotenv::createImmutable( __DIR__ . '/..' );
 	$dotenv->load();
 
-    $bootstrapper = new EnvironmentBootstrapper( getenv( 'APP_ENV' ) ?: 'dev' );
+    $bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?: 'dev' );
 
 	$configReader = new ConfigReader(
 		new SimpleFileFetcher(),
