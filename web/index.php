@@ -15,6 +15,10 @@ use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
  * @var FunFunFactory $ffFactory
  */
 $ffFactory = call_user_func( function() {
+
+	$dotenv = Dotenv\Dotenv::create( __DIR__ . '/..' );
+	$dotenv->load();
+
     $bootstrapper = new EnvironmentBootstrapper( getenv( 'APP_ENV' ) ?: 'dev' );
 
 	$configReader = new ConfigReader(

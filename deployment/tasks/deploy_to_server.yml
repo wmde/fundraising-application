@@ -5,55 +5,56 @@
 # Most other variables come from the inventory file.
 
 - name: Create release directory
-  file: path={{ app_dir }}/{{ release_name }} state=directory
+  file:
+    path: "{{ release_directory }}"
+    state: directory
 
 - block:
     - name: Expand release tarball
-      unarchive: src={{ local_archive }} dest={{ app_dir }}/{{ release_name }}
-
-    - name: Set app directory ownership
-      file:
-        path: "{{ app_dir }}/{{ release_name }}"
-        owner: "{{app_owner}}"
-        group: "{{app_group}}"
-        recurse: yes
+      unarchive:
+        src: "{{ local_archive }}"
+        dest: "{{ release_directory }}"
 
     - name: Copy config file
       copy:
-        src: "{{ config_dir }}/{{ inventory_hostname }}/config.{{ environment_name }}.json"
-        dest: "{{ app_dir }}/{{ release_name }}/app/config/config.{{ environment_name }}.json"
-        owner: "{{app_owner}}"
-        group: "{{app_group}}"
+        src: "{{ config_file }}"
+        dest: "{{ release_directory }}/app/config/config.{{ environment_name }}.json"
+        owner: "{{ app_owner }}"
+        group: "{{ app_group }}"
 
     - name: Create .env file
       copy:
         content: >
           APP_ENV={{ environment_name }}
-        dest: "{{ app_dir }}/{{ release_name }}/.env"
-        owner: "{{app_owner}}"
-        group: "{{app_group}}"
+        dest: "{{ release_directory }}/.env"
+        owner: "{{ app_owner }}"
+        group: "{{ app_group }}"
 
     - name: Check if configuration file is valid JSON
-      command: php -r 'json_decode( file_get_contents( "{{ app_dir }}/{{ release_name }}/app/config/config.{{ environment_name }}.json" ) ); echo json_last_error();'
+      command: php -r 'json_decode( file_get_contents( "{{ release_directory }}/app/config/config.{{ environment_name }}.json" ) ); echo json_last_error();'
       register: decode_json_config
       failed_when: decode_json_config.stdout != "0"
 
     - name: Validate config file against schema
-      command: ./console app:validate:config app/config/config.dist.json app/config/config.{{ environment_name }}.json chdir={{ app_dir }}/{{ release_name }}
+      command: ./console app:validate:config app/config/config.dist.json app/config/config.{{ environment_name }}.json
+      args:
+        chdir: "{{ release_directory }}"
 
     - name: Validate campaign YAML files
-      command: ./console app:validate:campaigns chdir={{ app_dir }}/{{ release_name }} {{ environment_name }}
+      command: ./console app:validate:campaigns {{ environment_name }}
+      args:
+        chdir: "{{ release_directory }}"
 
     - name: Create var dir
       file:
-        path: "{{ app_dir }}/{{ release_name }}/var"
+        path: "{{ release_directory }}/var"
         owner: "{{app_owner}}"
         group: "{{app_group}}"
         state: directory
 
     - name: Create var/cache dir
       file:
-        path: "{{ app_dir }}/{{ release_name }}/var/cache"
+        path: "{{ release_directory }}/var/cache"
         owner: "{{app_owner}}"
         group: "{{app_group}}"
         state: directory
@@ -62,67 +63,67 @@
     - name: Create web resources (content) symlink
       file:
         src: "{{ app_dir }}/{{ content_directory }}/resources"
-        dest: "{{ app_dir }}/{{ release_name }}/web/resources"
+        dest: "{{ release_directory }}/web/resources"
         owner: "{{app_owner}}"
         group: "{{app_group}}"
         state: link
 
     - name: Create cache-busting prefix
       copy:
-         dest: "{{ app_dir }}/{{ release_name }}/var/file_prefix.txt"
-         content: "{{ release_name|hash('md5') }}"
+         dest: "{{ release_directory }}/var/file_prefix.txt"
+         content: "{{ release_name | hash( 'md5' ) }}"
          owner: "{{app_owner}}"
          group: "{{app_group}}"
+
 
     - name: Create symlink to log dir
       file:
         src: "{{ app_dir }}/{{ logs_dir }}"
-        dest: "{{ app_dir }}/{{ release_name }}/var/log"
+        dest: "{{ release_directory }}/var/log"
         state: link
 
-    - name: Create symlink to shared dir
+    # TODO: Remove this task when https://phabricator.wikimedia.org/T202285 is done
+    - name: Create shared dir
       file:
-        src: "{{ app_dir }}/{{ shared_dir }}"
-        dest: "{{ app_dir }}/{{ release_name }}/var/shared"
-        state: link
+        path: "{{ release_directory }}/var/shared"
+        state: directory
 
     - name: Create var/doctrine_proxies dir
       file:
-         path: "{{ app_dir }}/{{ release_name }}/var/doctrine_proxies"
+         path: "{{ release_directory }}/var/doctrine_proxies"
          state: directory
          owner: "{{app_owner}}"
          group: "{{app_group}}"
          mode: '775'
 
     - name: Create Doctrine proxy classes
-      command: vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies chdir={{ app_dir }}/{{ release_name }}
+      command: vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
+      args:
+        chdir: "{{ release_directory }}"
       environment:
         APP_ENV: "{{ environment_name }}"
 
-    - name: Symlink the release
+    - name: Symlink the document root of release to current-release
       file:
-        src: "{{ app_dir }}/{{ release_name }}"
-        dest: "{{ app_dir }}/{{ current_dir }}"
+        src: "{{ release_directory }}/web"
+        dest: "{{ deploy_base }}/{{ domain }}/current-release-{{ document_root }}"
+        state: link
+
+    - name: Symlink the current-release folder to htdocs
+      file:
+        src: "{{ deploy_base }}/{{ domain }}/current-release-{{ document_root }}"
+        dest: "{{ deploy_base }}/{{ domain }}/{{ document_root }}"
         state: link
       when: skip_symlink is undefined
 
   rescue:
     - name: Remove directory of failed release
       file:
-        path: "{{ app_dir }}/{{ release_name }}"
+        path: "{{ release_directory }}"
         state: absent
+      when: no_cleanup_on_error is not defined and is_atomic_deploy
 
     - fail:
         msg: "An error occured during deployment on server"
 
-- name: Download cachetool for clearing PHP-FPM opcache (if needed)
-  get_url:
-    url: http://gordalina.github.io/cachetool/downloads/cachetool.phar
-    dest: "{{ app_dir }}/cachetool.phar"
 
-- name: Clear PHP-FPM opcache
-  command: php {{ app_dir }}/cachetool.phar opcache:reset --fcgi=/var/run/php/php{{ php_version }}-fpm.sock
-
-- name: Remove old releases
-  shell: ls -d1 --format single-column {{ app_dir }}/{{ release_prefix }}* | sort -n | head -n -{{ keep_releases }} | xargs -I % rm -rf %
-  ignore_errors: yes # In case there is a file that can't be deleted for some reason

@@ -1594,7 +1594,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function enableCaching(): void {
 		$this->pimple['page_cache'] = function () {
-			return new FilesystemCache( $this->getCachePath() . '/pages/raw' );
+			return new FilesystemCache( $this->getCachePath() . '/pages/raw', FilesystemCache::EXTENSION, 0002 );
 		};
 
 		$this->pimple['rendered_page_cache'] = function () {
