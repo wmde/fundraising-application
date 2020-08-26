@@ -26,7 +26,7 @@ module.exports = {
 	globals: {
 		'ts-jest': {
 			babelConfig: true,
-			isolatedModules: true
+			isolatedModules: true,
 		},
 	},
 	setupFilesAfterEnv: [
