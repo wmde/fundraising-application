@@ -114,9 +114,16 @@ migration-status:
 	# TODO provide more migrations configurations when available.
 	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:status --configuration=app/config/migrations/subscriptions.yml
 
-ci: covers phpunit cs npm-ci validate-app-config validate-campaign-config stan
+validate-encrypted-config:
+	grep -q ANSIBLE_VAULT deployment/inventory/group_vars/production.yml
+	grep -q ANSIBLE_VAULT deployment/inventory/group_vars/test.yml
+	grep -q ANSIBLE_VAULT deployment/inventory/group_vars/webserver.yml
+	grep -q ANSIBLE_VAULT deployment/files/configs/spenden.wikimedia.de/config.prod.json
+	grep -q ANSIBLE_VAULT deployment/files/configs/test-spenden-2.wikimedia.de/config.uat.json
 
-ci-with-coverage: covers phpunit-with-coverage cs npm-ci validate-app-config validate-campaign-config stan
+ci: covers phpunit cs npm-ci validate-app-config validate-campaign-config validate-encrypted-config stan
+
+ci-with-coverage: covers phpunit-with-coverage cs npm-ci validate-app-config validate-campaign-config validate-encrypted-config stan
 
 create-env: 
 	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
