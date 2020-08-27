@@ -13,10 +13,10 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
  * https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/tools.html
  */
 
-$dotenv = Dotenv\Dotenv::create( __DIR__ );
+$dotenv = Dotenv\Dotenv::createImmutable( __DIR__ );
 $dotenv->load();
 
-$bootstrapper = new EnvironmentBootstrapper( getenv( 'APP_ENV' ) ?: 'dev' );
+$bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?: 'dev' );
 $configReader = new ConfigReader(
 	new SimpleFileFetcher(),
 	...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/app/config' )
