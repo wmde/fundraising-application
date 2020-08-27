@@ -47,3 +47,8 @@
       shell: ls -d1 --format single-column {{ app_dir }}/{{ release_prefix }}* | sort -n | head -n -{{ keep_releases }} | xargs -I % rm -rf %
       ignore_errors: yes # In case there is a file that can't be deleted for some reason
       when: is_atomic_deploy
+
+    - name: Output the domain of the current release
+      debug:
+        msg: "Deployed to {{ domain }}"
+      when: not is_atomic_deploy
