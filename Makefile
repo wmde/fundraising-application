@@ -115,11 +115,8 @@ migration-status:
 	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:status --configuration=app/config/migrations/subscriptions.yml
 
 validate-encrypted-config:
-	grep -q ANSIBLE_VAULT deployment/inventory/group_vars/production.yml
-	grep -q ANSIBLE_VAULT deployment/inventory/group_vars/test.yml
-	grep -q ANSIBLE_VAULT deployment/inventory/group_vars/webserver.yml
-	grep -q ANSIBLE_VAULT deployment/files/configs/spenden.wikimedia.de/config.prod.json
-	grep -q ANSIBLE_VAULT deployment/files/configs/test-spenden-2.wikimedia.de/config.uat.json
+	build/validate-config-encryption deployment/inventory/group_vars/*.yml
+	build/validate-config-encryption deployment/files/configs/*/*.json
 
 ci: covers phpunit cs npm-ci validate-app-config validate-campaign-config validate-encrypted-config stan
 

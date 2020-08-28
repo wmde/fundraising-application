@@ -1,0 +1,12 @@
+#!/usr/bin/awk -f
+{ 
+	if ($0~"^\\\$ANSIBLE_VAULT")
+	{
+		nextfile; 
+	}
+	else 
+	{
+		print "Found unencrypted file", FILENAME
+		exit 1
+	}
+}
