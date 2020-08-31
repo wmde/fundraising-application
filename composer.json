@@ -131,7 +131,7 @@
 		"wmde/fundraising-phpcs": "~1.0",
 		"phpmd/phpmd": "~2.6",
 
-		"symfony/browser-kit": "^3.2",
+		"symfony/browser-kit": "^4.4",
 		"silex/web-profiler": "~2.0",
 		"sorien/silex-dbal-profiler": "~2.0",
 		"wmde/fundraising-frontend-content": "dev-test",
