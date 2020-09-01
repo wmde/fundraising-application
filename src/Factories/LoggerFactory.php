@@ -52,7 +52,7 @@ class LoggerFactory {
 					'projectId' => $config['projectId'],
 					'projectKey' => $config['projectKey'],
 					'host' => $config['host'],
-					'environment' => $_ENV['APP_ENV'] ?: 'dev'
+					'environment' => $_ENV['APP_ENV'] ?? 'dev'
 				] );
 
 				return new SupportHandler(
