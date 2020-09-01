@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.11.4",
-    "@types/jest": "^26.0.10",
+    "@types/jest": "^26.0.12",
     "@types/jsonp": "^0.2.0",
     "@types/moxios": "^0.4.9",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
