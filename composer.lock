@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ecc52ab43deb710e9e6f744f1f87ab09",
+    "content-hash": "263212e82879ae7a3b1c91c3c2c7fa55",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -2546,17 +2546,24 @@
         },
         {
             "name": "piwik/piwik-php-tracker",
-            "version": "1.5.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/matomo-php-tracker.git",
-                "reference": "314e6d00039cb9d99837c81cdf4cbcd19f5683e0"
+                "reference": "d8a30200b0bd144f38282df9a8cb5da194da9296"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/matomo-php-tracker/zipball/314e6d00039cb9d99837c81cdf4cbcd19f5683e0",
-                "reference": "314e6d00039cb9d99837c81cdf4cbcd19f5683e0",
+                "url": "https://api.github.com/repos/matomo-org/matomo-php-tracker/zipball/d8a30200b0bd144f38282df9a8cb5da194da9296",
+                "reference": "d8a30200b0bd144f38282df9a8cb5da194da9296",
                 "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.3"
+            },
+            "suggest": {
+                "ext-curl": "Using this extension to issue the HTTPS request to Matomo"
             },
             "type": "library",
             "autoload": {
@@ -2570,20 +2577,21 @@
             ],
             "authors": [
                 {
-                    "name": "The Piwik Team",
-                    "email": "hello@piwik.org",
-                    "homepage": "http://piwik.org/the-piwik-team/"
+                    "name": "The Matomo Team",
+                    "email": "hello@matomo.org",
+                    "homepage": "https://matomo.org/team/"
                 }
             ],
-            "description": "PHP Client for Piwik Analytics Tracking API",
-            "homepage": "http://piwik.org",
+            "description": "PHP Client for Matomo Analytics Tracking API",
+            "homepage": "https://matomo.org",
             "keywords": [
                 "analytics",
+                "matomo",
                 "piwik",
                 "tracker"
             ],
             "abandoned": "matomo/matomo-php-tracker",
-            "time": "2019-12-23T21:48:04+00:00"
+            "time": "2020-01-14T19:33:53+00:00"
         },
         {
             "name": "psr/cache",
