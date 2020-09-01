@@ -21,7 +21,7 @@
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.4",
+    "@babel/core": "^7.11.5",
     "@types/jest": "^26.0.12",
     "@types/jsonp": "^0.2.0",
     "@types/moxios": "^0.4.9",
