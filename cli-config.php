@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 $dotenv = Dotenv\Dotenv::createImmutable( __DIR__ );
 $dotenv->load();
 
-$bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?: 'dev' );
+$bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?? 'dev' );
 $configReader = new ConfigReader(
 	new SimpleFileFetcher(),
 	...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/app/config' )
