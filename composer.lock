@@ -3537,7 +3537,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.1.4",
+            "version": "v5.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -9255,12 +9255,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "96f9074eb66867354ca243b6c45e79dae86ba561"
+                "reference": "45347bf27522a050dbaca994bdbca60cb81d773e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/96f9074eb66867354ca243b6c45e79dae86ba561",
-                "reference": "96f9074eb66867354ca243b6c45e79dae86ba561",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/45347bf27522a050dbaca994bdbca60cb81d773e",
+                "reference": "45347bf27522a050dbaca994bdbca60cb81d773e",
                 "shasum": ""
             },
             "require-dev": {
@@ -9293,7 +9293,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-08-26T13:11:18+00:00"
+            "time": "2020-09-04T08:43:01+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
