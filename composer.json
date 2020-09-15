@@ -49,7 +49,7 @@
 		"remotelyliving/doorkeeper": "^1.4",
 		"doctrine/migrations": "~1.8",
 		"nikic/php-parser": "~4.0",
-		"vlucas/phpdotenv": "~5.1.0"
+		"vlucas/phpdotenv": "~5.2.0"
 	},
 	"repositories": [
 		{
