@@ -19,13 +19,12 @@ class GreetingGenerator {
 		$this->translator = $translator;
 	}
 
-	private static function getSpacedTitle( string $title ): string {
-		$spacedTitle = $title === '' ? '' : $title . ' ';
-		return $spacedTitle;
+	private static function getSpacedTitle( ?string $title ): string {
+		return $title ? '' : $title . ' ';
 	}
 
-	public function createFormalGreeting( string $lastName, string $salutation, string $title ): string {
-		if ( $lastName === '' ) {
+	public function createFormalGreeting( ?string $lastName, ?string $salutation, ?string $title ): string {
+		if ( !$lastName ) {
 			return $this->translator->trans( 'mail_introduction_generic' );
 		}
 
@@ -43,9 +42,9 @@ class GreetingGenerator {
 		}
 	}
 
-	public function createInformalGreeting( string $salutation, string $firstName, string $lastName ): string {
-		if ( ( $salutation !== self::GREETING_FAMILY && $firstName === '' ) ||
-			( $salutation === self::GREETING_FAMILY && $lastName === '' ) ) {
+	public function createInformalGreeting( ?string $salutation, ?string $firstName, ?string $lastName ): string {
+		if ( ( $salutation !== self::GREETING_FAMILY && !$firstName ) ||
+			( $salutation === self::GREETING_FAMILY && !$lastName ) ) {
 			return $this->translator->trans( 'mail_introduction_generic' );
 		}
 
@@ -61,8 +60,8 @@ class GreetingGenerator {
 		}
 	}
 
-	public function createInformalLastnameGreeting( string $salutation, string $lastName, string $title ): string {
-		if ( $lastName === '' ) {
+	public function createInformalLastnameGreeting( ?string $salutation, ?string $lastName, ?string $title ): string {
+		if ( !$lastName ) {
 			return $this->translator->trans( 'mail_introduction_generic' );
 		}
 

@@ -88,8 +88,6 @@ use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\StreamLogWriter;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;

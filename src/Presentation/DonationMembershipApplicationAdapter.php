@@ -6,6 +6,10 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\AnonymousDonor;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\CompanyDonor;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\PersonDonor;
+use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 
@@ -18,24 +22,21 @@ class DonationMembershipApplicationAdapter {
 		);
 	}
 
-	private function getMembershipFormPersonValues( ? Donor $donor ): array {
-		if ( $donor === null ) {
+	private function getMembershipFormPersonValues( Donor $donor ): array {
+		if ( $donor instanceof AnonymousDonor ) {
 			return [];
 		}
 
-		return [
-			'addressType' => $donor->getName()->getPersonType(),
-			'salutation' => $donor->getName()->isPrivatePerson() ? $donor->getName()->getSalutation() : '',
-			'title' => $donor->getName()->getTitle(),
-			'firstName' => $donor->getName()->getFirstName(),
-			'lastName' => $donor->getName()->getLastName(),
-			'companyName' => $donor->getName()->getCompanyName(),
+		return array_merge(
+			$donor->getName()->toArray(),
+			[
+			'addressType' => AddressType::donorToPresentationAddressType( $donor ),
 			'street' => $donor->getPhysicalAddress()->getStreetAddress(),
 			'postcode' => $donor->getPhysicalAddress()->getPostalCode(),
 			'city' => $donor->getPhysicalAddress()->getCity(),
 			'country' => $donor->getPhysicalAddress()->getCountryCode(),
 			'email' => $donor->getEmailAddress(),
-		];
+		] );
 	}
 
 	private function getMembershipFormBankDataValues( PaymentMethod $paymentMethod ): array {
@@ -55,7 +56,7 @@ class DonationMembershipApplicationAdapter {
 
 	public function getInitialValidationState( Donation $donation ): array {
 		$validationState = [];
-		if ( $donation->getDonor() !== null ) {
+		if ( $donation->getDonor() instanceof PersonDonor || $donation->getDonor() instanceof CompanyDonor ) {
 			$validationState['address'] = true;
 		}
 		if ( $donation->getPaymentMethodId() !== PaymentMethod::DIRECT_DEBIT ) {
@@ -68,4 +69,5 @@ class DonationMembershipApplicationAdapter {
 		}
 		return $validationState;
 	}
+
 }

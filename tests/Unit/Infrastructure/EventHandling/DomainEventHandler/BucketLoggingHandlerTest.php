@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling\Doma
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
+use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
@@ -47,7 +48,7 @@ class BucketLoggingHandlerTest extends TestCase {
 		$eventDispatcher = $this->createMock( EventDispatcher::class );
 		$handler = new BucketLoggingHandler( $logger, [ $this, 'getBuckets' ], $eventDispatcher );
 
-		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, null ) );
+		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, ValidDonation::newDonor() ) );
 
 		$this->assertSame( 1, $logger->getEventCount() );
 		$this->assertInstanceOf( DonationCreated::class, $logger->getFirstEvent() );

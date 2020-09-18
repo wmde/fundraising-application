@@ -9,13 +9,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController
@@ -228,7 +227,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	private function newPrivateDonorData(): array {
 		return [
-			'addressType' => DonorName::PERSON_PRIVATE,
+			'addressType' => AddressType::LEGACY_PERSON,
 			'city' => 'Mönchengladbach',
 			'country' => 'DE',
 			'email' => 'test@test.de',
@@ -242,7 +241,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	private function newCompanyDonorData(): array {
 		return [
-			'addressType' => DonorName::PERSON_COMPANY,
+			'addressType' => AddressType::LEGACY_COMPANY,
 			'city' => 'Mönchengladbach',
 			'companyName' => 'Wikimedia Deutschland Money Makers GmbH',
 			'country' => 'DE',

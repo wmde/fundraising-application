@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\PersonDonor;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCard;
@@ -22,11 +23,18 @@ class CreditCardPaymentUrlGenerator {
 	}
 
 	public function buildUrl( AddDonationResponse $response ): string {
-		$personalInfo = $response->getDonation()->getDonor();
+		$donor = $response->getDonation()->getDonor();
+		$firstName = '';
+		$lastName = '';
+		if ( $donor instanceof PersonDonor ) {
+			$data = $donor->getName()->toArray();
+			$firstName = $data['firstName'];
+			$lastName = $data['lastName'];
+		}
 
 		return $this->urlGenerator->generateUrl(
-			$personalInfo ? $personalInfo->getName()->getFirstName() : '',
-			$personalInfo ? $personalInfo->getName()->getLastName() : '',
+			$firstName,
+			$lastName,
 			$this->translator->trans(
 				'credit_card_item_name_donation',
 				[

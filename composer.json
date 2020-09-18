@@ -17,7 +17,7 @@
 		"wmde/email-address": "~1.0",
 		"wmde/euro": "~1.0",
 		"wmde/clock": "~1.0",
-		"wmde/fundraising-donations": "~2.0.0",
+		"wmde/fundraising-donations": "~3.0.0",
 		"wmde/fundraising-memberships": "~2.0.0",
 		"wmde/fundraising-payments": "~1.0.1",
 		"wmde/fundraising-subscriptions": "~1.0.0",

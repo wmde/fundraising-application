@@ -94,6 +94,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	private function assertDonationDataInResponse( Donation $donation, string $responseContent ): void {
 		$donor = $donation->getDonor();
 		$personName = $donor->getName();
+		$personNameValues = $personName->toArray();
 		$physicalAddress = $donor->getPhysicalAddress();
 		/** @var DirectDebitPayment $paymentMethod */
 		$paymentMethod = $donation->getPaymentMethod();
@@ -106,10 +107,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( 'donation.optsIntoNewsletter: ' . $donation->getOptsIntoNewsletter(), $responseContent );
 		$this->assertStringContainsString( 'donation.updateToken: ' . self::CORRECT_ACCESS_TOKEN, $responseContent );
 
-		$this->assertStringContainsString( 'address.salutation: ' . $personName->getSalutation(), $responseContent );
+		$this->assertStringContainsString( 'address.salutation: ' . $personNameValues['salutation'], $responseContent );
 		$this->assertStringContainsString( 'address.fullName: ' . $personName->getFullName(), $responseContent );
-		$this->assertStringContainsString( 'address.firstName: ' . $personName->getFirstName(), $responseContent );
-		$this->assertStringContainsString( 'address.lastName: ' . $personName->getLastName(), $responseContent );
+		$this->assertStringContainsString( 'address.firstName: ' . $personNameValues['firstName'], $responseContent );
+		$this->assertStringContainsString( 'address.lastName: ' . $personNameValues['lastName'], $responseContent );
 		$this->assertStringContainsString( 'address.streetAddress: ' . $physicalAddress->getStreetAddress(), $responseContent );
 		$this->assertStringContainsString( 'address.postalCode: ' . $physicalAddress->getPostalCode(), $responseContent );
 		$this->assertStringContainsString( 'address.city: ' . $physicalAddress->getCity(), $responseContent );
@@ -138,8 +139,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	private function assertDonationIsNotShown( Donation $donation, string $responseContent ): void {
-		$this->assertStringNotContainsString( $donation->getDonor()->getName()->getFirstName(), $responseContent );
-		$this->assertStringNotContainsString( $donation->getDonor()->getName()->getLastName(), $responseContent );
+		$this->assertStringNotContainsString( $donation->getDonor()->getPhysicalAddress()->getStreetAddress(), $responseContent );
 
 		$this->assertStringContainsString( self::ACCESS_DENIED_TEXT, $responseContent );
 	}

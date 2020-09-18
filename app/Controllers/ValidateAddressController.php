@@ -7,8 +7,8 @@ namespace WMDE\Fundraising\Frontend\App\Controllers;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\Validators\AddressValidator;
 
@@ -19,24 +19,22 @@ class ValidateAddressController {
 
 	private const VIOLATION_UNKNOWN_ADDRESS_TYPE = 'address_form_error';
 
-	/**
-	 * @var AddressValidator
-	 */
-	private $addressValidator;
+	private AddressValidator $addressValidator;
 
 	public function validate( Request $request, FunFunFactory $ffFactory ): Response {
 		$this->addressValidator = $ffFactory->newAddressValidator();
 
-		if ( $this->getAddressType( $request ) === DonorName::PERSON_PRIVATE ) {
+		$addressType = $this->getAddressType( $request );
+		if ( $addressType === AddressType::PERSON ) {
 			$nameViolations = $this->getPersonViolations( $request );
-		} elseif ( $this->getAddressType( $request ) === DonorName::PERSON_COMPANY ) {
+		} elseif ( $addressType === AddressType::COMPANY ) {
 			$nameViolations = $this->getCompanyViolations( $request );
-		} elseif ( $this->getAddressType( $request ) === DonorName::PERSON_ANONYMOUS ) {
+		} elseif ( $addressType === AddressType::ANONYMOUS ) {
 			return $this->newSuccessResponse();
 		} else {
 			return $this->newErrorResponse(
 				new ConstraintViolation(
-					$this->getAddressType( $request ),
+					$addressType,
 					self::VIOLATION_UNKNOWN_ADDRESS_TYPE,
 					'addressType'
 				)
@@ -80,7 +78,12 @@ class ValidateAddressController {
 	}
 
 	private function getAddressType( Request $request ): string {
-		return $request->get( 'addressType', '' );
+		$addressType = $request->get( 'addressType', '' );
+		try {
+			return AddressType::presentationAddressTypeToDomainAddressType( $addressType );
+		} catch ( \UnexpectedValueException $ex ) {
+			return $addressType;
+		}
 	}
 
 	private function newSuccessResponse(): Response {

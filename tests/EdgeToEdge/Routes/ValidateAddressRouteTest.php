@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
@@ -47,7 +48,7 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		$this->assertJsonSuccessResponse( $expectedResponse, $response );
 	}
 
-	public function testGivenAnonymousAddress_validationReturnsErrorMessage(): void {
+	public function testGivenAnonymousAddress_validationReturnsSuccess(): void {
 		$client = $this->createClient();
 		$client->followRedirects( false );
 
@@ -59,18 +60,12 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 
-		$expectedResponse = [
-			'status' => 'ERR',
-			'messages' => [
-				'addressType' => 'address_form_error'
-			]
-		];
-		$this->assertJsonSuccessResponse( $expectedResponse, $response );
+		$this->assertJsonSuccessResponse( [ 'status' => 'OK' ], $response );
 	}
 
 	private function newPersonFormInput(): array {
 		return [
-			'addressType' => 'person',
+			'addressType' => AddressType::LEGACY_PERSON,
 			'salutation' => 'Frau',
 			'title' => 'Prof. Dr.',
 			'company' => '',
@@ -86,7 +81,7 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 
 	private function newCompanyWithMissingNameFormInput(): array {
 		return [
-			'addressType' => 'firma',
+			'addressType' => AddressType::LEGACY_COMPANY,
 			'salutation' => 'Frau',
 			'title' => 'Prof. Dr.',
 			'company' => '',

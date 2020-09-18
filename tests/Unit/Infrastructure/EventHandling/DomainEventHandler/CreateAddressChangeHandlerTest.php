@@ -11,9 +11,8 @@ use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
-use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonorAddress;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\AnonymousDonor;
+use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\CreateAddressChangeHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\EntityManagerSpy;
@@ -49,7 +48,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 		$entityManager = new EntityManagerSpy();
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
-		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, null ) );
+		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, new AnonymousDonor() ) );
 
 		$this->assertNull( $entityManager->getEntity() );
 	}
@@ -67,11 +66,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 			} ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
-		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, new Donor(
-			DonorName::newPrivatePersonName(),
-			new DonorAddress(),
-			'nobody@nowhere.com'
-		) ) );
+		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, ValidDonation::newDonor() ) );
 	}
 
 	public function testCreateDonationForCompany_createsAddressChange(): void {
@@ -87,11 +82,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 			} ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
-		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, new Donor(
-			DonorName::newCompanyName(),
-			new DonorAddress(),
-			'nobody@nowhere.com'
-		) ) );
+		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, ValidDonation::newCompanyDonor() ) );
 	}
 
 	public function testCreateMembershipForPrivatePerson_createsAddressChange(): void {
@@ -150,11 +141,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 			->method( 'persist' );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
-		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, new Donor(
-			DonorName::newPrivatePersonName(),
-			new DonorAddress(),
-			'nobody@nowhere.com'
-		) ) );
+		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, ValidDonation::newDonor() ) );
 	}
 
 	/**
