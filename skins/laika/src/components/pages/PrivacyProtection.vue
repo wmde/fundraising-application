@@ -99,6 +99,19 @@ export default Vue.extend( {
 			}
 		}
 	}
+	.privacy_protection{
+		h3 {
+			font-size: 1.4em;
+		}
+		h4 {
+			font-size: 1.2em;
+		}
+		ul {
+			list-style-type: disc;
+			padding-left: 20px;
+			margin-bottom: 12px;
+		}
+	}
 	.static-content {
 		& > ol {
 			padding-left: 10px;
