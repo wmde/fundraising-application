@@ -3,12 +3,11 @@
 		<AutofillHandler @autofill="onAutofill" >
 			<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
 		</AutofillHandler>
-		<address-type
+		<provisional-address-type
 				v-on:address-type="setAddressType( $event )"
 				:disabledAddressTypes="disabledAddressTypes"
 				:is-direct-debit="isDirectDebit"
-				:initial-address-type="addressTypeName">
-		</address-type>
+				:initial-address-type="addressTypeName"/>
 		<span
 				v-if="addressTypeIsInvalid"
 				class="help is-danger">{{ $t( 'donation_form_section_address_error' ) }}
@@ -17,15 +16,15 @@
 				class="has-margin-top-18"
 				v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}
 		</div>
-		<AutofillHandler @autofill="onAutofill" >
+		<AutofillHandler @autofill="onAutofill">
 			<name
-					v-if="addressTypeIsNotAnon"
+					v-if="addressTypeIsNotAnon && addressTypeSelected"
 					:show-error="fieldErrors"
 					:form-data="formData"
 					:address-type="addressType"
 					v-on:field-changed="onFieldChange"/>
 			<postal
-					v-if="addressTypeIsNotAnon"
+					v-if="addressTypeIsNeitherAnonNorEmail && addressTypeSelected"
 					:show-error="fieldErrors"
 					:form-data="formData"
 					:countries="countries"
@@ -34,14 +33,14 @@
 			<receipt-opt-out
 					:message="$t( 'receipt_needed_donation_page' )"
 					:initial-receipt-needed="receiptNeeded"
-					v-if="addressTypeIsNotAnon"
+					v-if="addressTypeIsNeitherAnonNorEmail && addressTypeSelected"
 					v-on:opted-out="setReceiptOptedOut( $event )"/>
 			<email
-					v-if="addressTypeIsNotAnon"
+					v-if="addressTypeIsNotAnon && addressTypeSelected"
 					:show-error="fieldErrors.email"
 					:form-data="formData"
 					v-on:field-changed="onFieldChange"/>
-			<newsletter-opt-in v-if="addressTypeIsNotAnon"></newsletter-opt-in>
+			<newsletter-opt-in v-if="addressTypeIsNotAnon && addressTypeSelected"></newsletter-opt-in>
 		</AutofillHandler>
 	</div>
 </template>
@@ -49,7 +48,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import AutofillHandler from '@/components/shared/AutofillHandler.vue';
-import AddressType from '@/components/pages/donation_form/AddressType.vue';
+import ProvisionalAddressType from '@/components/pages/donation_form/ProvisionalAddressType.vue';
+import AddressSwitchDonorType from '@/components/pages/donation_form/ProvisionalAddressType.vue';
 import Name from '@/components/shared/Name.vue';
 import Postal from '@/components/shared/Postal.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
@@ -81,7 +81,8 @@ export default Vue.extend( {
 	components: {
 		Name,
 		Postal,
-		AddressType,
+		ProvisionalAddressType,
+		AddressSwitchDonorType,
 		ReceiptOptOut,
 		Email,
 		NewsletterOptIn,
@@ -182,6 +183,7 @@ export default Vue.extend( {
 		...mapGetters( NS_ADDRESS, [
 			'addressType',
 			'addressTypeIsNotAnon',
+			'addressTypeIsNeitherAnonNorEmail',
 			'addressTypeIsInvalid',
 		] ),
 		addressTypeName(): string {
@@ -189,6 +191,9 @@ export default Vue.extend( {
 		},
 		receiptNeeded(): Boolean {
 			return !this.$store.state.address.receiptOptOut;
+		},
+		addressTypeSelected(): Boolean {
+			return this.$store.state.AddressType !== AddressTypeModel.UNSET;
 		},
 	},
 	mounted() {

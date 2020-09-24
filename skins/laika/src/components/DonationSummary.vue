@@ -34,6 +34,17 @@ class CompanyDonorRenderer {
 		return address.fullName && address.streetAddress && address.postalCode && address.city;
 	}
 }
+class EmailDonorRenderer {
+	static getPersonTypeMessageKey() {
+		return 'donation_confirmation_topbox_donor_type_anonymous';
+	}
+	static renderAddress( address ) {
+		return address.salutation + ', ' + address.fullName;
+	}
+	static canRender() {
+		return address.salutation && address.fullName;
+	}
+}
 class AnonymousDonorRenderer {
 	static getPersonTypeMessageKey() {
 		return 'donation_confirmation_topbox_donor_type_anonymous';
@@ -49,6 +60,7 @@ class AnonymousDonorRenderer {
 const addressTypeRenderers = {
 	[ addressTypeName( AddressTypeModel.PERSON ) ]: PrivateDonorRenderer,
 	[ addressTypeName( AddressTypeModel.COMPANY ) ]: CompanyDonorRenderer,
+	[ addressTypeName( AddressTypeModel.EMAIL ) ]: EmailDonorRenderer,
 	[ addressTypeName( AddressTypeModel.ANON ) ]: AnonymousDonorRenderer,
 	[ addressTypeName( AddressTypeModel.UNSET ) ]: AnonymousDonorRenderer,
 };
