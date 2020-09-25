@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "95e4d48af93f19425352911c6153edd5",
+    "content-hash": "f3ee6b0a1ab72fe494b2e56d3613ab97",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -527,32 +527,33 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "2.10.2",
+            "version": "2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "aab745e7b6b2de3b47019da81e7225e14dcfdac8"
+                "reference": "0d4e1a8b29dd987704842f0465aded378f441dca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/aab745e7b6b2de3b47019da81e7225e14dcfdac8",
-                "reference": "aab745e7b6b2de3b47019da81e7225e14dcfdac8",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/0d4e1a8b29dd987704842f0465aded378f441dca",
+                "reference": "0d4e1a8b29dd987704842f0465aded378f441dca",
                 "shasum": ""
             },
             "require": {
                 "doctrine/cache": "^1.0",
                 "doctrine/event-manager": "^1.0",
                 "ext-pdo": "*",
-                "php": "^7.2"
+                "php": "^7.3"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^6.0",
+                "doctrine/coding-standard": "^8.1",
                 "jetbrains/phpstorm-stubs": "^2019.1",
                 "nikic/php-parser": "^4.4",
-                "phpstan/phpstan": "^0.12",
-                "phpunit/phpunit": "^8.4.1",
+                "phpstan/phpstan": "^0.12.40",
+                "phpunit/phpunit": "^9.3",
+                "psalm/plugin-phpunit": "^0.10.0",
                 "symfony/console": "^2.0.5|^3.0|^4.0|^5.0",
-                "vimeo/psalm": "^3.11"
+                "vimeo/psalm": "^3.14.2"
             },
             "suggest": {
                 "symfony/console": "For helpful console commands such as SQL execution and import of files."
@@ -563,8 +564,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.10.x-dev",
-                    "dev-develop": "3.0.x-dev"
+                    "dev-master": "4.0.x-dev"
                 }
             },
             "autoload": {
@@ -631,7 +631,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-04-20T17:19:26+00:00"
+            "time": "2020-09-20T23:24:53+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -5973,16 +5973,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v2.0.3",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "9aed850fb5f9747dda7beda08e1c74d8e46c0894"
+                "reference": "c2ff275858e7d7d6f58911511f151f9b8f939cc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/9aed850fb5f9747dda7beda08e1c74d8e46c0894",
-                "reference": "9aed850fb5f9747dda7beda08e1c74d8e46c0894",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/c2ff275858e7d7d6f58911511f151f9b8f939cc0",
+                "reference": "c2ff275858e7d7d6f58911511f151f9b8f939cc0",
                 "shasum": ""
             },
             "require": {
@@ -6004,7 +6004,7 @@
                 "ockcyp/covers-validator": "^1.2",
                 "phpmd/phpmd": "~2.6",
                 "phpstan/phpstan": "^0.12",
-                "phpunit/phpunit": "~9.2",
+                "phpunit/phpunit": "~9.2.6",
                 "wmde/fundraising-phpcs": "~1.0",
                 "wmde/psr-log-test-doubles": "~2.1"
             },
@@ -6025,7 +6025,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2020-07-02T12:33:01+00:00"
+            "time": "2020-09-23T07:36:21+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
