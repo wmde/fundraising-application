@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikEvents;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
@@ -60,7 +61,7 @@ class DonationConfirmationHtmlPresenter {
 			],
 			'countries' => $this->countries,
 			'addressValidationPatterns' => $this->validation,
-			'addressType' => $this->donorDataFormatter->getAddressType( $donation ),
+			'addressType' => AddressType::donorToPresentationAddressType( $donation->getDonor() ),
 			'address' => $this->donorDataFormatter->getAddressArguments( $donation ),
 			'bankData' => $this->donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),
 			'urls' => array_merge(

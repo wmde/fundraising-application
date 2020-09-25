@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\Address\NoAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\MembershipContext\Domain\Event\MembershipCreatedEvent;
 
@@ -22,15 +23,19 @@ class CreateAddressChangeHandler {
 	}
 
 	public function onDonationCreated( DonationCreatedEvent $event ): void {
-		if ( $event->getDonor() === null ) {
+		// We don't need address change records for donations without address
+		// In case of email-only donations, the data warehousing software that receives the exports
+		// will merge them with existing donations bearing the same name and email address,
+		// assigning them the address change token of the existing donation with address
+		if ( $event->getDonor()->getPhysicalAddress() instanceof NoAddress ) {
 			return;
 		}
 		$addressChangeBuilder = AddressChangeBuilder::create();
 		$addressChangeBuilder->forDonation( $event->getDonationId() );
 
-		if ( $event->getDonor()->getName()->isPrivatePerson() ) {
+		if ( $event->getDonor()->isPrivatePerson() ) {
 			$addressChangeBuilder->forPerson();
-		} elseif ( $event->getDonor()->getName()->isCompany() ) {
+		} elseif ( $event->getDonor()->isCompany() ) {
 			$addressChangeBuilder->forCompany();
 		} else {
 			// Preparation for https://phabricator.wikimedia.org/T220367

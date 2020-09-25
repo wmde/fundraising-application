@@ -10,8 +10,7 @@ use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationPayment;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonorAddress;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonorName;
+use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankTransferPayment;
@@ -40,7 +39,6 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 				'title' => 'Dr.',
 				'firstName' => 'Max',
 				'lastName' => 'Mustermann',
-				'companyName' => '',
 				'street' => 'Demostr. 42',
 				'postcode' => '08771',
 				'city' => 'Bärlin',
@@ -68,10 +66,6 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 		$this->assertEquals(
 			[
 				'addressType' => 'firma',
-				'salutation' => '',
-				'title' => '',
-				'firstName' => '',
-				'lastName' => '',
 				'companyName' => 'ACME Inc',
 				'street' => 'Demostr. 42',
 				'postcode' => '08771',
@@ -104,7 +98,6 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 				'title' => 'Prof. Dr.',
 				'firstName' => 'Minna',
 				'lastName' => 'Mustermann',
-				'companyName' => '',
 				'street' => 'Demostr. 42',
 				'postcode' => '3389',
 				'city' => 'Wien',
@@ -131,7 +124,6 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 				'title' => '',
 				'firstName' => '',
 				'lastName' => '',
-				'companyName' => '',
 				'street' => '',
 				'postcode' => '',
 				'city' => '',
@@ -144,33 +136,18 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 
 	private function getPrivateDonor( string $salutation, string $title, string $firstName, string $lastName,
 		string $street, string $postCode, string $city, string $countryCode, string $email
-	): Donor {
-		$donorName = DonorName::newPrivatePersonName();
-		$donorName->setSalutation( $salutation );
-		$donorName->setTitle( $title );
-		$donorName->setFirstName( $firstName );
-		$donorName->setLastName( $lastName );
-
-		$donorAddress = new DonorAddress();
-		$donorAddress->setStreetAddress( $street );
-		$donorAddress->setPostalCode( $postCode );
-		$donorAddress->setCity( $city );
-		$donorAddress->setCountryCode( $countryCode );
-
-		return new Donor( $donorName, $donorAddress, $email );
+	): Donor\PersonDonor {
+		return new Donor\PersonDonor(
+			new Donor\Name\PersonName( $firstName, $lastName, $salutation, $title ),
+			new Donor\Address\PostalAddress( $street, $postCode, $city, $countryCode ),
+		$email );
 	}
 
-	private function getCompanyDonor( string $companyname, string $street, string $postCode, string $city, string $countryCode, string $email ): Donor {
-		$donorName = DonorName::newCompanyName();
-		$donorName->setCompanyName( $companyname );
-
-		$donorAddress = new DonorAddress();
-		$donorAddress->setStreetAddress( $street );
-		$donorAddress->setPostalCode( $postCode );
-		$donorAddress->setCity( $city );
-		$donorAddress->setCountryCode( $countryCode );
-
-		return new Donor( $donorName, $donorAddress, $email );
+	private function getCompanyDonor( string $companyname, string $street, string $postCode, string $city, string $countryCode, string $email ): Donor\CompanyDonor {
+		return new Donor\CompanyDonor(
+			new Donor\Name\CompanyName( $companyname ),
+			new Donor\Address\PostalAddress( $street, $postCode, $city, $countryCode ),
+			$email );
 	}
 
 	private function getDirectDebitPayment(): DirectDebitPayment {
@@ -189,7 +166,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 
 	public function testDefaultValidationStateIsEmpty(): void {
 		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getBankTransferPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, null, $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, new Donor\AnonymousDonor(), $payment, false, new DonationTrackingInfo, null );
 		$adapter = new DonationMembershipApplicationAdapter();
 
 		$this->assertEquals( [], $adapter->getInitialValidationState( $donation ) );
@@ -213,11 +190,11 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 
 	public function testDonationWithDirectDebitAndIbanHasValidBankData(): void {
 		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getDirectDebitPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, null, $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, ValidDonation::newDonor(), $payment, false, new DonationTrackingInfo, null );
 		$adapter = new DonationMembershipApplicationAdapter();
 
 		$this->assertEquals(
-			[ 'bankData' => true ],
+			[ 'bankData' => true, 'address' => true ],
 			$adapter->getInitialValidationState( $donation )
 		);
 	}
@@ -227,9 +204,9 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 		$bankData->setIban( new Iban( '' ) );
 		$paymentMethod = new DirectDebitPayment( $bankData );
 		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $paymentMethod );
-		$donation = new Donation( null, Donation::STATUS_NEW, null, $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, ValidDonation::newDonor(), $payment, false, new DonationTrackingInfo, null );
 		$adapter = new DonationMembershipApplicationAdapter();
 
-		$this->assertEquals( [], $adapter->getInitialValidationState( $donation ) );
+		$this->assertEquals( [ 'address' => true ], $adapter->getInitialValidationState( $donation ) );
 	}
 }

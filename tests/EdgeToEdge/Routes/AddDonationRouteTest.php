@@ -156,7 +156,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'person', $data['adresstyp'] );
 		$this->assertSame( 'Frau', $data['anrede'] );
 		$this->assertSame( 'Prof. Dr.', $data['titel'] );
-		$this->assertSame( '', $data['firma'] );
 		$this->assertSame( 'Karla', $data['vorname'] );
 		$this->assertSame( 'Kennichnich', $data['nachname'] );
 		$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getDonorFullName() );
@@ -240,7 +239,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 'person', $data['adresstyp'] );
 			$this->assertSame( 'Frau', $data['anrede'] );
 			$this->assertSame( 'Prof. Dr.', $data['titel'] );
-			$this->assertSame( '', $data['firma'] );
 			$this->assertSame( 'Karla', $data['vorname'] );
 			$this->assertSame( 'Kennichnich', $data['nachname'] );
 			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getDonorFullName() );

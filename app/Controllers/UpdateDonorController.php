@@ -9,10 +9,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorRequest;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorResponse;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 
 /**
  * @license GPL-2.0-or-later
@@ -77,6 +79,9 @@ class UpdateDonorController {
 
 	private function newRequestModel( Request $request ): UpdateDonorRequest {
 		return UpdateDonorRequest::newInstance()
+			->withType(
+				$this->getAddressType( $request )
+			)
 			->withDonationId( intval( $request->get( 'donation_id', '' ) ) )
 			->withCity( $request->get( 'city', '' ) )
 			->withCompanyName( $request->get( 'companyName', '' ) )
@@ -87,7 +92,25 @@ class UpdateDonorController {
 			->withPostalCode( $request->get( 'postcode', '' ) )
 			->withSalutation( $request->get( 'salutation', '' ) )
 			->withStreetAddress( $request->get( 'street', '' ) )
-			->withTitle( $request->get( 'title', '' ) )
-			->withType( $request->get( 'addressType', '' ) );
+			->withTitle( $request->get( 'title', '' ) );
+	}
+
+	/**
+	 * Get UpdateDonorRequest donor type from HTTP request field.
+	 *
+	 * Assumes "Anonymous" when field is not set or invalid.
+	 *
+	 * @param Request $request
+	 *
+	 * @return DonorType
+	 */
+	private function getAddressType( Request $request ): DonorType {
+		try {
+			return DonorType::make(
+				AddressType::presentationAddressTypeToDomainAddressType( $request->get( 'addressType', '' ) )
+			);
+		} catch ( \UnexpectedValueException $e ) {
+			return DonorType::ANONYMOUS();
+		}
 	}
 }

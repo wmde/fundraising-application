@@ -10,10 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\FallbackRequestValueReader;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
@@ -122,7 +124,7 @@ class AddDonationController {
 		$donationRequest->setPaymentType( $request->get( 'paymentType', $this->legacyRequestValueReader->getPaymentType() ) );
 		$donationRequest->setInterval( intval( $request->get( 'interval', $this->legacyRequestValueReader->getInterval() ) ) );
 
-		$donationRequest->setDonorType( $request->get( 'addressType', '' ) );
+		$donationRequest->setDonorType( $this->getSafeDonorType( $request ) );
 		$donationRequest->setDonorSalutation( $request->get( 'salutation', '' ) );
 		$donationRequest->setDonorTitle( $request->get( 'title', '' ) );
 		$donationRequest->setDonorCompany( $request->get( 'companyName', '' ) );
@@ -259,5 +261,24 @@ class AddDonationController {
 			$fields,
 			$formattedConstraintViolations
 		);
+	}
+
+	/**
+	 * Get AddDonationRequest donor type from HTTP request field.
+	 *
+	 * Assumes "Anonymous" when field is not set or invalid.
+	 *
+	 * @param Request $request
+	 *
+	 * @return DonorType
+	 */
+	private function getSafeDonorType( Request $request ): DonorType {
+		try {
+			return DonorType::make(
+				AddressType::presentationAddressTypeToDomainAddressType( $request->get( 'addressType', '' ) )
+			);
+		} catch ( \UnexpectedValueException $e ) {
+			return DonorType::ANONYMOUS();
+		}
 	}
 }
