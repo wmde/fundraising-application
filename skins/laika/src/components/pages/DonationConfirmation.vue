@@ -17,6 +17,7 @@
 							type="is-primary is-main">
 					{{ $t('donation_confirmation_address_update_button') }}
 				</b-button>
+				<address-usage-toggle v-if="showAddressUsageToggle"></address-usage-toggle>
 				<b-modal :active.sync="isAddressModalOpen" scroll="keep" class="address-modal" has-modal-card>
 					<address-modal
 							:countries="countries"
@@ -74,6 +75,7 @@ import DonationSummary from '@/components/DonationSummary.vue';
 import MembershipInfo from '@/components/pages/donation_confirmation/MembershipInfo.vue';
 import PaymentNotice from '@/components/pages/donation_confirmation/PaymentNotice.vue';
 import SummaryLinks from '@/components/pages/donation_confirmation/SummaryLinks.vue';
+import AddressUsageToggle from '@/components/pages/donation_confirmation/AddressUsageToggle.vue';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
 import AddressModal from '@/components/pages/donation_confirmation/AddressModal.vue';
 import { Country } from '@/view_models/Country';
@@ -89,6 +91,7 @@ export default Vue.extend( {
 		MembershipInfo,
 		PaymentNotice,
 		SummaryLinks,
+		AddressUsageToggle,
 		AddressModal,
 	},
 	data: function () {
@@ -130,6 +133,9 @@ export default Vue.extend( {
 		showAddressChangeButton: function () {
 			return this.$props.addressType === addressTypeName( AddressTypeModel.ANON ) &&
 					!this.$data.addressChangeHasErrored && !this.$data.addressChangeHasSucceeded;
+		},
+		showAddressUsageToggle: function () {
+			return this.$props.addressType === addressTypeName( AddressTypeModel.ANON );
 		},
 	},
 } );

@@ -1,0 +1,50 @@
+$address-usage-text-color: #727373;
+
+.address-usage-toggle {
+	font-size: 11px;
+	&-link {
+		color: $address-usage-text-color;
+		position: relative;
+		padding-left: 24px;
+		display: block;
+		padding-top: 5px;
+
+		&:hover {
+			color: $fun-color-primary;
+		}
+
+		&::after {
+			border: 2px solid $fun-color-primary;
+			border-radius: 2px;
+			border-right: 0;
+			border-top: 0;
+			content: ' ';
+			display: block;
+			margin-top: -0.6em;
+			pointer-events: none;
+			position: absolute;
+			top: 50%;
+			left: 5px;
+			transform: rotate(-45deg);
+			transform-origin: center;
+			height: 1em;
+			width: 1em;
+
+			transition: transform 100ms, margin-top 100ms;
+		}
+	}
+	&-content {
+		color: #727373;
+		display: none;
+	}
+
+	&.open {
+		.address-usage-toggle-link::after {
+			transform: rotate(135deg);
+			margin-top: -0.3em;
+		}
+		.address-usage-toggle-content {
+			display: block;
+		}
+	}
+}
