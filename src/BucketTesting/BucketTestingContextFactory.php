@@ -2,8 +2,8 @@
 
 namespace WMDE\Fundraising\Frontend\BucketTesting;
 
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 
 class BucketTestingContextFactory {
 	public const ENTITY_NAMESPACE = 'WMDE\Fundraising\Frontend\BucketTesting\Domain\Model';
