@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3ee6b0a1ab72fe494b2e56d3613ab97",
+    "content-hash": "1095e37ccf5ae4457e6dab46cf91ef73",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -410,27 +410,20 @@
         },
         {
             "name": "doctrine/common",
-            "version": "2.13.3",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "f3812c026e557892c34ef37f6ab808a6b567da7f"
+                "reference": "a3c6479858989e242a2465972b4f7a8642baf0d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/f3812c026e557892c34ef37f6ab808a6b567da7f",
-                "reference": "f3812c026e557892c34ef37f6ab808a6b567da7f",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/a3c6479858989e242a2465972b4f7a8642baf0d4",
+                "reference": "a3c6479858989e242a2465972b4f7a8642baf0d4",
                 "shasum": ""
             },
             "require": {
-                "doctrine/annotations": "^1.0",
-                "doctrine/cache": "^1.0",
-                "doctrine/collections": "^1.0",
-                "doctrine/event-manager": "^1.0",
-                "doctrine/inflector": "^1.0",
-                "doctrine/lexer": "^1.0",
-                "doctrine/persistence": "^1.3.3",
-                "doctrine/reflection": "^1.0",
+                "doctrine/persistence": "^2.0",
                 "php": "^7.1 || ^8.0"
             },
             "require-dev": {
@@ -444,7 +437,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.11.x-dev"
+                    "dev-master": "3.0.x-dev"
                 }
             },
             "autoload": {
@@ -489,7 +482,7 @@
                 "doctrine",
                 "php"
             ],
-            "time": "2020-06-05T16:46:05+00:00"
+            "time": "2020-06-05T16:59:53+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -1021,16 +1014,16 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "1.3.8",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "7a6eac9fb6f61bba91328f15aa7547f4806ca288"
+                "reference": "1dee036f22cd5dc0bc12132f1d1c38415907be55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/7a6eac9fb6f61bba91328f15aa7547f4806ca288",
-                "reference": "7a6eac9fb6f61bba91328f15aa7547f4806ca288",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/1dee036f22cd5dc0bc12132f1d1c38415907be55",
+                "reference": "1dee036f22cd5dc0bc12132f1d1c38415907be55",
                 "shasum": ""
             },
             "require": {
@@ -1039,7 +1032,7 @@
                 "doctrine/collections": "^1.0",
                 "doctrine/event-manager": "^1.0",
                 "doctrine/reflection": "^1.2",
-                "php": "^7.1 || ^8.0"
+                "php": "^7.1"
             },
             "conflict": {
                 "doctrine/common": "<2.10@dev"
@@ -1047,13 +1040,13 @@
             "require-dev": {
                 "doctrine/coding-standard": "^6.0",
                 "phpstan/phpstan": "^0.11",
-                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
+                "phpunit/phpunit": "^7.0",
                 "vimeo/psalm": "^3.11"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3.x-dev"
+                    "dev-master": "2.x-dev"
                 }
             },
             "autoload": {
@@ -1101,7 +1094,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2020-06-20T12:56:16+00:00"
+            "time": "2020-05-12T19:32:44+00:00"
         },
         {
             "name": "doctrine/reflection",
@@ -1291,33 +1284,42 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.42",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "b6c4442b4f32ce05673fbdf1fa4a2d5e315cc0a4"
+                "reference": "be551985759946a45d052777c2906aa52db64532"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/b6c4442b4f32ce05673fbdf1fa4a2d5e315cc0a4",
-                "reference": "b6c4442b4f32ce05673fbdf1fa4a2d5e315cc0a4",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/be551985759946a45d052777c2906aa52db64532",
+                "reference": "be551985759946a45d052777c2906aa52db64532",
                 "shasum": ""
             },
             "require": {
                 "behat/transliterator": "~1.2",
-                "doctrine/common": "~2.4",
-                "php": ">=5.3.2"
+                "doctrine/annotations": "^1.2",
+                "doctrine/cache": "^1.0",
+                "doctrine/collections": "^1.0",
+                "doctrine/common": "^2.13 || ^3.0",
+                "doctrine/event-manager": "^1.0",
+                "php": "^7.2"
             },
             "conflict": {
-                "doctrine/annotations": "<1.2",
-                "doctrine/mongodb-odm": ">=2.0"
+                "doctrine/mongodb": "<1.3",
+                "doctrine/mongodb-odm": "<2.0",
+                "sebastian/comparator": "<2.0"
+            },
+            "provide": {
+                "ext-mongo": "1.6.12"
             },
             "require-dev": {
-                "doctrine/common": ">=2.5.0",
-                "doctrine/mongodb-odm": ">=1.0.2 <2.0",
-                "doctrine/orm": ">=2.5.0",
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5",
-                "symfony/yaml": "^2.6 || ^3.0 || ^4.0 || ^5.0"
+                "alcaeus/mongo-php-adapter": "^1.1",
+                "doctrine/mongodb-odm": "^2.0",
+                "doctrine/orm": "^2.6.3",
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "phpunit/phpunit": "^8.5",
+                "symfony/yaml": "^4.1"
             },
             "suggest": {
                 "doctrine/mongodb-odm": "to use the extensions with the MongoDB ODM",
@@ -1326,12 +1328,12 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.4.x-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Gedmo\\": "lib/Gedmo"
+                    "Gedmo\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1369,7 +1371,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2020-08-21T01:27:20+00:00"
+            "time": "2020-09-23T16:40:45+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -5375,22 +5377,22 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v3.0.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "c2ff275858e7d7d6f58911511f151f9b8f939cc0"
+                "reference": "eaf6100a2d80eab44b7a84b74b99dc0cbe734224"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/c2ff275858e7d7d6f58911511f151f9b8f939cc0",
-                "reference": "c2ff275858e7d7d6f58911511f151f9b8f939cc0",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/eaf6100a2d80eab44b7a84b74b99dc0cbe734224",
+                "reference": "eaf6100a2d80eab44b7a84b74b99dc0cbe734224",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.7",
                 "ext-curl": "*",
-                "gedmo/doctrine-extensions": "^2.4",
+                "gedmo/doctrine-extensions": "^3.0",
                 "php": ">=7.4",
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
@@ -5427,25 +5429,25 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2020-09-23T07:36:21+00:00"
+            "time": "2020-09-24T12:19:36+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v2.0.3",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "7b9440a8729c0f7a2665381db5ede56ae1067831"
+                "reference": "1647b94a782756d20f6cfe02a3251d642f9210cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/7b9440a8729c0f7a2665381db5ede56ae1067831",
-                "reference": "7b9440a8729c0f7a2665381db5ede56ae1067831",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/1647b94a782756d20f6cfe02a3251d642f9210cb",
+                "reference": "1647b94a782756d20f6cfe02a3251d642f9210cb",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.7",
-                "gedmo/doctrine-extensions": "^2.4",
+                "gedmo/doctrine-extensions": "^3.0",
                 "php": ">=7.4",
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
@@ -5459,7 +5461,7 @@
                 "ockcyp/covers-validator": "~1.2",
                 "phpstan/phpstan": "~0.11",
                 "phpstan/phpstan-phpunit": "^0.12.6",
-                "phpunit/phpunit": "~9.2",
+                "phpunit/phpunit": "~9.2.6",
                 "wmde/fundraising-phpcs": "~1.0",
                 "wmde/psr-log-test-doubles": "~2.2"
             },
@@ -5485,7 +5487,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2020-07-02T16:20:18+00:00"
+            "time": "2020-09-24T14:09:09+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -5538,21 +5540,21 @@
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "v1.0.3",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "0589bf78b53fe0816bd20573cebab8bb5587a70d"
+                "reference": "be359e484b7c2318738f7ba4250cccf367711427"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/0589bf78b53fe0816bd20573cebab8bb5587a70d",
-                "reference": "0589bf78b53fe0816bd20573cebab8bb5587a70d",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/be359e484b7c2318738f7ba4250cccf367711427",
+                "reference": "be359e484b7c2318738f7ba4250cccf367711427",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.7",
-                "gedmo/doctrine-extensions": "^2.4",
+                "gedmo/doctrine-extensions": "^3.0",
                 "php": ">=7.4",
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
@@ -5561,7 +5563,7 @@
             "require-dev": {
                 "ockcyp/covers-validator": "~1.0",
                 "phpstan/phpstan": "~0.11",
-                "phpunit/phpunit": "~9.2",
+                "phpunit/phpunit": "~9.2.6",
                 "wmde/fundraising-phpcs": "~1.0"
             },
             "type": "library",
@@ -5584,7 +5586,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for fundraising subcriptions",
-            "time": "2020-07-03T07:44:39+00:00"
+            "time": "2020-09-24T13:04:20+00:00"
         }
     ],
     "packages-dev": [
