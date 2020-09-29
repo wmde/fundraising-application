@@ -86,4 +86,4 @@ address_provision_options:
   default_bucket: "provisional_address_options"
   url_key: provadd
   active: true
-  param_only: false
+  param_only: true

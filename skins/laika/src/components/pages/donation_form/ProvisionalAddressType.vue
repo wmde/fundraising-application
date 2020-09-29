@@ -5,8 +5,10 @@
         <div class="radio-container">
             <b-radio
                     id="fulladdress"
+                    v-model="fullAddressTypeModel"
+                    :native-value="'full'"
                     name="addressTypeProvisional"
-                    @change.native="togglePersonTypeSelection( 'full' )">
+                    @change.native="togglePersonTypeSelection( true )">
                 {{ $t( 'donation_form_provisional_address_choice_fulladdress' ) }}
                 {{ $t( 'donation_form_provisional_address_choice_fulladdress_notice' ) }}
             </b-radio>
@@ -29,10 +31,9 @@
             </b-radio>
         </div>
 
-        <legend class="subtitle" v-if="isFullAddressSelected">{{ $t( 'donation_form_section_address_header_type' ) }}</legend>
-        <div class="radio-container">
+        <legend class="subtitle" v-show="isFullAddressSelected">{{ $t( 'donation_form_section_address_header_type' ) }}</legend>
+        <div class="radio-container" v-show="isFullAddressSelected">
             <b-radio
-                    v-if="isFullAddressSelected"
                     id="personal"
                     name="addressTypeInternal"
                     v-model="type"
@@ -40,7 +41,6 @@
                     @change.native="setAddressType()">{{ $t( 'donation_form_addresstype_option_private' ) }}
             </b-radio>
             <b-radio
-                    v-if="isFullAddressSelected"
                     id="company"
                     name="addressTypeInternal"
                     v-model="type"
@@ -62,6 +62,7 @@ export default Vue.extend( {
 		return {
 			type: this.$props.initialAddressType ? AddressTypes.get( this.$props.initialAddressType ) : null,
 			isFullAddressSelected: false,
+			fullAddressTypeModel: 'other',
 		};
 	},
 	props: {
@@ -93,11 +94,12 @@ export default Vue.extend( {
 	methods: {
 		setAddressType: function () {
 			this.$emit( 'address-type', this.$data.type );
-			this.togglePersonTypeSelection( '' );
+			const showInternalSelection = ( this.$data.type === AddressTypeModel.PERSON || this.$data.type === AddressTypeModel.COMPANY );
+			this.togglePersonTypeSelection( showInternalSelection );
 		},
-		togglePersonTypeSelection: function ( changeType: string ) {
-			this.$data.isFullAddressSelected = ( changeType === 'full' );
-			// TODO: does not work properly yet, maybe there's a better way
+		togglePersonTypeSelection: function ( changeType: boolean ) {
+			this.$data.fullAddressTypemodel = changeType ? 'full' : 'other';
+			this.$data.isFullAddressSelected = changeType;
 		},
 	},
 } );
