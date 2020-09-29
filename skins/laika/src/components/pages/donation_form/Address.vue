@@ -48,6 +48,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { useStore } from 'vuex';
+import { reactive, computed, onMounted, PropType } from '@vue/composition-api';
+import store from '../../../store/address';
 import AutofillHandler from '@/components/shared/AutofillHandler.vue';
 import AddressType from '@/components/pages/donation_form/AddressType.vue';
 import Name from '@/components/shared/Name.vue';
@@ -56,8 +59,8 @@ import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import Email from '@/components/shared/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
 import { mapGetters } from 'vuex';
-import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
-import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import { AddressValidity, AddressFormData, ValidationResult, InputField } from '@/view_models/Address';
+import { AddressTypeModel, addressTypeName as getAddressTypeName } from '@/view_models/AddressTypeModel';
 import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
 import {
@@ -66,7 +69,7 @@ import {
 	validateAddress,
 	validateEmail,
 	setReceiptOptOut,
-	setAddressType,
+	setAddressType as setAddressTypeActionType,
 	validateAddressType,
 } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
@@ -88,143 +91,164 @@ export default Vue.extend( {
 		PaymentBankData,
 		AutofillHandler,
 	},
-	data: function (): { formData: AddressFormData } {
-		return {
-			formData: {
-				salutation: {
-					name: 'salutation',
-					value: '',
-					pattern: this.$props.addressValidationPatterns.salutation,
-					optionalField: false,
-				},
-				title: {
-					name: 'title',
-					value: '',
-					pattern: this.$props.addressValidationPatterns.title,
-					optionalField: true,
-				},
-				companyName: {
-					name: 'companyName',
-					value: '',
-					pattern: this.$props.addressValidationPatterns.companyName,
-					optionalField: false,
-				},
-				firstName: {
-					name: 'firstName',
-					value: '',
-					pattern: this.$props.addressValidationPatterns.firstName,
-					optionalField: false,
-				},
-				lastName: {
-					name: 'lastName',
-					value: '',
-					pattern: this.$props.addressValidationPatterns.lastName,
-					optionalField: false,
-				},
-				street: {
-					name: 'street',
-					value: '',
-					pattern: this.$props.addressValidationPatterns.street,
-					optionalField: false,
-				},
-				city: {
-					name: 'city',
-					value: '',
-					pattern: this.$props.addressValidationPatterns.city,
-					optionalField: false,
-				},
-				postcode: {
-					name: 'postcode',
-					value: '',
-					pattern: this.$props.addressValidationPatterns.postcode,
-					optionalField: false,
-				},
-				country: {
-					name: 'country',
-					value: 'DE',
-					pattern: this.$props.addressValidationPatterns.country,
-					optionalField: false,
-				},
-				email: {
-					name: 'email',
-					value: '',
-					pattern: this.$props.addressValidationPatterns.email,
-					optionalField: false,
-				},
-			},
-		};
-	},
 	props: {
 		validateAddressUrl: String,
 		validateEmailUrl: String,
 		validateBankDataUrl: String,
 		validateLegacyBankDataUrl: String,
-		countries: Array as () => Array<Country>,
+		countries: Array as PropType<Array<Country>>,
 		isDirectDebit: Boolean,
-		addressValidationPatterns: Object as () => AddressValidation,
+		addressValidationPatterns: Object as PropType<AddressValidation>,
 	},
-	computed: {
-		fieldErrors: {
-			get: function (): AddressValidity {
-				return Object.keys( this.formData ).reduce( ( validity: AddressValidity, fieldName: string ) => {
-					if ( !this.formData[ fieldName ].optionalField ) {
-						validity[ fieldName ] = this.$store.state.address.validity[ fieldName ] === Validity.INVALID;
+	// TODO properly type 'props'
+	setup( props : any, { root: { $store } } ) {
+		const formData: AddressFormData = reactive(
+			{
+				salutation: {
+					name: 'salutation',
+					value: '',
+					pattern: props.addressValidationPatterns.salutation,
+					optionalField: false,
+				},
+				title: {
+					name: 'title',
+					value: '',
+					pattern: props.addressValidationPatterns.title,
+					optionalField: true,
+				},
+				companyName: {
+					name: 'companyName',
+					value: '',
+					pattern: props.addressValidationPatterns.companyName,
+					optionalField: false,
+				},
+				firstName: {
+					name: 'firstName',
+					value: '',
+					pattern: props.addressValidationPatterns.firstName,
+					optionalField: false,
+				},
+				lastName: {
+					name: 'lastName',
+					value: '',
+					pattern: props.addressValidationPatterns.lastName,
+					optionalField: false,
+				},
+				street: {
+					name: 'street',
+					value: '',
+					pattern: props.addressValidationPatterns.street,
+					optionalField: false,
+				},
+				city: {
+					name: 'city',
+					value: '',
+					pattern: props.addressValidationPatterns.city,
+					optionalField: false,
+				},
+				postcode: {
+					name: 'postcode',
+					value: '',
+					pattern: props.addressValidationPatterns.postcode,
+					optionalField: false,
+				},
+				country: {
+					name: 'country',
+					value: 'DE',
+					pattern: props.addressValidationPatterns.country,
+					optionalField: false,
+				},
+				email: {
+					name: 'email',
+					value: '',
+					pattern: props.addressValidationPatterns.email,
+					optionalField: false,
+				},
+			}
+		);
+
+		// computed
+		const fieldErrors = computed(
+			(): AddressValidity => {
+				return Object.keys( formData ).reduce( ( validity: AddressValidity, fieldName: string ) => {
+					if ( !formData[ fieldName ].optionalField ) {
+						validity[ fieldName ] = $store.state.address.validity[ fieldName ] === Validity.INVALID;
 					}
 					return validity;
 				}, ( {} as AddressValidity ) );
-			},
-		},
-		disabledAddressTypes: {
-			get: function (): Array<AddressTypeModel> {
-				return this.$store.getters[ 'payment/isDirectDebitPayment' ] ? [ AddressTypeModel.ANON ] : [];
-			},
-		},
-		...mapGetters( NS_ADDRESS, [
-			'addressType',
-			'addressTypeIsNotAnon',
-			'addressTypeIsInvalid',
-		] ),
-		addressTypeName(): string {
-			return addressTypeName( this.$store.state.address.addressType );
-		},
-		receiptNeeded(): Boolean {
-			return !this.$store.state.address.receiptOptOut;
-		},
-	},
-	mounted() {
-		Object.entries( this.$data.formData ).forEach( ( formItem ) => {
-			const key: string = formItem[ 0 ];
-			this.$data.formData[ key ].value = this.$store.state.address.values[ key ];
-			if ( this.$store.state[ NS_ADDRESS ].validity[ key ] === Validity.RESTORED ) {
-				this.$store.dispatch( action( NS_ADDRESS, validateAddressField ), this.$data.formData[ key ] );
 			}
-		} );
-	},
-	methods: {
-		validateForm(): Promise<ValidationResult> {
-			return Promise.all( [
-				this.$store.dispatch( action( NS_ADDRESS, validateAddressType ), this.$store.state.address.addressType ),
-				this.$store.dispatch( action( NS_ADDRESS, validateAddress ), this.$props.validateAddressUrl ),
-				this.$store.dispatch( action( NS_ADDRESS, validateEmail ), this.$props.validateEmailUrl ),
-			] ).then( mergeValidationResults );
-		},
-		onFieldChange( fieldName: string ): void {
-			this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
-		},
-		onAutofill( autofilledFields: { [key: string]: string; } ) {
-			Object.keys( autofilledFields ).forEach( key => {
-				const fieldName = camelizeName( key );
-				if ( this.$data.formData[ fieldName ] ) {
-					this.$store.dispatch( action( NS_ADDRESS, setAddressField ), this.$data.formData[ fieldName ] );
+		);
+		const disabledAddressTypes = computed(
+			(): Array<AddressTypeModel> => {
+				return $store.getters[ 'payment/isDirectDebitPayment' ] ? [ AddressTypeModel.ANON ] : [];
+			}
+		);
+		const addressType = computed( () => $store.getters[ 'address/addressType' ] );
+		const addressTypeIsNotAnon = computed( () => $store.getters[ 'address/addressTypeIsNotAnon' ] );
+		const addressTypeIsInvalid = computed( () => $store.getters[ 'address/addressTypeIsInvalid' ] );
+
+		const addressTypeName = computed(
+			(): string => getAddressTypeName( $store.state.address.addressType )
+		);
+		const receiptNeeded = computed(
+			(): Boolean => !$store.state.address.receiptOptOut
+		);
+
+		// mounted
+		onMounted( () => {
+			Object.entries( formData ).forEach( ( formItem ) => {
+				const key: string = formItem[ 0 ];
+				formData[ key ].value = $store.state.address.values[ key ];
+				if ( $store.state[ NS_ADDRESS ].validity[ key ] === Validity.RESTORED ) {
+					$store.dispatch( action( NS_ADDRESS, validateAddressField ), formData[ key ] );
 				}
 			} );
-		},
-		setReceiptOptedOut( optedOut: boolean ): void {
-			this.$store.dispatch( action( NS_ADDRESS, setReceiptOptOut ), optedOut );
-		},
-		setAddressType( addressType: AddressTypeModel ): void {
-			this.$store.dispatch( action( NS_ADDRESS, setAddressType ), addressType );
-		},
+		} );
+
+		// methods
+		function validateForm(): Promise<ValidationResult> {
+			return Promise.all( [
+				$store.dispatch( action( NS_ADDRESS, validateAddressType ), $store.state.address.addressType ),
+				$store.dispatch( action( NS_ADDRESS, validateAddress ), props.validateAddressUrl ),
+				$store.dispatch( action( NS_ADDRESS, validateEmail ), props.validateEmailUrl ),
+			] ).then( mergeValidationResults );
+		}
+
+		function onFieldChange( fieldName: string ): void {
+			$store.dispatch( action( NS_ADDRESS, setAddressField ), formData[ fieldName ] );
+		}
+
+		function onAutofill( autofilledFields: { [key: string]: string; } ): void {
+			Object.keys( autofilledFields ).forEach( key => {
+				const fieldName = camelizeName( key );
+				if ( formData[ fieldName ] ) {
+					$store.dispatch( action( NS_ADDRESS, setAddressField ), formData[ fieldName ] );
+				}
+			} );
+		}
+
+		function setReceiptOptedOut( optedOut: boolean ): void {
+			$store.dispatch( action( NS_ADDRESS, setReceiptOptOut ), optedOut );
+		}
+
+		function setAddressType( addressType: AddressTypeModel ): void {
+			$store.dispatch( action( NS_ADDRESS, setAddressTypeActionType ), addressType );
+		}
+
+		return {
+			formData,
+			fieldErrors,
+			disabledAddressTypes,
+			addressType, addressTypeIsNotAnon, addressTypeIsInvalid,
+			addressTypeName,
+			receiptNeeded,
+
+			validateForm,
+			onFieldChange,
+			onAutofill,
+			setReceiptOptedOut,
+			setAddressType,
+		};
 	},
 } );
 </script>
