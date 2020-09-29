@@ -34,7 +34,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound(): void {
-		$client = $this->createClient( [ 'skin' => 'laika' ], null, self::DISABLE_DEBUG );
+		$client = $this->createClient( [ 'skin' => 'laika' ] );
 
 		$client->request(
 			'GET',

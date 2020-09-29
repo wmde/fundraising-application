@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -28,13 +27,10 @@ abstract class WebRouteTestCase extends TestCase {
 	 *
 	 * @param array $config
 	 * @param callable|null $onEnvironmentCreated Gets called after onTestEnvironmentCreated, same signature
-	 * @param bool $debug
-	 * @param array $serverConfig
 	 *
 	 * @return Client
 	 */
-	protected function createClient( array $config = [], callable $onEnvironmentCreated = null, bool $debug = true,
-								  array $serverConfig = [] ): Client {
+	protected function createClient( array $config = [], callable $onEnvironmentCreated = null ): Client {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		if ( is_callable( $onEnvironmentCreated ) ) {
@@ -42,8 +38,7 @@ abstract class WebRouteTestCase extends TestCase {
 		}
 
 		return new Client(
-			$this->createApplication( $testEnvironment->getFactory(), $debug ),
-			$serverConfig
+			$this->createApplication( $testEnvironment->getFactory() )
 		);
 	}
 
@@ -62,7 +57,7 @@ abstract class WebRouteTestCase extends TestCase {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		$client = new Client(
-			$this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG )
+			$this->createApplication( $testEnvironment->getFactory() )
 		);
 
 		call_user_func(
@@ -87,7 +82,7 @@ abstract class WebRouteTestCase extends TestCase {
 	protected function createAppEnvironment( array $config, callable $onEnvironmentCreated ): void {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
-		$application = $this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG );
+		$application = $this->createApplication( $testEnvironment->getFactory() );
 		$client = new Client( $application );
 
 		call_user_func(
@@ -99,16 +94,11 @@ abstract class WebRouteTestCase extends TestCase {
 	}
 
 	// @codingStandardsIgnoreStart
-	private function createApplication( FunFunFactory $ffFactory, bool $debug ): Application {
+	private function createApplication( FunFunFactory $ffFactory ): Application {
 		// @codingStandardsIgnoreEnd
 		$app = Bootstrap::initializeApplication( $ffFactory );
 
 		$app['session.test'] = true;
-
-		if ( $debug ) {
-			$app['debug'] = true;
-			unset( $app['exception_handler'] );
-		}
 
 		$ffFactory->setSkinTwigEnvironment( $app['twig'] );
 
@@ -118,7 +108,7 @@ abstract class WebRouteTestCase extends TestCase {
 	protected function createSilexApplication(): Application {
 		$testEnvironment = TestEnvironment::newInstance( [] );
 
-		return $this->createApplication( $testEnvironment->getFactory(), self::ENABLE_DEBUG );
+		return $this->createApplication( $testEnvironment->getFactory() );
 	}
 
 	protected function assert404( Response $response ): void {
@@ -136,13 +126,6 @@ abstract class WebRouteTestCase extends TestCase {
 		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
 		$this->assertJson( $response->getContent(), 'response is json' );
 		$this->assertJsonResponse( $expected, $response );
-	}
-
-	protected function assertGetRequestCausesMethodNotAllowedResponse( string $route, array $params ): void {
-		$client = $this->createClient();
-
-		$this->expectException( MethodNotAllowedHttpException::class );
-		$client->request( 'GET', $route, $params );
 	}
 
 	protected function assertErrorJsonResponse( Response $response ): void {

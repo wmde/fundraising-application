@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation as DoctrineDonation;
 use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
@@ -78,13 +79,18 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenGetRequest_resultHasMethodNotAllowedStatus(): void {
-		$this->assertGetRequestCausesMethodNotAllowedResponse(
+		$client = $this->createClient();
+
+		$client->request(
+			'GET',
 			'/donation/cancel',
 			[
 				'sid' => '',
 				'utoken' => self::CORRECT_UPDATE_TOKEN,
 			]
 		);
+
+		$this->assertSame( Response::HTTP_METHOD_NOT_ALLOWED, $client->getResponse()->getStatusCode() );
 	}
 
 	public function testGivenInvalidUpdateToken_resultIsError(): void {

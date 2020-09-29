@@ -99,8 +99,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 
 				$factory->setSuborganizationMessenger( $messenger );
 				$factory->setEmailValidator( new SucceedingEmailValidator() );
-			},
-			self::DISABLE_DEBUG
+			}
 		);
 
 		$client->request(

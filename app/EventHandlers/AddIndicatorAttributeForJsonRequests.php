@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class AddIndicatorAttributeForJsonRequests implements EventSubscriberInterface {
 
 	private const PRIORITY = 64;
+	public const REQUEST_IS_JSON_ATTRIBUTE = 'request_stack.is_json';
 
 	public static function getSubscribedEvents() {
 		return [
@@ -31,7 +32,7 @@ class AddIndicatorAttributeForJsonRequests implements EventSubscriberInterface {
 	public function onKernelRequest( KernelEvent $event ): void {
 		$request = $event->getRequest();
 		if ( $this->isJsonRequest( $request ) || $this->isJsonPRequest( $request ) ) {
-			$request->attributes->set( 'request_stack.is_json', true );
+			$request->attributes->set( self::REQUEST_IS_JSON_ATTRIBUTE, true );
 		}
 	}
 

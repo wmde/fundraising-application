@@ -13,7 +13,7 @@ class TrimValuesTest extends WebRouteTestCase {
 	 * @dataProvider getTestData
 	 */
 	public function testPassedGetParametersAreTrimmed( array $expected, array $request ): void {
-		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
+		$client = $this->createClient();
 		$client->request( 'GET', '/actually-every-route', $request );
 
 		$this->assertSame( $expected, $client->getRequest()->query->all() );
@@ -23,7 +23,7 @@ class TrimValuesTest extends WebRouteTestCase {
 	 * @dataProvider getTestData
 	 */
 	public function testPassedPostParametersAreTrimmed( array $expected, array $request ): void {
-		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
+		$client = $this->createClient();
 		$client->request( 'POST', '/actually-every-route', $request );
 
 		$this->assertSame( $expected, $client->getRequest()->request->all() );

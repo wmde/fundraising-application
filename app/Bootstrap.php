@@ -9,11 +9,8 @@ use Silex\Provider\RoutingServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
+use WMDE\Fundraising\Frontend\App\EventHandlers\HandleExceptions;
 use WMDE\Fundraising\Frontend\App\EventHandlers\LogErrors;
 use WMDE\Fundraising\Frontend\App\EventHandlers\PrettifyJsonResponse;
 use WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData;
@@ -37,6 +34,7 @@ class Bootstrap {
 			$dispatcher->addSubscriber( new RegisterTrackingData() );
 			$dispatcher->addSubscriber( new TrimEveryInput() );
 			$dispatcher->addSubscriber( new LogErrors( $ffFactory->getLogger() ) );
+			$dispatcher->addSubscriber( new HandleExceptions( $ffFactory ) );
 
 			$environment = $_ENV['APP_ENV'] ?? 'dev';
 			if ( $environment === 'test' || $environment === 'dev' ) {
@@ -45,42 +43,8 @@ class Bootstrap {
 			return $dispatcher;
 		} );
 
-		$app->error( function ( AccessDeniedException $e ) use ( $ffFactory ) {
-			return new Response(
-				$ffFactory->newAccessDeniedHtmlPresenter()->present( $e->getMessage() ),
-				403,
-				[ 'X-Status-Code' => 403 ]
-			);
-		} );
-
-		$app->error( function ( NotFoundHttpException $e, Request $request ) use ( $ffFactory, $app ) {
-			if ( $request->attributes->get( 'request_stack.is_json', false ) ) {
-				return $app->json( [ 'ERR' => $e->getMessage() ], 404, [ 'X-Status-Code' => 404 ] );
-			}
-
-			return new Response(
-				$ffFactory->newPageNotFoundHtmlPresenter()->present(),
-				404,
-				[ 'X-Status-Code' => 404 ]
-			);
-		} );
-
-		$app->error( function ( \Exception $e, Request $request, $code ) use ( $ffFactory, $app ) {
-			if ( $app['debug'] ) {
-				throw $e;
-			}
-
-			if ( $request->attributes->get( 'request_stack.is_json', false ) ) {
-				return $app->json( [
-					'ERR' => $e->getMessage()
-				] );
-			}
-
-			return new Response(
-				$ffFactory->getInternalErrorHtmlPresenter()->present( $e ),
-				$code
-			);
-		} );
+		// Disable Silex error handler, we handle errors with HandleExceptions class
+		unset( $app['exception_handler'] );
 
 		return Routes::initializeRoutes( $app, $ffFactory );
 	}

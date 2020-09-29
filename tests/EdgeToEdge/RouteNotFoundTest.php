@@ -11,14 +11,14 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 class RouteNotFoundTest extends WebRouteTestCase {
 
 	public function testGivenUnknownRoute_404isReturned(): void {
-		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
+		$client = $this->createClient();
 		$client->request( 'GET', '/kittens' );
 
 		$this->assert404( $client->getResponse() );
 	}
 
 	public function testGivenUnknownRoute_responseIsHTML(): void {
-		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
+		$client = $this->createClient();
 		$client->request( 'GET', '/kittens' );
 
 		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
@@ -26,7 +26,7 @@ class RouteNotFoundTest extends WebRouteTestCase {
 	}
 
 	public function testGivenUnknownRouteAndJsonRequest_responseIsJSON(): void {
-		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
+		$client = $this->createClient();
 		$client->request( 'GET', '/kittens', [], [], [ 'HTTP_Accept' => 'application/json' ] );
 
 		$this->assertJsonResponse( [ 'ERR' => 'No route found for "GET /kittens"' ], $client->getResponse() );
