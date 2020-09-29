@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
 use WMDE\Fundraising\Frontend\App\EventHandlers\PrettifyJsonResponse;
 use WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData;
+use WMDE\Fundraising\Frontend\App\EventHandlers\TrimEveryInput;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
@@ -33,6 +34,7 @@ class Bootstrap {
 		$app->extend( 'dispatcher', function ( EventDispatcher $dispatcher ) {
 			$dispatcher->addSubscriber( new AddIndicatorAttributeForJsonRequests() );
 			$dispatcher->addSubscriber( new RegisterTrackingData() );
+			$dispatcher->addSubscriber( new TrimEveryInput() );
 
 			$environment = $_ENV['APP_ENV'] ?? 'dev';
 			if ( $environment === 'test' || $environment === 'dev' ) {
@@ -40,16 +42,6 @@ class Bootstrap {
 			}
 			return $dispatcher;
 		} );
-
-		$app->before( function ( Request $request ) {
-			foreach ( [ $request->request, $request->query ] as $parameterBag ) {
-				foreach ( $parameterBag->keys() as $key ) {
-					if ( is_string( $parameterBag->get( $key ) ) ) {
-						$parameterBag->set( $key, trim( $parameterBag->get( $key ) ) );
-					}
-				}
-			}
-		}, Application::EARLY_EVENT );
 
 		$app->error( function ( AccessDeniedException $e ) use ( $ffFactory ) {
 			return new Response(
