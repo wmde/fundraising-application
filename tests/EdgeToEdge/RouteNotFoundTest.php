@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Bootstrap
+ * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests
  */
 class RouteNotFoundTest extends WebRouteTestCase {
 
@@ -24,7 +25,7 @@ class RouteNotFoundTest extends WebRouteTestCase {
 		$this->assertStringContainsString( '<html', $client->getResponse()->getContent() );
 	}
 
-	public function testGivenUnknownRouteAndJSONRquest_responseIsJSON(): void {
+	public function testGivenUnknownRouteAndJsonRequest_responseIsJSON(): void {
 		$client = $this->createClient( [], null, self::DISABLE_DEBUG );
 		$client->request( 'GET', '/kittens', [], [], [ 'HTTP_Accept' => 'application/json' ] );
 

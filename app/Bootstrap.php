@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
 use WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -29,19 +30,10 @@ class Bootstrap {
 		$app->register( new FundraisingFactoryServiceProvider( $ffFactory ) );
 
 		$app->extend( 'dispatcher', function ( EventDispatcher $dispatcher ) {
+			$dispatcher->addSubscriber( new AddIndicatorAttributeForJsonRequests() );
 			$dispatcher->addSubscriber( new RegisterTrackingData() );
 			return $dispatcher;
 		} );
-
-		$app->before(
-			function ( Request $request ) {
-				$request->attributes->set( 'request_stack.is_json', in_array( 'application/json', $request->getAcceptableContentTypes() ) );
-				if ( in_array( 'application/javascript', $request->getAcceptableContentTypes() ) && $request->get( 'callback', null ) ) {
-					$request->attributes->set( 'request_stack.is_json', true );
-				}
-			},
-			Application::EARLY_EVENT
-		);
 
 		$app->before( function ( Request $request ) {
 			foreach ( [ $request->request, $request->query ] as $parameterBag ) {
