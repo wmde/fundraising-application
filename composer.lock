@@ -6631,16 +6631,16 @@
         },
         {
             "name": "ockcyp/covers-validator",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oradwell/covers-validator.git",
-                "reference": "880d624bae55dcf432cba18a5f84da5a7773309e"
+                "reference": "1493114b7b3c4af442a7251ef12dc68abacb691e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oradwell/covers-validator/zipball/880d624bae55dcf432cba18a5f84da5a7773309e",
-                "reference": "880d624bae55dcf432cba18a5f84da5a7773309e",
+                "url": "https://api.github.com/repos/oradwell/covers-validator/zipball/1493114b7b3c4af442a7251ef12dc68abacb691e",
+                "reference": "1493114b7b3c4af442a7251ef12dc68abacb691e",
                 "shasum": ""
             },
             "require": {
@@ -6673,7 +6673,7 @@
                 }
             ],
             "description": "Validates @covers tags in PHPUnit tests",
-            "time": "2020-06-18T21:58:00+00:00"
+            "time": "2020-09-26T10:07:12+00:00"
         },
         {
             "name": "pdepend/pdepend",
