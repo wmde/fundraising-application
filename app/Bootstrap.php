@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
+use WMDE\Fundraising\Frontend\App\EventHandlers\PrettifyJsonResponse;
 use WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -32,6 +33,11 @@ class Bootstrap {
 		$app->extend( 'dispatcher', function ( EventDispatcher $dispatcher ) {
 			$dispatcher->addSubscriber( new AddIndicatorAttributeForJsonRequests() );
 			$dispatcher->addSubscriber( new RegisterTrackingData() );
+
+			$environment = $_ENV['APP_ENV'] ?? 'dev';
+			if ( $environment === 'test' || $environment === 'dev' ) {
+				$dispatcher->addSubscriber( new PrettifyJsonResponse() );
+			}
 			return $dispatcher;
 		} );
 
@@ -44,14 +50,6 @@ class Bootstrap {
 				}
 			}
 		}, Application::EARLY_EVENT );
-
-		$app->after( function ( Request $request, Response $response ) {
-			if ( $response instanceof JsonResponse ) {
-				$response->setEncodingOptions( JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
-			}
-
-			return $response;
-		} );
 
 		$app->error( function ( AccessDeniedException $e ) use ( $ffFactory ) {
 			return new Response(
