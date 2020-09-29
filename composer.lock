@@ -5103,16 +5103,16 @@
         },
         {
             "name": "symfony/twig-bridge",
-            "version": "v3.4.44",
+            "version": "v3.4.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/twig-bridge.git",
-                "reference": "19bb27548cf24fe44c083d301b6c5098376e08f1"
+                "reference": "ae9afdecb6d0c04cbc7b7b8be67a578339f4e207"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/19bb27548cf24fe44c083d301b6c5098376e08f1",
-                "reference": "19bb27548cf24fe44c083d301b6c5098376e08f1",
+                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/ae9afdecb6d0c04cbc7b7b8be67a578339f4e207",
+                "reference": "ae9afdecb6d0c04cbc7b7b8be67a578339f4e207",
                 "shasum": ""
             },
             "require": {
@@ -5204,7 +5204,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-12T14:55:37+00:00"
+            "time": "2020-09-02T16:06:40+00:00"
         },
         {
             "name": "symfony/validator",
