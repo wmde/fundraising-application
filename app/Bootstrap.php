@@ -8,13 +8,14 @@ use Silex\Application;
 use Silex\Provider\RoutingServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
 class Bootstrap {
 
@@ -27,27 +28,17 @@ class Bootstrap {
 		$app->register( new BucketSelectionServiceProvider( $ffFactory ) );
 		$app->register( new FundraisingFactoryServiceProvider( $ffFactory ) );
 
+		$app->extend( 'dispatcher', function ( EventDispatcher $dispatcher ) {
+			$dispatcher->addSubscriber( new RegisterTrackingData() );
+			return $dispatcher;
+		} );
+
 		$app->before(
-			function ( Request $request, Application $app ) {
+			function ( Request $request ) {
 				$request->attributes->set( 'request_stack.is_json', in_array( 'application/json', $request->getAcceptableContentTypes() ) );
 				if ( in_array( 'application/javascript', $request->getAcceptableContentTypes() ) && $request->get( 'callback', null ) ) {
 					$request->attributes->set( 'request_stack.is_json', true );
 				}
-
-				$request->attributes->set( 'trackingCode', TrackingDataSelector::getFirstNonEmptyValue( [
-					$request->cookies->get( 'spenden_tracking' ),
-					$request->request->get( 'tracking' ),
-					TrackingDataSelector::concatTrackingFromVarTuple(
-						$request->get( 'piwik_campaign', '' ),
-						$request->get( 'piwik_kwd', '' )
-					)
-				] ) );
-
-				$request->attributes->set( 'trackingSource', TrackingDataSelector::getFirstNonEmptyValue( [
-					$request->cookies->get( 'spenden_source' ),
-					$request->request->get( 'source' ),
-					$request->server->get( 'HTTP_REFERER' )
-				] ) );
 			},
 			Application::EARLY_EVENT
 		);
@@ -65,15 +56,6 @@ class Bootstrap {
 		$app->after( function ( Request $request, Response $response ) {
 			if ( $response instanceof JsonResponse ) {
 				$response->setEncodingOptions( JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
-			}
-
-			// Set cookie with original tracking data
-			if ( (string)$request->cookies->get( 'spenden_tracking' ) === '' &&
-				(string)$request->get( 'piwik_campaign' ) !== '' && (string)$request->get( 'piwik_kwd' ) !== '' ) {
-				$response->headers->setCookie( new \Symfony\Component\HttpFoundation\Cookie(
-					'spenden_tracking',
-					$request->get( 'piwik_campaign' ) . '/' . $request->get( 'piwik_kwd' )
-				) );
 			}
 
 			return $response;

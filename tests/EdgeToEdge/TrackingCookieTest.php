@@ -8,6 +8,7 @@ use Symfony\Component\BrowserKit\Cookie;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Bootstrap
+ * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData
  */
 class TrackingCookieTest extends WebRouteTestCase {
 
@@ -43,7 +44,7 @@ class TrackingCookieTest extends WebRouteTestCase {
 		$this->assertNull( $client->getCookieJar()->get( self::COOKIE_NAME ) );
 	}
 
-	public function testNewValuesAreProvided_theOldOnesAreKept(): void {
+	public function testWhenNewValuesAreProvided_theOldOnesAreKept(): void {
 		$client = $this->createClient();
 
 		$client->getCookieJar()->set( new Cookie(
