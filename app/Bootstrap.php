@@ -14,8 +14,8 @@ use WMDE\Fundraising\Frontend\App\EventHandlers\HandleExceptions;
 use WMDE\Fundraising\Frontend\App\EventHandlers\LogErrors;
 use WMDE\Fundraising\Frontend\App\EventHandlers\PrettifyJsonResponse;
 use WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData;
+use WMDE\Fundraising\Frontend\App\EventHandlers\StoreBucketSelection;
 use WMDE\Fundraising\Frontend\App\EventHandlers\TrimEveryInput;
-use WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class Bootstrap {
@@ -26,10 +26,10 @@ class Bootstrap {
 		$app->register( new SessionServiceProvider() );
 		$app->register( new RoutingServiceProvider() );
 		$app->register( new TwigServiceProvider() );
-		$app->register( new BucketSelectionServiceProvider( $ffFactory ) );
 		$app->register( new FundraisingFactoryServiceProvider( $ffFactory ) );
 
 		$app->extend( 'dispatcher', function ( EventDispatcher $dispatcher ) use ( $ffFactory ) {
+			$dispatcher->addSubscriber( new StoreBucketSelection( $ffFactory ) );
 			$dispatcher->addSubscriber( new AddIndicatorAttributeForJsonRequests() );
 			$dispatcher->addSubscriber( new RegisterTrackingData() );
 			$dispatcher->addSubscriber( new TrimEveryInput() );

@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider
+ * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\StoreBucketSelection
  */
 class CampaignCookieTest extends WebRouteTestCase {
 
