@@ -1,6 +1,9 @@
 # How to create an A/B test for a feature
 
-This document describes how you create an A/B test for a feature. If the feature affects the behavior of the PHP code or the client-side code in the `laika` skin, follow sections 1-4. If the test affects the client-side code written with [Vue.js](https://vuejs.org/), follow the sections 1 and 5.
+This document describes how you create an A/B test for a feature.
+
+* If the feature affects the behavior of the **PHP code**, follow sections 1-4.
+* If the test affects the **client-side code**, follow the sections 1 and 5.
 
 ## 1. Create a campaign definition
 Edit the file `app/config/campaigns.yml` and add a new entry. If you're unsure about the end date, set it to the end of 
@@ -12,11 +15,16 @@ but that does not mean the user will be placed in the same bucket for two differ
 
 Please check that:
 * The campaign name is unique in the campaign file.
-* The url key is set and is unique in the campaign file.
+* `url_key` has a value and the value is unique in the campaign file. Try to keep it as
+  short and innocuous as possible.
 * The start and end dates must be quoted and in the format `YYYY-MM-DD` or `YYYY-MM-DD H:i:s`. All dates are considered to be in the Europe/Berlin timezone.
 * The end date must be after the start date.
 * The `default_bucket` must be part of the `buckets` definition.
-* Bucket names beginning with digits (e.g. `10h16`) must be quoted, both for `buckets` and `default_bucket`.
+* You must quote Bucket names beginning with digits (e.g. `10h16`), both for `buckets` and `default_bucket`.
+* If this bucket test should be triggered by a banner, you must set
+  `param_only` to `true`. Otherwise the bucket test is active for *all*
+  visitors regardless of which banner they are coming from. This can skew
+  banner test results!
 
 ### Example Campaign:
 
@@ -32,6 +40,7 @@ header_template:
     - default_header
     - fancy_header
   default_bucket: default_header
+  param_only: true
 ``` 
 
 ## 2. Create a factory method for the campaign
