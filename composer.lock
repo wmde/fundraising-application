@@ -4880,7 +4880,7 @@
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v3.4.44",
+            "version": "v3.4.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -9259,12 +9259,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "ed8ff2c8910908c61394f0867ad5cc7b68e5ee46"
+                "reference": "501294549cb08e25e5c81aa435011b970710d5d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/ed8ff2c8910908c61394f0867ad5cc7b68e5ee46",
-                "reference": "ed8ff2c8910908c61394f0867ad5cc7b68e5ee46",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/501294549cb08e25e5c81aa435011b970710d5d3",
+                "reference": "501294549cb08e25e5c81aa435011b970710d5d3",
                 "shasum": ""
             },
             "require-dev": {
@@ -9297,7 +9297,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-09-25T12:41:24+00:00"
+            "time": "2020-09-29T14:55:25+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
