@@ -7119,16 +7119,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.46",
+            "version": "0.12.47",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "9419738e20f0c49757be05d22969c1c44c1dff3b"
+                "reference": "74325a6ae15378db0df71b969ded245378d2e058"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9419738e20f0c49757be05d22969c1c44c1dff3b",
-                "reference": "9419738e20f0c49757be05d22969c1c44c1dff3b",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/74325a6ae15378db0df71b969ded245378d2e058",
+                "reference": "74325a6ae15378db0df71b969ded245378d2e058",
                 "shasum": ""
             },
             "require": {
@@ -7171,7 +7171,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-28T09:48:55+00:00"
+            "time": "2020-09-29T13:35:39+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -9259,12 +9259,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "ed8ff2c8910908c61394f0867ad5cc7b68e5ee46"
+                "reference": "501294549cb08e25e5c81aa435011b970710d5d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/ed8ff2c8910908c61394f0867ad5cc7b68e5ee46",
-                "reference": "ed8ff2c8910908c61394f0867ad5cc7b68e5ee46",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/501294549cb08e25e5c81aa435011b970710d5d3",
+                "reference": "501294549cb08e25e5c81aa435011b970710d5d3",
                 "shasum": ""
             },
             "require-dev": {
@@ -9297,7 +9297,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-09-25T12:41:24+00:00"
+            "time": "2020-09-29T14:55:25+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
