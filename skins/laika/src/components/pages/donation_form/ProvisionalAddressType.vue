@@ -17,23 +17,28 @@
                     name="addressTypeProvisional"
                     v-model="type"
                     :native-value="AddressTypeModel.EMAIL"
-                    @change.native="setAddressType()">
+                    @change.native="setAddressType()"
+                    :disabled="this.disabledAddressTypes.includes( AddressTypeModel.EMAIL )">
                 {{ $t( 'donation_form_provisional_address_choice_emailonly' ) }}
                 {{ $t( 'donation_form_provisional_address_choice_emailonly_notice' ) }}
+                <div v-show="isDirectDebit" class="info-message has-margin-top-18">({{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }})</div>
             </b-radio>
             <b-radio
                     id="noaddress"
                     name="addressTypeProvisional"
                     v-model="type"
                     :native-value="AddressTypeModel.ANON"
-                    @change.native="setAddressType()">
+                    @change.native="setAddressType()"
+                    :disabled="this.disabledAddressTypes.includes( AddressTypeModel.ANON )">
                 {{ $t( 'donation_form_provisional_address_choice_noaddress' ) }}
+                <div v-show="isDirectDebit" class="info-message has-margin-top-18">({{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }})</div>
             </b-radio>
         </div>
 
         <legend class="subtitle" v-show="isFullAddressSelected">{{ $t( 'donation_form_section_address_header_type' ) }}</legend>
-        <div class="radio-container" v-show="isFullAddressSelected">
+        <div class="radio-container">
             <b-radio
+                    v-show="isFullAddressSelected"
                     id="personal"
                     name="addressTypeInternal"
                     v-model="type"
@@ -41,6 +46,7 @@
                     @change.native="setAddressType()">{{ $t( 'donation_form_addresstype_option_private' ) }}
             </b-radio>
             <b-radio
+                    v-show="isFullAddressSelected"
                     id="company"
                     name="addressTypeInternal"
                     v-model="type"
@@ -57,7 +63,7 @@
 import Vue from 'vue';
 import { AddressTypes, AddressTypeModel } from '@/view_models/AddressTypeModel';
 export default Vue.extend( {
-	name: 'AddressSwitchDonorType',
+	name: 'ProvisionalAddressType',
 	data: function () {
 		return {
 			type: this.$props.initialAddressType ? AddressTypes.get( this.$props.initialAddressType ) : null,
