@@ -3221,16 +3221,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v4.4.13",
+            "version": "v4.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "043bf8652c307ebc23ce44047d215eec889d8850"
+                "reference": "3880541ff96d2e9a113f355d8c6891489c63cf56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/043bf8652c307ebc23ce44047d215eec889d8850",
-                "reference": "043bf8652c307ebc23ce44047d215eec889d8850",
+                "url": "https://api.github.com/repos/symfony/config/zipball/3880541ff96d2e9a113f355d8c6891489c63cf56",
+                "reference": "3880541ff96d2e9a113f355d8c6891489c63cf56",
                 "shasum": ""
             },
             "require": {
@@ -3295,7 +3295,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-10T07:27:51+00:00"
+            "time": "2020-09-02T16:08:58+00:00"
         },
         {
             "name": "symfony/console",
@@ -9259,12 +9259,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "ed8ff2c8910908c61394f0867ad5cc7b68e5ee46"
+                "reference": "501294549cb08e25e5c81aa435011b970710d5d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/ed8ff2c8910908c61394f0867ad5cc7b68e5ee46",
-                "reference": "ed8ff2c8910908c61394f0867ad5cc7b68e5ee46",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/501294549cb08e25e5c81aa435011b970710d5d3",
+                "reference": "501294549cb08e25e5c81aa435011b970710d5d3",
                 "shasum": ""
             },
             "require-dev": {
@@ -9297,7 +9297,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-09-25T12:41:24+00:00"
+            "time": "2020-09-29T14:55:25+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
