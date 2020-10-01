@@ -120,7 +120,7 @@ Deactivating the campaigns ensures that you always test the default path.
 If you want to test other buckets in the campaign, you need to explicitly set a different default bucket by overriding 
 the campaign loader with an `OverridingCampaignConfigurationLoader` like this:
 
-```yaml
+```php
 public function testFancyHeader() {
 	$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 		$factory->setCampaignConfigurationLoader( new OverridingCampaignConfigurationLoader(
@@ -130,7 +130,7 @@ public function testFancyHeader() {
 
 		$crawler = $client->request( 'GET', 'some-route-name' );
 
-		this->assertCount( 1, $crawler->filter( 'head.fancy-schmancy' ) )
+		this->assertCount( 1, $crawler->filter( 'head.fancy-schmancy' ) );
 	} );
 }
 ```
