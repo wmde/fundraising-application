@@ -15,7 +15,7 @@
 										name="addressTypeProvisional"
 										v-model="addressType"
 										native-value="email"
-										:disabled="this.disabledAddressTypes.includes( AddressTypeModel.EMAIL )">
+										:disabled="disableEmail">
 								{{ $t( 'donation_form_provisional_address_choice_emailonly' ) }}
 								{{ $t( 'donation_form_provisional_address_choice_emailonly_notice' ) }}
 								<div v-show="isDirectDebit" class="info-message has-margin-top-18">
@@ -26,7 +26,7 @@
 										name="addressTypeProvisional"
 										v-model="addressType"
 										native-value="anonymous"
-										:disabled="this.disabledAddressTypes.includes( AddressTypeModel.ANON )">
+										:disabled="disableAnonymous">
 								{{ $t( 'donation_form_provisional_address_choice_noaddress' ) }}
 								<div v-show="isDirectDebit" class="info-message has-margin-top-18">
 									({{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }})
@@ -56,82 +56,76 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { AddressTypes, AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel, addressTypeFromName } from '@/view_models/AddressTypeModel';
+import { computed, defineComponent, PropType, Ref, ref, watch } from '@vue/composition-api';
 
-const fullAddressTypeToModel = new Map( [
-	[ 'person', AddressTypeModel.PERSON ],
-	[ 'company', AddressTypeModel.COMPANY ],
-] );
+type fullAddressStates = '' | 'person' | 'company';
 
-export default Vue.extend( {
+const fullAddressTypeToModel: Record<fullAddressStates, AddressTypeModel> = {
+	'': AddressTypeModel.UNSET,
+	person: AddressTypeModel.PERSON,
+	company: AddressTypeModel.COMPANY,
+};
+
+export default defineComponent( {
 	name: 'ProvisionalAddressType',
-	data: function () {
-		return {
-			type: this.$props.initialAddressType ? AddressTypes.get( this.$props.initialAddressType ) : null,
-			fullAddressType: '',
-			addressType: this.$props.initialAddressType ? this.$props.initialAddressType : '',
-		};
-	},
 	props: {
-		disabledAddressTypes: Array,
+		disabledAddressTypes: Array as PropType<Array<AddressTypeModel>>,
 		disabledAnonymousType: Boolean,
 		initialAddressType: String,
 		isDirectDebit: Boolean,
 	},
-	computed: {
-		AddressTypeModel: {
-			get: function () {
-				return AddressTypeModel;
-			},
-		},
-		isFullAddressSelected: {
-			get: function () {
-				const $this = ( this as any );
-				return $this.$data.addressType === 'full';
-			},
-		},
-	},
-	watch: {
-		disabledAddressTypes:
-				{
-					handler: function ( disabledAddressTypes ) {
-						const $this = ( this as any );
-						if ( disabledAddressTypes.includes( $this.$data.type ) ) {
-							$this.$data.addressType = 'full';
-							$this.$data.fullAddressType = AddressTypeModel.PERSON;
-						}
-					},
-					deep: true,
-				},
-		addressType: {
-			handler: function ( newAddressType ) {
-				const $this = ( this as any );
-				switch ( newAddressType ) {
-					case 'full':
-						$this.$data.type = AddressTypeModel.UNSET;
-						break;
-					case 'email':
-						$this.$data.type = AddressTypeModel.EMAIL;
-						$this.$data.fullAddressType = '';
-						break;
-					case 'anonymous':
-						$this.$data.type = AddressTypeModel.ANON;
-						$this.$data.fullAddressType = '';
-				}
-				this.$emit( 'address-type', this.$data.type );
-			},
-		},
-		fullAddressType: {
-			handler: function ( newFullAddressType ) {
-				const $this = ( this as any );
-				if ( !fullAddressTypeToModel.has( newFullAddressType ) ) {
-					return;
-				}
-				$this.$data.type = fullAddressTypeToModel.get( newFullAddressType );
-				$this.$emit( 'address-type', this.$data.type );
-			},
-		},
+	setup( props, { emit } ) {
+		const type : Ref<AddressTypeModel|null> = ref( props.initialAddressType ? addressTypeFromName( props.initialAddressType ) : null );
+		const fullAddressType : Ref<fullAddressStates> = ref( '' );
+		const addressType = ref( props.initialAddressType ? props.initialAddressType : '' );
+
+		const disableEmail = computed( (): boolean => props.disabledAddressTypes !== undefined && props.disabledAddressTypes.includes( AddressTypeModel.EMAIL ) );
+		const disableAnonymous = computed( (): boolean => props.disabledAddressTypes !== undefined && props.disabledAddressTypes.includes( AddressTypeModel.ANON ) );
+		const isFullAddressSelected = computed( (): boolean => addressType.value === 'full' );
+
+		// When disabled address type is selected, revert to person type
+		watch( () => props.disabledAddressTypes, disabledAddressTypes => {
+			if ( disabledAddressTypes !== undefined && type.value !== null && disabledAddressTypes.includes( type.value ) ) {
+				addressType.value = 'full';
+				fullAddressType.value = 'person';
+			}
+		} );
+
+		// Convert addressType and fullAddressType to AddressTypeModel
+		watch( addressType, newAddressType => {
+			console.log( 'add', addressType );
+			switch ( newAddressType ) {
+				case 'full':
+					type.value = AddressTypeModel.UNSET;
+					break;
+				case 'email':
+					type.value = AddressTypeModel.EMAIL;
+					fullAddressType.value = '';
+					break;
+				case 'anonymous':
+					type.value = AddressTypeModel.ANON;
+					fullAddressType.value = '';
+			}
+			emit( 'address-type', type.value );
+		} );
+
+		watch( fullAddressType, newFullAddressType => {
+			if ( newFullAddressType === '' ) {
+				return;
+			}
+			type.value = fullAddressTypeToModel[ newFullAddressType ];
+			emit( 'address-type', type.value );
+		} );
+
+		return {
+			type,
+			fullAddressType,
+			addressType,
+			disableEmail,
+			disableAnonymous,
+			isFullAddressSelected,
+		};
 	},
 } );
 </script>
