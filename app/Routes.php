@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
+use WMDE\Fundraising\Frontend\App\Controllers\ListCommentsController;
 use WMDE\Fundraising\Frontend\App\Controllers\NewDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PageDisplayController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
@@ -89,61 +90,17 @@ class Routes {
 
 		$app->get(
 			'list-comments.json',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$response = $app->json(
-					$ffFactory->newCommentListJsonPresenter()->present(
-						$ffFactory->newListCommentsUseCase()->listComments(
-							new CommentListingRequest(
-								(int)$request->query->get( 'n', '10' ),
-								(int)$request->query->get( 'page', '1' )
-							)
-						)
-					)
-				);
-
-				if ( $request->query->get( 'f' ) ) {
-					$response->setCallback( $request->query->get( 'f' ) );
-				}
-
-				return $response;
-			}
+			ListCommentsController::class . '::handleJson'
 		);
 
 		$app->get(
 			'list-comments.rss',
-			function () use ( $ffFactory ) {
-				$rss = $ffFactory->newCommentListRssPresenter()->present(
-					$ffFactory->newListCommentsUseCase()->listComments(
-						new CommentListingRequest( 100, CommentListingRequest::FIRST_PAGE )
-					)
-				);
-
-				return new Response(
-					$rss,
-					200,
-					[
-						'Content-Type' => 'text/xml; charset=utf-8',
-						'X-Moz-Is-Feed' => '1'
-					]
-				);
-			}
+			ListCommentsController::class . '::handleRss'
 		)->bind( self::LIST_COMMENTS_RSS );
 
 		$app->get(
 			'list-comments.html',
-			function ( Request $request ) use ( $ffFactory ) {
-				return new Response(
-					$ffFactory->newCommentListHtmlPresenter()->present(
-						$ffFactory->newListCommentsUseCase()->listComments(
-							new CommentListingRequest(
-								10,
-								(int)$request->query->get( 'page', '1' )
-							)
-						),
-						(int)$request->query->get( 'page', '1' )
-					)
-				);
-			}
+			ListCommentsController::class . '::handleHtml'
 		)->bind( self::LIST_COMMENTS_HTML );
 
 		$app->get(
@@ -154,9 +111,7 @@ class Routes {
 		$app->match(
 			'contact/subscribe',
 			AddSubscriptionController::class . '::addSubscription'
-		)
-			->method( 'GET|POST' )
-			->bind( self::SUBSCRIBE );
+		)->method( 'GET|POST' )->bind( self::SUBSCRIBE );
 
 		$app->get(
 			'contact/confirm-subscription/{confirmationCode}',
