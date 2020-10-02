@@ -22,6 +22,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\SofortNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController;
@@ -29,7 +30,6 @@ use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -409,9 +409,7 @@ class Routes {
 
 		$app->post(
 			'sofort-payment-notification',
-			function ( Request $request ) use ( $ffFactory ) {
-				return ( new SofortNotificationHandler( $ffFactory ) )->handle( $request );
-			}
+			SofortNotificationController::class . '::handle'
 		);
 
 		$app->get(

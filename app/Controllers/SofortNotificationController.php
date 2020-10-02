@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
+namespace WMDE\Fundraising\Frontend\App\Controllers;
 
 use DateTime;
 use Psr\Log\LogLevel;
@@ -15,20 +15,13 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\PaymentContext\RequestModel\SofortNotificationRequest;
 use WMDE\Fundraising\PaymentContext\ResponseModel\SofortNotificationResponse;
 
-class SofortNotificationHandler {
+class SofortNotificationController {
 
-	private $ffFactory;
+	private FunFunFactory $ffFactory;
+	private Request $request;
 
-	/**
-	 * @var Request
-	 */
-	private $request;
-
-	public function __construct( FunFunFactory $ffFactory ) {
+	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
 		$this->ffFactory = $ffFactory;
-	}
-
-	public function handle( Request $request ): Response {
 		$this->request = $request;
 
 		try {
@@ -109,5 +102,4 @@ class SofortNotificationHandler {
 		$context['query_vars'] = $this->request->query->all();
 		$this->ffFactory->getSofortLogger()->log( $logLevel, $message, $context );
 	}
-
 }
