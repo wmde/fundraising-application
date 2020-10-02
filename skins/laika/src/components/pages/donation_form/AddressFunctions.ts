@@ -1,5 +1,5 @@
 import { AddressFormData, AddressValidity, ValidationResult } from '@/view_models/Address';
-import { computed, onMounted, reactive } from '@vue/composition-api';
+import { computed, reactive } from '@vue/composition-api';
 import { Validity } from '@/view_models/Validity';
 import { AddressTypeModel, addressTypeName as getAddressTypeName } from '@/view_models/AddressTypeModel';
 import { mergeValidationResults } from '@/merge_validation_results';
@@ -15,7 +15,26 @@ import { NS_ADDRESS } from '@/store/namespaces';
 import { action } from '@/store/util';
 import { camelizeName } from '@/camlize_name';
 
-export const useAddressFunctions = ( props: any, store: any ) => {
+interface AddressValidationPatterns {
+	salutation: string,
+	title: string,
+	companyName: string,
+	firstName: string,
+	lastName: string,
+	street: string,
+	city: string,
+	postcode: string,
+	country: string,
+	email: string
+}
+
+interface AddressFunctionParams {
+	validateAddressUrl: string,
+	validateEmailUrl: string,
+	addressValidationPatterns: AddressValidationPatterns
+}
+
+export const useAddressFunctions = ( props: AddressFunctionParams, store: any ) => {
 	const formData: AddressFormData = reactive(
 		{
 			salutation: {
