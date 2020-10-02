@@ -23,7 +23,6 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	private array $validFormInput = [
 		'email' => 'jeroendedauw@gmail.com',
 		'wikilogin' => true,
-		'tracking' => 'test/blue',
 		'source' => 'testCampaign',
 	];
 
@@ -43,7 +42,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'POST',
-			'/contact/subscribe',
+			'/contact/subscribe?piwik_campaign=test&piwik_kwd=blue',
 			$this->validFormInput
 		);
 

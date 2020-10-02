@@ -8,13 +8,15 @@ use Silex\Application;
 use Silex\Provider\RoutingServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
+use WMDE\Fundraising\Frontend\App\EventHandlers\HandleExceptions;
+use WMDE\Fundraising\Frontend\App\EventHandlers\LogErrors;
+use WMDE\Fundraising\Frontend\App\EventHandlers\PrettifyJsonResponse;
+use WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData;
+use WMDE\Fundraising\Frontend\App\EventHandlers\StoreBucketSelection;
+use WMDE\Fundraising\Frontend\App\EventHandlers\TrimEveryInput;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
 class Bootstrap {
 
@@ -24,113 +26,25 @@ class Bootstrap {
 		$app->register( new SessionServiceProvider() );
 		$app->register( new RoutingServiceProvider() );
 		$app->register( new TwigServiceProvider() );
-		$app->register( new BucketSelectionServiceProvider( $ffFactory ) );
 		$app->register( new FundraisingFactoryServiceProvider( $ffFactory ) );
 
-		$app->before(
-			function ( Request $request, Application $app ) {
-				$request->attributes->set( 'request_stack.is_json', in_array( 'application/json', $request->getAcceptableContentTypes() ) );
-				if ( in_array( 'application/javascript', $request->getAcceptableContentTypes() ) && $request->get( 'callback', null ) ) {
-					$request->attributes->set( 'request_stack.is_json', true );
-				}
+		$app->extend( 'dispatcher', function ( EventDispatcher $dispatcher ) use ( $ffFactory ) {
+			$dispatcher->addSubscriber( new StoreBucketSelection( $ffFactory ) );
+			$dispatcher->addSubscriber( new AddIndicatorAttributeForJsonRequests() );
+			$dispatcher->addSubscriber( new RegisterTrackingData() );
+			$dispatcher->addSubscriber( new TrimEveryInput() );
+			$dispatcher->addSubscriber( new LogErrors( $ffFactory->getLogger() ) );
+			$dispatcher->addSubscriber( new HandleExceptions( $ffFactory ) );
 
-				$request->attributes->set( 'trackingCode', TrackingDataSelector::getFirstNonEmptyValue( [
-					$request->cookies->get( 'spenden_tracking' ),
-					$request->request->get( 'tracking' ),
-					TrackingDataSelector::concatTrackingFromVarTuple(
-						$request->get( 'piwik_campaign', '' ),
-						$request->get( 'piwik_kwd', '' )
-					)
-				] ) );
-
-				$request->attributes->set( 'trackingSource', TrackingDataSelector::getFirstNonEmptyValue( [
-					$request->cookies->get( 'spenden_source' ),
-					$request->request->get( 'source' ),
-					$request->server->get( 'HTTP_REFERER' )
-				] ) );
-			},
-			Application::EARLY_EVENT
-		);
-
-		$app->before( function ( Request $request ) {
-			foreach ( [ $request->request, $request->query ] as $parameterBag ) {
-				foreach ( $parameterBag->keys() as $key ) {
-					if ( is_string( $parameterBag->get( $key ) ) ) {
-						$parameterBag->set( $key, trim( $parameterBag->get( $key ) ) );
-					}
-				}
+			$environment = $_ENV['APP_ENV'] ?? 'dev';
+			if ( $environment === 'test' || $environment === 'dev' ) {
+				$dispatcher->addSubscriber( new PrettifyJsonResponse() );
 			}
-		}, Application::EARLY_EVENT );
-
-		$app->after( function ( Request $request, Response $response ) {
-			if ( $response instanceof JsonResponse ) {
-				$response->setEncodingOptions( JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
-			}
-
-			// Set cookie with original tracking data
-			if ( (string)$request->cookies->get( 'spenden_tracking' ) === '' &&
-				(string)$request->get( 'piwik_campaign' ) !== '' && (string)$request->get( 'piwik_kwd' ) !== '' ) {
-				$response->headers->setCookie( new \Symfony\Component\HttpFoundation\Cookie(
-					'spenden_tracking',
-					$request->get( 'piwik_campaign' ) . '/' . $request->get( 'piwik_kwd' )
-				) );
-			}
-
-			return $response;
+			return $dispatcher;
 		} );
 
-		$app->error( function ( AccessDeniedException $e ) use ( $ffFactory ) {
-			return new Response(
-				$ffFactory->newAccessDeniedHtmlPresenter()->present( $e->getMessage() ),
-				403,
-				[ 'X-Status-Code' => 403 ]
-			);
-		} );
-
-		$app->error( function ( NotFoundHttpException $e, Request $request ) use ( $ffFactory, $app ) {
-			if ( $request->attributes->get( 'request_stack.is_json', false ) ) {
-				return $app->json( [ 'ERR' => $e->getMessage() ], 404, [ 'X-Status-Code' => 404 ] );
-			}
-
-			return new Response(
-				$ffFactory->newPageNotFoundHtmlPresenter()->present(),
-				404,
-				[ 'X-Status-Code' => 404 ]
-			);
-		} );
-
-		$app->error( function ( \Exception $e, Request $request, $code ) use ( $ffFactory, $app ) {
-			if ( $app['debug'] ) {
-				throw $e;
-			}
-
-			$ffFactory->getLogger()->error(
-				$e->getMessage(),
-				[
-					'code' => $e->getCode(),
-					'file' => $e->getFile(),
-					'line' => $e->getLine(),
-					'stack_trace' => $e->getTraceAsString(),
-					'referrer' => $request->headers->get( 'referer' ),
-					'uri' => $request->getRequestUri(),
-					'languages' => $request->getLanguages(),
-					'charsets' => $request->getCharsets(),
-					'content_types' => $request->getAcceptableContentTypes(),
-					'method' => $request->getMethod()
-				]
-			);
-
-			if ( $request->attributes->get( 'request_stack.is_json', false ) ) {
-				return $app->json( [
-					'ERR' => $e->getMessage()
-				] );
-			}
-
-			return new Response(
-				$ffFactory->getInternalErrorHtmlPresenter()->present( $e ),
-				$code
-			);
-		} );
+		// Disable Silex error handler, we handle errors with HandleExceptions class
+		unset( $app['exception_handler'] );
 
 		return Routes::initializeRoutes( $app, $ffFactory );
 	}

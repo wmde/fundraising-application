@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\BucketSelectionServiceProvider
+ * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\StoreBucketSelection
  */
 class CampaignCookieTest extends WebRouteTestCase {
 
@@ -60,9 +60,9 @@ class CampaignCookieTest extends WebRouteTestCase {
 		$client->getCookieJar()->set( new BrowserKitCookie( self::COOKIE_NAME, 'omg=0' ) );
 		$client->request( 'get', '/', [ 'omg' => 1 ] );
 		$responseCookies = $client->getResponse()->headers->getCookies();
-		$bucketCookie = array_filter( $responseCookies, function ( Cookie $cookie ): bool {
+		$bucketCookie = array_values( array_filter( $responseCookies, function ( Cookie $cookie ): bool {
 			return $cookie->getName() === self::COOKIE_NAME;
-		} )[0];
+		} ) )[0];
 		$this->assertStringContainsString( 'omg=1', $bucketCookie->getValue() );
 	}
 
