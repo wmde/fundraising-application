@@ -14,6 +14,7 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
+use WMDE\Fundraising\Frontend\App\Controllers\ConfirmSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\ListCommentsController;
@@ -115,11 +116,7 @@ class Routes {
 
 		$app->get(
 			'contact/confirm-subscription/{confirmationCode}',
-			function ( $confirmationCode ) use ( $ffFactory ) {
-				$useCase = $ffFactory->newConfirmSubscriptionUseCase();
-				$response = $useCase->confirmSubscription( $confirmationCode );
-				return $ffFactory->newConfirmSubscriptionHtmlPresenter()->present( $response );
-			}
+			ConfirmSubscriptionController::class . '::handle'
 		)
 			->assert( 'confirmationCode', '^[0-9a-f]+$' )
 			->bind( self::CONFIRM_SUBSCRIPTION );
