@@ -2,31 +2,21 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\App\RouteHandlers;
+namespace WMDE\Fundraising\Frontend\App\Controllers;
 
-use Silex\Application;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
-/**
- * @license GPL-2.0-or-later
- * @author Tim Eulitz < tim.eulitz@wikimedia.de >
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
- */
-class PageDisplayHandler {
+class PageDisplayController {
 
-	private $ffFactory;
-	private $app;
+	private FunFunFactory $ffFactory;
 
-	public function __construct( FunFunFactory $ffFactory, Application $app ) {
+	public function handle( FunFunFactory $ffFactory, string $pageName ): string {
 		$this->ffFactory = $ffFactory;
-		$this->app = $app;
-	}
 
-	public function handle( string $pageName ): string {
 		$pageSelector = $this->ffFactory->getContentPagePageSelector();
 
 		try {

@@ -17,6 +17,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\NewDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\PageDisplayController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
@@ -27,7 +28,6 @@ use WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\PageDisplayHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -148,11 +148,8 @@ class Routes {
 
 		$app->get(
 			'page/{pageName}',
-			function ( Application $app, $pageName ) use ( $ffFactory ) {
-				return ( new PageDisplayHandler( $ffFactory, $app ) )->handle( $pageName );
-			}
-		)
-			->bind( self::SHOW_PAGE );
+			PageDisplayController::class . '::handle'
+		)->bind( self::SHOW_PAGE );
 
 		$app->match(
 			'contact/subscribe',
