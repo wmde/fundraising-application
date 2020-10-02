@@ -83,7 +83,7 @@ address_provision_options:
   buckets:
     - "provisional_address_options"
     - "old_address_type_options"
-  default_bucket: "provisional_address_options"
+  default_bucket: "old_address_type_options"
   url_key: provadd
   active: true
   param_only: true
