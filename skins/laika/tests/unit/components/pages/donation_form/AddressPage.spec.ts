@@ -1,17 +1,25 @@
-import { createLocalVue, mount, shallowMount } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 
 import AddressPage from '@/components/pages/donation_form/subpages/AddressPage.vue';
 import Vuex from 'vuex';
 import Buefy from 'buefy';
+import CompositionAPI from '@vue/composition-api';
 import { createStore } from '@/store/donation_store';
 import Address from '@/components/pages/donation_form/Address.vue';
 import { action } from '@/store/util';
 import { NS_PAYMENT } from '@/store/namespaces';
 import { initializePayment } from '@/store/payment/actionTypes';
+import { FeatureTogglePlugin } from '@/FeatureToggle';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
+localVue.use( CompositionAPI );
+
+localVue.use( FeatureTogglePlugin, { activeFeatures: [
+	'campaigns.address_type.preselection',
+	'campaigns.address_provision_options.old_address_type_options',
+] } );
 
 describe( 'AddressPage', () => {
 

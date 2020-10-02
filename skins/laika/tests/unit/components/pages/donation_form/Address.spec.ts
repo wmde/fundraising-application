@@ -1,6 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Buefy from 'buefy';
+import CompositionAPI from '@vue/composition-api';
 import Address from '@/components/pages/donation_form/Address.vue';
 import Name from '@/components/shared/Name.vue';
 import Postal from '@/components/shared/Postal.vue';
@@ -22,6 +23,7 @@ import { addressValidationPatterns } from '../../../../data/validation';
 const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
+localVue.use( CompositionAPI );
 
 localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'campaigns.address_type.preselection' ] } );
 
@@ -35,6 +37,7 @@ describe( 'Address.vue', () => {
 				countries: countries,
 				initialFormValues: '',
 				addressValidationPatterns: addressValidationPatterns,
+				isDirectDebit: false,
 			},
 			store: createStore(),
 			mocks: {
@@ -51,14 +54,26 @@ describe( 'Address.vue', () => {
 		expect( wrapper.findComponent( NewsletterOptIn ).exists() ).toBe( true );
 	} );
 
-	it( 'renders Bank Data component only if payment is direct debit', () => {
+	it( 'hides Bank Data component if payment is not direct debit', () => {
 		expect( wrapper.findComponent( PaymentBankData ).exists() ).toBe( false );
-		// Stub payment option direct debit (BEZ) being selected
-		const comp = wrapper.vm.$options!.computed;
-		if ( typeof comp.isDirectDebit === 'function' ) {
-			comp.isDirectDebit = jest.fn( () => true );
-			expect( wrapper.findComponent( PaymentBankData ).exists() ).toBe( true );
-		}
+	} );
+
+	it( 'renders Bank Data component if payment is direct debit', () => {
+		wrapper = mount( Address, {
+			localVue,
+			propsData: {
+				validateAddressUrl: 'validate-address',
+				countries: countries,
+				initialFormValues: '',
+				addressValidationPatterns: addressValidationPatterns,
+				isDirectDebit: true,
+			},
+			store: createStore(),
+			mocks: {
+				$t: () => { },
+			},
+		} );
+		expect( wrapper.findComponent( PaymentBankData ).exists() ).toBe( true );
 	} );
 
 	it( 'does not render postal and receipt opt out if adress type is anonymous', async () => {
