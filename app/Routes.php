@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\App\Controllers\AddCommentController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
@@ -133,74 +134,12 @@ class Routes {
 
 		$app->post(
 			'add-comment',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$addCommentRequest = new AddCommentRequest();
-				$addCommentRequest->setCommentText( trim( $request->request->get( 'comment', '' ) ) );
-				$addCommentRequest->setIsPublic( $request->request->getBoolean( 'public' ) );
-				$addCommentRequest->setDonationId( (int)$request->request->get( 'donationId', '' ) );
-
-				if ( $request->request->getBoolean( 'isAnonymous' ) ) {
-					$addCommentRequest->setIsAnonymous();
-				} else {
-					$addCommentRequest->setIsNamed();
-				}
-
-				$addCommentRequest->freeze()->assertNoNullFields();
-
-				$updateToken = $request->request->get( 'updateToken', '' );
-
-				if ( $updateToken === '' ) {
-					return $app->json(
-						[
-							'status' => 'ERR',
-							'message' => 'comment_failure_access_denied',
-						]
-					);
-				}
-
-				$response = $ffFactory->newAddCommentUseCase( $updateToken )->addComment( $addCommentRequest );
-
-				if ( $response->isSuccessful() ) {
-					return $app->json(
-						[
-							'status' => 'OK',
-							'message' => $response->getSuccessMessage(),
-						]
-					);
-				}
-
-				return $app->json(
-					[
-						'status' => 'ERR',
-						'message' => $response->getErrorMessage(),
-					]
-				);
-			}
+			AddCommentController::class . '::addComment'
 		)->bind( self::POST_COMMENT );
 
 		$app->get(
 			'add-comment',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$template = $ffFactory->getLayoutTemplate(
-					'Donation_Comment.html.twig'
-				);
-
-				return new Response(
-					$template->render(
-						[
-							'donationId' => (int)$request->query->get( 'donationId', '' ),
-							'updateToken' => $request->query->get( 'updateToken', '' ),
-							'cancelUrl' => $app['url_generator']->generate(
-								'show-donation-confirmation',
-								[
-									'id' => (int)$request->query->get( 'donationId', '' ),
-									'accessToken' => $request->query->get( 'accessToken', '' )
-								]
-							)
-						]
-					)
-				);
-			}
+			AddCommentController::class . '::viewComment'
 		)->bind( self::ADD_COMMENT_PAGE );
 
 		$app->post(
