@@ -36,13 +36,13 @@ class CompanyDonorRenderer {
 }
 class EmailDonorRenderer {
 	static getPersonTypeMessageKey() {
-		return 'donation_confirmation_topbox_donor_type_anonymous';
+		return 'donation_confirmation_topbox_donor_type_email';
 	}
 	static renderAddress( address ) {
-		return address.salutation + ', ' + address.fullName;
+		return address.salutation + ' ' + address.fullName;
 	}
-	static canRender() {
-		return address.salutation && address.fullName;
+	static canRender( address ) {
+		return address.salutation && address.firstName && address.lastName;
 	}
 }
 class AnonymousDonorRenderer {

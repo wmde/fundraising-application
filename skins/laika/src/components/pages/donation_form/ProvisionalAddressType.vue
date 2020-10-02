@@ -1,3 +1,7 @@
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 <template>
 		<fieldset class="form-input form-input__vertical-option-list">
 
@@ -56,10 +60,10 @@
 </template>
 
 <script lang="ts">
-import { AddressTypeModel, addressTypeFromName } from '@/view_models/AddressTypeModel';
+import { addressTypeFromName, AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { computed, defineComponent, PropType, Ref, ref, watch } from '@vue/composition-api';
 
-type fullAddressStates = '' | 'person' | 'company';
+	type fullAddressStates = '' | 'person' | 'company';
 
 const fullAddressTypeToModel: Record<fullAddressStates, AddressTypeModel> = {
 	'': AddressTypeModel.UNSET,
@@ -76,9 +80,33 @@ export default defineComponent( {
 		isDirectDebit: Boolean,
 	},
 	setup( props, { emit } ) {
-		const type : Ref<AddressTypeModel|null> = ref( props.initialAddressType ? addressTypeFromName( props.initialAddressType ) : null );
+
 		const fullAddressType : Ref<fullAddressStates> = ref( '' );
-		const addressType = ref( props.initialAddressType ? props.initialAddressType : '' );
+		const addressType = ref( '' );
+
+		const initialAddressTypeString = props.initialAddressType ? props.initialAddressType : 'unset';
+
+		switch ( addressTypeFromName( initialAddressTypeString ) ) {
+			case AddressTypeModel.ANON:
+				fullAddressType.value = '';
+				addressType.value = 'anonymous';
+				break;
+			case AddressTypeModel.EMAIL:
+			case AddressTypeModel.UNSET:
+				fullAddressType.value = '';
+				addressType.value = initialAddressTypeString;
+				break;
+			case AddressTypeModel.PERSON:
+				addressType.value = 'full';
+				fullAddressType.value = 'person';
+				break;
+			case AddressTypeModel.COMPANY:
+				addressType.value = 'full';
+				fullAddressType.value = 'company';
+				break;
+
+		}
+		const type : Ref<AddressTypeModel> = ref( addressTypeFromName( initialAddressTypeString ) );
 
 		const disableEmail = computed( (): boolean => props.disabledAddressTypes !== undefined && props.disabledAddressTypes.includes( AddressTypeModel.EMAIL ) );
 		const disableAnonymous = computed( (): boolean => props.disabledAddressTypes !== undefined && props.disabledAddressTypes.includes( AddressTypeModel.ANON ) );
@@ -94,7 +122,6 @@ export default defineComponent( {
 
 		// Convert addressType and fullAddressType to AddressTypeModel
 		watch( addressType, newAddressType => {
-			console.log( 'add', addressType );
 			switch ( newAddressType ) {
 				case 'full':
 					type.value = AddressTypeModel.UNSET;
@@ -106,6 +133,7 @@ export default defineComponent( {
 				case 'anonymous':
 					type.value = AddressTypeModel.ANON;
 					fullAddressType.value = '';
+					break;
 			}
 			emit( 'address-type', type.value );
 		} );

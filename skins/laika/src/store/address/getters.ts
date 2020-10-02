@@ -22,7 +22,10 @@ export const getters: GetterTree<AddressState, any> = {
 		const nonEmpty = ( v: string ): boolean => !!v;
 		const companyName = state.addressType === AddressTypeModel.COMPANY ? address.companyName : '';
 		// remove ternary operator in the following line when we implement contact person, https://phabricator.wikimedia.org/T220366
-		const privateName = state.addressType === AddressTypeModel.PERSON ? [ address.title, address.firstName, address.lastName ].filter( nonEmpty ).join( ' ' ) : '';
+		let privateName = '';
+		if ( state.addressType === AddressTypeModel.PERSON || state.addressType === AddressTypeModel.EMAIL ) {
+			privateName = [ address.title, address.firstName, address.lastName ].filter( nonEmpty ).join( ' ' );
+		}
 		return [ companyName, privateName ].filter( nonEmpty ).join( ', ' );
 	},
 	isValidating: ( state: AddressState ): boolean => {
