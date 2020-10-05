@@ -3223,16 +3223,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v4.4.14",
+            "version": "v4.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "3880541ff96d2e9a113f355d8c6891489c63cf56"
+                "reference": "7c5a1002178a612787c291a4f515f87b19176b61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/3880541ff96d2e9a113f355d8c6891489c63cf56",
-                "reference": "3880541ff96d2e9a113f355d8c6891489c63cf56",
+                "url": "https://api.github.com/repos/symfony/config/zipball/7c5a1002178a612787c291a4f515f87b19176b61",
+                "reference": "7c5a1002178a612787c291a4f515f87b19176b61",
                 "shasum": ""
             },
             "require": {
@@ -3297,7 +3297,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-02T16:08:58+00:00"
+            "time": "2020-10-02T07:34:48+00:00"
         },
         {
             "name": "symfony/console",
@@ -5428,6 +5428,7 @@
                 "i18n",
                 "text"
             ],
+            "abandoned": true,
             "time": "2018-12-05T18:34:18+00:00"
         },
         {
@@ -9375,12 +9376,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "501294549cb08e25e5c81aa435011b970710d5d3"
+                "reference": "54e5e5961adf5a7c1125989741f6b606bac0bc32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/501294549cb08e25e5c81aa435011b970710d5d3",
-                "reference": "501294549cb08e25e5c81aa435011b970710d5d3",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/54e5e5961adf5a7c1125989741f6b606bac0bc32",
+                "reference": "54e5e5961adf5a7c1125989741f6b606bac0bc32",
                 "shasum": ""
             },
             "require-dev": {
@@ -9413,7 +9414,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-09-29T14:55:25+00:00"
+            "time": "2020-10-02T18:54:50+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
