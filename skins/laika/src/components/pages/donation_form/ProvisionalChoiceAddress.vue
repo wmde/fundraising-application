@@ -5,6 +5,7 @@
 		</AutofillHandler>
 		<provisional-address-type
 				v-on:address-type="setAddressType( $event )"
+				v-on:set-full-selected="setFullSelected"
 				:disabledAddressTypes="disabledAddressTypes"
 				:is-direct-debit="isDirectDebit"
 				:initial-address-type="addressTypeName"/>
@@ -40,14 +41,14 @@
 					:show-error="fieldErrors.email"
 					:form-data="formData"
 					v-on:field-changed="onFieldChange"/>
-			<newsletter-opt-in v-if="showPostal"></newsletter-opt-in>
+			<newsletter-opt-in v-if="showEmail"></newsletter-opt-in>
 		</AutofillHandler>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { computed, onMounted, PropType } from '@vue/composition-api';
+import { computed, onMounted, PropType, ref } from '@vue/composition-api';
 import AutofillHandler from '@/components/shared/AutofillHandler.vue';
 import ProvisionalAddressType from '@/components/pages/donation_form/ProvisionalAddressType.vue';
 import AddressSwitchDonorType from '@/components/pages/donation_form/ProvisionalAddressType.vue';
@@ -90,10 +91,17 @@ export default Vue.extend( {
 	},
 	setup( props : any, { root: { $store } } ) {
 		const addressFunctions = useAddressFunctions( props, $store );
+		const isFullSelected = ref( false );
 
-		const showPostal = computed( () => [ AddressTypeModel.COMPANY, AddressTypeModel.PERSON ].includes( $store.state.address.addressType ) );
-		const showEmail = computed( () => [ AddressTypeModel.EMAIL, AddressTypeModel.COMPANY, AddressTypeModel.PERSON ].includes( $store.state.address.addressType ) );
-		const showName = computed( () => [ AddressTypeModel.EMAIL, AddressTypeModel.COMPANY, AddressTypeModel.PERSON ].includes( $store.state.address.addressType ) );
+		const showPostal = computed( () => {
+			return isFullSelected.value || [ AddressTypeModel.COMPANY, AddressTypeModel.PERSON ].includes( $store.state.address.addressType );
+		} );
+		const showEmail = computed( () => {
+			return isFullSelected.value || [ AddressTypeModel.EMAIL, AddressTypeModel.COMPANY, AddressTypeModel.PERSON ].includes( $store.state.address.addressType );
+		} );
+		const showName = computed( () => {
+			return isFullSelected.value || [ AddressTypeModel.EMAIL, AddressTypeModel.COMPANY, AddressTypeModel.PERSON ].includes( $store.state.address.addressType );
+		} );
 
 		onMounted( () => {
 			Object.entries( addressFunctions.formData ).forEach( ( formItem ) => {
@@ -105,10 +113,16 @@ export default Vue.extend( {
 			} );
 		} );
 
+		const setFullSelected = ( selected: boolean ) => {
+			isFullSelected.value = selected;
+		};
+
 		return { ...addressFunctions,
 			showName,
 			showPostal,
 			showEmail,
+			isFullSelected,
+			setFullSelected,
 		};
 	},
 } );

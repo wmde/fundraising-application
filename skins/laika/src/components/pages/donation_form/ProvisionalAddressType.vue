@@ -1,69 +1,69 @@
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
-import { AddressTypeModel } from '@/view_models/AddressTypeModel';
 <template>
-		<fieldset class="form-input form-input__vertical-option-list">
+	<fieldset class="form-input form-input__vertical-option-list">
+		<legend class="subtitle">{{ $t( 'donation_form_provisional_address_choice_title' ) }}</legend>
+		<div v-show="isDirectDebit" class="info-message has-margin-top-18">
+			{{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }}
+		</div>
 
-				<legend class="subtitle">{{ $t( 'donation_form_provisional_address_choice_title' ) }}</legend>
-				<div class="radio-container">
-						<b-radio
-										v-model="addressType"
-										native-value="full"
-										name="addressTypeProvisional"
-										>
-								{{ $t( 'donation_form_provisional_address_choice_fulladdress' ) }}
-								{{ $t( 'donation_form_provisional_address_choice_fulladdress_notice' ) }}
-						</b-radio>
-						<b-radio
-										name="addressTypeProvisional"
-										v-model="addressType"
-										native-value="email"
-										:disabled="disableEmail">
-								{{ $t( 'donation_form_provisional_address_choice_emailonly' ) }}
-								{{ $t( 'donation_form_provisional_address_choice_emailonly_notice' ) }}
-								<div v-show="isDirectDebit" class="info-message has-margin-top-18">
-									({{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }})
-								</div>
-						</b-radio>
-						<b-radio
-										name="addressTypeProvisional"
-										v-model="addressType"
-										native-value="anonymous"
-										:disabled="disableAnonymous">
-								{{ $t( 'donation_form_provisional_address_choice_noaddress' ) }}
-								<div v-show="isDirectDebit" class="info-message has-margin-top-18">
-									({{ $t( 'donation_form_address_choice_direct_debit_disclaimer' ) }})
-								</div>
-						</b-radio>
+		<div class="radio-container">
+			<b-radio
+				v-model="addressType"
+				native-value="full"
+				name="addressTypeProvisional"
+			>
+				{{ $t( 'donation_form_provisional_address_choice_fulladdress' ) }}
+				<div class="info-message has-margin-top-18">
+					{{ $t( 'donation_form_provisional_address_choice_fulladdress_notice' ) }}
 				</div>
-
-				<legend class="subtitle" v-show="isFullAddressSelected">{{ $t( 'donation_form_section_address_header_type' ) }}</legend>
-				<div class="radio-container" v-show="isFullAddressSelected">
-						<b-radio
-										name="addressTypeInternal"
-										v-model="fullAddressType"
-										native-value="person"
-										>{{ $t( 'donation_form_addresstype_option_private' ) }}
-						</b-radio>
-						<b-radio
-										v-show="isFullAddressSelected"
-										name="addressTypeInternal"
-										v-model="fullAddressType"
-										native-value="company"
-										>
-								{{ $t( 'donation_form_addresstype_option_company' ) }}
-						</b-radio>
+			</b-radio>
+			<b-radio
+				name="addressTypeProvisional"
+				v-model="addressType"
+				native-value="email"
+				:disabled="disableEmail">
+				{{ $t( 'donation_form_provisional_address_choice_emailonly' ) }}
+				<div class="info-message has-margin-top-18">
+					{{ $t( 'donation_form_provisional_address_choice_emailonly_notice' ) }}
 				</div>
+			</b-radio>
+			<b-radio
+				name="addressTypeProvisional"
+				v-model="addressType"
+				native-value="anonymous"
+				:disabled="disableAnonymous">
+				{{ $t( 'donation_form_provisional_address_choice_noaddress' ) }}
+			</b-radio>
+		</div>
 
-		</fieldset>
+		<legend class="subtitle" v-show="isFullAddressSelected">{{
+				$t( 'donation_form_section_address_header_type' )
+			}}
+		</legend>
+		<div class="radio-container" v-show="isFullAddressSelected">
+			<b-radio
+				name="addressTypeInternal"
+				v-model="fullAddressType"
+				native-value="person"
+			>{{ $t( 'donation_form_addresstype_option_private' ) }}
+			</b-radio>
+			<b-radio
+				v-show="isFullAddressSelected"
+				name="addressTypeInternal"
+				v-model="fullAddressType"
+				native-value="company"
+			>
+				{{ $t( 'donation_form_addresstype_option_company' ) }}
+			</b-radio>
+		</div>
+
+	</fieldset>
 </template>
 
 <script lang="ts">
 import { addressTypeFromName, AddressTypeModel } from '@/view_models/AddressTypeModel';
 import { computed, defineComponent, PropType, Ref, ref, watch } from '@vue/composition-api';
 
-	type fullAddressStates = '' | 'person' | 'company';
+type fullAddressStates = '' | 'person' | 'company';
 
 const fullAddressTypeToModel: Record<fullAddressStates, AddressTypeModel> = {
 	'': AddressTypeModel.UNSET,
@@ -71,6 +71,8 @@ const fullAddressTypeToModel: Record<fullAddressStates, AddressTypeModel> = {
 	company: AddressTypeModel.COMPANY,
 };
 
+// TODO: If this option wins the test add a store state to handle the pre-address type selection
+//       This will allow it to be saved and restored from local storage and simplify states here
 export default defineComponent( {
 	name: 'ProvisionalAddressType',
 	props: {
@@ -81,7 +83,7 @@ export default defineComponent( {
 	},
 	setup( props, { emit } ) {
 
-		const fullAddressType : Ref<fullAddressStates> = ref( '' );
+		const fullAddressType: Ref<fullAddressStates> = ref( '' );
 		const addressType = ref( '' );
 
 		const initialAddressTypeString = props.initialAddressType ? props.initialAddressType : 'unset';
@@ -106,7 +108,7 @@ export default defineComponent( {
 				break;
 
 		}
-		const type : Ref<AddressTypeModel> = ref( addressTypeFromName( initialAddressTypeString ) );
+		const type: Ref<AddressTypeModel> = ref( addressTypeFromName( initialAddressTypeString ) );
 
 		const disableEmail = computed( (): boolean => props.disabledAddressTypes !== undefined && props.disabledAddressTypes.includes( AddressTypeModel.EMAIL ) );
 		const disableAnonymous = computed( (): boolean => props.disabledAddressTypes !== undefined && props.disabledAddressTypes.includes( AddressTypeModel.ANON ) );
@@ -135,6 +137,7 @@ export default defineComponent( {
 					fullAddressType.value = '';
 					break;
 			}
+			emit( 'set-full-selected', newAddressType === 'full' );
 			emit( 'address-type', type.value );
 		} );
 
