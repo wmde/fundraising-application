@@ -70,7 +70,7 @@ address_type:
   buckets:
     - "preselection"
     - "no_preselection"
-  default_bucket: "preselection"
+  default_bucket: "no_preselection"
   url_key: addrpre
   active: false
   param_only: false
