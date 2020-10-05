@@ -4620,7 +4620,7 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v5.1.6",
+            "version": "v5.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
@@ -4702,7 +4702,7 @@
         },
         {
             "name": "symfony/property-info",
-            "version": "v5.1.6",
+            "version": "v5.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
@@ -4946,7 +4946,7 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.1.6",
+            "version": "v5.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
@@ -5428,6 +5428,7 @@
                 "i18n",
                 "text"
             ],
+            "abandoned": true,
             "time": "2018-12-05T18:34:18+00:00"
         },
         {
@@ -9375,12 +9376,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "501294549cb08e25e5c81aa435011b970710d5d3"
+                "reference": "54e5e5961adf5a7c1125989741f6b606bac0bc32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/501294549cb08e25e5c81aa435011b970710d5d3",
-                "reference": "501294549cb08e25e5c81aa435011b970710d5d3",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/54e5e5961adf5a7c1125989741f6b606bac0bc32",
+                "reference": "54e5e5961adf5a7c1125989741f6b606bac0bc32",
                 "shasum": ""
             },
             "require-dev": {
@@ -9413,7 +9414,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-09-29T14:55:25+00:00"
+            "time": "2020-10-02T18:54:50+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
