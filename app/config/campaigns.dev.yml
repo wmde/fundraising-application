@@ -14,7 +14,7 @@ compact_design:
   start: "2019-10-06 10:00:00"
 
 address_type:
-  active: true
+  active: false
   start: "2020-09-15"
 
 address_provision_options:

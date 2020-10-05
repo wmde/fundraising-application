@@ -72,7 +72,7 @@ address_type:
     - "no_preselection"
   default_bucket: "preselection"
   url_key: addrpre
-  active: true
+  active: false
   param_only: false
 
 address_provision_options:
