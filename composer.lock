@@ -5973,16 +5973,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "eaf6100a2d80eab44b7a84b74b99dc0cbe734224"
+                "reference": "c46649dc710fc12a15b5e6f4a32efe9758c4278e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/eaf6100a2d80eab44b7a84b74b99dc0cbe734224",
-                "reference": "eaf6100a2d80eab44b7a84b74b99dc0cbe734224",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/c46649dc710fc12a15b5e6f4a32efe9758c4278e",
+                "reference": "c46649dc710fc12a15b5e6f4a32efe9758c4278e",
                 "shasum": ""
             },
             "require": {
@@ -6004,7 +6004,7 @@
                 "ockcyp/covers-validator": "^1.2",
                 "phpmd/phpmd": "~2.6",
                 "phpstan/phpstan": "^0.12",
-                "phpunit/phpunit": "~9.2.6",
+                "phpunit/phpunit": "~9.4.0",
                 "wmde/fundraising-phpcs": "~1.0",
                 "wmde/psr-log-test-doubles": "~2.1"
             },
@@ -6025,7 +6025,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2020-09-24T12:19:36+00:00"
+            "time": "2020-10-02T16:47:21+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
