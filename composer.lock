@@ -7744,16 +7744,16 @@
         },
         {
             "name": "sebastian/type",
-            "version": "2.2.2",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "e494dcaeb89d1458c9ccd8c819745245a1669aea"
+                "reference": "fa592377f3923946cb90bf1f6a71ba2e5f229909"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/e494dcaeb89d1458c9ccd8c819745245a1669aea",
-                "reference": "e494dcaeb89d1458c9ccd8c819745245a1669aea",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/fa592377f3923946cb90bf1f6a71ba2e5f229909",
+                "reference": "fa592377f3923946cb90bf1f6a71ba2e5f229909",
                 "shasum": ""
             },
             "require": {
@@ -7765,7 +7765,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
@@ -7786,7 +7786,13 @@
             ],
             "description": "Collection of value objects that represent the types of the PHP type system",
             "homepage": "https://github.com/sebastianbergmann/type",
-            "time": "2020-09-28T06:01:38+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-10-06T08:41:03+00:00"
         },
         {
             "name": "sebastian/version",
@@ -8684,12 +8690,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "54e5e5961adf5a7c1125989741f6b606bac0bc32"
+                "reference": "c7601c9cf716c191106e212c721dd59b4e0113a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/54e5e5961adf5a7c1125989741f6b606bac0bc32",
-                "reference": "54e5e5961adf5a7c1125989741f6b606bac0bc32",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/c7601c9cf716c191106e212c721dd59b4e0113a6",
+                "reference": "c7601c9cf716c191106e212c721dd59b4e0113a6",
                 "shasum": ""
             },
             "require-dev": {
@@ -8722,7 +8728,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-10-02T18:54:50+00:00"
+            "time": "2020-10-06T11:09:50+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
