@@ -26,7 +26,7 @@ export function addressTypeName( t: AddressTypeModel ): string {
 	const name = AddressTypeNames.get( t );
 	// poor man's type check to protect against future extensions of AddressTypeModel, e.g. https://phabricator.wikimedia.org/T220367
 	if ( typeof name === 'undefined' ) {
-		throw new Error( 'Unknown address type: ' + t );
+		return AddressTypeNames.get( AddressTypeModel.UNSET ) as string;
 	}
 	return name;
 }
@@ -35,7 +35,7 @@ export function addressTypeFromName( n: string ): AddressTypeModel {
 	const type = AddressTypes.get( n );
 	// poor man's type check to protect against future extensions of AddressTypeModel, e.g. https://phabricator.wikimedia.org/T220367
 	if ( typeof type === 'undefined' ) {
-		throw new Error( 'Unknown address type: ' + n );
+		return AddressTypes.get( 'unset' ) as AddressTypeModel;
 	}
 	return type;
 }
