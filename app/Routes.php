@@ -20,6 +20,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\CancelMembershipApplicationControl
 use WMDE\Fundraising\Frontend\App\Controllers\ConfirmSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ContactController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
+use WMDE\Fundraising\Frontend\App\Controllers\DonationAcceptedController;
 use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\ListCommentsController;
 use WMDE\Fundraising\Frontend\App\Controllers\NewDonationController;
@@ -244,16 +245,7 @@ class Routes {
 
 		$app->get(
 			'donation-accepted',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$eventHandler = $ffFactory->newDonationAcceptedEventHandler(
-					$request->query->get( 'update_token', '' )
-				);
-				$result = $eventHandler->onDonationAccepted( (int)$request->query->get( 'donation_id', '' ) );
-
-				return $app->json(
-					$result === null ? [ 'status' => 'OK' ] : [ 'status' => 'ERR', 'message' => $result ]
-				);
-			}
+			DonationAcceptedController::class . '::handle'
 		);
 
 		$app->post(
