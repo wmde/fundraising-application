@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\ConfirmSubscriptionController;
+use WMDE\Fundraising\Frontend\App\Controllers\ContactController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\ListCommentsController;
@@ -144,41 +145,12 @@ class Routes {
 
 		$app->post(
 			'contact/get-in-touch',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$contactFormRequest = new GetInTouchRequest(
-					$request->get( 'firstname', '' ),
-					$request->get( 'lastname', '' ),
-					$request->get( 'email', '' ),
-					$request->get( 'donationNumber', '' ),
-					$request->get( 'subject', '' ),
-					$request->get( 'category', '' ),
-					$request->get( 'messageBody', '' )
-				);
-
-				$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContactRequest( $contactFormRequest );
-				if ( $contactFormResponse->isSuccessful() ) {
-					return $app->redirect(
-						$app['url_generator']->generate( 'page', [ 'pageName' => 'Kontakt_Bestaetigung' ] )
-					);
-				}
-
-				return $ffFactory->newGetInTouchHtmlPresenter()->present(
-					$contactFormResponse,
-					$request->request->all()
-				);
-			}
+			ContactController::class . '::sendRequest'
 		);
 
 		$app->get(
 			'contact/get-in-touch',
-			function () use ( $ffFactory ) {
-				return $ffFactory->getLayoutTemplate( 'Contact_Form.html.twig' )->render(
-					[
-						'contact_categories' => $ffFactory->getGetInTouchCategories(),
-						'contactFormValidationPatterns' => $ffFactory->getValidationRules()->contactForm,
-					]
-				);
-			}
+			ContactController::class . '::viewContactForm'
 		)->bind( self::GET_IN_TOUCH );
 
 		$app->get(
