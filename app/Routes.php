@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\CancelDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\CancelMembershipApplicationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ConfirmSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ContactController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
@@ -217,16 +218,7 @@ class Routes {
 
 		$app->get(
 			'cancel-membership-application',
-			function ( Request $request ) use ( $ffFactory ) {
-				$cancellationRequest = new CancellationRequest(
-					(int)$request->query->get( 'id', '' )
-				);
-
-				return $ffFactory->newCancelMembershipApplicationHtmlPresenter()->present(
-					$ffFactory->newCancelMembershipApplicationUseCase( $request->query->get( 'updateToken', '' ) )
-						->cancelApplication( $cancellationRequest )
-				);
-			}
+			CancelMembershipApplicationController::class . '::handle'
 		)->bind( self::CANCEL_MEMBERSHIP );
 
 		$app->match(
