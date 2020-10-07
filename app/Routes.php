@@ -15,6 +15,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\AddCommentController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
+use WMDE\Fundraising\Frontend\App\Controllers\CancelDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ConfirmSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ContactController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
@@ -178,21 +179,7 @@ class Routes {
 
 		$app->post(
 			'donation/cancel',
-			function ( Request $request ) use ( $ffFactory ) {
-				$cancellationRequest = new CancelDonationRequest(
-					(int)$request->request->get( 'sid', '' )
-				);
-
-				$responseModel = $ffFactory->newCancelDonationUseCase( $request->request->get( 'utoken', '' ) )
-					->cancelDonation( $cancellationRequest );
-
-				$httpResponse = new Response( $ffFactory->newCancelDonationHtmlPresenter()->present( $responseModel ) );
-				if ( $responseModel->cancellationSucceeded() ) {
-					$httpResponse->headers->clearCookie( 'donation_timestamp' );
-				}
-
-				return $httpResponse;
-			}
+			CancelDonationController::class . '::handle'
 		)->bind( self::CANCEL_DONATION );
 
 		$app->post(
