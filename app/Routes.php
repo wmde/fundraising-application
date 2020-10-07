@@ -25,6 +25,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\PageDisplayController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowFaqController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\SofortNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
@@ -155,13 +156,7 @@ class Routes {
 
 		$app->get(
 			'faq',
-			function () use ( $ffFactory ) {
-				return $ffFactory->getLayoutTemplate( 'Frequent_Questions.html.twig' )->render(
-					[
-						'faq_content' => $ffFactory->getFaqContent(),
-					]
-				);
-			}
+			ShowFaqController::class . '::handle'
 		)->bind( self::SHOW_FAQ );
 
 		$app->get(
