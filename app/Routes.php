@@ -27,6 +27,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\NewDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PageDisplayController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee;
+use WMDE\Fundraising\Frontend\App\Controllers\PurgeCacheController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowFaqController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowMembershipConfirmationController;
@@ -316,17 +317,7 @@ class Routes {
 
 		$app->get(
 			'/purge-cache',
-			function ( Request $request ) use ( $ffFactory ) {
-				$response = $ffFactory->newAuthorizedCachePurger()->purgeCache( $request->query->get( 'secret', '' ) );
-
-				return new Response(
-					[
-						AuthorizedCachePurger::RESULT_SUCCESS => 'SUCCESS',
-						AuthorizedCachePurger::RESULT_ERROR => 'ERROR',
-						AuthorizedCachePurger::RESULT_ACCESS_DENIED => 'ACCESS DENIED'
-					][$response]
-				);
-			}
+			PurgeCacheController::class . '::handle'
 		);
 
 		$app->get(
