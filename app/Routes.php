@@ -27,6 +27,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMem
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowFaqController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowUseOfFundsController;
 use WMDE\Fundraising\Frontend\App\Controllers\SofortNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
@@ -172,10 +173,7 @@ class Routes {
 
 		$app->get(
 			'use-of-funds',
-			function ( Request $request ) use ( $ffFactory ) {
-				$renderer = $ffFactory->getUseOfFundsRenderer();
-				return $renderer( $request );
-			}
+			ShowUseOfFundsController::class . '::handle'
 		)->bind( self::SHOW_USE_OF_FUNDS );
 
 		$app->post(
