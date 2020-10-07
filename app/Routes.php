@@ -27,6 +27,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowFaqController;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowMembershipConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUseOfFundsController;
 use WMDE\Fundraising\Frontend\App\Controllers\SofortNotificationController;
@@ -211,18 +212,7 @@ class Routes {
 
 		$app->get(
 			'show-membership-confirmation',
-			function ( Request $request ) use ( $ffFactory ) {
-				$presenter = $ffFactory->newMembershipApplicationConfirmationHtmlPresenter();
-
-				$useCase = $ffFactory->newMembershipApplicationConfirmationUseCase(
-					$presenter,
-					$request->query->get( 'accessToken', '' )
-				);
-
-				$useCase->showConfirmation( new ShowAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) ) );
-
-				return $presenter->getHtml();
-			}
+			ShowMembershipConfirmationController::class . '::handle'
 		)->bind( self::SHOW_MEMBERSHIP_CONFIRMATION );
 
 		$app->get(
