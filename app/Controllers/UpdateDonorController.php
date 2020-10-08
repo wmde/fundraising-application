@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorRequest;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorResponse;
@@ -23,7 +24,7 @@ class UpdateDonorController {
 
 	public const ADDRESS_CHANGE_SESSION_KEY = 'address_changed';
 
-	public function updateDonor( Request $request, FunFunFactory $ffFactory, Application $app ): Response {
+	public function updateDonor( Request $request, FunFunFactory $ffFactory, SessionInterface $session ): Response {
 		$updateToken = $request->request->get( 'updateToken', '' );
 		$accessToken = $request->query->get( 'accessToken', '' );
 		$responseModel = $ffFactory
@@ -32,7 +33,7 @@ class UpdateDonorController {
 		if ( $request->getAcceptableContentTypes()[0] === 'application/json' ) {
 			return $this->createJsonResponse( $responseModel );
 		}
-		return $this->createHtmlResponse( $app, $ffFactory, $responseModel, $updateToken, $accessToken );
+		return $this->createHtmlResponse( $session, $ffFactory, $responseModel, $updateToken, $accessToken );
 	}
 
 	private function createJsonResponse( UpdateDonorResponse $responseModel ): JsonResponse {
@@ -43,7 +44,7 @@ class UpdateDonorController {
 	}
 
 	private function createHtmlResponse(
-		Application $app,
+		SessionInterface $session,
 		FunFunFactory $ffFactory,
 		UpdateDonorResponse $responseModel,
 		string $updateToken,
@@ -53,7 +54,7 @@ class UpdateDonorController {
 			throw new AccessDeniedException();
 		}
 		if ( $responseModel->isSuccessful() ) {
-			$app['session']->set(
+			$session->set(
 				self::ADDRESS_CHANGE_SESSION_KEY,
 				true
 			);
