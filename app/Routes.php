@@ -6,11 +6,7 @@ namespace WMDE\Fundraising\Frontend\App;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentRequest;
-use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationRequest;
-use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest;
 use WMDE\Fundraising\Frontend\App\Controllers\AddCommentController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
@@ -42,11 +38,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
-use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
-use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowAppConfirmationRequest;
 
 class Routes {
 
