@@ -61,7 +61,7 @@ export const mutations: MutationTree<AddressState> = {
 		if ( payload.status === 'OK' ) {
 			return;
 		}
-		if ( state.requiredFields[ state.addressType ].indexOf( 'email' ) > 0 ) {
+		if ( state.requiredFields[ state.addressType ].indexOf( 'email' ) > -1 ) {
 			state.validity.email = Validity.INVALID;
 		}
 	},
