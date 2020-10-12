@@ -5475,16 +5475,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v4.0.1",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "c46649dc710fc12a15b5e6f4a32efe9758c4278e"
+                "reference": "9ccf15b8908931073b9b5feebcb6aae47c3fefcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/c46649dc710fc12a15b5e6f4a32efe9758c4278e",
-                "reference": "c46649dc710fc12a15b5e6f4a32efe9758c4278e",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/9ccf15b8908931073b9b5feebcb6aae47c3fefcf",
+                "reference": "9ccf15b8908931073b9b5feebcb6aae47c3fefcf",
                 "shasum": ""
             },
             "require": {
@@ -5527,7 +5527,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2020-10-02T16:47:21+00:00"
+            "time": "2020-10-06T16:02:46+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -6900,16 +6900,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.4.0",
+            "version": "9.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "ef533467a7974c4b6c354f3eff42a115910bd4e5"
+                "reference": "1f09a12726593737e8a228ebb1c8647305d07c41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ef533467a7974c4b6c354f3eff42a115910bd4e5",
-                "reference": "ef533467a7974c4b6c354f3eff42a115910bd4e5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1f09a12726593737e8a228ebb1c8647305d07c41",
+                "reference": "1f09a12726593737e8a228ebb1c8647305d07c41",
                 "shasum": ""
             },
             "require": {
@@ -6924,23 +6924,23 @@
                 "phar-io/manifest": "^2.0.1",
                 "phar-io/version": "^3.0.2",
                 "php": ">=7.3",
-                "phpspec/prophecy": "^1.11.1",
+                "phpspec/prophecy": "^1.12.1",
                 "phpunit/php-code-coverage": "^9.2",
-                "phpunit/php-file-iterator": "^3.0.4",
-                "phpunit/php-invoker": "^3.1",
-                "phpunit/php-text-template": "^2.0.2",
-                "phpunit/php-timer": "^5.0.1",
-                "sebastian/cli-parser": "^1.0",
-                "sebastian/code-unit": "^1.0.5",
-                "sebastian/comparator": "^4.0.3",
-                "sebastian/diff": "^4.0.2",
-                "sebastian/environment": "^5.1.2",
-                "sebastian/exporter": "^4.0.2",
-                "sebastian/global-state": "^5.0",
-                "sebastian/object-enumerator": "^4.0.2",
-                "sebastian/resource-operations": "^3.0.2",
-                "sebastian/type": "^2.2.1",
-                "sebastian/version": "^3.0.1"
+                "phpunit/php-file-iterator": "^3.0.5",
+                "phpunit/php-invoker": "^3.1.1",
+                "phpunit/php-text-template": "^2.0.3",
+                "phpunit/php-timer": "^5.0.2",
+                "sebastian/cli-parser": "^1.0.1",
+                "sebastian/code-unit": "^1.0.6",
+                "sebastian/comparator": "^4.0.5",
+                "sebastian/diff": "^4.0.3",
+                "sebastian/environment": "^5.1.3",
+                "sebastian/exporter": "^4.0.3",
+                "sebastian/global-state": "^5.0.1",
+                "sebastian/object-enumerator": "^4.0.3",
+                "sebastian/resource-operations": "^3.0.3",
+                "sebastian/type": "^2.3",
+                "sebastian/version": "^3.0.2"
             },
             "require-dev": {
                 "ext-pdo": "*",
@@ -6995,7 +6995,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-02T03:54:37+00:00"
+            "time": "2020-10-11T07:41:19+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -8690,12 +8690,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "c7601c9cf716c191106e212c721dd59b4e0113a6"
+                "reference": "daa1f49da15d0aa67559573449288a633c9845bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/c7601c9cf716c191106e212c721dd59b4e0113a6",
-                "reference": "c7601c9cf716c191106e212c721dd59b4e0113a6",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/daa1f49da15d0aa67559573449288a633c9845bb",
+                "reference": "daa1f49da15d0aa67559573449288a633c9845bb",
                 "shasum": ""
             },
             "require-dev": {
@@ -8728,7 +8728,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-10-06T11:09:50+00:00"
+            "time": "2020-10-06T13:53:42+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
