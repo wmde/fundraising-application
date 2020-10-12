@@ -70,7 +70,20 @@ address_type:
   buckets:
     - "preselection"
     - "no_preselection"
-  default_bucket: "preselection"
+  default_bucket: "no_preselection"
   url_key: addrpre
-  active: true
+  active: false
   param_only: false
+
+address_provision_options:
+  description: Test adding provisional address type options before choosing a donor type. (Adds "e-mail only" option)
+  reference: "https://phabricator.wikimedia.org/T260023"
+  start: "2020-10-01"
+  end: "2020-12-31"
+  buckets:
+    - "old_address_type_options"
+    - "provisional_address_options"
+  default_bucket: "old_address_type_options"
+  url_key: provadd
+  active: true
+  param_only: true

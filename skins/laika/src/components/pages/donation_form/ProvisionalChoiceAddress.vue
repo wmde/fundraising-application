@@ -3,12 +3,12 @@
 		<AutofillHandler @autofill="onAutofill" >
 			<payment-bank-data v-if="isDirectDebit" :validateBankDataUrl="validateBankDataUrl" :validateLegacyBankDataUrl="validateLegacyBankDataUrl"></payment-bank-data>
 		</AutofillHandler>
-		<address-type
+		<provisional-address-type
 				v-on:address-type="setAddressType( $event )"
+				v-on:set-full-selected="setFullSelected"
 				:disabledAddressTypes="disabledAddressTypes"
 				:is-direct-debit="isDirectDebit"
-				:initial-address-type="addressTypeName">
-		</address-type>
+				:initial-address-type="addressTypeName"/>
 		<span
 				v-if="addressTypeIsInvalid"
 				class="help is-danger">{{ $t( 'donation_form_section_address_error' ) }}
@@ -17,15 +17,15 @@
 				class="has-margin-top-18"
 				v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}
 		</div>
-		<AutofillHandler @autofill="onAutofill" >
+		<AutofillHandler @autofill="onAutofill">
 			<name
-					v-if="addressTypeIsNotAnon"
+					v-if="showName"
 					:show-error="fieldErrors"
 					:form-data="formData"
 					:address-type="addressType"
 					v-on:field-changed="onFieldChange"/>
 			<postal
-					v-if="addressTypeIsNotAnon"
+					v-if="showPostal"
 					:show-error="fieldErrors"
 					:form-data="formData"
 					:countries="countries"
@@ -34,43 +34,46 @@
 			<receipt-opt-out
 					:message="$t( 'receipt_needed_donation_page' )"
 					:initial-receipt-needed="receiptNeeded"
-					v-if="addressTypeIsNotAnon"
+					v-if="showPostal"
 					v-on:opted-out="setReceiptOptedOut( $event )"/>
 			<email
-					v-if="addressTypeIsNotAnon"
+					v-if="showEmail"
 					:show-error="fieldErrors.email"
 					:form-data="formData"
 					v-on:field-changed="onFieldChange"/>
-			<newsletter-opt-in v-if="addressTypeIsNotAnon"></newsletter-opt-in>
+			<newsletter-opt-in v-if="showEmail"></newsletter-opt-in>
 		</AutofillHandler>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { PropType, onMounted } from '@vue/composition-api';
+import { computed, onMounted, PropType, ref } from '@vue/composition-api';
 import AutofillHandler from '@/components/shared/AutofillHandler.vue';
-import AddressType from '@/components/pages/donation_form/AddressType.vue';
+import ProvisionalAddressType from '@/components/pages/donation_form/ProvisionalAddressType.vue';
+import AddressSwitchDonorType from '@/components/pages/donation_form/ProvisionalAddressType.vue';
 import Name from '@/components/shared/Name.vue';
 import Postal from '@/components/shared/Postal.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
 import Email from '@/components/shared/Email.vue';
 import NewsletterOptIn from '@/components/pages/donation_form/NewsletterOptIn.vue';
-import PaymentBankData from '@/components/shared/PaymentBankData.vue';
-import { Country } from '@/view_models/Country';
-import { AddressValidation } from '@/view_models/Validation';
-import { useAddressFunctions } from '@/components/pages/donation_form/AddressFunctions';
+import { AddressTypeModel } from '@/view_models/AddressTypeModel';
+import { Validity } from '@/view_models/Validity';
 import { NS_ADDRESS } from '@/store/namespaces';
 import { validateAddressField } from '@/store/address/actionTypes';
 import { action } from '@/store/util';
-import { Validity } from '@/view_models/Validity';
+import PaymentBankData from '@/components/shared/PaymentBankData.vue';
+import { Country } from '@/view_models/Country';
+import { AddressValidation } from '@/view_models/Validation';
+import { useAddressFunctions } from './AddressFunctions';
 
 export default Vue.extend( {
 	name: 'Address',
 	components: {
 		Name,
 		Postal,
-		AddressType,
+		ProvisionalAddressType,
+		AddressSwitchDonorType,
 		ReceiptOptOut,
 		Email,
 		NewsletterOptIn,
@@ -86,10 +89,19 @@ export default Vue.extend( {
 		isDirectDebit: Boolean,
 		addressValidationPatterns: Object as PropType<AddressValidation>,
 	},
-	// TODO properly type 'props'
 	setup( props : any, { root: { $store } } ) {
-
 		const addressFunctions = useAddressFunctions( props, $store );
+		const isFullSelected = ref( false );
+
+		const showPostal = computed( () => {
+			return isFullSelected.value || [ AddressTypeModel.COMPANY, AddressTypeModel.PERSON ].includes( $store.state.address.addressType );
+		} );
+		const showEmail = computed( () => {
+			return isFullSelected.value || [ AddressTypeModel.EMAIL, AddressTypeModel.COMPANY, AddressTypeModel.PERSON ].includes( $store.state.address.addressType );
+		} );
+		const showName = computed( () => {
+			return isFullSelected.value || [ AddressTypeModel.EMAIL, AddressTypeModel.COMPANY, AddressTypeModel.PERSON ].includes( $store.state.address.addressType );
+		} );
 
 		onMounted( () => {
 			Object.entries( addressFunctions.formData ).forEach( ( formItem ) => {
@@ -101,7 +113,17 @@ export default Vue.extend( {
 			} );
 		} );
 
-		return { ...addressFunctions };
+		const setFullSelected = ( selected: boolean ) => {
+			isFullSelected.value = selected;
+		};
+
+		return { ...addressFunctions,
+			showName,
+			showPostal,
+			showEmail,
+			isFullSelected,
+			setFullSelected,
+		};
 	},
 } );
 </script>

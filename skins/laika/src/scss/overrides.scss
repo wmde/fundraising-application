@@ -43,7 +43,7 @@
 
 .b-radio.radio {
 	height: auto;
-	width: $fun-min-width;
+	width: 380px;
 	@include from($tablet) {
 		width: $fun-max-width;
 	}

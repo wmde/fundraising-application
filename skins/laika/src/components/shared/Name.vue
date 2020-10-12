@@ -1,6 +1,6 @@
 <template>
 <div class="name-section">
-	<div v-if="addressType === AddressTypeModel.PERSON || addressType === AddressTypeModel.UNSET">
+	<div v-if="addressType === AddressTypeModel.PERSON || addressType === AddressTypeModel.EMAIL || addressType === AddressTypeModel.UNSET">
 		<fieldset class="form-input form-input__horizontal-option-list">
 			<legend class="subtitle">{{ $t( 'donation_form_salutation_label' ) }}</legend>
 			<div class="radio-container">

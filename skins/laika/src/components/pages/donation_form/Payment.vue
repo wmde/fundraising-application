@@ -15,15 +15,28 @@
 				:disabled-payment-intervals="disabledPaymentIntervals"
 				v-on:interval-selected="sendIntervalToStore"
 		></payment-interval>
-		<payment-type
-				class="has-margin-top-36"
-				:current-type="type"
-				:payment-types="paymentTypes"
-				:error="typeIsValid ? '' : $t('donation_form_payment_type_error')"
-				:title="$t('donation_form_payment_type_title')"
-				:disabled-payment-types="disabledPaymentTypes"
-				v-on:payment-type-selected="sendTypeToStore"
-		></payment-type>
+		<feature-toggle>
+			<payment-type
+					class="has-margin-top-36"
+					:current-type="type"
+					:payment-types="paymentTypes"
+					:error="typeIsValid ? '' : $t('donation_form_payment_type_error')"
+					:title="$t('donation_form_payment_type_title')"
+					:disabled-payment-types="disabledPaymentTypes"
+					slot="campaigns.address_provision_options.old_address_type_options"
+					v-on:payment-type-selected="sendTypeToStore"
+			></payment-type>
+			<payment-type
+					class="has-margin-top-36"
+					:current-type="type"
+					:payment-types="paymentTypes"
+					:error="typeIsValid ? '' : $t('donation_form_payment_type_error')"
+					:title="$t('donation_form_payment_type_title')"
+					:disabled-payment-types="[]"
+					slot="campaigns.address_provision_options.provisional_address_options"
+					v-on:payment-type-selected="sendTypeToStore"
+			></payment-type>
+		</feature-toggle>
 	</div>
 </template>
 

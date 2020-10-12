@@ -29,6 +29,8 @@ class ValidateAddressController {
 			$nameViolations = $this->getPersonViolations( $request );
 		} elseif ( $addressType === AddressType::COMPANY ) {
 			$nameViolations = $this->getCompanyViolations( $request );
+		} elseif ( $addressType === AddressType::EMAIL ) {
+			$nameViolations = $this->getPersonViolations( $request );
 		} elseif ( $addressType === AddressType::ANONYMOUS ) {
 			return $this->newSuccessResponse();
 		} else {
