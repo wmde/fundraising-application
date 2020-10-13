@@ -29,9 +29,19 @@ describe( 'createInitialDonationAddressValues', () => {
 		expect( values.addressType ).toEqual( AddressTypeModel.ANON );
 	} );
 
-	it( 'uses stored address type over initial address type', () => {
+	it( 'uses initial address type over stored address type over', () => {
 		const storedAddressType = { key: 'addressType', value: AddressTypeModel.PERSON };
-		const initialAddressType = 'anonym';
+		const initialAddressType = 'firma';
+
+		const dataPersister = new FakeDataPersister( [ storedAddressType ] );
+		const values = createInitialDonationAddressValues( dataPersister, { addressType: initialAddressType } );
+
+		expect( values.addressType ).toEqual( AddressTypeModel.COMPANY );
+	} );
+
+	it( 'uses stored address type when initial address type is empty', () => {
+		const storedAddressType = { key: 'addressType', value: AddressTypeModel.PERSON };
+		const initialAddressType = '';
 
 		const dataPersister = new FakeDataPersister( [ storedAddressType ] );
 		const values = createInitialDonationAddressValues( dataPersister, { addressType: initialAddressType } );
