@@ -6,36 +6,39 @@ namespace WMDE\Fundraising\Frontend\App;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentRequest;
-use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationRequest;
-use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentListingRequest;
+use WMDE\Fundraising\Frontend\App\Controllers\AddCommentController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
 use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
+use WMDE\Fundraising\Frontend\App\Controllers\CancelDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\CancelMembershipApplicationController;
+use WMDE\Fundraising\Frontend\App\Controllers\ConfirmSubscriptionController;
+use WMDE\Fundraising\Frontend\App\Controllers\ContactController;
 use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
+use WMDE\Fundraising\Frontend\App\Controllers\DonationAcceptedController;
 use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
+use WMDE\Fundraising\Frontend\App\Controllers\ListCommentsController;
 use WMDE\Fundraising\Frontend\App\Controllers\NewDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\PageDisplayController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee;
+use WMDE\Fundraising\Frontend\App\Controllers\PurgeCacheController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowFaqController;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowMembershipConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\ShowUseOfFundsController;
+use WMDE\Fundraising\Frontend\App\Controllers\SofortNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
 use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\PageDisplayHandler;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
-use WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
-use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancellationRequest;
-use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowAppConfirmationRequest;
 
 class Routes {
 
@@ -89,85 +92,32 @@ class Routes {
 
 		$app->get(
 			'list-comments.json',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$response = $app->json(
-					$ffFactory->newCommentListJsonPresenter()->present(
-						$ffFactory->newListCommentsUseCase()->listComments(
-							new CommentListingRequest(
-								(int)$request->query->get( 'n', '10' ),
-								(int)$request->query->get( 'page', '1' )
-							)
-						)
-					)
-				);
-
-				if ( $request->query->get( 'f' ) ) {
-					$response->setCallback( $request->query->get( 'f' ) );
-				}
-
-				return $response;
-			}
+			ListCommentsController::class . '::handleJson'
 		);
 
 		$app->get(
 			'list-comments.rss',
-			function () use ( $ffFactory ) {
-				$rss = $ffFactory->newCommentListRssPresenter()->present(
-					$ffFactory->newListCommentsUseCase()->listComments(
-						new CommentListingRequest( 100, CommentListingRequest::FIRST_PAGE )
-					)
-				);
-
-				return new Response(
-					$rss,
-					200,
-					[
-						'Content-Type' => 'text/xml; charset=utf-8',
-						'X-Moz-Is-Feed' => '1'
-					]
-				);
-			}
+			ListCommentsController::class . '::handleRss'
 		)->bind( self::LIST_COMMENTS_RSS );
 
 		$app->get(
 			'list-comments.html',
-			function ( Request $request ) use ( $ffFactory ) {
-				return new Response(
-					$ffFactory->newCommentListHtmlPresenter()->present(
-						$ffFactory->newListCommentsUseCase()->listComments(
-							new CommentListingRequest(
-								10,
-								(int)$request->query->get( 'page', '1' )
-							)
-						),
-						(int)$request->query->get( 'page', '1' )
-					)
-				);
-			}
+			ListCommentsController::class . '::handleHtml'
 		)->bind( self::LIST_COMMENTS_HTML );
 
 		$app->get(
 			'page/{pageName}',
-			function ( Application $app, $pageName ) use ( $ffFactory ) {
-				return ( new PageDisplayHandler( $ffFactory, $app ) )->handle( $pageName );
-			}
-		)
-			->bind( self::SHOW_PAGE );
+			PageDisplayController::class . '::handle'
+		)->bind( self::SHOW_PAGE );
 
 		$app->match(
 			'contact/subscribe',
 			AddSubscriptionController::class . '::addSubscription'
-		)
-			->method( 'GET|POST' )
-			->bind( self::SUBSCRIBE );
+		)->method( 'GET|POST' )->bind( self::SUBSCRIBE );
 
 		$app->get(
 			'contact/confirm-subscription/{confirmationCode}',
-			function ( $confirmationCode ) use ( $ffFactory ) {
-				$useCase = $ffFactory->newConfirmSubscriptionUseCase();
-				$response = $useCase->confirmSubscription( $confirmationCode );
-				return $ffFactory->newConfirmSubscriptionHtmlPresenter()->present( $response );
-			}
+			ConfirmSubscriptionController::class . '::handle'
 		)
 			->assert( 'confirmationCode', '^[0-9a-f]+$' )
 			->bind( self::CONFIRM_SUBSCRIPTION );
@@ -184,124 +134,27 @@ class Routes {
 
 		$app->post(
 			'add-comment',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$addCommentRequest = new AddCommentRequest();
-				$addCommentRequest->setCommentText( trim( $request->request->get( 'comment', '' ) ) );
-				$addCommentRequest->setIsPublic( $request->request->getBoolean( 'public' ) );
-				$addCommentRequest->setDonationId( (int)$request->request->get( 'donationId', '' ) );
-
-				if ( $request->request->getBoolean( 'isAnonymous' ) ) {
-					$addCommentRequest->setIsAnonymous();
-				} else {
-					$addCommentRequest->setIsNamed();
-				}
-
-				$addCommentRequest->freeze()->assertNoNullFields();
-
-				$updateToken = $request->request->get( 'updateToken', '' );
-
-				if ( $updateToken === '' ) {
-					return $app->json(
-						[
-							'status' => 'ERR',
-							'message' => 'comment_failure_access_denied',
-						]
-					);
-				}
-
-				$response = $ffFactory->newAddCommentUseCase( $updateToken )->addComment( $addCommentRequest );
-
-				if ( $response->isSuccessful() ) {
-					return $app->json(
-						[
-							'status' => 'OK',
-							'message' => $response->getSuccessMessage(),
-						]
-					);
-				}
-
-				return $app->json(
-					[
-						'status' => 'ERR',
-						'message' => $response->getErrorMessage(),
-					]
-				);
-			}
+			AddCommentController::class . '::addComment'
 		)->bind( self::POST_COMMENT );
 
 		$app->get(
 			'add-comment',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$template = $ffFactory->getLayoutTemplate(
-					'Donation_Comment.html.twig'
-				);
-
-				return new Response(
-					$template->render(
-						[
-							'donationId' => (int)$request->query->get( 'donationId', '' ),
-							'updateToken' => $request->query->get( 'updateToken', '' ),
-							'cancelUrl' => $app['url_generator']->generate(
-								'show-donation-confirmation',
-								[
-									'id' => (int)$request->query->get( 'donationId', '' ),
-									'accessToken' => $request->query->get( 'accessToken', '' )
-								]
-							)
-						]
-					)
-				);
-			}
+			AddCommentController::class . '::viewComment'
 		)->bind( self::ADD_COMMENT_PAGE );
 
 		$app->post(
 			'contact/get-in-touch',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$contactFormRequest = new GetInTouchRequest(
-					$request->get( 'firstname', '' ),
-					$request->get( 'lastname', '' ),
-					$request->get( 'email', '' ),
-					$request->get( 'donationNumber', '' ),
-					$request->get( 'subject', '' ),
-					$request->get( 'category', '' ),
-					$request->get( 'messageBody', '' )
-				);
-
-				$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContactRequest( $contactFormRequest );
-				if ( $contactFormResponse->isSuccessful() ) {
-					return $app->redirect(
-						$app['url_generator']->generate( 'page', [ 'pageName' => 'Kontakt_Bestaetigung' ] )
-					);
-				}
-
-				return $ffFactory->newGetInTouchHtmlPresenter()->present(
-					$contactFormResponse,
-					$request->request->all()
-				);
-			}
+			ContactController::class . '::sendRequest'
 		);
 
 		$app->get(
 			'contact/get-in-touch',
-			function () use ( $ffFactory ) {
-				return $ffFactory->getLayoutTemplate( 'Contact_Form.html.twig' )->render(
-					[
-						'contact_categories' => $ffFactory->getGetInTouchCategories(),
-						'contactFormValidationPatterns' => $ffFactory->getValidationRules()->contactForm,
-					]
-				);
-			}
+			ContactController::class . '::viewContactForm'
 		)->bind( self::GET_IN_TOUCH );
 
 		$app->get(
 			'faq',
-			function () use ( $ffFactory ) {
-				return $ffFactory->getLayoutTemplate( 'Frequent_Questions.html.twig' )->render(
-					[
-						'faq_content' => $ffFactory->getFaqContent(),
-					]
-				);
-			}
+			ShowFaqController::class . '::handle'
 		)->bind( self::SHOW_FAQ );
 
 		$app->get(
@@ -317,29 +170,12 @@ class Routes {
 
 		$app->get(
 			'use-of-funds',
-			function ( Request $request ) use ( $ffFactory ) {
-				$renderer = $ffFactory->getUseOfFundsRenderer();
-				return $renderer( $request );
-			}
+			ShowUseOfFundsController::class . '::handle'
 		)->bind( self::SHOW_USE_OF_FUNDS );
 
 		$app->post(
 			'donation/cancel',
-			function ( Request $request ) use ( $ffFactory ) {
-				$cancellationRequest = new CancelDonationRequest(
-					(int)$request->request->get( 'sid', '' )
-				);
-
-				$responseModel = $ffFactory->newCancelDonationUseCase( $request->request->get( 'utoken', '' ) )
-					->cancelDonation( $cancellationRequest );
-
-				$httpResponse = new Response( $ffFactory->newCancelDonationHtmlPresenter()->present( $responseModel ) );
-				if ( $responseModel->cancellationSucceeded() ) {
-					$httpResponse->headers->clearCookie( 'donation_timestamp' );
-				}
-
-				return $httpResponse;
-			}
+			CancelDonationController::class . '::handle'
 		)->bind( self::CANCEL_DONATION );
 
 		$app->post(
@@ -371,32 +207,12 @@ class Routes {
 
 		$app->get(
 			'show-membership-confirmation',
-			function ( Request $request ) use ( $ffFactory ) {
-				$presenter = $ffFactory->newMembershipApplicationConfirmationHtmlPresenter();
-
-				$useCase = $ffFactory->newMembershipApplicationConfirmationUseCase(
-					$presenter,
-					$request->query->get( 'accessToken', '' )
-				);
-
-				$useCase->showConfirmation( new ShowAppConfirmationRequest( (int)$request->query->get( 'id', 0 ) ) );
-
-				return $presenter->getHtml();
-			}
+			ShowMembershipConfirmationController::class . '::handle'
 		)->bind( self::SHOW_MEMBERSHIP_CONFIRMATION );
 
 		$app->get(
 			'cancel-membership-application',
-			function ( Request $request ) use ( $ffFactory ) {
-				$cancellationRequest = new CancellationRequest(
-					(int)$request->query->get( 'id', '' )
-				);
-
-				return $ffFactory->newCancelMembershipApplicationHtmlPresenter()->present(
-					$ffFactory->newCancelMembershipApplicationUseCase( $request->query->get( 'updateToken', '' ) )
-						->cancelApplication( $cancellationRequest )
-				);
-			}
+			CancelMembershipApplicationController::class . '::handle'
 		)->bind( self::CANCEL_MEMBERSHIP );
 
 		$app->match(
@@ -412,9 +228,7 @@ class Routes {
 
 		$app->post(
 			'sofort-payment-notification',
-			function ( Request $request ) use ( $ffFactory ) {
-				return ( new SofortNotificationHandler( $ffFactory ) )->handle( $request );
-			}
+			SofortNotificationController::class . '::handle'
 		);
 
 		$app->get(
@@ -424,16 +238,7 @@ class Routes {
 
 		$app->get(
 			'donation-accepted',
-			function ( Request $request ) use ( $app, $ffFactory ) {
-				$eventHandler = $ffFactory->newDonationAcceptedEventHandler(
-					$request->query->get( 'update_token', '' )
-				);
-				$result = $eventHandler->onDonationAccepted( (int)$request->query->get( 'donation_id', '' ) );
-
-				return $app->json(
-					$result === null ? [ 'status' => 'OK' ] : [ 'status' => 'ERR', 'message' => $result ]
-				);
-			}
+			DonationAcceptedController::class . '::handle'
 		);
 
 		$app->post(
@@ -504,17 +309,7 @@ class Routes {
 
 		$app->get(
 			'/purge-cache',
-			function ( Request $request ) use ( $ffFactory ) {
-				$response = $ffFactory->newAuthorizedCachePurger()->purgeCache( $request->query->get( 'secret', '' ) );
-
-				return new Response(
-					[
-						AuthorizedCachePurger::RESULT_SUCCESS => 'SUCCESS',
-						AuthorizedCachePurger::RESULT_ERROR => 'ERROR',
-						AuthorizedCachePurger::RESULT_ACCESS_DENIED => 'ACCESS DENIED'
-					][$response]
-				);
-			}
+			PurgeCacheController::class . '::handle'
 		);
 
 		$app->get(

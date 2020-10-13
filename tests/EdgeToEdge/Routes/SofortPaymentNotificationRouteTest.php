@@ -18,7 +18,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\RouteHandlers\SofortNotificationHandler
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\SofortNotificationController
  */
 class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 

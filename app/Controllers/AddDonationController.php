@@ -8,6 +8,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
@@ -27,15 +28,15 @@ use WMDE\FunValidators\ConstraintViolation;
  */
 class AddDonationController {
 
-	private Application $app;
+	private SessionInterface $session;
 	private FunFunFactory $ffFactory;
 	/**
 	 * @var FallbackRequestValueReader
 	 */
 	private FallbackRequestValueReader $legacyRequestValueReader;
 
-	public function handle( FunFunFactory $ffFactory, Request $request, Application $app ): Response {
-		$this->app = $app;
+	public function handle( FunFunFactory $ffFactory, Request $request, SessionInterface $session ): Response {
+		$this->session = $session;
 		$this->ffFactory = $ffFactory;
 		if ( !$this->isSubmissionAllowed( $request ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
@@ -233,7 +234,7 @@ class AddDonationController {
 	 * Reset session data to prevent old donations from changing the application output due to old data leaking into the new session
 	 */
 	private function resetSessionState(): void {
-		$this->app['session']->set(
+		$this->session->set(
 			UpdateDonorController::ADDRESS_CHANGE_SESSION_KEY,
 			false
 		);
