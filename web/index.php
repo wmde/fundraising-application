@@ -2,41 +2,34 @@
 
 declare( strict_types = 1 );
 
-stream_wrapper_unregister( 'phar' );
+use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\Frontend\App\Kernel;
 
 require_once __DIR__ . '/../vendor/autoload.php';
-use FileFetcher\SimpleFileFetcher;
-use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
-use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
-/**
- * @var FunFunFactory $ffFactory
- */
-$ffFactory = call_user_func( function() {
+$env = $_SERVER['APP_ENV'] ?? 'dev';
+$debug = $_SERVER['APP_DEBUG'] ? (bool)$_SERVER['APP_DEBUG'] : false;
 
-	$dotenv = Dotenv\Dotenv::createImmutable( __DIR__ . '/..' );
-	$dotenv->load();
+if ( $debug || 1 == 1 ) {
+	umask( 0000 );
+	Debug::enable();
+}
 
-    $bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?? 'dev' );
-
-	$configReader = new ConfigReader(
-		new SimpleFileFetcher(),
-		...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/../app/config' )
+if ( $trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false ) {
+	Request::setTrustedProxies(
+		explode( ',', $trustedProxies ),
+		Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST
 	);
+}
 
-	$config = $configReader->getConfig();
-	$factory = new FunFunFactory( $config );
+if ( $trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false ) {
+	Request::setTrustedHosts( [ $trustedHosts ] );
+}
 
-	$bootstrapper->getEnvironmentSetupInstance()
-		->setEnvironmentDependentInstances( $factory, $config );
+$kernel = new Kernel( $env, $debug );
+$request = Request::createFromGlobals();
+$response = $kernel->handle( $request );
+$response->send();
+$kernel->terminate( $request, $response );
 
-	return $factory;
-} );
-
-$app = \WMDE\Fundraising\Frontend\App\Bootstrap::initializeApplication( $ffFactory );
-
-$ffFactory->setUrlGenerator( new UrlGeneratorAdapter( $app['url_generator'] ) );
-
-$app->run();
