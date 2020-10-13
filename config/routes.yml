@@ -1,0 +1,209 @@
+validate-email:
+    path: /validate-email
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ValidationController::validateEmail'
+
+validate-donor-address:
+    path: /validate-address
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController::validate'
+
+validate-donation-amount:
+    path: /validate-donation-amount
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController::validate'
+
+validate-fee:
+    path: /validate-fee
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController::validateFee'
+
+GET_list_comments.json:
+    path: /list-comments.json
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ListCommentsController::handleJson'
+
+list-comments.rss:
+    path: /list-comments.rss
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ListCommentsController::handleRss'
+
+list-comments.html:
+    path: /list-comments.html
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ListCommentsController::handleHtml'
+
+page:
+    path: '/page/{pageName}'
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\PageDisplayController::handle'
+
+subscribe:
+    path: /contact/subscribe
+    methods: [GET, POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController::addSubscription'
+
+confirm-subscription:
+    path: '/contact/confirm-subscription/{confirmationCode}'
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ConfirmSubscriptionController::handle'
+    requirements: { confirmationCode: '[0-9a-f]+' }
+
+check-iban:
+    path: /check-iban
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\IbanController::validateIban'
+
+generate-iban:
+    path: /generate-iban
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\IbanController::convertBankDataToIban'
+
+PostComment:
+    path: /add-comment
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\AddCommentController::addComment'
+
+AddCommentPage:
+    path: /add-comment
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\AddCommentController::viewComment'
+
+POST_contact_get_in_touch:
+    path: /contact/get-in-touch
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ContactController::sendRequest'
+
+contact:
+    path: /contact/get-in-touch
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ContactController::viewContactForm'
+
+faq:
+    path: /faq
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ShowFaqController::handle'
+
+update-address-show-form:
+    path: /update-address
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController::showForm'
+
+update-address:
+    path: /update-address
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController::updateAddress'
+
+use-of-funds:
+    path: /use-of-funds
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ShowUseOfFundsController::handle'
+
+cancel-donation:
+    path: /donation/cancel
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\CancelDonationController::handle'
+
+POST_donation_add:
+    path: /donation/add
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\AddDonationController::handle'
+
+update-donor:
+    path: /donation/update
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController::updateDonor'
+
+show-donation-form:
+    path: /donation/new
+    methods: [POST, GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\NewDonationController::handle'
+
+POST_apply_for_membership:
+    path: /apply-for-membership
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController::applyForMembership'
+
+GET_apply_for_membership:
+    path: /apply-for-membership
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController::showApplicationForm'
+
+show-membership-confirmation:
+    path: /show-membership-confirmation
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ShowMembershipConfirmationController::handle'
+
+cancel-membership-application:
+    path: /cancel-membership-application
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\CancelMembershipApplicationController::handle'
+
+show-donation-confirmation:
+    path: /show-donation-confirmation
+    methods: [GET, POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController::show'
+
+POST_handle_paypal_payment_notification:
+    path: /handle-paypal-payment-notification
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController::handle'
+
+POST_sofort_payment_notification:
+    path: /sofort-payment-notification
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\SofortNotificationController::handle'
+
+GET_handle_creditcard_payment_notification:
+    path: /handle-creditcard-payment-notification
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController::handleNotification'
+
+GET_donation_accepted:
+    path: /donation-accepted
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\DonationAcceptedController::handle'
+
+POST_handle_paypal_membership_fee_payments:
+    path: /handle-paypal-membership-fee-payments
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee::handle'
+
+/:
+    path: /
+    methods: [ POST, GET ]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\TestController::handle'
+
+POST_spenden_paypal_handler.php:
+    path: /spenden/paypal_handler.php
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController::handle'
+
+GET_spenden_page:
+    path: '/spenden/{page}'
+    methods: [GET]
+    controller: null
+    requirements: { page: '[a-zA-Z_\-\s\x7f-\xff]+' }
+
+GET_spenden_outputFormat.php:
+    path: '/spenden/{outputFormat}.php'
+    methods: [GET]
+    controller: null
+    requirements: { outputFormat: list|rss|json }
+
+GET_spendenpage:
+    path: '/spenden{page}'
+    methods: [GET]
+    controller: null
+    requirements: { page: '/?([a-z]+\.php)?' }
+
+GET_purge_cache:
+    path: /purge-cache
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\PurgeCacheController::handle'
+
+GET_status:
+    path: /status
+    methods: [GET]
+    controller: null
+
