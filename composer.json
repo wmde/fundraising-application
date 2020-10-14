@@ -11,7 +11,7 @@
 		"ext-sodium": "*",
 
 		"silex/silex": "~2.0",
-		"twig/twig": "~1.23",
+		"twig/twig": "~3.0",
 		"pimple/pimple": "~3.0",
 
 		"wmde/email-address": "~1.0",
@@ -21,12 +21,11 @@
 		"wmde/fundraising-memberships": "~3.0.0",
 		"wmde/fundraising-payments": "~1.0.1",
 		"wmde/fundraising-subscriptions": "~2.0.0",
-		"wmde/fundraising-content-provider": "^2.0",
+		"wmde/fundraising-content-provider": "~3.0",
 		"wmde/fundraising-address-change": "@dev",
 		"wmde/freezable-value-object": "~1.0",
 		"wmde/fun-validators": "~3.0.0",
 
-		"symfony/twig-bridge": "^3.3",
 		"symfony/console": "^3.3",
 		"symfony/stopwatch": "^3.3",
 		"symfony/http-foundation": "^3.3",
@@ -36,7 +35,6 @@
 		"psr/log": "~1.0",
 		"monolog/monolog": "~2.1",
 		"swiftmailer/swiftmailer": "~6.2",
-		"twig/extensions": "^1.3",
 		"micropayment-de/service-client": "~1.23",
 		"justinrainbow/json-schema": "^5.2",
 		"piwik/piwik-php-tracker": "^2.0",
@@ -132,8 +130,6 @@
 		"phpmd/phpmd": "~2.6",
 
 		"symfony/browser-kit": "^4.4",
-		"silex/web-profiler": "~2.0",
-		"sorien/silex-dbal-profiler": "~2.0",
 		"wmde/fundraising-frontend-content": "dev-test",
 		"symfony/css-selector": "^5.1",
 		"phpstan/phpstan": "^0.12",

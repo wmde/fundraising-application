@@ -10,8 +10,8 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Twig_Environment;
-use Twig_Error;
+use Twig\Environment;
+use Twig\Error\Error;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
 use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
@@ -120,11 +120,11 @@ class RenderMailTemplatesCommand extends Command {
 	 * Render all templates and write them to disk to allow a comparison with an alternative data set
 	 *
 	 * @param array $testData Template names and fixture information to render these templates
-	 * @param Twig_Environment $twig The templating engine to render the templates
+	 * @param Environment $twig The templating engine to render the templates
 	 * @param string $outputPath Path where rendered templates will be written to
 	 * @param OutputInterface $output Command output
 	 */
-	private function renderTemplates( array $testData, Twig_Environment $twig, string $outputPath, OutputInterface $output ): void {
+	private function renderTemplates( array $testData, Environment $twig, string $outputPath, OutputInterface $output ): void {
 		foreach ( $testData as $templateFileName => $templateSettings ) {
 
 			if ( empty( $templateSettings['variants'] ) ) {
@@ -157,7 +157,7 @@ class RenderMailTemplatesCommand extends Command {
 							)
 						)
 					);
-				} catch ( Twig_Error $e ) {
+				} catch ( Error $e ) {
 					$output->writeln( '' );
 					$output->writeln( '<error>' . $e->getMessage() . '</error>' );
 					$output->writeln( var_export( $e->getSourceContext(), true ) );

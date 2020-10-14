@@ -26,10 +26,10 @@ use Swift_SmtpTransport;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
 use TNvpServiceDispatcher;
-use Twig_Environment;
-use Twig_Extensions_Extension_Intl;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
+use Twig\Environment;
+use Twig\Loader\ChainLoader;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 use WMDE\Clock\SystemClock;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Euro\Euro;
@@ -412,38 +412,31 @@ class FunFunFactory {
 		) )->readAndValidateJson();
 	}
 
-	public function setSkinTwigEnvironment( Twig_Environment $twig ): void {
-		$this->sharedObjects[Twig_Environment::class . '::Skin'] = $twig;
+	public function setSkinTwigEnvironment( Environment $twig ): void {
+		$this->sharedObjects[Environment::class . '::Skin'] = $twig;
 	}
 
-	public function getSkinTwig(): Twig_Environment {
-		return $this->createSharedObject( Twig_Environment::class . '::Skin', function (): Twig_Environment {
+	public function getSkinTwig(): Environment {
+		return $this->createSharedObject( Environment::class . '::Skin', function (): Environment {
 			$config = $this->config['twig'];
 			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
 
 			$twigFactory = $this->newTwigFactory( $config );
-			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
 
-			$loaders = array_filter( [
-				$twigFactory->newFileSystemLoader(),
-				// This is just a fallback for testing
-				$twigFactory->newArrayLoader(),
-			] );
-			$extensions = [];
 			$filters = [
 				$twigFactory->newFilePrefixFilter(
 					$this->getFilePrefixer()
 				)
 			];
 			$functions = [
-				new Twig_SimpleFunction(
+				new TwigFunction(
 					'web_content',
 					function ( string $name, array $context = [] ): string {
 						return $this->getContentProvider()->getWeb( $name, $context );
 					},
 					[ 'is_safe' => [ 'html' ] ]
 				),
-				new Twig_SimpleFunction(
+				new TwigFunction(
 					'translations',
 					function (): string {
 						return json_encode( $this->getTranslationCollector()->collectTranslations() );
@@ -451,40 +444,36 @@ class FunFunFactory {
 					[ 'is_safe' => [ 'html' ] ]
 				),
 			];
+			$globals = [
+				'basepath' => $this->config['web-basepath'],
+				'assets_path' => $this->config['assets-path']
+			];
 
-			return $configurator->getEnvironment( new Twig_Environment(), $loaders, $extensions, $filters, $functions );
+			return $twigFactory->newTwigEnvironment( $filters, $functions, $globals );
 		} );
 	}
 
-	public function getMailerTwig(): Twig_Environment {
-		return $this->createSharedObject( Twig_Environment::class . '::Mailer', function (): Twig_Environment {
+	public function getMailerTwig(): Environment {
+		return $this->createSharedObject( Environment::class . '::Mailer', function (): Environment {
 			$mailTranslator = $this->getMailTranslator();
-			$twigFactory = $this->newTwigFactory( $this->config['mailer-twig'] );
-			$configurator = $twigFactory->newTwigEnvironmentConfigurator();
+			$config = $this->config['mailer-twig'];
+			$twigFactory = $this->newTwigFactory( $config );
 
-			$loaders = array_filter( [
-				$twigFactory->newFileSystemLoader(),
-				// This is just a fallback for testing
-				$twigFactory->newArrayLoader(),
-			] );
-			$extensions = [
-				new Twig_Extensions_Extension_Intl(),
-			];
 			$filters = [
-				new Twig_SimpleFilter(
+				new TwigFilter(
 					'payment_interval',
 					/** @var int|string $interval */
 					function ( $interval ) use ( $mailTranslator ): string {
 						return $mailTranslator->trans( "donation_payment_interval_{$interval}" );
 					}
 				),
-				new Twig_SimpleFilter(
+				new TwigFilter(
 					'payment_method',
 					function ( string $method ) use ( $mailTranslator ): string {
 						return $mailTranslator->trans( $method );
 					}
 				),
-				new Twig_SimpleFilter(
+				new TwigFilter(
 					'membership_type',
 					function ( string $membershipType ) use ( $mailTranslator ): string {
 						return $mailTranslator->trans( $membershipType );
@@ -492,25 +481,25 @@ class FunFunFactory {
 				),
 			];
 			$functions = [
-				new Twig_SimpleFunction(
+				new TwigFunction(
 					'mail_content',
 					function ( string $name, array $context = [] ): string {
 						return $this->getContentProvider()->getMail( $name, $context );
 					},
 					[ 'is_safe' => [ 'all' ] ]
 				),
-				new Twig_SimpleFunction(
+				new TwigFunction(
 					'url',
 					function ( string $name, array $parameters = [] ): string {
 						return $this->getUrlGenerator()->generateAbsoluteUrl( $name, $parameters );
 					}
 				)
 			];
+			$globals = [
+				'day_of_the_week' => $this->getDayOfWeekName()
+			];
 
-			$twigEnvironment = new Twig_Environment();
-			$twigEnvironment->addGlobal( 'day_of_the_week', $this->getDayOfWeekName() );
-
-			return $configurator->getEnvironment( $twigEnvironment, $loaders, $extensions, $filters, $functions );
+			return $twigFactory->newTwigEnvironment( $filters, $functions, $globals );
 		} );
 	}
 
@@ -725,7 +714,6 @@ class FunFunFactory {
 	public function newAuthorizedCachePurger(): AuthorizedCachePurger {
 		return new AuthorizedCachePurger(
 			new AllOfTheCachePurger(
-				$this->getSkinTwig(),
 				$this->getPageCache(),
 				$this->getRenderedPageCache(),
 				$this->getCampaignCache()
@@ -1689,11 +1677,13 @@ class FunFunFactory {
 	}
 
 	public function getSkinDirectory(): string {
-		return 'skins/' . $this->config['skin'] . '/templates';
+		return $this->createSharedObject( 'SKIN_DIRECTORY', function (): string {
+			return $this->getAbsolutePath( 'skins/' . $this->config['skin'] . '/templates' );
+		} );
 	}
 
-	public function getAbsoluteSkinDirectory(): string {
-		return $this->getAbsolutePath( $this->getSkinDirectory() );
+	public function setSkinDirectory( string $skinDirectory ): void {
+		$this->sharedObjects['SKIN_DIRECTORY'] = $skinDirectory;
 	}
 
 	/**
