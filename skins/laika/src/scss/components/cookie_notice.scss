@@ -45,9 +45,20 @@ $cookie-notice-padding: 32px;
 			transition: transform 100ms, margin-top 100ms;
 		}
 	}
-	.open .cookie-notice-more::after {
-		margin-top: -0.2em;
-		transform: rotate( 135deg );
+	&-show-less {
+		display: none;
+	}
+	.open {
+		.cookie-notice-more::after {
+			margin-top: -0.2em;
+			transform: rotate( 135deg );
+		}
+		.cookie-notice-show-more {
+			display: none;
+		}
+		.cookie-notice-show-less {
+			display: inline;
+		}
 	}
 	&-content {
 		position: fixed;
@@ -81,7 +92,7 @@ $cookie-notice-padding: 32px;
 		position: relative;
 		height: 38px;
 		overflow-y: hidden;
-		padding-right: 60px;
+		padding-right: 80px;
 
 		&.open {
 			height: auto;
@@ -166,7 +177,7 @@ $cookie-notice-padding: 32px;
 		display: block;
 		font-size: 14px;
 		line-height: 18px;
-		padding-right: 60px;
+		padding-right: 80px;
 		max-height: 38px;
 		overflow-y: hidden;
 	}

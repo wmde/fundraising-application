@@ -4,7 +4,8 @@
 			<slot/>
 		</span>
 		<a href="" v-on:click="toggleText" class="cookie-notice-more" v-if="showMoreLink">
-			{{ $t( 'cookie_option_more' ) }}
+			<span class="cookie-notice-show-more">{{ $t( 'cookie_option_more' ) }}</span>
+			<span class="cookie-notice-show-less">{{ $t( 'cookie_option_less' ) }}</span>
 		</a>
 	</span>
 </template>
