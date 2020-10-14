@@ -16,8 +16,6 @@ use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
 use NumberFormatter;
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use RemotelyLiving\Doorkeeper\Doorkeeper;
@@ -216,14 +214,12 @@ use WMDE\FunValidators\Validators\TextPolicyValidator;
 /**
  * @license GPL-2.0-or-later
  */
-class FunFunFactory implements ServiceProviderInterface {
+class FunFunFactory {
 
 	/**
 	 * @var array<string, mixed>
 	 */
 	private array $config;
-
-	private Container $pimple;
 
 	private bool $addDoctrineSubscribers = true;
 
@@ -236,17 +232,7 @@ class FunFunFactory implements ServiceProviderInterface {
 
 	public function __construct( array $config ) {
 		$this->config = $config;
-		$this->pimple = $this->newPimple();
 		$this->sharedObjects = [];
-	}
-
-	private function newPimple(): Container {
-		$container = new Container();
-		$this->register( $container );
-		return $container;
-	}
-
-	public function register( Container $container ): void {
 	}
 
 	private function createSharedObject( string $id, callable $constructionFunction ) { // @codingStandardsIgnoreLine
