@@ -44,24 +44,26 @@ class SupportHandlerTest extends TestCase {
 		$this->assertFalse( $wasHandled, 'Support handler should always return false when error-prone handler has thrown an exception.' );
 	}
 
-	public function testSupportHandlerReturnsHandlingResultFromWrappedMainHandler(): void {
+	/**
+	 * @dataProvider handlerResultsProvider
+	 *
+	 * @param bool $returnValue
+	 */
+	public function testSupportHandlerReturnsHandlingResultFromWrappedMainHandler( bool $returnValue ): void {
 		/** @var AbstractHandler&MockObject $returningHandler */
 		$returningHandler = $this->createMock( AbstractHandler::class );
-
-		$returningHandler->expects( $this->at( 0 ) )
-			->method( 'handle' )
-			->willReturn( false );
-
-		$returningHandler->expects( $this->at( 1 ) )
-			->method( 'handle' )
-			->willReturn( true );
-
+		$returningHandler->method( 'handle' )
+			->willReturn( $returnValue );
 		$supportHandler = new SupportHandler( $returningHandler, new NullLogger() );
-		$firstCallResult = $supportHandler->handle( [] );
-		$secondCallResult = $supportHandler->handle( [] );
 
-		$this->assertFalse( $firstCallResult );
-		$this->assertTrue( $secondCallResult );
+		$callResult = $supportHandler->handle( [] );
+
+		$this->assertSame( $returnValue, $callResult );
+	}
+
+	public function handlerResultsProvider(): iterable {
+		yield [ true ];
+		yield [ false ];
 	}
 
 }
