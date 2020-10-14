@@ -42,7 +42,7 @@ Some of the code in the controllers (e.g. validation) might become obsolete if w
 TBD: Chosen option: "", because (justification. e.g., only option, which meets k.o. criterion decision driver | which resolves force force | … | comes out best (see below)).
 
 
-## Pros and Cons of the Options <!-- optional -->
+## Pros and Cons of the Options
 
 ### Leave controllers as-is
 
@@ -57,11 +57,13 @@ Most controllers already follow an `ActionSentenceController::action` pattern, w
 Group controllers by "Domain" (e.g. Donation, Payment, Comment, Membership, StaticPages) and have multiple actions, some of those calling a use case.  
 
 * Good, because it's consistent
-* Good, because it is an established pattern web frameworks 
+* Good, because it's an established pattern in other web frameworks 
 * Good, because the amount of classes/files is small
 * Bad, because the classes become long, needing a lot of scrolling
 * Bad, because we have to change most of the controllers (and the corresponding routes). This option has the biggest effort.
-* Bad, because our unit test structure won't reflect the class structure anymore (`@covers` annotations for the same controller split across tests).
+* Bad, because our E2E test structure won't reflect the class structure anymore (`@covers` annotations for the same controller split across tests).
+* Bad, because the code quality scores will go down because the classes
+  are too big.
 * Bad, because it's hard to find a single action via code search in the IDE
 
 ### `ActionSentenceController::action`
