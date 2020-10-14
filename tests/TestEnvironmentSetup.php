@@ -17,7 +17,6 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 class TestEnvironmentSetup implements EnvironmentSetup {
 	public function setEnvironmentDependentInstances( FunFunFactory $factory, array $configuration ) {
 		$factory->setNullMessenger();
-		$factory->setSkinTwigEnvironment( new \Twig_Environment() );
 		$factory->setUrlGenerator( new FakeUrlGenerator() );
 
 		$factory->setDoctrineConfiguration( Setup::createConfiguration( true ) );

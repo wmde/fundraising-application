@@ -37,8 +37,6 @@ $ffFactory = call_user_func( function() {
 
 $app = \WMDE\Fundraising\Frontend\App\Bootstrap::initializeApplication( $ffFactory );
 
-$ffFactory->setSkinTwigEnvironment( $app['twig'] );
-
 $ffFactory->setUrlGenerator( new UrlGeneratorAdapter( $app['url_generator'] ) );
 
 $app->run();
