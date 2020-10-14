@@ -15,11 +15,12 @@ class Kernel extends BaseKernel {
 
 	protected function configureContainer(ContainerConfigurator $container): void
 	{
-		$container->import('../config/services.yml');
+		$container->import( $this->getProjectDir(). '/config/packages/framework.yaml' );
+		$container->import( $this->getProjectDir(). '/config/services.yml' );
 	}
 
 	protected function configureRoutes(RoutingConfigurator $routes): void
 	{
-		$routes->import('../config/routes.yml');
+		$routes->import( $this->getProjectDir() . '/config/routes.yml' );
 	}
 }

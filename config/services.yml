@@ -20,6 +20,10 @@ services:
 #        resource: '../src/*'
 #        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
+    WMDE\Fundraising\Frontend\Factories\FunFunFactory:
+        factory: ['WMDE\Fundraising\Frontend\Factories\FunFunFactory', 'getInstanceForEnvironment']
+        arguments: ['%env(APP_ENV)%']
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     WMDE\Fundraising\Frontend\App\Controllers\:

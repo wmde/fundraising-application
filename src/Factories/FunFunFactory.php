@@ -91,7 +91,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AllOfTheCachePurger;
 use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
+use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\CreateAddressChangeHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
@@ -2015,5 +2017,22 @@ class FunFunFactory implements ServiceProviderInterface {
 		return $this->createSharedObject( ValidationErrorLogger::class, function (): ValidationErrorLogger {
 			return new ValidationErrorLogger( $this->getLogger() );
 		} );
+	}
+
+	public static function getInstanceForEnvironment( string $environment ): FunFunFactory {
+		$bootstrapper = new EnvironmentBootstrapper( $environment );
+
+		$configReader = new ConfigReader(
+			new SimpleFileFetcher(),
+			...$bootstrapper->getConfigurationPathsForEnvironment( dirname( __DIR__, 2 ) .  '/app/config' )
+		);
+
+		$config = $configReader->getConfig();
+		$factory = new self( $config );
+
+		$bootstrapper->getEnvironmentSetupInstance()
+			->setEnvironmentDependentInstances( $factory, $config );
+
+		return $factory;
 	}
 }
