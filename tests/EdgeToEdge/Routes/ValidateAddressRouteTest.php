@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateAddressController
  */
 class ValidateAddressRouteTest extends WebRouteTestCase {
 

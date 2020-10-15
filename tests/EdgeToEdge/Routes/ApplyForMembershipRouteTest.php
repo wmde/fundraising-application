@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
@@ -26,7 +26,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalData;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController
  *
  * @requires extension konto_check
  */

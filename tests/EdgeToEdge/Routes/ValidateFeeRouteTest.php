@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateFeeController
  */
 class ValidateFeeRouteTest extends WebRouteTestCase {
 

@@ -7,35 +7,36 @@ namespace WMDE\Fundraising\Frontend\App;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use WMDE\Fundraising\Frontend\App\Controllers\AddCommentController;
-use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
-use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
-use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
-use WMDE\Fundraising\Frontend\App\Controllers\CancelDonationController;
-use WMDE\Fundraising\Frontend\App\Controllers\CancelMembershipApplicationController;
-use WMDE\Fundraising\Frontend\App\Controllers\ConfirmSubscriptionController;
-use WMDE\Fundraising\Frontend\App\Controllers\ContactController;
-use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
-use WMDE\Fundraising\Frontend\App\Controllers\DonationAcceptedController;
-use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
-use WMDE\Fundraising\Frontend\App\Controllers\ListCommentsController;
-use WMDE\Fundraising\Frontend\App\Controllers\NewDonationController;
-use WMDE\Fundraising\Frontend\App\Controllers\PageDisplayController;
-use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
-use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee;
+use WMDE\Fundraising\Frontend\App\Controllers\AddressChange\ShowUpdateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\AddressChange\UpdateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\AddCommentController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\AddDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\CancelDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationAcceptedController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ListCommentsController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\UpdateDonorController;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\CancelMembershipApplicationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\BankDataToIbanController;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\CreditCardPaymentNotificationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationControllerForMembershipFee;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\SofortNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PurgeCacheController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowFaqController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowMembershipConfirmationController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowUseOfFundsController;
-use WMDE\Fundraising\Frontend\App\Controllers\SofortNotificationController;
-use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
-use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ContactController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\PageDisplayController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowFaqController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowUseOfFundsController;
+use WMDE\Fundraising\Frontend\App\Controllers\Subscription\AddSubscriptionController;
+use WMDE\Fundraising\Frontend\App\Controllers\Subscription\ConfirmSubscriptionController;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateDonationAmountController;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateFeeController;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateIbanController;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -124,12 +125,12 @@ class Routes {
 
 		$app->get(
 			'check-iban',
-			IbanController::class . '::validateIban'
+			ValidateIbanController::class . '::handle'
 		)->bind( self::VALIDATE_IBAN );
 
 		$app->get(
 			'generate-iban',
-			IbanController::class . '::convertBankDataToIban'
+			BankDataToIbanController::class . '::handle'
 		)->bind( self::CONVERT_BANKDATA );
 
 		$app->post(

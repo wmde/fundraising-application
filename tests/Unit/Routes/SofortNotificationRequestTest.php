@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Routes;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\App\Controllers\SofortNotificationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\SofortNotificationController;
 use WMDE\Fundraising\PaymentContext\RequestModel\SofortNotificationRequest;
 
 /**

@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\AddressChange\UpdateAddressController
  */
 class UpdateAddressRouteTest extends WebRouteTestCase {
 

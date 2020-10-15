@@ -19,7 +19,7 @@ use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenera
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationControllerForMembershipFee
  */
 class HandlePayPalMembershipFeePaymentRouteTest extends WebRouteTestCase {
 

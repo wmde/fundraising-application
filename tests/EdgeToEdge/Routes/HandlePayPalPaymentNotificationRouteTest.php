@@ -22,7 +22,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationController
  */
 class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 

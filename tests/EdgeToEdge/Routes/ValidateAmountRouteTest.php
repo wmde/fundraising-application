@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateDonationAmountController
  */
 class ValidateAmountRouteTest extends WebRouteTestCase {
 
