@@ -100,8 +100,6 @@ abstract class WebRouteTestCase extends TestCase {
 
 		$app['session.test'] = true;
 
-		$ffFactory->setSkinTwigEnvironment( $app['twig'] );
-
 		return $app;
 	}
 
