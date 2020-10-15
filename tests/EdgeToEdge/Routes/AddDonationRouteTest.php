@@ -779,10 +779,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testCookieFlagsSecureAndHttpOnlyAreSet(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
-			$client = new Client(
-				$this->createSilexApplication(),
-				[ 'HTTPS' => true ]
-			);
+			$client->setServerParameter( 'HTTPS', true );
 			$client->followRedirects( true );
 
 			$client->request(

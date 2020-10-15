@@ -76,12 +76,6 @@ abstract class WebRouteTestCase extends TestCase {
 		return $app;
 	}
 
-	protected function createSilexApplication(): Application {
-		$testEnvironment = TestEnvironment::newInstance( [] );
-
-		return $this->createApplication( $testEnvironment->getFactory() );
-	}
-
 	protected function assert404( Response $response ): void {
 		$this->assertSame( 404, $response->getStatusCode() );
 	}

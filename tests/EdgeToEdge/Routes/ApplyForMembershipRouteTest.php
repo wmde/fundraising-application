@@ -503,10 +503,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCookieFlagsSecureAndHttpOnlyAreSet(): void {
-		$client = new Client(
-			$this->createSilexApplication(),
-			[ 'HTTPS' => true ]
-		);
+		$client = $this->createClient();
+		$client->setServerParameter( 'HTTPS', true );
 
 		$client->request(
 			'POST',
