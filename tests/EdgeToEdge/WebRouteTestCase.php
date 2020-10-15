@@ -14,7 +14,6 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
  * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 abstract class WebRouteTestCase extends TestCase {
 
@@ -64,32 +63,6 @@ abstract class WebRouteTestCase extends TestCase {
 			$onEnvironmentCreated,
 			$client,
 			$testEnvironment->getFactory()
-		);
-	}
-
-	/**
-	 * Initializes a new test environment and Silex Application.
-	 * Invokes the provided callable with a HttpKernel client to make requests to the application
-	 * as first argument. The second argument is the top level factory which can be used for
-	 * both setup before requests to the client and validation tasks afterwards. The third argument
-	 * is the application instance itself.
-	 *
-	 * Use instead of createEnvironment when the application instance is needed.
-	 *
-	 * @param array $config
-	 * @param callable $onEnvironmentCreated
-	 */
-	protected function createAppEnvironment( array $config, callable $onEnvironmentCreated ): void {
-		$testEnvironment = TestEnvironment::newInstance( $config );
-
-		$application = $this->createApplication( $testEnvironment->getFactory() );
-		$client = new Client( $application );
-
-		call_user_func(
-			$onEnvironmentCreated,
-			$client,
-			$testEnvironment->getFactory(),
-			$application
 		);
 	}
 
