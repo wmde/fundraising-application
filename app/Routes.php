@@ -17,8 +17,10 @@ use WMDE\Fundraising\Frontend\App\Controllers\Donation\ListCommentsController;
 use WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController;
 use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\Donation\UpdateDonorController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ViewCommentController;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\CancelMembershipApplicationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipConfirmationController;
 use WMDE\Fundraising\Frontend\App\Controllers\Payment\BankDataToIbanController;
 use WMDE\Fundraising\Frontend\App\Controllers\Payment\CreditCardPaymentNotificationController;
@@ -26,8 +28,9 @@ use WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationControll
 use WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationControllerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\Controllers\Payment\SofortNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PurgeCacheController;
-use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ContactController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ContactRequestController;
 use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\PageDisplayController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowContactFormController;
 use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowFaqController;
 use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowUseOfFundsController;
 use WMDE\Fundraising\Frontend\App\Controllers\Subscription\AddSubscriptionController;
@@ -135,22 +138,22 @@ class Routes {
 
 		$app->post(
 			'add-comment',
-			AddCommentController::class . '::addComment'
+			AddCommentController::class . '::handle'
 		)->bind( self::POST_COMMENT );
 
 		$app->get(
 			'add-comment',
-			AddCommentController::class . '::viewComment'
+			ViewCommentController::class . '::handle'
 		)->bind( self::ADD_COMMENT_PAGE );
 
 		$app->post(
 			'contact/get-in-touch',
-			ContactController::class . '::sendRequest'
+			ContactRequestController::class . '::handle'
 		);
 
 		$app->get(
 			'contact/get-in-touch',
-			ContactController::class . '::viewContactForm'
+			ShowContactFormController::class . '::handle'
 		)->bind( self::GET_IN_TOUCH );
 
 		$app->get(
@@ -198,12 +201,12 @@ class Routes {
 
 		$app->post(
 			'apply-for-membership',
-			ApplyForMembershipController::class . '::applyForMembership'
+			ApplyForMembershipController::class . '::handle'
 		);
 
 		$app->get(
 			'apply-for-membership',
-			ApplyForMembershipController::class . '::showApplicationForm'
+			ShowMembershipApplicationFormController::class . '::handle'
 		);
 
 		$app->get(

@@ -7,9 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 
-class ContactController {
+class ContactRequestController {
 
-	public function sendRequest( FunFunFactory $ffFactory, Request $request ) {
+	public function handle( FunFunFactory $ffFactory, Request $request ) {
 		$contactFormRequest = new GetInTouchRequest(
 			$request->get( 'firstname', '' ),
 			$request->get( 'lastname', '' ),
@@ -30,15 +30,6 @@ class ContactController {
 		return $ffFactory->newGetInTouchHtmlPresenter()->present(
 			$contactFormResponse,
 			$request->request->all()
-		);
-	}
-
-	public function viewContactForm( FunFunFactory $ffFactory ): string {
-		return $ffFactory->getLayoutTemplate( 'Contact_Form.html.twig' )->render(
-			[
-				'contact_categories' => $ffFactory->getGetInTouchCategories(),
-				'contactFormValidationPatterns' => $ffFactory->getValidationRules()->contactForm,
-			]
 		);
 	}
 }

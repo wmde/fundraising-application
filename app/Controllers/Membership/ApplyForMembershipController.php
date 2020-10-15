@@ -29,36 +29,9 @@ class ApplyForMembershipController {
 	public const SUBMISSION_COOKIE_NAME = 'memapp_timestamp';
 	public const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
 
-	/** @var FunFunFactory */
-	private $ffFactory;
+	private FunFunFactory $ffFactory;
 
-	public function showApplicationForm( FunFunFactory $ffFactory, Request $httpRequest ): Response {
-		$params = [
-			'urls' => Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
-		];
-		$params['showMembershipTypeOption'] = $httpRequest->query->get( 'type' ) !== 'sustaining';
-
-		$useCase = $ffFactory->newGetDonationUseCase( $httpRequest->query->get( 'donationAccessToken', '' ) );
-		$responseModel = $useCase->showConfirmation(
-			new GetDonationRequest(
-				$httpRequest->query->getInt( 'donationId' )
-			)
-		);
-
-		if ( $responseModel->accessIsPermitted() ) {
-			$adapter = new DonationMembershipApplicationAdapter();
-			$params['initialFormValues'] = $adapter->getInitialMembershipFormValues(
-				$responseModel->getDonation()
-			);
-			$params['initialValidationResult'] = $adapter->getInitialValidationState(
-				$responseModel->getDonation()
-			);
-		}
-
-		return new Response( $ffFactory->getMembershipApplicationFormTemplate()->render( $params ) );
-	}
-
-	public function applyForMembership( FunFunFactory $ffFactory, Request $httpRequest ): Response {
+	public function handle( FunFunFactory $ffFactory, Request $httpRequest ): Response {
 		$this->ffFactory = $ffFactory;
 		if ( !$this->isSubmissionAllowed( $httpRequest ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'membership_application_rejected_limit' ) );

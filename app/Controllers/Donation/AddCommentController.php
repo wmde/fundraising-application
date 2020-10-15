@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class AddCommentController {
 
-	public function addComment( FunFunFactory $ffFactory, Request $request ): Response {
+	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
 		$addCommentRequest = new AddCommentRequest();
 		$addCommentRequest->setCommentText( trim( $request->request->get( 'comment', '' ) ) );
 		$addCommentRequest->setIsPublic( $request->request->getBoolean( 'public' ) );
@@ -53,28 +53,6 @@ class AddCommentController {
 				'status' => 'ERR',
 				'message' => $response->getErrorMessage(),
 			]
-		);
-	}
-
-	public function viewComment( FunFunFactory $ffFactory, Request $request ): Response {
-		$template = $ffFactory->getLayoutTemplate(
-			'Donation_Comment.html.twig'
-		);
-
-		return new Response(
-			$template->render(
-				[
-					'donationId' => (int)$request->query->get( 'donationId', '' ),
-					'updateToken' => $request->query->get( 'updateToken', '' ),
-					'cancelUrl' => $ffFactory->getUrlGenerator()->generateRelativeUrl(
-						'show-donation-confirmation',
-						[
-							'id' => (int)$request->query->get( 'donationId', '' ),
-							'accessToken' => $request->query->get( 'accessToken', '' )
-						]
-					)
-				]
-			)
 		);
 	}
 }
