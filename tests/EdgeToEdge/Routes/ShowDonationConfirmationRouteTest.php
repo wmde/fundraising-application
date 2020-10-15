@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Silex\Application;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
@@ -16,6 +15,8 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
+use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser;
+use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser as Client;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 
 /**
@@ -28,37 +29,39 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	private const ACCESS_DENIED_TEXT = 'access_denied_donation_confirmation';
 
+	private Donation $donation;
+
 	public function testGivenValidRequest_confirmationPageContainsDonationData(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->newStoredDonation( $factory );
-
-			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
-
-			$this->assertDonationDataInResponse( $donation, $responseContent );
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+			$this->donation = $this->newStoredDonation( $factory );
 		} );
+
+		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
+
+		$this->assertDonationDataInResponse( $this->donation, $responseContent );
 	}
 
 	public function testGivenAnonymousDonation_confirmationPageReflectsThat(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->newBookedAnonymousPayPalDonation( $factory );
-
-			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
-
-			$this->assertStringContainsString( 'Anonym', $responseContent );
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+			$this->donation = $this->newBookedAnonymousPayPalDonation( $factory );
 		} );
+
+		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
+
+		$this->assertStringContainsString( 'Anonym', $responseContent );
 	}
 
 	public function testGivenAnonymousDonation_confirmationPageShowsStatusText(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->newBookedAnonymousPayPalDonation( $factory );
-
-			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() );
-
-			$this->assertStringContainsString( 'status-booked', $responseContent );
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+			$this->donation = $this->newBookedAnonymousPayPalDonation( $factory );
 		} );
+
+		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
+
+		$this->assertStringContainsString( 'status-booked', $responseContent );
 	}
 
-	private function retrieveDonationConfirmation( Client $client, int $donationId ): string {
+	private function retrieveDonationConfirmation( HttpKernelBrowser $client, int $donationId ): string {
 		$client->request(
 			'GET',
 			'show-donation-confirmation',
@@ -145,13 +148,13 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenWrongId_accessIsDenied(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->newStoredDonation( $factory );
-
-			$responseContent = $this->retrieveDonationConfirmation( $client, $donation->getId() + 1 );
-
-			$this->assertDonationIsNotShown( $donation, $responseContent );
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+			$this->donation = $this->newStoredDonation( $factory );
 		} );
+
+		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() + 1 );
+
+		$this->assertDonationIsNotShown( $this->donation, $responseContent );
 	}
 
 	public function testWhenNoDonation_accessIsDenied(): void {
