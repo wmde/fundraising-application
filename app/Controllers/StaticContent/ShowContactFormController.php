@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class ShowContactFormController {
 
-	public function handle( FunFunFactory $ffFactory ): string {
+	public function index( FunFunFactory $ffFactory ): string {
 		return $ffFactory->getLayoutTemplate( 'Contact_Form.html.twig' )->render(
 			[
 				'contact_categories' => $ffFactory->getGetInTouchCategories(),

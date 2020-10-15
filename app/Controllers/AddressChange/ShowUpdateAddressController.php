@@ -17,7 +17,7 @@ class ShowUpdateAddressController {
 
 	public const ADDRESS_CHANGE_SESSION_KEY = 'address_changed';
 
-	public function showForm( Request $request, FunFunFactory $ffFactory ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$addressToken = $request->get( 'addressToken', '' );
 		if ( $addressToken === '' ) {
 			throw new AccessDeniedException();

@@ -75,23 +75,23 @@ class Routes {
 	public static function initializeRoutes( Application $app, FunFunFactory $ffFactory ): Application {
 		$app->post(
 			'validate-email',
-			ValidationController::class . '::validateEmail'
+			ValidationController::class . '::index'
 		)->bind( self::VALIDATE_EMAIL );
 
 		$app->post(
 			// This route is named badly, it validates **donor** information.
 			'validate-address',
-			ValidateAddressController::class . '::validate'
+			ValidateAddressController::class . '::index'
 		)->bind( self::VALIDATE_ADDRESS );
 
 		$app->post(
 			'validate-donation-amount',
-			ValidateDonationAmountController::class . '::validate'
+			ValidateDonationAmountController::class . '::index'
 		)->bind( self::VALIDATE_DONATION_AMOUNT );
 
 		$app->post(
 			'validate-fee',
-			ValidateFeeController::class . '::validateFee'
+			ValidateFeeController::class . '::index'
 		)->bind( self::VALIDATE_MEMBERSHIP_FEE );
 
 		$app->get(
@@ -111,143 +111,143 @@ class Routes {
 
 		$app->get(
 			'page/{pageName}',
-			PageDisplayController::class . '::handle'
+			PageDisplayController::class . '::index'
 		)->bind( self::SHOW_PAGE );
 
 		$app->match(
 			'contact/subscribe',
-			AddSubscriptionController::class . '::addSubscription'
+			AddSubscriptionController::class . '::index'
 		)->method( 'GET|POST' )->bind( self::SUBSCRIBE );
 
 		$app->get(
 			'contact/confirm-subscription/{confirmationCode}',
-			ConfirmSubscriptionController::class . '::handle'
+			ConfirmSubscriptionController::class . '::index'
 		)
 			->assert( 'confirmationCode', '^[0-9a-f]+$' )
 			->bind( self::CONFIRM_SUBSCRIPTION );
 
 		$app->get(
 			'check-iban',
-			ValidateIbanController::class . '::handle'
+			ValidateIbanController::class . '::index'
 		)->bind( self::VALIDATE_IBAN );
 
 		$app->get(
 			'generate-iban',
-			BankDataToIbanController::class . '::handle'
+			BankDataToIbanController::class . '::index'
 		)->bind( self::CONVERT_BANKDATA );
 
 		$app->post(
 			'add-comment',
-			AddCommentController::class . '::handle'
+			AddCommentController::class . '::index'
 		)->bind( self::POST_COMMENT );
 
 		$app->get(
 			'add-comment',
-			ViewCommentController::class . '::handle'
+			ViewCommentController::class . '::index'
 		)->bind( self::ADD_COMMENT_PAGE );
 
 		$app->post(
 			'contact/get-in-touch',
-			ContactRequestController::class . '::handle'
+			ContactRequestController::class . '::index'
 		);
 
 		$app->get(
 			'contact/get-in-touch',
-			ShowContactFormController::class . '::handle'
+			ShowContactFormController::class . '::index'
 		)->bind( self::GET_IN_TOUCH );
 
 		$app->get(
 			'faq',
-			ShowFaqController::class . '::handle'
+			ShowFaqController::class . '::index'
 		)->bind( self::SHOW_FAQ );
 
 		$app->get(
 			self::UPDATE_ADDRESS,
-			ShowUpdateAddressController::class . '::showForm'
+			ShowUpdateAddressController::class . '::index'
 		)->bind( self::SHOW_UPDATE_ADDRESS );
 
 		$app->post(
 			self::UPDATE_ADDRESS,
-			UpdateAddressController::class . '::updateAddress'
+			UpdateAddressController::class . '::index'
 
 		)->bind( self::UPDATE_ADDRESS );
 
 		$app->get(
 			'use-of-funds',
-			ShowUseOfFundsController::class . '::handle'
+			ShowUseOfFundsController::class . '::index'
 		)->bind( self::SHOW_USE_OF_FUNDS );
 
 		$app->post(
 			'donation/cancel',
-			CancelDonationController::class . '::handle'
+			CancelDonationController::class . '::index'
 		)->bind( self::CANCEL_DONATION );
 
 		$app->post(
 			'donation/add',
-			AddDonationController::class . '::handle'
+			AddDonationController::class . '::index'
 		);
 
 		$app->post(
 			'donation/update',
-			UpdateDonorController::class . '::updateDonor'
+			UpdateDonorController::class . '::index'
 		)->bind( self::UPDATE_DONOR );
 
 		// Show a donation form with pre-filled payment values, e.g. when coming from a banner
 		$app->match(
 			'donation/new',
-			NewDonationController::class . '::handle'
+			NewDonationController::class . '::index'
 		)->method( 'POST|GET' )
 			->bind( self::SHOW_DONATION_FORM );
 
 		$app->post(
 			'apply-for-membership',
-			ApplyForMembershipController::class . '::handle'
+			ApplyForMembershipController::class . '::index'
 		);
 
 		$app->get(
 			'apply-for-membership',
-			ShowMembershipApplicationFormController::class . '::handle'
+			ShowMembershipApplicationFormController::class . '::index'
 		);
 
 		$app->get(
 			'show-membership-confirmation',
-			ShowMembershipConfirmationController::class . '::handle'
+			ShowMembershipConfirmationController::class . '::index'
 		)->bind( self::SHOW_MEMBERSHIP_CONFIRMATION );
 
 		$app->get(
 			'cancel-membership-application',
-			CancelMembershipApplicationController::class . '::handle'
+			CancelMembershipApplicationController::class . '::index'
 		)->bind( self::CANCEL_MEMBERSHIP );
 
 		$app->match(
 			'show-donation-confirmation',
-			ShowDonationConfirmationController::class . '::show'
+			ShowDonationConfirmationController::class . '::index'
 		)->bind( self::SHOW_DONATION_CONFIRMATION )
 			->method( 'GET|POST' );
 
 		$app->post(
 			'handle-paypal-payment-notification',
-			PayPalNotificationController::class . '::handle'
+			PayPalNotificationController::class . '::index'
 		);
 
 		$app->post(
 			'sofort-payment-notification',
-			SofortNotificationController::class . '::handle'
+			SofortNotificationController::class . '::index'
 		);
 
 		$app->get(
 			'handle-creditcard-payment-notification',
-			CreditCardPaymentNotificationController::class . '::handleNotification'
+			CreditCardPaymentNotificationController::class . '::index'
 		);
 
 		$app->get(
 			'donation-accepted',
-			DonationAcceptedController::class . '::handle'
+			DonationAcceptedController::class . '::index'
 		);
 
 		$app->post(
 			'handle-paypal-membership-fee-payments',
-			PayPalNotificationControllerForMembershipFee::class . '::handle'
+			PayPalNotificationControllerForMembershipFee::class . '::index'
 		);
 
 		$app->get(
@@ -271,7 +271,7 @@ class Routes {
 		// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url
 		$app->post(
 			'/spenden/paypal_handler.php',
-			PayPalNotificationController::class . '::handle'
+			PayPalNotificationController::class . '::index'
 		);
 
 		// redirect display page requests from old URLs
@@ -313,7 +313,7 @@ class Routes {
 
 		$app->get(
 			'/purge-cache',
-			PurgeCacheController::class . '::handle'
+			PurgeCacheController::class . '::index'
 		);
 
 		$app->get(

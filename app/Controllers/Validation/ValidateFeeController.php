@@ -21,7 +21,7 @@ class ValidateFeeController {
 		'not-money' => 'not-money'
 	];
 
-	public function validateFee( Request $httpRequest ): Response {
+	public function index( Request $httpRequest ): Response {
 		try {
 			$fee = $this->euroFromRequest( $httpRequest );
 		}

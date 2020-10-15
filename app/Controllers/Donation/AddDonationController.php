@@ -35,7 +35,7 @@ class AddDonationController {
 	 */
 	private FallbackRequestValueReader $legacyRequestValueReader;
 
-	public function handle( FunFunFactory $ffFactory, Request $request, SessionInterface $session ): Response {
+	public function index( FunFunFactory $ffFactory, Request $request, SessionInterface $session ): Response {
 		$this->session = $session;
 		$this->ffFactory = $ffFactory;
 		if ( !$this->isSubmissionAllowed( $request ) ) {

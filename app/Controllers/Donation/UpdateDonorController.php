@@ -24,7 +24,7 @@ class UpdateDonorController {
 
 	public const ADDRESS_CHANGE_SESSION_KEY = 'address_changed';
 
-	public function updateDonor( Request $request, FunFunFactory $ffFactory, SessionInterface $session ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory, SessionInterface $session ): Response {
 		$updateToken = $request->request->get( 'updateToken', '' );
 		$accessToken = $request->query->get( 'accessToken', '' );
 		$responseModel = $ffFactory

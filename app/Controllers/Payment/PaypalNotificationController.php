@@ -19,7 +19,7 @@ class PaypalNotificationController {
 	private const MSG_NOT_HANDLED = 'PayPal request not handled';
 	private const PAYPAL_LOG_FILTER = [ 'payer_email', 'payer_id' ];
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
+	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$post = $request->request;
 
 		if ( !$this->requestIsForPaymentCompletion( $post ) ) {

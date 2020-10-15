@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class DonationAcceptedController {
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): JsonResponse {
+	public function index( FunFunFactory $ffFactory, Request $request ): JsonResponse {
 		$eventHandler = $ffFactory->newDonationAcceptedEventHandler(
 			$request->query->get( 'update_token', '' )
 		);

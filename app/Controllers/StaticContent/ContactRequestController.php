@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 
 class ContactRequestController {
 
-	public function handle( FunFunFactory $ffFactory, Request $request ) {
+	public function index( FunFunFactory $ffFactory, Request $request ) {
 		$contactFormRequest = new GetInTouchRequest(
 			$request->get( 'firstname', '' ),
 			$request->get( 'lastname', '' ),

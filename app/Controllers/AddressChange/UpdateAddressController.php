@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class UpdateAddressController {
 
-	public function updateAddress( Request $request, FunFunFactory $ffFactory ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$addressToken = $request->get( 'addressToken', '' );
 		if ( $addressToken === '' ) {
 			throw new AccessDeniedException();

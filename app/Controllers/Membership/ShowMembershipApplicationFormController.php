@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 
 class ShowMembershipApplicationFormController {
 
-	public function handle( FunFunFactory $ffFactory, Request $httpRequest ): Response {
+	public function index( FunFunFactory $ffFactory, Request $httpRequest ): Response {
 		$params = [
 			'urls' => Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
 		];

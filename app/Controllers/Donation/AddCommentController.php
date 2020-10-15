@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class AddCommentController {
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
+	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$addCommentRequest = new AddCommentRequest();
 		$addCommentRequest->setCommentText( trim( $request->request->get( 'comment', '' ) ) );
 		$addCommentRequest->setIsPublic( $request->request->getBoolean( 'public' ) );

@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class ShowFaqController {
 
-	public function handle( FunFunFactory $ffFactory ): string {
+	public function index( FunFunFactory $ffFactory ): string {
 		return $ffFactory->getLayoutTemplate( 'Frequent_Questions.html.twig' )->render(
 			[
 				'faq_content' => $ffFactory->getFaqContent(),

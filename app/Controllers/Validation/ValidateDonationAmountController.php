@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class ValidateDonationAmountController {
 
-	public function validate( Request $request, FunFunFactory $ffFactory ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$rawAmount = $request->request->get( 'amount', '' );
 
 		if ( !ctype_digit( $rawAmount ) ) {

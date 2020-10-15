@@ -10,7 +10,7 @@ use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\Canc
 
 class CancelMembershipApplicationController {
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): string {
+	public function index( FunFunFactory $ffFactory, Request $request ): string {
 		$cancellationRequest = new CancellationRequest(
 			(int)$request->query->get( 'id', '' )
 		);

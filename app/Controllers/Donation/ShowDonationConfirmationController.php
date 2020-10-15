@@ -21,7 +21,7 @@ class ShowDonationConfirmationController {
 	public const SUBMISSION_COOKIE_NAME = 'donation_timestamp';
 	public const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
 
-	public function show( Request $request, FunFunFactory $ffFactory ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$useCase = $ffFactory->newGetDonationUseCase( $request->get( 'accessToken', '' ) );
 
 		$responseModel = $useCase->showConfirmation( new GetDonationRequest(

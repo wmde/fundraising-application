@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class CancelDonationController {
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
+	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$cancellationRequest = new CancelDonationRequest(
 			(int)$request->request->get( 'sid', '' )
 		);

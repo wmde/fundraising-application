@@ -10,7 +10,7 @@ use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\Show
 
 class ShowMembershipConfirmationController {
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): string {
+	public function index( FunFunFactory $ffFactory, Request $request ): string {
 		$presenter = $ffFactory->newMembershipApplicationConfirmationHtmlPresenter();
 
 		$useCase = $ffFactory->newMembershipApplicationConfirmationUseCase(

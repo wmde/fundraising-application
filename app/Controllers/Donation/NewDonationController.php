@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Validation\FallbackRequestValueRead
 
 class NewDonationController {
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
+	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$ffFactory->getTranslationCollector()->addTranslationFile(
 			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
 		);

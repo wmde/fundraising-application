@@ -21,7 +21,7 @@ class ValidateAddressController {
 
 	private AddressValidator $addressValidator;
 
-	public function validate( Request $request, FunFunFactory $ffFactory ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$this->addressValidator = $ffFactory->newAddressValidator();
 
 		$addressType = $this->getAddressType( $request );

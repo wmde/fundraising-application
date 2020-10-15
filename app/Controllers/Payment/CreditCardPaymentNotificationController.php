@@ -19,7 +19,7 @@ class CreditCardPaymentNotificationController {
 
 	private const MSG_NOT_HANDLED = 'Credit card request "%s" not handled';
 
-	public function handleNotification( FunFunFactory $ffFactory, Request $request ): Response {
+	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$queryParams = $request->query;
 		$donationId = $queryParams->get( 'donation_id', '' );
 

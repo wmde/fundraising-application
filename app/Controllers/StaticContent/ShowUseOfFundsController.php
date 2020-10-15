@@ -9,7 +9,7 @@ use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Request;
 
 class ShowUseOfFundsController {
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): string {
+	public function index( FunFunFactory $ffFactory, Request $request ): string {
 		$renderer = $ffFactory->getUseOfFundsRenderer();
 		return $renderer( $request );
 	}

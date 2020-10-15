@@ -21,7 +21,7 @@ class PaypalNotificationControllerForMembershipFee {
 	private const TYPE_SUBSCRIPTION_SIGNUP = 'subscr_signup';
 	private const TYPE_SUBSCRIPTION_PAYMENT = 'subscr_payment';
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
+	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$post = $request->request;
 
 		try {

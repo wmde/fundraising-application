@@ -20,7 +20,7 @@ class SofortNotificationController {
 	private FunFunFactory $ffFactory;
 	private Request $request;
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
+	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$this->ffFactory = $ffFactory;
 		$this->request = $request;
 

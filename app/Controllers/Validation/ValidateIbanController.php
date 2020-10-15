@@ -12,7 +12,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 
 class ValidateIbanController {
 
-	public function handle( Request $request, FunFunFactory $ffFactory ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$useCase = $ffFactory->newCheckIbanUseCase();
 		$checkIbanResponse = $useCase->checkIban( new Iban( $request->query->get( 'iban', '' ) ) );
 		return new JsonResponse( $ffFactory->newIbanPresenter()->present( $checkIbanResponse ) );

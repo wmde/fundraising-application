@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class ViewCommentController {
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
+	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$template = $ffFactory->getLayoutTemplate(
 			'Donation_Comment.html.twig'
 		);

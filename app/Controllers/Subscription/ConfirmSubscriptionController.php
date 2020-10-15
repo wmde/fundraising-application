@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class ConfirmSubscriptionController {
 
-	public function handle( FunFunFactory $ffFactory, string $confirmationCode ) {
+	public function index( FunFunFactory $ffFactory, string $confirmationCode ) {
 		$useCase = $ffFactory->newConfirmSubscriptionUseCase();
 		$response = $useCase->confirmSubscription( $confirmationCode );
 		return $ffFactory->newConfirmSubscriptionHtmlPresenter()->present( $response );

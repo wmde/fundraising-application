@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class ValidationController {
 
-	public function validateEmail( Request $request, FunFunFactory $ffFactory ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$validationResult = $ffFactory->getEmailValidator()->validate( $request->request->get( 'email', '' ) );
 		return new JsonResponse( [
 			'status' => $validationResult->isSuccessful() ? 'OK' : 'ERR'

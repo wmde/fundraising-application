@@ -16,7 +16,7 @@ use WMDE\FunValidators\ValidationResponse;
 
 class AddSubscriptionController {
 
-	public function addSubscription( Request $request, FunFunFactory $ffFactory ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$useCase = $ffFactory->newAddSubscriptionUseCase();
 		$responseModel = $useCase->addSubscription( $this->createSubscriptionRequest( $request ) );
 

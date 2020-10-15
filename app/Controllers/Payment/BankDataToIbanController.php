@@ -15,7 +15,7 @@ use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
  */
 class BankDataToIbanController {
 
-	public function handle( Request $request, FunFunFactory $ffFactory ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$generateIbanRequest = new GenerateIbanRequest(
 			$request->query->get( 'accountNumber', '' ),
 			$request->query->get( 'bankCode', '' )

@@ -14,7 +14,7 @@ class PageDisplayController {
 
 	private FunFunFactory $ffFactory;
 
-	public function handle( FunFunFactory $ffFactory, string $pageName ): string {
+	public function index( FunFunFactory $ffFactory, string $pageName ): string {
 		$this->ffFactory = $ffFactory;
 
 		$pageSelector = $this->ffFactory->getContentPagePageSelector();
