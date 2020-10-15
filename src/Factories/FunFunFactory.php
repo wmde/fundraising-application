@@ -205,6 +205,7 @@ use WMDE\Fundraising\SubscriptionContext\UseCases\AddSubscription\AddSubscriptio
 use WMDE\Fundraising\SubscriptionContext\UseCases\ConfirmSubscription\ConfirmSubscriptionUseCase;
 use WMDE\Fundraising\SubscriptionContext\Validation\SubscriptionDuplicateValidator;
 use WMDE\Fundraising\SubscriptionContext\Validation\SubscriptionValidator;
+use WMDE\FunValidators\DomainNameValidator;
 use WMDE\FunValidators\Validators\AddressValidator;
 use WMDE\FunValidators\Validators\AllowedValuesValidator;
 use WMDE\FunValidators\Validators\AmountPolicyValidator;
@@ -351,8 +352,18 @@ class FunFunFactory {
 
 	public function getEmailValidator(): EmailValidator {
 		return $this->createSharedObject( EmailValidator::class, function () {
-			return new EmailValidator( new InternetDomainNameValidator() );
+			return new EmailValidator( $this->getDomainNameValidator() );
 		} );
+	}
+
+	private function getDomainNameValidator(): DomainNameValidator {
+		return $this->createSharedObject( DomainNameValidator::class, function () {
+			return new InternetDomainNameValidator();
+		} );
+	}
+
+	public function setDomainNameValidator( DomainNameValidator $validator ): void {
+		$this->sharedObjects[DomainNameValidator::class] = $validator;
 	}
 
 	public function newAddSubscriptionHtmlPresenter(): AddSubscriptionHtmlPresenter {
@@ -1516,10 +1527,6 @@ class FunFunFactory {
 
 	public function setProfiler( Stopwatch $profiler ): void {
 		$this->profiler = $profiler;
-	}
-
-	public function setEmailValidator( EmailValidator $validator ): void {
-		$this->sharedObjects[EmailValidator::class] = $validator;
 	}
 
 	public function setLogger( LoggerInterface $logger ): void {
