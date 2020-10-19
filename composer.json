@@ -40,7 +40,7 @@
 		"micropayment-de/service-client": "~1.23",
 		"justinrainbow/json-schema": "^5.2",
 		"piwik/piwik-php-tracker": "^2.0",
-		"guzzlehttp/guzzle": "^6.0",
+		"guzzlehttp/guzzle": "^7.2",
 		"symfony/validator": "^4.0",
 		"symfony/property-access": "^5.1",
 		"symfony/config": "^4.1",
