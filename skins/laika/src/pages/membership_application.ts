@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+import VueCompositionApi from '@vue/composition-api';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
@@ -31,6 +32,7 @@ const FORM_NAMESPACE = 'membership_application';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
+Vue.use( VueCompositionApi );
 
 interface MembershipAmountModel {
 	presetAmounts: Array<string>,

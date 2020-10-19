@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+import VueCompositionApi from '@vue/composition-api';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import { createStore } from '@/store/donor_update_store';
@@ -17,6 +18,7 @@ const PAGE_IDENTIFIER = 'donation-confirmation',
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
+Vue.use( VueCompositionApi );
 
 clearPersistentData( new LocalStorageRepository(), LOCAL_STORAGE_DELETION_NAMESPACES );
 
