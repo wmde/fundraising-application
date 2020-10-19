@@ -14,7 +14,7 @@ use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySp
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  *
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Subscription\AddSubscriptionController
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter
  */

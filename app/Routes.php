@@ -7,35 +7,39 @@ namespace WMDE\Fundraising\Frontend\App;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use WMDE\Fundraising\Frontend\App\Controllers\AddCommentController;
-use WMDE\Fundraising\Frontend\App\Controllers\AddDonationController;
-use WMDE\Fundraising\Frontend\App\Controllers\AddSubscriptionController;
-use WMDE\Fundraising\Frontend\App\Controllers\ApplyForMembershipController;
-use WMDE\Fundraising\Frontend\App\Controllers\CancelDonationController;
-use WMDE\Fundraising\Frontend\App\Controllers\CancelMembershipApplicationController;
-use WMDE\Fundraising\Frontend\App\Controllers\ConfirmSubscriptionController;
-use WMDE\Fundraising\Frontend\App\Controllers\ContactController;
-use WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController;
-use WMDE\Fundraising\Frontend\App\Controllers\DonationAcceptedController;
-use WMDE\Fundraising\Frontend\App\Controllers\IbanController;
-use WMDE\Fundraising\Frontend\App\Controllers\ListCommentsController;
-use WMDE\Fundraising\Frontend\App\Controllers\NewDonationController;
-use WMDE\Fundraising\Frontend\App\Controllers\PageDisplayController;
-use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationController;
-use WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee;
+use WMDE\Fundraising\Frontend\App\Controllers\AddressChange\ShowUpdateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\AddressChange\UpdateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\AddCommentController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\AddDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\CancelDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationAcceptedController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ListCommentsController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\UpdateDonorController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ViewCommentController;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\CancelMembershipApplicationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\BankDataToIbanController;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\CreditCardPaymentNotificationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationControllerForMembershipFee;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\SofortNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PurgeCacheController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowFaqController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowMembershipConfirmationController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowUpdateAddressController;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowUseOfFundsController;
-use WMDE\Fundraising\Frontend\App\Controllers\SofortNotificationController;
-use WMDE\Fundraising\Frontend\App\Controllers\UpdateAddressController;
-use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidateAddressController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidateDonationAmountController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidateFeeController;
-use WMDE\Fundraising\Frontend\App\Controllers\ValidationController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ContactRequestController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\PageDisplayController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowContactFormController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowFaqController;
+use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowUseOfFundsController;
+use WMDE\Fundraising\Frontend\App\Controllers\Subscription\AddSubscriptionController;
+use WMDE\Fundraising\Frontend\App\Controllers\Subscription\ConfirmSubscriptionController;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateAddressController;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateDonationAmountController;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateFeeController;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateIbanController;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidationController;
 use WMDE\Fundraising\Frontend\App\RouteHandlers\RouteRedirectionHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -71,23 +75,23 @@ class Routes {
 	public static function initializeRoutes( Application $app, FunFunFactory $ffFactory ): Application {
 		$app->post(
 			'validate-email',
-			ValidationController::class . '::validateEmail'
+			ValidationController::class . '::index'
 		)->bind( self::VALIDATE_EMAIL );
 
 		$app->post(
 			// This route is named badly, it validates **donor** information.
 			'validate-address',
-			ValidateAddressController::class . '::validate'
+			ValidateAddressController::class . '::index'
 		)->bind( self::VALIDATE_ADDRESS );
 
 		$app->post(
 			'validate-donation-amount',
-			ValidateDonationAmountController::class . '::validate'
+			ValidateDonationAmountController::class . '::index'
 		)->bind( self::VALIDATE_DONATION_AMOUNT );
 
 		$app->post(
 			'validate-fee',
-			ValidateFeeController::class . '::validateFee'
+			ValidateFeeController::class . '::index'
 		)->bind( self::VALIDATE_MEMBERSHIP_FEE );
 
 		$app->get(
@@ -107,143 +111,143 @@ class Routes {
 
 		$app->get(
 			'page/{pageName}',
-			PageDisplayController::class . '::handle'
+			PageDisplayController::class . '::index'
 		)->bind( self::SHOW_PAGE );
 
 		$app->match(
 			'contact/subscribe',
-			AddSubscriptionController::class . '::addSubscription'
+			AddSubscriptionController::class . '::index'
 		)->method( 'GET|POST' )->bind( self::SUBSCRIBE );
 
 		$app->get(
 			'contact/confirm-subscription/{confirmationCode}',
-			ConfirmSubscriptionController::class . '::handle'
+			ConfirmSubscriptionController::class . '::index'
 		)
 			->assert( 'confirmationCode', '^[0-9a-f]+$' )
 			->bind( self::CONFIRM_SUBSCRIPTION );
 
 		$app->get(
 			'check-iban',
-			IbanController::class . '::validateIban'
+			ValidateIbanController::class . '::index'
 		)->bind( self::VALIDATE_IBAN );
 
 		$app->get(
 			'generate-iban',
-			IbanController::class . '::convertBankDataToIban'
+			BankDataToIbanController::class . '::index'
 		)->bind( self::CONVERT_BANKDATA );
 
 		$app->post(
 			'add-comment',
-			AddCommentController::class . '::addComment'
+			AddCommentController::class . '::index'
 		)->bind( self::POST_COMMENT );
 
 		$app->get(
 			'add-comment',
-			AddCommentController::class . '::viewComment'
+			ViewCommentController::class . '::index'
 		)->bind( self::ADD_COMMENT_PAGE );
 
 		$app->post(
 			'contact/get-in-touch',
-			ContactController::class . '::sendRequest'
+			ContactRequestController::class . '::index'
 		);
 
 		$app->get(
 			'contact/get-in-touch',
-			ContactController::class . '::viewContactForm'
+			ShowContactFormController::class . '::index'
 		)->bind( self::GET_IN_TOUCH );
 
 		$app->get(
 			'faq',
-			ShowFaqController::class . '::handle'
+			ShowFaqController::class . '::index'
 		)->bind( self::SHOW_FAQ );
 
 		$app->get(
 			self::UPDATE_ADDRESS,
-			ShowUpdateAddressController::class . '::showForm'
+			ShowUpdateAddressController::class . '::index'
 		)->bind( self::SHOW_UPDATE_ADDRESS );
 
 		$app->post(
 			self::UPDATE_ADDRESS,
-			UpdateAddressController::class . '::updateAddress'
+			UpdateAddressController::class . '::index'
 
 		)->bind( self::UPDATE_ADDRESS );
 
 		$app->get(
 			'use-of-funds',
-			ShowUseOfFundsController::class . '::handle'
+			ShowUseOfFundsController::class . '::index'
 		)->bind( self::SHOW_USE_OF_FUNDS );
 
 		$app->post(
 			'donation/cancel',
-			CancelDonationController::class . '::handle'
+			CancelDonationController::class . '::index'
 		)->bind( self::CANCEL_DONATION );
 
 		$app->post(
 			'donation/add',
-			AddDonationController::class . '::handle'
+			AddDonationController::class . '::index'
 		);
 
 		$app->post(
 			'donation/update',
-			UpdateDonorController::class . '::updateDonor'
+			UpdateDonorController::class . '::index'
 		)->bind( self::UPDATE_DONOR );
 
 		// Show a donation form with pre-filled payment values, e.g. when coming from a banner
 		$app->match(
 			'donation/new',
-			NewDonationController::class . '::handle'
+			NewDonationController::class . '::index'
 		)->method( 'POST|GET' )
 			->bind( self::SHOW_DONATION_FORM );
 
 		$app->post(
 			'apply-for-membership',
-			ApplyForMembershipController::class . '::applyForMembership'
+			ApplyForMembershipController::class . '::index'
 		);
 
 		$app->get(
 			'apply-for-membership',
-			ApplyForMembershipController::class . '::showApplicationForm'
+			ShowMembershipApplicationFormController::class . '::index'
 		);
 
 		$app->get(
 			'show-membership-confirmation',
-			ShowMembershipConfirmationController::class . '::handle'
+			ShowMembershipConfirmationController::class . '::index'
 		)->bind( self::SHOW_MEMBERSHIP_CONFIRMATION );
 
 		$app->get(
 			'cancel-membership-application',
-			CancelMembershipApplicationController::class . '::handle'
+			CancelMembershipApplicationController::class . '::index'
 		)->bind( self::CANCEL_MEMBERSHIP );
 
 		$app->match(
 			'show-donation-confirmation',
-			ShowDonationConfirmationController::class . '::show'
+			ShowDonationConfirmationController::class . '::index'
 		)->bind( self::SHOW_DONATION_CONFIRMATION )
 			->method( 'GET|POST' );
 
 		$app->post(
 			'handle-paypal-payment-notification',
-			PayPalNotificationController::class . '::handle'
+			PayPalNotificationController::class . '::index'
 		);
 
 		$app->post(
 			'sofort-payment-notification',
-			SofortNotificationController::class . '::handle'
+			SofortNotificationController::class . '::index'
 		);
 
 		$app->get(
 			'handle-creditcard-payment-notification',
-			CreditCardPaymentNotificationController::class . '::handleNotification'
+			CreditCardPaymentNotificationController::class . '::index'
 		);
 
 		$app->get(
 			'donation-accepted',
-			DonationAcceptedController::class . '::handle'
+			DonationAcceptedController::class . '::index'
 		);
 
 		$app->post(
 			'handle-paypal-membership-fee-payments',
-			PayPalNotificationControllerForMembershipFee::class . '::handle'
+			PayPalNotificationControllerForMembershipFee::class . '::index'
 		);
 
 		$app->get(
@@ -267,7 +271,7 @@ class Routes {
 		// See https://serverfault.com/questions/805881/nginx-populate-request-uri-with-rewritten-url
 		$app->post(
 			'/spenden/paypal_handler.php',
-			PayPalNotificationController::class . '::handle'
+			PayPalNotificationController::class . '::index'
 		);
 
 		// redirect display page requests from old URLs
@@ -309,7 +313,7 @@ class Routes {
 
 		$app->get(
 			'/purge-cache',
-			PurgeCacheController::class . '::handle'
+			PurgeCacheController::class . '::index'
 		);
 
 		$app->get(

@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
@@ -32,7 +32,7 @@ use WMDE\FunValidators\Validators\EmailValidator;
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  *
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\AddDonationController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\AddDonationController
  * @requires extension konto_check
  */
 class AddDonationRouteTest extends WebRouteTestCase {

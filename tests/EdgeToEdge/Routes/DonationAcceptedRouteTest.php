@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController
  */
 class DonationAcceptedRouteTest extends WebRouteTestCase {
 

@@ -16,7 +16,7 @@ use WMDE\Fundraising\PaymentContext\Infrastructure\FakeCreditCardService;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\CreditCardPaymentNotificationController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\CreditCardPaymentNotificationController
  */
 class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 

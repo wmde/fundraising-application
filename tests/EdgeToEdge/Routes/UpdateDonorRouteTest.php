@@ -17,7 +17,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\UpdateDonorController
  */
 class UpdateDonorRouteTest extends WebRouteTestCase {
 

@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Cache\AuthorizedCachePurger;
 
 class PurgeCacheController {
 
-	public function handle( FunFunFactory $ffFactory, Request $request ): Response {
+	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$response = $ffFactory->newAuthorizedCachePurger()->purgeCache( $request->query->get( 'secret', '' ) );
 
 		return new Response(

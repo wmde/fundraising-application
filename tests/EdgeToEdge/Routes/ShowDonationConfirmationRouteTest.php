@@ -10,8 +10,8 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController;
-use WMDE\Fundraising\Frontend\App\Controllers\UpdateDonorController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\UpdateDonorController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoad
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\ShowDonationConfirmationController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController
  */
 class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
