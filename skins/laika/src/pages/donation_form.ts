@@ -30,6 +30,7 @@ Vue.use( VueI18n );
 Vue.use( VueCompositionApi );
 
 interface DonationFormModel {
+	environment: string,
 	initialFormValues: any,
 	presetAmounts: Array<string>,
 	paymentTypes: Array<string>,
@@ -89,6 +90,7 @@ dataPersister.initialize( persistenceItems ).then( () => {
 					countries: pageData.applicationVars.countries,
 					trackingData: pageData.applicationVars.tracking,
 					bucketClasses: bucketIdToCssClass( pageData.selectedBuckets ),
+					cookieNoticeVisible: pageData.environment !== 'production',
 				},
 			},
 			[
