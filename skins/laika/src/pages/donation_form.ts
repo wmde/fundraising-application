@@ -58,6 +58,7 @@ const i18n = new VueI18n( {
 		[ DEFAULT_LOCALE ]: pageData.messages,
 	},
 } );
+
 Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
 
 dataPersister.initialize( persistenceItems ).then( () => {
