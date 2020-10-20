@@ -27,6 +27,11 @@ class RegisterTrackingData implements EventSubscriberInterface {
 
 	public function onKernelRequest( KernelEvent $event ): void {
 		$request = $event->getRequest();
+
+		if ( $request->cookies->get('cookie_consent' ) !== 'yes' ) {
+			return;
+		}
+
 		$request->attributes->set( 'trackingCode', TrackingDataSelector::getFirstNonEmptyValue( [
 			$request->cookies->get( 'spenden_tracking' ),
 			TrackingDataSelector::concatTrackingFromVarTuple(

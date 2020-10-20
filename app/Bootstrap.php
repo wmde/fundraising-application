@@ -11,6 +11,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
 use WMDE\Fundraising\Frontend\App\EventHandlers\HandleExceptions;
 use WMDE\Fundraising\Frontend\App\EventHandlers\LogErrors;
+use WMDE\Fundraising\Frontend\App\EventHandlers\OutputCookiePreference;
 use WMDE\Fundraising\Frontend\App\EventHandlers\PrettifyJsonResponse;
 use WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData;
 use WMDE\Fundraising\Frontend\App\EventHandlers\StoreBucketSelection;
@@ -30,6 +31,7 @@ class Bootstrap {
 			$dispatcher->addSubscriber( new StoreBucketSelection( $ffFactory ) );
 			$dispatcher->addSubscriber( new AddIndicatorAttributeForJsonRequests() );
 			$dispatcher->addSubscriber( new RegisterTrackingData() );
+			$dispatcher->addSubscriber( new OutputCookiePreference() );
 			$dispatcher->addSubscriber( new TrimEveryInput() );
 			$dispatcher->addSubscriber( new LogErrors( $ffFactory->getLogger() ) );
 			$dispatcher->addSubscriber( new HandleExceptions( $ffFactory ) );
