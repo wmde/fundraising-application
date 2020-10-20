@@ -37,6 +37,11 @@ class StoreBucketSelection implements EventSubscriberInterface {
 	}
 
 	public function storeSelectedBuckets( FilterResponseEvent $event ): void {
+
+		if ( $event->getRequest()->cookies->get('cookie_consent' ) !== 'yes' ) {
+			return;
+		}
+
 		$response = $event->getResponse();
 		$response->headers->setCookie(
 			$this->factory->getCookieBuilder()->newCookie(

@@ -30,7 +30,6 @@ Vue.use( VueI18n );
 Vue.use( VueCompositionApi );
 
 interface DonationFormModel {
-	environment: string,
 	initialFormValues: any,
 	presetAmounts: Array<string>,
 	paymentTypes: Array<string>,
@@ -59,7 +58,6 @@ const i18n = new VueI18n( {
 		[ DEFAULT_LOCALE ]: pageData.messages,
 	},
 } );
-
 Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
 
 dataPersister.initialize( persistenceItems ).then( () => {
@@ -90,7 +88,7 @@ dataPersister.initialize( persistenceItems ).then( () => {
 					countries: pageData.applicationVars.countries,
 					trackingData: pageData.applicationVars.tracking,
 					bucketClasses: bucketIdToCssClass( pageData.selectedBuckets ),
-					cookieNoticeVisible: pageData.environment !== 'production',
+					cookieNoticeVisible: pageData.cookieConsent === 'unset',
 				},
 			},
 			[
