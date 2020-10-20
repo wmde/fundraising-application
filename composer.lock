@@ -5992,16 +5992,16 @@
         },
         {
             "name": "wmde/fundraising-content-provider",
-            "version": "v2.2.1",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-content-provider",
-                "reference": "03cc9f5f2b4bea320953a9f662cafe34697f640e"
+                "reference": "70269fc3d3da43bb611498e0fdbf2cc20e0547ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/03cc9f5f2b4bea320953a9f662cafe34697f640e",
-                "reference": "03cc9f5f2b4bea320953a9f662cafe34697f640e",
+                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/70269fc3d3da43bb611498e0fdbf2cc20e0547ae",
+                "reference": "70269fc3d3da43bb611498e0fdbf2cc20e0547ae",
                 "shasum": ""
             },
             "require": {
@@ -6013,7 +6013,7 @@
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
                 "phpunit/phpunit": "~8.0",
-                "squizlabs/php_codesniffer": "^2.8"
+                "wmde/fundraising-phpcs": "~1.0"
             },
             "bin": [
                 "bin/lint_content"
@@ -6043,13 +6043,16 @@
                 ],
                 "phpcs": [
                     "vendor/bin/phpcs src/ test/ --standard=phpcs.xml --extensions=php -sp"
+                ],
+                "phpcbf": [
+                    "vendor/bin/phpcbf src/ test/ --standard=phpcs.xml --extensions=php -sp"
                 ]
             },
             "license": [
                 "GPL-2.0+"
             ],
             "description": "WMDE fundraising application content provider and filter",
-            "time": "2020-06-17T16:37:16+00:00"
+            "time": "2020-10-19T13:13:26+00:00"
         },
         {
             "name": "wmde/fundraising-donations",
