@@ -19,7 +19,7 @@
 		<footer class="is-hidden-print">
 			<Footer :assets-path="assetsPath"></Footer>
 		</footer>
-		<CookieNotice :show-cookie-notice="cookieNoticeVisible"></CookieNotice>
+		<CookieNotice v-if="cookieNoticeVisible"></CookieNotice>
 	</div>
 </template>
 
@@ -30,7 +30,7 @@ import Header from '@/components/layout/Header.vue';
 import Headline from '@/components/layout/Headline.vue';
 import Content from '@/components/layout/Content.vue';
 import Footer from '@/components/layout/Footer.vue';
-import CookieNotice from '@/components/CookieNotice.vue';
+import CookieNotice from '@/components/cookie_notice/CookieNotice.vue';
 import createLogger from '@/logger';
 
 Vue.use( Buefy );
