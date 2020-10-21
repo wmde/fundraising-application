@@ -13,9 +13,9 @@
 					<h3>{{ $t( 'cookie_heading' ) }}</h3>
 					<p class="cookie-notice-text-copy" :class="{ open: textOpen }">
 						{{ $t( 'cookie_content' ) }}
-						<a href="" v-on:click="toggleTextOpen" class="cookie-notice-more">{{
-								$t( 'cookie_option_more' )
-							}}</a>
+						<a href="" v-on:click="toggleTextOpen" class="cookie-notice-more">
+							{{ $t( 'cookie_option_more' ) }}
+						</a>
 					</p>
 				</div>
 				<div class="cookie-notice-options">
@@ -67,15 +67,16 @@
 				</div>
 			</div>
 		</form>
-		<div :style="{ height: height + 'px' }"></div>
+		<HeightAdjuster :element="cookieNotice" :element-visibility="isVisible"></HeightAdjuster>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { ref, onMounted, onUnmounted } from '@vue/composition-api';
+import { ref } from '@vue/composition-api';
 import axios from 'axios';
 import CookieCheckbox from './CookieCheckbox.vue';
+import HeightAdjuster from './HeightAdjuster.vue';
 
 const CONSENT_TRUE: string = 'yes';
 const CONSENT_FALSE: string = 'no';
@@ -84,14 +85,11 @@ export default Vue.extend( {
 	name: 'CookieNotice',
 	components: {
 		CookieCheckbox,
+		HeightAdjuster,
 	},
-	props: {
-		showCookieNotice: Boolean,
-	},
-	setup( props: any ) {
-		const isVisible = ref( props.showCookieNotice );
+	setup() {
+		const isVisible = ref( true );
 		const cookieNotice = ref<any>( null );
-		const height = ref( 0 );
 		const optionalChecked = ref( false );
 		const showOptions = ref( false );
 		const textOpen = ref( false );
@@ -99,17 +97,6 @@ export default Vue.extend( {
 		const toggleTextOpen = ( e: Event ) => {
 			e.preventDefault();
 			textOpen.value = !textOpen.value;
-		};
-
-		const onContentResize = () => {
-			height.value = cookieNotice.value.offsetHeight;
-		};
-
-		const removeNotice = () => {
-			height.value = 0;
-			isVisible.value = false;
-			cookieNotice.value.removeEventListener( 'click', onContentResize );
-			window.removeEventListener( 'resize', onContentResize );
 		};
 
 		const submitPreferences = () => {
@@ -120,7 +107,7 @@ export default Vue.extend( {
 				form,
 				{ headers: { 'Content-Type': 'multipart/form-data' } }
 			).then( () => {
-				removeNotice();
+				isVisible.value = false;
 			} );
 		};
 
@@ -149,23 +136,9 @@ export default Vue.extend( {
 			submitPreferences();
 		};
 
-		onMounted( () => {
-			if ( !isVisible.value ) {
-				return;
-			}
-			height.value = cookieNotice.value.offsetHeight;
-			cookieNotice.value.addEventListener( 'click', onContentResize );
-			window.addEventListener( 'resize', onContentResize );
-		} );
-
-		onUnmounted( () => {
-			removeNotice();
-		} );
-
 		return {
 			isVisible,
 			cookieNotice,
-			height,
 			optionalChecked,
 			showOptions,
 			textOpen,
