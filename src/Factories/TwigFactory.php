@@ -4,17 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
-use RuntimeException;
 use Twig\Environment;
 use Twig\Lexer;
-use Twig\Loader\ArrayLoader;
 use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
 use Twig\TwigFilter;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
-use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;
 
-class TwigFactory {
+abstract class TwigFactory {
 
 	private array $config;
 	private string $cachePath;
@@ -26,7 +23,7 @@ class TwigFactory {
 		$this->locale = $locale;
 	}
 
-	public function newFilePrefixFilter( FilePrefixer $filePrefixer ): TwigFilter {
+	protected function newFilePrefixFilter( FilePrefixer $filePrefixer ): TwigFilter {
 		return new TwigFilter( 'prefix_file', [ $filePrefixer, 'prefixFile' ] );
 	}
 
@@ -37,7 +34,7 @@ class TwigFactory {
 		throw new \UnexpectedValueException( 'Invalid Twig loader configuration - missing filesystem' );
 	}
 
-	public function newTwigEnvironment( array $filters, array $functions, array $globals = [] ): Environment {
+	protected function newTwigEnvironment( array $filters, array $functions, array $globals = [] ): Environment {
 		$options = [
 			'strict_variables' => isset( $this->config['strict-variables'] ) && $this->config['strict-variables'] === true,
 			'cache' => empty( $this->config['enable-cache'] ) ? false : $this->config['enable-cache']

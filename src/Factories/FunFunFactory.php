@@ -27,9 +27,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Stopwatch\Stopwatch;
 use TNvpServiceDispatcher;
 use Twig\Environment;
-use Twig\Loader\ChainLoader;
-use Twig\TwigFilter;
-use Twig\TwigFunction;
 use WMDE\Clock\SystemClock;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Euro\Euro;
@@ -420,86 +417,33 @@ class FunFunFactory {
 		return $this->createSharedObject( Environment::class . '::Skin', function (): Environment {
 			$config = $this->config['twig'];
 			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
-
-			$twigFactory = $this->newTwigFactory( $config );
-
-			$filters = [
-				$twigFactory->newFilePrefixFilter(
-					$this->getFilePrefixer()
-				)
-			];
-			$functions = [
-				new TwigFunction(
-					'web_content',
-					function ( string $name, array $context = [] ): string {
-						return $this->getContentProvider()->getWeb( $name, $context );
-					},
-					[ 'is_safe' => [ 'html' ] ]
-				),
-				new TwigFunction(
-					'translations',
-					function (): string {
-						return json_encode( $this->getTranslationCollector()->collectTranslations() );
-					},
-					[ 'is_safe' => [ 'html' ] ]
-				),
-			];
-			$globals = [
-				'basepath' => $this->config['web-basepath'],
-				'assets_path' => $this->config['assets-path']
-			];
-
-			return $twigFactory->newTwigEnvironment( $filters, $functions, $globals );
+			$factory = new WebTemplatingFactory( $config, $this->getCachePath() . '/twig', $this->config['locale'] );
+			return $factory->newTemplatingEnvionment(
+				$this->getTranslationCollector()->collectTranslations(),
+				$this->getContentProvider(),
+				$this->getFilePrefixer(),
+				[
+					'basepath' => $this->config['web-basepath'],
+					'assets_path' => $this->config['assets-path']
+				]
+			);
 		} );
 	}
 
 	public function getMailerTwig(): Environment {
 		return $this->createSharedObject( Environment::class . '::Mailer', function (): Environment {
-			$mailTranslator = $this->getMailTranslator();
 			$config = $this->config['mailer-twig'];
-			$twigFactory = $this->newTwigFactory( $config );
-
-			$filters = [
-				new TwigFilter(
-					'payment_interval',
-					/** @var int|string $interval */
-					function ( $interval ) use ( $mailTranslator ): string {
-						return $mailTranslator->trans( "donation_payment_interval_{$interval}" );
-					}
-				),
-				new TwigFilter(
-					'payment_method',
-					function ( string $method ) use ( $mailTranslator ): string {
-						return $mailTranslator->trans( $method );
-					}
-				),
-				new TwigFilter(
-					'membership_type',
-					function ( string $membershipType ) use ( $mailTranslator ): string {
-						return $mailTranslator->trans( $membershipType );
-					}
-				),
-			];
-			$functions = [
-				new TwigFunction(
-					'mail_content',
-					function ( string $name, array $context = [] ): string {
-						return $this->getContentProvider()->getMail( $name, $context );
-					},
-					[ 'is_safe' => [ 'all' ] ]
-				),
-				new TwigFunction(
-					'url',
-					function ( string $name, array $parameters = [] ): string {
-						return $this->getUrlGenerator()->generateAbsoluteUrl( $name, $parameters );
-					}
-				)
-			];
-			$globals = [
-				'day_of_the_week' => $this->getDayOfWeekName()
-			];
-
-			return $twigFactory->newTwigEnvironment( $filters, $functions, $globals );
+			$factory = new MailerTemplatingFactory(
+				$config,
+				$this->getCachePath() . '/twig',
+				$this->config['locale']
+			);
+			return $factory->newTemplatingEnvironment(
+				$this->getMailTranslator(),
+				$this->getContentProvider(),
+				$this->getUrlGenerator(),
+				$this->getDayOfWeekName()
+			);
 		} );
 	}
 
@@ -803,20 +747,6 @@ class FunFunFactory {
 
 	public function newAccessDeniedHtmlPresenter(): ErrorPageHtmlPresenter {
 		return new ErrorPageHtmlPresenter( $this->getLayoutTemplate( 'Access_Denied.twig' ) );
-	}
-
-	private function newTwigFactory( array $twigConfig ): TwigFactory {
-		return new TwigFactory(
-			array_merge_recursive(
-				$twigConfig,
-				[
-					'web-basepath' => $this->config['web-basepath'],
-					'assets-path' => $this->config['assets-path']
-				]
-			),
-			$this->getCachePath() . '/twig',
-			$this->config['locale']
-		);
 	}
 
 	private function newTextPolicyValidator( string $policyName ): TextPolicyValidator {
