@@ -5513,20 +5513,20 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.43.1",
+            "version": "v1.44.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "2311602f6a208715252febe682fa7c38e56a3373"
+                "reference": "e7c93a4af5eba2b0b3cf51d540e0a131187d7410"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/2311602f6a208715252febe682fa7c38e56a3373",
-                "reference": "2311602f6a208715252febe682fa7c38e56a3373",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e7c93a4af5eba2b0b3cf51d540e0a131187d7410",
+                "reference": "e7c93a4af5eba2b0b3cf51d540e0a131187d7410",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.3",
+                "php": ">=7.2.5",
                 "symfony/polyfill-ctype": "^1.8"
             },
             "require-dev": {
@@ -5536,7 +5536,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.43-dev"
+                    "dev-master": "1.44-dev"
                 }
             },
             "autoload": {
@@ -5583,7 +5583,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-05T15:05:05+00:00"
+            "time": "2020-10-21T12:32:35+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -9459,12 +9459,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "c55311811690861a948b9660c0d16c8aef468533"
+                "reference": "1339a3d2ba4e3f6c9a3c724c97f6bde8eb54aeaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/c55311811690861a948b9660c0d16c8aef468533",
-                "reference": "c55311811690861a948b9660c0d16c8aef468533",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/1339a3d2ba4e3f6c9a3c724c97f6bde8eb54aeaa",
+                "reference": "1339a3d2ba4e3f6c9a3c724c97f6bde8eb54aeaa",
                 "shasum": ""
             },
             "require-dev": {
@@ -9497,7 +9497,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-10-15T08:18:58+00:00"
+            "time": "2020-10-21T07:29:10+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
