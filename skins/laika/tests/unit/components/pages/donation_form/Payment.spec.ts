@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import Buefy from 'buefy';
 import { createStore } from '@/store/donation_store';
 import { action } from '@/store/util';
+import { FeatureTogglePlugin } from '@/FeatureToggle';
 
 import Payment from '@/components/pages/donation_form/Payment.vue';
 import { NS_PAYMENT } from '@/store/namespaces';
@@ -14,6 +15,7 @@ import PaymentType from '@/components/pages/donation_form/PaymentType.vue';
 const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
+localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'skin.laika' ] } );
 
 describe( 'Payment', () => {
 	it( 'sends amount to store when amount selection emits event ', () => {
