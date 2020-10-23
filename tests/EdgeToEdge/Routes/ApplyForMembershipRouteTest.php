@@ -8,7 +8,6 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
@@ -19,6 +18,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser as Client;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineEntities\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
@@ -68,39 +68,39 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithDonationIdAndCorrespondingAccessCode_successResponseWithInitialFormValuesIsReturned(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( '4711abc' ) );
-			$factory->getDonationRepository()->storeDonation( ValidDonation::newDirectDebitDonation() );
-
-			$httpParameters = [
-				'donationId' => 1,
-				'donationAccessToken' => '4711abc'
-			];
-
-			$client->request( Request::METHOD_GET, self::APPLY_FOR_MEMBERSHIP_PATH, $httpParameters );
-
-			$this->assertInitialFormValues(
-				[
-					'addressType' => 'person',
-					'salutation' => 'nyan',
-					'title' => 'nyan',
-					'firstName' => 'Jeroen',
-					'lastName' => 'De Dauw',
-					'street' => 'Nyan Street',
-					'postcode' => '12345',
-					'city' => 'Berlin',
-					'country' => 'DE',
-					'email' => 'foo@bar.baz',
-					'iban' => 'DE12500105170648489890',
-					'bic' => 'INGDDEFFXXX',
-					'accountNumber' => '0648489890',
-					'bankCode' => '50010517',
-					'bankname' => 'ING-DiBa',
-					'paymentType' => 'BEZ'
-				],
-				$client
-			);
+			$factory->getDonationRepository()
+				->storeDonation( ValidDonation::newDirectDebitDonation() );
 		} );
+		$httpParameters = [
+			'donationId' => 1,
+			'donationAccessToken' => '4711abc'
+		];
+
+		$client->request( Request::METHOD_GET, self::APPLY_FOR_MEMBERSHIP_PATH, $httpParameters );
+
+		$this->assertInitialFormValues(
+			[
+				'addressType' => 'person',
+				'salutation' => 'nyan',
+				'title' => 'nyan',
+				'firstName' => 'Jeroen',
+				'lastName' => 'De Dauw',
+				'street' => 'Nyan Street',
+				'postcode' => '12345',
+				'city' => 'Berlin',
+				'country' => 'DE',
+				'email' => 'foo@bar.baz',
+				'iban' => 'DE12500105170648489890',
+				'bic' => 'INGDDEFFXXX',
+				'accountNumber' => '0648489890',
+				'bankCode' => '50010517',
+				'bankname' => 'ING-DiBa',
+				'paymentType' => 'BEZ'
+			],
+			$client
+		);
 	}
 
 	private function newValidHttpParameters(): array {
@@ -503,10 +503,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCookieFlagsSecureAndHttpOnlyAreSet(): void {
-		$client = new Client(
-			$this->createSilexApplication(),
-			[ 'HTTPS' => true ]
-		);
+		$client = $this->createClient();
+		$client->setServerParameter( 'HTTPS', true );
 
 		$client->request(
 			'POST',

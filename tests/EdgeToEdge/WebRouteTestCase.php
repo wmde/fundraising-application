@@ -7,14 +7,13 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
  * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 abstract class WebRouteTestCase extends TestCase {
 
@@ -22,33 +21,34 @@ abstract class WebRouteTestCase extends TestCase {
 	protected const ENABLE_DEBUG = true;
 
 	/**
-	 * Initializes a new test environment and Silex Application and returns a HttpKernel client to
+	 * Initializes a new test environment and returns a HttpKernel client to
 	 * make requests to the application.
 	 *
 	 * @param array $config
 	 * @param callable|null $onEnvironmentCreated Gets called after onTestEnvironmentCreated, same signature
 	 *
-	 * @return Client
+	 * @return HttpKernelBrowser
 	 */
-	protected function createClient( array $config = [], callable $onEnvironmentCreated = null ): Client {
+	protected function createClient( array $config = [], callable $onEnvironmentCreated = null ): HttpKernelBrowser {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		if ( is_callable( $onEnvironmentCreated ) ) {
 			call_user_func( $onEnvironmentCreated, $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 		}
 
-		return new Client(
+		return new HttpKernelBrowser(
 			$this->createApplication( $testEnvironment->getFactory() )
 		);
 	}
 
 	/**
-	 * Initializes a new test environment and Silex Application.
+	 * Initializes a new test environment and HttpKernel.
+	 *
 	 * Invokes the provided callable with a HttpKernel client to make requests to the application
 	 * as first argument. The second argument is the top level factory which can be used for
 	 * both setup before requests to the client and validation tasks afterwards.
 	 *
-	 * Use instead of createClient when the client and factory are needed in the same scope.
+	 * Use instead of createClient when you need the factory after the initial setup of the client.
 	 *
 	 * @param array $config
 	 * @param callable $onEnvironmentCreated
@@ -56,7 +56,7 @@ abstract class WebRouteTestCase extends TestCase {
 	protected function createEnvironment( array $config, callable $onEnvironmentCreated ): void {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
-		$client = new Client(
+		$client = new HttpKernelBrowser(
 			$this->createApplication( $testEnvironment->getFactory() )
 		);
 
@@ -64,32 +64,6 @@ abstract class WebRouteTestCase extends TestCase {
 			$onEnvironmentCreated,
 			$client,
 			$testEnvironment->getFactory()
-		);
-	}
-
-	/**
-	 * Initializes a new test environment and Silex Application.
-	 * Invokes the provided callable with a HttpKernel client to make requests to the application
-	 * as first argument. The second argument is the top level factory which can be used for
-	 * both setup before requests to the client and validation tasks afterwards. The third argument
-	 * is the application instance itself.
-	 *
-	 * Use instead of createEnvironment when the application instance is needed.
-	 *
-	 * @param array $config
-	 * @param callable $onEnvironmentCreated
-	 */
-	protected function createAppEnvironment( array $config, callable $onEnvironmentCreated ): void {
-		$testEnvironment = TestEnvironment::newInstance( $config );
-
-		$application = $this->createApplication( $testEnvironment->getFactory() );
-		$client = new Client( $application );
-
-		call_user_func(
-			$onEnvironmentCreated,
-			$client,
-			$testEnvironment->getFactory(),
-			$application
 		);
 	}
 
@@ -101,12 +75,6 @@ abstract class WebRouteTestCase extends TestCase {
 		$app['session.test'] = true;
 
 		return $app;
-	}
-
-	protected function createSilexApplication(): Application {
-		$testEnvironment = TestEnvironment::newInstance( [] );
-
-		return $this->createApplication( $testEnvironment->getFactory() );
 	}
 
 	protected function assert404( Response $response ): void {
@@ -151,7 +119,7 @@ abstract class WebRouteTestCase extends TestCase {
 		$this->assertArrayHasKey( 'message', $responseData );
 	}
 
-	protected function assertInitialFormValues( array $expected, Client $client ): void {
+	protected function assertInitialFormValues( array $expected, HttpKernelBrowser $client ): void {
 		$initialFormValues = $client->getCrawler()->filter( 'script[data-initial-form-values]' );
 		$this->assertGreaterThan(
 			0,

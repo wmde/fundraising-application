@@ -7,9 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Sunset\Routes;
 use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\AddDonationController
@@ -30,7 +28,6 @@ class AddDonationLegacyParametersTest extends WebRouteTestCase {
 
 	public function testGivenLegacyParameters_donationGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
 

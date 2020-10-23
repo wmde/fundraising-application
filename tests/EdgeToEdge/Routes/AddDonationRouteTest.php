@@ -11,7 +11,6 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Client;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
@@ -19,13 +18,12 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
-use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser as Client;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
-use WMDE\FunValidators\Validators\EmailValidator;
 
 /**
  * @license GPL-2.0-or-later
@@ -43,7 +41,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_donationGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
 
@@ -59,7 +56,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenDonationGetsPersisted_timestampIsStoredInCookie(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->followRedirects( true );
 			$client->request(
 				'POST',
@@ -89,7 +85,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->getCookieJar()->set(
 				new Cookie(
 					'donation_timestamp',
@@ -180,7 +175,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
 		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->request(
 				'POST',
 				'/donation/add',
@@ -219,8 +213,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$factory = null;
 
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
-
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
 
@@ -292,7 +284,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->followRedirects( false );
 
 			$client->request(
@@ -333,8 +324,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenNonGermanDonor_donationGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
-
 			$client->followRedirects( false );
 
 			$client->request(
@@ -344,7 +333,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			);
 
 			$donation = $this->getDonationFromDatabase( $factory );
-
 			$data = $donation->getDecodedData();
 			$this->assertSame( 'Claire', $data['vorname'] );
 			$this->assertSame( 'Jennesaispas', $data['nachname'] );
@@ -391,25 +379,22 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidPayPalData_redirectsToPayPal(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
-			$client->followRedirects( false );
+		$client = $this->createClient();
+		$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidPayPalInput()
-			);
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidPayPalInput()
+		);
 
-			$response = $client->getResponse();
-			$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
-			$this->assertStringContainsString( 'sandbox.paypal.com', $response->getContent() );
-		} );
+		$response = $client->getResponse();
+		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
+		$this->assertStringContainsString( 'sandbox.paypal.com', $response->getContent() );
 	}
 
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$translator = $this->createMock( TranslatorInterface::class );
 			$translator->expects( $this->once() )
 				->method( 'trans' )
@@ -441,20 +426,18 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidCreditCardData_redirectsToPaymentProvider(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidCreditCardInput()
-			);
+		$client = $this->createClient();
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidCreditCardInput()
+		);
 
-			$response = $client->getResponse();
-			$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
-			$this->assertTrue( $response->isRedirect() );
-			$this->assertStringContainsString( 'amount=1234', $response->headers->get( 'Location' ) );
-			$this->assertStringContainsString( 'thatother.paymentprovider.com', $response->headers->get( 'Location' ) );
-		} );
+		$response = $client->getResponse();
+		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
+		$this->assertTrue( $response->isRedirect() );
+		$this->assertStringContainsString( 'amount=1234', $response->headers->get( 'Location' ) );
+		$this->assertStringContainsString( 'thatother.paymentprovider.com', $response->headers->get( 'Location' ) );
 	}
 
 	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
@@ -468,7 +451,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				->method( 'get' )
 				->willReturn( $response );
 			$factory->setSofortClient( $sofortClient );
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 
 			$client->followRedirects( false );
 			$client->request(
@@ -646,7 +628,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_tokensAreReturned(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 
 			$client->followRedirects( false );
 
@@ -665,7 +646,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_clientIsRedirected(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->followRedirects( false );
 
 			$client->request(
@@ -680,7 +660,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
 			$client->request(
@@ -699,7 +678,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setNullMessenger();
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->followRedirects( false );
 
 			$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
@@ -735,8 +713,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonExternalPayment(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setNullMessenger();
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->followRedirects( false );
 
 			$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
@@ -759,7 +735,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
 
@@ -777,31 +752,25 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCookieFlagsSecureAndHttpOnlyAreSet(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
-			$client = new Client(
-				$this->createSilexApplication(),
-				[ 'HTTPS' => true ]
-			);
-			$client->followRedirects( true );
+		$client = $this->createClient();
+		$client->setServerParameter( 'HTTPS', true );
+		$client->followRedirects( true );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
 
-			$cookieJar = $client->getCookieJar();
-			$cookieJar->updateFromResponse( $client->getInternalResponse() );
-			$cookie = $cookieJar->get( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME );
-			$this->assertTrue( $cookie->isSecure() );
-			$this->assertTrue( $cookie->isHttpOnly() );
-		} );
+		$cookieJar = $client->getCookieJar();
+		$cookieJar->updateFromResponse( $client->getInternalResponse() );
+		$cookie = $cookieJar->get( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME );
+		$this->assertTrue( $cookie->isSecure() );
+		$this->assertTrue( $cookie->isHttpOnly() );
 	}
 
 	public function testDonationReceiptOptOut_persistedInDonation(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$parameters = $this->newValidFormInput();
 			$parameters['donationReceipt'] = '0';
 
@@ -813,7 +782,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_bucketsAreLogged(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$bucketLogger = new BucketLoggerSpy();
 			$factory->setBucketLogger( $bucketLogger );
 			$client->followRedirects( false );
@@ -831,7 +799,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_addressChangeRecordIsCreated(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setEmailValidator( new EmailValidator( new NullDomainNameValidator() ) );
 			$client->followRedirects( false );
 
 			$client->request(
