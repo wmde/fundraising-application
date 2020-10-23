@@ -42,6 +42,7 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationEventLogger;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationTokenFetcher;
 use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
+use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
@@ -157,6 +158,7 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracke
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
+use WMDE\Fundraising\MembershipContext\Domain\Event\MembershipCreatedEvent;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
@@ -1803,16 +1805,26 @@ class FunFunFactory {
 	}
 
 	private function setupEventListeners( EventDispatcher $dispatcher ): void {
+		// TODO: Move this initialisation into an initialiser class
 		new CreateAddressChangeHandler( $this->getEntityManager(), $dispatcher );
-		new BucketLoggingHandler(
-			$this->getBucketLogger(),
-			/** @return Bucket[] */
-			function (): array {
-				// Defer execution with anonymous function because buckets might not be selected at call time
-				return $this->getSelectedBuckets();
-			},
-			$dispatcher
-		);
+
+		$bucketLoggingHandler = $this->getBucketLoggingHandler();
+		foreach ( BucketLoggingHandler::getSubscribedEvents() as $event => $method ) {
+			$dispatcher->addEventListener( $event, [ $bucketLoggingHandler, $method ] );
+		}
+	}
+
+	public function getBucketLoggingHandler(): BucketLoggingHandler {
+		return $this->createSharedObject( BucketLoggingHandler::class, function (): BucketLoggingHandler {
+			return new BucketLoggingHandler(
+				$this->getBucketLogger(),
+				/** @return Bucket[] */
+				function (): array {
+					// Defer execution with anonymous function because buckets might not be selected at call time
+					return $this->getSelectedBuckets();
+				}
+			);
+		} );
 	}
 
 	private function getPaymentProviderItemsTranslator(): TranslatorInterface {

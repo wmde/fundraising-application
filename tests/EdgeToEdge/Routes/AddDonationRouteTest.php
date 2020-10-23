@@ -14,10 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
-use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
+use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
@@ -660,7 +659,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
+	public function testWhenTrackingCookieExists_andCookieConsentGiven_valueIsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$this->consentToCookies( $client );
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
@@ -678,17 +677,23 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newValidMobilePayPalInput(): array {
-		return [
-			'amount' => '1234',
-			'paymentType' => 'PPL',
-			'interval' => 3,
-			'addressType' => 'anonym',
-			'piwik_campaign' => 'test',
-			'piwik_kwd' => 'gelb',
-			// 'mbt' is the mobile tracking param that triggers a redirect to paypal for anonymous donations
-			'mbt' => '1'
-		];
+	public function testWhenTrackingCookieExists_andNoCookieConsentGiven_valueIsNotPersisted(): void {
+		$this->createEnvironment(
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newComplementableFormInput()
+				);
+
+				$donation = $this->getDonationFromDatabase( $factory );
+				$data = $donation->getDecodedData();
+
+				$this->assertSame( '', $data['tracking'] );
+			}
+		);
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
@@ -745,7 +750,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_bucketsAreLogged(): void {
+	public function testGivenValidRequest_andCookieConsentGiven_bucketsAreLogged(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$bucketLogger = new BucketLoggerSpy();
 			$factory->setBucketLogger( $bucketLogger );
@@ -763,22 +768,23 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_addressChangeRecordIsCreated(): void {
+	public function testGivenValidRequest_andCookieConsentNotGiven_bucketsAreNotLogged(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$client->followRedirects( false );
+				$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidFormInput()
+				);
 
-			/** @var AddressChange[] $addressChanges */
-			$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
-			$this->assertCount( 1, $addressChanges );
-			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION );
-			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
-		} );
+				/** @var AddressChange[] $addressChanges */
+				$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
+				$this->assertCount( 1, $addressChanges );
+				$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION );
+				$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
+		}
+		);
 	}
 
 	private function getDataApplicationVars( Crawler $crawler ): object {
@@ -788,6 +794,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	private function consentToCookies( Client $client ): void {
-		$client->getCookieJar()->set( new Cookie( SetCookiePreferencesController::CONSENT_COOKIE_NAME, 'yes' ) );
+		$client->getCookieJar()->set( new Cookie( CookieNames::CONSENT, 'yes' ) );
 	}
 }

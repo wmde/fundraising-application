@@ -10,7 +10,7 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
+use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
@@ -317,7 +317,11 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertStringNotContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 	}
 
-	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
+	private function getPastTimestamp( string $interval = 'PT10S' ): string {
+		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
+	}
+
+	public function testWhenTrackingCookieExists_andCookieConsentGiven_valueIsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 			$this->consentToCookies( $client );
@@ -331,6 +335,22 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$application = $this->getApplicationFromDatabase( $factory );
 			$this->assertSame( 'test/blue', $application->getTracking() );
 		} );
+	}
+
+	public function testWhenTrackingCookieExists_andNoCookieConsentGiven_valueIsNotPersisted(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+
+				$client->request(
+					'POST',
+					'/apply-for-membership',
+					$this->newValidHttpParameters()
+				);
+
+				$application = $this->getApplicationFromDatabase( $factory );
+				$this->assertSame( '', $application->getTracking() );
+		}
+		);
 	}
 
 	private function getApplicationFromDatabase( FunFunFactory $factory ): MembershipApplication {
@@ -519,7 +539,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_bucketsAreLogged(): void {
+	public function testGivenValidRequest_andCookieConsentGiven_bucketsAreLogged(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 			$bucketLogger = new BucketLoggerSpy();
@@ -537,9 +557,25 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testGivenValidRequest_andCookieConsentNotGiven_bucketsAreNotLogged(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+				$bucketLogger = new BucketLoggerSpy();
+				$factory->setBucketLogger( $bucketLogger );
+
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$this->newValidHttpParameters()
+				);
+
+				$this->assertSame( 0, $bucketLogger->getEventCount() );
+		}
+		);
+	}
+
 	public function testGivenInvalidRequest_errorsAreLogged(): void {
-		$this->createEnvironment(
-			function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 				$testHandler = new TestHandler();
 				$factory->setLogger( new Logger( 'TestLogger', [ $testHandler ] ) );
 				$client->request(
@@ -551,7 +587,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				foreach ( $testHandler->getRecords() as $record ) {
 					$this->assertEquals( 'Unexpected server-side form validation errors.', $record['message'] );
 				}
-			}
+		}
 		);
 	}
 
@@ -577,6 +613,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	 * @param Client $client
 	 */
 	private function consentToCookies( Client $client ): void {
-		$client->getCookieJar()->set( new Cookie( SetCookiePreferencesController::CONSENT_COOKIE_NAME, 'yes' ) );
+		$client->getCookieJar()->set( new Cookie( CookieNames::CONSENT, 'yes' ) );
 	}
 }

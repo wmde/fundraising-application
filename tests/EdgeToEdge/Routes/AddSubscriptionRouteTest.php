@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
-use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
+use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
@@ -41,7 +41,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		} );
 		$client = $this->createClient();
 		$client->followRedirects( false );
-		$client->getCookieJar()->set( new Cookie( SetCookiePreferencesController::CONSENT_COOKIE_NAME, 'yes' ) );
+		$client->getCookieJar()->set( new Cookie( CookieNames::CONSENT, 'yes' ) );
 
 		$client->request(
 			'POST',
