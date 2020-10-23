@@ -361,6 +361,24 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	public function testWhenTrackingCookieExists_andNoCookieConsentGiven_valueIsNotPersisted(): void {
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+
+				$client->request(
+					'POST',
+					'/apply-for-membership',
+					$this->newValidHttpParameters()
+				);
+
+				$application = $this->getApplicationFromDatabase( $factory );
+				$this->assertSame( '', $application->getTracking() );
+			}
+		);
+	}
+
 	private function getApplicationFromDatabase( FunFunFactory $factory ): MembershipApplication {
 		$repository = $factory->getEntityManager()->getRepository( MembershipApplication::class );
 		$application = $repository->find( 1 );
@@ -598,6 +616,25 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->assertInstanceOf( MembershipApplicationCreated::class, $bucketLogger->getFirstEvent() );
 			},
 			[ CookieNames::CONSENT => 'yes' ]
+		);
+	}
+
+	public function testGivenValidRequest_andCookieConsentNotGiven_bucketsAreNotLogged(): void {
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+				$bucketLogger = new BucketLoggerSpy();
+				$factory->setBucketLogger( $bucketLogger );
+
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$this->newValidHttpParameters()
+				);
+
+				$this->assertSame( 0, $bucketLogger->getEventCount() );
+			}
 		);
 	}
 
