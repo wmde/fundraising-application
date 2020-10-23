@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
@@ -40,34 +41,41 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private const ADD_DONATION_PATH = '/donation/add';
 
 	public function testGivenValidRequest_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
-			$client->followRedirects( false );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
+				$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidFormInput()
+				);
 
-			$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
-		} );
+				$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	public function testWhenDonationGetsPersisted_timestampIsStoredInCookie(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->followRedirects( true );
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->followRedirects( true );
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidFormInput()
+				);
 
-			$cookie = $client->getCookieJar()->get( 'donation_timestamp' );
-			$this->assertNotNull( $cookie );
-			$donationTimestamp = new \DateTime( $cookie->getValue() );
-			$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
-		} );
+				$cookie = $client->getCookieJar()->get( 'donation_timestamp' );
+				$this->assertNotNull( $cookie );
+				$donationTimestamp = new \DateTime( $cookie->getValue() );
+				$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
+			}
+		);
 	}
 
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected(): void {
@@ -84,22 +92,25 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->getCookieJar()->set(
-				new Cookie(
-					'donation_timestamp',
-					$this->getPastTimestamp( 'PT35M' )
-				)
-			);
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->getCookieJar()->set(
+					new Cookie(
+						'donation_timestamp',
+						$this->getPastTimestamp( 'PT35M' )
+					)
+				);
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidFormInput()
+				);
 
-			$this->assertStringNotContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() );
-		} );
+				$this->assertStringNotContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() );
+			}
+		);
 	}
 
 	private function getPastTimestamp( string $interval = 'PT10S' ): string {
@@ -174,36 +185,39 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
-		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
-			$client->followRedirect();
+		$this->createEnvironment(
+			[ 'skin' => 'laika' ],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidFormInput()
+				);
+				$client->followRedirect();
 
-			$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
+				$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-			$this->assertObjectHasAttribute( 'donation', $applicationVars );
-			$this->assertSame( 5.51, $applicationVars->donation->amount );
-			$this->assertSame( 0, $applicationVars->donation->interval );
-			$this->assertSame( 'BEZ', $applicationVars->donation->paymentType );
-			$this->assertTrue( $applicationVars->donation->optsIntoNewsletter );
-			$this->assertTrue( $applicationVars->donation->optsIntoDonationReceipt );
+				$this->assertObjectHasAttribute( 'donation', $applicationVars );
+				$this->assertSame( 5.51, $applicationVars->donation->amount );
+				$this->assertSame( 0, $applicationVars->donation->interval );
+				$this->assertSame( 'BEZ', $applicationVars->donation->paymentType );
+				$this->assertTrue( $applicationVars->donation->optsIntoNewsletter );
+				$this->assertTrue( $applicationVars->donation->optsIntoDonationReceipt );
 
-			$this->assertObjectHasAttribute( 'bankData', $applicationVars );
-			$this->assertSame( 'DE12500105170648489890', $applicationVars->bankData->iban );
-			$this->assertSame( 'INGDDEFFXXX', $applicationVars->bankData->bic );
-			$this->assertSame( 'ING-DiBa', $applicationVars->bankData->bankname );
+				$this->assertObjectHasAttribute( 'bankData', $applicationVars );
+				$this->assertSame( 'DE12500105170648489890', $applicationVars->bankData->iban );
+				$this->assertSame( 'INGDDEFFXXX', $applicationVars->bankData->bic );
+				$this->assertSame( 'ING-DiBa', $applicationVars->bankData->bankname );
 
-			$this->assertObjectHasAttribute( 'address', $applicationVars );
-			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $applicationVars->address->fullName );
-			$this->assertSame( 'Lehmgasse 12', $applicationVars->address->streetAddress );
-			$this->assertSame( '12345', $applicationVars->address->postalCode );
-			$this->assertSame( 'Einort', $applicationVars->address->city );
-			$this->assertSame( 'DE', $applicationVars->address->countryCode );
-			$this->assertSame( 'karla@kennichnich.de', $applicationVars->address->email );
-		} );
+				$this->assertObjectHasAttribute( 'address', $applicationVars );
+				$this->assertSame( 'Prof. Dr. Karla Kennichnich', $applicationVars->address->fullName );
+				$this->assertSame( 'Lehmgasse 12', $applicationVars->address->streetAddress );
+				$this->assertSame( '12345', $applicationVars->address->postalCode );
+				$this->assertSame( 'Einort', $applicationVars->address->city );
+				$this->assertSame( 'DE', $applicationVars->address->countryCode );
+				$this->assertSame( 'karla@kennichnich.de', $applicationVars->address->email );
+			}
+		);
 	}
 
 	public function testGivenValidBankTransferRequest_donationGetsPersisted(): void {
@@ -212,47 +226,51 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		 */
 		$factory = null;
 
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
-			$client->followRedirects( false );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
+				$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidBankTransferInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidBankTransferInput()
+				);
 
-			$donation = $this->getDonationFromDatabase( $factory );
+				$donation = $this->getDonationFromDatabase( $factory );
 
-			$data = $donation->getDecodedData();
-			$this->assertSame( '12.34', $donation->getAmount() );
-			$this->assertSame( 'UEB', $donation->getPaymentType() );
-			$this->assertSame( 0, $donation->getPaymentIntervalInMonths() );
-			$this->assertSame( 'person', $data['adresstyp'] );
-			$this->assertSame( 'Frau', $data['anrede'] );
-			$this->assertSame( 'Prof. Dr.', $data['titel'] );
-			$this->assertSame( 'Karla', $data['vorname'] );
-			$this->assertSame( 'Kennichnich', $data['nachname'] );
-			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getDonorFullName() );
-			$this->assertSame( 'Lehmgasse 12', $data['strasse'] );
-			$this->assertSame( '12345', $data['plz'] );
-			$this->assertSame( 'Einort', $data['ort'] );
-			$this->assertSame( 'Einort', $donation->getDonorCity() );
-			$this->assertSame( 'DE', $data['country'] );
-			$this->assertSame( 'karla@kennichnich.de', $data['email'] );
-			$this->assertSame( 'karla@kennichnich.de', $donation->getDonorEmail() );
-			$this->assertSame( 'test/gelb', $data['tracking'] );
-			$this->assertSame( 3, $data['impCount'] );
-			$this->assertSame( 1, $data['bImpCount'] );
-			$this->assertSame( '', $data['layout'] );
-			$this->assertSame( '', $data['color'] );
-			$this->assertSame( '', $data['skin'] );
-			$this->assertSame( 'en.wikipedia.org', $data['source'] );
-			$this->assertSame( true, $donation->getDonorOptsIntoNewsletter() );
+				$data = $donation->getDecodedData();
+				$this->assertSame( '12.34', $donation->getAmount() );
+				$this->assertSame( 'UEB', $donation->getPaymentType() );
+				$this->assertSame( 0, $donation->getPaymentIntervalInMonths() );
+				$this->assertSame( 'person', $data['adresstyp'] );
+				$this->assertSame( 'Frau', $data['anrede'] );
+				$this->assertSame( 'Prof. Dr.', $data['titel'] );
+				$this->assertSame( 'Karla', $data['vorname'] );
+				$this->assertSame( 'Kennichnich', $data['nachname'] );
+				$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getDonorFullName() );
+				$this->assertSame( 'Lehmgasse 12', $data['strasse'] );
+				$this->assertSame( '12345', $data['plz'] );
+				$this->assertSame( 'Einort', $data['ort'] );
+				$this->assertSame( 'Einort', $donation->getDonorCity() );
+				$this->assertSame( 'DE', $data['country'] );
+				$this->assertSame( 'karla@kennichnich.de', $data['email'] );
+				$this->assertSame( 'karla@kennichnich.de', $donation->getDonorEmail() );
+				$this->assertSame( 'test/gelb', $data['tracking'] );
+				$this->assertSame( 3, $data['impCount'] );
+				$this->assertSame( 1, $data['bImpCount'] );
+				$this->assertSame( '', $data['layout'] );
+				$this->assertSame( '', $data['color'] );
+				$this->assertSame( '', $data['skin'] );
+				$this->assertSame( 'en.wikipedia.org', $data['source'] );
+				$this->assertSame( true, $donation->getDonorOptsIntoNewsletter() );
 
-			$this->assertSame( 'Z', $donation->getStatus() );
-			$this->assertMatchesRegularExpression( '/^(XW)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
-		} );
+				$this->assertSame( 'Z', $donation->getStatus() );
+				$this->assertMatchesRegularExpression( '/^(XW)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	private function newValidBankTransferInput(): array {
@@ -283,24 +301,28 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->followRedirects( false );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newComplementableFormInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newComplementableFormInput()
+				);
 
-			$donation = $this->getDonationFromDatabase( $factory );
+				$donation = $this->getDonationFromDatabase( $factory );
 
-			$data = $donation->getDecodedData();
-			$this->assertSame( 'DE12500105170648489890', $data['iban'] );
-			$this->assertSame( 'INGDDEFFXXX', $data['bic'] );
-			$this->assertSame( '0648489890', $data['konto'] );
-			$this->assertSame( '50010517', $data['blz'] );
-			$this->assertSame( 'ING-DiBa', $data['bankname'] );
-		} );
+				$data = $donation->getDecodedData();
+				$this->assertSame( 'DE12500105170648489890', $data['iban'] );
+				$this->assertSame( 'INGDDEFFXXX', $data['bic'] );
+				$this->assertSame( '0648489890', $data['konto'] );
+				$this->assertSame( '50010517', $data['blz'] );
+				$this->assertSame( 'ING-DiBa', $data['bankname'] );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	private function newComplementableFormInput(): array {
@@ -323,33 +345,37 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenNonGermanDonor_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->followRedirects( false );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newFrenchDonorFormInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newFrenchDonorFormInput()
+				);
 
-			$donation = $this->getDonationFromDatabase( $factory );
-			$data = $donation->getDecodedData();
-			$this->assertSame( 'Claire', $data['vorname'] );
-			$this->assertSame( 'Jennesaispas', $data['nachname'] );
-			$this->assertSame( 'Claire Jennesaispas', $donation->getDonorFullName() );
-			$this->assertSame( 'Ruelle Argile 12', $data['strasse'] );
-			$this->assertSame( '12345', $data['plz'] );
-			$this->assertSame( 'Unlieu', $data['ort'] );
-			$this->assertSame( 'Unlieu', $donation->getDonorCity() );
-			$this->assertSame( 'FR', $data['country'] );
-			$this->assertSame( 'claire@jennesaispas.fr', $data['email'] );
-			$this->assertSame( 'claire@jennesaispas.fr', $donation->getDonorEmail() );
-			$this->assertSame( 'FR7630066100410001057380116', $data['iban'] );
-			$this->assertSame( '', $data['bic'] );
-			$this->assertSame( '', $data['konto'] );
-			$this->assertSame( '', $data['blz'] );
-			$this->assertSame( '', $data['bankname'] );
-		} );
+				$donation = $this->getDonationFromDatabase( $factory );
+				$data = $donation->getDecodedData();
+				$this->assertSame( 'Claire', $data['vorname'] );
+				$this->assertSame( 'Jennesaispas', $data['nachname'] );
+				$this->assertSame( 'Claire Jennesaispas', $donation->getDonorFullName() );
+				$this->assertSame( 'Ruelle Argile 12', $data['strasse'] );
+				$this->assertSame( '12345', $data['plz'] );
+				$this->assertSame( 'Unlieu', $data['ort'] );
+				$this->assertSame( 'Unlieu', $donation->getDonorCity() );
+				$this->assertSame( 'FR', $data['country'] );
+				$this->assertSame( 'claire@jennesaispas.fr', $data['email'] );
+				$this->assertSame( 'claire@jennesaispas.fr', $donation->getDonorEmail() );
+				$this->assertSame( 'FR7630066100410001057380116', $data['iban'] );
+				$this->assertSame( '', $data['bic'] );
+				$this->assertSame( '', $data['konto'] );
+				$this->assertSame( '', $data['blz'] );
+				$this->assertSame( '', $data['bankname'] );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	private function newFrenchDonorFormInput(): array {
@@ -394,26 +420,29 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$translator = $this->createMock( TranslatorInterface::class );
-			$translator->expects( $this->once() )
-				->method( 'trans' )
-				->with( 'paypal_item_name_donation' )
-				->willReturn( 'Ihre Spende' );
-			$factory->setPaymentProviderItemsTranslator( $translator );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$translator = $this->createMock( TranslatorInterface::class );
+				$translator->expects( $this->once() )
+					->method( 'trans' )
+					->with( 'paypal_item_name_donation' )
+					->willReturn( 'Ihre Spende' );
+				$factory->setPaymentProviderItemsTranslator( $translator );
 
-			$client->followRedirects( false );
+				$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidPayPalInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidPayPalInput()
+				);
 
-			$response = $client->getResponse();
-			$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
-			$this->assertStringContainsString( 'item_name=Ihre+Spende', $response->getContent() );
-		} );
+				$response = $client->getResponse();
+				$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
+				$this->assertStringContainsString( 'item_name=Ihre+Spende', $response->getContent() );
+			}
+		);
 	}
 
 	private function newValidPayPalInput(): array {
@@ -441,31 +470,34 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$response = new SofortResponse();
-			$response->setPaymentUrl( 'https://bankingpin.please' );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$response = new SofortResponse();
+				$response->setPaymentUrl( 'https://bankingpin.please' );
 
-			/** @var SofortClient&MockObject $sofortClient */
-			$sofortClient = $this->createMock( SofortClient::class );
-			$sofortClient
-				->method( 'get' )
-				->willReturn( $response );
-			$factory->setSofortClient( $sofortClient );
+				/** @var SofortClient&MockObject $sofortClient */
+				$sofortClient = $this->createMock( SofortClient::class );
+				$sofortClient
+					->method( 'get' )
+					->willReturn( $response );
+				$factory->setSofortClient( $sofortClient );
 
-			$client->followRedirects( false );
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidSofortInput()
-			);
+				$client->followRedirects( false );
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidSofortInput()
+				);
 
-			$donation = $this->getDonationFromDatabase( $factory );
+				$donation = $this->getDonationFromDatabase( $factory );
 
-			$this->assertSame( 'X', $donation->getStatus() );
-			$this->assertMatchesRegularExpression( '/^(XR)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
+				$this->assertSame( 'X', $donation->getStatus() );
+				$this->assertMatchesRegularExpression( '/^(XR)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
 
-			$this->assertTrue( $client->getResponse()->isRedirect( 'https://bankingpin.please' ) );
-		} );
+				$this->assertTrue( $client->getResponse()->isRedirect( 'https://bankingpin.please' ) );
+			}
+		);
 	}
 
 	private function newValidCreditCardInput(): array {
@@ -516,7 +548,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidRequest_formStillContainsBannerTrackingData(): void {
-		$client = $this->createClient();
+		$client = $this->createClient( [], null, [ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ] );
 		$client->request(
 			'POST',
 			'/donation/add',
@@ -626,76 +658,90 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_tokensAreReturned(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 
-			$client->followRedirects( false );
+				$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidCreditCardInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidCreditCardInput()
+				);
 
-			$response = $client->getResponse()->getContent();
+				$response = $client->getResponse()->getContent();
 
-			$this->assertStringContainsString( self::SOME_TOKEN, $response );
-		} );
+				$this->assertStringContainsString( self::SOME_TOKEN, $response );
+			}
+		);
 	}
 
 	public function testGivenValidRequest_clientIsRedirected(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
-			$client->followRedirects( false );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
+				$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidFormInput()
+				);
 
-			$this->assertTrue( $client->getResponse()->isRedirect() );
-		} );
+				$this->assertTrue( $client->getResponse()->isRedirect() );
+			}
+		);
 	}
 
 	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newComplementableFormInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newComplementableFormInput()
+				);
 
-			$donation = $this->getDonationFromDatabase( $factory );
-			$data = $donation->getDecodedData();
+				$donation = $this->getDonationFromDatabase( $factory );
+				$data = $donation->getDecodedData();
 
-			$this->assertSame( 'test/blue', $data['tracking'] );
-		} );
+				$this->assertSame( 'test/blue', $data['tracking'] );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setNullMessenger();
-			$client->followRedirects( false );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setNullMessenger();
+				$client->followRedirects( false );
 
-			$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
-			$tracker->expects( $this->once() )
-				->method( 'trackPaypalRedirection' )
-				->with( 'test', 'gelb', '10.1.2.3' );
-			$factory->setPageViewTracker( $tracker );
+				$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
+				$tracker->expects( $this->once() )
+					->method( 'trackPaypalRedirection' )
+					->with( 'test', 'gelb', '10.1.2.3' );
+				$factory->setPageViewTracker( $tracker );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidMobilePayPalInput(),
-				[],
-				[ 'REMOTE_ADDR' => '10.1.2.3' ]
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidMobilePayPalInput(),
+					[],
+					[ 'REMOTE_ADDR' => '10.1.2.3' ]
+				);
 
-			$client->getResponse();
-		} );
+				$client->getResponse();
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	private function newValidMobilePayPalInput(): array {
@@ -712,43 +758,50 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonExternalPayment(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->followRedirects( false );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->followRedirects( false );
 
-			$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
-			$tracker->expects( $this->never() )
-				->method( 'trackPaypalRedirection' );
-			$factory->setPageViewTracker( $tracker );
+				$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
+				$tracker->expects( $this->never() )
+					->method( 'trackPaypalRedirection' );
+				$factory->setPageViewTracker( $tracker );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				array_merge(
-					$this->newValidBankTransferInput(),
-					[ 'mbt' => '1' ]
-				)
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					array_merge(
+						$this->newValidBankTransferInput(),
+						[ 'mbt' => '1' ]
+					)
+				);
 
-			$client->getResponse();
-		} );
+				$client->getResponse();
+			}
+		);
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
-			$client->followRedirects( false );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
+				$client->followRedirects( false );
 
-			$formInput = $this->newValidFormInput();
-			$formInput['street'] = ',Lehmgasse, 12,';
+				$formInput = $this->newValidFormInput();
+				$formInput['street'] = ',Lehmgasse, 12,';
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$formInput
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$formInput
+				);
 
-			$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
-		} );
+				$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	public function testCookieFlagsSecureAndHttpOnlyAreSet(): void {
@@ -770,49 +823,59 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testDonationReceiptOptOut_persistedInDonation(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$parameters = $this->newValidFormInput();
-			$parameters['donationReceipt'] = '0';
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$parameters = $this->newValidFormInput();
+				$parameters['donationReceipt'] = '0';
 
-			$client->request( Request::METHOD_POST, self::ADD_DONATION_PATH, $parameters );
+				$client->request( Request::METHOD_POST, self::ADD_DONATION_PATH, $parameters );
 
-			$this->assertFalse( $this->getDonationFromDatabase( $factory )->getDonationReceipt() );
-		} );
+				$this->assertFalse( $this->getDonationFromDatabase( $factory )->getDonationReceipt() );
+			}
+		);
 	}
 
 	public function testGivenValidRequest_bucketsAreLogged(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$bucketLogger = new BucketLoggerSpy();
-			$factory->setBucketLogger( $bucketLogger );
-			$client->followRedirects( false );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$bucketLogger = new BucketLoggerSpy();
+				$factory->setBucketLogger( $bucketLogger );
+				$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidFormInput()
+				);
 
-			$this->assertSame( 1, $bucketLogger->getEventCount() );
-			$this->assertInstanceOf( DonationCreated::class, $bucketLogger->getFirstEvent() );
-		} );
+				$this->assertSame( 1, $bucketLogger->getEventCount() );
+				$this->assertInstanceOf( DonationCreated::class, $bucketLogger->getFirstEvent() );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	public function testGivenValidRequest_addressChangeRecordIsCreated(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->followRedirects( false );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newValidFormInput()
+				);
 
-			/** @var AddressChange[] $addressChanges */
-			$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
-			$this->assertCount( 1, $addressChanges );
-			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION );
-			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
-		} );
+				/** @var AddressChange[] $addressChanges */
+				$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
+				$this->assertCount( 1, $addressChanges );
+				$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION );
+				$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
+			}
+		);
 	}
 
 	private function getDataApplicationVars( Crawler $crawler ): object {

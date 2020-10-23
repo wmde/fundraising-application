@@ -94,7 +94,7 @@ class ApplyForMembershipController {
 			$httpRequest->request->get( 'templateName', '' )
 		) );
 
-		$request->setPiwikTrackingString( $httpRequest->attributes->get( 'trackingCode' ) );
+		$request->setPiwikTrackingString( $httpRequest->attributes->get( 'trackingCode', '' ) );
 
 		$request->setOptsIntoDonationReceipt( $httpRequest->request->getBoolean( 'donationReceipt', true ) );
 

@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use PHPUnit\Framework\TestCase;
 use Silex\Application;
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -26,19 +27,24 @@ abstract class WebRouteTestCase extends TestCase {
 	 *
 	 * @param array $config
 	 * @param callable|null $onEnvironmentCreated Gets called after onTestEnvironmentCreated, same signature
+	 * @param array $extraCookies Add any required extra cookies
 	 *
 	 * @return HttpKernelBrowser
 	 */
-	protected function createClient( array $config = [], callable $onEnvironmentCreated = null ): HttpKernelBrowser {
+	protected function createClient( array $config = [], callable $onEnvironmentCreated = null, $extraCookies = [] ): HttpKernelBrowser {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		if ( is_callable( $onEnvironmentCreated ) ) {
 			call_user_func( $onEnvironmentCreated, $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 		}
 
-		return new HttpKernelBrowser(
+		$client = new HttpKernelBrowser(
 			$this->createApplication( $testEnvironment->getFactory() )
 		);
+
+		$this->addExtraCookies( $client, $extraCookies );
+
+		return $client;
 	}
 
 	/**
@@ -52,19 +58,28 @@ abstract class WebRouteTestCase extends TestCase {
 	 *
 	 * @param array $config
 	 * @param callable $onEnvironmentCreated
+	 * @param array $extraCookies
 	 */
-	protected function createEnvironment( array $config, callable $onEnvironmentCreated ): void {
+	protected function createEnvironment( array $config, callable $onEnvironmentCreated, $extraCookies = [] ): void {
 		$testEnvironment = TestEnvironment::newInstance( $config );
 
 		$client = new HttpKernelBrowser(
 			$this->createApplication( $testEnvironment->getFactory() )
 		);
 
+		$this->addExtraCookies( $client, $extraCookies );
+
 		call_user_func(
 			$onEnvironmentCreated,
 			$client,
 			$testEnvironment->getFactory()
 		);
+	}
+
+	private function addExtraCookies( HttpKernelBrowser $client, array $cookies ) {
+		foreach ( $cookies as $name => $value ) {
+			$client->getCookieJar()->set( new Cookie( $name, $value ) );
+		}
 	}
 
 	// @codingStandardsIgnoreStart

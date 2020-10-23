@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use Symfony\Component\BrowserKit\Cookie as BrowserKitCookie;
 use Symfony\Component\HttpFoundation\Cookie;
+use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
@@ -31,13 +32,14 @@ class CampaignCookieTest extends WebRouteTestCase {
 		$client = $this->createClient(
 			[ 'campaigns' => [ 'timezone' => 'UTC' ] ],
 			function ( FunFunFactory $ffactory, array $config ) {
-			$ffactory->setCampaignConfigurationLoader(
-				new OverridingCampaignConfigurationLoader(
-					$ffactory->getCampaignConfigurationLoader(),
-					self::TEST_CAMPAIGN_CONFIG
-				)
-			);
-			}
+				$ffactory->setCampaignConfigurationLoader(
+					new OverridingCampaignConfigurationLoader(
+						$ffactory->getCampaignConfigurationLoader(),
+						self::TEST_CAMPAIGN_CONFIG
+					)
+				);
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
 		);
 		$client->request( 'get', '/', [] );
 
@@ -55,7 +57,8 @@ class CampaignCookieTest extends WebRouteTestCase {
 					$factory->getCampaignConfigurationLoader(),
 					self::TEST_CAMPAIGN_CONFIG
 				) );
-			}
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
 		);
 		$client->getCookieJar()->set( new BrowserKitCookie( self::COOKIE_NAME, 'omg=0' ) );
 		$client->request( 'get', '/', [ 'omg' => 1 ] );
@@ -81,7 +84,9 @@ class CampaignCookieTest extends WebRouteTestCase {
 						}
 					)
 				);
-			} );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 		$client->request( 'get', '/', [] );
 
 		$cookie = $client->getCookieJar()->get( self::COOKIE_NAME );

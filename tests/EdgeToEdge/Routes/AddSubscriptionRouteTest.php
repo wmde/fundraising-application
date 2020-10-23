@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\DomCrawler\Crawler;
+use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
@@ -34,9 +35,13 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	public function testValidSubscriptionRequestGetsPersisted(): void {
 		$subscriptionRepository = new SubscriptionRepositorySpy();
 
-		$client = $this->createClient( [ 'skin' => 'laika' ], function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
-			$factory->setSubscriptionRepository( $subscriptionRepository );
-		} );
+		$client = $this->createClient(
+			[ 'skin' => 'laika' ],
+			function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
+				$factory->setSubscriptionRepository( $subscriptionRepository );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 
 		$client->followRedirects( false );
 

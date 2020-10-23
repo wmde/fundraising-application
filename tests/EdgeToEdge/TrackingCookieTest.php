@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use Symfony\Component\BrowserKit\Cookie;
+use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Bootstrap
@@ -18,7 +19,7 @@ class TrackingCookieTest extends WebRouteTestCase {
 	private const COOKIE_NAME = 'spenden_tracking';
 
 	public function testWhenTrackingParamsArePassed_valuesAreStoredInCookie(): void {
-		$client = $this->createClient();
+		$client = $this->createClient( [], null, [ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ] );
 		$client->request( 'get', '/', [
 			self::PARAM_NAME_CAMPAIGN => 'campaign',
 			self::PARAM_NAME_KEYWORD => 'keyword'

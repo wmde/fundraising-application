@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
+use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
@@ -168,7 +169,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithInsufficientAmount_failureResponseIsReturned(): void {
-		$client = $this->createClient();
+		$client = $this->createClient( [], null, [ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ] );
 
 		$httpParameters = $this->newValidHttpParameters();
 		$httpParameters['membership_fee'] = '100';
@@ -219,41 +220,48 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_applicationIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$this->newValidHttpParameters()
-			);
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$this->newValidHttpParameters()
+				);
 
-			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
+				$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
 
-			$this->assertNotNull( $application );
+				$this->assertNotNull( $application );
 
-			$expectedApplication = ValidMembershipApplication::newAutoConfirmedDomainEntity();
-			$expectedApplication->assignId( 1 );
+				$expectedApplication = ValidMembershipApplication::newAutoConfirmedDomainEntity();
+				$expectedApplication->assignId( 1 );
 
-			$this->assertEquals( $expectedApplication, $application );
-		} );
+				$this->assertEquals( $expectedApplication, $application );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsCancellationParameters(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator( self::FIXED_TOKEN ) );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator( self::FIXED_TOKEN ) );
 
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$this->newValidHttpParameters()
-			);
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$this->newValidHttpParameters()
+				);
 
-			$responseContent = $client->getResponse()->getContent();
+				$responseContent = $client->getResponse()->getContent();
 
-			$this->assertStringContainsString( 'id=1', $responseContent );
-			$this->assertStringContainsString( 'accessToken=' . self::FIXED_TOKEN, $responseContent );
-		} );
+				$this->assertStringContainsString( 'id=1', $responseContent );
+				$this->assertStringContainsString( 'accessToken=' . self::FIXED_TOKEN, $responseContent );
+			}
+		);
 	}
 
 	public function testGivenValidRequest_requestIsRedirected(): void {
@@ -316,18 +324,22 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
-			$client->request(
-				'POST',
-				'/apply-for-membership',
-				$this->newValidHttpParameters()
-			);
+				$client->request(
+					'POST',
+					'/apply-for-membership',
+					$this->newValidHttpParameters()
+				);
 
-			$application = $this->getApplicationFromDatabase( $factory );
-			$this->assertSame( 'test/blue', $application->getTracking() );
-		} );
+				$application = $this->getApplicationFromDatabase( $factory );
+				$this->assertSame( 'test/blue', $application->getTracking() );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	private function getApplicationFromDatabase( FunFunFactory $factory ): MembershipApplication {
@@ -338,28 +350,31 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequestUsingPayPal_applicationIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$this->newValidHttpParametersUsingPayPal()
-			);
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$this->newValidHttpParametersUsingPayPal()
+				);
 
-			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
+				$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
 
-			$this->assertNotNull( $application );
+				$this->assertNotNull( $application );
 
-			$payPalData = new PayPalData();
-			$payPalData->setFirstPaymentDate( self::FIRST_PAYMENT_DATE );
-			$payPalData->freeze();
+				$payPalData = new PayPalData();
+				$payPalData->setFirstPaymentDate( self::FIRST_PAYMENT_DATE );
+				$payPalData->freeze();
 
-			$expectedApplication = ValidMembershipApplication::newDomainEntityUsingPayPal( $payPalData );
-			$expectedApplication->assignId( 1 );
+				$expectedApplication = ValidMembershipApplication::newDomainEntityUsingPayPal( $payPalData );
+				$expectedApplication->assignId( 1 );
 
-			$this->assertEquals( $expectedApplication, $application );
-		} );
+				$this->assertEquals( $expectedApplication, $application );
+			}
+		);
 	}
 
 	private function newValidHttpParametersUsingPayPal(): array {
@@ -404,14 +419,18 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
-			$translator = $this->createMock( TranslatorInterface::class );
-			$translator->expects( $this->once() )
-				->method( 'trans' )
-				->with( 'paypal_item_name_membership' )
-				->willReturn( 'Ihre Mitgliedschaft bei Wikimedia' );
-			$factory->setPaymentProviderItemsTranslator( $translator );
-		} );
+		$client = $this->createClient(
+			[],
+			function ( FunFunFactory $factory ) {
+				$translator = $this->createMock( TranslatorInterface::class );
+				$translator->expects( $this->once() )
+					->method( 'trans' )
+					->with( 'paypal_item_name_membership' )
+					->willReturn( 'Ihre Mitgliedschaft bei Wikimedia' );
+				$factory->setPaymentProviderItemsTranslator( $translator );
+			}
+		);
+
 		$client->followRedirects( false );
 
 		$client->request(
@@ -426,46 +445,54 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCommasInStreetNamesAreRemoved(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$params = $this->newValidHttpParameters();
-			$params['strasse'] = 'Nyan, street, ';
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$params
-			);
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$params = $this->newValidHttpParameters();
+				$params['strasse'] = 'Nyan, street, ';
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$params
+				);
 
-			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
+				$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
 
-			$this->assertNotNull( $application );
+				$this->assertNotNull( $application );
 
-			$expectedApplication = ValidMembershipApplication::newDomainEntity();
-			$expectedApplication->assignId( 1 );
-			$expectedApplication->confirm();
+				$expectedApplication = ValidMembershipApplication::newDomainEntity();
+				$expectedApplication->assignId( 1 );
+				$expectedApplication->confirm();
 
-			$this->assertEquals( $expectedApplication, $application );
-		} );
+				$this->assertEquals( $expectedApplication, $application );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	public function testWhenCompaniesApply_salutationIsSetToFixedValue(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$params = $this->newValidHttpParametersForCompanies();
-			$result = $client->request(
-				'POST',
-				'apply-for-membership',
-				$params
-			);
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$params = $this->newValidHttpParametersForCompanies();
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$params
+				);
 
-			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
+				$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
 
-			$this->assertNotNull( $application );
+				$this->assertNotNull( $application );
 
-			$expectedApplication = ValidMembershipApplication::newCompanyApplication();
-			$expectedApplication->assignId( 1 );
-			$expectedApplication->confirm();
+				$expectedApplication = ValidMembershipApplication::newCompanyApplication();
+				$expectedApplication->assignId( 1 );
+				$expectedApplication->confirm();
 
-			$this->assertEquals( $expectedApplication, $application );
-		} );
+				$this->assertEquals( $expectedApplication, $application );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	private function newValidHttpParametersForCompanies(): array {
@@ -521,31 +548,38 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenDonationReceiptOptOutRequest_applicationHoldsThisValue(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$parameters = $this->newValidHttpParameters();
-			$parameters['donationReceipt'] = '0';
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$parameters = $this->newValidHttpParameters();
+				$parameters['donationReceipt'] = '0';
 
-			$client->request( Request::METHOD_POST, self::APPLY_FOR_MEMBERSHIP_PATH, $parameters );
+				$client->request( Request::METHOD_POST, self::APPLY_FOR_MEMBERSHIP_PATH, $parameters );
 
-			$this->assertFalse( $factory->getMembershipApplicationRepository()->getApplicationById( 1 )->getDonationReceipt() );
-		} );
+				$this->assertFalse( $factory->getMembershipApplicationRepository()->getApplicationById( 1 )->getDonationReceipt() );
+			}
+		);
 	}
 
 	public function testGivenValidRequest_bucketsAreLogged(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
-			$bucketLogger = new BucketLoggerSpy();
-			$factory->setBucketLogger( $bucketLogger );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+				$bucketLogger = new BucketLoggerSpy();
+				$factory->setBucketLogger( $bucketLogger );
 
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$this->newValidHttpParameters()
-			);
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$this->newValidHttpParameters()
+				);
 
-			$this->assertSame( 1, $bucketLogger->getEventCount() );
-			$this->assertInstanceOf( MembershipApplicationCreated::class, $bucketLogger->getFirstEvent() );
-		} );
+				$this->assertSame( 1, $bucketLogger->getEventCount() );
+				$this->assertInstanceOf( MembershipApplicationCreated::class, $bucketLogger->getFirstEvent() );
+			},
+			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
 	}
 
 	public function testGivenInvalidRequest_errorsAreLogged(): void {
@@ -568,20 +602,23 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_AddressChangeRecordIsCreated(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$this->newValidHttpParameters()
-			);
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$this->newValidHttpParameters()
+				);
 
-			/** @var AddressChange[] $addressChanges */
-			$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
-			$this->assertCount( 1, $addressChanges );
-			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_MEMBERSHIP );
-			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
-		} );
+				/** @var AddressChange[] $addressChanges */
+				$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
+				$this->assertCount( 1, $addressChanges );
+				$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_MEMBERSHIP );
+				$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
+			}
+		);
 	}
 }

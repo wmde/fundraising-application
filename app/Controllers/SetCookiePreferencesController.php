@@ -12,8 +12,10 @@ use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
 class SetCookiePreferencesController {
 
+	public const CONSENT_COOKIE_NAME = 'cookie_consent';
+
 	public function index( Request $request ): Response {
-		$cookieConsent = $request->get( 'cookie_consent', 'no' );
+		$cookieConsent = $request->get( self::CONSENT_COOKIE_NAME, 'no' );
 
 		if ( $cookieConsent === 'yes' ) {
 			$request->attributes->set( 'trackingCode', TrackingDataSelector::getFirstNonEmptyValue( [
@@ -29,7 +31,7 @@ class SetCookiePreferencesController {
 			'status' => 'OK',
 		] );
 
-		$response->headers->setCookie( new Cookie( 'cookie_consent', $cookieConsent ) );
+		$response->headers->setCookie( new Cookie( self::CONSENT_COOKIE_NAME, $cookieConsent ) );
 
 		return $response;
 	}
