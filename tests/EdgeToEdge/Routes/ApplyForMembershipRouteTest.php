@@ -323,7 +323,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
 	}
 
-	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
+	public function testWhenTrackingCookieExists_andCookieConsentGiven_valueIsPersisted(): void {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
@@ -339,6 +339,24 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->assertSame( 'test/blue', $application->getTracking() );
 			},
 			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
+	}
+
+	public function testWhenTrackingCookieExists_andNoCookieConsentGiven_valueIsNotPersisted(): void {
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+
+				$client->request(
+					'POST',
+					'/apply-for-membership',
+					$this->newValidHttpParameters()
+				);
+
+				$application = $this->getApplicationFromDatabase( $factory );
+				$this->assertSame( '', $application->getTracking() );
+			}
 		);
 	}
 
@@ -561,7 +579,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testGivenValidRequest_bucketsAreLogged(): void {
+	public function testGivenValidRequest_andCookieConsentGiven_bucketsAreLogged(): void {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
@@ -579,6 +597,25 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->assertInstanceOf( MembershipApplicationCreated::class, $bucketLogger->getFirstEvent() );
 			},
 			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+		);
+	}
+
+	public function testGivenValidRequest_andCookieConsentNotGiven_bucketsAreNotLogged(): void {
+		$this->createEnvironment(
+			[],
+			function ( Client $client, FunFunFactory $factory ): void {
+				$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+				$bucketLogger = new BucketLoggerSpy();
+				$factory->setBucketLogger( $bucketLogger );
+
+				$client->request(
+					'POST',
+					'apply-for-membership',
+					$this->newValidHttpParameters()
+				);
+
+				$this->assertSame( 0, $bucketLogger->getEventCount() );
+			}
 		);
 	}
 

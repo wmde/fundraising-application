@@ -28,7 +28,7 @@ class RegisterTrackingData implements EventSubscriberInterface {
 	public function onKernelRequest( KernelEvent $event ): void {
 		$request = $event->getRequest();
 
-		if ( $request->cookies->get('cookie_consent' ) !== 'yes' ) {
+		if ( $request->cookies->get( 'cookie_consent' ) !== 'yes' ) {
 			return;
 		}
 

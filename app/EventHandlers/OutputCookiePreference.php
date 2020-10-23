@@ -21,13 +21,13 @@ class OutputCookiePreference implements EventSubscriberInterface {
 			return;
 		}
 
-		$cookieConsent = $event->getRequest()->cookies->get('cookie_consent', 'unset' );
+		$cookieConsent = $event->getRequest()->cookies->get( 'cookie_consent', 'unset' );
 		$response = $event->getResponse();
 
-		$response->setContent(str_replace(
+		$response->setContent( str_replace(
 			'data-application-vars=',
 			'data-cookie-consent="' . $cookieConsent . '" data-application-vars=',
 			$response->getContent()
-		));
+		) );
 	}
 }

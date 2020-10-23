@@ -9,6 +9,7 @@ use Silex\Provider\RoutingServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
+use WMDE\Fundraising\Frontend\App\EventHandlers\BucketLoggingConsentHandler;
 use WMDE\Fundraising\Frontend\App\EventHandlers\HandleExceptions;
 use WMDE\Fundraising\Frontend\App\EventHandlers\LogErrors;
 use WMDE\Fundraising\Frontend\App\EventHandlers\OutputCookiePreference;
@@ -35,6 +36,7 @@ class Bootstrap {
 			$dispatcher->addSubscriber( new TrimEveryInput() );
 			$dispatcher->addSubscriber( new LogErrors( $ffFactory->getLogger() ) );
 			$dispatcher->addSubscriber( new HandleExceptions( $ffFactory ) );
+			$dispatcher->addSubscriber( new BucketLoggingConsentHandler( $ffFactory->getBucketLoggingHandler() ) );
 
 			$environment = $_ENV['APP_ENV'] ?? 'dev';
 			if ( $environment === 'test' || $environment === 'dev' ) {
