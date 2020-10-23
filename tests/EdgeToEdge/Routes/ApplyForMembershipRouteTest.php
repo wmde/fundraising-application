@@ -10,6 +10,7 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
@@ -222,6 +223,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_applicationIsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+			$this->consentToCookies( $client );
 
 			$client->request(
 				'POST',
@@ -250,11 +252,12 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->newValidHttpParameters()
 			);
 
-			$responseContent = $client->getResponse()->getContent();
+				$responseContent = $client->getResponse()->getContent();
 
-			$this->assertStringContainsString( 'id=1', $responseContent );
-			$this->assertStringContainsString( 'accessToken=' . self::FIXED_TOKEN, $responseContent );
-		} );
+				$this->assertStringContainsString( 'id=1', $responseContent );
+				$this->assertStringContainsString( 'accessToken=' . self::FIXED_TOKEN, $responseContent );
+		}
+		);
 	}
 
 	public function testGivenValidRequest_requestIsRedirected(): void {
@@ -317,6 +320,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+			$this->consentToCookies( $client );
 
 			$client->request(
 				'POST',
@@ -434,6 +438,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				'apply-for-membership',
 				$params
 			);
+			$this->consentToCookies( $client );
 
 			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
 
@@ -450,7 +455,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testWhenCompaniesApply_salutationIsSetToFixedValue(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$params = $this->newValidHttpParametersForCompanies();
-			$result = $client->request(
+			$this->consentToCookies( $client );
+			$client->request(
 				'POST',
 				'apply-for-membership',
 				$params
@@ -518,6 +524,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 			$bucketLogger = new BucketLoggerSpy();
 			$factory->setBucketLogger( $bucketLogger );
+			$this->consentToCookies( $client );
 
 			$client->request(
 				'POST',
@@ -564,5 +571,12 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_MEMBERSHIP );
 			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
 		} );
+	}
+
+	/**
+	 * @param Client $client
+	 */
+	private function consentToCookies( Client $client ): void {
+		$client->getCookieJar()->set( new Cookie( SetCookiePreferencesController::CONSENT_COOKIE_NAME, 'yes' ) );
 	}
 }

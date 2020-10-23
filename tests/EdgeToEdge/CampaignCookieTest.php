@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use Symfony\Component\BrowserKit\Cookie as BrowserKitCookie;
 use Symfony\Component\HttpFoundation\Cookie;
+use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
@@ -38,6 +39,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 			);
 		} );
 		$client = $this->createClient();
+		$client->getCookieJar()->set( new BrowserKitCookie( SetCookiePreferencesController::CONSENT_COOKIE_NAME, 'yes' ) );
 		$client->request( 'get', '/', [] );
 
 		$cookie = $client->getCookieJar()->get( self::COOKIE_NAME );
@@ -57,6 +59,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 		} );
 		$client = $this->createClient();
 		$client->getCookieJar()->set( new BrowserKitCookie( self::COOKIE_NAME, 'omg=0' ) );
+		$client->getCookieJar()->set( new BrowserKitCookie( SetCookiePreferencesController::CONSENT_COOKIE_NAME, 'yes' ) );
 		$client->request( 'get', '/', [ 'omg' => 1 ] );
 		$responseCookies = $client->getResponse()->headers->getCookies();
 		$bucketCookie = array_values( array_filter( $responseCookies, function ( Cookie $cookie ): bool {
@@ -82,6 +85,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 			);
 		} );
 		$client = $this->createClient();
+		$client->getCookieJar()->set( new BrowserKitCookie( SetCookiePreferencesController::CONSENT_COOKIE_NAME, 'yes' ) );
 		$client->request( 'get', '/', [] );
 
 		$cookie = $client->getCookieJar()->get( self::COOKIE_NAME );
