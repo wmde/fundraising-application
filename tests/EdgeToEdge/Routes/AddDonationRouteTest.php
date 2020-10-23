@@ -769,21 +769,22 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_andCookieConsentNotGiven_bucketsAreNotLogged(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-				$client->followRedirects( false );
+			$bucketLogger = new BucketLoggerSpy();
+			$factory->setBucketLogger( $bucketLogger );
+			$client->followRedirects( false );
 
-				$client->request(
-					'POST',
-					'/donation/add',
-					$this->newValidFormInput()
-				);
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
 
-				/** @var AddressChange[] $addressChanges */
-				$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
-				$this->assertCount( 1, $addressChanges );
-				$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION );
-				$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
-		}
-		);
+			/** @var AddressChange[] $addressChanges */
+			$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
+			$this->assertCount( 1, $addressChanges );
+			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION );
+			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
+		} );
 	}
 
 	private function getDataApplicationVars( Crawler $crawler ): object {
