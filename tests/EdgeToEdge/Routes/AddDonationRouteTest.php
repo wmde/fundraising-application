@@ -45,15 +45,14 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->consentToCookies( $client );
 			$client->followRedirects( false );
 
-				$client->request(
-					'POST',
-					'/donation/add',
-					$this->newValidFormInput()
-				);
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidFormInput()
+			);
 
-				$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
-		}
-		);
+			$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
+		} );
 	}
 
 	public function testWhenDonationGetsPersisted_timestampIsStoredInSession(): void {
@@ -680,7 +679,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testWhenTrackingCookieExists_andNoCookieConsentGiven_valueIsNotPersisted(): void {
 		$this->createEnvironment(
 			function ( Client $client, FunFunFactory $factory ): void {
-				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+				$client->getCookieJar()->set( new Cookie( CookieNames::TRACKING, 'test/blue' ) );
 
 				$client->request(
 					'POST',

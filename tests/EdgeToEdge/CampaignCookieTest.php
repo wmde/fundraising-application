@@ -15,8 +15,6 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoad
  */
 class CampaignCookieTest extends WebRouteTestCase {
 
-	private const COOKIE_NAME = 'spenden_ttg';
-
 	private const TEST_CAMPAIGN_CONFIG = [
 		'awesome_feature' => [
 			'url_key' => 'omg',
@@ -42,7 +40,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::CONSENT, 'yes' ) );
 		$client->request( 'get', '/', [] );
 
-		$cookie = $client->getCookieJar()->get( self::COOKIE_NAME );
+		$cookie = $client->getCookieJar()->get( CookieNames::BUCKET_TESTING );
 		$this->assertNotEmpty( $cookie->getValue() );
 		$this->assertFalse( $cookie->isExpired() );
 		$this->assertSame( '2099-12-31 00:00:00', date( 'Y-m-d H:i:s', (int)$cookie->getExpiresTime() ) );
@@ -58,12 +56,12 @@ class CampaignCookieTest extends WebRouteTestCase {
 			);
 		} );
 		$client = $this->createClient();
-		$client->getCookieJar()->set( new BrowserKitCookie( self::COOKIE_NAME, 'omg=0' ) );
+		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::BUCKET_TESTING, 'omg=0' ) );
 		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::CONSENT, 'yes' ) );
 		$client->request( 'get', '/', [ 'omg' => 1 ] );
 		$responseCookies = $client->getResponse()->headers->getCookies();
 		$bucketCookie = array_values( array_filter( $responseCookies, function ( Cookie $cookie ): bool {
-			return $cookie->getName() === self::COOKIE_NAME;
+			return $cookie->getName() === CookieNames::BUCKET_TESTING;
 		} ) )[0];
 		$this->assertStringContainsString( 'omg=1', $bucketCookie->getValue() );
 	}
@@ -88,11 +86,11 @@ class CampaignCookieTest extends WebRouteTestCase {
 		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::CONSENT, 'yes' ) );
 		$client->request( 'get', '/', [] );
 
-		$cookie = $client->getCookieJar()->get( self::COOKIE_NAME );
+		$cookie = $client->getCookieJar()->get( CookieNames::BUCKET_TESTING );
 		$this->assertNotEmpty( $cookie->getValue() );
 		$this->assertFalse( $cookie->isExpired() );
 		// 'null' is the value to set for indicating a session cookie
-		$this->assertNull( $client->getCookieJar()->get( self::COOKIE_NAME )->getExpiresTime() );
+		$this->assertNull( $client->getCookieJar()->get( CookieNames::BUCKET_TESTING )->getExpiresTime() );
 	}
 
 }
