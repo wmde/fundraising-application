@@ -7,8 +7,9 @@ namespace WMDE\Fundraising\Frontend\App\EventHandlers;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
 /**
@@ -25,7 +26,7 @@ class RegisterTrackingData implements EventSubscriberInterface {
 		];
 	}
 
-	public function onKernelRequest( KernelEvent $event ): void {
+	public function onKernelRequest( GetResponseEvent $event ): void {
 		$request = $event->getRequest();
 
 		if ( $request->cookies->get( 'cookie_consent' ) !== 'yes' ) {
@@ -33,7 +34,7 @@ class RegisterTrackingData implements EventSubscriberInterface {
 		}
 
 		$request->attributes->set( 'trackingCode', TrackingDataSelector::getFirstNonEmptyValue( [
-			$request->cookies->get( 'spenden_tracking' ),
+			$request->cookies->get( CookieNames::TRACKING ),
 			TrackingDataSelector::concatTrackingFromVarTuple(
 				$request->get( 'piwik_campaign', '' ),
 				$request->get( 'piwik_kwd', '' )
@@ -54,7 +55,7 @@ class RegisterTrackingData implements EventSubscriberInterface {
 
 		if ( $request->attributes->has( 'trackingCode' ) ) {
 			$response->headers->setCookie( new Cookie(
-				'spenden_tracking',
+				CookieNames::TRACKING,
 				$request->attributes->get( 'trackingCode' )
 			) );
 		}

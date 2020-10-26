@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\DomCrawler\Crawler;
 use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
+use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
@@ -40,7 +41,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
 				$factory->setSubscriptionRepository( $subscriptionRepository );
 			},
-			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+			[ CookieNames::CONSENT => 'yes' ]
 		);
 
 		$client->followRedirects( false );

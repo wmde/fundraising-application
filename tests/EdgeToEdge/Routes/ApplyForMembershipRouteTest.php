@@ -12,6 +12,7 @@ use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
+use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
@@ -169,7 +170,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithInsufficientAmount_failureResponseIsReturned(): void {
-		$client = $this->createClient( [], null, [ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ] );
+		$client = $this->createClient( [], null, [ CookieNames::CONSENT => 'yes' ] );
 
 		$httpParameters = $this->newValidHttpParameters();
 		$httpParameters['membership_fee'] = '100';
@@ -240,7 +241,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 				$this->assertEquals( $expectedApplication, $application );
 			},
-			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+			[ CookieNames::CONSENT => 'yes' ]
 		);
 	}
 
@@ -327,7 +328,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+				$client->getCookieJar()->set( new Cookie( CookieNames::TRACKING, 'test/blue' ) );
 
 				$client->request(
 					'POST',
@@ -338,7 +339,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$application = $this->getApplicationFromDatabase( $factory );
 				$this->assertSame( 'test/blue', $application->getTracking() );
 			},
-			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+			[ CookieNames::CONSENT => 'yes' ]
 		);
 	}
 
@@ -346,7 +347,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->createEnvironment(
 			[],
 			function ( Client $client, FunFunFactory $factory ): void {
-				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
+				$client->getCookieJar()->set( new Cookie( CookieNames::TRACKING, 'test/blue' ) );
 
 				$client->request(
 					'POST',
@@ -484,7 +485,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 				$this->assertEquals( $expectedApplication, $application );
 			},
-			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+			[ CookieNames::CONSENT => 'yes' ]
 		);
 	}
 
@@ -509,7 +510,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 				$this->assertEquals( $expectedApplication, $application );
 			},
-			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+			[ CookieNames::CONSENT => 'yes' ]
 		);
 	}
 
@@ -596,7 +597,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->assertSame( 1, $bucketLogger->getEventCount() );
 				$this->assertInstanceOf( MembershipApplicationCreated::class, $bucketLogger->getFirstEvent() );
 			},
-			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+			[ CookieNames::CONSENT => 'yes' ]
 		);
 	}
 

@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 use Symfony\Component\BrowserKit\Cookie as BrowserKitCookie;
 use Symfony\Component\HttpFoundation\Cookie;
 use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
+use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
@@ -14,8 +15,6 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoad
  * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\StoreBucketSelection
  */
 class CampaignCookieTest extends WebRouteTestCase {
-
-	private const COOKIE_NAME = 'spenden_ttg';
 
 	private const TEST_CAMPAIGN_CONFIG = [
 		'awesome_feature' => [
@@ -39,11 +38,11 @@ class CampaignCookieTest extends WebRouteTestCase {
 					)
 				);
 			},
-			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+			[ CookieNames::CONSENT => 'yes' ]
 		);
 		$client->request( 'get', '/', [] );
 
-		$cookie = $client->getCookieJar()->get( self::COOKIE_NAME );
+		$cookie = $client->getCookieJar()->get( CookieNames::BUCKET_TESTING );
 		$this->assertNotEmpty( $cookie->getValue() );
 		$this->assertFalse( $cookie->isExpired() );
 		$this->assertSame( '2099-12-31 00:00:00', date( 'Y-m-d H:i:s', (int)$cookie->getExpiresTime() ) );
@@ -58,13 +57,13 @@ class CampaignCookieTest extends WebRouteTestCase {
 					self::TEST_CAMPAIGN_CONFIG
 				) );
 			},
-			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+			[ CookieNames::CONSENT => 'yes' ]
 		);
-		$client->getCookieJar()->set( new BrowserKitCookie( self::COOKIE_NAME, 'omg=0' ) );
+		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::BUCKET_TESTING, 'omg=0' ) );
 		$client->request( 'get', '/', [ 'omg' => 1 ] );
 		$responseCookies = $client->getResponse()->headers->getCookies();
 		$bucketCookie = array_values( array_filter( $responseCookies, function ( Cookie $cookie ): bool {
-			return $cookie->getName() === self::COOKIE_NAME;
+			return $cookie->getName() === CookieNames::BUCKET_TESTING;
 		} ) )[0];
 		$this->assertStringContainsString( 'omg=1', $bucketCookie->getValue() );
 	}
@@ -85,15 +84,15 @@ class CampaignCookieTest extends WebRouteTestCase {
 					)
 				);
 			},
-			[ SetCookiePreferencesController::CONSENT_COOKIE_NAME => 'yes' ]
+			[ CookieNames::CONSENT => 'yes' ]
 		);
 		$client->request( 'get', '/', [] );
 
-		$cookie = $client->getCookieJar()->get( self::COOKIE_NAME );
+		$cookie = $client->getCookieJar()->get( CookieNames::BUCKET_TESTING );
 		$this->assertNotEmpty( $cookie->getValue() );
 		$this->assertFalse( $cookie->isExpired() );
 		// 'null' is the value to set for indicating a session cookie
-		$this->assertNull( $client->getCookieJar()->get( self::COOKIE_NAME )->getExpiresTime() );
+		$this->assertNull( $client->getCookieJar()->get( CookieNames::BUCKET_TESTING )->getExpiresTime() );
 	}
 
 }
