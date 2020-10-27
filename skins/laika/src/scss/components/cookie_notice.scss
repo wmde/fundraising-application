@@ -94,19 +94,6 @@ $cookie-notice-padding: 32px;
 		right: 0;
 	}
 
-	&-options {
-		display: none;
-	}
-
-	&.options-visible {
-		.cookie-notice-text {
-			display: none;
-		}
-		.cookie-notice-options {
-			display: block;
-		}
-	}
-
 	&-accordion {
 		max-height: 180px;
 		border: 1px solid $fun-color-gray-mid;

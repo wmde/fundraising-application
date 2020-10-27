@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="cookie-notice"
-		:class="{ 'options-visible': showOptions, 'is-visible': isVisible }"
+		:class="{ 'is-visible': isVisible }"
 	>
 		<form
 			class="cookie-notice-content"
@@ -9,7 +9,7 @@
 			action="/set-cookie-preferences"
 		>
 			<div class="cookie-notice-info">
-				<div class="cookie-notice-text">
+				<div class="cookie-notice-text" v-if="!showOptions">
 					<h3>{{ $t( 'cookie_heading' ) }}</h3>
 					<p class="cookie-notice-text-copy" :class="{ open: textOpen }">
 						{{ $t( 'cookie_content' ) }}
@@ -18,9 +18,9 @@
 						</a>
 					</p>
 				</div>
-				<div class="cookie-notice-options">
+				<div class="cookie-notice-options" v-if="showOptions">
 					<h3>
-						<a href="" v-on:click="onBackButtonClick">
+						<a href="" class="cookie-notice-back-button" v-on:click="onBackButtonClick">
 							<svg width="11" height="18" viewBox="0 0 11 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M0 9L9 18L10.4 16.5L3 9L10.4 1.5L9 0L0 9Z" fill="#0065A4"/>
 							</svg>
@@ -34,6 +34,7 @@
 									:content="$t('cookie_option_required_content')"
 									:checked="true"
 									:disabled="true"
+									:name="'required'"
 								></CookieCheckbox>
 							</li>
 							<li>
@@ -43,6 +44,7 @@
 									:checked="optionalChecked"
 									:disabled="false"
 									v-on:toggle="onOptionalToggle"
+									:name="'optional'"
 								></CookieCheckbox>
 							</li>
 						</ul>
