@@ -3,6 +3,7 @@
 		<b-checkbox
 			type="checkbox"
 			class="is-inline-checkbox cookie-checkbox-checkbox"
+			:name="name"
 			v-model="isChecked"
 			:disabled="disabled"
 			@change.native="$emit('toggle')"
