@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\Controllers\StaticContent;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig\Error\RuntimeError;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\ContentNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
@@ -29,7 +30,7 @@ class PageDisplayController {
 		try {
 			return $this->getPageTemplate( $pageId )->render( [ 'page_id' => $pageId ] );
 		}
-		catch ( \Twig_Error_Runtime $exception ) {
+		catch ( RuntimeError $exception ) {
 			if ( $exception->getPrevious() instanceof ContentNotFoundException ) {
 				throw new NotFoundHttpException( "Content for page id '$pageId' not found." );
 			}
@@ -51,7 +52,7 @@ class PageDisplayController {
 		$template = 'page_layouts' . DIRECTORY_SEPARATOR . 'base.html.twig';
 		$pageTemplate = 'page_layouts' . DIRECTORY_SEPARATOR . $pageId . '.html.twig';
 
-		if ( file_exists( $this->ffFactory->getAbsoluteSkinDirectory() . DIRECTORY_SEPARATOR . $pageTemplate ) ) {
+		if ( file_exists( $this->ffFactory->getSkinDirectory() . DIRECTORY_SEPARATOR . $pageTemplate ) ) {
 			$template = $pageTemplate;
 			$context = $this->getAdditionalContextForPageId( $pageId, $context );
 		}

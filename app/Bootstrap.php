@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\App;
 use Silex\Application;
 use Silex\Provider\RoutingServiceProvider;
 use Silex\Provider\SessionServiceProvider;
-use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
 use WMDE\Fundraising\Frontend\App\EventHandlers\HandleExceptions;
@@ -25,7 +24,6 @@ class Bootstrap {
 
 		$app->register( new SessionServiceProvider() );
 		$app->register( new RoutingServiceProvider() );
-		$app->register( new TwigServiceProvider() );
 		$app->register( new FundraisingFactoryServiceProvider( $ffFactory ) );
 
 		$app->extend( 'dispatcher', function ( EventDispatcher $dispatcher ) use ( $ffFactory ) {

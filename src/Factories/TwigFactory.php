@@ -4,18 +4,18 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
-use RuntimeException;
-use Twig_Loader_Array;
-use Twig_Loader_Filesystem;
-use Twig_SimpleFilter;
+use Twig\Environment;
+use Twig\Lexer;
+use Twig\Loader\FilesystemLoader;
+use Twig\Loader\LoaderInterface;
+use Twig\TwigFilter;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
-use WMDE\Fundraising\Frontend\Presentation\TwigEnvironmentConfigurator;
 
-class TwigFactory {
+abstract class TwigFactory {
 
-	private $config;
-	private $cachePath;
-	private $locale;
+	private array $config;
+	private string $cachePath;
+	private string $locale;
 
 	public function __construct( array $config, string $cachePath, string $locale ) {
 		$this->config = $config;
@@ -23,53 +23,43 @@ class TwigFactory {
 		$this->locale = $locale;
 	}
 
-	public function newFileSystemLoader(): ?Twig_Loader_Filesystem {
-		if ( empty( $this->config['loaders']['filesystem'] ) ) {
-			return null;
+	protected function newFilePrefixFilter( FilePrefixer $filePrefixer ): TwigFilter {
+		return new TwigFilter( 'prefix_file', [ $filePrefixer, 'prefixFile' ] );
+	}
+
+	private function getLoader(): LoaderInterface {
+		if ( !empty( $this->config['loaders']['filesystem'] ) ) {
+			return new FilesystemLoader( $this->config['loaders']['filesystem'] );
 		}
-		$templateDir = $this->getTemplateDir( $this->config['loaders']['filesystem'] );
-		return new Twig_Loader_Filesystem( $templateDir );
+		throw new \UnexpectedValueException( 'Invalid Twig loader configuration - missing filesystem' );
 	}
 
-	/**
-	 * Create an array of absolute template directories from the loader
-	 *
-	 * @param array $config Configuration for the filesystem loader. The key 'template-dir' can be a string or an array.
-	 * @return array
-	 */
-	private function getTemplateDir( array $config ): array {
-		$appRoot = realpath( __DIR__ . '/../..' ) . '/';
-		if ( is_string( $config['template-dir'] ) ) {
-			return $this->convertToAbsolute( $appRoot, [ $config['template-dir'] ] );
-		} elseif ( is_array( $config['template-dir'] ) ) {
-			return $this->convertToAbsolute( $appRoot, $config['template-dir'] );
+	protected function newTwigEnvironment( array $filters, array $functions, array $globals = [] ): Environment {
+		$options = [
+			'strict_variables' => isset( $this->config['strict-variables'] ) && $this->config['strict-variables'] === true,
+			'cache' => empty( $this->config['enable-cache'] ) ? false : $this->config['enable-cache']
+		];
+		$twig = new Environment( $this->getLoader(), $options );
+
+		foreach ( $globals as $name => $global ) {
+			$twig->addGlobal( $name, $global );
 		}
 
-		throw new RuntimeException( 'wrong template directory type' );
+		foreach ( $functions as $function ) {
+			$twig->addFunction( $function );
+		}
+
+		foreach ( $filters as $filter ) {
+			$twig->addFilter( $filter );
+		}
+
+		$twig->setLexer( new Lexer( $twig, [
+			'tag_comment' => [ '{#', '#}' ],
+			'tag_block' => [ '{%', '%}' ],
+			'tag_variable' => [ '{$', '$}' ]
+		] ) );
+
+		return $twig;
 	}
 
-	private function convertToAbsolute( string $root, array $dirs ): array {
-		return array_map(
-				function ( $dir ) use ( $root ) {
-					if ( strlen( $dir ) === 0 || $dir[0] !== '/' ) {
-						$dir = $root . $dir;
-					}
-					return $dir;
-				},
-				$dirs
-		);
-	}
-
-	public function newArrayLoader(): Twig_Loader_Array {
-		$templates = $this->config['loaders']['array'] ?? [];
-		return new Twig_Loader_Array( $templates );
-	}
-
-	public function newFilePrefixFilter( FilePrefixer $filePrefixer ): Twig_SimpleFilter {
-		return new Twig_SimpleFilter( 'prefix_file', [ $filePrefixer, 'prefixFile' ] );
-	}
-
-	public function newTwigEnvironmentConfigurator(): TwigEnvironmentConfigurator {
-		return new TwigEnvironmentConfigurator( $this->config, $this->cachePath );
-	}
 }

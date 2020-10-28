@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
+use Twig\Environment;
+
 /**
  * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
@@ -14,7 +16,7 @@ class TwigTemplate {
 	private $templatePath;
 	private $context;
 
-	public function __construct( \Twig_Environment $twig, string $templatePath, array $context = [] ) {
+	public function __construct( Environment $twig, string $templatePath, array $context = [] ) {
 		$this->twig = $twig;
 		$this->templatePath = $templatePath;
 		$this->context = $context;
