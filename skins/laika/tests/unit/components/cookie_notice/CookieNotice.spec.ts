@@ -39,22 +39,22 @@ describe( 'CookieNotice', () => {
 	} );
 
 	it( 'posts consent when accept button is clicked', () => {
-		const payload = new FormData();
-		payload.append( 'cookie_consent', 'yes' );
+		const expectedPayload = new FormData();
+		expectedPayload.append( 'cookie_consent', 'yes' );
 
 		wrapper.find( '.accept > button' ).trigger( 'click' );
 
 		expect( axios.post ).toHaveBeenCalledTimes( 1 );
 		expect( axios.post ).toHaveBeenCalledWith(
 			'http://localhost/set-cookie-preferences',
-			payload,
+			expectedPayload,
 			{ headers: { 'Content-Type': 'multipart/form-data' } }
 		);
 	} );
 
 	it( 'posts consent when save button is clicked and consent given', async () => {
-		const payload = new FormData();
-		payload.append( 'cookie_consent', 'yes' );
+		const expectedPayload = new FormData();
+		expectedPayload.append( 'cookie_consent', 'yes' );
 
 		wrapper.find( '.check > button' ).trigger( 'click' );
 		await wrapper.vm.$nextTick();
@@ -64,14 +64,14 @@ describe( 'CookieNotice', () => {
 		expect( axios.post ).toHaveBeenCalledTimes( 1 );
 		expect( axios.post ).toHaveBeenCalledWith(
 			'http://localhost/set-cookie-preferences',
-			payload,
+			expectedPayload,
 			{ headers: { 'Content-Type': 'multipart/form-data' } }
 		);
 	} );
 
 	it( 'does not post consent when save button is clicked and consent not given', async () => {
-		const payload = new FormData();
-		payload.append( 'cookie_consent', 'no' );
+		const expectedPayload = new FormData();
+		expectedPayload.append( 'cookie_consent', 'no' );
 
 		wrapper.find( '.check > button' ).trigger( 'click' );
 		await wrapper.vm.$nextTick();
@@ -80,7 +80,7 @@ describe( 'CookieNotice', () => {
 		expect( axios.post ).toHaveBeenCalledTimes( 1 );
 		expect( axios.post ).toHaveBeenCalledWith(
 			'http://localhost/set-cookie-preferences',
-			payload,
+			expectedPayload,
 			{ headers: { 'Content-Type': 'multipart/form-data' } }
 		);
 	} );
