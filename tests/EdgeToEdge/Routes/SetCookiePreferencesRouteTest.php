@@ -5,10 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\BrowserKit\Cookie;
-use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
-use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
 use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController
@@ -24,11 +23,19 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 			[ CookieNames::CONSENT => 'yes' ]
 		);
 
+		$this->assertCookieHasValue( $client, CookieNames::CONSENT, 'yes' );
+	}
+
+	/**
+	 * @param HttpKernelBrowser $client
+	 * @param string $name
+	 * @param mixed $expectedValue
+	 */
+	private function assertCookieHasValue( HttpKernelBrowser $client, string $name, $expectedValue ) {
 		$cookieJar = $client->getCookieJar();
 		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-		$cookie = $cookieJar->get( CookieNames::CONSENT );
-
-		$this->assertSame( $cookie->getValue(), 'yes' );
+		$cookie = $cookieJar->get( $name );
+		$this->assertSame( $cookie->getValue(), $expectedValue );
 	}
 
 	public function testWhenCookieConsentSetAndTrackingPassed_trackingValueIsPersisted(): void {
@@ -44,11 +51,7 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$cookieJar = $client->getCookieJar();
-		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-		$cookie = $cookieJar->get( CookieNames::TRACKING );
-
-		$this->assertSame( $cookie->getValue(), 'nicholas/cage' );
+		$this->assertCookieHasValue( $client, CookieNames::TRACKING, 'nicholas/cage' );
 	}
 
 	public function testWhenCookieConsentNotSetAndTrackingPassed_trackingValueIsNotPersisted(): void {
@@ -64,10 +67,17 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 			]
 		);
 
+		$this->assertCookieIsNotSet( $client, CookieNames::TRACKING );
+	}
+
+	/**
+	 * @param HttpKernelBrowser $client
+	 * @param string $name
+	 */
+	private function assertCookieIsNotSet( HttpKernelBrowser $client, string $name ) {
 		$cookieJar = $client->getCookieJar();
 		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-
-		$this->assertNull( $cookieJar->get( CookieNames::TRACKING ) );
+		$this->assertNull( $cookieJar->get( $name ) );
 	}
 
 	public function testWhenCookieConsentRejected_trackingCookiesAreRemoved() {
@@ -83,10 +93,7 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$cookieJar = $client->getCookieJar();
-		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-
-		$this->assertNull( $cookieJar->get( CookieNames::TRACKING ) );
-		$this->assertNull( $cookieJar->get( CookieNames::BUCKET_TESTING ) );
+		$this->assertCookieIsNotSet( $client, CookieNames::TRACKING );
+		$this->assertCookieIsNotSet( $client, CookieNames::BUCKET_TESTING );
 	}
 }
