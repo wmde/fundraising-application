@@ -9,6 +9,11 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler;
 
+/**
+ * Set consent state of BucketLoggingHandler on every request, depending on the consent cookie value.
+ *
+ * This will prevent the BucketLoggingHandler from logging the buckets when no consent was given.
+ */
 class BucketLoggingConsentHandler implements EventSubscriberInterface {
 
 	private BucketLoggingHandler $bucketLoggingHandler;
