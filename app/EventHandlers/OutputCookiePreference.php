@@ -8,6 +8,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+/**
+ * Modify all HTML responses, adding the current consent state as a data attribute.
+ *
+ * This helps us keeping the consent cookie HTTP-only.
+ *
+ * Manipulating the HTML output directly, relying on an existing attribute, is
+ * brittle, but until we have a better way for rendering our application shell
+ * (see https://phabricator.wikimedia.org/T248460 ), this will have to do.
+ */
 class OutputCookiePreference implements EventSubscriberInterface {
 
 	public static function getSubscribedEvents() {
