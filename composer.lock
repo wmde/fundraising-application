@@ -8426,16 +8426,16 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v4.4.15",
+            "version": "v4.4.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "9a1786e5020783605a30cff2ceed9aca030e8d80"
+                "reference": "99b640fd5d06877e3242ba0393b40a7877dfe534"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/9a1786e5020783605a30cff2ceed9aca030e8d80",
-                "reference": "9a1786e5020783605a30cff2ceed9aca030e8d80",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/99b640fd5d06877e3242ba0393b40a7877dfe534",
+                "reference": "99b640fd5d06877e3242ba0393b40a7877dfe534",
                 "shasum": ""
             },
             "require": {
@@ -8452,11 +8452,6 @@
                 "symfony/process": ""
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.4-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\BrowserKit\\": ""
@@ -8495,7 +8490,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-02T08:38:15+00:00"
+            "time": "2020-10-24T11:50:19+00:00"
         },
         {
             "name": "symfony/css-selector",
@@ -8653,16 +8648,16 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v5.1.7",
+            "version": "v5.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "6d6885e167aad0af4128b392f22d8f2a33dd88ec"
+                "reference": "0969122fe144dd8ab2e8c98c7e03eedc621b368c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/6d6885e167aad0af4128b392f22d8f2a33dd88ec",
-                "reference": "6d6885e167aad0af4128b392f22d8f2a33dd88ec",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/0969122fe144dd8ab2e8c98c7e03eedc621b368c",
+                "reference": "0969122fe144dd8ab2e8c98c7e03eedc621b368c",
                 "shasum": ""
             },
             "require": {
@@ -8682,11 +8677,6 @@
                 "symfony/css-selector": ""
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\DomCrawler\\": ""
@@ -8725,7 +8715,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-02T16:23:27+00:00"
+            "time": "2020-10-24T12:01:57+00:00"
         },
         {
             "name": "symfony/service-contracts",
