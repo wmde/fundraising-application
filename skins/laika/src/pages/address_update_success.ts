@@ -29,6 +29,7 @@ new Vue( {
 		props: {
 			assetsPath: pageData.assetsPath,
 			pageIdentifier: PAGE_IDENTIFIER,
+			cookieNoticeVisible: pageData.cookieConsent === 'unset',
 		},
 	},
 	[
