@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
+use Twig\Cache\CacheInterface;
+use Twig\Cache\FilesystemCache;
+use Twig\Cache\NullCache;
 use Twig\Environment;
 use Twig\Lexer;
 use Twig\Loader\FilesystemLoader;
@@ -16,11 +19,13 @@ abstract class TwigFactory {
 	private array $config;
 	private string $cachePath;
 	private string $locale;
+	private ?CacheInterface $cache;
 
 	public function __construct( array $config, string $cachePath, string $locale ) {
 		$this->config = $config;
 		$this->cachePath = $cachePath;
 		$this->locale = $locale;
+		$this->cache = null;
 	}
 
 	protected function newFilePrefixFilter( FilePrefixer $filePrefixer ): TwigFilter {
@@ -37,7 +42,7 @@ abstract class TwigFactory {
 	protected function newTwigEnvironment( array $filters, array $functions, array $globals = [] ): Environment {
 		$options = [
 			'strict_variables' => isset( $this->config['strict-variables'] ) && $this->config['strict-variables'] === true,
-			'cache' => empty( $this->config['enable-cache'] ) ? false : $this->config['enable-cache']
+			'cache' => $this->getCache()
 		];
 		$twig = new Environment( $this->getLoader(), $options );
 
@@ -60,6 +65,16 @@ abstract class TwigFactory {
 		] ) );
 
 		return $twig;
+	}
+
+	public function getCache(): CacheInterface {
+		if ( empty( $this->config['enable-cache'] ) ) {
+			return new NullCache();
+		}
+		if ( $this->cache === null ) {
+			$this->cache = new FilesystemCache( $this->cachePath );
+		}
+		return $this->cache;
 	}
 
 }
