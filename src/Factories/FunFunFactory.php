@@ -24,7 +24,6 @@ use RemotelyLiving\Doorkeeper\Requestor;
 use Swift_NullTransport;
 use Swift_SmtpTransport;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Stopwatch\Stopwatch;
 use TNvpServiceDispatcher;
 use Twig\Environment;
 use WMDE\Clock\SystemClock;
@@ -225,8 +224,6 @@ class FunFunFactory {
 	 * @var array<string, mixed>
 	 */
 	private array $sharedObjects;
-
-	private ?Stopwatch $profiler = null;
 
 	public function __construct( array $config ) {
 		$this->config = $config;
@@ -1441,10 +1438,6 @@ class FunFunFactory {
 		$this->sharedObjects[Cache::class . '::Page'] = new FilesystemCache( $this->getCachePath() . '/pages/raw' );
 		$this->sharedObjects[Cache::class . '::RenderedPage'] = new FilesystemCache( $this->getCachePath() . '/pages/rendered' );
 		$this->sharedObjects[Cache::class . '::Campaign'] = new FilesystemCache( $this->getCachePath() . '/campaigns' );
-	}
-
-	public function setProfiler( Stopwatch $profiler ): void {
-		$this->profiler = $profiler;
 	}
 
 	public function setLogger( LoggerInterface $logger ): void {
