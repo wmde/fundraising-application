@@ -31,7 +31,7 @@ class Bootstrap {
 		$app->extend( 'dispatcher', function ( EventDispatcher $dispatcher ) use ( $ffFactory ) {
 			$dispatcher->addSubscriber( new StoreBucketSelection( $ffFactory ) );
 			$dispatcher->addSubscriber( new AddIndicatorAttributeForJsonRequests() );
-			$dispatcher->addSubscriber( new RegisterTrackingData() );
+			$dispatcher->addSubscriber( new RegisterTrackingData( $ffFactory->getCookieBuilder() ) );
 			$dispatcher->addSubscriber( new OutputCookiePreference() );
 			$dispatcher->addSubscriber( new TrimEveryInput() );
 			$dispatcher->addSubscriber( new LogErrors( $ffFactory->getLogger() ) );
