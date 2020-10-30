@@ -738,26 +738,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testWhenTrackingCookieExists_andNoCookieConsentGiven_valueIsNotPersisted(): void {
-		$this->createEnvironment(
-			[],
-			function ( Client $client, FunFunFactory $factory ): void {
-				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
-
-				$client->request(
-					'POST',
-					'/donation/add',
-					$this->newComplementableFormInput()
-				);
-
-				$donation = $this->getDonationFromDatabase( $factory );
-				$data = $donation->getDecodedData();
-
-				$this->assertSame( '', $data['tracking'] );
-			}
-		);
-	}
-
 	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment(): void {
 		$this->createEnvironment(
 			[],
@@ -895,25 +875,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				$this->assertInstanceOf( DonationCreated::class, $bucketLogger->getFirstEvent() );
 			},
 			[ CookieNames::CONSENT => 'yes' ]
-		);
-	}
-
-	public function testGivenValidRequest_andCookieConsentNotGiven_bucketsAreNotLogged(): void {
-		$this->createEnvironment(
-			[],
-			function ( Client $client, FunFunFactory $factory ): void {
-				$bucketLogger = new BucketLoggerSpy();
-				$factory->setBucketLogger( $bucketLogger );
-				$client->followRedirects( false );
-
-				$client->request(
-					'POST',
-					'/donation/add',
-					$this->newValidFormInput()
-				);
-
-				$this->assertSame( 0, $bucketLogger->getEventCount() );
-			}
 		);
 	}
 
