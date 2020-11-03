@@ -653,13 +653,9 @@ class FunFunFactory {
 	private function getHonorifics(): Honorifics {
 		return $this->createSharedObject( Honorifics::class,
 			function () {
-				return new Honorifics( [
-					// In the future, this could be locale-specific or filled from a DB table
-					'' => 'Kein Titel',
-					'Dr.' => 'Dr.',
-					'Prof.' => 'Prof.',
-					'Prof. Dr.' => 'Prof. Dr.'
-				] );
+				$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/honorifics.json' );
+				$honorificsData = json_decode( $json, true, 16, JSON_THROW_ON_ERROR );
+				return new Honorifics( $honorificsData );
 			} );
 	}
 
