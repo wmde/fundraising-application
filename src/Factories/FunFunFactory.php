@@ -441,6 +441,7 @@ class FunFunFactory {
 	public function getMailerTwig(): Environment {
 		return $this->createSharedObject( Environment::class . '::Mailer', function (): Environment {
 			$config = $this->config['mailer-twig'];
+			$config['loaders']['filesystem']['template-dir'] = $this->getAbsolutePath( $config['loaders']['filesystem']['template-dir'] );
 			$factory = new MailerTemplatingFactory(
 				$config,
 				$this->getCachePath() . '/twig',
