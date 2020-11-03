@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers\StaticContent;
 
+use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Request;
 
 class ShowUseOfFundsController {
 
