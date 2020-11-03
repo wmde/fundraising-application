@@ -42,6 +42,7 @@ class MailerTemplatingFactoryTest extends TestCase {
 		vfsStream::setup( self::TEMPLATE_DIR, null, [
 			'translation_filters.twig' => '{$ mb_type|membership_type $} | {$ interval|payment_interval $} | {$ p_type|payment_method $}',
 		] );
+		$this->factory->setMailTemplateDirectory( vfsStream::url( self::TEMPLATE_DIR ) );
 
 		$output = $this->factory->getMailerTemplate( 'translation_filters.twig' )->render( [
 			'mb_type' => 'active',
@@ -64,6 +65,7 @@ class MailerTemplatingFactoryTest extends TestCase {
 			'lorem.html.twig' => 'I am the wrong twig environment. Dragons here!',
 			'lorem.twig' => 'More Dragons!'
 		] );
+		$this->factory->setMailTemplateDirectory( vfsStream::url( self::TEMPLATE_DIR ) );
 		$this->contentProvider->method( 'getMail' )
 			->with( 'something', [ 'donation_id' => 45 ] )
 			->willReturn( 'you got mail' );
@@ -78,6 +80,7 @@ class MailerTemplatingFactoryTest extends TestCase {
 		vfsStream::setup( self::TEMPLATE_DIR, null, [
 			'url_output.twig' => '{$ url( "add-donation", { "amount": 10 } ) $}',
 		] );
+		$this->factory->setMailTemplateDirectory( vfsStream::url( self::TEMPLATE_DIR ) );
 
 		$output = $this->factory->getMailerTemplate( 'url_output.twig' )->render( [] );
 
@@ -88,6 +91,7 @@ class MailerTemplatingFactoryTest extends TestCase {
 		vfsStream::setup( self::TEMPLATE_DIR, null, [
 			'globals.twig' => '{$ day_of_the_week $}',
 		] );
+		$this->factory->setMailTemplateDirectory( vfsStream::url( self::TEMPLATE_DIR ) );
 
 		$output = $this->factory->getMailerTemplate( 'globals.twig' )->render( [] );
 
