@@ -441,6 +441,7 @@ class FunFunFactory {
 	public function getMailerTwig(): Environment {
 		return $this->createSharedObject( Environment::class . '::Mailer', function (): Environment {
 			$config = $this->config['mailer-twig'];
+			$config['loaders']['filesystem']['template-dir'] = $this->getMailTemplateDirectory();
 			$factory = new MailerTemplatingFactory(
 				$config,
 				$this->getCachePath() . '/twig',
@@ -1872,5 +1873,15 @@ class FunFunFactory {
 		return $this->createSharedObject( ValidationErrorLogger::class, function (): ValidationErrorLogger {
 			return new ValidationErrorLogger( $this->getLogger() );
 		} );
+	}
+
+	private function getMailTemplateDirectory() {
+		return $this->createSharedObject( 'MAIL_TEMPLATE_DIRECTORY', function (): string {
+			return $this->getAbsolutePath( $this->config['mailer-twig']['loaders']['filesystem']['template-dir'] );
+		} );
+	}
+
+	public function setMailTemplateDirectory( string $directory ): void {
+		$this->sharedObjects['MAIL_TEMPLATE_DIRECTORY'] = $directory;
 	}
 }
