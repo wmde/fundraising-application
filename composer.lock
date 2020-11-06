@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "airbrake/phpbrake",
-            "version": "v0.7.4",
+            "version": "v0.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/airbrake/phpbrake.git",
-                "reference": "260183200fcd5d7d6f03c927cef7ae7ccdee9f33"
+                "reference": "fc22e92549606104b5f43accedfaba96cd060184"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/airbrake/phpbrake/zipball/260183200fcd5d7d6f03c927cef7ae7ccdee9f33",
-                "reference": "260183200fcd5d7d6f03c927cef7ae7ccdee9f33",
+                "url": "https://api.github.com/repos/airbrake/phpbrake/zipball/fc22e92549606104b5f43accedfaba96cd060184",
+                "reference": "fc22e92549606104b5f43accedfaba96cd060184",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                 "logging",
                 "notifier"
             ],
-            "time": "2020-10-15T13:12:55+00:00"
+            "time": "2020-11-05T20:02:42+00:00"
         },
         {
             "name": "behat/transliterator",
@@ -8544,12 +8544,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "87cf29fb0c2f250e6823bda406e3934c01277178"
+                "reference": "de9e586d576b19fe6773f3122df4211fd9860842"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/87cf29fb0c2f250e6823bda406e3934c01277178",
-                "reference": "87cf29fb0c2f250e6823bda406e3934c01277178",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/de9e586d576b19fe6773f3122df4211fd9860842",
+                "reference": "de9e586d576b19fe6773f3122df4211fd9860842",
                 "shasum": ""
             },
             "require-dev": {
@@ -8582,7 +8582,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-11-03T14:04:08+00:00"
+            "time": "2020-11-05T09:46:49+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
