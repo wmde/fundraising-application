@@ -9,6 +9,8 @@ updates:
       interval: "daily"
     reviewers:
       - "wmde/funtech-core"
+    # Temporarily disable automated update PRs for this repository
+    open-pull-requests-limit: 0
       
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
@@ -16,6 +18,8 @@ updates:
       interval: "weekly"
     reviewers:
       - "wmde/funtech-core"
+    # Temporarily disable automated update PRs for this repository
+    open-pull-requests-limit: 0
       
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/skins/laika" # Location of package manifests
@@ -23,5 +27,7 @@ updates:
       interval: "daily"
     reviewers:
       - "wmde/funtech-core"
+    # Temporarily disable automated update PRs for this repository
+    open-pull-requests-limit: 0
 
 
