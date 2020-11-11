@@ -157,7 +157,7 @@ interface MyApplicationDataModel {
     // etc
 }
 
-const pageData = new PageDataInitializer<MyApplicationDataModel>( '#app' );
+const pageData = new PageDataInitializer<MyApplicationDataModel>( '#appdata' );
 
 new Vue( {
 		render: h => h( App, {
@@ -185,7 +185,7 @@ interface MyApplicationDataModel {
     // etc
 }
 
-const pageData = new PageDataInitializer<MyApplicationDataModel>( '#app' );
+const pageData = new PageDataInitializer<MyApplicationDataModel>( '#appdata' );
 
 Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
 

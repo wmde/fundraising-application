@@ -4,7 +4,7 @@ export default class PageDataInitializer<T> {
 	assetsPath: string;
 	selectedBuckets: string[];
 
-	constructor( dataElementSelector: string = '#app' ) {
+	constructor( dataElementSelector: string = '#appdata' ) {
 		const dataElement: HTMLElement | null = document.querySelector( dataElementSelector );
 		if ( !dataElement ) {
 			throw new Error( 'No element found with selector ' + dataElementSelector );

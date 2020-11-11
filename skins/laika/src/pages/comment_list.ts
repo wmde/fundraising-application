@@ -12,7 +12,7 @@ const PAGE_IDENTIFIER = 'comment-list';
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
 
-const pageData = new PageDataInitializer<any>( '#app' );
+const pageData = new PageDataInitializer<any>( '#appdata' );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,

@@ -17,7 +17,7 @@ interface ErrorModel {
 	trace: string,
 }
 
-const pageData = new PageDataInitializer<ErrorModel>( '#app' );
+const pageData = new PageDataInitializer<ErrorModel>( '#appdata' );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,

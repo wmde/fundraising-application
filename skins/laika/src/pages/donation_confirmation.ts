@@ -29,7 +29,7 @@ interface DonationConfirmationModel {
 	addressValidationPatterns: AddressValidation,
 }
 
-const pageData = new PageDataInitializer<DonationConfirmationModel>( '#app' );
+const pageData = new PageDataInitializer<DonationConfirmationModel>( '#appdata' );
 const store = createStore();
 
 const i18n = new VueI18n( {

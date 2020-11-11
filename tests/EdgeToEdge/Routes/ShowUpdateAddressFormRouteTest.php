@@ -39,7 +39,7 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 
 				$response = $client->getResponse();
 				/** @var \DOMElement $appElement */
-				$appElement = $client->getCrawler()->filter( '#app' )->getNode( 0 );
+				$appElement = $client->getCrawler()->filter( '#appdata' )->getNode( 0 );
 				$dataVars = json_decode(
 					$appElement->getAttribute( 'data-application-vars' )
 				);
