@@ -143,7 +143,9 @@ class AddDonationController {
 
 		$donationRequest->setTracking( $request->attributes->get( 'trackingCode' ) );
 		$donationRequest->setOptIn( $request->get( 'info', '' ) );
-		$donationRequest->setSource( $request->attributes->get( 'trackingSource' ) );
+		// Setting source for completeness sake,
+		// TODO Remove when  https://phabricator.wikimedia.org/T134327 is done
+		$donationRequest->setSource( '' );
 		$donationRequest->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
 		$donationRequest->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
 		$donationRequest->setOptsIntoDonationReceipt( $request->request->getBoolean( 'donationReceipt', true ) );

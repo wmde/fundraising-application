@@ -302,7 +302,6 @@
       "properties": {
         "default": {
           "type": "string",
-          "minLength": 1,
           "title": "Default referrer",
           "description": "What referrer to use when no host name from domain-map matches.",
           "default": "web"
