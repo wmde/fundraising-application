@@ -42,6 +42,15 @@
 {% endblock %}
 
 {% block scripts %}
+    {# Matomo is Piwik's new name #}
+    {% include 'matomo.html.twig' %}
+    {% if piwikGoals | default( [] ) %}
+    <script>
+        {% for goal in piwikGoals %}
+        _paq.push( [ 'trackGoal', '{$ goal $}' ] );
+        {% endfor %}
+    </script>
+    {% endif %}
     {% if assets_path %}
         <script src="{$ assets_path $}/js/chunk-vendors.js"></script>
         <script src="{$ assets_path $}/js/chunk-common.js"></script>
@@ -59,16 +68,6 @@
         <script src="{$ basepath $}/skins/laika/js/styles.js"></script>
     {% endif %}
 {% endblock %}
-
-{# Matomo is Piwik's new name #}
-{% include 'matomo.html.twig' %}
-{% if piwikGoals | default( [] ) %}
-    <script>
-        {% for goal in piwikGoals %}
-        _paq.push( [ 'trackGoal', '{$ goal $}' ] );
-        {% endfor %}
-    </script>
-{% endif %}
 
 </body>
 </html>

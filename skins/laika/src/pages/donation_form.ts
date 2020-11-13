@@ -89,7 +89,7 @@ dataPersister.initialize( persistenceItems ).then( () => {
 					countries: pageData.applicationVars.countries,
 					trackingData: pageData.applicationVars.tracking,
 					bucketClasses: bucketIdToCssClass( pageData.selectedBuckets ),
-					cookieNoticeVisible: pageData.cookieConsent === 'unset',
+					cookieConsent: pageData.cookieConsent,
 				},
 			},
 			[

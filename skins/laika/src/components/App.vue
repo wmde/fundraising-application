@@ -19,7 +19,7 @@
 		<footer class="is-hidden-print">
 			<Footer :assets-path="assetsPath"></Footer>
 		</footer>
-		<CookieNotice v-if="cookieNoticeVisible"></CookieNotice>
+		<CookieNotice v-if="cookieConsent === 'unset'"></CookieNotice>
 	</div>
 </template>
 
@@ -32,6 +32,7 @@ import Content from '@/components/layout/Content.vue';
 import Footer from '@/components/layout/Footer.vue';
 import CookieNotice from '@/components/cookie_notice/CookieNotice.vue';
 import createLogger from '@/logger';
+import { setConsentGiven } from '@/tracking';
 
 Vue.use( Buefy );
 
@@ -66,10 +67,14 @@ export default Vue.extend( {
 			type: Array,
 			default: () => [],
 		},
-		cookieNoticeVisible: {
-			type: Boolean,
-			default: false,
+		cookieConsent: {
+			type: String,
 		},
+	},
+	mounted() {
+		if ( this.$props.cookieConsent === 'yes' ) {
+			setConsentGiven();
+		}
 	},
 } );
 </script>

@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
-import VueCompositionApi from '@vue/composition-api';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
@@ -32,7 +31,7 @@ new Vue( {
 			assetsPath: pageData.assetsPath,
 			pageIdentifier: PAGE_IDENTIFIER,
 			isFullWidth: IS_FULLWIDTH_PAGE,
-			cookieNoticeVisible: pageData.cookieConsent === 'unset',
+			cookieConsent: pageData.cookieConsent,
 		},
 	},
 	[

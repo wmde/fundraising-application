@@ -49,7 +49,7 @@ new Vue( {
 			assetsPath: pageData.assetsPath,
 			pageIdentifier: PAGE_IDENTIFIER,
 			isFullWidth: IS_FULLWIDTH_PAGE,
-			cookieNoticeVisible: pageData.cookieConsent === 'unset',
+			cookieConsent: pageData.cookieConsent,
 		},
 	},
 	[

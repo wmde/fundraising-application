@@ -1,6 +1,8 @@
 <!-- Matomo -->
 <script>
 	var _paq = _paq || [];
+	_paq.push(['requireConsent']);
+	_paq.push(['requireCookieConsent']);
 	{% if initialFormValues.paymentType != '' %}
 		_paq.push( [ 'setCustomDimension', 1, '{$ initialFormValues.paymentType $}' ] );
 	{% endif %}

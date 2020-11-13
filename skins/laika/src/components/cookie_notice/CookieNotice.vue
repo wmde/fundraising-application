@@ -75,6 +75,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { ref } from '@vue/composition-api';
+import { setConsentGiven } from '@/tracking';
 import axios from 'axios';
 import CookieCheckbox from './CookieCheckbox.vue';
 import HeightAdjuster from './HeightAdjuster.vue';
@@ -103,13 +104,17 @@ export default Vue.extend( {
 
 		const submitPreferences = () => {
 			const form = new FormData();
-			form.append( 'cookie_consent', optionalChecked.value ? CONSENT_TRUE : CONSENT_FALSE );
+			const consent = optionalChecked.value ? CONSENT_TRUE : CONSENT_FALSE;
+			form.append( 'cookie_consent', consent );
 			axios.post(
 				cookieNotice.value.action + window.location.search,
 				form,
 				{ headers: { 'Content-Type': 'multipart/form-data' } }
 			).then( () => {
 				isVisible.value = false;
+				if ( consent === CONSENT_TRUE ) {
+					setConsentGiven();
+				}
 			} );
 		};
 

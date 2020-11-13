@@ -21,3 +21,8 @@ export function trackFormFieldRestored( formName: string, formFieldName: string 
 export function trackFormValidationErrors( formName: string, formFieldName: string ) {
 	_paq.push( [ 'trackEvent', 'Form Field Invalid', formName, formFieldName ] );
 }
+
+export function setConsentGiven() {
+	_paq.push( [ 'setConsentGiven' ] );
+	_paq.push( [ 'setCookieConsentGiven' ] );
+}
