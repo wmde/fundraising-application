@@ -167,7 +167,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( '', $data['layout'] );
 		$this->assertSame( '', $data['color'] );
 		$this->assertSame( '', $data['skin'] );
-		$this->assertSame( 'en.wikipedia.org', $data['source'] );
+		$this->assertSame( '', $data['source'] );
 		$this->assertSame( 'N', $donation->getStatus() );
 		$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
 		$this->assertTrue( $donation->getDonationReceipt() );
@@ -247,7 +247,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( '', $data['layout'] );
 			$this->assertSame( '', $data['color'] );
 			$this->assertSame( '', $data['skin'] );
-			$this->assertSame( 'en.wikipedia.org', $data['source'] );
+			$this->assertSame( '', $data['source'] );
 			$this->assertSame( true, $donation->getDonorOptsIntoNewsletter() );
 
 			$this->assertSame( 'Z', $donation->getStatus() );

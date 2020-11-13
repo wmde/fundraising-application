@@ -34,13 +34,6 @@ class RegisterTrackingData implements EventSubscriberInterface {
 				$request->get( 'piwik_kwd', '' )
 			)
 		] ) );
-
-		// Remove when https://phabricator.wikimedia.org/T134327 is done
-		$request->attributes->set( 'trackingSource', TrackingDataSelector::getFirstNonEmptyValue( [
-			$request->cookies->get( 'spenden_source' ),
-			$request->request->get( 'source' ),
-			$request->server->get( 'HTTP_REFERER' )
-		] ) );
 	}
 
 	public function onKernelResponse( FilterResponseEvent $event ): void {
