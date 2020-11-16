@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33cfb68e496d074106ab50eae9177e82",
+    "content-hash": "302ddfbe8772947d63eb79253209bb47",
     "packages": [
         {
             "name": "airbrake/phpbrake",
-            "version": "v0.7.4",
+            "version": "v0.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/airbrake/phpbrake.git",
-                "reference": "260183200fcd5d7d6f03c927cef7ae7ccdee9f33"
+                "reference": "fc22e92549606104b5f43accedfaba96cd060184"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/airbrake/phpbrake/zipball/260183200fcd5d7d6f03c927cef7ae7ccdee9f33",
-                "reference": "260183200fcd5d7d6f03c927cef7ae7ccdee9f33",
+                "url": "https://api.github.com/repos/airbrake/phpbrake/zipball/fc22e92549606104b5f43accedfaba96cd060184",
+                "reference": "fc22e92549606104b5f43accedfaba96cd060184",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                 "logging",
                 "notifier"
             ],
-            "time": "2020-10-15T13:12:55+00:00"
+            "time": "2020-11-05T20:02:42+00:00"
         },
         {
             "name": "behat/transliterator",
@@ -148,12 +148,6 @@
                 "brick",
                 "math"
             ],
-            "funding": [
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/brick/math",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-08-18T23:57:15+00:00"
         },
         {
@@ -196,75 +190,6 @@
                 "lru"
             ],
             "time": "2013-09-20T18:59:12+00:00"
-        },
-        {
-            "name": "composer/package-versions-deprecated",
-            "version": "1.11.99",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/composer/package-versions-deprecated.git",
-                "reference": "c8c9aa8a14cc3d3bec86d0a8c3fa52ea79936855"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/composer/package-versions-deprecated/zipball/c8c9aa8a14cc3d3bec86d0a8c3fa52ea79936855",
-                "reference": "c8c9aa8a14cc3d3bec86d0a8c3fa52ea79936855",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.1.0 || ^2.0",
-                "php": "^7 || ^8"
-            },
-            "replace": {
-                "ocramius/package-versions": "1.11.99"
-            },
-            "require-dev": {
-                "composer/composer": "^1.9.3 || ^2.0@dev",
-                "ext-zip": "^1.13",
-                "phpunit/phpunit": "^6.5 || ^7"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "PackageVersions\\Installer",
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "PackageVersions\\": "src/PackageVersions"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marco Pivetta",
-                    "email": "ocramius@gmail.com"
-                },
-                {
-                    "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be"
-                }
-            ],
-            "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/composer",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2020-08-25T05:50:16+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -417,20 +342,6 @@
                 "redis",
                 "xcache"
             ],
-            "funding": [
-                {
-                    "url": "https://www.doctrine-project.org/sponsorship.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/phpdoctrine",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fcache",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-07-07T18:54:01+00:00"
         },
         {
@@ -572,34 +483,20 @@
                 "doctrine",
                 "php"
             ],
-            "funding": [
-                {
-                    "url": "https://www.doctrine-project.org/sponsorship.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/phpdoctrine",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fcommon",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-06-05T16:59:53+00:00"
         },
         {
             "name": "doctrine/dbal",
-            "version": "2.12.0",
+            "version": "2.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "c6d37b4c42aaa3c3ee175f05eca68056f4185646"
+                "reference": "adce7a954a1c2f14f85e94aed90c8489af204086"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/c6d37b4c42aaa3c3ee175f05eca68056f4185646",
-                "reference": "c6d37b4c42aaa3c3ee175f05eca68056f4185646",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/adce7a954a1c2f14f85e94aed90c8489af204086",
+                "reference": "adce7a954a1c2f14f85e94aed90c8489af204086",
                 "shasum": ""
             },
             "require": {
@@ -693,7 +590,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-22T17:26:24+00:00"
+            "time": "2020-11-14T20:26:58+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -768,20 +665,6 @@
                 "event manager",
                 "event system",
                 "events"
-            ],
-            "funding": [
-                {
-                    "url": "https://www.doctrine-project.org/sponsorship.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/phpdoctrine",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fevent-manager",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-05-29T18:28:51+00:00"
         },
@@ -879,36 +762,31 @@
         },
         {
             "name": "doctrine/instantiator",
-            "version": "1.3.1",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "f350df0268e904597e3bd9c4685c53e0e333feea"
+                "reference": "d56bf6102915de5702778fe20f2de3b2fe570b5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/f350df0268e904597e3bd9c4685c53e0e333feea",
-                "reference": "f350df0268e904597e3bd9c4685c53e0e333feea",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/d56bf6102915de5702778fe20f2de3b2fe570b5b",
+                "reference": "d56bf6102915de5702778fe20f2de3b2fe570b5b",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^6.0",
+                "doctrine/coding-standard": "^8.0",
                 "ext-pdo": "*",
                 "ext-phar": "*",
-                "phpbench/phpbench": "^0.13",
-                "phpstan/phpstan-phpunit": "^0.11",
-                "phpstan/phpstan-shim": "^0.11",
-                "phpunit/phpunit": "^7.0"
+                "phpbench/phpbench": "^0.13 || 1.0.0-alpha2",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-phpunit": "^0.12",
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Doctrine\\Instantiator\\": "src/Doctrine/Instantiator/"
@@ -922,7 +800,7 @@
                 {
                     "name": "Marco Pivetta",
                     "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/"
+                    "homepage": "https://ocramius.github.io/"
                 }
             ],
             "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors",
@@ -945,7 +823,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-29T17:27:14+00:00"
+            "time": "2020-11-10T18:47:58+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1099,20 +977,19 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.7.4",
+            "version": "v2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "7d84a4998091ece4d645253ac65de9f879eeed2f"
+                "reference": "d95e03ba660d50d785a9925f41927fef0ee553cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/7d84a4998091ece4d645253ac65de9f879eeed2f",
-                "reference": "7d84a4998091ece4d645253ac65de9f879eeed2f",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/d95e03ba660d50d785a9925f41927fef0ee553cf",
+                "reference": "d95e03ba660d50d785a9925f41927fef0ee553cf",
                 "shasum": ""
             },
             "require": {
-                "composer/package-versions-deprecated": "^1.8",
                 "doctrine/annotations": "^1.8",
                 "doctrine/cache": "^1.9.1",
                 "doctrine/collections": "^1.5",
@@ -1124,6 +1001,7 @@
                 "doctrine/lexer": "^1.0",
                 "doctrine/persistence": "^1.3.3 || ^2.0",
                 "ext-pdo": "*",
+                "ocramius/package-versions": "^1.2",
                 "php": "^7.1",
                 "symfony/console": "^3.0|^4.0|^5.0"
             },
@@ -1183,7 +1061,21 @@
                 "database",
                 "orm"
             ],
-            "time": "2020-10-10T17:11:26+00:00"
+            "funding": [
+                {
+                    "url": "https://www.doctrine-project.org/sponsorship.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://www.patreon.com/phpdoctrine",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/doctrine/orm",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-05-26T16:03:49+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -1267,16 +1159,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.23",
+            "version": "2.1.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "5fa792ad1853ae2bc60528dd3e5cbf4542d3c1df"
+                "reference": "ca90a3291eee1538cd48ff25163240695bd95448"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/5fa792ad1853ae2bc60528dd3e5cbf4542d3c1df",
-                "reference": "5fa792ad1853ae2bc60528dd3e5cbf4542d3c1df",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/ca90a3291eee1538cd48ff25163240695bd95448",
+                "reference": "ca90a3291eee1538cd48ff25163240695bd95448",
                 "shasum": ""
             },
             "require": {
@@ -1321,7 +1213,13 @@
                 "validation",
                 "validator"
             ],
-            "time": "2020-10-31T20:37:35+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/egulias",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-11-14T15:56:27+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1887,48 +1785,41 @@
         },
         {
             "name": "laminas/laminas-code",
-            "version": "3.4.1",
+            "version": "3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-code.git",
-                "reference": "1cb8f203389ab1482bf89c0e70a04849bacd7766"
+                "reference": "cb90ef428da9260c2deaa827b037c20695f968ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/1cb8f203389ab1482bf89c0e70a04849bacd7766",
-                "reference": "1cb8f203389ab1482bf89c0e70a04849bacd7766",
+                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/cb90ef428da9260c2deaa827b037c20695f968ae",
+                "reference": "cb90ef428da9260c2deaa827b037c20695f968ae",
                 "shasum": ""
             },
             "require": {
-                "laminas/laminas-eventmanager": "^2.6 || ^3.0",
-                "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^7.1"
+                "laminas/laminas-eventmanager": "^3.3",
+                "laminas/laminas-zendframework-bridge": "^1.1",
+                "php": "^7.3 || ~8.0.0"
             },
             "conflict": {
                 "phpspec/prophecy": "<1.9.0"
             },
             "replace": {
-                "zendframework/zend-code": "self.version"
+                "zendframework/zend-code": "^3.4.1"
             },
             "require-dev": {
-                "doctrine/annotations": "^1.7",
+                "doctrine/annotations": "^1.10.4",
                 "ext-phar": "*",
-                "laminas/laminas-coding-standard": "^1.0",
-                "laminas/laminas-stdlib": "^2.7 || ^3.0",
-                "phpunit/phpunit": "^7.5.16 || ^8.4"
+                "laminas/laminas-coding-standard": "^1.0.0",
+                "laminas/laminas-stdlib": "^3.3.0",
+                "phpunit/phpunit": "^9.4.2"
             },
             "suggest": {
                 "doctrine/annotations": "Doctrine\\Common\\Annotations >=1.0 for annotation features",
                 "laminas/laminas-stdlib": "Laminas\\Stdlib component"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.4.x-dev",
-                    "dev-develop": "3.5.x-dev",
-                    "dev-dev-4.0": "4.0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Laminas\\Code\\": "src/"
@@ -1944,7 +1835,13 @@
                 "code",
                 "laminas"
             ],
-            "time": "2019-12-31T16:28:24+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2020-11-11T22:11:27+00:00"
         },
         {
             "name": "laminas/laminas-eventmanager",
@@ -2002,12 +1899,6 @@
                 "events",
                 "laminas"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-08-25T11:10:44+00:00"
         },
         {
@@ -2055,12 +1946,6 @@
                 "autoloading",
                 "laminas",
                 "zf"
-            ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
             ],
             "time": "2020-09-14T14:23:00+00:00"
         },
@@ -2227,22 +2112,83 @@
             "time": "2020-09-26T10:30:38+00:00"
         },
         {
-            "name": "ocramius/proxy-manager",
-            "version": "2.8.0",
+            "name": "ocramius/package-versions",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Ocramius/ProxyManager.git",
-                "reference": "ac1dd414fd114cfc0da9930e0ab46063c2f5e62a"
+                "url": "https://github.com/Ocramius/PackageVersions.git",
+                "reference": "94c9d42a466c57f91390cdd49c81313264f49d85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/ac1dd414fd114cfc0da9930e0ab46063c2f5e62a",
-                "reference": "ac1dd414fd114cfc0da9930e0ab46063c2f5e62a",
+                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/94c9d42a466c57f91390cdd49c81313264f49d85",
+                "reference": "94c9d42a466c57f91390cdd49c81313264f49d85",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1.0 || ^2.0",
+                "php": "^7.4.0"
+            },
+            "require-dev": {
+                "composer/composer": "^1.9.3 || ^2.0@dev",
+                "doctrine/coding-standard": "^7.0.2",
+                "ext-zip": "^1.15.0",
+                "infection/infection": "^0.15.3",
+                "phpunit/phpunit": "^9.1.1",
+                "vimeo/psalm": "^3.9.3"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PackageVersions\\Installer",
+                "branch-alias": {
+                    "dev-master": "1.99.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PackageVersions\\": "src/PackageVersions"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com"
+                }
+            ],
+            "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
+            "funding": [
+                {
+                    "url": "https://github.com/Ocramius",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/ocramius/package-versions",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-06-22T14:15:44+00:00"
+        },
+        {
+            "name": "ocramius/proxy-manager",
+            "version": "2.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ocramius/ProxyManager.git",
+                "reference": "371c8f2d9d1e888ce1f8f2137d9187252b07ee94"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/371c8f2d9d1e888ce1f8f2137d9187252b07ee94",
+                "reference": "371c8f2d9d1e888ce1f8f2137d9187252b07ee94",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-code": "^3.4.1",
-                "ocramius/package-versions": "^1.8.0",
+                "ocramius/package-versions": "^1.8.0,<1.10.0",
                 "php": "~7.4.1",
                 "webimpress/safe-writer": "^2.0.1"
             },
@@ -2309,7 +2255,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-04-13T14:42:16+00:00"
+            "time": "2020-07-13T19:23:57+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -2363,16 +2309,6 @@
                 "option",
                 "php",
                 "type"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpoption/phpoption",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-07-20T17:29:33+00:00"
         },
@@ -2903,12 +2839,6 @@
                 "guid",
                 "identifier",
                 "uuid"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/ramsey",
-                    "type": "github"
-                }
             ],
             "time": "2020-08-18T17:17:46+00:00"
         },
@@ -5183,12 +5113,6 @@
                 "safe writer",
                 "webimpress"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/michalbundyra",
-                    "type": "github"
-                }
-            ],
             "time": "2020-08-25T07:21:11+00:00"
         },
         {
@@ -5323,28 +5247,26 @@
         },
         {
             "name": "wmde/freezable-value-object",
-            "version": "1.0.0",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/FreezableValueObject.git",
-                "reference": "5e4d63b2f16ad5122d2f303e3478b6b583a9eb7e"
+                "reference": "1205d2df0ce0494ff5473172504c2a779ec6bafa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/FreezableValueObject/zipball/5e4d63b2f16ad5122d2f303e3478b6b583a9eb7e",
-                "reference": "5e4d63b2f16ad5122d2f303e3478b6b583a9eb7e",
+                "url": "https://api.github.com/repos/wmde/FreezableValueObject/zipball/1205d2df0ce0494ff5473172504c2a779ec6bafa",
+                "reference": "1205d2df0ce0494ff5473172504c2a779ec6bafa",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.4"
             },
             "require-dev": {
-                "mediawiki/mediawiki-codesniffer": "~13.0",
-                "ockcyp/covers-validator": "~0.6",
-                "phpstan/phpstan": "~0.8.0",
-                "phpunit/phpunit": "~6.2",
-                "slevomat/coding-standard": "~4.0",
-                "squizlabs/php_codesniffer": "~3.0"
+                "ockcyp/covers-validator": "~1.0",
+                "phpstan/phpstan": "~0.11",
+                "phpunit/phpunit": "~8.0",
+                "wmde/fundraising-phpcs": "~1.0"
             },
             "type": "library",
             "extra": {
@@ -5359,7 +5281,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -5370,7 +5292,7 @@
                 }
             ],
             "description": "PHP Trait for creating freezable value objects",
-            "time": "2017-11-01T05:03:17+00:00"
+            "time": "2020-07-03T15:28:11+00:00"
         },
         {
             "name": "wmde/fun-validators",
@@ -5421,16 +5343,16 @@
         },
         {
             "name": "wmde/fundraising-address-change",
-            "version": "v1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-address-change",
-                "reference": "855ddd1f2f92b42aece82ebb3d0f19dacb236c7e"
+                "reference": "135bf7ff0ad1033c593ce6d9656e8fb18b6b0a56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/855ddd1f2f92b42aece82ebb3d0f19dacb236c7e",
-                "reference": "855ddd1f2f92b42aece82ebb3d0f19dacb236c7e",
+                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/135bf7ff0ad1033c593ce6d9656e8fb18b6b0a56",
+                "reference": "135bf7ff0ad1033c593ce6d9656e8fb18b6b0a56",
                 "shasum": ""
             },
             "require": {
@@ -5438,7 +5360,7 @@
                 "doctrine/orm": "^2.7",
                 "php": ">=7.4",
                 "ramsey/uuid": "^4.0",
-                "wmde/freezable-value-object": "~1.0"
+                "wmde/freezable-value-object": "~2.0"
             },
             "require-dev": {
                 "ockcyp/covers-validator": "~1.0",
@@ -5463,7 +5385,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Address change use case for fundraising application",
-            "time": "2020-07-03T07:43:00+00:00"
+            "time": "2020-07-06T05:26:59+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
@@ -5531,16 +5453,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v4.0.3",
+            "version": "v4.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "61eb1d6dd01cb480d386014c6594ddfb5460b380"
+                "reference": "68d03c42407821b0efa5f81a793838a5741c57ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/61eb1d6dd01cb480d386014c6594ddfb5460b380",
-                "reference": "61eb1d6dd01cb480d386014c6594ddfb5460b380",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/68d03c42407821b0efa5f81a793838a5741c57ce",
+                "reference": "68d03c42407821b0efa5f81a793838a5741c57ce",
                 "shasum": ""
             },
             "require": {
@@ -5551,9 +5473,9 @@
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
-                "wmde/freezable-value-object": "~1.0",
+                "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~3.0.0",
-                "wmde/fundraising-payments": "~1.0.0"
+                "wmde/fundraising-payments": "~1.0"
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
@@ -5583,20 +5505,20 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2020-10-30T07:42:15+00:00"
+            "time": "2020-11-16T11:58:57+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v3.0.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "1647b94a782756d20f6cfe02a3251d642f9210cb"
+                "reference": "ef9149c6ea9f17da64d6addfe6d3cf09580e9d69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/1647b94a782756d20f6cfe02a3251d642f9210cb",
-                "reference": "1647b94a782756d20f6cfe02a3251d642f9210cb",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/ef9149c6ea9f17da64d6addfe6d3cf09580e9d69",
+                "reference": "ef9149c6ea9f17da64d6addfe6d3cf09580e9d69",
                 "shasum": ""
             },
             "require": {
@@ -5606,16 +5528,16 @@
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
-                "wmde/freezable-value-object": "~1.0",
+                "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~3.0.0",
-                "wmde/fundraising-payments": "~1.0.0"
+                "wmde/fundraising-payments": "~1.0"
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
                 "ockcyp/covers-validator": "~1.2",
                 "phpstan/phpstan": "~0.11",
                 "phpstan/phpstan-phpunit": "^0.12.6",
-                "phpunit/phpunit": "~9.2.6",
+                "phpunit/phpunit": "~9.4.0",
                 "wmde/fundraising-phpcs": "~1.0",
                 "wmde/psr-log-test-doubles": "~2.2"
             },
@@ -5641,33 +5563,33 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2020-09-24T14:09:09+00:00"
+            "time": "2020-11-06T12:28:48+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v1.0.3",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "b5cd50172fea7317b2f75835af718b7f4275d520"
+                "reference": "f98ae2846c53551cddfbfc527fd31f831894ffcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/b5cd50172fea7317b2f75835af718b7f4275d520",
-                "reference": "b5cd50172fea7317b2f75835af718b7f4275d520",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/f98ae2846c53551cddfbfc527fd31f831894ffcd",
+                "reference": "f98ae2846c53551cddfbfc527fd31f831894ffcd",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4",
                 "sofort/sofortlib-php": "^3.2",
                 "wmde/euro": "~1.0",
-                "wmde/freezable-value-object": "~1.0",
+                "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~v3.0.0"
             },
             "require-dev": {
                 "ockcyp/covers-validator": "~1.2",
                 "phpstan/phpstan": "~0.12.0",
-                "phpunit/phpunit": "~8.5",
+                "phpunit/phpunit": "~9.4",
                 "wmde/fundraising-phpcs": "~1.0"
             },
             "type": "library",
@@ -5690,7 +5612,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2020-07-03T06:51:20+00:00"
+            "time": "2020-11-06T12:22:17+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -5916,34 +5838,20 @@
                 "spdx",
                 "validator"
             ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/composer",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-07-15T15:35:07+00:00"
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "1.4.4",
+            "version": "1.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "6e076a124f7ee146f2487554a94b6a19a74887ba"
+                "reference": "f28d44c286812c714741478d968104c5e604a1d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/6e076a124f7ee146f2487554a94b6a19a74887ba",
-                "reference": "6e076a124f7ee146f2487554a94b6a19a74887ba",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/f28d44c286812c714741478d968104c5e604a1d4",
+                "reference": "f28d44c286812c714741478d968104c5e604a1d4",
                 "shasum": ""
             },
             "require": {
@@ -5988,24 +5896,24 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T12:39:10+00:00"
+            "time": "2020-11-13T08:04:11+00:00"
         },
         {
             "name": "matthiasnoback/symfony-config-test",
-            "version": "4.2.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyTest/SymfonyConfigTest.git",
-                "reference": "32de23c14c31820626d65a06a3c11f60b487263d"
+                "reference": "8b1408d2d9c2530bbba550f272061c4736052c80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyTest/SymfonyConfigTest/zipball/32de23c14c31820626d65a06a3c11f60b487263d",
-                "reference": "32de23c14c31820626d65a06a3c11f60b487263d",
+                "url": "https://api.github.com/repos/SymfonyTest/SymfonyConfigTest/zipball/8b1408d2d9c2530bbba550f272061c4736052c80",
+                "reference": "8b1408d2d9c2530bbba550f272061c4736052c80",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1",
+                "php": "^7.1 || ^8.0",
                 "symfony/config": "^2.7 || ^3.4 || ^4.0 || ^5.0"
             },
             "conflict": {
@@ -6043,7 +5951,7 @@
                 "phpunit",
                 "symfony"
             ],
-            "time": "2020-05-08T07:24:53+00:00"
+            "time": "2020-11-15T15:13:34+00:00"
         },
         {
             "name": "mediawiki/mediawiki-codesniffer",
@@ -6139,16 +6047,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.10.1",
+            "version": "1.10.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "969b211f9a51aa1f6c01d1d2aef56d3bd91598e5"
+                "reference": "776f831124e9c62e1a2c601ecc52e776d8bb7220"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/969b211f9a51aa1f6c01d1d2aef56d3bd91598e5",
-                "reference": "969b211f9a51aa1f6c01d1d2aef56d3bd91598e5",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/776f831124e9c62e1a2c601ecc52e776d8bb7220",
+                "reference": "776f831124e9c62e1a2c601ecc52e776d8bb7220",
                 "shasum": ""
             },
             "require": {
@@ -6189,7 +6097,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-29T13:22:24+00:00"
+            "time": "2020-11-13T09:40:50+00:00"
         },
         {
             "name": "ockcyp/covers-validator",
@@ -6609,12 +6517,6 @@
                 "phpmd",
                 "pmd"
             ],
-            "funding": [
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpmd/phpmd",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-09-23T22:06:32+00:00"
         },
         {
@@ -6682,16 +6584,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.54",
+            "version": "0.12.55",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "45c7b999a4b7dd9ac5558bdaaf23dcebbef88223"
+                "reference": "4382b2b2059ec7e5135d07685ec1e3e16ae32d16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/45c7b999a4b7dd9ac5558bdaaf23dcebbef88223",
-                "reference": "45c7b999a4b7dd9ac5558bdaaf23dcebbef88223",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4382b2b2059ec7e5135d07685ec1e3e16ae32d16",
+                "reference": "4382b2b2059ec7e5135d07685ec1e3e16ae32d16",
                 "shasum": ""
             },
             "require": {
@@ -6734,7 +6636,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-05T13:36:26+00:00"
+            "time": "2020-11-14T10:20:35+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -6857,12 +6759,6 @@
                 "filesystem",
                 "iterator"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
-            ],
             "time": "2020-09-28T05:57:25+00:00"
         },
         {
@@ -6915,12 +6811,6 @@
             "homepage": "https://github.com/sebastianbergmann/php-invoker/",
             "keywords": [
                 "process"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
             ],
             "time": "2020-09-28T05:58:55+00:00"
         },
@@ -7036,16 +6926,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.4.2",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3866b2eeeed21b1b099c4bc0b7a1690ac6fd5baa"
+                "reference": "9fa359ff5ddaa5eb2be2bedb08a6a5787a5807ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3866b2eeeed21b1b099c4bc0b7a1690ac6fd5baa",
-                "reference": "3866b2eeeed21b1b099c4bc0b7a1690ac6fd5baa",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9fa359ff5ddaa5eb2be2bedb08a6a5787a5807ab",
+                "reference": "9fa359ff5ddaa5eb2be2bedb08a6a5787a5807ab",
                 "shasum": ""
             },
             "require": {
@@ -7131,7 +7021,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-19T09:23:29+00:00"
+            "time": "2020-11-10T12:53:30+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -7280,12 +7170,6 @@
             ],
             "description": "Looks up which function or method a line of code belongs to",
             "homepage": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
-            "funding": [
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
-            ],
             "time": "2020-09-28T05:30:19+00:00"
         },
         {
@@ -7524,12 +7408,6 @@
                 "environment",
                 "hhvm"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
-            ],
             "time": "2020-09-28T05:52:38+00:00"
         },
         {
@@ -7596,12 +7474,6 @@
             "keywords": [
                 "export",
                 "exporter"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
             ],
             "time": "2020-09-28T05:24:23+00:00"
         },
@@ -7924,12 +7796,6 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "funding": [
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
-            ],
             "time": "2020-09-28T06:45:17+00:00"
         },
         {
@@ -8025,12 +7891,6 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
-            "funding": [
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
-            ],
             "time": "2020-09-28T06:39:44+00:00"
         },
         {
@@ -8481,12 +8341,6 @@
                 }
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
-            "funding": [
-                {
-                    "url": "https://github.com/theseer",
-                    "type": "github"
-                }
-            ],
             "time": "2020-07-12T23:59:07+00:00"
         },
         {
@@ -8544,12 +8398,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "de9e586d576b19fe6773f3122df4211fd9860842"
+                "reference": "3a7eabdd1033f683bae83ceaee4ba9b962831a3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/de9e586d576b19fe6773f3122df4211fd9860842",
-                "reference": "de9e586d576b19fe6773f3122df4211fd9860842",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/3a7eabdd1033f683bae83ceaee4ba9b962831a3c",
+                "reference": "3a7eabdd1033f683bae83ceaee4ba9b962831a3c",
                 "shasum": ""
             },
             "require-dev": {
@@ -8582,7 +8436,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-11-05T09:46:49+00:00"
+            "time": "2020-11-16T08:09:16+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
@@ -8671,7 +8525,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "wmde/fundraising-address-change": 20,
         "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
