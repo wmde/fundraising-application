@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers\Donation;
 
-use Silex\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +13,6 @@ use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\FallbackRequestValueReader;
@@ -38,7 +36,7 @@ class AddDonationController {
 	public function index( FunFunFactory $ffFactory, Request $request, SessionInterface $session ): Response {
 		$this->session = $session;
 		$this->ffFactory = $ffFactory;
-		if ( !$this->isSubmissionAllowed( $request ) ) {
+		if ( !$ffFactory->getDonationSubmissionRateLimiter()->isSubmissionAllowed( $request ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
 
@@ -60,7 +58,7 @@ class AddDonationController {
 		$this->sendTrackingDataIfNeeded( $request, $responseModel );
 		$this->resetSessionState();
 
-		return $this->newHttpResponse( $responseModel );
+		return $this->newHttpResponse( $request, $responseModel );
 	}
 
 	private function sendTrackingDataIfNeeded( Request $request, AddDonationResponse $responseModel ) {
@@ -75,11 +73,11 @@ class AddDonationController {
 		$this->ffFactory->getPageViewTracker()->trackPaypalRedirection( $campaign, $keyword, $request->getClientIp() );
 	}
 
-	private function newHttpResponse( AddDonationResponse $responseModel ): Response {
+	private function newHttpResponse( Request $request, AddDonationResponse $responseModel ): Response {
 		switch ( $responseModel->getDonation()->getPaymentMethodId() ) {
 			case PaymentMethod::DIRECT_DEBIT:
 			case PaymentMethod::BANK_TRANSFER:
-				return new RedirectResponse(
+				$response = new RedirectResponse(
 					$this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
 						'show-donation-confirmation',
 						[
@@ -88,8 +86,9 @@ class AddDonationController {
 						]
 					)
 				);
+				break;
 			case PaymentMethod::PAYPAL:
-				return new RedirectResponse(
+				$response = new RedirectResponse(
 					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getAmount(),
@@ -98,8 +97,9 @@ class AddDonationController {
 						$responseModel->getAccessToken()
 					)
 				);
+				break;
 			case PaymentMethod::SOFORT:
-				return new RedirectResponse(
+				$response = new RedirectResponse(
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getBankTransferCode(),
@@ -108,13 +108,17 @@ class AddDonationController {
 						$responseModel->getAccessToken()
 					)
 				);
+				break;
 			case PaymentMethod::CREDIT_CARD:
-				return new RedirectResponse(
+				$response = new RedirectResponse(
 					$this->ffFactory->newCreditCardPaymentUrlGenerator()->buildUrl( $responseModel )
 				);
+				break;
 			default:
-				throw new \LogicException( 'This code should not be reached' );
+				throw new \LogicException( 'Unknown Payment method - can\'t determine response' );
 		}
+		$this->ffFactory->getDonationSubmissionRateLimiter()->setRateLimitCookie( $request, $response );
+		return $response;
 	}
 
 	private function createDonationRequest( Request $request ): AddDonationRequest {
@@ -194,23 +198,6 @@ class AddDonationController {
 			return intval( $request->get( 'amount' ) );
 		}
 		return $this->legacyRequestValueReader->getAmount();
-	}
-
-	private function isSubmissionAllowed( Request $request ): bool {
-		$lastSubmission = $request->cookies->get( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME, '' );
-		if ( $lastSubmission === '' ) {
-			return true;
-		}
-
-		$minNextTimestamp =
-			\DateTime::createFromFormat( ShowDonationConfirmationController::TIMESTAMP_FORMAT, $lastSubmission )
-			->add( new \DateInterval( $this->ffFactory->getDonationTimeframeLimit() ) );
-
-		if ( $minNextTimestamp > new \DateTime() ) {
-			return false;
-		}
-
-		return true;
 	}
 
 	private function newTrackingInfoFromRequest( Request $request ): DonationTrackingInfo {

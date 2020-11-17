@@ -8,11 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
-use WMDE\Fundraising\Frontend\App\Routes;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
@@ -26,14 +22,11 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
  */
 class ApplyForMembershipController {
 
-	public const SUBMISSION_COOKIE_NAME = 'memapp_timestamp';
-	public const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
-
 	private FunFunFactory $ffFactory;
 
 	public function index( FunFunFactory $ffFactory, Request $httpRequest ): Response {
 		$this->ffFactory = $ffFactory;
-		if ( !$this->isSubmissionAllowed( $httpRequest ) ) {
+		if ( !$ffFactory->getMembershipSubmissionRateLimiter()->isSubmissionAllowed( $httpRequest ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'membership_application_rejected_limit' ) );
 		}
 
@@ -49,7 +42,7 @@ class ApplyForMembershipController {
 			return $this->newFailureResponse( $httpRequest );
 		}
 
-		return $this->newHttpResponse( $responseModel );
+		return $this->newHttpResponse( $httpRequest, $responseModel );
 	}
 
 	private function callUseCase( Request $httpRequest ): ApplyForMembershipResponse {
@@ -132,23 +125,9 @@ class ApplyForMembershipController {
 		) );
 	}
 
-	private function isSubmissionAllowed( Request $request ): bool {
-		$lastSubmission = $request->cookies->get( self::SUBMISSION_COOKIE_NAME, '' );
-		if ( $lastSubmission === '' ) {
-			return true;
-		}
-
-		$minNextTimestamp = \DateTime::createFromFormat( self::TIMESTAMP_FORMAT, $lastSubmission )
-			->add( new \DateInterval( $this->ffFactory->getMembershipApplicationTimeframeLimit() ) );
-		if ( $minNextTimestamp > new \DateTime() ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	private function newHttpResponse( ApplyForMembershipResponse $responseModel ): Response {
-		switch ( $responseModel->getMembershipApplication()->getPayment()->getPaymentMethod()->getId() ) {
+	private function newHttpResponse( Request $request, ApplyForMembershipResponse $responseModel ): Response {
+		$paymentMethodId = $responseModel->getMembershipApplication()->getPayment()->getPaymentMethod()->getId();
+		switch ( $paymentMethodId ) {
 			case PaymentMethod::DIRECT_DEBIT:
 				$httpResponse = $this->newDirectDebitResponse( $responseModel );
 				break;
@@ -156,10 +135,10 @@ class ApplyForMembershipController {
 				$httpResponse = $this->newPayPalResponse( $responseModel );
 				break;
 			default:
-				throw new \LogicException( 'This code should not be reached' );
+				throw new \LogicException( 'Unknown payment method when generating membership response: ' . $paymentMethodId );
 		}
 
-		$this->addCookie( $httpResponse );
+		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $request, $httpResponse );
 
 		return $httpResponse;
 	}
@@ -184,15 +163,6 @@ class ApplyForMembershipController {
 				$responseModel->getMembershipApplication()->getPayment()->getIntervalInMonths(),
 				$responseModel->getUpdateToken(),
 				$responseModel->getAccessToken()
-			)
-		);
-	}
-
-	private function addCookie( Response $httpResponse ) {
-		$httpResponse->headers->setCookie(
-			$this->ffFactory->getCookieBuilder()->newCookie(
-				self::SUBMISSION_COOKIE_NAME,
-				date( self::TIMESTAMP_FORMAT )
 			)
 		);
 	}

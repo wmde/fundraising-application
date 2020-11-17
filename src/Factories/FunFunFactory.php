@@ -110,6 +110,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
+use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
@@ -212,6 +213,9 @@ use WMDE\FunValidators\Validators\TextPolicyValidator;
  * @license GPL-2.0-or-later
  */
 class FunFunFactory {
+
+	public const DONATION_RATE_LIMIT_COOKIE_NAME = 'donation_timestamp';
+	public const MEMBERSHIP_RATE_LIMIT_COOKIE_NAME = 'memapp_timestamp';
 
 	/**
 	 * @var array<string, mixed>
@@ -1383,17 +1387,9 @@ class FunFunFactory {
 		return new AmountPolicyValidator( 1000, 1000 );
 	}
 
-	public function getDonationTimeframeLimit(): string {
-		return $this->config['donation-timeframe-limit'];
-	}
-
 	public function newSystemMessageResponse( string $message ): string {
 		return $this->getLayoutTemplate( 'System_Message.html.twig' )
 			->render( [ 'message' => $message ] );
-	}
-
-	public function getMembershipApplicationTimeframeLimit(): string {
-		return $this->config['membership-application-timeframe-limit'];
 	}
 
 	private function newAddCommentValidator(): AddCommentValidator {
@@ -1581,6 +1577,24 @@ class FunFunFactory {
 				$this->config['cookie']['sameSite']
 			);
 		} );
+	}
+
+	public function getDonationSubmissionRateLimiter(): SubmissionRateLimit {
+		return new SubmissionRateLimit(
+			self::DONATION_RATE_LIMIT_COOKIE_NAME,
+			new \DateInterval( $this->config['donation-timeframe-limit'] ),
+			$this->getCookieBuilder(),
+			$this->getLogger()
+		);
+	}
+
+	public function getMembershipSubmissionRateLimiter(): SubmissionRateLimit {
+		return new SubmissionRateLimit(
+			self::MEMBERSHIP_RATE_LIMIT_COOKIE_NAME,
+			new \DateInterval( $this->config['membership-application-timeframe-limit'] ),
+			$this->getCookieBuilder(),
+			$this->getLogger()
+		);
 	}
 
 	public function getPaymentTypesSettings(): PaymentTypesSettings {

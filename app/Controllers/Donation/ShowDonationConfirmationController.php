@@ -18,9 +18,6 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class ShowDonationConfirmationController {
 
-	public const SUBMISSION_COOKIE_NAME = 'donation_timestamp';
-	public const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
-
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$useCase = $ffFactory->newGetDonationUseCase( $request->get( 'accessToken', '' ) );
 
@@ -33,7 +30,7 @@ class ShowDonationConfirmationController {
 		}
 
 		$ffFactory->getTranslationCollector()->addTranslationFile( $ffFactory->getI18nDirectory() . '/messages/paymentTypes.json' );
-		$httpResponse = new Response(
+		return new Response(
 			$ffFactory->newDonationConfirmationPresenter()->present(
 				$responseModel->getDonation(),
 				$responseModel->getUpdateToken(),
@@ -51,14 +48,6 @@ class ShowDonationConfirmationController {
 				)
 			)
 		);
-
-		if ( !$request->cookies->get( self::SUBMISSION_COOKIE_NAME ) ) {
-			$cookie = $ffFactory->getCookieBuilder();
-			$httpResponse->headers->setCookie(
-				$cookie->newCookie( self::SUBMISSION_COOKIE_NAME, date( self::TIMESTAMP_FORMAT ) )
-			);
-		}
-		return $httpResponse;
 	}
 
 }

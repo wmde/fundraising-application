@@ -160,26 +160,4 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( self::ACCESS_DENIED_TEXT, $responseContent );
 	}
 
-	public function testWhenDonationTimestampCookiePreexists_itIsNotOverwritten(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->newStoredDonation( $factory );
-
-			$client->getCookieJar()->set(
-				new Cookie( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME, 'some value' )
-			);
-			$client->request(
-				'GET',
-				'show-donation-confirmation',
-				[
-					'id' => $donation->getId(),
-					'accessToken' => self::CORRECT_ACCESS_TOKEN
-				]
-			);
-
-			$this->assertSame(
-				'some value',
-				$client->getCookieJar()->get( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME )->getValue()
-			);
-		} );
-	}
 }
