@@ -40,6 +40,7 @@ module.exports = {
 		'buefy',
 	],
 	devServer: {
+		disableHostCheck: true,
 		watchOptions: {
 			poll: false,
 		},

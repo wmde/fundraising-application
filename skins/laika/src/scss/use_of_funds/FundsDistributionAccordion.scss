@@ -1,0 +1,85 @@
+@import './variables';
+
+.funds_distribution_accordion {
+	padding-bottom: 16px;
+	display: block;
+
+	@media (min-width: $use_of_funds_breakpoint_m) {
+		display: none;
+	}
+
+	.funds_distribution_info_item {
+		&__title {
+			font-weight: bold;
+			cursor: pointer;
+			border-top: 1px solid #979797;
+			line-height: 36px;
+			position: relative;
+		}
+
+		&:last-child .funds_distribution_info_item__title {
+			border-bottom: 1px solid #979797;
+		}
+
+		&.active:last-child .funds_distribution_info_item__title {
+			border-bottom: 0;
+		}
+
+		&.active:last-child .funds_distribution_info_item__text {
+			border-bottom: 1px solid #979797;
+			padding-bottom: 1em;
+		}
+
+		&__title:after {
+			background: url( '../../assets/images/Chevron-left.svg' ) no-repeat center;
+			height: 36px;
+			width: 36px;
+			position: absolute;
+			content: '';
+			right: 0;
+			opacity: 0.5;
+			/* stylelint-disable-next-line function-parentheses-space-inside */
+			transform: rotate(-90deg);
+		}
+
+		&.active .funds_distribution_info_item__title:after {
+			/* stylelint-disable-next-line function-parentheses-space-inside */
+			transform: rotate(90deg);
+		}
+
+		&__text {
+			display: none;
+		}
+
+		&.active .funds_distribution_info_item__text {
+			display: block;
+		}
+
+		&--software {
+			.funds_distribution_info_item__title {
+				color: #808080;
+			}
+		}
+		&--international {
+			.funds_distribution_info_item__title {
+				color: #0ea789;
+			}
+		}
+		&--communities {
+			.funds_distribution_info_item__title {
+				color: #f24825;
+			}
+		}
+		&--society {
+			.funds_distribution_info_item__title {
+				color: #9410ac;
+			}
+		}
+		&--operative {
+			.funds_distribution_info_item__title {
+				color: #8ed14f;
+			}
+		}
+	}
+}
+
