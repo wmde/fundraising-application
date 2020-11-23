@@ -7,7 +7,7 @@ import App from '@/components/App.vue';
 import Component from '@/components/pages/PrivacyProtection.vue';
 import Sidebar from '@/components/layout/Sidebar.vue';
 
-const staticPage: any = document.getElementById( 'app' );
+const staticPage: any = document.getElementById( 'appdata' );
 const PAGE_IDENTIFIER = staticPage.getAttribute( 'data-page-id' );
 
 Vue.config.productionTip = false;
