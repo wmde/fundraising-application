@@ -17,7 +17,7 @@ Vue.use( VueI18n );
 
 clearPersistentData( new LocalStorageRepository(), LOCAL_STORAGE_DELETION_NAMESPACES );
 
-const pageData = new PageDataInitializer<any>( '#app' );
+const pageData = new PageDataInitializer<any>( '#appdata' );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,

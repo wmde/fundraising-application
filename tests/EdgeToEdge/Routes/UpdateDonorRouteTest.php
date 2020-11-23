@@ -264,7 +264,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	private function getDataApplicationVars( Crawler $crawler ): object {
 		/** @var \DOMElement $appElement */
-		$appElement = $crawler->filter( '#app' )->getNode( 0 );
+		$appElement = $crawler->filter( '#appdata' )->getNode( 0 );
 		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
 	}
 }

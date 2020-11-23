@@ -24,7 +24,7 @@ interface UpdateAddressModel {
 	addressValidationPatterns: AddressValidation
 }
 
-const pageData = new PageDataInitializer<UpdateAddressModel>( '#app' );
+const pageData = new PageDataInitializer<UpdateAddressModel>( '#appdata' );
 const store = createStore( [
 	createTrackFormErrorsPlugin( FORM_NAMESPACE ),
 ] );

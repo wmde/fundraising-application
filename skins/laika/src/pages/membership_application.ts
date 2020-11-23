@@ -44,7 +44,7 @@ interface MembershipAmountModel {
 	dateOfBirthValidationPattern: String,
 }
 
-const pageData = new PageDataInitializer<MembershipAmountModel>( '#app' );
+const pageData = new PageDataInitializer<MembershipAmountModel>( '#appdata' );
 
 const dataPersister = createDataPersister(
 	new LocalStorageRepository(),

@@ -41,7 +41,7 @@ interface DonationFormModel {
 	addressValidationPatterns: AddressValidation
 }
 
-const pageData = new PageDataInitializer<DonationFormModel>( '#app' );
+const pageData = new PageDataInitializer<DonationFormModel>( '#appdata' );
 const dataPersister = createDataPersister(
 	new LocalStorageRepository(),
 	FORM_NAMESPACE,

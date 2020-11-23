@@ -17,7 +17,7 @@ interface ContactFormModel {
 	contactFormValidationPatterns: ContactFormValidation
 }
 
-const pageData = new PageDataInitializer<ContactFormModel>( '#app' );
+const pageData = new PageDataInitializer<ContactFormModel>( '#appdata' );
 
 const i18n = new VueI18n( {
 	locale: DEFAULT_LOCALE,
