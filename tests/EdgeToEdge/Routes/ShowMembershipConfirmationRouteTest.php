@@ -38,29 +38,6 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 		return $membershipApplication;
 	}
 
-	public function testWhenMembershipApplicationTimestampCookiePreexists_itIsNotOverwritten(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$membershipApplication = $this->newStoredMembershipApplication( $factory );
-
-			$client->getCookieJar()->set(
-				new Cookie( ApplyForMembershipController::SUBMISSION_COOKIE_NAME, 'some value' )
-			);
-			$client->request(
-				Request::METHOD_GET,
-				self::PATH,
-				[
-					'id' => $membershipApplication->getId(),
-					'accessToken' => self::CORRECT_ACCESS_TOKEN
-				]
-			);
-
-			$this->assertSame(
-				'some value',
-				$client->getCookieJar()->get( ApplyForMembershipController::SUBMISSION_COOKIE_NAME )->getValue()
-			);
-		} );
-	}
-
 	public function testCallWithWrongAccessToken_deniedPageIsShown(): void {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$membershipApplication = $this->newStoredMembershipApplication( $factory );

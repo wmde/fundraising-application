@@ -279,7 +279,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->newValidHttpParameters()
 		);
 
-		$cookie = $client->getCookieJar()->get( 'memapp_timestamp' );
+		$cookie = $client->getCookieJar()->get( FunFunFactory::MEMBERSHIP_RATE_LIMIT_COOKIE_NAME );
 		$this->assertNotNull( $cookie );
 		$donationTimestamp = new \DateTime( $cookie->getValue() );
 		$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
@@ -514,7 +514,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$cookieJar = $client->getCookieJar();
 		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-		$cookie = $cookieJar->get( ApplyForMembershipController::SUBMISSION_COOKIE_NAME );
+		$cookie = $cookieJar->get( FunFunFactory::MEMBERSHIP_RATE_LIMIT_COOKIE_NAME );
 
 		$this->assertTrue( $cookie->isHttpOnly() );
 		$this->assertTrue( $cookie->isSecure() );

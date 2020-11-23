@@ -7,6 +7,8 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +26,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser as Client;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
+use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @license GPL-2.0-or-later
@@ -72,7 +75,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected(): void {
 		$client = $this->createClient();
-		$client->getCookieJar()->set( new Cookie( 'donation_timestamp', $this->getPastTimestamp() ) );
+		$client->getCookieJar()->set(
+			new Cookie( FunFunFactory::DONATION_RATE_LIMIT_COOKIE_NAME, $this->getPastTimestamp() )
+		);
 
 		$client->request(
 			'POST',
@@ -87,7 +92,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$client->getCookieJar()->set(
 				new Cookie(
-					'donation_timestamp',
+					FunFunFactory::DONATION_RATE_LIMIT_COOKIE_NAME,
 					$this->getPastTimestamp( 'PT35M' )
 				)
 			);
@@ -764,7 +769,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$cookieJar = $client->getCookieJar();
 		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-		$cookie = $cookieJar->get( ShowDonationConfirmationController::SUBMISSION_COOKIE_NAME );
+		$cookie = $cookieJar->get( FunFunFactory::DONATION_RATE_LIMIT_COOKIE_NAME );
 		$this->assertTrue( $cookie->isSecure() );
 		$this->assertTrue( $cookie->isHttpOnly() );
 	}
