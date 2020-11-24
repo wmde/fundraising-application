@@ -4,7 +4,14 @@
 {% set content = web_content("pages/#{page_id}") %}
 
 {% block main %}
-	<div id="app"
+	<div id="app">
+		<noscript>
+			<h2>{$ title $}</h2>
+			{$ content | raw $}
+		</noscript>
+	</div>
+	<div id="appdata"
+		class="is-hidden"
 		data-page-id="{$ page_id $}"
 		data-page-title="{$ title | e('html_attr') $}"
 		data-page-content="{$ content | e('html_attr') | raw $}"
@@ -13,10 +20,6 @@
 		data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}"
 		data-tracking-url="{$ piwik.baseUrl | e('html_attr') $}">
 	</div>
-	<noscript>
-		<h2>{$ title $}</h2>
-		{$ content | raw $}
-	</noscript>
 </div>
 {% endblock %}
 

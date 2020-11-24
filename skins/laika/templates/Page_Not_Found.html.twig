@@ -1,13 +1,16 @@
 {% extends 'Base_Layout.html.twig' %}
 
 {% block main %}
-	<div id="app" data-application-vars="{$ _context|json_encode|e('html_attr') $}"
-		 data-application-messages="{$ translations()|e('html_attr') $}"
-		 data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
+	<div id="app">
 		<noscript>
 			<h2>{$ site_metadata.page_not_found_header $}</h2>
 			<p>{$ site_metadata.page_not_found | raw $}<p>
 		</noscript>
+	</div>
+	<div id="appdata"
+		 data-application-vars="{$ _context|json_encode|e('html_attr') $}"
+		 data-application-messages="{$ translations()|e('html_attr') $}"
+		 data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
 	</div>
 {% endblock %}
 

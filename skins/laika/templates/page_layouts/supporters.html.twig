@@ -1,13 +1,16 @@
 {% extends 'Base_Layout.html.twig' %}
 
 {% block main %}
-	<div id="app" data-application-vars="{$ supporters|e('html_attr') $}"
-		 data-application-messages="{$ translations()|e('html_attr') $}"
-		 data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
+	<div id="app">
 		<noscript>
 			<h2>{$ site_metadata.no_javascript_header $}</h2>
 			{$ web_content( 'pages/no_javascript' ) $}
 		</noscript>
+	</div>
+	<div id="appdata" data-application-vars="{$ supporters|e('html_attr') $}"
+		 data-application-messages="{$ translations()|e('html_attr') $}"
+		 data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}"
+		 class="is-hidden">
 	</div>
 {% endblock %}
 
