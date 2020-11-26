@@ -8,6 +8,7 @@
         </noscript>
     </div>
     <div id="appdata"
+         class="is-hidden"
          data-application-vars="{$ use_of_funds_content|e('html_attr') $}"
          data-application-messages="{$ translations()|e('html_attr') $}"
          data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
