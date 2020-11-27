@@ -55,22 +55,9 @@ class AddDonationController {
 			);
 		}
 
-		$this->sendTrackingDataIfNeeded( $request, $responseModel );
 		$this->resetAddressChangeDataInSession();
 
 		return $this->newHttpResponse( $session, $responseModel );
-	}
-
-	private function sendTrackingDataIfNeeded( Request $request, AddDonationResponse $responseModel ) {
-		if ( $request->get( 'mbt', '' ) !== '1' || !$responseModel->getDonation()->hasExternalPayment() ) {
-			return;
-		}
-
-		$trackingCode = explode( '/', $request->attributes->get( 'trackingCode' ) );
-		$campaign = $trackingCode[0];
-		$keyword = $trackingCode[1] ?? '';
-
-		$this->ffFactory->getPageViewTracker()->trackPaypalRedirection( $campaign, $keyword, $request->getClientIp() );
 	}
 
 	private function newHttpResponse( SessionInterface $session, AddDonationResponse $responseModel ): Response {
