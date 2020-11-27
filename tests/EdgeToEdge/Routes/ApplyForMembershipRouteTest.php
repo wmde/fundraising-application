@@ -10,7 +10,6 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
@@ -271,7 +270,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( 'show-membership-confirmation', $response->headers->get( 'Location' ) );
 	}
 
-	public function testWhenApplicationGetsPersisted_timestampIsStoredInCookie(): void {
+	public function testWhenApplicationGetsPersisted_timestampIsStoredInSession(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -279,15 +278,15 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->newValidHttpParameters()
 		);
 
-		$cookie = $client->getCookieJar()->get( FunFunFactory::MEMBERSHIP_RATE_LIMIT_COOKIE_NAME );
-		$this->assertNotNull( $cookie );
-		$donationTimestamp = new \DateTime( $cookie->getValue() );
-		$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
+		$lastMembership = $this->getSessionValue( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY );
+		$this->assertNotNull( $lastMembership );
+		$this->assertEqualsWithDelta( time(), $lastMembership->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
 	}
 
 	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected(): void {
-		$client = $this->createClient();
-		$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp() ) );
+		$client = $this->createClient( [], function () {
+			$this->setSessionValue( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
+		} );
 
 		$client->request(
 			'POST',
@@ -299,8 +298,12 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected(): void {
-		$client = $this->createClient();
-		$client->getCookieJar()->set( new Cookie( 'memapp_timestamp', $this->getPastTimestamp( 'PT12M' ) ) );
+		$client = $this->createClient( [], function () {
+			$this->setSessionValue(
+				FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY,
+				( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT12M' ) )
+			);
+		} );
 
 		$client->request(
 			'POST',
@@ -309,10 +312,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertStringNotContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
-	}
-
-	private function getPastTimestamp( string $interval = 'PT10S' ): string {
-		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
 	}
 
 	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
@@ -500,24 +499,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		return new FixedPaymentDelayCalculator(
 			new \DateTime( self::FIRST_PAYMENT_DATE )
 		);
-	}
-
-	public function testCookieFlagsSecureAndHttpOnlyAreSet(): void {
-		$client = $this->createClient();
-		$client->setServerParameter( 'HTTPS', true );
-
-		$client->request(
-			'POST',
-			'apply-for-membership',
-			$this->newValidHttpParameters()
-		);
-
-		$cookieJar = $client->getCookieJar();
-		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-		$cookie = $cookieJar->get( FunFunFactory::MEMBERSHIP_RATE_LIMIT_COOKIE_NAME );
-
-		$this->assertTrue( $cookie->isHttpOnly() );
-		$this->assertTrue( $cookie->isSecure() );
 	}
 
 	public function testGivenDonationReceiptOptOutRequest_applicationHoldsThisValue(): void {

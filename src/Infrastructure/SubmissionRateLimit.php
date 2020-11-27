@@ -5,44 +5,25 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use DateInterval;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SubmissionRateLimit {
 
-	public const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
-
-	private string $cookieName;
-	private LoggerInterface $logger;
+	private string $sessionKey;
 	private DateInterval $intervalBetweenSubmissions;
-	private CookieBuilder $cookieBuilder;
 
-	public function __construct( string $cookieName, DateInterval $intervalBetweenSubmissions, CookieBuilder $cookieBuilder, LoggerInterface $logger ) {
-		$this->cookieName = $cookieName;
-		$this->logger = $logger;
+	public function __construct( string $sessionKey, DateInterval $intervalBetweenSubmissions ) {
+		$this->sessionKey = $sessionKey;
 		$this->intervalBetweenSubmissions = $intervalBetweenSubmissions;
-		$this->cookieBuilder = $cookieBuilder;
 	}
 
-	public function isSubmissionAllowed( Request $request ): bool {
-		$lastSubmission = $request->cookies->get( $this->cookieName, '' );
-		if ( $lastSubmission === '' ) {
+	public function isSubmissionAllowed( SessionInterface $session ): bool {
+		$lastSubmission = $session->get( $this->sessionKey, null );
+		if ( $lastSubmission === null || !( $lastSubmission instanceof \DateTimeImmutable ) ) {
 			return true;
 		}
 
-		$timeFromCookie = \DateTime::createFromFormat( self::TIMESTAMP_FORMAT, $lastSubmission );
-		if ( $timeFromCookie === false ) {
-			$this->logger->info( sprintf(
-				'Invalid time string in cookie "%s": "%s" does not match "%s"',
-				$this->cookieName,
-				$lastSubmission,
-				self::TIMESTAMP_FORMAT
-			) );
-			return true;
-		}
-
-		$minNextTimestamp = $timeFromCookie->add( $this->intervalBetweenSubmissions );
+		$minNextTimestamp = $lastSubmission->add( $this->intervalBetweenSubmissions );
 		if ( $minNextTimestamp > new \DateTime() ) {
 			return false;
 		}
@@ -50,11 +31,10 @@ class SubmissionRateLimit {
 		return true;
 	}
 
-	public function setRateLimitCookie( Request $request, Response $response ) {
-		if ( !$request->cookies->get( $this->cookieName ) ) {
-			$response->headers->setCookie(
-				$this->cookieBuilder->newCookie( $this->cookieName, date( self::TIMESTAMP_FORMAT ) )
-			);
+	public function setRateLimitCookie( SessionInterface $session ) {
+		$lastSubmission = $session->get( $this->sessionKey, null );
+		if ( $lastSubmission === null || !( $lastSubmission instanceof \DateTimeImmutable ) ) {
+			$session->set( $this->sessionKey, new \DateTimeImmutable() );
 		}
 	}
 

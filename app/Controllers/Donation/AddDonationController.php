@@ -36,7 +36,7 @@ class AddDonationController {
 	public function index( FunFunFactory $ffFactory, Request $request, SessionInterface $session ): Response {
 		$this->session = $session;
 		$this->ffFactory = $ffFactory;
-		if ( !$ffFactory->getDonationSubmissionRateLimiter()->isSubmissionAllowed( $request ) ) {
+		if ( !$ffFactory->getDonationSubmissionRateLimiter()->isSubmissionAllowed( $session ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
 
@@ -56,9 +56,9 @@ class AddDonationController {
 		}
 
 		$this->sendTrackingDataIfNeeded( $request, $responseModel );
-		$this->resetSessionState();
+		$this->resetAddressChangeDataInSession();
 
-		return $this->newHttpResponse( $request, $responseModel );
+		return $this->newHttpResponse( $session, $responseModel );
 	}
 
 	private function sendTrackingDataIfNeeded( Request $request, AddDonationResponse $responseModel ) {
@@ -73,11 +73,12 @@ class AddDonationController {
 		$this->ffFactory->getPageViewTracker()->trackPaypalRedirection( $campaign, $keyword, $request->getClientIp() );
 	}
 
-	private function newHttpResponse( Request $request, AddDonationResponse $responseModel ): Response {
+	private function newHttpResponse( SessionInterface $session, AddDonationResponse $responseModel ): Response {
+		$this->ffFactory->getDonationSubmissionRateLimiter()->setRateLimitCookie( $session );
 		switch ( $responseModel->getDonation()->getPaymentMethodId() ) {
 			case PaymentMethod::DIRECT_DEBIT:
 			case PaymentMethod::BANK_TRANSFER:
-				$response = new RedirectResponse(
+				return new RedirectResponse(
 					$this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
 						'show-donation-confirmation',
 						[
@@ -86,9 +87,8 @@ class AddDonationController {
 						]
 					)
 				);
-				break;
 			case PaymentMethod::PAYPAL:
-				$response = new RedirectResponse(
+				return new RedirectResponse(
 					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getAmount(),
@@ -97,9 +97,8 @@ class AddDonationController {
 						$responseModel->getAccessToken()
 					)
 				);
-				break;
 			case PaymentMethod::SOFORT:
-				$response = new RedirectResponse(
+				return new RedirectResponse(
 					$this->ffFactory->newSofortUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
 						$responseModel->getDonation()->getPayment()->getPaymentMethod()->getBankTransferCode(),
@@ -108,17 +107,14 @@ class AddDonationController {
 						$responseModel->getAccessToken()
 					)
 				);
-				break;
 			case PaymentMethod::CREDIT_CARD:
-				$response = new RedirectResponse(
+				return new RedirectResponse(
 					$this->ffFactory->newCreditCardPaymentUrlGenerator()->buildUrl( $responseModel )
 				);
 				break;
 			default:
 				throw new \LogicException( 'Unknown Payment method - can\'t determine response' );
 		}
-		$this->ffFactory->getDonationSubmissionRateLimiter()->setRateLimitCookie( $request, $response );
-		return $response;
 	}
 
 	private function createDonationRequest( Request $request ): AddDonationRequest {
@@ -222,7 +218,7 @@ class AddDonationController {
 	/**
 	 * Reset session data to prevent old donations from changing the application output due to old data leaking into the new session
 	 */
-	private function resetSessionState(): void {
+	private function resetAddressChangeDataInSession(): void {
 		$this->session->set(
 			UpdateDonorController::ADDRESS_CHANGE_SESSION_KEY,
 			false

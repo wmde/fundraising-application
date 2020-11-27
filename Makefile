@@ -68,11 +68,11 @@ covers:
 	docker-compose run --rm --no-deps app ./vendor/bin/covers-validator
 
 phpunit:
-	docker-compose run --rm app ./vendor/bin/phpunit $(TEST_DIR)
+	docker-compose run --rm app php -d memory_limit=1G vendor/bin/phpunit $(TEST_DIR)
 
 phpunit-with-coverage:
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm app_debug ./vendor/bin/phpunit --dump-xdebug-filter var/xdebug-filter.php
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm app_debug ./vendor/bin/phpunit --prepend var/xdebug-filter.php --configuration=phpunit.xml.dist --stop-on-error --coverage-clover coverage.clover
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm app_debug php -d memory_limit=1G vendor/bin/phpunit --dump-xdebug-filter var/xdebug-filter.php
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm app_debug php -d memory_limit=1G vendor/bin/phpunit --prepend var/xdebug-filter.php --configuration=phpunit.xml.dist --stop-on-error --coverage-clover coverage.clover
 
 phpunit-system:
 	docker-compose run --rm app ./vendor/bin/phpunit tests/System/

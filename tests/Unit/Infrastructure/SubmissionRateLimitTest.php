@@ -3,87 +3,85 @@
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LogLevel;
-use Psr\Log\NullLogger;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
-use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit
  */
 class SubmissionRateLimitTest extends TestCase {
 
-	public function testSubmissionAllowedWhenCookieIsEmpty(): void {
-		$cookieBuilder = $this->createMock( CookieBuilder::class );
-		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ), $cookieBuilder, new NullLogger() );
-		$request = new Request();
+	public function testSubmissionAllowedWhenNoPreviousSubmissionInSession(): void {
+		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ) );
+		$session = $this->createMock( SessionInterface::class );
+		$session->expects( $this->once() )->method( 'get' )->willReturn( null );
 
-		$this->assertTrue( $limit->isSubmissionAllowed( $request ) );
+		$this->assertTrue( $limit->isSubmissionAllowed( $session ) );
 	}
 
-	public function testSubmissionAllowedWhenCookieHasInvalidTimestamp(): void {
-		$cookieBuilder = $this->createMock( CookieBuilder::class );
-		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ), $cookieBuilder, new NullLogger() );
-		$request = new Request( [], [], [], [ 'donation_timestamp' => 'Now is not the time!' ] );
+	public function testSubmissionAllowedWhenSessionHasInvalidClass(): void {
+		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ) );
+		$session = $this->createMock( SessionInterface::class );
+		$session->expects( $this->once() )->method( 'get' )->willReturn( 'Now is not the time!' );
 
-		$this->assertTrue( $limit->isSubmissionAllowed( $request ) );
+		$this->assertTrue( $limit->isSubmissionAllowed( $session ) );
 	}
 
-	public function testSubmissionAllowedWhenCookieHasExpiredTimestamp(): void {
-		$cookieBuilder = $this->createMock( CookieBuilder::class );
-		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ), $cookieBuilder, new NullLogger() );
-		$request = new Request( [], [], [], [ 'donation_timestamp' => date( SubmissionRateLimit::TIMESTAMP_FORMAT, time() - 7200 ) ] );
+	public function testSubmissionAllowedWhenSessionHasExpiredTimestamp(): void {
+		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ) );
+		$session = $this->createMock( SessionInterface::class );
+		$session->expects( $this->once() )
+			->method( 'get' )
+			->willReturn(
+				( new \DateTimeImmutable() )
+					->sub( new \DateInterval( 'PT2H' ) )
+			);
 
-		$this->assertTrue( $limit->isSubmissionAllowed( $request ) );
+		$this->assertTrue( $limit->isSubmissionAllowed( $session ) );
 	}
 
-	public function testSubmissionForbiddenWhenCookieTimestampIsInRange(): void {
-		$cookieBuilder = $this->createMock( CookieBuilder::class );
-		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ), $cookieBuilder, new NullLogger() );
-		$request = new Request( [], [], [], [ 'donation_timestamp' => date( SubmissionRateLimit::TIMESTAMP_FORMAT, time() - 120 ) ] );
+	public function testSubmissionForbiddenWhenSessionTimestampIsInRange(): void {
+		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ) );
+		$session = $this->createMock( SessionInterface::class );
 
-		$this->assertFalse( $limit->isSubmissionAllowed( $request ) );
+		$session->expects( $this->once() )
+			->method( 'get' )
+			->willReturn(
+				( new \DateTimeImmutable() )
+					->sub( new \DateInterval( 'PT120S' ) )
+			);
+
+		$this->assertFalse( $limit->isSubmissionAllowed( $session ) );
 	}
 
-	public function testWhenTimestampOfPreviousDonationIsFaulty_timestampGetsLogged(): void {
-		$cookieBuilder = $this->createMock( CookieBuilder::class );
-		$logger = new LoggerSpy();
-		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ), $cookieBuilder, $logger );
-		$request = new Request( [], [], [], [ 'donation_timestamp' => 'Now is not the time!' ] );
+	public function testWhenSessionContainsNoTimestampItSetsTimestampToCurrent(): void {
+		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ) );
+		$session = $this->createMock( SessionInterface::class );
+		$session->method( 'get' )->willReturn( null );
+		$session = $this->createMock( SessionInterface::class );
 
-		$limit->isSubmissionAllowed( $request );
+		$session->expects( $this->once() )
+			->method( 'set' )
+			->with(
+				$this->equalTo( 'donation_timestamp' ),
+				$this->callback( function ( \DateTimeImmutable $date ) {
+					$now = time();
+					// use delta of 5 seconds to make this immune against slow tests
+					return $now - $date->getTimestamp() < 5 && $now - $date->getTimestamp() >= 0;
+				} )
+			);
 
-		$call = $logger->getFirstLogCall();
-		$this->assertSame( LogLevel::INFO, $call->getLevel() );
-		$this->assertStringContainsString( 'Now is not the time', $call->getMessage() );
+		$limit->setRateLimitCookie( $session );
 	}
 
-	public function testWhenRequestHasNoCookieItSetsRateLimitCookieWithCurrentDateValue(): void {
-		$cookieBuilder = new CookieBuilder( time() + 10000, '/', 'example.com', true, false, false, null );
-		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ), $cookieBuilder, new NullLogger() );
-		$response = new Response();
-		$request = new Request();
+	public function testWhenSessionContainsTimestamp_itIsNotOverwritten(): void {
+		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ) );
+		$session = $this->createMock( SessionInterface::class );
+		$session->method( 'get' )->willReturn( new \DateTimeImmutable() );
 
-		$limit->setRateLimitCookie( $request, $response );
+		$session->expects( $this->never() )->method( 'set' );
 
-		$limitCookie = $response->headers->getCookies()[0];
-		$this->assertSame( 'donation_timestamp', $limitCookie->getName() );
-		$this->assertStringStartsWith( date( SubmissionRateLimit::TIMESTAMP_FORMAT, time() ), $limitCookie->getValue() );
-	}
-
-	public function testWhenDonationTimestampCookieExists_itIsNotOverwritten(): void {
-		$cookieBuilder = $this->createMock( CookieBuilder::class );
-		$cookieBuilder->expects( $this->never() )->method( 'newCookie' );
-
-		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ), $cookieBuilder, new NullLogger() );
-		$response = new Response();
-		$request = new Request( [], [], [], [ 'donation_timestamp' => '2020-11-11 11:11:00' ] );
-
-		$limit->setRateLimitCookie( $request, $response );
+		$limit->setRateLimitCookie( $session );
 	}
 
 }
