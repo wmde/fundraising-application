@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser;
@@ -20,6 +21,8 @@ abstract class WebRouteTestCase extends TestCase {
 	protected const DISABLE_DEBUG = false;
 	protected const ENABLE_DEBUG = true;
 
+	protected Application $app;
+
 	/**
 	 * Initializes a new test environment and returns a HttpKernel client to
 	 * make requests to the application.
@@ -31,14 +34,13 @@ abstract class WebRouteTestCase extends TestCase {
 	 */
 	protected function createClient( array $config = [], callable $onEnvironmentCreated = null ): HttpKernelBrowser {
 		$testEnvironment = TestEnvironment::newInstance( $config );
+		$app = $this->createApplication( $testEnvironment->getFactory() );
 
 		if ( is_callable( $onEnvironmentCreated ) ) {
 			call_user_func( $onEnvironmentCreated, $testEnvironment->getFactory(), $testEnvironment->getConfig() );
 		}
 
-		return new HttpKernelBrowser(
-			$this->createApplication( $testEnvironment->getFactory() )
-		);
+		return new HttpKernelBrowser( $app );
 	}
 
 	/**
@@ -70,11 +72,11 @@ abstract class WebRouteTestCase extends TestCase {
 	// @codingStandardsIgnoreStart
 	private function createApplication( FunFunFactory $ffFactory ): Application {
 		// @codingStandardsIgnoreEnd
-		$app = Bootstrap::initializeApplication( $ffFactory );
+		$this->app = Bootstrap::initializeApplication( $ffFactory );
 
-		$app['session.test'] = true;
+		$this->app['session.test'] = true;
 
-		return $app;
+		return $this->app;
 	}
 
 	protected function assert404( Response $response ): void {
@@ -128,5 +130,35 @@ abstract class WebRouteTestCase extends TestCase {
 		$json = $initialFormValues->attr( 'data-initial-form-values' );
 		$data = json_decode( $json, true );
 		$this->assertEquals( $expected, $data );
+	}
+
+	/**
+	 * @todo Change code to work with Symfony DI when switch to Symfony is done
+	 * @param string $key
+	 * @return mixed
+	 */
+	protected function getSessionValue( string $key ) {
+		if ( !( $this->app instanceof Application ) ) {
+			$this->fail( 'Application was not initialized. Call createClient or createEnvironment' );
+			return null;
+		}
+		/** @var SessionInterface $session */
+		$session = $this->app['session'];
+		return $session->get( $key, null );
+	}
+
+	/**
+	 * @todo Change code to work with Symfony DI when switch to Symfony is done
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public function setSessionValue( string $key, $value ): void {
+		if ( !( $this->app instanceof Application ) ) {
+			$this->fail( 'Application was not initialized. Call createClient or createEnvironment' );
+			return;
+		}
+		/** @var SessionInterface $session */
+		$session = $this->app['session'];
+		$session->set( $key, $value );
 	}
 }

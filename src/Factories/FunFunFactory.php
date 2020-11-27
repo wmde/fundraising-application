@@ -214,8 +214,8 @@ use WMDE\FunValidators\Validators\TextPolicyValidator;
  */
 class FunFunFactory {
 
-	public const DONATION_RATE_LIMIT_COOKIE_NAME = 'donation_timestamp';
-	public const MEMBERSHIP_RATE_LIMIT_COOKIE_NAME = 'memapp_timestamp';
+	public const DONATION_RATE_LIMIT_SESSION_KEY = 'donation_timestamp';
+	public const MEMBERSHIP_RATE_LIMIT_SESSION_KEY = 'memapp_timestamp';
 
 	/**
 	 * @var array<string, mixed>
@@ -1581,19 +1581,15 @@ class FunFunFactory {
 
 	public function getDonationSubmissionRateLimiter(): SubmissionRateLimit {
 		return new SubmissionRateLimit(
-			self::DONATION_RATE_LIMIT_COOKIE_NAME,
-			new \DateInterval( $this->config['donation-timeframe-limit'] ),
-			$this->getCookieBuilder(),
-			$this->getLogger()
+			self::DONATION_RATE_LIMIT_SESSION_KEY,
+			new \DateInterval( $this->config['donation-timeframe-limit'] )
 		);
 	}
 
 	public function getMembershipSubmissionRateLimiter(): SubmissionRateLimit {
 		return new SubmissionRateLimit(
-			self::MEMBERSHIP_RATE_LIMIT_COOKIE_NAME,
-			new \DateInterval( $this->config['membership-application-timeframe-limit'] ),
-			$this->getCookieBuilder(),
-			$this->getLogger()
+			self::MEMBERSHIP_RATE_LIMIT_SESSION_KEY,
+			new \DateInterval( $this->config['membership-application-timeframe-limit'] )
 		);
 	}
 

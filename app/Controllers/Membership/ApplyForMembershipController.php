@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Membership;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
@@ -24,9 +25,9 @@ class ApplyForMembershipController {
 
 	private FunFunFactory $ffFactory;
 
-	public function index( FunFunFactory $ffFactory, Request $httpRequest ): Response {
+	public function index( FunFunFactory $ffFactory, Request $httpRequest, SessionInterface $session ): Response {
 		$this->ffFactory = $ffFactory;
-		if ( !$ffFactory->getMembershipSubmissionRateLimiter()->isSubmissionAllowed( $httpRequest ) ) {
+		if ( !$ffFactory->getMembershipSubmissionRateLimiter()->isSubmissionAllowed( $session ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'membership_application_rejected_limit' ) );
 		}
 
@@ -42,7 +43,7 @@ class ApplyForMembershipController {
 			return $this->newFailureResponse( $httpRequest );
 		}
 
-		return $this->newHttpResponse( $httpRequest, $responseModel );
+		return $this->newHttpResponse( $session, $responseModel );
 	}
 
 	private function callUseCase( Request $httpRequest ): ApplyForMembershipResponse {
@@ -125,22 +126,17 @@ class ApplyForMembershipController {
 		) );
 	}
 
-	private function newHttpResponse( Request $request, ApplyForMembershipResponse $responseModel ): Response {
+	private function newHttpResponse( SessionInterface $session, ApplyForMembershipResponse $responseModel ): Response {
+		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $session );
 		$paymentMethodId = $responseModel->getMembershipApplication()->getPayment()->getPaymentMethod()->getId();
 		switch ( $paymentMethodId ) {
 			case PaymentMethod::DIRECT_DEBIT:
-				$httpResponse = $this->newDirectDebitResponse( $responseModel );
-				break;
+				return $this->newDirectDebitResponse( $responseModel );
 			case PaymentMethod::PAYPAL:
-				$httpResponse = $this->newPayPalResponse( $responseModel );
-				break;
+				return $this->newPayPalResponse( $responseModel );
 			default:
 				throw new \LogicException( 'Unknown payment method when generating membership response: ' . $paymentMethodId );
 		}
-
-		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $request, $httpResponse );
-
-		return $httpResponse;
 	}
 
 	private function newDirectDebitResponse( ApplyForMembershipResponse $responseModel ): Response {
