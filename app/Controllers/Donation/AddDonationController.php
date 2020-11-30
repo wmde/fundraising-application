@@ -111,7 +111,6 @@ class AddDonationController {
 				return new RedirectResponse(
 					$this->ffFactory->newCreditCardPaymentUrlGenerator()->buildUrl( $responseModel )
 				);
-				break;
 			default:
 				throw new \LogicException( 'Unknown Payment method - can\'t determine response' );
 		}
