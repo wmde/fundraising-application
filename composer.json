@@ -138,7 +138,10 @@
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\": "src/",
 			"WMDE\\Fundraising\\Frontend\\App\\": "app/",
-			"WMDE\\Fundraising\\Frontend\\Cli\\": "cli/"
+			"WMDE\\Fundraising\\Frontend\\Cli\\": "cli/",
+			"DoctrineMigrations\\": [
+				"src/BucketTesting/migrations/"
+			]
 		}
 	},
 	"autoload-dev": {
