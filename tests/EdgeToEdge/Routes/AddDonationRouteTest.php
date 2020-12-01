@@ -672,29 +672,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenMobileTrackingIsRequested_piwikTrackerIsCalledForPaypalPayment(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setNullMessenger();
-			$client->followRedirects( false );
-
-			$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
-			$tracker->expects( $this->once() )
-				->method( 'trackPaypalRedirection' )
-				->with( 'test', 'gelb', '10.1.2.3' );
-			$factory->setPageViewTracker( $tracker );
-
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidMobilePayPalInput(),
-				[],
-				[ 'REMOTE_ADDR' => '10.1.2.3' ]
-			);
-
-			$client->getResponse();
-		} );
-	}
-
 	private function newValidMobilePayPalInput(): array {
 		return [
 			'amount' => '1234',
@@ -706,28 +683,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			// 'mbt' is the mobile tracking param that triggers a redirect to paypal for anonymous donations
 			'mbt' => '1'
 		];
-	}
-
-	public function testWhenMobileTrackingIsRequested_piwikTrackerIsNotCalledForNonExternalPayment(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
-			$client->followRedirects( false );
-
-			$tracker = $this->getMockBuilder( PageViewTracker::class )->disableOriginalConstructor()->getMock();
-			$tracker->expects( $this->never() )
-				->method( 'trackPaypalRedirection' );
-			$factory->setPageViewTracker( $tracker );
-
-			$client->request(
-				'POST',
-				'/donation/add',
-				array_merge(
-					$this->newValidBankTransferInput(),
-					[ 'mbt' => '1' ]
-				)
-			);
-
-			$client->getResponse();
-		} );
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {

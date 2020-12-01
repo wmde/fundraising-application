@@ -101,15 +101,12 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubj
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckBankDataGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\PiwikServerSideTracker;
-use WMDE\Fundraising\Frontend\Infrastructure\ServerSideTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
@@ -1481,24 +1478,6 @@ class FunFunFactory {
 
 	public function newPageNotFoundHtmlPresenter(): PageNotFoundPresenter {
 		return new PageNotFoundPresenter( $this->getLayoutTemplate( 'Page_Not_Found.html.twig' ) );
-	}
-
-	public function setPageViewTracker( PageViewTracker $tracker ): void {
-		$this->sharedObjects[PageViewTracker::class] = $tracker;
-	}
-
-	public function getPageViewTracker(): PageViewTracker {
-		return $this->createSharedObject( PageViewTracker::class, function () {
-			return new PageViewTracker( $this->newServerSideTracker(), $this->config['piwik']['siteUrlBase'] );
-		} );
-	}
-
-	public function newServerSideTracker(): ServerSideTracker {
-		// the "https:" prefix does NOT get any slashes because baseURL is stored in a protocol-agnostic way
-		// (e.g. "//tracking.wikimedia.de" )
-		return new PiwikServerSideTracker(
-			new \PiwikTracker( $this->config['piwik']['siteId'], 'https:' . $this->config['piwik']['baseUrl'] )
-		);
 	}
 
 	public function getI18nDirectory(): string {
