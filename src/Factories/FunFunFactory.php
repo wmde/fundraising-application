@@ -392,7 +392,7 @@ class FunFunFactory {
 
 	public function getApplicationOfFundsContent(): string {
 		return ( new JsonStringReader(
-			$this->getI18nDirectory() . '/data/useOfFunds.json',
+			$this->getI18nDirectory() . '/data/use_of_funds_content.json',
 			new SimpleFileFetcher()
 		) )->readAndValidateJson();
 	}

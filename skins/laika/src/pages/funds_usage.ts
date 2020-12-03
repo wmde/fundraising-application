@@ -3,6 +3,7 @@ import VueI18n from 'vue-i18n';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
+import VueCompositionApi from '@vue/composition-api';
 
 import Component from '@/components/pages/UseOfFunds.vue';
 
@@ -10,6 +11,7 @@ const PAGE_IDENTIFIER = 'use-of-funds',
 	IS_FULLWIDTH_PAGE = true;
 
 Vue.config.productionTip = false;
+Vue.use( VueCompositionApi );
 Vue.use( VueI18n );
 
 const pageData = new PageDataInitializer<any>( '#appdata' );
@@ -34,6 +36,9 @@ new Vue( {
 		h( Component, {
 			props: {
 				content: pageData.applicationVars,
+				assetsPath: pageData.assetsPath,
+				// TODO propagate locale from application vars
+				locale: 'de',
 			},
 		} ),
 	] ),

@@ -1,0 +1,73 @@
+@import './variables';
+.company_budgets {
+	table-layout: fixed;
+	width: 100%;
+
+	&__col--company {
+		width: 30%;
+		vertical-align: top;
+		@media ( min-width: $use_of_funds_breakpoint_s ) {
+			width: 17%;
+		}
+	}
+	&__col--graph {
+		position: relative;
+	}
+	&__col--budget_number {
+		white-space: nowrap;
+		text-align: right;
+		vertical-align: top;
+		font-variant-numeric: tabular-nums;
+
+		@media ( min-width: $use_of_funds_breakpoint_s ) {
+			width: 20%;
+		}
+	}
+
+	&__col--citation {
+		display: none;
+
+		@media ( min-width: $use_of_funds_breakpoint_s ) {
+			display: table-cell;
+			width: 10%;
+			vertical-align: top;
+			text-align: right;
+		}
+	}
+
+	&__number {
+		display: block;
+	}
+	&__inline-citation {
+		display: block;
+		line-height: 14px;
+		@media ( min-width: $use_of_funds_breakpoint_s ) {
+			display: none;
+		}
+	}
+
+	&__citation_link {
+		font-size: 12px;
+		color: #9b9b9b;
+	}
+
+	&__budget_line {
+		height: 9px;
+		display: inline-block;
+		background-color: #cecece;
+		position: absolute;
+		top: 5px;
+		min-width: 3px;
+	}
+
+	&__row--wikipedia {
+
+		.company_budgets__col--company {
+			color: #4a90e2;
+		}
+
+		.company_budgets__budget_line {
+			background-color: #4a90e2;
+		}
+	}
+}

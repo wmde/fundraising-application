@@ -1,64 +1,128 @@
 <template>
-	<div class="columns has-padding-18 has-background-bright use-of-funds">
-		<div class="column is-two-thirds">
-			<h1 class="title is-1 has-margin-bottom-18">{{ $t('use_of_funds_header') }}*</h1>
-			<p>{{ $t('use_of_funds_description') }}</p>
-			<organization-section v-for="(org, index) in content.organizations"
-								:title="org.title"
-								:overallAmount="org.overallAmount"
-								:description="org.description"
-								:funds="org.funds"
-								:currency-symbol="org.currencySymbol"
-								:key="index">
-			</organization-section>
-			<div style="font-size: small; margin-top: 20px;">*) vorläufig</div>
+	<div class="use_of_funds">
+		<div class="use_of_funds__section">
+			<div class="use_of_funds__section_intro">
+				<h1 class="title is-1 has-margin-bottom-18">{{ content.intro.headline }}</h1>
+				<div>{{ content.intro.text }}</div>
+			</div>
 		</div>
-		<div class="column is-one-third">
-			<ul class="list-menu list-unstyled">
-				<li>
-					<a class="organization-link" :href="content.organizations.wmde.url">
-						<span>{{ $t('year_plan_wmde') }}</span>
-						<span>{{ content.organizations.wmde.title }}</span>
-					</a>
-				</li>
-				<li>
-					<a class="organization-link" :href="content.organizations.wmf.url">
-						<span>{{ $t('year_plan_wmf')  }}</span>
-						<span>{{ content.organizations.wmf.title }}</span>
-					</a>
-				</li>
-			</ul>
+
+		<FundsDistributionAccordion :application-of-funds-data="content.applicationOfFundsData" />
+		<FundsDistributionInfo :application-of-funds-data="content.applicationOfFundsData" />
+
+		<div class="use_of_funds__section use_of_funds__section--two-cols-info">
+			<div class="use_of_funds__column--info" style="display:none">
+				<span>{{ content.detailedReports.international.intro }}</span>
+				<a :href="content.detailedReports.international.linkUrl" target="_blank">
+					{{ content.detailedReports.international.linkName }}
+				</a>
+			</div>
+			<div class="use_of_funds__column--info">
+				<span>{{ content.detailedReports.germany.intro }}</span>
+				<a :href="content.detailedReports.germany.linkUrl" target="_blank">
+					{{ content.detailedReports.germany.linkName }}
+				</a>
+			</div>
 		</div>
+		<div class="use_of_funds__section use_of_funds__section--two-cols">
+			<div class="use_of_funds__column">
+				<div class="use_of_funds__benefits_list">
+					<h2>{{ content.benefitsList.headline }}</h2>
+					<ul class="use_of_funds__icon-list">
+						<li v-for="benefit in content.benefitsList.benefits"
+								:class="'use_of_funds__icon-list_item--' + benefit.icon"
+								:key=benefit.text>
+							{{ benefit.text }}
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="use_of_funds__column">
+				<div class="use_of_funds__comparison">
+					<h2>{{ content.comparison.headline }}</h2>
+					<div>
+						<p v-for="text in content.comparison.paragraphs" :key="text">{{ text }}</p>
+						<h3>{{ content.comparison.subhead }}</h3>
+					</div>
+					<CompanyBudgets
+							:companies="content.comparison.companies"
+							:citation-label="content.comparison.citationLabel"
+							:locale="locale" />
+				</div>
+			</div>
+		</div>
+		<div class="use_of_funds__section use_of_funds__section--orgchart">
+			<div class="use_of_funds__orgchart_text">
+				<h2>{{ content.orgchart.headline }}</h2>
+				<div>
+					<p><span v-for="part in highlightedOrganization" :key="part.text" :class="part.className">{{ ' ' }}{{ part.text }}{{ ' ' }}</span> </p>
+					<p v-for="para in content.orgchart.paragraphs.slice( 1 )" :key="para">{{ para }}</p>
+				</div>
+			</div>
+			<div class="use_of_funds__orgchart_image">
+				<img :src="assetsPath + '/images/WMDE-funds-forwarding.gif'" />
+			</div>
+		</div>
+		<div class="banner_model__section use_of_funds__section--call_to_action">
+			<button class="use_of_funds__button" onclick="location.href='/'">{{ content.callToAction }}</button>
+		</div>
+		<div style="text-align: left; font-size: small; padding-bottom: 16px;">{{ content.provisional }}</div>
 	</div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import OrganizationSection from '@/components/pages/use_of_funds/OrganizationSection.vue';
-import { UseOfFundsContent } from '@/view_models/useOfFunds';
 
-export default Vue.extend( {
+import CompanyBudgets from '@/components/pages/use_of_funds/CompanyBudgets.vue';
+import FundsDistributionAccordion from '@/components/pages/use_of_funds/FundsDistributionAccordion.vue';
+import FundsDistributionInfo from '@/components/pages/use_of_funds/FundsDistributionInfo.vue';
+import { defineComponent, computed } from '@vue/composition-api';
+
+function splitStringAt( splitWords: string[], str: string ) {
+	const rx = new RegExp( '(' + splitWords.join( '|' ) + ')', 'g' );
+	return str.split( rx ).filter( w => w !== '' );
+}
+
+export default defineComponent( {
 	name: 'use-of-funds',
 	components: {
-		OrganizationSection,
+		CompanyBudgets,
+		FundsDistributionAccordion,
+		FundsDistributionInfo,
 	},
 	props: {
 		content: {
-			type: Object as () => UseOfFundsContent,
+			type: Object,
+			required: true,
+		},
+		locale: {
+			type: String,
+			required: true,
+		},
+		assetsPath: {
+			type: String,
+			required: true,
 		},
 	},
-	data: function () {
+	setup( props ) {
+		const highlightedOrganization = computed( () => {
+			const organizationClassLookup = new Map<string, string>( Object.entries( props.content.orgchart.organizationClasses ) );
+			const getHighlightClassName = ( part: string ) => organizationClassLookup.has( part ) ?
+				`use_of_funds__org use_of_funds__org--${organizationClassLookup.get( part )}` : '';
+
+			return splitStringAt( Array.from( organizationClassLookup.keys() ), props.content.orgchart.paragraphs[ 0 ] ).map( part => {
+				return { text: part, className: getHighlightClassName( part ) };
+			} );
+		} );
 		return {
-			title: '',
-			overallAmount: '',
-			funds: {},
+			highlightedOrganization,
 		};
 	},
 } );
 </script>
 
 <style lang="scss">
-	.organization-link > span {
-		display: inline-block;
-	}
+@import '../../scss/use_of_funds/FundsContent';
+@import '../../scss/use_of_funds/CompanyBudgets';
+@import'../../scss/use_of_funds/FundsDistributionInfo';
+@import'../../scss/use_of_funds/FundsDistributionAccordion';
 </style>
