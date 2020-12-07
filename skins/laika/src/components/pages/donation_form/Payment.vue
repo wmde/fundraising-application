@@ -32,7 +32,7 @@
 					:payment-types="paymentTypes"
 					:error="typeIsValid ? '' : $t('donation_form_payment_type_error')"
 					:title="$t('donation_form_payment_type_title')"
-					:disabled-payment-types="[]"
+					:disabled-payment-types="emailOnlyDisabledPaymentTypes"
 					slot="campaigns.address_provision_options.provisional_address_options"
 					v-on:payment-type-selected="sendTypeToStore"
 			></payment-type>
@@ -74,6 +74,12 @@ export default Vue.extend( {
 					disabledTypes.push( 'SUB' );
 				}
 				return disabledTypes;
+			},
+			emailOnlyDisabledPaymentTypes: ( state: any ) => {
+				if ( state[ NS_PAYMENT ].values.interval !== '0' ) {
+					return [ 'SUB' ];
+				}
+				return [];
 			},
 			disabledPaymentIntervals: function ( state: any ) {
 				var disabledIntervals : String[] = [];
