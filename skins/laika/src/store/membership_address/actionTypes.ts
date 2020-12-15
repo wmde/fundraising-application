@@ -7,4 +7,6 @@ export const setAddressField = 'setAddressField';
 export const setAddressType = 'setAddressType';
 export const setDate = 'setDate';
 export const setReceiptOptOut = 'setReceiptOptOut';
+export const setIncentiveChecked = 'setIncentiveChecked';
+export const setIncentive = 'setIncentive';
 export const setMembershipType = 'setMembershipType';

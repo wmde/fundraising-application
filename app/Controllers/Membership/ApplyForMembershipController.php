@@ -92,6 +92,9 @@ class ApplyForMembershipController {
 
 		$request->setOptsIntoDonationReceipt( $httpRequest->request->getBoolean( 'donationReceipt', true ) );
 
+		// TODO: Activate this when bounded context is ready
+		//       $request->setIncentive( $httpRequest->request->get( 'incentive', '' ) );
+
 		$request->setBankData( $this->createBakData( $httpRequest ) );
 
 		return $request;

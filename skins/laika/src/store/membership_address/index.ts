@@ -13,6 +13,8 @@ export default function (): Module<MembershipAddressState, any> {
 		addressType: AddressTypeModel.PERSON,
 		membershipType: MembershipTypeModel.SUSTAINING,
 		receiptOptOut: false,
+		incentiveChecked: true,
+		incentive: '',
 		values: {
 			salutation: '',
 			title: '',

@@ -8,6 +8,8 @@ import {
 	validateAddressField,
 	setAddressField,
 	setReceiptOptOut,
+	setIncentiveChecked,
+	setIncentive,
 	setDate,
 	setMembershipType,
 	validateCountry,
@@ -34,6 +36,8 @@ import {
 	SET_MEMBERSHIP_TYPE,
 	SET_MEMBERSHIP_TYPE_VALIDITY,
 	SET_RECEIPT_OPTOUT,
+	SET_INCENTIVE_CHECKED,
+	SET_INCENTIVE,
 	VALIDATE_INPUT,
 } from '@/store/membership_address/mutationTypes';
 import { Validity } from '@/view_models/Validity';
@@ -56,6 +60,7 @@ export const actions = {
 		}
 
 		context.commit( SET_RECEIPT_OPTOUT, initialData.receiptOptOut );
+		context.commit( SET_INCENTIVE_CHECKED, initialData.incentiveChecked );
 
 		initialData.fields.forEach( ( field: FieldInitialization ) => {
 			context.commit( SET_ADDRESS_FIELD, { name: field.name, value: field.value } );
@@ -129,6 +134,12 @@ export const actions = {
 	},
 	[ setReceiptOptOut ]( context: ActionContext<MembershipAddressState, any>, optOut: boolean ) {
 		context.commit( SET_RECEIPT_OPTOUT, optOut );
+	},
+	[ setIncentiveChecked ]( context: ActionContext<MembershipAddressState, any>, checked: boolean ) {
+		context.commit( SET_INCENTIVE_CHECKED, checked );
+	},
+	[ setIncentive ]( context: ActionContext<MembershipAddressState, any>, incentive: string ) {
+		context.commit( SET_INCENTIVE, incentive );
 	},
 	[ setMembershipType ]( context: ActionContext<MembershipAddressState, any>, type: MembershipTypeModel ) {
 		context.commit( SET_MEMBERSHIP_TYPE, type );

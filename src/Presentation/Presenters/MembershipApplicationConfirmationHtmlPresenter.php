@@ -87,7 +87,9 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'status' => $this->mapStatus( $membershipApplication->isConfirmed() ),
 			'membershipFee' => $membershipApplication->getPayment()->getAmount()->getEuroString(),
 			'paymentIntervalInMonths' => $membershipApplication->getPayment()->getIntervalInMonths(),
-			'updateToken' => $updateToken
+			'updateToken' => $updateToken,
+			// TODO: Hook this up ( $membershipApplication->getIncentive() )
+			'incentive' => 'tote_bag'
 		];
 	}
 

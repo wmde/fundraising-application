@@ -10,5 +10,7 @@ export const SET_ADDRESS_FIELD: string = 'SET_ADDRESS_FIELD';
 export const SET_ADDRESS_FIELD_VALIDITY: string = 'SET_ADDRESS_FIELD_VALIDITY';
 export const SET_DATE: string = 'SET_DATE';
 export const SET_RECEIPT_OPTOUT: string = 'SET_RECEIPT_OPTOUT';
+export const SET_INCENTIVE_CHECKED: string = 'SET_INCENTIVE_CHECKED';
+export const SET_INCENTIVE: string = 'SET_INCENTIVE';
 export const SET_MEMBERSHIP_TYPE: string = 'SET_MEMBERSHIP_TYPE';
 export const SET_MEMBERSHIP_TYPE_VALIDITY: string = 'SET_MEMBERSHIP_TYPE_VALIDITY';

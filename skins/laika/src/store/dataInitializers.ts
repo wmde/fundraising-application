@@ -107,6 +107,7 @@ export const createInitialMembershipAddressValues = ( dataPersister: DataPersist
 		membershipType: replaceInitialValue( initialFormValues.get( 'membershipType' ), dataPersister.getValue( 'membershipType' ) ),
 		date: dataPersister.getValue( 'date' ),
 		receiptOptOut: replaceInitialValue( false, dataPersister.getValue( 'receiptOptOut' ) ),
+		incentiveChecked: replaceInitialValue( true, dataPersister.getValue( 'incentiveChecked' ) ),
 		fields: addressPersistItems,
 	};
 };

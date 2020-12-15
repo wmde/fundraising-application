@@ -19,6 +19,17 @@
 					:initial-receipt-needed="receiptNeeded"
 					v-on:opted-out="setReceiptOptedOut( $event )"
 			/>
+			<div>
+				<feature-toggle>
+					<incentive
+						slot="campaigns.membership_incentive.incentive"
+						:message="$t( 'membership_form_incentive' )"
+						:default-checked="incentiveChecked"
+						:value="'tote_bag'"
+						v-on:incentive-toggled="setIncentive( $event )"
+					/>
+				</feature-toggle>
+			</div>
 			<date-of-birth v-if="isPerson" :validation-pattern="dateOfBirthValidationPattern"/>
 			<email :show-error="fieldErrors.email" :form-data="formData" v-on:field-changed="onFieldChange"/>
 		</AutofillHandler>
@@ -33,6 +44,7 @@ import Name from '@/components/shared/Name.vue';
 import Postal from '@/components/shared/Postal.vue';
 import DateOfBirth from '@/components/pages/membership_form/DateOfBirth.vue';
 import ReceiptOptOut from '@/components/shared/ReceiptOptOut.vue';
+import Incentive from '@/components/pages/membership_form/Incentive.vue';
 import Email from '@/components/shared/Email.vue';
 import AutofillHandler from '@/components/shared/AutofillHandler.vue';
 import { AddressValidity, AddressFormData, ValidationResult } from '@/view_models/Address';
@@ -45,6 +57,8 @@ import {
 	validateAddress,
 	validateEmail,
 	setReceiptOptOut,
+	setIncentiveChecked,
+	setIncentive,
 	setAddressType,
 	validateCountry,
 	validateAddressField,
@@ -60,6 +74,7 @@ export default Vue.extend( {
 		Postal,
 		DateOfBirth,
 		ReceiptOptOut,
+		Incentive,
 		AddressType,
 		Email,
 		AutofillHandler,
@@ -157,6 +172,9 @@ export default Vue.extend( {
 		receiptNeeded(): Boolean {
 			return !this.$store.state[ NS_MEMBERSHIP_ADDRESS ].receiptOptOut;
 		},
+		incentiveChecked(): String {
+			return this.$store.state[ NS_MEMBERSHIP_ADDRESS ].incentiveChecked;
+		},
 	},
 	mounted() {
 		Object.entries( this.$store.state[ NS_MEMBERSHIP_ADDRESS ].values ).forEach( ( entry ) => {
@@ -197,6 +215,10 @@ export default Vue.extend( {
 		},
 		setReceiptOptedOut( optedOut: boolean ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setReceiptOptOut ), optedOut );
+		},
+		setIncentive( incentiveToggleEvent: any ): void {
+			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setIncentiveChecked ), incentiveToggleEvent.checked );
+			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setIncentive ), incentiveToggleEvent.incentive );
 		},
 		setAddressType( addressType: AddressTypeModel ): void {
 			this.$store.dispatch( action( NS_MEMBERSHIP_ADDRESS, setAddressType ), addressType );
