@@ -92,6 +92,8 @@ class ApplyForMembershipController {
 
 		$request->setOptsIntoDonationReceipt( $httpRequest->request->getBoolean( 'donationReceipt', true ) );
 
+		$request->setIncentives( array_filter( $httpRequest->request->get( 'incentives', [] ) ) );
+
 		$request->setBankData( $this->createBakData( $httpRequest ) );
 
 		return $request;

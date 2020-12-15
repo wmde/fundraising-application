@@ -21,10 +21,13 @@ import { action } from '@/store/util';
 import countries from '@/../tests/data/countries';
 import { Validity } from '@/view_models/Validity';
 import { addressValidationPatterns } from '../../../../data/validation';
+import { FeatureTogglePlugin } from '@/FeatureToggle';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
+
+localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'campaigns.membership_incentive.incentive' ] } );
 
 describe( 'Address.vue', () => {
 	let wrapper: any;

@@ -47,6 +47,7 @@ export interface MembershipAddressState {
     addressType: AddressTypeModel,
     membershipType: MembershipTypeModel,
     receiptOptOut: boolean,
+    incentives: string[],
     values: FormValues,
     validity: FormValidity,
 }
@@ -63,6 +64,7 @@ export interface InitialMembershipAddressValues {
     membershipType?: MembershipTypeModel,
     date?: string|null,
     receiptOptOut: boolean,
+    incentives: string[],
     fields: FieldInitialization[],
 }
 

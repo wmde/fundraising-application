@@ -14,10 +14,8 @@ use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 class ShowMembershipApplicationFormController {
 
 	public function index( FunFunFactory $ffFactory, Request $httpRequest ): Response {
-		$params = [
-			'urls' => Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
-		];
-		$params['showMembershipTypeOption'] = $httpRequest->query->get( 'type' ) !== 'sustaining';
+		$urls = Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() );
+		$showMembershipTypeOption = $httpRequest->query->get( 'type' ) !== 'sustaining';
 
 		$useCase = $ffFactory->newGetDonationUseCase( $httpRequest->query->get( 'donationAccessToken', '' ) );
 		$responseModel = $useCase->showConfirmation(
@@ -26,16 +24,23 @@ class ShowMembershipApplicationFormController {
 			)
 		);
 
+		$initialDonationFormValues = [];
+		$initialDonationValidationResult = [];
 		if ( $responseModel->accessIsPermitted() ) {
 			$adapter = new DonationMembershipApplicationAdapter();
-			$params['initialFormValues'] = $adapter->getInitialMembershipFormValues(
+			$initialDonationFormValues = $adapter->getInitialMembershipFormValues(
 				$responseModel->getDonation()
 			);
-			$params['initialValidationResult'] = $adapter->getInitialValidationState(
+			$initialDonationValidationResult = $adapter->getInitialValidationState(
 				$responseModel->getDonation()
 			);
 		}
 
-		return new Response( $ffFactory->getMembershipApplicationFormTemplate()->render( $params ) );
+		return new Response( $ffFactory->newMembershipApplicationFormPresenter()->present(
+			$urls,
+			$showMembershipTypeOption,
+			$initialDonationFormValues,
+			$initialDonationValidationResult
+		) );
 	}
 }

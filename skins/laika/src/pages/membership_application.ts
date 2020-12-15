@@ -24,6 +24,7 @@ import { Country } from '@/view_models/Country';
 import { initializeMembershipFee } from '@/store/membership_fee/actionTypes';
 import { createTrackFormErrorsPlugin } from '@/store/track_form_errors_plugin';
 import { AddressValidation } from '@/view_models/Validation';
+import { FeatureTogglePlugin } from '@/FeatureToggle';
 
 const PAGE_IDENTIFIER = 'membership-application';
 const FORM_NAMESPACE = 'membership_application';
@@ -62,8 +63,9 @@ const i18n = new VueI18n( {
 const store = createStore( [
 	dataPersister.getPlugin( persistenceItems ),
 	createTrackFormErrorsPlugin( FORM_NAMESPACE ),
-]
-);
+] );
+
+Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
 
 dataPersister.initialize( persistenceItems ).then( () => {
 

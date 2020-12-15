@@ -116,5 +116,10 @@ exports[`SubmitValues.vue renders input fields 1`] = `
     type="hidden"
     value="25.01.1948"
   />
+   
+  <input
+    name="incentives[]"
+    type="hidden"
+  />
 </span>
 `;
