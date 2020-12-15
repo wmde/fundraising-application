@@ -24,3 +24,8 @@ campaigns:
     active: true
     start: "2020-12-01"
     default_bucket: "incentive"
+
+  confirmation_page_layout:
+    active: true
+    start: "2021-02-10"
+    default_bucket: "new_layout"

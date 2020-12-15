@@ -7,7 +7,8 @@ import { createStore } from '@/store/donor_update_store';
 import { clearPersistentData } from '@/store/create_data_persister';
 import LocalStorageRepository from '@/store/LocalStorageRepository';
 import App from '@/components/App.vue';
-import Component from '@/components/pages/DonationConfirmation.vue';
+import DonationConfirmation from '@/components/pages/DonationConfirmation.vue';
+import DonationConfirmationAlt from '@/components/pages/DonationConfirmationAlt.vue';
 import { Country } from '@/view_models/Country';
 import { Donation } from '@/view_models/Donation';
 import { AddressValidation } from '@/view_models/Validation';
@@ -40,6 +41,8 @@ const i18n = new VueI18n( {
 		[ DEFAULT_LOCALE ]: pageData.messages,
 	},
 } );
+
+const Component = pageData.selectedBuckets.indexOf( 'campaigns.confirmation_page_layout.new_layout' ) !== -1 ? DonationConfirmationAlt : DonationConfirmation;
 
 new Vue( {
 	store,
