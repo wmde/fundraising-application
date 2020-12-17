@@ -1,68 +1,32 @@
 <template>
 	<div class="donation-summary">
 		<div class="intro"><slot></slot></div>
-		<div class="payment-summary" v-html="getSummary()"></div>
+		<component
+			:is="addressTypeComponent"
+			:address="address"
+			:interval="interval"
+			:formatted-amount="formattedAmount"
+			:paymentType="paymentType"
+			:country="country"
+		></component>
 		<div class="payment-email" v-html="getEmail()"></div>
 	</div>
 </template>
 
 <script lang="js">
 import Vue from 'vue';
-import { AddressTypeModel, addressTypeName } from '../view_models/AddressTypeModel';
+import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
+import PaymentSummaryAnonymous from '@/components/shared/payment_summary/PaymentSummaryAnonymous.vue';
+import PaymentSummaryCompany from '@/components/shared/payment_summary/PaymentSummaryCompany.vue';
+import PaymentSummaryEmail from '@/components/shared/payment_summary/PaymentSummaryEmail.vue';
+import PaymentSummaryPrivate from '@/components/shared/payment_summary/PaymentSummaryPrivate.vue';
 
-class PrivateDonorRenderer {
-	static getPersonTypeMessageKey() {
-		return 'donation_confirmation_topbox_donor_type_person';
-	}
-	static renderAddress( address, country ) {
-		return address.salutation + ' ' + address.fullName + ', '
-				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city + ', ' + country;
-	}
-	static canRender( address ) {
-		return address.salutation && address.firstName && address.lastName && address.streetAddress && address.postalCode && address.city;
-	}
-}
-class CompanyDonorRenderer {
-	static getPersonTypeMessageKey() {
-		return 'donation_confirmation_topbox_donor_type_company';
-	}
-	static renderAddress( address, country ) {
-		return address.fullName + ', '
-				+ address.streetAddress + ', ' + address.postalCode + ' ' + address.city + ', ' + country;
-	}
-	static canRender( address ) {
-		return address.fullName && address.streetAddress && address.postalCode && address.city;
-	}
-}
-class EmailDonorRenderer {
-	static getPersonTypeMessageKey() {
-		return 'donation_confirmation_topbox_donor_type_email';
-	}
-	static renderAddress( address ) {
-		return address.salutation + ' ' + address.fullName;
-	}
-	static canRender( address ) {
-		return address.salutation && address.firstName && address.lastName;
-	}
-}
-class AnonymousDonorRenderer {
-	static getPersonTypeMessageKey() {
-		return 'donation_confirmation_topbox_donor_type_anonymous';
-	}
-	static renderAddress() {
-		return '';
-	}
-	static canRender() {
-		return true;
-	}
-}
-
-const addressTypeRenderers = {
-	[ addressTypeName( AddressTypeModel.PERSON ) ]: PrivateDonorRenderer,
-	[ addressTypeName( AddressTypeModel.COMPANY ) ]: CompanyDonorRenderer,
-	[ addressTypeName( AddressTypeModel.EMAIL ) ]: EmailDonorRenderer,
-	[ addressTypeName( AddressTypeModel.ANON ) ]: AnonymousDonorRenderer,
-	[ addressTypeName( AddressTypeModel.UNSET ) ]: AnonymousDonorRenderer,
+const addressTypeComponents = {
+	[ addressTypeName( AddressTypeModel.ANON ) ]: PaymentSummaryAnonymous,
+	[ addressTypeName( AddressTypeModel.COMPANY ) ]: PaymentSummaryCompany,
+	[ addressTypeName( AddressTypeModel.EMAIL ) ]: PaymentSummaryEmail,
+	[ addressTypeName( AddressTypeModel.PERSON ) ]: PaymentSummaryPrivate,
+	[ addressTypeName( AddressTypeModel.UNSET ) ]: PaymentSummaryAnonymous,
 };
 
 export default Vue.extend( {
@@ -73,32 +37,25 @@ export default Vue.extend( {
 		'payment',
 		'countries',
 	],
-	methods: {
-		getSummary: function () {
-			const addressTypeRenderer = addressTypeRenderers[ this.addressType ];
-			const interval = this.$t( 'donation_form_payment_interval_' + this.payment.interval );
-			const formattedAmount = this.payment.amount.toFixed( 2 ).replace( '.', ',' );
-			const paymentType = this.$t( this.payment.paymentType );
-			const personType = this.$t( addressTypeRenderer.getPersonTypeMessageKey() );
-			// address.country is from store.address, address.countryCode is from donation confirmation
-			const countryObject = this.countries.find( c => ( c.countryCode === this.address.countryCode || c.countryCode === this.address.country ) );
-			let address = this.$t( 'donation_confirmation_review_address_missing' );
-			if ( addressTypeRenderer.canRender( this.address ) ) {
-				const country = countryObject ? countryObject.countryFullName : '';
-				address = addressTypeRenderer.renderAddress( this.address, country );
-			}
-
-			return this.$t(
-				'donation_confirmation_topbox_summary',
-				{
-					interval,
-					formattedAmount,
-					paymentType,
-					personType,
-					address,
-				}
-			);
+	computed: {
+		addressTypeComponent: function () {
+			return addressTypeComponents[ this.$props.addressType ];
 		},
+		paymentType: function () {
+			return this.$t( this.payment.paymentType );
+		},
+		interval: function () {
+			return this.$t( 'donation_form_payment_interval_' + this.payment.interval );
+		},
+		formattedAmount: function () {
+			return this.payment.amount.toFixed( 2 ).replace( '.', ',' );
+		},
+		country: function () {
+			const countryObject = this.countries.find( c => ( c.countryCode === this.address.countryCode || c.countryCode === this.address.country ) );
+			return countryObject ? countryObject.countryFullName : '';
+		},
+	},
+	methods: {
 		getEmail: function () {
 			if ( this.addressType === 'anonym' ) {
 				return '';
@@ -113,13 +70,13 @@ export default Vue.extend( {
 </script>
 
 <style lang="scss">
-	@import "../scss/custom";
+@import "../scss/custom";
 
-	.donation {
-		&-summary {
-			.intro {
-				margin-bottom: 18px;
-			}
+.donation {
+	&-summary {
+		.intro {
+			margin-bottom: 18px;
 		}
 	}
+}
 </style>
