@@ -80,6 +80,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	}
 
 	private function getApplicationArguments( Application $membershipApplication, string $updateToken ): array {
+		$incentives = iterator_to_array( $membershipApplication->getIncentives() );
 		return [
 			'id' => $membershipApplication->getId(),
 			'membershipType' => $membershipApplication->getType(),
@@ -88,8 +89,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'membershipFee' => $membershipApplication->getPayment()->getAmount()->getEuroString(),
 			'paymentIntervalInMonths' => $membershipApplication->getPayment()->getIntervalInMonths(),
 			'updateToken' => $updateToken,
-			// TODO: Hook this up ( $membershipApplication->getIncentive() )
-			'incentive' => 'tote_bag'
+			'incentive' => count( $incentives ) > 0 ? $incentives[0]->getName() : ''
 		];
 	}
 
