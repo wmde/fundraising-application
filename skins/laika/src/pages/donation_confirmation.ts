@@ -12,6 +12,7 @@ import DonationConfirmationAlt from '@/components/pages/DonationConfirmationAlt.
 import { Country } from '@/view_models/Country';
 import { Donation } from '@/view_models/Donation';
 import { AddressValidation } from '@/view_models/Validation';
+import { FeatureTogglePlugin } from '@/FeatureToggle';
 
 const PAGE_IDENTIFIER = 'donation-confirmation',
 	IS_FULLWIDTH_PAGE = true,
@@ -42,6 +43,7 @@ const i18n = new VueI18n( {
 	},
 } );
 
+Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
 const Component = pageData.selectedBuckets.indexOf( 'campaigns.confirmation_page_layout.new_layout' ) !== -1 ? DonationConfirmationAlt : DonationConfirmation;
 
 new Vue( {

@@ -46,12 +46,14 @@
 			</div>
 
 			<div class="column is-half">
-				<summary-links
-						:donation="donation"
-						:address-type="currentAddressType"
-						:cancel-donation-url="cancelDonationUrl"
-						:post-comment-url="postCommentUrl"
-				/>
+				<div class="donation-cta">
+					<summary-links
+							:donation="donation"
+							:address-type="currentAddressType"
+							:cancel-donation-url="cancelDonationUrl"
+							:post-comment-url="postCommentUrl"
+					/>
+				</div>
 			</div>
 		</div>
 		<membership-info :donation="donation"></membership-info>
@@ -161,6 +163,10 @@ export default Vue.extend( {
 					line-height: 2em;
 				}
 			}
+		}
+		&-cta {
+			border-left: 1px solid $fun-color-gray-light-solid;
+			padding: 0 0 18px 18px;
 		}
 	}
 </style>

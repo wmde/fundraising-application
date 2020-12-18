@@ -11,11 +11,12 @@ export default {
 		'formattedAmount',
 		'paymentType',
 		'country',
+		'languageItem',
 	],
 	computed: {
 		getSummary: function () {
 			return this.$t(
-				'donation_confirmation_topbox_summary',
+				this.$props.languageItem,
 				{
 					interval: this.$props.interval,
 					formattedAmount: this.$props.formattedAmount,

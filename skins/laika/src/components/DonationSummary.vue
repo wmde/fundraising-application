@@ -1,14 +1,28 @@
 <template>
 	<div class="donation-summary">
 		<div class="intro"><slot></slot></div>
-		<component
-			:is="addressTypeComponent"
-			:address="address"
-			:interval="interval"
-			:formatted-amount="formattedAmount"
-			:paymentType="paymentType"
-			:country="country"
-		></component>
+		<feature-toggle>
+			<component
+				slot="campaigns.confirmation_page_layout.old_layout"
+				:is="addressTypeComponent"
+				:address="address"
+				:interval="interval"
+				:formatted-amount="formattedAmount"
+				:paymentType="paymentType"
+				:country="country"
+				:language-item="'donation_confirmation_topbox_summary'"
+			></component>
+			<component
+				slot="campaigns.confirmation_page_layout.new_layout"
+				:is="addressTypeComponent"
+				:address="address"
+				:interval="interval"
+				:formatted-amount="formattedAmount"
+				:paymentType="paymentType"
+				:country="country"
+				:language-item="'donation_confirmation_topbox_summary_alt'"
+			></component>
+		</feature-toggle>
 		<div class="payment-email" v-html="getEmail()"></div>
 	</div>
 </template>

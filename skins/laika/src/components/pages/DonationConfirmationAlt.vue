@@ -2,24 +2,43 @@
 	<div class="donation-confirmation">
 		<div class="donation-summary-wrapper has-background-bright columns has-padding-18">
 			<div class="column is-half">
-				<donation-summary
-						:address="currentAddress"
-						:address-type="currentAddressType"
-						:payment="donation"
-						:countries="countries"
-				>
-					<div class="title is-size-5">{{ $t( 'donation_confirmation_topbox_intro' ) }}</div>
-				</donation-summary>
-				<b-button v-if="showAddressChangeButton"
+				<div class="title is-size-5" v-if="showBankTransferContent">{{ $t( 'donation_confirmation_topbox_payment_title_bank_transfer_alt' ) }}</div>
+				<div class="title is-size-5" v-if="!showBankTransferContent">{{ $t( 'donation_confirmation_topbox_payment_title_alt' ) }}</div>
+				<payment-notice :payment="donation"></payment-notice>
+				<div id="bank-data" v-if="showBankTransferContent">
+					<bank-data :bank-transfer-code="donation.bankTransferCode"></bank-data>
+					<div class="has-margin-top-18"
+						v-html="$t( 'donation_confirmation_reminder_bank_transfer', { bankTransferCode: donation.bankTransferCode } )">
+					</div>
+				</div>
+				<div id="newsletter-optin" class="has-margin-top-18" v-if="donation.optsIntoNewsletter">
+					{{ $t( 'donation_confirmation_newsletter_confirmation' ) }}
+				</div>
+				<summary-links
+					:donation="donation"
+					:address-type="currentAddressType"
+					:cancel-donation-url="cancelDonationUrl"
+					:post-comment-url="postCommentUrl"
+				/>
+			</div>
+
+			<div class="column is-half">
+				<div class="donation-cta">
+					<div v-if="showAddressChangeContent">
+						<p class="has-margin-bottom-18"><strong>Benötigen Sie eine Spendenquittung?</strong></p>
+						<p class="has-margin-bottom-18">Hier erläutern wir die Vorteile der Angabe von Adressdaten und auch, warum sie diese Spende benötigen</p>
+						<b-button
 							id="address-change-button"
 							class="address-change-button"
 							@click="showAddressModal()"
-							type="is-primary is-main">
-					{{ $t('donation_confirmation_address_update_button') }}
-				</b-button>
-				<address-usage-toggle v-if="showAddressUsageToggle"></address-usage-toggle>
-				<b-modal :active.sync="isAddressModalOpen" scroll="keep" class="address-modal" has-modal-card>
-					<address-modal
+							type="is-primary is-main"
+						>
+							{{ $t('donation_confirmation_address_update_button') }}
+						</b-button>
+						<address-usage-toggle></address-usage-toggle>
+					</div>
+					<b-modal :active.sync="isAddressModalOpen" scroll="keep" class="address-modal" has-modal-card>
+						<address-modal
 							:countries="countries"
 							:donation="donation"
 							:updateDonorUrl="updateDonorUrl"
@@ -30,28 +49,19 @@
 							:address-validation-patterns="addressValidationPatterns"
 							v-on:address-update-failed="addressChangeHasErrored = true"
 							v-on:address-updated="updateAddress( $event )"
-					>
-					</address-modal>
-				</b-modal>
-				<payment-notice :payment="donation"></payment-notice>
-				<div id="bank-data" v-if="showBankTransferCode">
-					<bank-data :bank-transfer-code="donation.bankTransferCode"></bank-data>
-					<div class="has-margin-top-18"
-						v-html="$t( 'donation_confirmation_reminder_bank_transfer', { bankTransferCode: donation.bankTransferCode } )">
-					</div>
-				</div>
-				<div id="newsletter-optin" class="has-margin-top-18" v-if="donation.optsIntoNewsletter">
-					{{ $t( 'donation_confirmation_newsletter_confirmation' ) }}
-				</div>
-			</div>
-
-			<div class="column is-half">
-				<summary-links
-						:donation="donation"
+						>
+						</address-modal>
+					</b-modal>
+					<donation-summary
+						v-if="!showAddressChangeContent"
+						:address="currentAddress"
 						:address-type="currentAddressType"
-						:cancel-donation-url="cancelDonationUrl"
-						:post-comment-url="postCommentUrl"
-				/>
+						:payment="donation"
+						:countries="countries"
+					>
+						<div><strong>{{ $t( 'donation_confirmation_summary_title_alt' ) }}</strong></div>
+					</donation-summary>
+				</div>
 			</div>
 		</div>
 		<membership-info :donation="donation"></membership-info>
@@ -73,7 +83,7 @@ import Vue from 'vue';
 import BankData from '@/components/BankData.vue';
 import DonationSummary from '@/components/DonationSummary.vue';
 import MembershipInfo from '@/components/pages/donation_confirmation/MembershipInfo.vue';
-import PaymentNotice from '@/components/pages/donation_confirmation/PaymentNotice.vue';
+import PaymentNotice from '@/components/pages/donation_confirmation/PaymentNoticeAlt.vue';
 import SummaryLinks from '@/components/pages/donation_confirmation/SummaryLinks.vue';
 import AddressUsageToggle from '@/components/pages/donation_confirmation/AddressUsageToggle.vue';
 import { AddressTypeModel, addressTypeName } from '@/view_models/AddressTypeModel';
@@ -127,15 +137,12 @@ export default Vue.extend( {
 		},
 	},
 	computed: {
-		showBankTransferCode: function () {
+		showBankTransferContent: function () {
 			return this.$props.donation.paymentType === 'UEB';
 		},
-		showAddressChangeButton: function () {
+		showAddressChangeContent: function () {
 			return this.$props.addressType === addressTypeName( AddressTypeModel.ANON ) &&
 					!this.$data.addressChangeHasErrored && !this.$data.addressChangeHasSucceeded;
-		},
-		showAddressUsageToggle: function () {
-			return this.$props.addressType === addressTypeName( AddressTypeModel.ANON );
 		},
 	},
 } );
