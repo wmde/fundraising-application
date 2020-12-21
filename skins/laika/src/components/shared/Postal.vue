@@ -36,6 +36,7 @@
 					id="city"
 					:placeholder="$t( 'form_for_example', { example: $t( 'donation_form_city_placeholder' ) } )"
 					v-model="formData.city.value"
+					autocomplete="address-level2"
 					@blur="$emit('field-changed', 'city')">
 			</b-input>
 		</b-field>
