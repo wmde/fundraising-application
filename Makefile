@@ -63,6 +63,7 @@ setup-db:
 	docker-compose run --rm start_dependencies
 	docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create
 	docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
+	docker-compose run --rm app ./vendor/bin/doctrine dbal:import build/database/fixtures.sql
 
 covers:
 	docker-compose run --rm --no-deps app ./vendor/bin/covers-validator
