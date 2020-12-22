@@ -143,6 +143,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\GetInTouchHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
@@ -1191,7 +1192,7 @@ class FunFunFactory {
 		);
 	}
 
-	public function getMembershipApplicationFormTemplate(): TwigTemplate {
+	private function getMembershipApplicationFormTemplate(): TwigTemplate {
 		$validation = $this->getValidationRules();
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
@@ -1202,7 +1203,15 @@ class FunFunFactory {
 			'countries' => $this->getCountries(),
 			'addressValidationPatterns' => $validation->address,
 			'dateOfBirthValidationPattern' => $validation->dateOfBirth,
+			'incentives' => $this->getChoiceFactory()->getDefaultIncentives()
 		] );
+	}
+
+	public function newMembershipApplicationFormPresenter(): MembershipApplicationFormPresenter {
+		return new MembershipApplicationFormPresenter(
+			$this->getMembershipApplicationFormTemplate(),
+			$this->getChoiceFactory()->getDefaultIncentives()
+		);
 	}
 
 	public function getCountries(): array {

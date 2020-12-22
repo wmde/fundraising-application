@@ -13,6 +13,7 @@ import {
 	SET_ADDRESS_FIELD_VALIDITY,
 	SET_DATE,
 	SET_RECEIPT_OPTOUT,
+	SET_INCENTIVES,
 	SET_MEMBERSHIP_TYPE,
 	SET_MEMBERSHIP_TYPE_VALIDITY,
 } from '@/store/membership_address/mutationTypes';
@@ -86,6 +87,9 @@ export const mutations: MutationTree<MembershipAddressState> = {
 	},
 	[ SET_RECEIPT_OPTOUT ]( state: MembershipAddressState, optOut ) {
 		state.receiptOptOut = optOut;
+	},
+	[ SET_INCENTIVES ]( state: MembershipAddressState, incentives ) {
+		state.incentives = incentives;
 	},
 	[ SET_MEMBERSHIP_TYPE ]( state: MembershipAddressState, type: MembershipTypeModel ) {
 		state.membershipType = type;

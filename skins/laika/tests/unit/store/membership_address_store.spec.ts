@@ -27,6 +27,7 @@ function newMinimalStore( overrides: Object ): MembershipAddressState {
 			addressType: AddressTypeModel.PERSON,
 			membershipType: MembershipTypeModel.SUSTAINING,
 			receiptOptOut: false,
+			incentives: [],
 			values: {
 				salutation: '',
 				title: '',
@@ -458,6 +459,19 @@ describe( 'MembershipAddress', () => {
 			action( { commit }, choice );
 			expect( commit ).toBeCalledWith(
 				'SET_RECEIPT_OPTOUT',
+				choice
+			);
+		} );
+	} );
+
+	describe( 'Actions/setIncentive', () => {
+		it( 'commits to mutation [SET_INCENTIVES] with the entered choice', () => {
+			const commit = jest.fn(),
+				action = actions.setIncentives as any,
+				choice = [ 'Playstation 5' ];
+			action( { commit }, choice );
+			expect( commit ).toBeCalledWith(
+				'SET_INCENTIVES',
 				choice
 			);
 		} );

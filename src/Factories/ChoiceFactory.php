@@ -63,4 +63,14 @@ class ChoiceFactory {
 		}
 		throw new UnknownChoiceDefinition( 'Address type configuration failure.' );
 	}
+
+	public function getDefaultIncentives(): array {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.membership_incentive.incentive' ) ) {
+			// TODO: This is currently hardcoded, we should make the list of incentives and defaults configurable
+			return [ 'tote_bag' ];
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.membership_incentive.no_incentive' ) ) {
+			return [];
+		}
+		throw new UnknownChoiceDefinition( 'Address type configuration failure.' );
+	}
 }

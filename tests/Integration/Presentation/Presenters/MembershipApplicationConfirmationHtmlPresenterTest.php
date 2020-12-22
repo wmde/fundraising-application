@@ -59,7 +59,8 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 				'status' => $mappedStatus,
 				'membershipFee' => '10.00',
 				'paymentIntervalInMonths' => 3,
-				'updateToken' => 'update_token'
+				'updateToken' => 'update_token',
+				'incentives' => []
 			],
 			'address' => [
 				'salutation' => 'Herr',

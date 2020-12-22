@@ -58,6 +58,10 @@ class DoctrineFactory {
 		$driver = new MappingDriverChain();
 		/** @var DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory $contextFactory */
 		foreach ( $this->contextFactories as $contextFactory ) {
+			if ( method_exists( $contextFactory, 'visitMappingDriver' ) ) {
+				$contextFactory->visitMappingDriver( $driver );
+				continue;
+			}
 			$driver->addDriver( $contextFactory->newMappingDriver(), $contextFactory::ENTITY_NAMESPACE );
 		}
 		return $driver;

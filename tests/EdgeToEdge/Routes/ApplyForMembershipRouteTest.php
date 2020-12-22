@@ -96,7 +96,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				'accountNumber' => '0648489890',
 				'bankCode' => '50010517',
 				'bankname' => 'ING-DiBa',
-				'paymentType' => 'BEZ'
+				'paymentType' => 'BEZ',
+				'incentives' => []
 			],
 			$client
 		);
