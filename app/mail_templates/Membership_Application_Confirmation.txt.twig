@@ -1,4 +1,8 @@
 {%- set formattedAmount = membershipFee|number_format(2, ',', '.') ~ ' Euro' -%}
+
+{# TODO improve incentive handling  #}
+{% set incentiveText = ( incentives|length > 0 ) ? 'mit dem Wikipedia-Stoffbeutel ' : '' %}
+
 {% if membershipType == 'sustaining' %}
 {$- greeting_generator.createInformalLastnameGreeting( salutation, lastName, title )|raw $}
 {% else %}
@@ -9,6 +13,7 @@
     'formatted_amount': formattedAmount,
     'donation_interval': paymentIntervalInMonths|payment_interval,
     'membership_type': membershipType|membership_type,
+    'incentive': incentiveText
 }) $}
 
 {$ mail_content('membership_application_confirmation/contact', {

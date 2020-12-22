@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4dcb84e6c89389e581748c29b92fee77",
+    "content-hash": "e3ff1de56da0cde5d3baa021688fcb37",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -5538,16 +5538,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v4.0.0",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "872e614fb9cc958b574e95a76a513f32d5855a80"
+                "reference": "dd99a8b4e1ba5d30b26e8676c820095a802717b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/872e614fb9cc958b574e95a76a513f32d5855a80",
-                "reference": "872e614fb9cc958b574e95a76a513f32d5855a80",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/dd99a8b4e1ba5d30b26e8676c820095a802717b7",
+                "reference": "dd99a8b4e1ba5d30b26e8676c820095a802717b7",
                 "shasum": ""
             },
             "require": {
@@ -5592,7 +5592,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2020-12-22T13:45:09+00:00"
+            "time": "2020-12-22T20:43:37+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -8441,12 +8441,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "6b37a4a4097aef675fe2a05cc769c2a4db1441ee"
+                "reference": "7c2b95d35d9527b53cd97ed97daa7501bbe4e8c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/6b37a4a4097aef675fe2a05cc769c2a4db1441ee",
-                "reference": "6b37a4a4097aef675fe2a05cc769c2a4db1441ee",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/7c2b95d35d9527b53cd97ed97daa7501bbe4e8c2",
+                "reference": "7c2b95d35d9527b53cd97ed97daa7501bbe4e8c2",
                 "shasum": ""
             },
             "require-dev": {
@@ -8479,7 +8479,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2020-12-22T13:41:19+00:00"
+            "time": "2020-12-22T17:53:20+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
