@@ -20,7 +20,7 @@ class GreetingGenerator {
 	}
 
 	private static function getSpacedTitle( ?string $title ): string {
-		return $title ? '' : $title . ' ';
+		return $title ? $title . ' ' : '';
 	}
 
 	public function createFormalGreeting( ?string $lastName, ?string $salutation, ?string $title ): string {
