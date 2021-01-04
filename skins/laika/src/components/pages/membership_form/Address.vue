@@ -1,7 +1,6 @@
 <template>
 	<div class="address-section">
-		<div class="has-margin-top-18">
-			<h1 class="title is-size-1">{{ $t( 'donation_form_section_address_title' ) }}</h1>
+		<div class="has-margin-top-36">
 			<address-type :initial-value="addressType" v-on:address-type="setAddressType( $event )"/>
 		</div>
 		<h1 class="has-margin-top-36 title is-size-5">{{ $t( 'donation_form_section_address_title' ) }}</h1>
