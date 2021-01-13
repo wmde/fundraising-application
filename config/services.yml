@@ -26,5 +26,10 @@ services:
         resource: '../app/Controllers/*'
         tags: ['controller.service_arguments']
 
+    # register kernel event subscribers
+    WMDE\Fundraising\Frontend\App\EventHandlers\:
+        resource: '../app/EventHandlers/*'
+        exclude: '../app/EventHandlers/{HandleExceptions,LogErrors}.php'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

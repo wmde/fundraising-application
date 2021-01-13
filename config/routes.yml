@@ -169,10 +169,11 @@ POST_handle_paypal_membership_fee_payments:
     methods: [POST]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\PaypalNotificationControllerForMembershipFee::handle'
 
-/:
+index:
     path: /
     methods: [ POST, GET ]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\TestController::handle'
+    # controller: 'WMDE\Fundraising\Frontend\App\Controllers\TestController::handle'
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController::index'
 
 POST_spenden_paypal_handler.php:
     path: /spenden/paypal_handler.php
