@@ -33,3 +33,15 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+
+    WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper:
+        class: WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper
+        public: true
+        arguments:
+            - "%env(resolve:APP_ENV)%"
+
+    WMDE\Fundraising\Frontend\Factories\FunFunFactory:
+        class: WMDE\Fundraising\Frontend\Factories\FunFunFactory
+        factory: ['@WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper', 'newFunFunFactory']
+        public: true

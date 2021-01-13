@@ -4,12 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class TestController {
 
-	public function handle( Request $request ): Response {
-		return new Response( sprintf('Something here: %s', $request->getBaseUrl()) );
+	public function handle(FunFunFactory $ffFactory): Response {
+		return new Response( sprintf(
+			'<html><head><title>Test Controller</title></head>'.
+				'<body>Something here: %s</body></html>',
+			$ffFactory->getCachePath()
+		) );
 	}
 }

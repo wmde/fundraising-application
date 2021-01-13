@@ -4,10 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
+use FileFetcher\SimpleFileFetcher;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetupException;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\ProductionEnvironmentSetup;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class EnvironmentBootstrapper {
 
@@ -61,5 +63,20 @@ class EnvironmentBootstrapper {
 		}
 		$class = $this->environmentMap[$this->environmentName];
 		return new $class;
+	}
+
+	public function newFunFunFactory(): FunFunFactory {
+		$configReader = new ConfigReader(
+			new SimpleFileFetcher(),
+			...$this->getConfigurationPathsForEnvironment( __DIR__ . '/../../app/config' )
+		);
+
+		$config = $configReader->getConfig();
+		$factory = new FunFunFactory( $config );
+
+		$this->getEnvironmentSetupInstance()
+			->setEnvironmentDependentInstances( $factory, $config );
+
+		return $factory;
 	}
 }
