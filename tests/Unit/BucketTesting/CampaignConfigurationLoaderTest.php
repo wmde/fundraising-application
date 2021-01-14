@@ -22,19 +22,21 @@ use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader;
 class CampaignConfigurationLoaderTest extends TestCase {
 
 	private const VALID_CONFIGURATION = <<<CFG
-campaign1:
-  url_key: c1
-  start: "2015-01-01"
-  end: "2015-02-02"
-  active: true
-  buckets: [ foo, bar ]
-  default_bucket: foo
+campaigns:
+    campaign1:
+      url_key: c1
+      start: "2015-01-01"
+      end: "2015-02-02"
+      active: true
+      buckets: [ foo, bar ]
+      default_bucket: foo
 CFG;
 
 	private const OVERRIDE_CONFIGURATION = <<<CFG
-campaign1:
-  active: false
-  default_bucket: bar
+campaigns:
+    campaign1:
+      active: false
+      default_bucket: bar
 CFG;
 
 	public function testGivenOneConfigurationFile_itIsLoaded() {
