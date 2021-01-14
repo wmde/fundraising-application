@@ -10,7 +10,7 @@
     "ci": "npm run lint && npm run test:unit"
   },
   "dependencies": {
-    "@airbrake/browser": "^1.4.1",
+    "@airbrake/browser": "^1.4.2",
     "@vue/composition-api": "^1.0.0-beta.18",
     "axios": "^0.21.0",
     "buefy": "^0.9.4",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
-    "@types/jest": "^26.0.15",
+    "@types/jest": "^26.0.20",
     "@types/jsonp": "^0.2.0",
     "@types/moxios": "^0.4.9",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
