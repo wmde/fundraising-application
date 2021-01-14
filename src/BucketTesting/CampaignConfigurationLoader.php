@@ -18,9 +18,9 @@ use Symfony\Component\Yaml\Yaml;
  */
 class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 
-	private $filesystem;
-	private $fileFetcher;
-	private $cache;
+	private Filesystem $filesystem;
+	private FileFetcher $fileFetcher;
+	private CacheProvider $cache;
 
 	public function __construct( Filesystem $filesystem, FileFetcher $fileFetcher, CacheProvider $cache ) {
 		$this->filesystem = $filesystem;
@@ -41,7 +41,7 @@ class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterfac
 		$processor = new Processor();
 		$processedConfiguration = $processor->processConfiguration( new CampaignConfiguration(), $configs );
 		$this->cache->save( $cacheKey, $processedConfiguration );
-		return $processedConfiguration;
+		return $processedConfiguration['campaigns'];
 	}
 
 	protected function loadFiles( string ...$configFiles ): array {

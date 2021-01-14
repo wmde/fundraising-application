@@ -1,28 +1,26 @@
-# This file is used on test server
-#
-# Set all campaigns to inactive to force the test server to use the default code paths
+# This file is used in the "dev" and "uat" environments to be able to test future and past campaigns
+campaigns:
+  membership_call_to_action:
+    active: true
 
-membership_call_to_action:
-  active: true
+  amount_options:
+    active: true
+    start: "2018-12-01"
 
-amount_options:
-  active: true
-  start: "2018-12-01"
+  compact_design:
+    active: true
+    start: "2019-10-06 10:00:00"
 
-compact_design:
-  active: true
-  start: "2019-10-06 10:00:00"
+  address_type:
+    active: false
+    start: "2020-09-15"
 
-address_type:
-  active: false
-  start: "2020-09-15"
+  address_provision_options:
+    active: true
+    start: "2020-09-20"
+    default_bucket: "provisional_address_options"
 
-address_provision_options:
-  active: true
-  start: "2020-09-20"
-  default_bucket: "provisional_address_options"
-
-membership_incentive:
-  active: true
-  start: "2020-12-01"
-  default_bucket: "incentive"
+  membership_incentive:
+    active: true
+    start: "2020-12-01"
+    default_bucket: "incentive"

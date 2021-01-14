@@ -19,27 +19,30 @@ class CampaignConfigurationTest extends TestCase {
 	public function testGivenValidConfigurationEntries_ValidationPasses() {
 		$this->assertConfigurationIsValid(
 			[
-				[
-					'minimal_campaign' => [
-						'start' => '2018-10-31',
-						'end' => '2018-12-31',
-						'active' => true,
-						'buckets' => [ 'bucket1', 'bucket2' ],
-						'default_bucket' => 'bucket2',
-						'url_key' => 'mc',
-						'param_only' => true
-					],
-					'full_campaign' => [
-						'description' => 'This is just a test of a campaign configuration with all possible values set',
-						'reference' => 'https://example.com/',
-						'start' => '2018-10-31',
-						'end' => '2018-12-31',
-						'active' => true,
-						'buckets' => [ 'bucket1', 'bucket2' ],
-						'default_bucket' => 'bucket2',
-						'url_key' => 'fc'
+				'bucket_tests' => [
+					'campaigns' => [
+						'minimal_campaign' => [
+							'start' => '2018-10-31',
+							'end' => '2018-12-31',
+							'active' => true,
+							'buckets' => [ 'bucket1', 'bucket2' ],
+							'default_bucket' => 'bucket2',
+							'url_key' => 'mc',
+							'param_only' => true
+						],
+						'full_campaign' => [
+							'description' => 'This is just a test of a campaign configuration with all possible values set',
+							'reference' => 'https://example.com/',
+							'start' => '2018-10-31',
+							'end' => '2018-12-31',
+							'active' => true,
+							'buckets' => [ 'bucket1', 'bucket2' ],
+							'default_bucket' => 'bucket2',
+							'url_key' => 'fc'
+						]
 					]
-				] ]
+				]
+			]
 		);
 	}
 
@@ -47,7 +50,14 @@ class CampaignConfigurationTest extends TestCase {
 	 * @dataProvider invalidConfigurationProvider
 	 */
 	public function testGivenMissingConfigurationEntries_ValidationFails( array $invalidConfig, string $expectedReason ) {
-		$this->assertConfigurationIsInvalid( [ $invalidConfig ], $expectedReason );
+		$this->assertConfigurationIsInvalid(
+			[
+				'bucket_tests' => [
+					'campaigns' => $invalidConfig
+				]
+			],
+			$expectedReason
+		);
 	}
 
 	public function invalidConfigurationProvider(): iterable {
@@ -60,7 +70,7 @@ class CampaignConfigurationTest extends TestCase {
 					'default_bucket' => 'bucket2'
 				]
 			],
-			'start'
+			'bucket_tests.campaigns.missing_start'
 		];
 		yield [
 			[
@@ -71,7 +81,7 @@ class CampaignConfigurationTest extends TestCase {
 					'default_bucket' => 'bucket2'
 				]
 			],
-			'end'
+			'bucket_tests.campaigns.missing_end'
 		];
 		yield [
 			[
@@ -82,7 +92,7 @@ class CampaignConfigurationTest extends TestCase {
 					'default_bucket' => 'bucket2'
 				]
 			],
-			'active'
+			'bucket_tests.campaigns.missing_active'
 		];
 		yield [
 			[
@@ -93,7 +103,7 @@ class CampaignConfigurationTest extends TestCase {
 					'default_bucket' => 'bucket2'
 				]
 			],
-			'buckets'
+			'bucket_tests.campaigns.missing_buckets'
 		];
 		yield [
 			[
@@ -104,7 +114,7 @@ class CampaignConfigurationTest extends TestCase {
 					'buckets' => [ 'bucket1', 'bucket2' ],
 				]
 			],
-			'default_bucket'
+			'bucket_tests.campaigns.missing_default_bucket'
 		];
 		yield [
 			[
@@ -116,21 +126,74 @@ class CampaignConfigurationTest extends TestCase {
 					'default_bucket' => 'bucket2'
 				]
 			],
-			'url_key'
+			'bucket_tests.campaigns.missing_url_key'
 		];
 	}
 
 	public function testGivenMultipleConfigurationEntries_TheyAreMergedAndOverwritten() {
 		$this->assertProcessedConfigurationEquals(
 			[
+				// Since the configurations are merged at the root node, we omit the 'bucket_testing' root node
 				[
+					'campaigns' => [
+						'first_campaign' => [
+							'start' => '2018-10-31',
+							'end' => '2018-12-31',
+							'active' => true,
+							'buckets' => [ 'bucket1', 'bucket2' ],
+							'default_bucket' => 'bucket2',
+							'url_key' => 'fc'
+						],
+						'second_campaign' => [
+							'start' => '2019-01-01',
+							'end' => '2019-12-31',
+							'active' => false,
+							'buckets' => [ 'bucket1', 'bucket2' ],
+							'default_bucket' => 'bucket2',
+							'url_key' => 'sc'
+						],
+					],
+				],
+				[
+					'campaigns' => [
+						'first_campaign' => [
+							'start' => '2018-10-31',
+							'end' => '2018-12-31',
+							'active' => false,
+							'buckets' => [ 'bucket3' ],
+							'default_bucket' => 'bucket3',
+							'url_key' => 'fc',
+							'param_only' => true
+						],
+						'third_campaign' => [
+							'start' => '2020-10-31',
+							'end' => '2020-12-31',
+							'active' => false,
+							'buckets' => [ 'default', 'fancy' ],
+							'default_bucket' => 'default',
+							'url_key' => 'tc'
+						]
+					],
+				],
+				// partial overrides are allowed
+				[
+					'campaigns' => [
+						'third_campaign' => [
+							'active' => true
+						]
+					]
+				],
+			],
+			[
+				'campaigns' => [
 					'first_campaign' => [
 						'start' => '2018-10-31',
 						'end' => '2018-12-31',
-						'active' => true,
-						'buckets' => [ 'bucket1', 'bucket2' ],
-						'default_bucket' => 'bucket2',
-						'url_key' => 'fc'
+						'active' => false,
+						'buckets' => [ 'bucket1', 'bucket2', 'bucket3' ],
+						'default_bucket' => 'bucket3',
+						'url_key' => 'fc',
+						'param_only' => true
 					],
 					'second_campaign' => [
 						'start' => '2019-01-01',
@@ -138,62 +201,18 @@ class CampaignConfigurationTest extends TestCase {
 						'active' => false,
 						'buckets' => [ 'bucket1', 'bucket2' ],
 						'default_bucket' => 'bucket2',
-						'url_key' => 'sc'
-					],
-				],
-				[
-					'first_campaign' => [
-						'start' => '2018-10-31',
-						'end' => '2018-12-31',
-						'active' => false,
-						'buckets' => [ 'bucket3' ],
-						'default_bucket' => 'bucket3',
-						'url_key' => 'fc',
-						'param_only' => true
+						'url_key' => 'sc',
+						'param_only' => false
 					],
 					'third_campaign' => [
 						'start' => '2020-10-31',
 						'end' => '2020-12-31',
-						'active' => false,
+						'active' => true,
 						'buckets' => [ 'default', 'fancy' ],
 						'default_bucket' => 'default',
-						'url_key' => 'tc'
+						'url_key' => 'tc',
+						'param_only' => false
 					]
-				],
-				// partial overrides are allowed
-				[
-					'third_campaign' => [
-						'active' => true
-					]
-				]
-			],
-			[
-				'first_campaign' => [
-					'start' => '2018-10-31',
-					'end' => '2018-12-31',
-					'active' => false,
-					'buckets' => [ 'bucket1', 'bucket2', 'bucket3' ],
-					'default_bucket' => 'bucket3',
-					'url_key' => 'fc',
-					'param_only' => true
-				],
-				'second_campaign' => [
-					'start' => '2019-01-01',
-					'end' => '2019-12-31',
-					'active' => false,
-					'buckets' => [ 'bucket1', 'bucket2' ],
-					'default_bucket' => 'bucket2',
-					'url_key' => 'sc',
-					'param_only' => false
-				],
-				'third_campaign' => [
-					'start' => '2020-10-31',
-					'end' => '2020-12-31',
-					'active' => true,
-					'buckets' => [ 'default', 'fancy' ],
-					'default_bucket' => 'default',
-					'url_key' => 'tc',
-					'param_only' => false
 				]
 			]
 		);
