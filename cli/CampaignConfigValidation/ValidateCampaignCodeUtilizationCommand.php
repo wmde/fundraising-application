@@ -16,6 +16,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValida
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\FeatureToggleParser;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
 /**
  * @license GPL-2.0-or-later
@@ -69,22 +70,9 @@ class ValidateCampaignCodeUtilizationCommand extends Command {
 		return self::RETURN_CODE_ERROR;
 	}
 
-	private function getFactory( string $environment ): FunFunFactory {
-		$environmentConfigPath = __DIR__ . '/../../app/config/config.' . $environment . '.json';
-		if ( is_readable( $environmentConfigPath ) === false ) {
-			throw new \RuntimeException( sprintf( 'File "%s" not found or not readable', $environmentConfigPath ), 0, null );
-		}
-		$configReader = new ConfigReader(
-			new SimpleFileFetcher(),
-			__DIR__ . '/../../app/config/config.dist.json',
-			$environmentConfigPath
-		);
-
-		return new FunFunFactory( $configReader->getConfig() );
-	}
-
 	private function getCampaigns( string $environment ): CampaignCollection {
-		$factory = $this->getFactory( $environment );
+		$bootstrapper = new EnvironmentBootstrapper( $environment );
+		$factory = $bootstrapper->newFunFunFactory();
 		return $factory->getCampaignCollection();
 	}
 
