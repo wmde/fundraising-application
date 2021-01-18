@@ -28,8 +28,9 @@ class CampaignCookieTest extends WebRouteTestCase {
 	];
 
 	public function testWhenUserVisitsThePage_cookieIsSet(): void {
+		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
 		$client = $this->createClient(
-			[ 'campaigns' => [ 'timezone' => 'UTC' ] ],
+			[],
 			function ( FunFunFactory $ffactory, array $config ) {
 			$ffactory->setCampaignConfigurationLoader(
 				new OverridingCampaignConfigurationLoader(
@@ -67,7 +68,8 @@ class CampaignCookieTest extends WebRouteTestCase {
 	}
 
 	public function testWhenCampaignsAreInactive_cookieExpiresAtEndOfSession(): void {
-		$client = $this->createClient( [ 'campaigns' => [ 'timezone' => 'UTC' ] ],
+		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
+		$client = $this->createClient( [],
 			function ( FunFunFactory $ffactory, array $config ) {
 				$ffactory->setCampaignConfigurationLoader(
 					new OverridingCampaignConfigurationLoader(

@@ -23,6 +23,16 @@ abstract class WebRouteTestCase extends TestCase {
 
 	protected Application $app;
 
+	protected ?FunFunFactory $factory;
+
+	protected array $applicationConfiguration = [];
+
+	protected function tearDown(): void {
+		parent::tearDown();
+		$this->factory = null;
+		$this->applicationConfiguration = [];
+	}
+
 	/**
 	 * Initializes a new test environment and returns a HttpKernel client to
 	 * make requests to the application.
@@ -33,7 +43,10 @@ abstract class WebRouteTestCase extends TestCase {
 	 * @return HttpKernelBrowser
 	 */
 	protected function createClient( array $config = [], callable $onEnvironmentCreated = null ): HttpKernelBrowser {
-		$testEnvironment = TestEnvironment::newInstance( $config );
+		if ( !empty( $config ) ) {
+			$this->fail( "Adding a config is forbidden, use `modifyConfiguration` instead" );
+		}
+		$testEnvironment = TestEnvironment::newInstance( $this->applicationConfiguration );
 		$app = $this->createApplication( $testEnvironment->getFactory() );
 
 		if ( is_callable( $onEnvironmentCreated ) ) {
@@ -56,7 +69,10 @@ abstract class WebRouteTestCase extends TestCase {
 	 * @param callable $onEnvironmentCreated
 	 */
 	protected function createEnvironment( array $config, callable $onEnvironmentCreated ): void {
-		$testEnvironment = TestEnvironment::newInstance( $config );
+		if ( !empty( $config ) ) {
+			$this->fail( "Adding a config is forbidden, use `modifyConfiguration` instead" );
+		}
+		$testEnvironment = TestEnvironment::newInstance( $this->applicationConfiguration );
 
 		$client = new HttpKernelBrowser(
 			$this->createApplication( $testEnvironment->getFactory() )
@@ -67,6 +83,18 @@ abstract class WebRouteTestCase extends TestCase {
 			$client,
 			$testEnvironment->getFactory()
 		);
+	}
+
+	protected function modifyConfiguration( array $config ) {
+		$this->applicationConfiguration = $config;
+	}
+
+	protected function modifyEnvironment( callable $doModify ) {
+		call_user_func( $doModify, $this->getFactory() );
+	}
+
+	private function getFactory(): FunFunFactory {
+		return TestEnvironment::newInstance( $this->applicationConfiguration )->getFactory();
 	}
 
 	// @codingStandardsIgnoreStart

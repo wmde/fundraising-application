@@ -171,7 +171,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
-		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
 			$client->request(
 				'POST',
 				'/donation/add',
