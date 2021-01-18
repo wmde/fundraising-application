@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidationResult as Result;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidationResult;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
@@ -20,8 +20,8 @@ use WMDE\FunValidators\ConstraintViolation;
  */
 class DonationFormViolationPresenter {
 
-	private $template;
-	private $amountFormatter;
+	private TwigTemplate $template;
+	private AmountFormatter $amountFormatter;
 
 	public function __construct( TwigTemplate $template, AmountFormatter $amountFormatter ) {
 		$this->template = $template;
@@ -31,10 +31,10 @@ class DonationFormViolationPresenter {
 	/**
 	 * @param ConstraintViolation[] $violations
 	 * @param AddDonationRequest $request
-	 * @param DonationTrackingInfo $trackingData
+	 * @param ImpressionCounts $trackingData
 	 * @return string
 	 */
-	public function present( array $violations, AddDonationRequest $request, DonationTrackingInfo $trackingData ): string {
+	public function present( array $violations, AddDonationRequest $request, ImpressionCounts $trackingData ): string {
 		return $this->template->render(
 			[
 				'initialFormValues' => $this->getDonationFormArguments( $request ),

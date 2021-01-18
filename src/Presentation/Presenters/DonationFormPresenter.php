@@ -5,20 +5,19 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 
 /**
  * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class DonationFormPresenter {
 
-	private $template;
-	private $amountFormatter;
-	private $isCustomDonationAmountValidator;
+	private TwigTemplate $template;
+	private AmountFormatter $amountFormatter;
+	private IsCustomAmountValidator $isCustomDonationAmountValidator;
 
 	public function __construct(
 		TwigTemplate $template,
@@ -31,7 +30,7 @@ class DonationFormPresenter {
 	}
 
 	public function present( Euro $amount, string $paymentType, ?int $paymentInterval, bool $paymentDataIsValid,
-							 DonationTrackingInfo $trackingInfo, ?string $addressType, array $urlEndpoints ): string {
+							 ImpressionCounts $trackingInfo, ?string $addressType, array $urlEndpoints ): string {
 		return $this->template->render( [
 			'initialFormValues' => [
 				'amount' => $this->amountFormatter->format( $amount ),

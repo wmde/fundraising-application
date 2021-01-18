@@ -59,7 +59,6 @@ use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationPolicyValid
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\InitialDonationStatusPicker;
-use WMDE\Fundraising\DonationContext\UseCases\AddDonation\ReferrerGeneralizer;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationUseCase;
@@ -492,13 +491,6 @@ class FunFunFactory {
 		];
 	}
 
-	private function newReferrerGeneralizer(): ReferrerGeneralizer {
-		return new ReferrerGeneralizer(
-			$this->config['referrer-generalization']['default'],
-			$this->config['referrer-generalization']['domain-map']
-		);
-	}
-
 	public function getLogger(): LoggerInterface {
 		return $this->createSharedObject( LoggerInterface::class . '::Application', function () {
 			return new NullLogger();
@@ -805,7 +797,6 @@ class FunFunFactory {
 			$this->getDonationRepository(),
 			$this->newDonationValidator(),
 			$this->newDonationPolicyValidator(),
-			$this->newReferrerGeneralizer(),
 			$this->newDonationConfirmationMailer(),
 			$this->newBankTransferCodeGenerator(),
 			$this->newDonationTokenFetcher(),
