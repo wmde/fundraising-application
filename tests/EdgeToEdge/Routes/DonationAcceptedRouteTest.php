@@ -20,7 +20,7 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 	private const CORRECT_UPDATE_TOKEN = 'Correct update token';
 
 	public function testGivenInvalidUpdateToken_errorIsReturned(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$existingDonationId = $this->storeDonation( $factory );
 
 			$client->request(
@@ -49,7 +49,7 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenKnownIdAndValidUpdateToken_successIsReturned(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$existingDonationId = $this->storeDonation( $factory );
 
 			$client->request(

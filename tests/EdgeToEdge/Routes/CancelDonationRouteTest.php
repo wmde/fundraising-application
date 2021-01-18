@@ -40,7 +40,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCancellationIsSuccessful_cookieIsCleared(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->getCookieJar()->set( new Cookie( 'donation_timestamp', '49152 B.C.' ) );
 
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
@@ -62,7 +62,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidUpdateToken_confirmationPageIsShown(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
 
 			$client->request(
@@ -94,7 +94,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidUpdateToken_resultIsError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
 
 			$client->request(
@@ -131,7 +131,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMailDeliveryFails_noticeIsDisplayed(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
 			$factory->setSuborganizationMessenger( $this->newThrowingMessenger() );
 

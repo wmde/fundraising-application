@@ -220,7 +220,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_applicationIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 
 			$client->request(
@@ -241,7 +241,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsCancellationParameters(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator( self::FIXED_TOKEN ) );
 
 			$client->request(
@@ -315,7 +315,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
 			$client->request(
@@ -337,7 +337,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequestUsingPayPal_applicationIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 
 			$client->request(
@@ -426,7 +426,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCommasInStreetNamesAreRemoved(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$params = $this->newValidHttpParameters();
 			$params['strasse'] = 'Nyan, street, ';
 			$client->request(
@@ -448,7 +448,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenCompaniesApply_salutationIsSetToFixedValue(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$params = $this->newValidHttpParametersForCompanies();
 			$result = $client->request(
 				'POST',
@@ -503,7 +503,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenDonationReceiptOptOutRequest_applicationHoldsThisValue(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$parameters = $this->newValidHttpParameters();
 			$parameters['donationReceipt'] = '0';
 
@@ -514,7 +514,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_bucketsAreLogged(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 			$bucketLogger = new BucketLoggerSpy();
 			$factory->setBucketLogger( $bucketLogger );
@@ -532,7 +532,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenInvalidRequest_errorsAreLogged(): void {
 		$this->createEnvironment(
-			[],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$testHandler = new TestHandler();
 				$factory->setLogger( new Logger( 'TestLogger', [ $testHandler ] ) );
@@ -550,7 +549,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_AddressChangeRecordIsCreated(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 
 			$client->request(

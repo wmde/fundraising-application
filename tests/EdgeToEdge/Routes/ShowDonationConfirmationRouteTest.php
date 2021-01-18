@@ -124,7 +124,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenWrongToken_accessIsDenied(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->newStoredDonation( $factory );
 
 			$client->request(

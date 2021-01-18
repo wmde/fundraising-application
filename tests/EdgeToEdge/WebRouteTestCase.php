@@ -39,19 +39,9 @@ abstract class WebRouteTestCase extends TestCase {
 	 * Initializes a new test environment and returns a HttpKernel client to
 	 * make requests to the application.
 	 *
-	 * @param array $config
-	 * @param callable|null $onEnvironmentCreated Gets called after onTestEnvironmentCreated, same signature
-	 *
 	 * @return HttpKernelBrowser
 	 */
-	protected function createClient( array $config = [], callable $onEnvironmentCreated = null ): HttpKernelBrowser {
-		if ( !empty( $config ) ) {
-			$this->fail( "Adding a config is forbidden, use `modifyConfiguration` instead" );
-		}
-		if ( !empty( $onEnvironmentCreated ) ) {
-			$this->fail( "using `onEnvironmentCreated` is deprecated, call `modifyEnvironment` instead" );
-		}
-
+	protected function createClient(): HttpKernelBrowser {
 		$app = $this->createApplication( $this->getFactory() );
 
 		return new HttpKernelBrowser( $app );
@@ -68,13 +58,9 @@ abstract class WebRouteTestCase extends TestCase {
 	 * modifyEnvironment before calling createClient is not sufficient. After the move to Symfony, calls to this
 	 * method should be replaced with $this->getContainer('application_factory') and getClient
 	 *
-	 * @param array $config
 	 * @param callable $onEnvironmentCreated
 	 */
-	protected function createEnvironment( array $config, callable $onEnvironmentCreated ): void {
-		if ( !empty( $config ) ) {
-			$this->fail( "Adding a config is forbidden, use `modifyConfiguration` instead" );
-		}
+	protected function createEnvironment( callable $onEnvironmentCreated ): void {
 		$testEnvironment = TestEnvironment::newInstance( $this->applicationConfiguration );
 
 		$client = new HttpKernelBrowser(

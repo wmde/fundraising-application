@@ -36,7 +36,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	private const PATH = '/handle-paypal-payment-notification';
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator(
 				self::UPDATE_TOKEN,
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
@@ -136,7 +136,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidReceiverEmail_applicationReturnsError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
 				$this->newNonNetworkUsingNotificationVerifier()
 			);
@@ -159,7 +159,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	 * @dataProvider unsupportedPaymentStatusProvider
 	 */
 	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK( array $params ): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ) use ( $params ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ) use ( $params ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
 				$this->newNonNetworkUsingNotificationVerifier()
 			);
@@ -181,7 +181,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenUnsupportedPaymentStatus_requestDataIsLogged(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
 				$this->newNonNetworkUsingNotificationVerifier()
 			);
@@ -208,7 +208,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenPersonalPaypalInfosOnError_PrivateInfoIsExcludedFromGettingLogged(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
 				$this->newNonNetworkUsingNotificationVerifier()
 			);
@@ -244,7 +244,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenFailingVerification_applicationReturnsError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
 				$this->newFailingNotifierMock()
 			);
@@ -261,7 +261,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenUnsupportedCurrency_applicationReturnsError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
 				$this->newNonNetworkUsingNotificationVerifier()
 			);
@@ -280,7 +280,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenTransactionTypeForSubscriptionChanges_requestDataIsLogged(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier(
 				$this->newNonNetworkUsingNotificationVerifier()
 			);
@@ -383,7 +383,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenNegativeTransactionFee_exceptionIsThrown(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPayPalPaymentNotificationVerifier( $this->newSucceedingNotificationVerifier() );
 
 			$logger = new LoggerSpy();

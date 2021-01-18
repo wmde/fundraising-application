@@ -16,7 +16,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
 	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$subscription = new Subscription();
 			$subscription->setConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );
@@ -61,7 +61,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
 	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$subscription = new Subscription();
 			$subscription->setConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );

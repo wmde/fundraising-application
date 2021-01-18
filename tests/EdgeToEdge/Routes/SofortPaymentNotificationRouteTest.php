@@ -48,7 +48,6 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	private function newEnvironment( callable $onEnvironmentCreated ): void {
 		$this->createEnvironment(
-			[],
 			function ( Client $client, FunFunFactory $factory ) use ( $onEnvironmentCreated ): void {
 				$factory->setDonationTokenGenerator( new FixedTokenGenerator(
 					self::VALID_TOKEN,

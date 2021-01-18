@@ -37,7 +37,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->modifyEnvironment( function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
 			$factory->setSubscriptionRepository( $subscriptionRepository );
 		} );
-		$client = $this->createClient( [], );
+		$client = $this->createClient();
 		$client->followRedirects( false );
 
 		$client->request(
