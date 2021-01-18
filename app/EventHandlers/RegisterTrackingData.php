@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\EventHandlers;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
@@ -32,7 +32,7 @@ class RegisterTrackingData implements EventSubscriberInterface {
 		$this->cookieBuilder = $cookieBuilder;
 	}
 
-	public function onKernelRequest( GetResponseEvent $event ): void {
+	public function onKernelRequest( RequestEvent $event ): void {
 		$request = $event->getRequest();
 
 		if ( $request->cookies->get( 'cookie_consent' ) !== 'yes' ) {
@@ -48,7 +48,7 @@ class RegisterTrackingData implements EventSubscriberInterface {
 		] ) );
 	}
 
-	public function onKernelResponse( FilterResponseEvent $event ): void {
+	public function onKernelResponse( ResponseEvent $event ): void {
 		$request = $event->getRequest();
 		$response = $event->getResponse();
 

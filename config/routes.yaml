@@ -127,7 +127,7 @@ apply_for_membership:
 apply_for_membership_form:
     path: /apply-for-membership
     methods: [GET]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController::index'
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController::index'
 
 show_membership_confirmation:
     path: /show-membership-confirmation

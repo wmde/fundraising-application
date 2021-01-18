@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\EventHandlers;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -25,7 +25,7 @@ class OutputCookiePreference implements EventSubscriberInterface {
 		];
 	}
 
-	public function addCookiePreference( FilterResponseEvent $event ): void {
+	public function addCookiePreference( ResponseEvent $event ): void {
 		if ( !$event->isMasterRequest() ) {
 			return;
 		}
