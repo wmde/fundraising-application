@@ -53,9 +53,6 @@ class MailTemplatesTest extends TestCase {
 		$ffFactory->setContentProvider( $contentProvider );
 		$ffFactory->setMailTranslator( new FakeTranslator() );
 
-		$app = Bootstrap::initializeApplication( $ffFactory );
-		$app->flush();
-
 		return $ffFactory;
 	}
 
