@@ -73,9 +73,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected(): void {
-		$client = $this->createClient( [], function () {
-			$this->setSessionValue( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
-		} );
+		$this->setSessionValue( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
+		$client = $this->createClient();
 
 		$client->request(
 			'POST',

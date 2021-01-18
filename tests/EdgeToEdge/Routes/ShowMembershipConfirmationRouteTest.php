@@ -96,14 +96,14 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testOnDatabaseError_errorPageIsShown(): void {
 		$membershipApplication = ValidMembershipApplication::newDomainEntity();
-
-		$client = $this->createClient( [], function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
 			$factory->setMembershipApplicationAuthorizer( new SucceedingAuthorizer() );
 
 			$applicationRepository = new FakeApplicationRepository( $membershipApplication );
 			$applicationRepository->throwOnRead();
 			$factory->setMembershipApplicationRepository( $applicationRepository );
 		} );
+		$client = $this->createClient();
 
 		$client->request(
 			Request::METHOD_GET,

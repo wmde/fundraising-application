@@ -31,12 +31,13 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testRouteShowsComments(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
 		} );
+		$client = $this->createClient();
 
 		$client->request( 'GET', '/list-comments.json?n=10' );
 
@@ -92,12 +93,13 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitSmallerThanCommentCount_onlySoManyCommentsAreShown(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
 		} );
+		$client = $this->createClient();
 
 		$client->request( 'GET', '/list-comments.json?n=1' );
 
@@ -110,12 +112,13 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenJsonpCallback_jsonIsWrappedInCallback(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
 		} );
+		$client = $this->createClient();
 
 		$client->request( 'GET', '/list-comments.json?n=1&f=kittens' );
 
@@ -136,12 +139,13 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
 		} );
+		$client = $this->createClient();
 
 		$client->request( 'GET', '/list-comments.json?n=1&page=2' );
 

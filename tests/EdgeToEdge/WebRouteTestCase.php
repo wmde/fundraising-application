@@ -23,14 +23,16 @@ abstract class WebRouteTestCase extends TestCase {
 
 	protected Application $app;
 
-	protected ?FunFunFactory $factory;
+	protected ?FunFunFactory $factory = null;
 
 	protected array $applicationConfiguration = [];
+	protected array $sessionValues = [];
 
 	protected function tearDown(): void {
 		parent::tearDown();
 		$this->factory = null;
 		$this->applicationConfiguration = [];
+		$this->sessionValues = [];
 	}
 
 	/**
@@ -46,12 +48,11 @@ abstract class WebRouteTestCase extends TestCase {
 		if ( !empty( $config ) ) {
 			$this->fail( "Adding a config is forbidden, use `modifyConfiguration` instead" );
 		}
-		$testEnvironment = TestEnvironment::newInstance( $this->applicationConfiguration );
-		$app = $this->createApplication( $testEnvironment->getFactory() );
-
-		if ( is_callable( $onEnvironmentCreated ) ) {
-			call_user_func( $onEnvironmentCreated, $testEnvironment->getFactory(), $testEnvironment->getConfig() );
+		if ( !empty( $onEnvironmentCreated ) ) {
+			$this->fail( "using `onEnvironmentCreated` is deprecated, call `modifyEnvironment` instead" );
 		}
+
+		$app = $this->createApplication( $this->getFactory() );
 
 		return new HttpKernelBrowser( $app );
 	}
@@ -63,7 +64,9 @@ abstract class WebRouteTestCase extends TestCase {
 	 * as first argument. The second argument is the top level factory which can be used for
 	 * both setup before requests to the client and validation tasks afterwards.
 	 *
-	 * Use instead of createClient when you need the factory after the initial setup of the client.
+	 * Use this method only when you need the factory after the initial setup of the client - when calling
+	 * modifyEnvironment before calling createClient is not sufficient. After the move to Symfony, calls to this
+	 * method should be replaced with $this->getContainer('application_factory') and getClient
 	 *
 	 * @param array $config
 	 * @param callable $onEnvironmentCreated
@@ -94,7 +97,10 @@ abstract class WebRouteTestCase extends TestCase {
 	}
 
 	private function getFactory(): FunFunFactory {
-		return TestEnvironment::newInstance( $this->applicationConfiguration )->getFactory();
+		if ( $this->factory === null ) {
+			$this->factory = TestEnvironment::newInstance( $this->applicationConfiguration )->getFactory();
+		}
+		return $this->factory;
 	}
 
 	// @codingStandardsIgnoreStart
@@ -103,6 +109,7 @@ abstract class WebRouteTestCase extends TestCase {
 		$this->app = Bootstrap::initializeApplication( $ffFactory );
 
 		$this->app['session.test'] = true;
+		$this->initializeApplicationSessionValues();
 
 		return $this->app;
 	}
@@ -181,12 +188,18 @@ abstract class WebRouteTestCase extends TestCase {
 	 * @param mixed $value
 	 */
 	public function setSessionValue( string $key, $value ): void {
-		if ( !( $this->app instanceof Application ) ) {
-			$this->fail( 'Application was not initialized. Call createClient or createEnvironment' );
+		$this->sessionValues[$key] = $value;
+	}
+
+	public function initializeApplicationSessionValues(): void {
+		if ( empty( $this->sessionValues ) ) {
 			return;
 		}
+
 		/** @var SessionInterface $session */
 		$session = $this->app['session'];
-		$session->set( $key, $value );
+		foreach ( $this->sessionValues as $key => $value ) {
+			$session->set( $key, $value );
+		}
 	}
 }

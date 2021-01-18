@@ -29,13 +29,14 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenAreComments_theyAreInTheRss(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->persistFirstComment( $factory->getEntityManager() );
 			$this->persistSecondComment( $factory->getEntityManager() );
 			$this->persistEvilComment( $factory->getEntityManager() );
 			$factory->getEntityManager()->flush();
 		} );
+		$client = $this->createClient();
 
 		$client->request( 'GET', '/list-comments.rss' );
 

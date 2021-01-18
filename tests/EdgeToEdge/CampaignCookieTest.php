@@ -29,17 +29,15 @@ class CampaignCookieTest extends WebRouteTestCase {
 
 	public function testWhenUserVisitsThePage_cookieIsSet(): void {
 		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
-		$client = $this->createClient(
-			[],
-			function ( FunFunFactory $ffactory, array $config ) {
+		$this->modifyEnvironment( function ( FunFunFactory $ffactory ) {
 			$ffactory->setCampaignConfigurationLoader(
 				new OverridingCampaignConfigurationLoader(
 					$ffactory->getCampaignConfigurationLoader(),
 					self::TEST_CAMPAIGN_CONFIG
 				)
 			);
-			}
-		);
+		} );
+		$client = $this->createClient();
 		$client->request( 'get', '/', [] );
 
 		$cookie = $client->getCookieJar()->get( self::COOKIE_NAME );
@@ -49,15 +47,15 @@ class CampaignCookieTest extends WebRouteTestCase {
 	}
 
 	public function testWhenUserVisitsThePageWithUrlParams_cookieIsChanged(): void {
-		$client = $this->createClient(
-			[],
-			function ( FunFunFactory $factory ): void {
-				$factory->setCampaignConfigurationLoader( new OverridingCampaignConfigurationLoader(
-					$factory->getCampaignConfigurationLoader(),
+		$this->modifyEnvironment( function ( FunFunFactory $ffactory ) {
+			$ffactory->setCampaignConfigurationLoader(
+				new OverridingCampaignConfigurationLoader(
+					$ffactory->getCampaignConfigurationLoader(),
 					self::TEST_CAMPAIGN_CONFIG
-				) );
-			}
-		);
+				)
+			);
+		} );
+		$client = $this->createClient();
 		$client->getCookieJar()->set( new BrowserKitCookie( self::COOKIE_NAME, 'omg=0' ) );
 		$client->request( 'get', '/', [ 'omg' => 1 ] );
 		$responseCookies = $client->getResponse()->headers->getCookies();
@@ -69,21 +67,21 @@ class CampaignCookieTest extends WebRouteTestCase {
 
 	public function testWhenCampaignsAreInactive_cookieExpiresAtEndOfSession(): void {
 		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
-		$client = $this->createClient( [],
-			function ( FunFunFactory $ffactory, array $config ) {
-				$ffactory->setCampaignConfigurationLoader(
-					new OverridingCampaignConfigurationLoader(
-						$ffactory->getCampaignConfigurationLoader(),
-						[],
-						function ( $campaigns ): array {
-							foreach ( $campaigns as $name => $campaign ) {
-								$campaigns[$name]['active'] = false;
-							}
-							return $campaigns;
+		$this->modifyEnvironment( function ( FunFunFactory $ffactory ) {
+			$ffactory->setCampaignConfigurationLoader(
+				new OverridingCampaignConfigurationLoader(
+					$ffactory->getCampaignConfigurationLoader(),
+					[],
+					function ( $campaigns ): array {
+						foreach ( $campaigns as $name => $campaign ) {
+							$campaigns[$name]['active'] = false;
 						}
-					)
-				);
-			} );
+						return $campaigns;
+					}
+				)
+			);
+		} );
+		$client = $this->createClient();
 		$client->request( 'get', '/', [] );
 
 		$cookie = $client->getCookieJar()->get( self::COOKIE_NAME );

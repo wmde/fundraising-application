@@ -67,11 +67,12 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithDonationIdAndCorrespondingAccessCode_successResponseWithInitialFormValuesIsReturned(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( '4711abc' ) );
 			$factory->getDonationRepository()
 				->storeDonation( ValidDonation::newDirectDebitDonation() );
 		} );
+		$client = $this->createClient();
 		$httpParameters = [
 			'donationId' => 1,
 			'donationAccessToken' => '4711abc'
@@ -285,9 +286,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected(): void {
-		$client = $this->createClient( [], function () {
-			$this->setSessionValue( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
-		} );
+		$this->setSessionValue( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
+		$client = $this->createClient();
 
 		$client->request(
 			'POST',
@@ -299,12 +299,11 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected(): void {
-		$client = $this->createClient( [], function () {
-			$this->setSessionValue(
-				FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY,
-				( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT12M' ) )
-			);
-		} );
+		$this->setSessionValue(
+			FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY,
+			( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT12M' ) )
+		);
+		$client = $this->createClient();
 
 		$client->request(
 			'POST',
@@ -404,7 +403,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ) {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ) {
 			$translator = $this->createMock( TranslatorInterface::class );
 			$translator->expects( $this->once() )
 				->method( 'trans' )
@@ -412,6 +411,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				->willReturn( 'Ihre Mitgliedschaft bei Wikimedia' );
 			$factory->setPaymentProviderItemsTranslator( $translator );
 		} );
+		$client = $this->createClient();
 		$client->followRedirects( false );
 
 		$client->request(
