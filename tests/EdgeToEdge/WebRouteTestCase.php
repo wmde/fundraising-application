@@ -48,41 +48,47 @@ abstract class WebRouteTestCase extends TestCase {
 	}
 
 	/**
-	 * Initializes a new test environment and HttpKernel.
+	 * Run test code that needs access to the central FunFunFactory.
 	 *
-	 * Invokes the provided callable with a HttpKernel client to make requests to the application
-	 * as first argument. The second argument is the top level factory which can be used for
-	 * both setup before requests to the client and validation tasks afterwards.
+	 * This is a "legacy" function for test code that needs access to FunFunFactory
+	 * (which was not accessible before). For new test code you should use "getFactory" instead.
 	 *
-	 * Use this method only when you need the factory after the initial setup of the client - when calling
-	 * modifyEnvironment before calling createClient is not sufficient. After the move to Symfony, calls to this
-	 * method should be replaced with $this->getContainer('application_factory') and getClient
-	 *
-	 * @param callable $onEnvironmentCreated
+	 * @param callable(HttpKernelBrowser, FunFunFactory): void $onEnvironmentCreated
 	 */
 	protected function createEnvironment( callable $onEnvironmentCreated ): void {
-		$testEnvironment = TestEnvironment::newInstance( $this->applicationConfiguration );
-
-		$client = new HttpKernelBrowser(
-			$this->createApplication( $testEnvironment->getFactory() )
-		);
-
+		$factory = $this->getFactory();
 		call_user_func(
 			$onEnvironmentCreated,
-			$client,
-			$testEnvironment->getFactory()
+			$this->createClient(),
+			$factory
 		);
 	}
 
-	protected function modifyConfiguration( array $config ) {
+	/**
+	 * Change application configuration values.
+	 *
+	 * Each value provided will be merged into the application configuration,
+	 * overriding the values from the configuration file (app/config/config.test.json).
+	 *
+	 * @param array $config
+	 */
+	protected function modifyConfiguration( array $config ): void {
 		$this->applicationConfiguration = $config;
 	}
 
-	protected function modifyEnvironment( callable $doModify ) {
+	/**
+	 * Run setup code that needs access to the central FunFunFactory.
+	 *
+	 * This is a "legacy" function for test code that needs access to FunFunFactory
+	 * (which was not accessible before). For new test code you should use "getFactory" instead.
+	 *
+	 * @param callable(FunFunFactory): void $doModify
+	 */
+	protected function modifyEnvironment( callable $doModify ): void {
 		call_user_func( $doModify, $this->getFactory() );
 	}
 
-	private function getFactory(): FunFunFactory {
+	protected function getFactory(): FunFunFactory {
 		if ( $this->factory === null ) {
 			$this->factory = TestEnvironment::newInstance( $this->applicationConfiguration )->getFactory();
 		}
