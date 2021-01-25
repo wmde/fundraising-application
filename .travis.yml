@@ -15,8 +15,10 @@ install:
 before_script:
   - bash build/travis/createLocalTestConfig.sh
   - echo "APP_ENV=dev" > .env
+  - source build/travis/branch_changes.sh
 
 script:
+  - if [ "$CHANGES_IN_JS" != "0" ]; then echo "there were $CHANGES_IN_JS JS changes"; else echo "No JS changes"; fi
   - make setup
   - make clear
   - make ci-with-coverage
