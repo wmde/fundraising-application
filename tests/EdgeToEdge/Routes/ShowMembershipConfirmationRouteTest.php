@@ -39,7 +39,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCallWithWrongAccessToken_deniedPageIsShown(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$membershipApplication = $this->newStoredMembershipApplication( $factory );
 
 			$client->request(
@@ -56,7 +56,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCallOnAnonymizedRecord_deniedPageIsShown(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
 				self::CORRECT_ACCESS_TOKEN
 			) );
@@ -80,7 +80,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCallOnUnknownApplicationId_deniedPageIsShown(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->request(
 				Request::METHOD_GET,
 				self::PATH,
@@ -96,14 +96,14 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testOnDatabaseError_errorPageIsShown(): void {
 		$membershipApplication = ValidMembershipApplication::newDomainEntity();
-
-		$client = $this->createClient( [], function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
 			$factory->setMembershipApplicationAuthorizer( new SucceedingAuthorizer() );
 
 			$applicationRepository = new FakeApplicationRepository( $membershipApplication );
 			$applicationRepository->throwOnRead();
 			$factory->setMembershipApplicationRepository( $applicationRepository );
 		} );
+		$client = $this->createClient();
 
 		$client->request(
 			Request::METHOD_GET,

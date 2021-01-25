@@ -15,7 +15,8 @@ use WMDE\Fundraising\SubscriptionContext\Domain\Model\Subscription;
 class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
 	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed(): void {
-		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$subscription = new Subscription();
 			$subscription->setConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );
@@ -34,7 +35,8 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound(): void {
-		$client = $this->createClient( [ 'skin' => 'laika' ] );
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
 
 		$client->request(
 			'GET',
@@ -58,7 +60,8 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed(): void {
-		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$subscription = new Subscription();
 			$subscription->setConfirmationCode( 'deadbeef' );
 			$subscription->setEmail( 'tester@example.com' );

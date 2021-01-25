@@ -37,7 +37,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithoutTokens_resultIsError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -69,7 +69,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithValidParameters_resultIsSuccess(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -89,7 +89,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithUnknownDonationId_resultIsError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -109,7 +109,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithInvalidUpdateToken_resultIsError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(
@@ -129,7 +129,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithEmoticons_resultIsError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->getNewlyStoredDonation( $factory );
 
 			$client->request(

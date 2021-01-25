@@ -28,9 +28,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	private Donation $donation;
 
 	public function testGivenValidRequest_confirmationPageContainsDonationData(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$this->donation = $this->newStoredDonation( $factory );
 		} );
+		$client = $this->createClient();
 
 		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
 
@@ -38,9 +39,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenAnonymousDonation_confirmationPageReflectsThat(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$this->donation = $this->newBookedAnonymousPayPalDonation( $factory );
 		} );
+		$client = $this->createClient();
 
 		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
 
@@ -48,9 +50,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenAnonymousDonation_confirmationPageShowsStatusText(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$this->donation = $this->newBookedAnonymousPayPalDonation( $factory );
 		} );
+		$client = $this->createClient();
 
 		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
 
@@ -121,7 +124,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenWrongToken_accessIsDenied(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$donation = $this->newStoredDonation( $factory );
 
 			$client->request(
@@ -144,9 +147,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenWrongId_accessIsDenied(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$this->donation = $this->newStoredDonation( $factory );
 		} );
+		$client = $this->createClient();
 
 		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() + 1 );
 
@@ -154,7 +158,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenNoDonation_accessIsDenied(): void {
-		$client = $this->createClient( [] );
+		$client = $this->createClient();
 		$responseContent = $this->retrieveDonationConfirmation( $client, 1 );
 
 		$this->assertStringContainsString( self::ACCESS_DENIED_TEXT, $responseContent );

@@ -23,50 +23,76 @@ abstract class WebRouteTestCase extends TestCase {
 
 	protected Application $app;
 
+	protected ?FunFunFactory $factory = null;
+
+	protected array $applicationConfiguration = [];
+	protected array $sessionValues = [];
+
+	protected function tearDown(): void {
+		parent::tearDown();
+		$this->factory = null;
+		$this->applicationConfiguration = [];
+		$this->sessionValues = [];
+	}
+
 	/**
 	 * Initializes a new test environment and returns a HttpKernel client to
 	 * make requests to the application.
 	 *
-	 * @param array $config
-	 * @param callable|null $onEnvironmentCreated Gets called after onTestEnvironmentCreated, same signature
-	 *
 	 * @return HttpKernelBrowser
 	 */
-	protected function createClient( array $config = [], callable $onEnvironmentCreated = null ): HttpKernelBrowser {
-		$testEnvironment = TestEnvironment::newInstance( $config );
-		$app = $this->createApplication( $testEnvironment->getFactory() );
-
-		if ( is_callable( $onEnvironmentCreated ) ) {
-			call_user_func( $onEnvironmentCreated, $testEnvironment->getFactory(), $testEnvironment->getConfig() );
-		}
+	protected function createClient(): HttpKernelBrowser {
+		$app = $this->createApplication( $this->getFactory() );
 
 		return new HttpKernelBrowser( $app );
 	}
 
 	/**
-	 * Initializes a new test environment and HttpKernel.
+	 * Run test code that needs access to the central FunFunFactory.
 	 *
-	 * Invokes the provided callable with a HttpKernel client to make requests to the application
-	 * as first argument. The second argument is the top level factory which can be used for
-	 * both setup before requests to the client and validation tasks afterwards.
+	 * This is a "legacy" function for test code that needs access to FunFunFactory
+	 * (which was not accessible before). For new test code you should use "getFactory" instead.
 	 *
-	 * Use instead of createClient when you need the factory after the initial setup of the client.
-	 *
-	 * @param array $config
-	 * @param callable $onEnvironmentCreated
+	 * @param callable(HttpKernelBrowser, FunFunFactory): void $onEnvironmentCreated
 	 */
-	protected function createEnvironment( array $config, callable $onEnvironmentCreated ): void {
-		$testEnvironment = TestEnvironment::newInstance( $config );
-
-		$client = new HttpKernelBrowser(
-			$this->createApplication( $testEnvironment->getFactory() )
-		);
-
+	protected function createEnvironment( callable $onEnvironmentCreated ): void {
+		$factory = $this->getFactory();
 		call_user_func(
 			$onEnvironmentCreated,
-			$client,
-			$testEnvironment->getFactory()
+			$this->createClient(),
+			$factory
 		);
+	}
+
+	/**
+	 * Change application configuration values.
+	 *
+	 * Each value provided will be merged into the application configuration,
+	 * overriding the values from the configuration file (app/config/config.test.json).
+	 *
+	 * @param array $config
+	 */
+	protected function modifyConfiguration( array $config ): void {
+		$this->applicationConfiguration = $config;
+	}
+
+	/**
+	 * Run setup code that needs access to the central FunFunFactory.
+	 *
+	 * This is a "legacy" function for test code that needs access to FunFunFactory
+	 * (which was not accessible before). For new test code you should use "getFactory" instead.
+	 *
+	 * @param callable(FunFunFactory): void $doModify
+	 */
+	protected function modifyEnvironment( callable $doModify ): void {
+		call_user_func( $doModify, $this->getFactory() );
+	}
+
+	protected function getFactory(): FunFunFactory {
+		if ( $this->factory === null ) {
+			$this->factory = TestEnvironment::newInstance( $this->applicationConfiguration )->getFactory();
+		}
+		return $this->factory;
 	}
 
 	// @codingStandardsIgnoreStart
@@ -75,6 +101,7 @@ abstract class WebRouteTestCase extends TestCase {
 		$this->app = Bootstrap::initializeApplication( $ffFactory );
 
 		$this->app['session.test'] = true;
+		$this->initializeApplicationSessionValues();
 
 		return $this->app;
 	}
@@ -153,12 +180,18 @@ abstract class WebRouteTestCase extends TestCase {
 	 * @param mixed $value
 	 */
 	public function setSessionValue( string $key, $value ): void {
-		if ( !( $this->app instanceof Application ) ) {
-			$this->fail( 'Application was not initialized. Call createClient or createEnvironment' );
+		$this->sessionValues[$key] = $value;
+	}
+
+	public function initializeApplicationSessionValues(): void {
+		if ( empty( $this->sessionValues ) ) {
 			return;
 		}
+
 		/** @var SessionInterface $session */
 		$session = $this->app['session'];
-		$session->set( $key, $value );
+		foreach ( $this->sessionValues as $key => $value ) {
+			$session->set( $key, $value );
+		}
 	}
 }

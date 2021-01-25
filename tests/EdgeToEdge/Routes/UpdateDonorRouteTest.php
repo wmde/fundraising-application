@@ -26,8 +26,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	private const INVALID_UPDATE_TOKEN = '2ba905fe68e61f3a681d8faf689bfeeb8c942b5b';
 
 	public function testWhenCorrectPrivatePersonDataIsPosted_addressIsChanged(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$donation = $this->newStoredDonation( $factory );
 				$this->performRequest(
@@ -56,8 +56,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenCorrectCompanyDataIsPosted_addressIsChanged(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$donation = $this->newStoredDonation( $factory );
 				$this->performRequest(
@@ -98,7 +98,6 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	public function testWhenInvalidUpdateTokenIsSupplied_requestIsDenied(): void {
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$donation = $this->newStoredDonation( $factory );
 
@@ -117,8 +116,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenDonationIsExported_requestIsDenied(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$donation = ValidDoctrineDonation::newExportedirectDebitDoctrineDonation();
 				$donation->modifyDataObject(
@@ -145,8 +144,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenDonationDataIsInvalid_requestIsDenied(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$donation = $this->newStoredDonation( $factory );
 				$donorData = $this->newPrivateDonorData();
@@ -170,8 +169,8 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenDonationAlreadyHasAddress_requestIsDenied(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 				$donation->modifyDataObject(

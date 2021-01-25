@@ -19,7 +19,7 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 	private const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
 
 	public function testGivenValidUpdateToken_confirmationPageIsShown(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$applicationId = $this->storeApplication( $factory->getEntityManager() );
 
 			$client->request(
@@ -36,7 +36,7 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidUpdateToken_resultIsError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$applicationId = $this->storeApplication( $factory->getEntityManager() );
 
 			$client->request(

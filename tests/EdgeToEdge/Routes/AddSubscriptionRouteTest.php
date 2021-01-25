@@ -33,11 +33,11 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 
 	public function testValidSubscriptionRequestGetsPersisted(): void {
 		$subscriptionRepository = new SubscriptionRepositorySpy();
-
-		$client = $this->createClient( [ 'skin' => 'laika' ], function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$this->modifyEnvironment( function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
 			$factory->setSubscriptionRepository( $subscriptionRepository );
 		} );
-
+		$client = $this->createClient();
 		$client->followRedirects( false );
 
 		$client->request(
@@ -56,7 +56,8 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidDataAndNoContentType_routeReturnsRedirectToSucccessPage(): void {
-		$client = $this->createClient( [ 'skin' => 'laika' ] );
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
 		$client->followRedirects( false );
 		$client->request(
 			'POST',
@@ -69,7 +70,8 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage(): void {
-		$client = $this->createClient( [ 'skin' => 'laika' ] );
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
 
 		$crawler = $client->request(
 			'POST',
@@ -85,7 +87,8 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidDataAndJSONContentType_routeReturnsSuccessResult(): void {
-		$client = $this->createClient( [ 'skin' => 'laika' ] );
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
 		$client->followRedirects( false );
 		$client->request(
 			'POST',
@@ -99,7 +102,8 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidDataAndJSONContentType_routeReturnsErrorResult(): void {
-		$client = $this->createClient( [ 'skin' => 'laika' ] );
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
 
 		$client->request(
 			'POST',
@@ -119,7 +123,8 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidDataAndJSONPRequest_routeReturnsResult(): void {
-		$client = $this->createClient( [ 'skin' => 'laika' ] );
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
 		$client->request(
 			'GET',
 			'/contact/subscribe',

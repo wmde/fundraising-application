@@ -21,8 +21,8 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 	private const DUMMY_DONATION_ID = 0;
 
 	public function testWhenInvalidDataIsSent_serverThrowsAnError(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 
@@ -44,8 +44,8 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenValidDataIsSent_serverShowsAConfirmationPage(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 				$factory->getEntityManager()->persist( $addressChange );
@@ -82,8 +82,8 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 	}
 
 	public function testUsersOptIntoReceiptByDefault(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 				$entityManager = $factory->getEntityManager();
@@ -100,8 +100,8 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 	}
 
 	public function testUsersCanOptOutOfReceiptWhileStillProvidingAnAddress(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 				$entityManager = $factory->getEntityManager();
@@ -118,8 +118,8 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 	}
 
 	public function testOptingOutWithEmptyFields_serverShowsAConfirmationPage(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 

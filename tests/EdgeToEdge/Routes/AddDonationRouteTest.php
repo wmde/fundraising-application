@@ -43,7 +43,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private const ADD_DONATION_PATH = '/donation/add';
 
 	public function testGivenValidRequest_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
 
@@ -58,7 +58,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenDonationGetsPersisted_timestampIsStoredInSession(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( true );
 			$client->request(
 				'POST',
@@ -73,9 +73,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected(): void {
-		$client = $this->createClient( [], function () {
-			$this->setSessionValue( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
-		} );
+		$this->setSessionValue( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
+		$client = $this->createClient();
 
 		$client->request(
 			'POST',
@@ -87,7 +86,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$this->setSessionValue(
 				FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY,
 				( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT35M' ) )
@@ -171,7 +170,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
-		$this->createEnvironment( [ 'skin' => 'laika' ], function ( Client $client, FunFunFactory $factory ): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->request(
 				'POST',
 				'/donation/add',
@@ -209,7 +209,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		 */
 		$factory = null;
 
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
 
@@ -280,7 +280,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( false );
 
 			$client->request(
@@ -320,7 +320,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenNonGermanDonor_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( false );
 
 			$client->request(
@@ -391,7 +391,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$translator = $this->createMock( TranslatorInterface::class );
 			$translator->expects( $this->once() )
 				->method( 'trans' )
@@ -438,7 +438,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$response = new SofortResponse();
 			$response->setPaymentUrl( 'https://bankingpin.please' );
 
@@ -548,7 +548,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenInvalidRequest_errorsAreLogged(): void {
 		$this->createEnvironment(
-			[],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$testHandler = new TestHandler();
 				$factory->setLogger( new Logger( 'TestLogger', [ $testHandler ] ) );
@@ -623,7 +622,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_tokensAreReturned(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 
 			$client->followRedirects( false );
@@ -641,7 +640,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_clientIsRedirected(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 			$client->followRedirects( false );
 
@@ -656,7 +655,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
 			$client->request(
@@ -686,7 +685,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
 
@@ -728,7 +727,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testDonationReceiptOptOut_persistedInDonation(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$parameters = $this->newValidFormInput();
 			$parameters['donationReceipt'] = '0';
 
@@ -739,7 +738,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_bucketsAreLogged(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$bucketLogger = new BucketLoggerSpy();
 			$factory->setBucketLogger( $bucketLogger );
 			$client->followRedirects( false );
@@ -756,7 +755,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_addressChangeRecordIsCreated(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( false );
 
 			$client->request(

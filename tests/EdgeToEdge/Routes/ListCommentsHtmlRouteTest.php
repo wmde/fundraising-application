@@ -29,10 +29,11 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenAreThreeComments_listSizeIsShownAsThree(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
+		$client = $this->createClient();
 
 		$crawler = $client->request( 'GET', '/list-comments.html' );
 
@@ -80,10 +81,11 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenAreComments_theyAreInTheHtml(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
+		$client = $this->createClient();
 
 		$client->request( 'GET', '/list-comments.html' );
 
@@ -117,10 +119,11 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCommentsGetEscaped(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
+		$client = $this->createClient();
 
 		$client->request( 'GET', '/list-comments.html' );
 
@@ -131,10 +134,11 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
-		$client = $this->createClient( [], function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$factory->disableDoctrineSubscribers();
 			$this->createThreeComments( $factory->getEntityManager() );
 		} );
+		$client = $this->createClient();
 
 		$client->request( 'GET', '/list-comments.json?n=2&page=2' );
 

@@ -36,7 +36,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	private const PATH = '/handle-creditcard-payment-notification';
 
 	public function testGivenInvalidRequest_applicationIndicatesError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setCreditCardService( new FakeCreditCardService() );
 			$client->request(
 				Request::METHOD_GET,
@@ -51,7 +51,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenNonBillingRequest_applicationIndicatesError(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setCreditCardService( new FakeCreditCardService() );
 			$client->request(
 				Request::METHOD_GET,
@@ -69,7 +69,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenNonBillingRequest_applicationLogsRequest(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setCreditCardService( new FakeCreditCardService() );
 			$logger = new LoggerSpy();
 			$factory->setCreditCardLogger( $logger );
@@ -91,7 +91,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
-		$this->createEnvironment( [], function ( Client $client, FunFunFactory $factory ): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator(
 				self::UPDATE_TOKEN,
 				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )

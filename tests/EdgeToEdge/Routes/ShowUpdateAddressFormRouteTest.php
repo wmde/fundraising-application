@@ -24,8 +24,8 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 	private const INVALID_TOKEN = 'abcdefghijklmnopqrstuvwxzy12345';
 
 	public function testWhenCorrectUpdateAddressTokenIsSupplied_addressChangeFormIsShown(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
 
@@ -50,8 +50,8 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenIncorrectUpdateAddressTokenIsSupplied_accessToAddressChangeFormIsDenied(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
-			[ 'skin' => 'laika' ],
 			function ( Client $client, FunFunFactory $factory ): void {
 				$this->performRequest(
 					$client,
