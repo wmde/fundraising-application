@@ -15,7 +15,6 @@ use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
-use WMDE\Fundraising\Frontend\Infrastructure\Validation\FallbackRequestValueReader;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
@@ -28,10 +27,6 @@ class AddDonationController {
 
 	private SessionInterface $session;
 	private FunFunFactory $ffFactory;
-	/**
-	 * @var FallbackRequestValueReader
-	 */
-	private FallbackRequestValueReader $legacyRequestValueReader;
 
 	public function index( FunFunFactory $ffFactory, Request $request, SessionInterface $session ): Response {
 		$this->session = $session;
@@ -40,7 +35,6 @@ class AddDonationController {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
 
-		$this->legacyRequestValueReader = new FallbackRequestValueReader( $ffFactory->getLogger(), $request );
 		$addDonationRequest = $this->createDonationRequest( $request );
 		$responseModel = $this->ffFactory->newAddDonationUseCase()->addDonation( $addDonationRequest );
 
@@ -106,10 +100,9 @@ class AddDonationController {
 	private function createDonationRequest( Request $request ): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 
-		// TODO Replace legacyRequestValueReader with default values after January 2021
 		$donationRequest->setAmount( $this->getEuroAmount( $this->getAmountFromRequest( $request ) ) );
-		$donationRequest->setPaymentType( $request->get( 'paymentType', $this->legacyRequestValueReader->getPaymentType() ) );
-		$donationRequest->setInterval( intval( $request->get( 'interval', $this->legacyRequestValueReader->getInterval() ) ) );
+		$donationRequest->setPaymentType( $request->get( 'paymentType', '' ) );
+		$donationRequest->setInterval( intval( $request->get( 'interval', 0 ) ) );
 
 		$donationRequest->setDonorType( $this->getSafeDonorType( $request ) );
 		$donationRequest->setDonorSalutation( $request->get( 'salutation', '' ) );
@@ -179,7 +172,7 @@ class AddDonationController {
 		if ( $request->request->has( 'amount' ) ) {
 			return intval( $request->get( 'amount' ) );
 		}
-		return $this->legacyRequestValueReader->getAmount();
+		return 0;
 	}
 
 	private function newTrackingInfoFromRequest( Request $request ): DonationTrackingInfo {
