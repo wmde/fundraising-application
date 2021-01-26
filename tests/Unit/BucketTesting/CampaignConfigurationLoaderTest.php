@@ -6,13 +6,12 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\VoidCache;
-use FileFetcher\InMemoryFileFetcher;
-use FileFetcher\StubFileFetcher;
+use FileFetcher\SimpleFileFetcher;
 use FileFetcher\ThrowingFileFetcher;
-use PHPUnit\Framework\MockObject\MockObject;
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Exception\ParseException;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader;
 
@@ -39,59 +38,68 @@ campaigns:
       default_bucket: bar
 CFG;
 
-	public function testGivenOneConfigurationFile_itIsLoaded() {
-		$filesystem = $this->getMockFilesystem();
-		$filesystem->method( 'exists' )->willReturn( true );
-		$fileFetcher = new StubFileFetcher( self::VALID_CONFIGURATION );
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
+	private const INVALID_CONFIGURATION = <<<CFG
+campaigns:
+    campaign1: "Campaign definition should be an object, this is wrong"
+CFG;
 
-		$this->assertArrayHasKey( 'campaign1', $loader->loadCampaignConfiguration( 'campaigns.yml' ) );
+	private vfsStreamDirectory $filesystem;
+
+	/**
+	 * @before
+	 */
+	public function filesystemSetUp(): void {
+		$this->filesystem = vfsStream::setup();
+	}
+
+	public function testGivenOneConfigurationFile_itIsLoaded() {
+		$campaignFile = vfsStream::newFile( 'campaigns.yml' )
+			->at( $this->filesystem )
+			->setContent( self::VALID_CONFIGURATION );
+		$loader = new CampaignConfigurationLoader( new SimpleFileFetcher(), new VoidCache() );
+
+		$this->assertArrayHasKey( 'campaign1', $loader->loadCampaignConfiguration( $campaignFile->url() ) );
 	}
 
 	public function testGivenSeveralConfigurationFiles_theyAreLoaded() {
-		$filesystem = $this->getMockFilesystem();
-		$filesystem->method( 'exists' )->willReturn( true );
-		$fileFetcher = new InMemoryFileFetcher(
-			[
-				'campaigns.yml' => self::VALID_CONFIGURATION,
-				'override.yml' => self::OVERRIDE_CONFIGURATION
-			]
-		);
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
+		$campaignFile = vfsStream::newFile( 'campaigns.yml' )
+			->at( $this->filesystem )
+			->setContent( self::VALID_CONFIGURATION );
+		$overrideFile = vfsStream::newFile( 'override.yml' )
+			->at( $this->filesystem )
+			->setContent( self::OVERRIDE_CONFIGURATION );
+		$loader = new CampaignConfigurationLoader( new SimpleFileFetcher(), new VoidCache() );
 
-		$config = $loader->loadCampaignConfiguration( 'campaigns.yml', 'override.yml' );
+		$config = $loader->loadCampaignConfiguration( $campaignFile->url(), $overrideFile->url() );
 		$this->assertArrayHasKey( 'campaign1', $config );
 		$this->assertFalse( $config['campaign1']['active'], 'Second configuration file should override first one' );
 	}
 
 	public function testGivenNonexistentFiles_exceptionIsThrown() {
-		$filesystem = $this->getMockFilesystem();
-		$filesystem->method( 'exists' )->willReturn( false );
-		$fileFetcher = new StubFileFetcher( self::VALID_CONFIGURATION );
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
+		$loader = new CampaignConfigurationLoader( new SimpleFileFetcher(), new VoidCache() );
 
 		$this->expectExceptionMessageMatches( '/No campaign configuration files found/' );
-		$loader->loadCampaignConfiguration( 'campaigns.yml' );
+		$loader->loadCampaignConfiguration( vfsStream::url( 'campaigns.yml' ) );
 	}
 
 	public function testGivenInvalidYaml_parseExceptionIsThrown() {
-		$filesystem = $this->getMockFilesystem();
-		$filesystem->method( 'exists' )->willReturn( true );
-		$fileFetcher = new StubFileFetcher( ' """ ' );
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
+		$campaignFile = vfsStream::newFile( 'campaigns.yml' )
+			->at( $this->filesystem )
+			->setContent( ' """ ' );
+		$loader = new CampaignConfigurationLoader( new SimpleFileFetcher(), new VoidCache() );
 
 		$this->expectException( ParseException::class );
-		$loader->loadCampaignConfiguration( 'campaigns.yml' );
+		$loader->loadCampaignConfiguration( $campaignFile->url() );
 	}
 
 	public function testGivenInvalidFileStructure_configurationExceptionIsThrown() {
-		$filesystem = $this->getMockFilesystem();
-		$filesystem->method( 'exists' )->willReturn( true );
-		$fileFetcher = new StubFileFetcher( 'campaign: true' );
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, new VoidCache() );
+		$campaignFile = vfsStream::newFile( 'campaigns.yml' )
+			->at( $this->filesystem )
+			->setContent( self::INVALID_CONFIGURATION );
+		$loader = new CampaignConfigurationLoader( new SimpleFileFetcher(), new VoidCache() );
 
 		$this->expectException( InvalidConfigurationException::class );
-		$loader->loadCampaignConfiguration( 'campaigns.yml' );
+		$loader->loadCampaignConfiguration( $campaignFile->url() );
 	}
 
 	public function testCategoriesAreAlreadyCached_nothingIsProcessed() {
@@ -105,23 +113,13 @@ CFG;
 				'default_bucket' => 'a'
 			]
 		];
-		$filesystem = $this->getMockFilesystem();
-		$filesystem->method( 'exists' )->willReturn( false );
 		$fileFetcher = new ThrowingFileFetcher();
 		$cache = new ArrayCache();
 		// @see CampaignConfigurationLoader::getCacheKey
 		$cacheKey = md5( 'campaigns.yml' );
 		$cache->save( $cacheKey, $campaignConfig );
-		$loader = new CampaignConfigurationLoader( $filesystem, $fileFetcher, $cache );
+		$loader = new CampaignConfigurationLoader( $fileFetcher, $cache );
 
 		$this->assertEquals( $campaignConfig, $loader->loadCampaignConfiguration( 'campaigns.yml' ) );
 	}
-
-	/**
-	 * @return MockObject|Filesystem
-	 */
-	public function getMockFilesystem() {
-		return $this->createMock( Filesystem::class );
-	}
-
 }
