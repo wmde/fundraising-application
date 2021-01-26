@@ -24,7 +24,7 @@ class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterfac
 
 	public function loadCampaignConfiguration( string ...$configFiles ): array {
 		$cacheKey = $this->getCacheKey( ...$configFiles );
-		if ( $this->cache->contains( $cacheKey ) ) {
+		if ( $cacheKey !== '' && $this->cache->contains( $cacheKey ) ) {
 			return $this->cache->fetch( $cacheKey );
 		}
 		$configs = $this->loadFiles( ...$configFiles );
@@ -48,8 +48,20 @@ class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterfac
 		return $configs;
 	}
 
+	/**
+	 * Build a hash of file names and their last modification dates
+	 *
+	 * @param string ...$configFiles
+	 * @return string
+	 */
 	protected function getCacheKey( string ...$configFiles ): string {
-		return md5( implode( '|', $configFiles ) );
+		$fileStats = '';
+		foreach ( $configFiles as $file ) {
+			if ( file_exists( $file ) ) {
+				$fileStats .= sprintf( ",%s.%d", $file, filemtime( $file ) );
+			}
+		}
+		return strlen( $fileStats ) > 0 ? md5( $fileStats ) : '';
 	}
 
 }

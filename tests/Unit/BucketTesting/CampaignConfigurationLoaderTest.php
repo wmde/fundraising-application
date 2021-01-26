@@ -103,6 +103,10 @@ CFG;
 	}
 
 	public function testCategoriesAreAlreadyCached_nothingIsProcessed() {
+		$campaignFile = vfsStream::newFile( 'campaigns.yml' )
+			->at( $this->filesystem )
+			->setContent( self::VALID_CONFIGURATION )
+			->lastModified( 1611619200 );
 		$campaignConfig = [
 			'campaign1' => [
 				'start' => '2018-10-01',
@@ -115,11 +119,20 @@ CFG;
 		];
 		$fileFetcher = new ThrowingFileFetcher();
 		$cache = new ArrayCache();
-		// @see CampaignConfigurationLoader::getCacheKey
-		$cacheKey = md5( 'campaigns.yml' );
+		// @see CampaignConfigurationLoader::getCacheKey to see how this has was generated
+		$cacheKey = '67984c5cde9f85dbd137b8832eff88b0';
 		$cache->save( $cacheKey, $campaignConfig );
 		$loader = new CampaignConfigurationLoader( $fileFetcher, $cache );
 
-		$this->assertEquals( $campaignConfig, $loader->loadCampaignConfiguration( 'campaigns.yml' ) );
+		$this->assertEquals( $campaignConfig, $loader->loadCampaignConfiguration( $campaignFile->url() ) );
+	}
+
+	public function testWhenNoConfigurationFilesExist_cacheWillBeSkipped() {
+		$forbiddenCache = $this->createMock( VoidCache::class );
+		$forbiddenCache->method( 'fetch' )->willThrowException( new \LogicException( 'Cache access is not allowed' ) );
+		$loader = new CampaignConfigurationLoader( new SimpleFileFetcher(), $forbiddenCache );
+
+		$this->expectExceptionMessageMatches( '/No campaign configuration files found/' );
+		$loader->loadCampaignConfiguration( vfsStream::url( 'campaigns.yml' ) );
 	}
 }
