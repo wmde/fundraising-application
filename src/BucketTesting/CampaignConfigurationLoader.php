@@ -25,7 +25,7 @@ class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterfac
 	public function loadCampaignConfiguration( string ...$configFiles ): array {
 		$cacheKey = $this->getCacheKey( ...$configFiles );
 		if ( $cacheKey !== '' && $this->cache->contains( $cacheKey ) ) {
-			return $this->cache->fetch( $cacheKey );
+			return $this->cache->fetch( $cacheKey )['campaigns'];
 		}
 		$configs = $this->loadFiles( ...$configFiles );
 

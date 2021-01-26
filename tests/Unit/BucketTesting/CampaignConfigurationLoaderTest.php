@@ -108,13 +108,15 @@ CFG;
 			->setContent( self::VALID_CONFIGURATION )
 			->lastModified( 1611619200 );
 		$campaignConfig = [
-			'campaign1' => [
-				'start' => '2018-10-01',
-				'end' => '2018-12-31',
-				'active' => false,
-				'url_key' => 'c1',
-				'buckets' => [ 'a', 'b' ],
-				'default_bucket' => 'a'
+			'campaigns' => [
+				'campaign1' => [
+					'start' => '2018-10-01',
+					'end' => '2018-12-31',
+					'active' => false,
+					'url_key' => 'c1',
+					'buckets' => [ 'a', 'b' ],
+					'default_bucket' => 'a'
+				]
 			]
 		];
 		$fileFetcher = new ThrowingFileFetcher();
@@ -124,7 +126,9 @@ CFG;
 		$cache->save( $cacheKey, $campaignConfig );
 		$loader = new CampaignConfigurationLoader( $fileFetcher, $cache );
 
-		$this->assertEquals( $campaignConfig, $loader->loadCampaignConfiguration( $campaignFile->url() ) );
+		$cachedCampaigns = $loader->loadCampaignConfiguration( $campaignFile->url() );
+		$this->assertArrayHasKey( 'campaign1', $cachedCampaigns );
+		$this->assertFalse( $cachedCampaigns['campaign1']['active'], 'We should get the value from the cached campaign' );
 	}
 
 	public function testWhenNoConfigurationFilesExist_cacheWillBeSkipped() {
