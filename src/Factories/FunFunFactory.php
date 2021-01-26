@@ -1417,7 +1417,7 @@ class FunFunFactory {
 
 	private function getCampaignCache(): CacheProvider {
 		// TODO check config for cache options
-		return $this->createSharedObject( Cache::class . '::RenderedPage', function () {
+		return $this->createSharedObject( Cache::class . '::Campaign', function () {
 			return new VoidCache();
 		} );
 	}
