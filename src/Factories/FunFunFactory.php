@@ -23,7 +23,6 @@ use RemotelyLiving\Doorkeeper\Features\Set;
 use RemotelyLiving\Doorkeeper\Requestor;
 use Swift_NullTransport;
 use Swift_SmtpTransport;
-use Symfony\Component\Filesystem\Filesystem;
 use TNvpServiceDispatcher;
 use Twig\Environment;
 use WMDE\Clock\SystemClock;
@@ -1418,7 +1417,7 @@ class FunFunFactory {
 
 	private function getCampaignCache(): CacheProvider {
 		// TODO check config for cache options
-		return $this->createSharedObject( Cache::class . '::RenderedPage', function () {
+		return $this->createSharedObject( Cache::class . '::Campaign', function () {
 			return new VoidCache();
 		} );
 	}
@@ -1628,7 +1627,7 @@ class FunFunFactory {
 
 	public function getCampaignConfigurationLoader(): CampaignConfigurationLoaderInterface {
 		return $this->createSharedObject( CampaignConfigurationLoaderInterface::class, function (): CampaignConfigurationLoader {
-			return new CampaignConfigurationLoader( new Filesystem(), new SimpleFileFetcher(), $this->getCampaignCache() );
+			return new CampaignConfigurationLoader( new SimpleFileFetcher(), $this->getCampaignCache() );
 		} );
 	}
 

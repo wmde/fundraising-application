@@ -10,7 +10,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValidator;
@@ -73,7 +72,7 @@ class ValidateCampaignCodeUtilizationCommand extends Command {
 	private function getFactory( string $environment ): FunFunFactory {
 		$environmentConfigPath = __DIR__ . '/../../app/config/config.' . $environment . '.json';
 		if ( is_readable( $environmentConfigPath ) === false ) {
-			throw new FileNotFoundException( null, 0, null, $environmentConfigPath );
+			throw new \RuntimeException( sprintf( 'File "%s" not found or not readable', $environmentConfigPath ), 0, null );
 		}
 		$configReader = new ConfigReader(
 			new SimpleFileFetcher(),
