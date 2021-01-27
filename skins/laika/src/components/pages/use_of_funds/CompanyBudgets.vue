@@ -7,9 +7,7 @@
                   :style="{ width: ( company.budget / highestBudget * 100 ) + '%' }">&#xa0;</span>
       </td>
       <td class="company_budgets__col--budget_number has-text-right">
-        <span class="company_budgets__number">{{
-						company.budget > 1 ? billionFormatter(company.budget) : millionFormatter(company.budget)
-					}}</span>
+        <span class="company_budgets__number">{{ company.budgetString }}</span>
         <span class="company_budgets__inline-citation"><CompanyCitation :company="company" :citation-label="citationLabel" /></span>
       </td>
       <td class="company_budgets__col--citation has-text-right"><CompanyCitation :company="company" :citation-label="citationLabel" /></td>
@@ -20,7 +18,6 @@
 <script lang="ts">
 
 import { computed, defineComponent, PropType } from '@vue/composition-api';
-import formatter from 'format-number';
 import CompanyCitation from './CompanyCitation.vue';
 
 interface CompanyInterface {
@@ -52,17 +49,9 @@ export default defineComponent( {
 		const highestBudget = computed( () => props.companies.reduce( ( highestBudget: number, company: CompanyInterface ) =>
 			Math.max( highestBudget, company.budget ), 0 )
 		);
-		const billionFormatter = props.locale === 'en' ?
-			formatter( { round: 0, prefix: '€', suffix: ' billion' } ) :
-			formatter( { round: 0, suffix: ' Mrd. €' } );
-		const millionFormatter = props.locale === 'en' ?
-			formatter( { round: 2, prefix: '€', suffix: ' billion', padRight: 1 } ) :
-			formatter( { round: 2, decimal: ',', suffix: ' Mrd. €', padRight: 1 } );
 
 		return {
 			highestBudget,
-			millionFormatter,
-			billionFormatter,
 		};
 	},
 } );
