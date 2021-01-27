@@ -10,7 +10,6 @@ use WMDE\FunValidators\ConstraintViolation;
 class ValidationErrorLogger {
 
 	private LoggerInterface $logger;
-	private const LEGACY_FIELDS = [ 'betrag', 'betrag_auswahl', 'periode', 'zahlweise' ];
 
 	public function __construct( LoggerInterface $logger ) {
 		$this->logger = $logger;
@@ -21,24 +20,10 @@ class ValidationErrorLogger {
 			return;
 		}
 
-		if ( $this->containsLegacyFields( $fields ) ) {
-			return;
-		}
-
 		$this->logger->warning( $message, $validationErrors );
 	}
 
 	private function hasMoreErrorsThan( int $number, array $violations ): bool {
 		return count( $violations ) > $number;
-	}
-
-	private function containsLegacyFields( array $violations ) {
-		foreach ( $violations as $violation ) {
-			if ( in_array( $violation, self::LEGACY_FIELDS ) ) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 }

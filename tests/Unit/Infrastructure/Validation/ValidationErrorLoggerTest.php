@@ -57,19 +57,4 @@ class ValidationErrorLoggerTest extends TestCase {
 		$this->assertStringContainsString( 'first_name', $firstCallContext['validation_errors'][0] );
 		$this->assertStringContainsString( 'last_name', $firstCallContext['validation_errors'][1] );
 	}
-
-	public function testGivenLegacyFields_doesNotLog() {
-		$loggerSpy = new LoggerSpy();
-		$fields = [ 'betrag', 'betrag_auswahl', 'periode', 'zahlweise' ];
-		$validationErrorLogger = new ValidationErrorLogger( $loggerSpy );
-		$violations = $this->createViolationErrors( $fields );
-
-		$validationErrorLogger->logViolations( 'Test error.', $fields, $violations );
-
-		// The logger spy throws an assertion
-		$loggerSpy->assertNoLoggingCallsWhereMade();
-		// This is a hacky way of making phpunit happy
-		$this->assertTrue( true );
-	}
-
 }

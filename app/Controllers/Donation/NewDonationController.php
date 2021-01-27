@@ -10,7 +10,6 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Validation\FallbackRequestValueReader;
 
 class NewDonationController {
 
@@ -19,16 +18,14 @@ class NewDonationController {
 			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
 		);
 
-		// TODO Remove LegacyValueReader after January 2021
-		$legacyValueReader = new FallbackRequestValueReader( $ffFactory->getLogger(), $request );
 		try {
-			$amount = Euro::newFromCents( intval( $request->get( 'amount', $legacyValueReader->getAmount() ) ) );
+			$amount = Euro::newFromCents( intval( $request->get( 'amount', 0 ) ) );
 		}
 		catch ( \InvalidArgumentException $ex ) {
 			$amount = Euro::newFromCents( 0 );
 		}
-		$paymentType = (string)$request->get( 'paymentType', $legacyValueReader->getPaymentType() );
-		$interval = $request->get( 'interval', $legacyValueReader->getInterval() );
+		$paymentType = (string)$request->get( 'paymentType', '' );
+		$interval = $request->get( 'interval', 0 );
 		if ( $interval !== null ) {
 			$interval = intval( $interval );
 		}
