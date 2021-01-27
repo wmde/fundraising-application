@@ -20,5 +20,6 @@ require __DIR__ . '/../vendor/autoload.php';
 if ( file_exists( dirname( __DIR__ ) . '/config/bootstrap.php' ) ) {
 	require dirname( __DIR__ ) . '/config/bootstrap.php';
 } elseif ( method_exists( Dotenv::class, 'bootEnv' ) ) {
-	( new Dotenv() )->bootEnv( dirname( __DIR__ ) . '/.env' );
+	// TODO investigate why we can't use '.env'. Using 'env.test' is cheating and goes against the purpose of Dotenv
+	( new Dotenv() )->bootEnv( dirname( __DIR__ ) . '/.env.test' );
 }

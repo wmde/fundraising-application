@@ -4,15 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
+use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser;
-use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser as Client;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 
 /**

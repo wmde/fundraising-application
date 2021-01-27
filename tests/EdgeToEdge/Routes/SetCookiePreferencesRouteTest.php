@@ -5,9 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController
