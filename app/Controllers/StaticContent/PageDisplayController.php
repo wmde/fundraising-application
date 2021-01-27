@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers\StaticContent;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\RuntimeError;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -15,7 +16,7 @@ class PageDisplayController {
 
 	private FunFunFactory $ffFactory;
 
-	public function index( FunFunFactory $ffFactory, string $pageName ): string {
+	public function index( FunFunFactory $ffFactory, string $pageName ): Response {
 		$this->ffFactory = $ffFactory;
 
 		$pageSelector = $this->ffFactory->getContentPagePageSelector();
@@ -28,7 +29,7 @@ class PageDisplayController {
 		}
 
 		try {
-			return $this->getPageTemplate( $pageId )->render( [ 'page_id' => $pageId ] );
+			return new Response( $this->getPageTemplate( $pageId )->render( [ 'page_id' => $pageId ] ) );
 		}
 		catch ( RuntimeError $exception ) {
 			if ( $exception->getPrevious() instanceof ContentNotFoundException ) {
