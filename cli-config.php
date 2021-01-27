@@ -17,14 +17,6 @@ $dotenv = Dotenv\Dotenv::createImmutable( __DIR__ );
 $dotenv->load();
 
 $bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?? 'dev' );
-$configReader = new ConfigReader(
-	new SimpleFileFetcher(),
-	...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/app/config' )
-);
-
-$config = $configReader->getConfig();
-$factory = new FunFunFactory( $config );
-$bootstrapper->getEnvironmentSetupInstance()
-	->setEnvironmentDependentInstances( $factory, $config );
+$factory = $bootstrapper->newFunFunFactory();
 
 return ConsoleRunner::createHelperSet( $factory->getEntityManager() );

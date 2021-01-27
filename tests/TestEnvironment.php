@@ -4,9 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
-use FileFetcher\SimpleFileFetcher;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
 /**
@@ -16,7 +15,7 @@ class TestEnvironment {
 
 	public static function newInstance( array $config = [] ): self {
 		$bootstrapper = new EnvironmentBootstrapper( 'test', [ 'test' => TestEnvironmentSetup::class ] );
-		$instance = new self( $config, $bootstrapper );
+		$instance = new self( $config );
 		$bootstrapper->getEnvironmentSetupInstance()
 			->setEnvironmentDependentInstances( $instance->factory, $config );
 
@@ -25,28 +24,14 @@ class TestEnvironment {
 		return $instance;
 	}
 
-	/**
-	 * @var array
-	 */
-	private $config;
+	private array $config;
 
-	/**
-	 * @var FunFunFactory
-	 */
-	private $factory;
+	private FunFunFactory $factory;
 
-	private function __construct( array $config, EnvironmentBootstrapper $bootstrapper ) {
-		$this->config = array_replace_recursive( $this->getConfigFromFiles( $bootstrapper ), $config );
+	private function __construct( array $config ) {
+		$configReader = ( new EnvironmentDependentConfigReaderFactory( 'test' ) )->getConfigReader();
+		$this->config = \array_replace_recursive( $configReader->getConfig(), $config );
 		$this->factory = new FunFunFactory( $this->config );
-	}
-
-	private function getConfigFromFiles( EnvironmentBootstrapper $bootstrapper ): array {
-		$configReader = new ConfigReader(
-			new SimpleFileFetcher(),
-			...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/../app/config' )
-		);
-
-		return $configReader->getConfig();
 	}
 
 	private function rebuildDatabaseSchema(): void {

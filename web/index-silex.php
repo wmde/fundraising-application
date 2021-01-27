@@ -21,18 +21,7 @@ $ffFactory = call_user_func( function() {
 
 	$bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?? 'dev' );
 
-	$configReader = new ConfigReader(
-		new SimpleFileFetcher(),
-		...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/../app/config' )
-	);
-
-	$config = $configReader->getConfig();
-	$factory = new FunFunFactory( $config );
-
-	$bootstrapper->getEnvironmentSetupInstance()
-		->setEnvironmentDependentInstances( $factory, $config );
-
-	return $factory;
+	return $bootstrapper->newFunFunFactory();
 } );
 
 $app = \WMDE\Fundraising\Frontend\App\Bootstrap::initializeApplication( $ffFactory );

@@ -15,6 +15,7 @@ use Twig\Error\Error;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
 use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
@@ -80,12 +81,7 @@ class RenderMailTemplatesCommand extends Command {
 	}
 
 	private function getDefaultConfig(): array {
-		$bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?? 'dev' );
-		$configReader = new ConfigReader(
-			new SimpleFileFetcher(),
-			...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/../app/config' )
-		);
-
+		$configReader = ( new EnvironmentDependentConfigReaderFactory( $_ENV['APP_ENV'] ?? 'dev' ) )->getConfigReader();
 		return $configReader->getConfig();
 	}
 
