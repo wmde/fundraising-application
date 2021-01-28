@@ -29,7 +29,7 @@ services:
     # register kernel event subscribers
     WMDE\Fundraising\Frontend\App\EventHandlers\:
         resource: '../app/EventHandlers/*'
-        exclude: '../app/EventHandlers/{HandleExceptions,LogErrors}.php'
+        exclude: '../app/EventHandlers/{LogErrors}.php'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

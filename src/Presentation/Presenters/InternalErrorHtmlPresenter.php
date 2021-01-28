@@ -20,7 +20,7 @@ class InternalErrorHtmlPresenter implements ExceptionHtmlPresenterInterface {
 		$this->template = $template;
 	}
 
-	public function present( \Exception $exception ): string {
+	public function present( \Throwable $exception ): string {
 		return $this->template->render( [] );
 	}
 }
