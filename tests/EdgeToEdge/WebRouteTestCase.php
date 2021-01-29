@@ -83,6 +83,10 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 */
 	protected function createEnvironment( callable $onEnvironmentCreated ): void {
 		$client = static::createClient();
+		// Don't throw away the environment between http requests, otherwise the in-memory SQLite database would be gone
+		if ( $client instanceof KernelBrowser) {
+			$client->disableReboot();
+		}
 		call_user_func(
 			$onEnvironmentCreated,
 			$client,
