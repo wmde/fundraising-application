@@ -11,7 +11,6 @@ use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use Symfony\Component\HttpKernel\KernelInterface;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory;
@@ -84,7 +83,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	protected function createEnvironment( callable $onEnvironmentCreated ): void {
 		$client = static::createClient();
 		// Don't throw away the environment between http requests, otherwise the in-memory SQLite database would be gone
-		if ( $client instanceof KernelBrowser) {
+		if ( $client instanceof KernelBrowser ) {
 			$client->disableReboot();
 		}
 		call_user_func(
@@ -245,39 +244,4 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		$this->assertEquals( $expected, $data );
 	}
 
-	/**
-	 * @todo Change code to work with Symfony DI when switch to Symfony is done
-	 * @param string $key
-	 * @return mixed
-	 */
-	protected function getSessionValue( string $key ) {
-		if ( !( $this->app instanceof Application ) ) {
-			$this->fail( 'Application was not initialized. Call createClient or createEnvironment' );
-			return null;
-		}
-		/** @var SessionInterface $session */
-		$session = $this->app['session'];
-		return $session->get( $key, null );
-	}
-
-	/**
-	 * @todo Change code to work with Symfony DI when switch to Symfony is done
-	 * @param string $key
-	 * @param mixed $value
-	 */
-	public function setSessionValue( string $key, $value ): void {
-		$this->sessionValues[$key] = $value;
-	}
-
-	public function initializeApplicationSessionValues(): void {
-		if ( empty( $this->sessionValues ) ) {
-			return;
-		}
-
-		/** @var SessionInterface $session */
-		$session = $this->app['session'];
-		foreach ( $this->sessionValues as $key => $value ) {
-			$session->set( $key, $value );
-		}
-	}
 }

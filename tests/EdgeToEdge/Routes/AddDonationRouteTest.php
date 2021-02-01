@@ -7,11 +7,13 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\CookieNames;
@@ -55,23 +57,30 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenDonationGetsPersisted_timestampIsStoredInSession(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$client->followRedirects( true );
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+		$client = $this->createClient();
+		// Don't throw away the environment between http requests, otherwise the in-memory SQLite database would be gone
+		if ( $client instanceof KernelBrowser ) {
+			$client->disableReboot();
+		}
+		$client->followRedirects( true );
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
 
-			$donationTimestamp = $this->getSessionValue( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY );
-			$this->assertNotNull( $donationTimestamp );
-			$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
-		} );
+		/** @var SessionInterface $session */
+		$session = $client->getContainer()->get( 'session' );
+		$donationTimestamp = $session->get( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY );
+		$this->assertNotNull( $donationTimestamp );
+		$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
 	}
 
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected(): void {
-		$this->setSessionValue( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
 		$client = $this->createClient();
+		/** @var SessionInterface $session */
+		$session = $client->getContainer()->get( 'session' );
+		$session->set( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
 
 		$client->request(
 			'POST',
@@ -84,7 +93,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSessionValue(
+			/** @var SessionInterface $session */
+			$session = $client->getContainer()->get( 'session' );
+			$session->set(
 				FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY,
 				( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT35M' ) )
 			);
