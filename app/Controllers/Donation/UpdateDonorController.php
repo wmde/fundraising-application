@@ -30,14 +30,14 @@ class UpdateDonorController {
 		$responseModel = $ffFactory
 			->newUpdateDonorUseCase( $updateToken, $accessToken )
 			->updateDonor( $this->newRequestModel( $request ) );
-		if ( $request->getAcceptableContentTypes()[0] === 'application/json' ) {
+		if ( $this->requestNeedsJsonResponse( $request ) ) {
 			return $this->createJsonResponse( $responseModel );
 		}
 		return $this->createHtmlResponse( $session, $ffFactory, $responseModel, $updateToken, $accessToken );
 	}
 
 	private function createJsonResponse( UpdateDonorResponse $responseModel ): JsonResponse {
-		return JsonResponse::create( [
+		return new JsonResponse( [
 			'state' => $responseModel->getDonation() !== null || $responseModel->isSuccessful() ? 'OK' : 'ERR',
 			'message' => $responseModel->getErrorMessage()
 		] );
@@ -113,5 +113,10 @@ class UpdateDonorController {
 		} catch ( \UnexpectedValueException $e ) {
 			return DonorType::ANONYMOUS();
 		}
+	}
+
+	private function requestNeedsJsonResponse( Request $request ): bool {
+		$contentTypes = $request->getAcceptableContentTypes();
+		return count( $contentTypes ) > 0 && $contentTypes[0] === 'application/json';
 	}
 }
