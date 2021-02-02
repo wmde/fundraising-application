@@ -27,7 +27,7 @@ class RouteNotFoundTest extends WebRouteTestCase {
 
 	public function testGivenUnknownRouteAndJsonRequest_responseIsJSON(): void {
 		$client = $this->createClient();
-		$client->request( 'GET', '/kittens', [], [], [ 'HTTP_Accept' => 'application/json' ] );
+		$client->request( 'GET', '/kittens', [], [], [ 'HTTP_ACCEPT' => 'application/json' ] );
 
 		$this->assertJsonResponse( [ 'ERR' => 'No route found for "GET /kittens"' ], $client->getResponse() );
 	}
