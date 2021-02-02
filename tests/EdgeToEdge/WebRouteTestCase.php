@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use PHPUnit\Framework\TestCase;
 use Silex\Application;
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\Frontend\App\Bootstrap;
@@ -93,6 +94,12 @@ abstract class WebRouteTestCase extends TestCase {
 			$this->factory = TestEnvironment::newInstance( $this->applicationConfiguration )->getFactory();
 		}
 		return $this->factory;
+	}
+
+	private function addExtraCookies( HttpKernelBrowser $client, array $cookies ) {
+		foreach ( $cookies as $name => $value ) {
+			$client->getCookieJar()->set( new Cookie( $name, $value ) );
+		}
 	}
 
 	// @codingStandardsIgnoreStart

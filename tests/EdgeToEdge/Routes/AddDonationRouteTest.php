@@ -7,18 +7,16 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
+
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
-use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
+use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\PageViewTracker;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
@@ -26,7 +24,6 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser as Client;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
-use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @license GPL-2.0-or-later
@@ -45,6 +42,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_donationGetsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
+			$this->consentToCookies( $client );
 			$client->followRedirects( false );
 
 			$client->request(
@@ -211,6 +209,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
+			$this->consentToCookies( $client );
 			$client->followRedirects( false );
 
 			$client->request(
@@ -282,6 +281,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( false );
+			$this->consentToCookies( $client );
 
 			$client->request(
 				'POST',
@@ -322,31 +322,33 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testGivenNonGermanDonor_donationGetsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( false );
+			$this->consentToCookies( $client );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newFrenchDonorFormInput()
-			);
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newFrenchDonorFormInput()
+				);
 
-			$donation = $this->getDonationFromDatabase( $factory );
-			$data = $donation->getDecodedData();
-			$this->assertSame( 'Claire', $data['vorname'] );
-			$this->assertSame( 'Jennesaispas', $data['nachname'] );
-			$this->assertSame( 'Claire Jennesaispas', $donation->getDonorFullName() );
-			$this->assertSame( 'Ruelle Argile 12', $data['strasse'] );
-			$this->assertSame( '12345', $data['plz'] );
-			$this->assertSame( 'Unlieu', $data['ort'] );
-			$this->assertSame( 'Unlieu', $donation->getDonorCity() );
-			$this->assertSame( 'FR', $data['country'] );
-			$this->assertSame( 'claire@jennesaispas.fr', $data['email'] );
-			$this->assertSame( 'claire@jennesaispas.fr', $donation->getDonorEmail() );
-			$this->assertSame( 'FR7630066100410001057380116', $data['iban'] );
-			$this->assertSame( '', $data['bic'] );
-			$this->assertSame( '', $data['konto'] );
-			$this->assertSame( '', $data['blz'] );
-			$this->assertSame( '', $data['bankname'] );
-		} );
+				$donation = $this->getDonationFromDatabase( $factory );
+				$data = $donation->getDecodedData();
+				$this->assertSame( 'Claire', $data['vorname'] );
+				$this->assertSame( 'Jennesaispas', $data['nachname'] );
+				$this->assertSame( 'Claire Jennesaispas', $donation->getDonorFullName() );
+				$this->assertSame( 'Ruelle Argile 12', $data['strasse'] );
+				$this->assertSame( '12345', $data['plz'] );
+				$this->assertSame( 'Unlieu', $data['ort'] );
+				$this->assertSame( 'Unlieu', $donation->getDonorCity() );
+				$this->assertSame( 'FR', $data['country'] );
+				$this->assertSame( 'claire@jennesaispas.fr', $data['email'] );
+				$this->assertSame( 'claire@jennesaispas.fr', $donation->getDonorEmail() );
+				$this->assertSame( 'FR7630066100410001057380116', $data['iban'] );
+				$this->assertSame( '', $data['bic'] );
+				$this->assertSame( '', $data['konto'] );
+				$this->assertSame( '', $data['blz'] );
+				$this->assertSame( '', $data['bankname'] );
+		}
+		);
 	}
 
 	private function newFrenchDonorFormInput(): array {
@@ -514,6 +516,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenInvalidRequest_formStillContainsBannerTrackingData(): void {
 		$client = $this->createClient();
+		$this->consentToCookies( $client );
+
 		$client->request(
 			'POST',
 			'/donation/add',
@@ -654,8 +658,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenTrackingCookieExists_valueIsPersisted(): void {
+	public function testWhenTrackingCookieExists_andCookieConsentGiven_valueIsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$this->consentToCookies( $client );
 			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
 
 			$client->request(
@@ -671,22 +676,29 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newValidMobilePayPalInput(): array {
-		return [
-			'amount' => '1234',
-			'paymentType' => 'PPL',
-			'interval' => 3,
-			'addressType' => 'anonym',
-			'piwik_campaign' => 'test',
-			'piwik_kwd' => 'gelb',
-			// 'mbt' is the mobile tracking param that triggers a redirect to paypal for anonymous donations
-			'mbt' => '1'
-		];
+	public function testWhenTrackingCookieExists_andNoCookieConsentGiven_valueIsNotPersisted(): void {
+		$this->createEnvironment(
+			function ( Client $client, FunFunFactory $factory ): void {
+				$client->getCookieJar()->set( new Cookie( CookieNames::TRACKING, 'test/blue' ) );
+
+				$client->request(
+					'POST',
+					'/donation/add',
+					$this->newComplementableFormInput()
+				);
+
+				$donation = $this->getDonationFromDatabase( $factory );
+				$data = $donation->getDecodedData();
+
+				$this->assertSame( '', $data['tracking'] );
+			}
+		);
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
+			$this->consentToCookies( $client );
 			$client->followRedirects( false );
 
 			$formInput = $this->newValidFormInput();
@@ -737,11 +749,12 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_bucketsAreLogged(): void {
+	public function testGivenValidRequest_andCookieConsentGiven_bucketsAreLogged(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$bucketLogger = new BucketLoggerSpy();
 			$factory->setBucketLogger( $bucketLogger );
 			$client->followRedirects( false );
+			$this->consentToCookies( $client );
 
 			$client->request(
 				'POST',
@@ -754,8 +767,10 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_addressChangeRecordIsCreated(): void {
+	public function testGivenValidRequest_andCookieConsentNotGiven_bucketsAreNotLogged(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$bucketLogger = new BucketLoggerSpy();
+			$factory->setBucketLogger( $bucketLogger );
 			$client->followRedirects( false );
 
 			$client->request(
@@ -776,5 +791,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		/** @var \DOMElement $appElement */
 		$appElement = $crawler->filter( '#appdata' )->getNode( 0 );
 		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
+	}
+
+	private function consentToCookies( Client $client ): void {
+		$client->getCookieJar()->set( new Cookie( CookieNames::CONSENT, 'yes' ) );
 	}
 }

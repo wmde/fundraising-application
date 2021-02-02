@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+import VueCompositionApi from '@vue/composition-api';
 import PageDataInitializer from '@/page_data_initializer';
 import { DEFAULT_LOCALE } from '@/locales';
 import App from '@/components/App.vue';
@@ -13,6 +14,7 @@ const PAGE_IDENTIFIER = 'faq-page';
 
 Vue.config.productionTip = false;
 Vue.use( VueI18n );
+Vue.use( VueCompositionApi );
 
 const pageData = new PageDataInitializer<any>( '#appdata' );
 
@@ -29,6 +31,7 @@ new Vue( {
 		props: {
 			assetsPath: pageData.assetsPath,
 			pageIdentifier: PAGE_IDENTIFIER,
+			cookieConsent: pageData.cookieConsent,
 		},
 	},
 	[

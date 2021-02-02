@@ -8,13 +8,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class StoreBucketSelection implements EventSubscriberInterface {
 
 	private const PRIORITY = 256;
-	private const COOKIE_NAME = 'spenden_ttg';
 
 	private FunFunFactory $factory;
 
@@ -31,16 +31,20 @@ class StoreBucketSelection implements EventSubscriberInterface {
 
 	public function setSelectedBuckets( KernelEvent $event ): void {
 		$request = $event->getRequest();
-		parse_str( $request->cookies->get( self::COOKIE_NAME, '' ), $cookieValues );
+		parse_str( $request->cookies->get( CookieNames::BUCKET_TESTING, '' ), $cookieValues );
 		$selector = $this->factory->getBucketSelector();
 		$this->factory->setSelectedBuckets( $selector->selectBuckets( $cookieValues, $request->query->all() ) );
 	}
 
 	public function storeSelectedBuckets( FilterResponseEvent $event ): void {
+		if ( $event->getRequest()->cookies->get( 'cookie_consent' ) !== 'yes' ) {
+			return;
+		}
+
 		$response = $event->getResponse();
 		$response->headers->setCookie(
 			$this->factory->getCookieBuilder()->newCookie(
-				self::COOKIE_NAME,
+				CookieNames::BUCKET_TESTING,
 				$this->getCookieValue(),
 				$this->getCookieLifetime()
 			)

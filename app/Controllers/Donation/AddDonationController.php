@@ -120,7 +120,7 @@ class AddDonationController {
 			$donationRequest->setBankData( $this->getBankDataFromRequest( $request ) );
 		}
 
-		$donationRequest->setTracking( $request->attributes->get( 'trackingCode' ) );
+		$donationRequest->setTracking( $request->attributes->get( 'trackingCode', '' ) );
 		$donationRequest->setOptIn( $request->get( 'info', '' ) );
 		// Setting source for completeness sake,
 		// TODO Remove when  https://phabricator.wikimedia.org/T134327 is done

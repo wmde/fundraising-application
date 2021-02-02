@@ -195,4 +195,5 @@
 
 @import "overrides";
 @import "compact_form"; // AB Test Import
-@import "address_usage_toggle";
+@import "components/address_usage_toggle";
+@import "components/cookie_notice";

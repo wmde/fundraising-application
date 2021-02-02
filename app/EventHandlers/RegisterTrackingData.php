@@ -5,10 +5,11 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\EventHandlers;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use WMDE\Fundraising\Frontend\App\CookieNames;
+use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
 /**
@@ -25,10 +26,21 @@ class RegisterTrackingData implements EventSubscriberInterface {
 		];
 	}
 
-	public function onKernelRequest( KernelEvent $event ): void {
+	private CookieBuilder $cookieBuilder;
+
+	public function __construct( CookieBuilder $cookieBuilder ) {
+		$this->cookieBuilder = $cookieBuilder;
+	}
+
+	public function onKernelRequest( GetResponseEvent $event ): void {
 		$request = $event->getRequest();
+
+		if ( $request->cookies->get( 'cookie_consent' ) !== 'yes' ) {
+			return;
+		}
+
 		$request->attributes->set( 'trackingCode', TrackingDataSelector::getFirstNonEmptyValue( [
-			$request->cookies->get( 'spenden_tracking' ),
+			$request->cookies->get( CookieNames::TRACKING ),
 			TrackingDataSelector::concatTrackingFromVarTuple(
 				$request->get( 'piwik_campaign', '' ),
 				$request->get( 'piwik_kwd', '' )
@@ -40,17 +52,19 @@ class RegisterTrackingData implements EventSubscriberInterface {
 		$request = $event->getRequest();
 		$response = $event->getResponse();
 
-		if ( $request->attributes->has( 'trackingCode' ) ) {
-			$response->headers->setCookie( new Cookie(
-				'spenden_tracking',
-				$request->attributes->get( 'trackingCode' )
+		$trackingCode = $request->attributes->get( 'trackingCode', '' );
+		if ( $trackingCode !== '' ) {
+			$response->headers->setCookie( $this->cookieBuilder->newCookie(
+				CookieNames::TRACKING,
+				$trackingCode
 			) );
 		}
 
-		if ( $request->attributes->has( 'trackingSource' ) ) {
-			$response->headers->setCookie( new Cookie(
+		$trackingSource = $request->attributes->get( 'trackingSource', '' );
+		if ( $trackingSource !== '' ) {
+			$response->headers->setCookie( $this->cookieBuilder->newCookie(
 				'spenden_source',
-				$request->attributes->get( 'trackingSource' )
+				$trackingSource
 			) );
 		}
 	}

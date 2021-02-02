@@ -13,6 +13,7 @@ const PAGE_IDENTIFIER = 'use-of-funds',
 Vue.config.productionTip = false;
 Vue.use( VueCompositionApi );
 Vue.use( VueI18n );
+Vue.use( VueCompositionApi );
 
 const pageData = new PageDataInitializer<any>( '#appdata' );
 
@@ -30,6 +31,7 @@ new Vue( {
 			assetsPath: pageData.assetsPath,
 			pageIdentifier: PAGE_IDENTIFIER,
 			isFullWidth: IS_FULLWIDTH_PAGE,
+			cookieConsent: pageData.cookieConsent,
 		},
 	},
 	[

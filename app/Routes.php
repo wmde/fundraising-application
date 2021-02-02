@@ -28,6 +28,7 @@ use WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationControll
 use WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationControllerForMembershipFee;
 use WMDE\Fundraising\Frontend\App\Controllers\Payment\SofortNotificationController;
 use WMDE\Fundraising\Frontend\App\Controllers\PurgeCacheController;
+use WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController;
 use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ContactRequestController;
 use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\PageDisplayController;
 use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowContactFormController;
@@ -248,6 +249,11 @@ class Routes {
 		$app->post(
 			'handle-paypal-membership-fee-payments',
 			PayPalNotificationControllerForMembershipFee::class . '::index'
+		);
+
+		$app->post(
+			'set-cookie-preferences',
+			SetCookiePreferencesController::class . '::index'
 		);
 
 		$app->get(
