@@ -4700,7 +4700,7 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
@@ -4761,7 +4761,7 @@
                 "reflection"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-access/tree/v5.2.2"
+                "source": "https://github.com/symfony/property-access/tree/v5.2.3"
             },
             "funding": [
                 {
@@ -4781,7 +4781,7 @@
         },
         {
             "name": "symfony/property-info",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
@@ -4851,7 +4851,7 @@
                 "validator"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-info/tree/v5.2.2"
+                "source": "https://github.com/symfony/property-info/tree/v5.2.3"
             },
             "funding": [
                 {
@@ -4959,7 +4959,7 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
@@ -5022,7 +5022,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v5.2.2"
+                "source": "https://github.com/symfony/string/tree/v5.2.3"
             },
             "funding": [
                 {
