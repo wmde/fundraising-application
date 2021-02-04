@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Routes
@@ -23,7 +22,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		$this->assertTrue( $client->getResponse()->isSuccessful(), 'request is successful' );
 
 		$this->assertEquals(
-			TestEnvironment::getTestData( 'emptyCommentList.rss' ),
+			file_get_contents( __DIR__ . '/../../Data/files/emptyCommentList.rss' ),
 			$client->getResponse()->getContent()
 		);
 	}
