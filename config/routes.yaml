@@ -169,6 +169,10 @@ handle_paypal_membership_fee_payments:
     methods: [POST]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationControllerForMembershipFee::index'
 
+set_cookie_preferences:
+    path: /set-cookie-preferences
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController::index'
+
 index:
     path: /
     methods: [ POST, GET ]

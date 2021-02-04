@@ -14,6 +14,7 @@ use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorRequest;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorResponse;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
+use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 
@@ -60,7 +61,7 @@ class UpdateDonorController {
 			);
 			return new RedirectResponse(
 				$ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-					'show-donation-confirmation',
+					Routes::SHOW_DONATION_CONFIRMATION,
 					[
 						'id' => $responseModel->getDonation()->getId(),
 						'accessToken' => $accessToken

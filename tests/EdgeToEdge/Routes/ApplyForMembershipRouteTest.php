@@ -372,7 +372,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				'POST',
-				'apply-for-membership',
+				'/apply-for-membership',
 				$this->newValidHttpParametersUsingPayPal()
 			);
 

@@ -1544,9 +1544,11 @@ class FunFunFactory {
 	}
 
 	public function getUrlGenerator(): UrlGenerator {
-		// TODO Remove startup dependency
 		if ( !isset( $this->sharedObjects[UrlGenerator::class] ) ) {
-			throw new \RuntimeException( 'UrlGenerated is a routing dependency that must be set at startup!' );
+			throw new \LogicException( sprintf(
+				'UrlGenerator is a setter dependency that must be set before calling "%s"!',
+				__METHOD__
+			) );
 		}
 		return $this->sharedObjects[UrlGenerator::class];
 	}

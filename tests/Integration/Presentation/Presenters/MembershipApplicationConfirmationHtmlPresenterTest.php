@@ -78,7 +78,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 				'firstPaymentDate' => '01.02.2021'
 			],
 			'urls' => [
-				'cancelMembership' => '/such.a.url/cancel-membership-application?updateToken=update_token'
+				'cancelMembership' => '/such.a.url/cancel_membership_application?updateToken=update_token'
 			]
 		];
 	}

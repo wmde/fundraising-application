@@ -4,21 +4,21 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration;
 
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
-use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**
  * This is for testing the mail template output, no classes are covered
  *
  * @coversNothing
  */
-class MailTemplatesTest extends TestCase {
+class MailTemplatesTest extends KernelTestCase {
 
 	private FunFunFactory $factory;
 
@@ -43,11 +43,18 @@ class MailTemplatesTest extends TestCase {
 	}
 
 	private function newFactory(): FunFunFactory {
-		$ffFactory = TestEnvironment::newInstance( $this->getConfig() )->getFactory();
+		static::bootKernel();
+		$bootstrapper = static::$container->get( EnvironmentBootstrapper::class );
 
-		$contentProvider = $this->getMockBuilder( ContentProvider::class )
-			->disableOriginalConstructor()
-			->getMock();
+		if ( !( $bootstrapper instanceof TestEnvironmentBootstrapper ) ) {
+			throw new \LogicException( 'We need to use TestEnvironmentBootstrapper to be able to override the configuration' );
+		}
+
+		$bootstrapper->overrideConfiguration( $this->getConfig() );
+
+		$ffFactory = static::$container->get( FunFunFactory::class );
+
+		$contentProvider = $this->createMock( ContentProvider::class );
 		$contentProvider->method( 'getMail' )->willReturnArgument( 0 );
 
 		$ffFactory->setContentProvider( $contentProvider );

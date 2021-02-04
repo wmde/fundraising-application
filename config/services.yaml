@@ -34,6 +34,13 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter:
+        class: WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter
+        public: false
+
+    app.url_generator:
+        alias: WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter
+        public: true
 
     WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper:
         class: WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper
@@ -45,6 +52,8 @@ services:
         class: WMDE\Fundraising\Frontend\Factories\FunFunFactory
         factory: ['@WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper', 'newFunFunFactory']
         public: true
+        calls:
+            - setUrlGenerator: ["@app.url_generator"]
 
     WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler:
         class: WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler

@@ -4,19 +4,20 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Factories;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Factories\MailerTemplatingFactory
  * @covers \WMDE\Fundraising\Frontend\Factories\TwigFactory
  */
-class MailerTemplatingFactoryTest extends TestCase {
+class MailerTemplatingFactoryTest extends KernelTestCase {
 
 	private const TEMPLATE_DIR = 'mail_templates';
 
@@ -54,7 +55,16 @@ class MailerTemplatingFactoryTest extends TestCase {
 	}
 
 	private function getFactory( array $configOverrides = [] ): FunFunFactory {
-		$factory = TestEnvironment::newInstance( $configOverrides )->getFactory();
+		static::bootKernel();
+		$bootstrapper = static::$container->get( EnvironmentBootstrapper::class );
+
+		if ( !( $bootstrapper instanceof TestEnvironmentBootstrapper ) ) {
+			throw new \LogicException( 'We need to use TestEnvironmentBootstrapper to be able to override the configuration' );
+		}
+
+		$bootstrapper->overrideConfiguration( $configOverrides );
+
+		$factory = static::$container->get( FunFunFactory::class );
 		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 		return $factory;
 	}

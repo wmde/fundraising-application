@@ -61,15 +61,14 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	public function testGivenValidDataAndNoContentType_routeReturnsRedirectToSucccessPage(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
-		$client->followRedirects( false );
+
 		$client->request(
 			'POST',
 			'/contact/subscribe',
 			$this->validFormInput
 		);
-		$response = $client->getResponse();
-		$this->assertTrue( $response->isRedirect(), 'Is redirect response' );
-		$this->assertSame( 'https://such.a.url/page?pageName=Subscription_Success', $response->headers->get( 'Location' ) );
+
+		$this->assertResponseRedirects( '/page/Subscription_Success' );
 	}
 
 	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage(): void {

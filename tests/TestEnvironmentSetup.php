@@ -18,7 +18,6 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 class TestEnvironmentSetup implements EnvironmentSetup {
 	public function setEnvironmentDependentInstances( FunFunFactory $factory, array $configuration ) {
 		$factory->setNullMessenger();
-		$factory->setUrlGenerator( new FakeUrlGenerator() );
 		$factory->setDomainNameValidator( new NullDomainNameValidator() );
 		$factory->setDoctrineConfiguration( Setup::createConfiguration( true ) );
 		$factory->setInternalErrorHtmlPresenter( new DevelopmentInternalErrorHtmlPresenter() );

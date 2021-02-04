@@ -179,36 +179,38 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
-			$client->followRedirect();
+		$client = $this->createClient();
+		if ( $client instanceof KernelBrowser ) {
+			$client->disableReboot();
+		}
+		$client->followRedirects( true );
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
 
-			$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
+		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-			$this->assertObjectHasAttribute( 'donation', $applicationVars );
-			$this->assertSame( 5.51, $applicationVars->donation->amount );
-			$this->assertSame( 0, $applicationVars->donation->interval );
-			$this->assertSame( 'BEZ', $applicationVars->donation->paymentType );
-			$this->assertTrue( $applicationVars->donation->optsIntoNewsletter );
-			$this->assertTrue( $applicationVars->donation->optsIntoDonationReceipt );
+		$this->assertObjectHasAttribute( 'donation', $applicationVars );
+		$this->assertSame( 5.51, $applicationVars->donation->amount );
+		$this->assertSame( 0, $applicationVars->donation->interval );
+		$this->assertSame( 'BEZ', $applicationVars->donation->paymentType );
+		$this->assertTrue( $applicationVars->donation->optsIntoNewsletter );
+		$this->assertTrue( $applicationVars->donation->optsIntoDonationReceipt );
 
-			$this->assertObjectHasAttribute( 'bankData', $applicationVars );
-			$this->assertSame( 'DE12500105170648489890', $applicationVars->bankData->iban );
-			$this->assertSame( 'INGDDEFFXXX', $applicationVars->bankData->bic );
-			$this->assertSame( 'ING-DiBa', $applicationVars->bankData->bankname );
+		$this->assertObjectHasAttribute( 'bankData', $applicationVars );
+		$this->assertSame( 'DE12500105170648489890', $applicationVars->bankData->iban );
+		$this->assertSame( 'INGDDEFFXXX', $applicationVars->bankData->bic );
+		$this->assertSame( 'ING-DiBa', $applicationVars->bankData->bankname );
 
-			$this->assertObjectHasAttribute( 'address', $applicationVars );
-			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $applicationVars->address->fullName );
-			$this->assertSame( 'Lehmgasse 12', $applicationVars->address->streetAddress );
-			$this->assertSame( '12345', $applicationVars->address->postalCode );
-			$this->assertSame( 'Einort', $applicationVars->address->city );
-			$this->assertSame( 'DE', $applicationVars->address->countryCode );
-			$this->assertSame( 'karla@kennichnich.de', $applicationVars->address->email );
-		} );
+		$this->assertObjectHasAttribute( 'address', $applicationVars );
+		$this->assertSame( 'Prof. Dr. Karla Kennichnich', $applicationVars->address->fullName );
+		$this->assertSame( 'Lehmgasse 12', $applicationVars->address->streetAddress );
+		$this->assertSame( '12345', $applicationVars->address->postalCode );
+		$this->assertSame( 'Einort', $applicationVars->address->city );
+		$this->assertSame( 'DE', $applicationVars->address->countryCode );
+		$this->assertSame( 'karla@kennichnich.de', $applicationVars->address->email );
 	}
 
 	public function testGivenValidBankTransferRequest_donationGetsPersisted(): void {
@@ -776,6 +778,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function getDataApplicationVars( Crawler $crawler ): object {
 		/** @var \DOMElement $appElement */
 		$appElement = $crawler->filter( '#appdata' )->getNode( 0 );
+		if ( $appElement === null ) {
+			$this->fail( 'Response did not contain an element with id "#appdata". Please check if you need to follow a redirect.' );
+		}
 		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
 	}
 
