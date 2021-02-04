@@ -31,11 +31,9 @@ export default {
 				return this.$t( 'donation_confirmation_review_address_missing' );
 			}
 			return [
-				this.$props.address.salutation,
-				this.$props.address.fullName,
+				this.$props.address.salutation + ' ' + this.$props.address.fullName,
 				this.$props.address.streetAddress,
-				this.$props.address.postalCode,
-				this.$props.address.city,
+				this.$props.address.postalCode + ' ' + this.$props.address.city,
 				this.$props.country,
 			].join( ', ' );
 		},

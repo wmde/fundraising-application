@@ -33,8 +33,7 @@ export default {
 			return [
 				this.$props.address.fullName,
 				this.$props.address.streetAddress,
-				this.$props.address.postalCode,
-				this.$props.address.city,
+				this.$props.address.postalCode + ' ' + this.$props.address.city,
 				this.$props.country,
 			].join( ', ' );
 		},
