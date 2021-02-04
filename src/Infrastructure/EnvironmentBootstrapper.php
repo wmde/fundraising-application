@@ -41,13 +41,17 @@ class EnvironmentBootstrapper {
 	}
 
 	public function newFunFunFactory(): FunFunFactory {
-		$configReader = ( new EnvironmentDependentConfigReaderFactory( $this->environmentName ) )->getConfigReader();
-		$config = $configReader->getConfig();
+		$config = $this->getConfiguration();
 		$factory = new FunFunFactory( $config );
 
 		$this->getEnvironmentSetupInstance()
 			->setEnvironmentDependentInstances( $factory, $config );
 
 		return $factory;
+	}
+
+	protected function getConfiguration(): array {
+		$configReader = ( new EnvironmentDependentConfigReaderFactory( $this->environmentName ) )->getConfigReader();
+		return $configReader->getConfig();
 	}
 }

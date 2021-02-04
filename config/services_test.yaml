@@ -1,6 +1,6 @@
 services:
   WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper:
-    class: WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper
+    class: WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper
     public: true
     arguments:
       - "%env(resolve:APP_ENV)%"

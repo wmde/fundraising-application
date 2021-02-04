@@ -13,10 +13,10 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use Symfony\Component\HttpKernel\KernelInterface;
-use WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Tests\SchemaCreator;
+use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**
  * @license GPL-2.0-or-later
@@ -137,7 +137,8 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	protected static function bootKernel( array $options = [] ): KernelInterface {
 		$kernel = parent::bootKernel( $options );
 
-		$factory = static::initializeFactoryWithConfiguration();
+		static::modifyBootstrapperConfiguration();
+		$factory = static::getFactory();
 		static::rebuildDatabaseSchema( $factory );
 
 		if ( is_callable( static::$environmentModification ) ) {
@@ -147,30 +148,17 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		return $kernel;
 	}
 
-	/**
-	 * Set FunFunFactory in the container, with a configuration modified by $applicationConfiguration.
-	 *
-	 * This code should be in sync with EnvironmentBootstrapper::getFunFunFactory, with the small addition
-	 * of calling \array_replace_recursive on the configuration, replacing values from $applicationConfiguration
-	 *
-	 * @return FunFunFactory
-	 */
-	private static function initializeFactoryWithConfiguration(): FunFunFactory {
+	private static function modifyBootstrapperConfiguration(): void {
 		if ( !static::$applicationConfiguration ) {
-			return static::getFactory();
+			return;
 		}
 
-		$environmentName = static::$kernel->getEnvironment();
-		$configReader = ( new EnvironmentDependentConfigReaderFactory( $environmentName ) )->getConfigReader();
-		$config = \array_replace_recursive( $configReader->getConfig(), static::$applicationConfiguration );
-		$factory = new FunFunFactory( $config );
-
 		$bootstrapper = static::$container->get( EnvironmentBootstrapper::class );
-		$bootstrapper->getEnvironmentSetupInstance()
-			->setEnvironmentDependentInstances( $factory, $config );
+		if ( !( $bootstrapper instanceof TestEnvironmentBootstrapper ) ) {
+			throw new \LogicException( 'When overriding configuration, the environment must use TestEnvironmentBootstrapper' );
+		}
 
-		static::$container->set( FunFunFactory::class, $factory );
-		return $factory;
+		$bootstrapper->overrideConfiguration( static::$applicationConfiguration );
 	}
 
 	private static function rebuildDatabaseSchema( FunFunFactory $factory ): void {
