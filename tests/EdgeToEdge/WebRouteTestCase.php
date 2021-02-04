@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use Symfony\Component\HttpKernel\KernelInterface;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
-use WMDE\Fundraising\Frontend\Tests\SchemaCreator;
+use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**
@@ -24,6 +24,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 abstract class WebRouteTestCase extends KernelTestCase {
 
 	use BrowserKitAssertionsTrait;
+	use RebuildDatabaseSchemaTrait;
 
 	protected const DISABLE_DEBUG = false;
 	protected const ENABLE_DEBUG = true;
@@ -159,24 +160,6 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		}
 
 		$bootstrapper->overrideConfiguration( static::$applicationConfiguration );
-	}
-
-	private static function rebuildDatabaseSchema( FunFunFactory $factory ): void {
-		$schemaCreator = new SchemaCreator( $factory->getPlainEntityManager() );
-
-		try {
-			$schemaCreator->dropSchema();
-		}
-		catch ( \Exception $ex ) {
-		}
-
-		$schemaCreator->createSchema();
-	}
-
-	private function addExtraCookies( KernelBrowser $client, array $cookies ) {
-		foreach ( $cookies as $name => $value ) {
-			$client->getCookieJar()->set( new Cookie( $name, $value ) );
-		}
 	}
 
 	protected function assert404( Response $response ): void {

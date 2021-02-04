@@ -4,7 +4,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectRepository;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\DataAccess\DoctrineBucketLogRepository;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\BucketLog;
@@ -12,19 +12,25 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingError;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger
  */
-class DatabaseBucketLoggerTest extends TestCase {
+class DatabaseBucketLoggerTest extends KernelTestCase {
+
+	use RebuildDatabaseSchemaTrait;
 
 	private EntityManager $entityManager;
 
 	public function setUp(): void {
-		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 		parent::setUp();
+		static::bootKernel();
+		$factory = static::$container->get( FunFunFactory::class );
+		static::rebuildDatabaseSchema( $factory );
+		$this->entityManager = $factory->getEntityManager();
 	}
 
 	private function getDatabaseBucketLogger(): DatabaseBucketLogger {
