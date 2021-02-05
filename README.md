@@ -24,7 +24,7 @@ User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fu
 
 ## Installation
 
-For development you need to have Docker and docker-compose installed. You need at least Docker Version >= 17.09.0 and docker-compose version >= 1.17.0. If your OS does not come with the right version, please use the official installation instructions for [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/). You don't need to install other dependencies (PHP, Node.js, MySQL) on your machine.
+For development, you need to have Docker and docker-compose installed. You need at least Docker Version >= 17.09.0 and docker-compose version >= 1.17.0. If your OS does not come with the right version, please use the official installation instructions for [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/). You don't need to install other dependencies (PHP, Node.js, MySQL) on your machine.
 
 Get a clone of our git repository and then run:
 
@@ -73,8 +73,9 @@ The application merges the values from the configuration files with the default 
 
 ### Create a test configuration that uses the MySQL database
 
-By default, the unit tests use an in-memory SQLite database. To speed tun the tests against a MySQL database, 
-add the file `app/config/config.test.local.json` with the following content (replacing the configuration values as needed):
+To speed up the tests when running them locally, use SQLite instead of the
+default MySQL. You can configure this by adding the file
+`app/config/config.test.local.json` with the following content:
 
 ```json
 {
@@ -150,20 +151,16 @@ Valid environment names are
 
     make ci
 
-If you want to run all the CI tasks in parallel, without ticking progress bars from commands that support it, run the following command instead:
-
-    make -j --output-sync ci DOCKER_FLAGS="" 
-
 
 ### For tests only
 
     make test
-    docker run -it --rm --user $(id -u):$(id -g) -v $(pwd):/app -w /app node:8 npm run test
+    docker run -it --rm --user $(id -u):$(id -g) -v $(pwd):/app -w /app node:14 npm run test
 
 ### For style checks only
 
     make cs
-    docker run -it --rm --user $(id -u):$(id -g) -v $(pwd):/app -w /app node:8 npm run cs
+    docker run -it --rm --user $(id -u):$(id -g) -v $(pwd):/app -w /app node:14 npm run cs
 
 For one context only
 
@@ -350,12 +347,6 @@ To update the skins, run
 For an in-depth documentation how to deploy the application on our servers, 
 see [the deployment documentation](https://github.com/wmde/fundraising-infrastructure/blob/master/docs/deployment/Fundraising_Application.md).
 
-## Profiling
-
-This is not working at the moment.
-
-(When accessing the API via `web/index.dev.php`, profiling information will be generated and in
-`app/cache/profiler`. You can access the profiler UI via `index.dev.php/_profiler`.)
 
 ## Project structure
 
@@ -372,7 +363,8 @@ Used Bounded Contexts:
 
 ### Production code layout
 
-* `src/`: framework agnostic code not belonging to any Bounded Context
+* `src/`: code not belonging to any Bounded Context, framework agnostic if
+        possible
 	* `Factories/`: application factories used by the framework, including top level factory `FFFactory`
 	* `Presentation/`: presentation code, including the `Presenters/`
 	* `Validation/`: validation code
@@ -382,8 +374,8 @@ Used Bounded Contexts:
 	* `DataAccess/`: implementations of services that binds to database, network, etc
 	* `Infrastructure/`: implementations of services binding to cross cutting concerns, ie logging
 * `web/`: web accessible code
-	* `index.php`: production entry point
-* `app/`: contains configuration and all framework (Silex) dependent code
+	* `index.php`: HTTP entry point
+* `app/`: contains configuration and all framework (Symfony) dependent code
 	* `bootstrap.php`: framework application bootstrap (used by System tests)
 	* `routes.php`: defines the routes and their handlers
 	* `RouteHandlers/`: route handlers that get benefit from having their own class are placed here
@@ -394,9 +386,11 @@ Used Bounded Contexts:
 		* `config.development.json`: instance specific (gitignored) production configuration (gets merged into default config)
 	* `js/lib`: Javascript modules, will be compiled into one file for the frontend.
 	* `js/test`: Unit tests for the JavaScript modules
+* `cli/`: Command line commands, integrated into the Symfony console
 * `var/`: Ephemeral application data
     * `log/`: Log files (in debug mode, every request creates a log file)
-    * `cache/`: Cache directory for Twig templates
+    * `cache/`: Cache directory for Twig templates and Symfony DI
+	       containers
 
 ### Test code layout
 
@@ -412,8 +406,9 @@ testsuites defined in `phpunit.xml.dist`.
 * `System/`: tests involving outside systems (ie, beyond our PHP app and database)
 * `Fixtures/`: test doubles (stubs, spies and mocks)
 
-If you need access to the application in your non-unit tests, for instance to interact with
-persistence, you should use `TestEnvironment` defined in `tests/TestEnvironment.php`.
+If you need access the `FunFunFactory` in your non-unit tests, for instance to interact with
+persistence, you should inherit from `KernelTestCase` and get the Factory
+from the container.
 
 #### Test type restrictions
 
@@ -421,7 +416,7 @@ persistence, you should use `TestEnvironment` defined in `tests/TestEnvironment.
 	<tr>
 		<th></th>
 		<th>Network</th>
-		<th>Framework (Silex)</th>
+		<th>Framework (Symfony)</th>
 		<th>Top level factory</th>
 		<th>Database and disk</th>
 	</tr>
