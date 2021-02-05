@@ -56,22 +56,34 @@ clean: clear
 
 # Continuous Integration
 
-test: phpunit
-
 ci: phpunit cs ci-js validate-app-config validate-campaign-config stan
 
 ci-with-coverage: phpunit-with-coverage cs ci-js validate-app-config validate-campaign-config stan
+
+phpunit-system:
+	docker-compose run --rm --no-deps app ./vendor/bin/phpunit tests/System/
+
+lint-container:
+	docker-compose run --rm --no-deps app ./bin/console lint:container
+
+validate-app-config:
+	docker-compose run --rm --no-deps app ./bin/console app:validate:config app/config/config.dist.json app/config/config.test.json
+
+validate-campaign-config:
+	docker-compose run --rm --no-deps app ./bin/console app:validate:campaigns $(APP_ENV)
+
+validate-campaign-utilization:
+	docker-compose run --rm --no-deps app ./bin/console app:validate:campaigns:utilization
+
+# Code Quality
+
+test: phpunit
 
 phpunit:
 	docker-compose run --rm --no-deps app php -d memory_limit=1G vendor/bin/phpunit $(TEST_DIR)
 
 phpunit-with-coverage:
 	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm --no-deps -e XDEBUG_MODE=coverage app_debug php -d memory_limit=1G vendor/bin/phpunit --configuration=phpunit.xml.dist --stop-on-error --coverage-clover coverage.clover
-
-phpunit-system:
-	docker-compose run --rm --no-deps app ./vendor/bin/phpunit tests/System/
-
-# Code Quality
 
 cs:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpcs
@@ -82,14 +94,6 @@ fix-cs:
 stan:
 	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):stan analyse --level=1 --no-progress cli/ src/ tests/
 
-validate-app-config:
-	docker-compose run --rm --no-deps app ./bin/console app:validate:config app/config/config.dist.json app/config/config.test.json
-
-validate-campaign-config:
-	docker-compose run --rm --no-deps app ./bin/console app:validate:campaigns $(APP_ENV)
-
-validate-campaign-utilization:
-	docker-compose run --rm --no-deps app ./bin/console app:validate:campaigns:utilization
 
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
