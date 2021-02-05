@@ -14,12 +14,6 @@ services:
           # fetching services directly from the container via $container->get() won't work.
         # The best practice is to be explicit about your dependencies anyway.
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-#    App\:
-#        resource: '../src/*'
-#        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     WMDE\Fundraising\Frontend\App\Controllers\:
@@ -35,29 +29,40 @@ services:
     WMDE\Fundraising\Frontend\Cli\:
         resource: '../cli/*'
 
-    # add more service definitions when explicit configuration is needed
+    # In the future, me might get less and less reliant on FunFunFactory and make
+    #    classes in src/ available to be used as services
+    # The following configuration creates a service per class whose id is the fully-qualified class name
+    #    WMDE\Fundraising\Frontend\:
+    #        resource: '../src/*'
+    #        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+
+    # add more service definitions as long the the above statement is commented out or
+    # when explicit configuration is needed.
     # please note that last definitions always *replace* previous ones
 
-    WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter:
-        class: WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter
-        public: false
 
-    app.url_generator:
-        alias: WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter
-        public: true
-
+    # We need the bootstrapper to be public to be able to access it in tests
     WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper:
         class: WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper
         public: true
         arguments:
             - "%env(resolve:APP_ENV)%"
 
+    # We need the FunFunFactory to be public to be able to access it in tests
     WMDE\Fundraising\Frontend\Factories\FunFunFactory:
         class: WMDE\Fundraising\Frontend\Factories\FunFunFactory
         factory: ['@WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper', 'newFunFunFactory']
         public: true
         calls:
             - setUrlGenerator: ["@app.url_generator"]
+
+    WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter:
+        class: WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter
+
+    app.url_generator:
+        alias: WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter
+        public: true
 
     WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler:
         class: WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler
