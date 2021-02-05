@@ -31,6 +31,10 @@ services:
         resource: '../app/EventHandlers/*'
         exclude: '../app/EventHandlers/{LogErrors}.php'
 
+    # register console commands
+    WMDE\Fundraising\Frontend\Cli\:
+        resource: '../cli/*'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 

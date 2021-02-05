@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Cli\CampaignConfigValidation;
 
-use FileFetcher\SimpleFileFetcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -14,8 +13,6 @@ use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\FeatureToggleParser;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
 /**

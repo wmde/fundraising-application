@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Bootstrap
  * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests
  */
 class RouteNotFoundTest extends WebRouteTestCase {

@@ -83,13 +83,13 @@ stan:
 	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):stan analyse --level=1 --no-progress cli/ src/ tests/
 
 validate-app-config:
-	docker-compose run --rm --no-deps app ./console app:validate:config app/config/config.dist.json app/config/config.test.json
+	docker-compose run --rm --no-deps app ./bin/console app:validate:config app/config/config.dist.json app/config/config.test.json
 
 validate-campaign-config:
-	docker-compose run --rm --no-deps app ./console app:validate:campaigns $(APP_ENV)
+	docker-compose run --rm --no-deps app ./bin/console app:validate:campaigns $(APP_ENV)
 
 validate-campaign-utilization:
-	docker-compose run --rm --no-deps app ./console app:validate:campaigns:utilization
+	docker-compose run --rm --no-deps app ./bin/console app:validate:campaigns:utilization
 
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
