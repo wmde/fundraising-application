@@ -299,13 +299,25 @@ If JavaScript or CSS files where changed, you will need to (re)run
 
     make js
 
-Actions and their resulting state will be logged.
+The Makefile and npm will log all actions and their resulting state.
 
-### Automatic recompilation of assets during development (Laika)
+### Automatic recompilation of assets during development
 
 If you are working on the JavaScript files of the Laika skin and need automatic recompilation when a file changes, add the following setting to your `config.dev.json` file:
 
     "assets-path": "http://localhost:7072" 
+
+### Troubleshooting the client-side Docker image
+
+If the build or the automatic recompilation fails after an update to the
+JavaScript dependency or the Node image (see the [Makefile](Makefile) for
+the image version we're using), you can run the following commands:
+
+	docker-compose stop skin_laika
+	docker-compose rm skin_laika
+	docker-compose pull skin_laika
+	docker-compose up -d skin_laika
+
 
 ## Skins
 
