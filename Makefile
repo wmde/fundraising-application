@@ -78,7 +78,7 @@ phpunit:
 	docker-compose run --rm app php -d memory_limit=1G vendor/bin/phpunit $(TEST_DIR)
 
 phpunit-with-coverage:
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm app_debug php -d memory_limit=1G vendor/bin/phpunit --configuration=phpunit.xml.dist --stop-on-error --coverage-clover coverage.clover
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm -e XDEBUG_MODE=coverage app_debug php -d memory_limit=1G vendor/bin/phpunit --configuration=phpunit.xml.dist --stop-on-error --coverage-clover coverage.clover
 
 phpunit-system:
 	docker-compose run --rm app ./vendor/bin/phpunit tests/System/
