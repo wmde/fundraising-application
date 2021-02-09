@@ -15,6 +15,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $env = $_SERVER['APP_ENV'] ?? 'dev';
 $debug = $_SERVER['APP_DEBUG'] ? (bool)$_SERVER['APP_DEBUG'] : false;
 
+umask( 0002 );
 if ( $debug ) {
 	umask( 0000 );
 	Debug::enable();
