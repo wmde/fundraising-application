@@ -63,16 +63,13 @@ clean: clear
 
 ui: clear js
 
-test: covers phpunit
+test: phpunit
 
 setup-db:
 	docker-compose run --rm start_dependencies
 	docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create
 	docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
 	docker-compose run --rm app ./vendor/bin/doctrine dbal:import build/database/fixtures.sql
-
-covers:
-	docker-compose run --rm --no-deps app ./vendor/bin/covers-validator
 
 phpunit:
 	docker-compose run --rm app php -d memory_limit=1G vendor/bin/phpunit $(TEST_DIR)
@@ -120,13 +117,13 @@ migration-status:
 	# TODO provide more migrations configurations when available.
 	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:status --configuration=app/config/migrations/subscriptions.yml
 
-ci: covers phpunit cs npm-ci validate-app-config validate-campaign-config stan
+ci: phpunit cs npm-ci validate-app-config validate-campaign-config stan
 
-ci-with-coverage: covers phpunit-with-coverage cs npm-ci validate-app-config validate-campaign-config stan
+ci-with-coverage: phpunit-with-coverage cs npm-ci validate-app-config validate-campaign-config stan
 
 create-env: 
 	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
 
 setup: create-env install-php install-js default-config ui setup-db
 
-.PHONY: ci ci-with-coverage clean clear covers cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config validate-campaign-config
+.PHONY: ci ci-with-coverage clean clear cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config validate-campaign-config
