@@ -57,7 +57,7 @@ class LoggerFactoryTest extends TestCase {
 				[
 					'method' => 'errbit',
 					'level' => 'ERROR',
-					'projectId' => 1,
+					'projectId' => '1',
 					'projectKey' => 'fd8794457af0da70882c850eb486524f',
 					'host' => 'http://errbit:8080'
 				]

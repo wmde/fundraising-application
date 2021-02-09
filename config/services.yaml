@@ -72,3 +72,13 @@ services:
         class: WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder
         factory: ['@WMDE\Fundraising\Frontend\Factories\FunFunFactory', 'getCookieBuilder']
 
+    app.errbit_logger:
+        class: WMDE\Fundraising\Frontend\Infrastructure\SupportHandler
+        factory: ['WMDE\Fundraising\Frontend\Factories\ErrbitLoggerFactory', 'createErrbitHandler']
+        arguments:
+            - "%env(resolve:ERRBIT_PROJECT_ID)%"
+            - "%env(resolve:ERRBIT_PROJECT_KEY)%"
+            - "%env(resolve:ERRBIT_HOST)%"
+            - "%env(resolve:APP_ENV)%"
+            # We can't define the log level in the monolog configuration, see https://github.com/symfony/monolog-bundle/issues/322
+            - notice

@@ -1,0 +1,15 @@
+monolog:
+  handlers:
+    main:
+      type: stream
+      path: "%kernel.logs_dir%/application.log"
+      channels: [ '!event' ]
+    errbit:
+      type: service
+      id: "app.errbit_logger"
+      # For some reason, when we log request errors, we will get source file paths as requests in a loop
+      channels: [ '!request' ]
+    console:
+      type: console
+      process_psr_3_messages: false
+      channels: [ '!event', '!doctrine', '!console' ]

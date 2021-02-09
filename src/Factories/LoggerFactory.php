@@ -48,17 +48,7 @@ class LoggerFactory {
 				if ( empty( $config['projectId'] ) || empty( $config['projectKey'] ) || empty( $config['host'] ) ) {
 					throw new \InvalidArgumentException( 'You need to configure project ID, projectKey and host for errbit logging' );
 				}
-				$notifier = new Notifier( [
-					'projectId' => $config['projectId'],
-					'projectKey' => $config['projectKey'],
-					'host' => $config['host'],
-					'environment' => $_ENV['APP_ENV'] ?? 'dev'
-				] );
-
-				return new SupportHandler(
-					new AirbrakeHandler( $notifier, $config['level'] ),
-					new Logger( 'errbit errors', [ new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, LogLevel::ERROR ), ] ),
-				);
+				return ErrbitLoggerFactory::createErrbitHandler( $config['projectId'], $config['projectKey'], $config['host'], $_ENV['APP_ENV'] ?? 'dev', $config['level'] );
 
 			default:
 				throw new \InvalidArgumentException( 'Unknown logging method - ' . $config['method'] );
