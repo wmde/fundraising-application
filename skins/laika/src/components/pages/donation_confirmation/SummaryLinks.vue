@@ -1,5 +1,5 @@
 <template>
-	<div class="donation-links is-hidden-print">
+	<div class="donation-links is-hidden-print has-margin-top-18">
 		<a id="print-link" href="javascript:window.print()">{{ $t( 'donation_confirmation_print_confirmation' ) }}</a>
 		<a id="comment-link" @click="openPopUp()" v-if="donationCanBeCommented" :disabled="commentLinkIsDisabled">
 			{{ commentLinkIsDisabled ? $t( 'donation_comment_popup_thanks' ) : $t( 'donation_confirmation_comment_button' ) }}
@@ -65,11 +65,7 @@ export default Vue.extend( {
 <style lang="scss">
 	@import "../../../scss/custom";
 
-	.donation-links {
-		border-left: 1px solid $fun-color-gray-light-solid;
-		padding: 0 0 18px 18px;
-		& > a {
-			display: block;
-		}
+	.donation-links a {
+		display: block;
 	}
 </style>
