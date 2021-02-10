@@ -11,7 +11,7 @@
 		<FundsDistributionInfo :application-of-funds-data="content.applicationOfFundsData" />
 
 		<div class="use_of_funds__section use_of_funds__section--two-cols-info">
-			<div class="use_of_funds__column--info" style="display:none">
+			<div class="use_of_funds__column--info">
 				<span>{{ content.detailedReports.international.intro }}</span>
 				<a :href="content.detailedReports.international.linkUrl" target="_blank">
 					{{ content.detailedReports.international.linkName }}
