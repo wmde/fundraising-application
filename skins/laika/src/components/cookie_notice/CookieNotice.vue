@@ -13,7 +13,7 @@
 					<h3>{{ $t( 'cookie_heading' ) }}</h3>
 					<p class="cookie-notice-text-copy" :class="{ open: textOpen }">
 						<text-visibility-toggle :height-to-show="38" v-on:toggle-text="toggleTextOpen">
-							{{ $t( 'cookie_content' ) }}
+							<span v-html="$t( 'cookie_content' )"></span>
 						</text-visibility-toggle>
 					</p>
 				</div>
