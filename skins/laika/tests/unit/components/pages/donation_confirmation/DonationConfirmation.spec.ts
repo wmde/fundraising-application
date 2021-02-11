@@ -3,10 +3,12 @@ import Vuex from 'vuex';
 import Buefy from 'buefy';
 import DonationConfirmation from '@/components/pages/DonationConfirmation.vue';
 import { createStore } from '@/store/donation_store';
+import { FeatureTogglePlugin } from '@/FeatureToggle';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
+localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'campaigns.confirmation_page_layout.old_layout' ] } );
 
 const testBankTransferCode = 'XW-XLK-M3F-Z';
 
