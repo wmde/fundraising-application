@@ -1,5 +1,9 @@
 import DonationSummary from '@/components/DonationSummary.vue';
-import { mount } from '@vue/test-utils';
+import { mount, createLocalVue } from '@vue/test-utils';
+import { FeatureTogglePlugin } from '@/FeatureToggle';
+
+const localVue = createLocalVue();
+localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'campaigns.confirmation_page_layout.old_layout' ] } );
 
 describe( 'DonationForm', () => {
 	const payment = {
@@ -38,6 +42,7 @@ describe( 'DonationForm', () => {
 			countryCode: 'DE',
 		};
 		mount( DonationSummary, {
+			localVue,
 			propsData: {
 				address,
 				payment,
@@ -62,6 +67,7 @@ describe( 'DonationForm', () => {
 			countryCode: 'DE',
 		};
 		mount( DonationSummary, {
+			localVue,
 			propsData: {
 				address,
 				payment,
@@ -79,6 +85,7 @@ describe( 'DonationForm', () => {
 	it( 'translates payment information', () => {
 		const $t = jest.fn( x => x );
 		mount( DonationSummary, {
+			localVue,
 			propsData: {
 				payment,
 				address: {},
