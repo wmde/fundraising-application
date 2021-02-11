@@ -25,8 +25,8 @@
 			<div class="column is-half">
 				<div class="donation-cta">
 					<div v-if="showAddressChangeContent">
-						<p class="has-margin-bottom-18"><strong>Benötigen Sie eine Spendenquittung?</strong></p>
-						<p class="has-margin-bottom-18">Hier erläutern wir die Vorteile der Angabe von Adressdaten und auch, warum sie diese Spende benötigen</p>
+						<p class="has-margin-bottom-18"><strong>{{ $t( 'donation_confirmation_cta_title_alt' ) }}</strong></p>
+						<p class="has-margin-bottom-18">{{ $t( 'donation_confirmation_cta_summary_alt' ) }}</p>
 						<b-button
 							id="address-change-button"
 							class="address-change-button"
