@@ -45,7 +45,7 @@ class EnvironmentBootstrapper {
 		$factory = new FunFunFactory( $config );
 
 		$this->getEnvironmentSetupInstance()
-			->setEnvironmentDependentInstances( $factory, $config );
+			->setEnvironmentDependentInstances( $factory );
 
 		return $factory;
 	}

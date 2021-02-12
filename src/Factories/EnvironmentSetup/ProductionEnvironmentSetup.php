@@ -10,30 +10,20 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Factories\LoggerFactory;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
 
 class ProductionEnvironmentSetup implements EnvironmentSetup {
 
-	public function setEnvironmentDependentInstances( FunFunFactory $factory, array $configuration ) {
-		$this->initializeLoggers( $factory, $configuration['logging'] );
+	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
+		$this->initializeLoggers( $factory );
 
 		$factory->enableCaching();
 	}
 
-	private function initializeLoggers( FunFunFactory $factory, array $loggingConfig ) {
-		$this->setApplicationLogger( $factory, $loggingConfig );
+	private function initializeLoggers( FunFunFactory $factory ) {
 		$this->setPaypalLogger( $factory );
 		$this->setSofortLogger( $factory );
 		$this->setCreditCardLogger( $factory );
 		$this->setDoctrineConfiguration( $factory );
-	}
-
-	private function setApplicationLogger( FunFunFactory $factory, array $loggingConfig ) {
-		$factory->setLogger(
-			( new LoggerFactory( $loggingConfig ) )
-				->getLogger()
-		);
 	}
 
 	private function setPaypalLogger( FunFunFactory $factory ) {

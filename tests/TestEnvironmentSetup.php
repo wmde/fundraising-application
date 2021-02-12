@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
  * @license GPL-2.0-or-later
  */
 class TestEnvironmentSetup implements EnvironmentSetup {
-	public function setEnvironmentDependentInstances( FunFunFactory $factory, array $configuration ) {
+	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
 		$factory->setNullMessenger();
 		$factory->setDomainNameValidator( new NullDomainNameValidator() );
 		$factory->setDoctrineConfiguration( Setup::createConfiguration( true ) );
