@@ -793,22 +793,6 @@
       "additionalProperties": false,
       "required": [ "donations", "membership" ]
     },
-    "logging": {
-      "type": "object",
-      "title": "Logging configuration",
-      "properties": {
-        "handlers": {
-          "type": "array",
-          "title": "'Output targets' for logging, each with a log level, type and other, handler-specific parameters ",
-          "items": {
-            "type": { "$ref":  "#/definitions/logConfig" }
-          },
-          "minItems": 1
-        }
-      },
-      "additionalProperties": false,
-      "required": [ "handlers" ]
-    },
     "smtp": {
       "type": "object",
       "title": "SMTP configuration",
@@ -867,34 +851,6 @@
     "payment-types",
     "cookie",
     "preset-amounts",
-    "logging",
     "smtp"
-  ],
-  "definitions": {
-    "logConfig": {
-      "type": "object",
-      "title": "Configuration for a logging handler, where the output should be written to",
-      "properties": {
-        "method": {
-          "type": "string",
-          "title": "Type of logging",
-          "enum": [ "error_log", "file", "errbit" ],
-          "default": "error_log"
-        },
-        "url": {
-          "type": "string",
-          "title": "Relative file URL endpoint",
-          "description": "File name for the 'file' logging type.",
-          "format": "url"
-        },
-        "level": {
-          "type": "string",
-          "title": "One of the error level constants",
-          "enum": [ "DEBUG", "INFO", "NOTICE", "WARNING", "ERROR", "CRITICAL", "ALERT", "EMERGENCY" ],
-          "default": "DEBUG"
-        }
-      },
-      "required": [ "method", "level"]
-    }
-  }
+  ]
 }
