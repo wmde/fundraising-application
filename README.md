@@ -214,7 +214,7 @@ command from doctrine-migrations which supports `--add` and `--delete` parameter
 vendor/doctrine/migrations/bin/doctrine-migrations migrations:version
 ```
 
-Have a look the the [deployment documentation](deployment/README.md) on how to run the migrations on the server.
+Have a look the [deployment documentation](https://github.com/wmde/fundraising-infrastructure/blob/master/docs/deployment/Fundraising_Application.md) on how to run the migrations on the server.
 
 **Note:** If you're getting errors that the a configuration file was nor found, make sure to set `APP_ENV` to the right value.
 See section "Running in different environments" in this document.
@@ -343,8 +343,8 @@ To update the skins, run
 
 ## Deployment
 
-For an in-depth documentation how deployment on a server is done, 
-see [the deployment documentation](deployment/README.md).
+For an in-depth documentation how to deploy the application on our servers, 
+see [the deployment documentation](https://github.com/wmde/fundraising-infrastructure/blob/master/docs/deployment/Fundraising_Application.md).
 
 ## Profiling
 
@@ -453,7 +453,6 @@ persistence, you should use `TestEnvironment` defined in `tests/TestEnvironment.
 
 ### Other directories
 
-* `deployment/`: Ansible scripts and configuration for deploying the application
 * `build/`: Configuration and Dockerfiles for the development environment and Travis CI
 
 ## See also
