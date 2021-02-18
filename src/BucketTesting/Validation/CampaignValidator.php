@@ -24,7 +24,7 @@ class CampaignValidator {
 	private $campaignCollection;
 	private $hasValidated = false;
 	private $errorLogger;
-	/** @var CampaignValidationRuleInterface[] $rules */
+	/** @var CampaignValidationRuleInterface[] */
 	private $rules = [];
 
 	public function __construct( CampaignCollection $campaignCollection, CampaignErrorCollection $errorLogger ) {

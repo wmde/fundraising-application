@@ -47,6 +47,6 @@ class JsonStringReaderTest extends TestCase {
 			'/test/directory/valid.json',
 			$this->getFileFetcherWithContent( [ '/test/directory/valid.json' => '{"test": "is", "ok": "now"}' ] )
 		) )->readAndValidateJson();
-		$this->assertEquals( $validJson, '{"test": "is", "ok": "now"}' );
+		$this->assertEquals( '{"test": "is", "ok": "now"}', $validJson );
 	}
 }

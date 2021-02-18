@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 
 class CampaignCollection implements IteratorAggregate {
 
-	/* @var Campaign[] */
+	/** @var Campaign[] */
 	private array $campaigns;
 
 	public function __construct( Campaign ...$campaigns ) {
