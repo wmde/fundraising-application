@@ -82,7 +82,7 @@ class ApplyForMembershipController {
 		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
 
 		$request->setPaymentType( $httpRequest->request->get( 'payment_type', '' ) );
-		$request->setPaymentIntervalInMonths( (int)$httpRequest->request->get( 'membership_fee_interval', 0 ) );
+		$request->setPaymentIntervalInMonths( $httpRequest->request->getInt( 'membership_fee_interval', 0 ) );
 
 		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
 			$httpRequest->request->get( 'templateCampaign', '' ),
