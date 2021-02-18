@@ -7,9 +7,9 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Donation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
 
 class NewDonationController {
 
@@ -32,9 +32,10 @@ class NewDonationController {
 
 		$validationResult = $ffFactory->newPaymentDataValidator()->validate( $amount, $paymentType );
 
-		$trackingInfo = new DonationTrackingInfo();
-		$trackingInfo->setTotalImpressionCount( intval( $request->get( 'impCount' ) ) );
-		$trackingInfo->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount' ) ) );
+		$trackingInfo = new ImpressionCounts(
+			intval( $request->get( 'impCount' ) ),
+			intval( $request->get( 'bImpCount' ) )
+		);
 
 		return new Response(
 			$ffFactory->newDonationFormPresenter()->present(

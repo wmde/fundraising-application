@@ -29,7 +29,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 			'08771', 'Bärlin', 'DE', 'demo@cat.goat'
 		);
 		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getDirectDebitPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
 
 		$adapter = new DonationMembershipApplicationAdapter();
 		$this->assertEquals(
@@ -60,7 +60,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 			'08771', 'Bärlin', 'DE', 'demo@cat.goat'
 		);
 		$payment = new DonationPayment( Euro::newFromCents( 100000 ), 1, $this->getDirectDebitPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
 
 		$adapter = new DonationMembershipApplicationAdapter();
 		$this->assertEquals(
@@ -88,7 +88,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 			'3389', 'Wien', 'AT', 'demo2@cat.goat'
 		);
 		$payment = new DonationPayment( Euro::newFromCents( 55000 ), 1, new SofortPayment( 'DXB' ) );
-		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
 
 		$adapter = new DonationMembershipApplicationAdapter();
 		$this->assertEquals(
@@ -114,7 +114,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 			'', '', 'AT', 'demo2@cat.goat'
 		);
 		$payment = new DonationPayment( Euro::newFromCents( 55000 ), 1, new SofortPayment( 'FFG' ) );
-		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
 
 		$adapter = new DonationMembershipApplicationAdapter();
 		$this->assertEquals(
@@ -166,7 +166,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 
 	public function testDefaultValidationStateIsEmpty(): void {
 		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getBankTransferPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, new Donor\AnonymousDonor(), $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, new Donor\AnonymousDonor(), $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
 		$adapter = new DonationMembershipApplicationAdapter();
 
 		$this->assertEquals( [], $adapter->getInitialValidationState( $donation ) );
@@ -178,7 +178,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 			'08771', 'Bärlin', 'DE', 'demo@cat.goat'
 		);
 		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getBankTransferPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
 
 		$adapter = new DonationMembershipApplicationAdapter();
 
@@ -190,7 +190,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 
 	public function testDonationWithDirectDebitAndIbanHasValidBankData(): void {
 		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getDirectDebitPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, ValidDonation::newDonor(), $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, ValidDonation::newDonor(), $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
 		$adapter = new DonationMembershipApplicationAdapter();
 
 		$this->assertEquals(
@@ -204,7 +204,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 		$bankData->setIban( new Iban( '' ) );
 		$paymentMethod = new DirectDebitPayment( $bankData );
 		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $paymentMethod );
-		$donation = new Donation( null, Donation::STATUS_NEW, ValidDonation::newDonor(), $payment, false, new DonationTrackingInfo, null );
+		$donation = new Donation( null, Donation::STATUS_NEW, ValidDonation::newDonor(), $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
 		$adapter = new DonationMembershipApplicationAdapter();
 
 		$this->assertEquals( [ 'address' => true ], $adapter->getInitialValidationState( $donation ) );

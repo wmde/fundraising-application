@@ -9,12 +9,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
@@ -122,9 +122,6 @@ class AddDonationController {
 
 		$donationRequest->setTracking( $request->attributes->get( 'trackingCode', '' ) );
 		$donationRequest->setOptIn( $request->get( 'info', '' ) );
-		// Setting source for completeness sake,
-		// TODO Remove when  https://phabricator.wikimedia.org/T134327 is done
-		$donationRequest->setSource( '' );
 		$donationRequest->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
 		$donationRequest->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
 		$donationRequest->setOptsIntoDonationReceipt( $request->request->getBoolean( 'donationReceipt', true ) );
@@ -175,12 +172,11 @@ class AddDonationController {
 		return 0;
 	}
 
-	private function newTrackingInfoFromRequest( Request $request ): DonationTrackingInfo {
-		$tracking = new DonationTrackingInfo();
-		$tracking->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
-		$tracking->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
-
-		return $tracking;
+	private function newTrackingInfoFromRequest( Request $request ): ImpressionCounts {
+		return new ImpressionCounts(
+			intval( $request->get( 'impCount', 0 ) ),
+			intval( $request->get( 'bImpCount', 0 ) )
+		);
 	}
 
 	/**
