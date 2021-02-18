@@ -72,13 +72,13 @@ setup-db:
 	docker-compose run --rm app ./vendor/bin/doctrine dbal:import build/database/fixtures.sql
 
 phpunit:
-	docker-compose run --rm app php -d memory_limit=1G vendor/bin/phpunit $(TEST_DIR)
+	docker-compose run --rm --no-deps app php -d memory_limit=1G vendor/bin/phpunit $(TEST_DIR)
 
 phpunit-with-coverage:
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm -e XDEBUG_MODE=coverage app_debug php -d memory_limit=1G vendor/bin/phpunit --configuration=phpunit.xml.dist --stop-on-error --coverage-clover coverage.clover
+	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm --no-deps -e XDEBUG_MODE=coverage app_debug php -d memory_limit=1G vendor/bin/phpunit --configuration=phpunit.xml.dist --stop-on-error --coverage-clover coverage.clover
 
 phpunit-system:
-	docker-compose run --rm app ./vendor/bin/phpunit tests/System/
+	docker-compose run --rm --no-deps app ./vendor/bin/phpunit tests/System/
 
 cs:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpcs
