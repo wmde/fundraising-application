@@ -714,30 +714,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testCookieFlagsSecureAndHttpOnlyAreSet(): void {
-		$this->markTestSkipped( 'Waiting for RegisterTrackingData to use CookieBuilder (implemented in PR #1936)' );
-		$client = $this->createClient();
-		$client->setServerParameter( 'HTTPS', true );
-		$client->followRedirects( true );
-
-		$client->request(
-			'POST',
-			'/donation/add',
-			$this->newValidFormInput()
-		);
-
-		$cookieJar = $client->getCookieJar();
-		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-		$cookies = $cookieJar->all();
-		if ( count( $cookies ) === 0 ) {
-			$this->markTestSkipped( 'No cookies set when adding donation - delete this test?' );
-		}
-		foreach ( $cookies as $cookie ) {
-			$this->assertTrue( $cookie->isSecure(), sprintf( 'Cookie "%s" is not secure', $cookie->getName() ) );
-			$this->assertTrue( $cookie->isHttpOnly() );
-		}
-	}
-
 	public function testDonationReceiptOptOut_persistedInDonation(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$parameters = $this->newValidFormInput();
