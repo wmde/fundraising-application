@@ -216,14 +216,24 @@ class FunFunFactory {
 	public const MEMBERSHIP_RATE_LIMIT_SESSION_KEY = 'memapp_timestamp';
 
 	/**
-	 * @var array<string, mixed>
+	 * Nested configuration values.
+	 *
+	 * See JSON schema in app/config/schema.json for allowed values
+	 *
+	 * @var array
 	 */
 	private array $config;
 
 	private bool $addDoctrineSubscribers = true;
 
 	/**
-	 * @var array<string, mixed>
+	 * Holds instances that should only be initialized once.
+	 *
+	 * Type is classname_string => instance
+	 *
+	 * If there are multiple instances of a class (e.g. loggers), the class names must get a suffix, separated with "::"
+	 *
+	 * @var array
 	 */
 	private array $sharedObjects;
 

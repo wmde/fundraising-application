@@ -1,5 +1,6 @@
 <?php
 
+// phpcs:ignoreFile MediaWiki.Commenting.FunctionComment.ObjectTypeHintParam
 declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
