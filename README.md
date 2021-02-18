@@ -71,17 +71,21 @@ You can add local modifications by adding a file that follows the name pattern o
 The application merges the values from the configuration files with the default values from the file 
 `app/config/config.dist.json`.
 
-### Create local test configuration to speed up tests
+### Create a test configuration that uses the MySQL database
 
-To speed up the tests when running them locally, use SQLite instead of the default MySQL. This can be done by
-adding the file `app/config/config.test.local.json` with the following content:
+By default, the unit tests use an in-memory SQLite database. To speed tun the tests against a MySQL database, 
+add the file `app/config/config.test.local.json` with the following content (replacing the configuration values as needed):
 
 ```json
 {
-    "db": {
-        "driver": "pdo_sqlite",
-        "memory": true
-    }
+	"db": {
+		"driver": "pdo_mysql",
+		"user": "fundraising",
+		"password": "INSECURE PASSWORD",
+		"dbname": "fundraising",
+		"host": "database",
+		"port": 3306
+	}
 }
 ```
 
