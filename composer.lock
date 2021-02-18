@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7fe92d48a9daa6cd12fe378b24cba97",
+    "content-hash": "95fe011f98e8e51315e0af957ba85ee3",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -1148,16 +1148,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.8.1",
+            "version": "2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "242cf1a33df1b8bc5e1b86c3ebd01db07851c833"
+                "reference": "ebae57eb9637acd8252b398df3121b120688ed5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/242cf1a33df1b8bc5e1b86c3ebd01db07851c833",
-                "reference": "242cf1a33df1b8bc5e1b86c3ebd01db07851c833",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/ebae57eb9637acd8252b398df3121b120688ed5c",
+                "reference": "ebae57eb9637acd8252b398df3121b120688ed5c",
                 "shasum": ""
             },
             "require": {
@@ -1165,7 +1165,7 @@
                 "doctrine/annotations": "^1.11.1",
                 "doctrine/cache": "^1.9.1",
                 "doctrine/collections": "^1.5",
-                "doctrine/common": "^3.0",
+                "doctrine/common": "^3.0.3",
                 "doctrine/dbal": "^2.10.0",
                 "doctrine/event-manager": "^1.1",
                 "doctrine/inflector": "^1.4|^2.0",
@@ -1234,9 +1234,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.8.1"
+                "source": "https://github.com/doctrine/orm/tree/2.8.2"
             },
-            "time": "2020-12-04T19:53:07+00:00"
+            "time": "2021-02-16T22:10:18+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -6115,29 +6115,29 @@
         },
         {
             "name": "composer/semver",
-            "version": "2.0.0",
+            "version": "3.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "0ec124f57c7e23925c006cbad0de853e3aec3ba2"
+                "reference": "a02fdf930a3c1c3ed3a49b5f63859c0c20e10464"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/0ec124f57c7e23925c006cbad0de853e3aec3ba2",
-                "reference": "0ec124f57c7e23925c006cbad0de853e3aec3ba2",
+                "url": "https://api.github.com/repos/composer/semver/zipball/a02fdf930a3c1c3ed3a49b5f63859c0c20e10464",
+                "reference": "a02fdf930a3c1c3ed3a49b5f63859c0c20e10464",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.2 || ^7.0"
+                "php": "^5.3.2 || ^7.0 || ^8.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "^0.12.19",
-                "phpunit/phpunit": "^4.5 || ^5.0.5 || ^7"
+                "phpstan/phpstan": "^0.12.54",
+                "symfony/phpunit-bridge": "^4.2 || ^5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.x-dev"
+                    "dev-main": "3.x-dev"
                 }
             },
             "autoload": {
@@ -6176,7 +6176,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/semver/issues",
-                "source": "https://github.com/composer/semver/tree/2.0.0"
+                "source": "https://github.com/composer/semver/tree/3.2.4"
             },
             "funding": [
                 {
@@ -6184,11 +6184,15 @@
                     "type": "custom"
                 },
                 {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
                     "url": "https://tidelift.com/funding/github/packagist/composer/composer",
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-04-21T13:19:12+00:00"
+            "time": "2020-11-13T08:59:24+00:00"
         },
         {
             "name": "composer/spdx-licenses",
@@ -6393,33 +6397,33 @@
         },
         {
             "name": "mediawiki/mediawiki-codesniffer",
-            "version": "v31.0.0",
+            "version": "v35.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/mediawiki-tools-codesniffer.git",
-                "reference": "130de29d06bf012f9e0217c28e2afbfaf0a80a20"
+                "reference": "c305fa16998d742705f9b59358fbb816f524cf9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/mediawiki-tools-codesniffer/zipball/130de29d06bf012f9e0217c28e2afbfaf0a80a20",
-                "reference": "130de29d06bf012f9e0217c28e2afbfaf0a80a20",
+                "url": "https://api.github.com/repos/wikimedia/mediawiki-tools-codesniffer/zipball/c305fa16998d742705f9b59358fbb816f524cf9f",
+                "reference": "c305fa16998d742705f9b59358fbb816f524cf9f",
                 "shasum": ""
             },
             "require": {
-                "composer/semver": "1.5.1|2.0.0",
+                "composer/semver": "^1.7.2|^3.2.4",
                 "composer/spdx-licenses": "~1.5.2",
                 "ext-mbstring": "*",
                 "php": ">=7.2.0",
-                "squizlabs/php_codesniffer": "3.5.5"
+                "squizlabs/php_codesniffer": "3.5.8"
             },
             "require-dev": {
-                "jakub-onderka/php-console-highlighter": "0.4.0",
-                "jakub-onderka/php-parallel-lint": "1.0.0",
-                "mediawiki/mediawiki-phan-config": "0.10.2",
-                "mediawiki/minus-x": "1.0.0",
+                "mediawiki/mediawiki-phan-config": "0.10.6",
+                "mediawiki/minus-x": "1.1.0",
+                "php-parallel-lint/php-console-highlighter": "0.5.0",
+                "php-parallel-lint/php-parallel-lint": "1.2.0",
                 "phpunit/phpunit": "^8.5"
             },
-            "type": "library",
+            "type": "phpcodesniffer-standard",
             "autoload": {
                 "psr-4": {
                     "MediaWiki\\": "MediaWiki"
@@ -6436,9 +6440,9 @@
                 "mediawiki"
             ],
             "support": {
-                "source": "https://github.com/wikimedia/mediawiki-tools-codesniffer/tree/v31.0.0"
+                "source": "https://github.com/wikimedia/mediawiki-tools-codesniffer/tree/v35.0.0"
             },
-            "time": "2020-05-26T19:06:48+00:00"
+            "time": "2021-01-28T20:56:31+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -8472,16 +8476,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.5.5",
+            "version": "3.5.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "73e2e7f57d958e7228fce50dc0c61f58f017f9f6"
+                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/73e2e7f57d958e7228fce50dc0c61f58f017f9f6",
-                "reference": "73e2e7f57d958e7228fce50dc0c61f58f017f9f6",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9d583721a7157ee997f235f327de038e7ea6dac4",
+                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4",
                 "shasum": ""
             },
             "require": {
@@ -8524,7 +8528,7 @@
                 "source": "https://github.com/squizlabs/PHP_CodeSniffer",
                 "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
-            "time": "2020-04-17T01:09:41+00:00"
+            "time": "2020-10-23T02:01:07+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -9052,27 +9056,27 @@
         },
         {
             "name": "wmde/fundraising-phpcs",
-            "version": "v1.0.0",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-phpcs",
-                "reference": "4b0a409bafba78f4b5a671eba8dae2a33649a86f"
+                "reference": "b71768376358bb47267d6aa8aa1929b8c26d06dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-phpcs/zipball/4b0a409bafba78f4b5a671eba8dae2a33649a86f",
-                "reference": "4b0a409bafba78f4b5a671eba8dae2a33649a86f",
+                "url": "https://api.github.com/repos/wmde/fundraising-phpcs/zipball/b71768376358bb47267d6aa8aa1929b8c26d06dc",
+                "reference": "b71768376358bb47267d6aa8aa1929b8c26d06dc",
                 "shasum": ""
             },
             "require": {
-                "mediawiki/mediawiki-codesniffer": "^31.0"
+                "mediawiki/mediawiki-codesniffer": "^35"
             },
             "type": "library",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "description": "PHP coding style for the WMDE FUN team",
-            "time": "2020-07-02T14:36:04+00:00"
+            "time": "2021-02-17T15:21:48+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",

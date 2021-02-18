@@ -122,7 +122,7 @@
 		"mikey179/vfsstream": "~1.6",
 		"wmde/psr-log-test-doubles": "~2.1",
 
-		"wmde/fundraising-phpcs": "~1.0",
+		"wmde/fundraising-phpcs": "~2.0",
 		"phpmd/phpmd": "~2.6",
 
 		"symfony/browser-kit": "^4.4",
