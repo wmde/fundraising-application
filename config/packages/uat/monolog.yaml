@@ -1,14 +1,29 @@
 monolog:
   handlers:
     main:
+      type: fingers_crossed
+      action_level: notice
+      handler: group
+      excluded_http_codes: [ 404, 405 ]
+      buffer_size: 50 # How many messages should be saved? Prevent memory leaks
+    group:
+      type: group
+      members: ['logfile', 'errbit_wrapper']
+    logfile:
       type: stream
       path: "%kernel.logs_dir%/application.log"
-      channels: [ '!event' ]
+      level: info
+    errbit_wrapper:
+      type: fallbackgroup
+      members: [ 'errbit', 'errbit_errors' ]
     errbit:
       type: service
       id: "app.errbit_logger"
-      # For some reason, when we log request errors, we will get source file paths as requests in a loop
-      channels: [ '!request' ]
+      # Level must be configured on service until https://github.com/symfony/monolog-bundle/issues/322 is implemented
+    errbit_errors:
+      type: stream
+      path: "%kernel.logs_dir%/errbit_errors.log"
+
     console:
       type: console
       process_psr_3_messages: false

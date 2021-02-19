@@ -73,7 +73,7 @@ services:
         factory: ['@WMDE\Fundraising\Frontend\Factories\FunFunFactory', 'getCookieBuilder']
 
     app.errbit_logger:
-        class: WMDE\Fundraising\Frontend\Infrastructure\SupportHandler
+        class: Airbrake\MonologHandler
         factory: ['WMDE\Fundraising\Frontend\Factories\ErrbitLoggerFactory', 'createErrbitHandler']
         arguments:
             - "%env(resolve:ERRBIT_PROJECT_ID)%"
