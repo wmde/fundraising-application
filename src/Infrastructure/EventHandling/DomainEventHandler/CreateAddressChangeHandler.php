@@ -37,10 +37,8 @@ class CreateAddressChangeHandler {
 			$addressChangeBuilder->forPerson();
 		} elseif ( $event->getDonor()->isCompany() ) {
 			$addressChangeBuilder->forCompany();
-		} else {
-			// Preparation for https://phabricator.wikimedia.org/T220367
-			return;
 		}
+		// No else here, AddressChange will throw an exception when reference type is not set
 
 		$this->persistIfNeeded( $addressChangeBuilder->build() );
 	}
