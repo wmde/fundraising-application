@@ -1,4 +1,0 @@
-name: Doctrine Migration Scripts for Bucket Testing
-migrations_namespace: DoctrineMigrations
-table_name: bucket_migration_versions
-migrations_directory: src/BucketTesting/migrations

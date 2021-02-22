@@ -1,4 +1,0 @@
-name: Doctrine Migration Scripts for Membership Bounded Context
-migrations_namespace: DoctrineMigrations
-table_name: membership_migration_versions
-migrations_directory: vendor/wmde/fundraising-memberships/migrations
