@@ -15,6 +15,7 @@ class ErrbitLogger implements Logger {
 			host: host,
 			projectId: 1,
 			projectKey: projectKey,
+			remoteConfig: false,
 		} );
 	}
 
