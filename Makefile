@@ -1,58 +1,51 @@
+include skins/laika/Makefile
+
 current_user  := $(shell id -u)
 current_group := $(shell id -g)
-BUILD_DIR     := $(PWD)
-TMPDIR        := $(BUILD_DIR)/tmp
+
 COMPOSER_FLAGS :=
-NPM_FLAGS     := --prefer-offline
 DOCKER_FLAGS  := --interactive --tty
 TEST_DIR      :=
 MIGRATION_VERSION :=
 MIGRATION_CONTEXT :=
 APP_ENV       := dev
-DOCKER_IMAGE  := wikimediade/fundraising-frontend
 
-NODE_IMAGE    := node:14
 DOCKER_IMAGE  := wikimediade/fundraising-frontend
-
 
 .DEFAULT_GOAL := ci
 
-up_app: down_app
+up-app: down-app
 	docker-compose -f docker-compose.yml up -d
 
-up_debug: down_app
+up-debug: down-app
 	docker-compose -f docker-compose.yml -f docker-compose.debug.yml up -d
 
-down_app:
+down-app:
 	docker-compose -f docker-compose.yml -f docker-compose.debug.yml down > /dev/null 2>&1
 
-install-js:
-	-mkdir -p $(TMPDIR)/home
-	-echo "node:x:$(current_user):$(current_group)::/var/nodehome:/bin/bash" > $(TMPDIR)/passwd
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm install $(NPM_FLAGS)
+# Installation
+
+setup: create-env install-php install-js default-config ui setup-db
+
+create-env:
+	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
 
 install-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume /tmp:/tmp --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer install $(COMPOSER_FLAGS)
 
-update-js:
-	-mkdir -p $(TMPDIR)/home
-	-echo "node:x:$(current_user):$(current_group)::/var/nodehome:/bin/bash" > $(TMPDIR)/passwd
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm update $(NPM_FLAGS)
-
-audit-fix-js:
-	-mkdir -p $(TMPDIR)/home
-	-echo "node:x:$(current_user):$(current_group)::/var/nodehome:/bin/bash" > $(TMPDIR)/passwd
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data/skins/laika -v $(TMPDIR)/home:/var/nodehome:delegated -v $(TMPDIR)/passwd:/etc/passwd $(NODE_IMAGE) npm audit fix $(NPM_FLAGS)
-
-
 update-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update $(COMPOSER_FLAGS)
+
+setup-db:
+	docker-compose run --rm start_dependencies
+	docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create
+	docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
+	docker-compose run --rm app ./vendor/bin/doctrine dbal:import build/database/fixtures.sql
 
 default-config:
 	cp -i build/app/config.dev.json app/config
 
-js:
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/data:delegated -w /data/skins/laika -e NO_UPDATE_NOTIFIER=1 $(NODE_IMAGE) npm run build
+# Maintenance
 
 clear:
 	rm -rf var/cache/
@@ -61,15 +54,13 @@ clear:
 # n alias to avoid frequent typo
 clean: clear
 
-ui: clear js
+# Continuous Integration
 
 test: phpunit
 
-setup-db:
-	docker-compose run --rm start_dependencies
-	docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create
-	docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
-	docker-compose run --rm app ./vendor/bin/doctrine dbal:import build/database/fixtures.sql
+ci: phpunit cs ci-js validate-app-config validate-campaign-config stan
+
+ci-with-coverage: phpunit-with-coverage cs ci-js validate-app-config validate-campaign-config stan
 
 phpunit:
 	docker-compose run --rm --no-deps app php -d memory_limit=1G vendor/bin/phpunit $(TEST_DIR)
@@ -79,6 +70,8 @@ phpunit-with-coverage:
 
 phpunit-system:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpunit tests/System/
+
+# Code Quality
 
 cs:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpcs
@@ -101,29 +94,4 @@ validate-campaign-utilization:
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
 
-npm-ci:
-	docker run --rm $(DOCKER_FLAGS) --user $(current_user):$(current_group) -v $(BUILD_DIR):/code -w /code -e NO_UPDATE_NOTIFIER=1 $(NODE_IMAGE) npm run ci
-
-migration-execute:
-	@test $(MIGRATION_CONTEXT) || ( echo "MIGRATION_CONTEXT must be set!" && exit 1)
-	# TODO unify all migrations when migrations 3.0 (with migrations_path instead of migration_dir) is available
-	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:execute $(MIGRATION_VERSION) --up --configuration=app/config/migrations/$(MIGRATION_CONTEXT).yml
-
-migration-revert:
-	@test $(MIGRATION_CONTEXT) || ( echo "MIGRATION_CONTEXT must be set!" && exit 1)
-	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:execute $(MIGRATION_VERSION) --down --configuration=app/config/migrations/$(MIGRATION_CONTEXT).yml
-
-migration-status:
-	# TODO provide more migrations configurations when available.
-	docker-compose run --rm --no-deps app vendor/doctrine/migrations/bin/doctrine-migrations migrations:status --configuration=app/config/migrations/subscriptions.yml
-
-ci: phpunit cs npm-ci validate-app-config validate-campaign-config stan
-
-ci-with-coverage: phpunit-with-coverage cs npm-ci validate-app-config validate-campaign-config stan
-
-create-env: 
-	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
-
-setup: create-env install-php install-js default-config ui setup-db
-
-.PHONY: ci ci-with-coverage clean clear cs install-php install-js js npm-ci npm-install phpmd phpunit phpunit-system setup stan test ui validate-app-config validate-campaign-config
+.PHONY: up-app down-app up-debug setup create-env install-php update-php setup-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization phpmd install-js update-js audit-fix-js js ci-js
