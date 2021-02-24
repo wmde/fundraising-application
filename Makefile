@@ -10,7 +10,7 @@ MIGRATION_VERSION :=
 MIGRATION_CONTEXT :=
 APP_ENV       := dev
 
-DOCKER_IMAGE  := wikimediade/fundraising-frontend
+DOCKER_IMAGE  := registry.gitlab.com/fun-tech/fundraising-frontend-docker
 
 .DEFAULT_GOAL := ci
 
