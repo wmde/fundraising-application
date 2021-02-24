@@ -21,7 +21,7 @@ script:
   - make clear
   - make ci-with-coverage
   - make install-php COMPOSER_FLAGS="--no-dev -q" # Remove dev dependencies to make sure PHPStan creates errors if prod code depends on dev classes
-  - docker run -v $PWD:/app --rm  wikimediade/fundraising-frontend:stan analyse --level 1 --no-progress cli/ src/ # Can't use "make stan" it contains the test directory
+  - docker run -v $PWD:/app --rm  registry.gitlab.com/fun-tech/fundraising-frontend-docker:stan analyse --level 1 --no-progress cli/ src/ # Can't use "make stan" it contains the test directory
 
 after_success:
   - if [ "$TYPE" == "coverage" ]; then bash build/travis/uploadCoverage.sh; fi
