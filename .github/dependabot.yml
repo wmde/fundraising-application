@@ -17,11 +17,4 @@ updates:
     reviewers:
       - "wmde/funtech-core"
       
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/skins/laika" # Location of package manifests
-    schedule:
-      interval: "daily"
-    reviewers:
-      - "wmde/funtech-core"
-
 
