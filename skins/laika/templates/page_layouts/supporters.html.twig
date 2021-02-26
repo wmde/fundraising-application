@@ -1,4 +1,5 @@
 {% extends 'Base_Layout.html.twig' %}
+{% set title = site_metadata.page_titles[page_id] %}
 
 {% block main %}
 	<div id="app">
@@ -8,6 +9,9 @@
 		</noscript>
 	</div>
 	<div id="appdata" data-application-vars="{$ supporters|e('html_attr') $}"
+	<div id="appdata"
+		 data-page-title="{$ title | e('html_attr') $}"
+		 data-application-vars="{$ supporters|e('html_attr') $}"
 		 data-application-messages="{$ translations()|e('html_attr') $}"
 		 data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}"
 		 class="is-hidden">
