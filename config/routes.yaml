@@ -33,6 +33,15 @@ list-comments.html:
     methods: [GET]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\ListCommentsController::handleHtml'
 
+# Temporary: Remove once hosting provider has set up the 301 redirect
+Unterstützerliste-redirect:
+    path: '/page/Unterstützerliste'
+    methods: [GET]
+    controller: 'Symfony\Bundle\FrameworkBundle\Controller\RedirectController'
+    defaults:
+        path: '/page/hall-of-fame'
+        permanent: true
+
 page:
     path: '/page/{pageName}'
     methods: [GET]
