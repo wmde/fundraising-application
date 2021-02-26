@@ -33,7 +33,7 @@
 							@click="showAddressModal()"
 							type="is-primary is-main"
 						>
-							{{ $t('donation_confirmation_address_update_button') }}
+							{{ $t('donation_confirmation_address_update_button_alt') }}
 						</b-button>
 						<address-usage-toggle></address-usage-toggle>
 					</div>
