@@ -39,12 +39,20 @@ $padding_mobile: 16px;
 	}
 
 	&__section--two-cols-info {
-		display: flex;
+		@media ( min-width: $use_of_funds_breakpoint_m ) {
+			display: flex;
+		}
 
 		.use_of_funds__column--info {
-			padding: 12px 0 0 0;
-			@media ( min-width: $use_of_funds_breakpoint_l ) {
-				padding: 0 0 12px 0;
+			padding-bottom: 12px;
+			@media ( min-width: $use_of_funds_breakpoint_m ) {
+				&:first-child {
+					padding-right: 5px;
+				}
+
+				&:last-child {
+					padding-left: 5px;
+				}
 			}
 		}
 	}
