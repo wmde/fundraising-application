@@ -4,36 +4,48 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
-use PHPUnit\Framework\TestCase;
-use Silex\Application;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\BrowserKitAssertionsTrait;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use WMDE\Fundraising\Frontend\App\Bootstrap;
+use Symfony\Component\HttpKernel\HttpKernelBrowser;
+use Symfony\Component\HttpKernel\KernelInterface;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
+use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
+use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**
  * @license GPL-2.0-or-later
  */
-abstract class WebRouteTestCase extends TestCase {
+abstract class WebRouteTestCase extends KernelTestCase {
+
+	use BrowserKitAssertionsTrait;
+	use RebuildDatabaseSchemaTrait;
 
 	protected const DISABLE_DEBUG = false;
 	protected const ENABLE_DEBUG = true;
 
-	protected Application $app;
+	protected static array $applicationConfiguration = [];
 
-	protected ?FunFunFactory $factory = null;
-
-	protected array $applicationConfiguration = [];
+	/**
+	 * phpcs:ignore MediaWiki.Commenting.PropertyDocumentation.NotPunctuationVarType
+	 * @var ?callable(FunFunFactory): void $environmentModification
+	 */
+	protected static $environmentModification = null;
 	protected array $sessionValues = [];
+
+	protected static bool $factoryInitialized = false;
 
 	protected function tearDown(): void {
 		parent::tearDown();
-		$this->factory = null;
-		$this->applicationConfiguration = [];
+		static::$applicationConfiguration = [];
+		static::$environmentModification = null;
 		$this->sessionValues = [];
+		static::$factoryInitialized = false;
 	}
 
 	/**
@@ -42,10 +54,23 @@ abstract class WebRouteTestCase extends TestCase {
 	 *
 	 * @return HttpKernelBrowser
 	 */
-	protected function createClient(): HttpKernelBrowser {
-		$app = $this->createApplication( $this->getFactory() );
+	protected static function createClient(): AbstractBrowser {
+		if ( static::$booted ) {
+			throw new \LogicException( sprintf( 'Booting the kernel before calling "%s()" is not supported, the kernel should only be booted once.', __METHOD__ ) );
+		}
 
-		return new HttpKernelBrowser( $app );
+		$kernel = static::bootKernel();
+
+		try {
+			$client = $kernel->getContainer()->get( 'test.client' );
+		} catch ( ServiceNotFoundException $e ) {
+			if ( class_exists( KernelBrowser::class ) ) {
+				throw new \LogicException( 'You cannot create the client used in functional tests if the "framework.test" config is not set to true.' );
+			}
+			throw new \LogicException( 'You cannot create the client used in functional tests if the BrowserKit component is not available. Try running "composer require symfony/browser-kit".' );
+		}
+
+		return self::getClient( $client );
 	}
 
 	/**
@@ -57,11 +82,15 @@ abstract class WebRouteTestCase extends TestCase {
 	 * @param callable(HttpKernelBrowser, FunFunFactory): void $onEnvironmentCreated
 	 */
 	protected function createEnvironment( callable $onEnvironmentCreated ): void {
-		$factory = $this->getFactory();
+		$client = static::createClient();
+		// Don't throw away the environment between http requests, otherwise the in-memory SQLite database would be gone
+		if ( $client instanceof KernelBrowser ) {
+			$client->disableReboot();
+		}
 		call_user_func(
 			$onEnvironmentCreated,
-			$this->createClient(),
-			$factory
+			$client,
+			static::getFactory()
 		);
 	}
 
@@ -73,8 +102,8 @@ abstract class WebRouteTestCase extends TestCase {
 	 *
 	 * @param array $config
 	 */
-	protected function modifyConfiguration( array $config ): void {
-		$this->applicationConfiguration = $config;
+	protected static function modifyConfiguration( array $config ): void {
+		static::$applicationConfiguration = $config;
 	}
 
 	/**
@@ -85,32 +114,52 @@ abstract class WebRouteTestCase extends TestCase {
 	 *
 	 * @param callable(FunFunFactory): void $doModify
 	 */
-	protected function modifyEnvironment( callable $doModify ): void {
-		call_user_func( $doModify, $this->getFactory() );
+	protected static function modifyEnvironment( callable $doModify ): void {
+		static::$environmentModification = $doModify;
 	}
 
-	protected function getFactory(): FunFunFactory {
-		if ( $this->factory === null ) {
-			$this->factory = TestEnvironment::newInstance( $this->applicationConfiguration )->getFactory();
+	protected static function getFactory(): FunFunFactory {
+		if ( !static::$booted ) {
+			throw new \LogicException( sprintf( 'Currently, the kernel must be booted before calling "%s()". Try calling "createClient" or "bootKernel"', __METHOD__ ) );
 		}
-		return $this->factory;
+		return static::$container->get( FunFunFactory::class );
 	}
 
-	private function addExtraCookies( HttpKernelBrowser $client, array $cookies ) {
-		foreach ( $cookies as $name => $value ) {
-			$client->getCookieJar()->set( new Cookie( $name, $value ) );
+	/**
+	 * Applies configuration changes, environment modifications and recreates the database schema
+	 * before returning the booted kernel.
+	 *
+	 * This method is needed as long as the FunFunFactory creates most of our services
+	 *
+	 * @override
+	 * @param array $options
+	 * @return KernelInterface
+	 */
+	protected static function bootKernel( array $options = [] ): KernelInterface {
+		$kernel = parent::bootKernel( $options );
+
+		static::modifyBootstrapperConfiguration();
+		$factory = static::getFactory();
+		static::rebuildDatabaseSchema( $factory );
+
+		if ( is_callable( static::$environmentModification ) ) {
+			call_user_func( static::$environmentModification, $factory );
 		}
+
+		return $kernel;
 	}
 
-	// @codingStandardsIgnoreStart
-	private function createApplication( FunFunFactory $ffFactory ): Application {
-		// @codingStandardsIgnoreEnd
-		$this->app = Bootstrap::initializeApplication( $ffFactory );
+	private static function modifyBootstrapperConfiguration(): void {
+		if ( !static::$applicationConfiguration ) {
+			return;
+		}
 
-		$this->app['session.test'] = true;
-		$this->initializeApplicationSessionValues();
+		$bootstrapper = static::$container->get( EnvironmentBootstrapper::class );
+		if ( !( $bootstrapper instanceof TestEnvironmentBootstrapper ) ) {
+			throw new \LogicException( 'When overriding configuration, the environment must use TestEnvironmentBootstrapper' );
+		}
 
-		return $this->app;
+		$bootstrapper->overrideConfiguration( static::$applicationConfiguration );
 	}
 
 	protected function assert404( Response $response ): void {
@@ -166,39 +215,4 @@ abstract class WebRouteTestCase extends TestCase {
 		$this->assertEquals( $expected, $data );
 	}
 
-	/**
-	 * @todo Change code to work with Symfony DI when switch to Symfony is done
-	 * @param string $key
-	 * @return mixed
-	 */
-	protected function getSessionValue( string $key ) {
-		if ( !( $this->app instanceof Application ) ) {
-			$this->fail( 'Application was not initialized. Call createClient or createEnvironment' );
-			return null;
-		}
-		/** @var SessionInterface $session */
-		$session = $this->app['session'];
-		return $session->get( $key, null );
-	}
-
-	/**
-	 * @todo Change code to work with Symfony DI when switch to Symfony is done
-	 * @param string $key
-	 * @param mixed $value
-	 */
-	public function setSessionValue( string $key, $value ): void {
-		$this->sessionValues[$key] = $value;
-	}
-
-	public function initializeApplicationSessionValues(): void {
-		if ( empty( $this->sessionValues ) ) {
-			return;
-		}
-
-		/** @var SessionInterface $session */
-		$session = $this->app['session'];
-		foreach ( $this->sessionValues as $key => $value ) {
-			$session->set( $key, $value );
-		}
-	}
 }

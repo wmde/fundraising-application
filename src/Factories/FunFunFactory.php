@@ -16,6 +16,7 @@ use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
 use NumberFormatter;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use RemotelyLiving\Doorkeeper\Doorkeeper;
@@ -210,7 +211,7 @@ use WMDE\FunValidators\Validators\TextPolicyValidator;
 /**
  * @license GPL-2.0-or-later
  */
-class FunFunFactory {
+class FunFunFactory implements LoggerAwareInterface {
 
 	public const DONATION_RATE_LIMIT_SESSION_KEY = 'donation_timestamp';
 	public const MEMBERSHIP_RATE_LIMIT_SESSION_KEY = 'memapp_timestamp';
@@ -1544,9 +1545,11 @@ class FunFunFactory {
 	}
 
 	public function getUrlGenerator(): UrlGenerator {
-		// TODO Remove startup dependency
 		if ( !isset( $this->sharedObjects[UrlGenerator::class] ) ) {
-			throw new \RuntimeException( 'UrlGenerated is a routing dependency that must be set at startup!' );
+			throw new \LogicException( sprintf(
+				'UrlGenerator is a setter dependency that must be set before calling "%s"!',
+				__METHOD__
+			) );
 		}
 		return $this->sharedObjects[UrlGenerator::class];
 	}

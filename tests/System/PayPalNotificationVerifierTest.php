@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System;
 
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
@@ -19,7 +20,7 @@ class PayPalNotificationVerifierTest extends TestCase {
 	private PayPalPaymentNotificationVerifier $verifier;
 
 	public function setUp(): void {
-		$config = TestEnvironment::newInstance( [] )->getConfig();
+		$config = ( new EnvironmentDependentConfigReaderFactory( $_ENV['APP_ENV'] ) )->getConfigReader()->getConfig();
 		$this->verifier = $this->newVerifier( $config['paypal-donation'] );
 	}
 

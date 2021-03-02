@@ -4,10 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
+use WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetupException;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\ProductionEnvironmentSetup;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class EnvironmentBootstrapper {
 
@@ -18,41 +20,16 @@ class EnvironmentBootstrapper {
 		'prod' => ProductionEnvironmentSetup::class
 	];
 
-	private $environmentName;
+	private string $environmentName;
 
-	private $environmentMap;
+	/**
+	 * @var array<string,class-string>
+	 */
+	private array $environmentMap;
 
 	public function __construct( string $environmentName, array $environmentMap = [] ) {
 		$this->environmentName = $environmentName;
 		$this->environmentMap = array_merge( self::DEFAULT_ENVIRONMENT_SETUP_MAP, $environmentMap );
-	}
-
-	public function getConfigurationPathsForEnvironment( string $configPath ): array {
-		$paths = self::removeNonexistentOptionalPaths( ...[
-			$configPath . '/config.dist.json',
-			$configPath . '/config.' . $this->environmentName . '.json',
-			$configPath . '/config.' . $this->environmentName . '.local.json',
-		] );
-		self::checkIfPathsExist( ...$paths );
-		return $paths;
-	}
-
-	private static function removeNonexistentOptionalPaths( string ...$paths ): array {
-		if ( !file_exists( $paths[2] ) ) {
-			array_splice( $paths, 2 );
-		}
-		return $paths;
-	}
-
-	private static function checkIfPathsExist( string ...$paths ): void {
-		array_map(
-			function ( $path ) {
-				if ( !is_readable( $path ) ) {
-					throw new \RuntimeException( 'Configuration file "' . $path . '" not found' );
-				}
-			},
-			$paths
-		);
 	}
 
 	public function getEnvironmentSetupInstance(): EnvironmentSetup {
@@ -61,5 +38,20 @@ class EnvironmentBootstrapper {
 		}
 		$class = $this->environmentMap[$this->environmentName];
 		return new $class;
+	}
+
+	public function newFunFunFactory(): FunFunFactory {
+		$config = $this->getConfiguration();
+		$factory = new FunFunFactory( $config );
+
+		$this->getEnvironmentSetupInstance()
+			->setEnvironmentDependentInstances( $factory );
+
+		return $factory;
+	}
+
+	protected function getConfiguration(): array {
+		$configReader = ( new EnvironmentDependentConfigReaderFactory( $this->environmentName ) )->getConfigReader();
+		return $configReader->getConfig();
 	}
 }

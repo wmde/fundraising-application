@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use DateTime;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
+use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
@@ -22,15 +23,12 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
  */
 class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationConfirmationPresenter {
 
-	private $template;
-	private $bankDataGenerator;
-	private $html = '';
-	private $urlGenerator;
+	private TwigTemplate $template;
+	private BankDataGenerator $bankDataGenerator;
+	private string $html = '';
+	private UrlGenerator $urlGenerator;
 
-	/**
-	 * @var \Exception|null
-	 */
-	private $exception = null;
+	private ?\Exception $exception = null;
 
 	public function __construct( TwigTemplate $template, BankDataGenerator $bankDataGenerator, UrlGenerator $urlGenerator ) {
 		$this->template = $template;
@@ -69,7 +67,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			),
 			'urls' => [
 				'cancelMembership'  => $this->urlGenerator->generateRelativeUrl(
-					'cancel-membership-application',
+					Routes::CANCEL_MEMBERSHIP,
 					[
 						'id' => $membershipApplication->getId(),
 						'updateToken' => $updateToken,

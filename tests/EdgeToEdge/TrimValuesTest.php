@@ -37,8 +37,8 @@ class TrimValuesTest extends WebRouteTestCase {
 					'var2' => 'val2',
 					'var3' => 'val3',
 					'var4' => 'val4',
-					'var5' => 0,
-					'var6' => 1234.56
+					'var5' => '0',
+					'var6' => '1234.56'
 				],
 				[
 					'var1' => '  val1 ',

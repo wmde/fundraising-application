@@ -2,41 +2,28 @@
 
 declare( strict_types = 1 );
 
-stream_wrapper_unregister( 'phar' );
+use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\Frontend\App\Kernel;
 
 require_once __DIR__ . '/../vendor/autoload.php';
-use FileFetcher\SimpleFileFetcher;
-use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
-use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
-/**
- * @var FunFunFactory $ffFactory
- */
-$ffFactory = call_user_func( function() {
+// We set the env from the .env file instead of web server settings because we want to be independent from the hosting provider
+( new Dotenv() )->bootEnv( __DIR__ . '/../.env' );
 
-	$dotenv = Dotenv\Dotenv::createImmutable( __DIR__ . '/..' );
-	$dotenv->load();
+$env = $_SERVER['APP_ENV'] ?? 'dev';
+$debug = $_SERVER['APP_DEBUG'] ? (bool)$_SERVER['APP_DEBUG'] : false;
 
-    $bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?? 'dev' );
+umask( 0002 );
+if ( $debug ) {
+	umask( 0000 );
+	Debug::enable();
+}
 
-	$configReader = new ConfigReader(
-		new SimpleFileFetcher(),
-		...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/../app/config' )
-	);
+$kernel = new Kernel( $env, $debug );
+$request = Request::createFromGlobals();
+$response = $kernel->handle( $request );
+$response->send();
+$kernel->terminate( $request, $response );
 
-	$config = $configReader->getConfig();
-	$factory = new FunFunFactory( $config );
-
-	$bootstrapper->getEnvironmentSetupInstance()
-		->setEnvironmentDependentInstances( $factory, $config );
-
-	return $factory;
-} );
-
-$app = \WMDE\Fundraising\Frontend\App\Bootstrap::initializeApplication( $ffFactory );
-
-$ffFactory->setUrlGenerator( new UrlGeneratorAdapter( $app['url_generator'] ) );
-
-$app->run();

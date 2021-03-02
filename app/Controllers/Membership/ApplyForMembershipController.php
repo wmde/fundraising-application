@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
@@ -81,7 +82,7 @@ class ApplyForMembershipController {
 		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
 
 		$request->setPaymentType( $httpRequest->request->get( 'payment_type', '' ) );
-		$request->setPaymentIntervalInMonths( (int)$httpRequest->request->get( 'membership_fee_interval', 0 ) );
+		$request->setPaymentIntervalInMonths( $httpRequest->request->getInt( 'membership_fee_interval', 0 ) );
 
 		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
 			$httpRequest->request->get( 'templateCampaign', '' ),
@@ -144,7 +145,7 @@ class ApplyForMembershipController {
 	private function newDirectDebitResponse( ApplyForMembershipResponse $responseModel ): Response {
 		return new RedirectResponse(
 			$this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-				'show-membership-confirmation',
+				Routes::SHOW_MEMBERSHIP_CONFIRMATION,
 				[
 					'id' => $responseModel->getMembershipApplication()->getId(),
 					'accessToken' => $responseModel->getAccessToken()

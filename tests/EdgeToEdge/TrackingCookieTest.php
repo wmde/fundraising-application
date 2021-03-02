@@ -8,7 +8,6 @@ use Symfony\Component\BrowserKit\Cookie;
 use WMDE\Fundraising\Frontend\App\CookieNames;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Bootstrap
  * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData
  */
 class TrackingCookieTest extends WebRouteTestCase {

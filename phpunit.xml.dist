@@ -15,6 +15,10 @@
 	stopOnSkipped="false"
 	verbose="false"
 	>
+    <php>
+        <server name="APP_ENV" value="test" force="true" />
+        <env name="APP_ENV" value="test" force="true" />
+    </php>
   <coverage processUncoveredFiles="true">
     <include>
       <directory suffix=".php">src</directory>

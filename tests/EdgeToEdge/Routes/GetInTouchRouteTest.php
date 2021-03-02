@@ -15,7 +15,6 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_contactRequestIsProperlyProcessed(): void {
 		$client = $this->createClient();
-
 		$client->followRedirects( false );
 
 		$client->request(
@@ -31,9 +30,8 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 				'messageBody' => 'Just tell me'
 			]
 		);
-		$response = $client->getResponse();
-		$this->assertTrue( $response->isRedirect(), 'Is redirect response' );
-		$this->assertSame( '/such.a.url/page?pageName=Kontakt_Bestaetigung', $response->headers->get( 'Location' ) );
+
+		$this->assertResponseRedirects( '/page/Kontakt_Bestaetigung' );
 	}
 
 	public function testGivenInvalidRequest_validationFails(): void {

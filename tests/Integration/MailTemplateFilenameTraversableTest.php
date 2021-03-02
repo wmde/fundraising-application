@@ -4,16 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration;
 
-use PHPUnit\Framework\TestCase;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\MailTemplateFilenameTraversable
  */
-class MailTemplateFilenameTraversableTest extends TestCase {
+class MailTemplateFilenameTraversableTest extends KernelTestCase {
 
 	public function testTraversableContainsSomeEntriesInTheRightFormat(): void {
-		$mailTemplatePaths = TestEnvironment::newInstance()->getFactory()->newMailTemplateFilenameTraversable();
+		static::bootKernel();
+		$mailTemplatePaths = static::$container->get( FunFunFactory::class )->newMailTemplateFilenameTraversable();
 
 		$pathArray = iterator_to_array( $mailTemplatePaths );
 

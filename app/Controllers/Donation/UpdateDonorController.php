@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers\Donation;
 
-use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +13,7 @@ use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorRequest;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorResponse;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
+use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 
@@ -30,14 +30,14 @@ class UpdateDonorController {
 		$responseModel = $ffFactory
 			->newUpdateDonorUseCase( $updateToken, $accessToken )
 			->updateDonor( $this->newRequestModel( $request ) );
-		if ( $request->getAcceptableContentTypes()[0] === 'application/json' ) {
+		if ( $this->requestNeedsJsonResponse( $request ) ) {
 			return $this->createJsonResponse( $responseModel );
 		}
 		return $this->createHtmlResponse( $session, $ffFactory, $responseModel, $updateToken, $accessToken );
 	}
 
 	private function createJsonResponse( UpdateDonorResponse $responseModel ): JsonResponse {
-		return JsonResponse::create( [
+		return new JsonResponse( [
 			'state' => $responseModel->getDonation() !== null || $responseModel->isSuccessful() ? 'OK' : 'ERR',
 			'message' => $responseModel->getErrorMessage()
 		] );
@@ -60,7 +60,7 @@ class UpdateDonorController {
 			);
 			return new RedirectResponse(
 				$ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-					'show-donation-confirmation',
+					Routes::SHOW_DONATION_CONFIRMATION,
 					[
 						'id' => $responseModel->getDonation()->getId(),
 						'accessToken' => $accessToken
@@ -113,5 +113,10 @@ class UpdateDonorController {
 		} catch ( \UnexpectedValueException $e ) {
 			return DonorType::ANONYMOUS();
 		}
+	}
+
+	private function requestNeedsJsonResponse( Request $request ): bool {
+		$contentTypes = $request->getAcceptableContentTypes();
+		return count( $contentTypes ) > 0 && $contentTypes[0] === 'application/json';
 	}
 }

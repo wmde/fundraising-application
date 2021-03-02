@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Cli\CampaignConfigValidation;
 
-use FileFetcher\SimpleFileFetcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -13,8 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
 /**
  * @license GPL-2.0-or-later
@@ -48,7 +46,8 @@ class ValidateCampaignConfigCommand extends Command {
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
 		$environment = $input->getArgument( 'environment' );
 		$errorLogger = new CampaignErrorCollection();
-		$factory = $this->getFactory( $environment );
+		$bootstrapper = new EnvironmentBootstrapper( $environment );
+		$factory = $bootstrapper->newFunFunFactory();
 		$factory->setCampaignConfigurationLoader(
 			new LoggingCampaignConfigurationLoader(
 				$factory->getCampaignConfigurationLoader(), $errorLogger
@@ -69,19 +68,5 @@ class ValidateCampaignConfigCommand extends Command {
 		}
 		$output->writeln( 'Campaign YAML validation failed.' );
 		return self::RETURN_CODE_ERROR;
-	}
-
-	private function getFactory( string $environment ): FunFunFactory {
-		$environmentConfigPath = __DIR__ . '/../../app/config/config.' . $environment . '.json';
-		if ( is_readable( $environmentConfigPath ) === false ) {
-			throw new \RuntimeException( sprintf( 'File "%s" not found or not readable', $environmentConfigPath ), 0, null );
-		}
-		$configReader = new ConfigReader(
-			new SimpleFileFetcher(),
-			__DIR__ . '/../../app/config/config.dist.json',
-			$environmentConfigPath
-		);
-
-		return new FunFunFactory( $configReader->getConfig() );
 	}
 }

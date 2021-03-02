@@ -5,9 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\SetCookiePreferencesController
@@ -19,23 +19,11 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'POST',
-			'set-cookie-preferences',
+			'/set-cookie-preferences',
 			[ CookieNames::CONSENT => 'yes' ]
 		);
 
-		$this->assertCookieHasValue( $client, CookieNames::CONSENT, 'yes' );
-	}
-
-	/**
-	 * @param HttpKernelBrowser $client
-	 * @param string $name
-	 * @param mixed $expectedValue
-	 */
-	private function assertCookieHasValue( HttpKernelBrowser $client, string $name, $expectedValue ) {
-		$cookieJar = $client->getCookieJar();
-		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-		$cookie = $cookieJar->get( $name );
-		$this->assertSame( $cookie->getValue(), $expectedValue );
+		$this->assertResponseCookieValueSame( CookieNames::CONSENT, 'yes' );
 	}
 
 	public function testWhenCookieConsentSetAndTrackingPassed_trackingValueIsPersisted(): void {
@@ -43,7 +31,7 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'POST',
-			'set-cookie-preferences',
+			'/set-cookie-preferences',
 			[
 				CookieNames::CONSENT => 'yes',
 				'piwik_campaign' => 'nicholas',
@@ -51,7 +39,7 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$this->assertCookieHasValue( $client, CookieNames::TRACKING, 'nicholas/cage' );
+		$this->assertResponseCookieValueSame( CookieNames::TRACKING, 'nicholas/cage' );
 	}
 
 	public function testWhenCookieConsentNotSetAndTrackingPassed_trackingValueIsNotPersisted(): void {
@@ -59,7 +47,7 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'POST',
-			'set-cookie-preferences',
+			'/set-cookie-preferences',
 			[
 				CookieNames::CONSENT => 'no',
 				'piwik_campaign' => 'Nicholas',
@@ -87,7 +75,7 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'POST',
-			'set-cookie-preferences',
+			'/set-cookie-preferences',
 			[
 				CookieNames::CONSENT => 'no'
 			]

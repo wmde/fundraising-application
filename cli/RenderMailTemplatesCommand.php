@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Cli;
 
-use FileFetcher\SimpleFileFetcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,12 +11,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Twig\Environment;
 use Twig\Error\Error;
-use WMDE\Fundraising\Frontend\App\Bootstrap;
 use WMDE\Fundraising\Frontend\App\MailTemplates;
-use WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
-use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
 
 /**
@@ -32,7 +27,14 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
  */
 class RenderMailTemplatesCommand extends Command {
 
-	private const NAME = 'dump-mail-tpl';
+	private const NAME = 'app:dump-mail-templates';
+
+	private FunFunFactory $ffFactory;
+
+	public function __construct( FunFunFactory $ffFactory ) {
+		parent::__construct( self::NAME );
+		$this->ffFactory = $ffFactory;
+	}
 
 	protected function configure(): void {
 		$this->setName( self::NAME )
@@ -49,25 +51,13 @@ class RenderMailTemplatesCommand extends Command {
 			);
 	}
 
-	protected function execute( InputInterface $input, OutputInterface $output ): void {
-		$config = $this->getDefaultConfig();
-		$config['twig']['strict-variables'] = true;
-
-		$ffFactory = new FunFunFactory( $config );
-
-		require __DIR__ . '/../app/Bootstrap.php';
-
-		$app = Bootstrap::initializeApplication( $ffFactory );
-		$app->flush();
-
-		$ffFactory->setUrlGenerator( new UrlGeneratorAdapter( $app['url_generator'] ) );
-
-		$mailTemplates = new MailTemplates( $ffFactory );
+	protected function execute( InputInterface $input, OutputInterface $output ): int {
+		$mailTemplates = new MailTemplates( $this->ffFactory );
 		$testData = $mailTemplates->get();
 
-		$this->validateTemplateFixtures(
+		$hasErrors = $this->validateTemplateFixtures(
 			$testData,
-			iterator_to_array( $ffFactory->newMailTemplateFilenameTraversable() ),
+			iterator_to_array( $this->ffFactory->newMailTemplateFilenameTraversable() ),
 			$output
 		);
 
@@ -76,17 +66,11 @@ class RenderMailTemplatesCommand extends Command {
 			$outputPath .= '/';
 		}
 
-		$this->renderTemplates( $testData, $ffFactory->getMailerTwig(), $outputPath, $output );
-	}
+		$twig = $this->ffFactory->getMailerTwig();
+		$twig->enableStrictVariables();
+		$hasErrors = $this->renderTemplates( $testData, $twig, $outputPath, $output ) || $hasErrors;
 
-	private function getDefaultConfig(): array {
-		$bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?? 'dev' );
-		$configReader = new ConfigReader(
-			new SimpleFileFetcher(),
-			...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/../app/config' )
-		);
-
-		return $configReader->getConfig();
+		return $hasErrors ? 1 : 0;
 	}
 
 	/**
@@ -95,13 +79,16 @@ class RenderMailTemplatesCommand extends Command {
 	 * @param array $testData Template names and fixture information to render these templates
 	 * @param array $mailTemplatePaths
 	 * @param OutputInterface $output Command output
+	 * @return bool
 	 */
-	private function validateTemplateFixtures( array $testData, array $mailTemplatePaths, OutputInterface $output ): void {
+	private function validateTemplateFixtures( array $testData, array $mailTemplatePaths, OutputInterface $output ): bool {
+		$hasErrors = false;
 		$testTemplateNames = array_keys( $testData );
 
 		$untestedTemplates = array_diff( $mailTemplatePaths, $testTemplateNames );
 
 		if ( !empty( $untestedTemplates ) ) {
+			$hasErrors = true;
 			$output->writeln(
 				'<error>There are untested templates: ' . implode( ', ', $untestedTemplates ) . '</error>'
 			);
@@ -110,10 +97,12 @@ class RenderMailTemplatesCommand extends Command {
 		$strayTemplates = array_diff( $testTemplateNames, $mailTemplatePaths );
 
 		if ( !empty( $strayTemplates ) ) {
+			$hasErrors = true;
 			$output->writeln(
 				'<error>There are tests for non-existing templates: ' . implode( ', ', $strayTemplates ) . '</error>'
 			);
 		}
+		return $hasErrors;
 	}
 
 	/**
@@ -123,8 +112,10 @@ class RenderMailTemplatesCommand extends Command {
 	 * @param Environment $twig The templating engine to render the templates
 	 * @param string $outputPath Path where rendered templates will be written to
 	 * @param OutputInterface $output Command output
+	 * @return bool
 	 */
-	private function renderTemplates( array $testData, Environment $twig, string $outputPath, OutputInterface $output ): void {
+	private function renderTemplates( array $testData, Environment $twig, string $outputPath, OutputInterface $output ): bool {
+		$hasErrors = false;
 		foreach ( $testData as $templateFileName => $templateSettings ) {
 
 			if ( empty( $templateSettings['variants'] ) ) {
@@ -158,6 +149,7 @@ class RenderMailTemplatesCommand extends Command {
 						)
 					);
 				} catch ( Error $e ) {
+					$hasErrors = true;
 					$output->writeln( '' );
 					$output->writeln( '<error>' . $e->getMessage() . '</error>' );
 					$output->writeln( var_export( $e->getSourceContext(), true ) );
@@ -165,5 +157,6 @@ class RenderMailTemplatesCommand extends Command {
 				$output->writeln( '' );
 			}
 		}
+		return $hasErrors;
 	}
 }

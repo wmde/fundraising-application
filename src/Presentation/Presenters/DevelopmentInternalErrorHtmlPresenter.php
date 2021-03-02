@@ -14,7 +14,7 @@ class DevelopmentInternalErrorHtmlPresenter implements ExceptionHtmlPresenterInt
 		$this->template = $template;
 	}
 
-	public function present( \Exception $exception ): string {
+	public function present( \Throwable $exception ): string {
 		return $this->template->render( [
 			'message' => $exception->getMessage(),
 			'trace' => $exception->getTrace(),

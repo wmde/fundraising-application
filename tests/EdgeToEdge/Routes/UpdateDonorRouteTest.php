@@ -4,17 +4,18 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDoctrineDonation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser as Client;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\UpdateDonorController
@@ -253,7 +254,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	private function newValidSuccessRedirectUrl( Donation $donation, FunFunFactory $ffFactory ): string {
 		return $ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-			'show-donation-confirmation',
+			Routes::SHOW_DONATION_CONFIRMATION,
 			[
 				'id' => $donation->getId(),
 				'accessToken' => self::CORRECT_UPDATE_TOKEN

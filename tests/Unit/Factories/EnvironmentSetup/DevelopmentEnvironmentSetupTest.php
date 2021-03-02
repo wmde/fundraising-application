@@ -15,7 +15,6 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 class DevelopmentEnvironmentSetupTest extends TestCase {
 	public function testEnvironmentSetsUpLoggingAndDoctrineConfiguration() {
 		$expectedSetters = [
-			'setLogger',
 			'setPaypalLogger',
 			'setSofortLogger',
 			'setSofortLogger',
@@ -32,10 +31,6 @@ class DevelopmentEnvironmentSetupTest extends TestCase {
 		$factory->expects( $this->never() )->method( $this->logicalNot( $this->matchesRegularExpression( $methodNameMatcher ) ) );
 
 		$setup = new DevelopmentEnvironmentSetup();
-		$setup->setEnvironmentDependentInstances( $factory, [ 'logging' => [
-			'handlers' => [
-				[ 'method' => 'error_log', 'level' => 0 ]
-			]
-		] ] );
+		$setup->setEnvironmentDependentInstances( $factory );
 	}
 }

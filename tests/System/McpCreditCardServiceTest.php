@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\System;
 use IMcpCreditcardService_v1_5;
 use PHPUnit\Framework\TestCase;
 use TNvpServiceDispatcher;
+use WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
@@ -30,7 +31,7 @@ class McpCreditCardServiceTest extends TestCase {
 	private $customerId;
 
 	public function setUp(): void {
-		$config = TestEnvironment::newInstance( [] )->getConfig();
+		$config = ( new EnvironmentDependentConfigReaderFactory( $_ENV['APP_ENV'] ) )->getConfigReader()->getConfig();
 		$this->accessKey = $config['creditcard']['access-key'];
 		$this->projectId = $config['creditcard']['project-id'];
 

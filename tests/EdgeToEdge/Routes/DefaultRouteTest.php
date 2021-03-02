@@ -4,15 +4,15 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Routes
  */
-class DefaultRouteTest extends WebRouteTestCase {
+class DefaultRouteTest extends WebTestCase {
 
 	public function testWhenFormParametersArePassedInRequest_theyArePassedToTheTemplate(): void {
-		$client = $this->createClient();
+		$client = static::createClient();
 		$client->request(
 			'GET',
 			'/',
@@ -30,7 +30,7 @@ class DefaultRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenFormParametersContainNegativeAmount_zeroAmountIsPassedToTheTemplate(): void {
-		$client = $this->createClient();
+		$client = static::createClient();
 		$client->request(
 			'GET',
 			'/',

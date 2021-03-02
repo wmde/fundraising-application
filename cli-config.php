@@ -1,30 +1,24 @@
 <?php
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use FileFetcher\SimpleFileFetcher;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
-use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
-
 /**
  * This is a CLI configuration file for Doctrine
  * https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/tools.html
  */
 
-$dotenv = Dotenv\Dotenv::createImmutable( __DIR__ );
-$dotenv->load();
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Symfony\Component\Dotenv\Dotenv;
+use WMDE\Fundraising\Frontend\App\Kernel;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
-$bootstrapper = new EnvironmentBootstrapper( $_ENV['APP_ENV'] ?? 'dev' );
-$configReader = new ConfigReader(
-	new SimpleFileFetcher(),
-	...$bootstrapper->getConfigurationPathsForEnvironment( __DIR__ . '/app/config' )
-);
+require __DIR__ . '/vendor/autoload.php';
 
-$config = $configReader->getConfig();
-$factory = new FunFunFactory( $config );
-$bootstrapper->getEnvironmentSetupInstance()
-	->setEnvironmentDependentInstances( $factory, $config );
+if ( !class_exists( Dotenv::class ) ) {
+	throw new LogicException( 'You need to add "symfony/framework-bundle" and "symfony/dotenv" as Composer dependencies.' );
+}
+
+( new Dotenv() )->bootEnv( __DIR__ . '/.env' );
+
+$kernel = new Kernel( $_SERVER['APP_ENV'], false );
+$kernel->boot();
+$factory = $kernel->getContainer()->get( FunFunFactory::class );
 
 return ConsoleRunner::createHelperSet( $factory->getEntityManager() );

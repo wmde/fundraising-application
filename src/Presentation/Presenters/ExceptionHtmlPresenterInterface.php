@@ -9,5 +9,5 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 interface ExceptionHtmlPresenterInterface {
 	public function setTemplate( TwigTemplate $template ): void;
 
-	public function present( \Exception $exception ): string;
+	public function present( \Throwable $exception ): string;
 }

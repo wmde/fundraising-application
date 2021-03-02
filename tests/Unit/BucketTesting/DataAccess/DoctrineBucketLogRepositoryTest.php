@@ -6,22 +6,27 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting\DataAccess;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectRepository;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\DataAccess\DoctrineBucketLogRepository;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\BucketLog;
-use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\BucketLogBucket;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\DataAccess\DoctrineBucketLogRepository
  */
-class DoctrineBucketLogRepositoryTest extends TestCase {
+class DoctrineBucketLogRepositoryTest extends KernelTestCase {
+
+	use RebuildDatabaseSchemaTrait;
 
 	private EntityManager $entityManager;
 
 	public function setUp(): void {
-		$this->entityManager = TestEnvironment::newInstance()->getFactory()->getEntityManager();
 		parent::setUp();
+		static::bootKernel();
+		$factory = static::$container->get( FunFunFactory::class );
+		static::rebuildDatabaseSchema( $factory );
+		$this->entityManager = $factory->getEntityManager();
 	}
 
 	private function getOrmRepository(): ObjectRepository {

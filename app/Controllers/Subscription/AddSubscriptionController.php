@@ -32,7 +32,7 @@ class AddSubscriptionController {
 			$request,
 			$responseModel,
 			$ffFactory->newAddSubscriptionHtmlPresenter(),
-			$ffFactory->getUrlGenerator()->generateAbsoluteUrl( 'page', [ 'pageName' => 'Subscription_Success' ] )
+			$ffFactory->getUrlGenerator()->generateRelativeUrl( 'page', [ 'pageName' => 'Subscription_Success' ] )
 		);
 	}
 

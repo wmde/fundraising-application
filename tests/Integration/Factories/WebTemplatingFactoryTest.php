@@ -6,17 +6,18 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Factories;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Twig\Error\RuntimeError;
 use WMDE\Fundraising\ContentProvider\ContentException;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
+use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**
- * Tests if the FunFunFactory correctly builds Twig environments for HTMl and Mail
+ * Tests if the FunFunFactory correctly builds Twig environment for HTML
  *
  * @covers \WMDE\Fundraising\Frontend\Factories\WebTemplatingFactory
  * @covers \WMDE\Fundraising\Frontend\Factories\TwigFactory
@@ -24,12 +25,21 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
  *
  * @license GPL-2.0-or-later
  */
-class WebTemplatingFactoryTest extends TestCase {
+class WebTemplatingFactoryTest extends KernelTestCase {
 
 	private const TEMPLATE_DIR = 'templates';
 
 	private function getFactory( array $configOverrides = [] ): FunFunFactory {
-		$factory = TestEnvironment::newInstance( $configOverrides )->getFactory();
+		static::bootKernel();
+		$bootstrapper = static::$container->get( EnvironmentBootstrapper::class );
+
+		if ( !( $bootstrapper instanceof TestEnvironmentBootstrapper ) ) {
+			throw new \LogicException( 'We need to use TestEnvironmentBootstrapper to be able to override the configuration' );
+		}
+
+		$bootstrapper->overrideConfiguration( $configOverrides );
+
+		$factory = static::$container->get( FunFunFactory::class );
 		$factory->setSkinDirectory( vfsStream::url( self::TEMPLATE_DIR ) );
 		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 		return $factory;

@@ -4,13 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser as Client;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Routes
@@ -21,6 +21,9 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	private const NON_EXISTING_DONATION_ID = 25502;
 	private const PATH = '/add-comment';
 
+	/**
+	 * @todo this test and behavior seems wrong
+	 */
 	public function testGivenRequestWithoutParameters_resultIsError(): void {
 		$client = $this->createClient();
 

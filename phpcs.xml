@@ -4,7 +4,8 @@
     <file>app</file>
     <file>src/</file>
     <file>tests/</file>
-    <file>cli/</file>
+	<file>cli/</file>
+	<file>cli-config.php</file>
 
     <arg name="extensions" value="php"/>
     <arg name="encoding" value="UTF-8"/>

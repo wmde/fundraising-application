@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers;
 
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +26,7 @@ class SetCookiePreferencesController {
 			] ) );
 		}
 
-		$response = JsonResponse::create( [
+		$response = new JsonResponse( [
 			'status' => 'OK',
 		] );
 

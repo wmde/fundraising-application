@@ -6,8 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\CookieNames;
@@ -18,7 +20,6 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser as Client;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineEntities\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
@@ -283,14 +284,18 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->newValidHttpParameters()
 		);
 
-		$lastMembership = $this->getSessionValue( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY );
+		/** @var SessionInterface $session */
+		$session = $client->getContainer()->get( 'session' );
+		$lastMembership = $session->get( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY );
 		$this->assertNotNull( $lastMembership );
 		$this->assertEqualsWithDelta( time(), $lastMembership->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
 	}
 
 	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected(): void {
-		$this->setSessionValue( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
 		$client = $this->createClient();
+		/** @var SessionInterface $session */
+		$session = $client->getContainer()->get( 'session' );
+		$session->set( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
 
 		$client->request(
 			'POST',
@@ -302,11 +307,12 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected(): void {
-		$this->setSessionValue(
+		$client = $this->createClient();
+		$session = $client->getContainer()->get( 'session' );
+		$session->set(
 			FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY,
 			( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT12M' ) )
 		);
-		$client = $this->createClient();
 
 		$client->request(
 			'POST',
@@ -366,7 +372,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$client->request(
 				'POST',
-				'apply-for-membership',
+				'/apply-for-membership',
 				$this->newValidHttpParametersUsingPayPal()
 			);
 

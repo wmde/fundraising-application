@@ -7,11 +7,13 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
-
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\CookieNames;
@@ -21,7 +23,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\Frontend\Tests\HttpKernelBrowser as Client;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
 
@@ -56,23 +57,30 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenDonationGetsPersisted_timestampIsStoredInSession(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$client->followRedirects( true );
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+		$client = $this->createClient();
+		// Don't throw away the environment between http requests, otherwise the in-memory SQLite database would be gone
+		if ( $client instanceof KernelBrowser ) {
+			$client->disableReboot();
+		}
+		$client->followRedirects( true );
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
 
-			$donationTimestamp = $this->getSessionValue( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY );
-			$this->assertNotNull( $donationTimestamp );
-			$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
-		} );
+		/** @var SessionInterface $session */
+		$session = $client->getContainer()->get( 'session' );
+		$donationTimestamp = $session->get( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY );
+		$this->assertNotNull( $donationTimestamp );
+		$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
 	}
 
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected(): void {
-		$this->setSessionValue( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
 		$client = $this->createClient();
+		/** @var SessionInterface $session */
+		$session = $client->getContainer()->get( 'session' );
+		$session->set( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
 
 		$client->request(
 			'POST',
@@ -85,7 +93,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSessionValue(
+			/** @var SessionInterface $session */
+			$session = $client->getContainer()->get( 'session' );
+			$session->set(
 				FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY,
 				( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT35M' ) )
 			);
@@ -169,36 +179,38 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
-			$client->followRedirect();
+		$client = $this->createClient();
+		if ( $client instanceof KernelBrowser ) {
+			$client->disableReboot();
+		}
+		$client->followRedirects( true );
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
 
-			$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
+		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-			$this->assertObjectHasAttribute( 'donation', $applicationVars );
-			$this->assertSame( 5.51, $applicationVars->donation->amount );
-			$this->assertSame( 0, $applicationVars->donation->interval );
-			$this->assertSame( 'BEZ', $applicationVars->donation->paymentType );
-			$this->assertTrue( $applicationVars->donation->optsIntoNewsletter );
-			$this->assertTrue( $applicationVars->donation->optsIntoDonationReceipt );
+		$this->assertObjectHasAttribute( 'donation', $applicationVars );
+		$this->assertSame( 5.51, $applicationVars->donation->amount );
+		$this->assertSame( 0, $applicationVars->donation->interval );
+		$this->assertSame( 'BEZ', $applicationVars->donation->paymentType );
+		$this->assertTrue( $applicationVars->donation->optsIntoNewsletter );
+		$this->assertTrue( $applicationVars->donation->optsIntoDonationReceipt );
 
-			$this->assertObjectHasAttribute( 'bankData', $applicationVars );
-			$this->assertSame( 'DE12500105170648489890', $applicationVars->bankData->iban );
-			$this->assertSame( 'INGDDEFFXXX', $applicationVars->bankData->bic );
-			$this->assertSame( 'ING-DiBa', $applicationVars->bankData->bankname );
+		$this->assertObjectHasAttribute( 'bankData', $applicationVars );
+		$this->assertSame( 'DE12500105170648489890', $applicationVars->bankData->iban );
+		$this->assertSame( 'INGDDEFFXXX', $applicationVars->bankData->bic );
+		$this->assertSame( 'ING-DiBa', $applicationVars->bankData->bankname );
 
-			$this->assertObjectHasAttribute( 'address', $applicationVars );
-			$this->assertSame( 'Prof. Dr. Karla Kennichnich', $applicationVars->address->fullName );
-			$this->assertSame( 'Lehmgasse 12', $applicationVars->address->streetAddress );
-			$this->assertSame( '12345', $applicationVars->address->postalCode );
-			$this->assertSame( 'Einort', $applicationVars->address->city );
-			$this->assertSame( 'DE', $applicationVars->address->countryCode );
-			$this->assertSame( 'karla@kennichnich.de', $applicationVars->address->email );
-		} );
+		$this->assertObjectHasAttribute( 'address', $applicationVars );
+		$this->assertSame( 'Prof. Dr. Karla Kennichnich', $applicationVars->address->fullName );
+		$this->assertSame( 'Lehmgasse 12', $applicationVars->address->streetAddress );
+		$this->assertSame( '12345', $applicationVars->address->postalCode );
+		$this->assertSame( 'Einort', $applicationVars->address->city );
+		$this->assertSame( 'DE', $applicationVars->address->countryCode );
+		$this->assertSame( 'karla@kennichnich.de', $applicationVars->address->email );
 	}
 
 	public function testGivenValidBankTransferRequest_donationGetsPersisted(): void {
@@ -766,6 +778,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private function getDataApplicationVars( Crawler $crawler ): object {
 		/** @var \DOMElement $appElement */
 		$appElement = $crawler->filter( '#appdata' )->getNode( 0 );
+		if ( $appElement === null ) {
+			$this->fail( 'Response did not contain an element with id "#appdata". Please check if you need to follow a redirect.' );
+		}
 		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
 	}
 

@@ -149,14 +149,6 @@
 		"timezone":  "Europe/Berlin",
 		"configurations": [ "campaigns.yml" ]
 	},
-	"logging": {
-		"handlers": [
-			{
-				"method": "error_log",
-				"level": "DEBUG"
-			}
-		]
-	},
 	"smtp": {
 		"host": "localhost",
 		"username": "",

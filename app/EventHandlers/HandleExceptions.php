@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\App\EventHandlers;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -17,9 +17,6 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 /**
  * Generate different error responses for the different exceptions.
  *
- * @todo Replace this class with a custom error controller when we have switched to Symfony
- *       see https://phabricator.wikimedia.org/T263436
- *       see https://symfony.com/doc/current/controller/error_pages.html#overriding-the-default-errorcontroller
  */
 class HandleExceptions implements EventSubscriberInterface {
 
@@ -28,17 +25,17 @@ class HandleExceptions implements EventSubscriberInterface {
 	private FunFunFactory $presenterFactory;
 
 	public function __construct( FunFunFactory $presenterFactory ) {
- $this->presenterFactory = $presenterFactory;
+		$this->presenterFactory = $presenterFactory;
 	}
 
-	public static function getSubscribedEvents() {
+	public static function getSubscribedEvents(): array {
 		return [
 			KernelEvents::EXCEPTION => [ 'onKernelException', self::PRIORITY ]
 		];
 	}
 
-	public function onKernelException( GetResponseForExceptionEvent $event ): void {
-		$exception = $event->getException();
+	public function onKernelException( ExceptionEvent $event ): void {
+		$exception = $event->getThrowable();
 		switch ( true ) {
 			case $exception instanceof AccessDeniedException:
 				$this->createAccessDeniedResponse( $event );
@@ -51,20 +48,20 @@ class HandleExceptions implements EventSubscriberInterface {
 		}
 	}
 
-	private function createAccessDeniedResponse( GetResponseForExceptionEvent $event ): void {
+	private function createAccessDeniedResponse( ExceptionEvent $event ): void {
 		$event->setResponse( new Response(
 			$this->presenterFactory->newAccessDeniedHtmlPresenter()->present(
-				$event->getException()->getMessage()
+				$event->getThrowable()->getMessage()
 			),
 			403,
 			[ 'X-Status-Code' => 403 ]
 		) );
 	}
 
-	private function createNotFoundResponse( GetResponseForExceptionEvent $event ): void {
+	private function createNotFoundResponse( ExceptionEvent $event ): void {
 		if ( $this->isJsonRequest( $event ) ) {
 			$event->setResponse( JsonResponse::create(
-				[ 'ERR' => $event->getException()->getMessage() ],
+				[ 'ERR' => $event->getThrowable()->getMessage() ],
 				404,
 				[ 'X-Status-Code' => 404 ]
 			) );
@@ -78,8 +75,8 @@ class HandleExceptions implements EventSubscriberInterface {
 		) );
 	}
 
-	private function createInternalErrorResponse( GetResponseForExceptionEvent $event ) {
-		$exception = $event->getException();
+	private function createInternalErrorResponse( ExceptionEvent $event ) {
+		$exception = $event->getThrowable();
 		if ( $this->isJsonRequest( $event ) ) {
 			$event->setResponse( JsonResponse::create(
 				[ 'ERR' => $exception->getMessage() ]
@@ -94,7 +91,7 @@ class HandleExceptions implements EventSubscriberInterface {
 		) );
 	}
 
-	private function isJsonRequest( GetResponseForExceptionEvent $event ): bool {
+	private function isJsonRequest( ExceptionEvent $event ): bool {
 		return $event->getRequest()
 			->attributes
 			->get( AddIndicatorAttributeForJsonRequests::REQUEST_IS_JSON_ATTRIBUTE, false );

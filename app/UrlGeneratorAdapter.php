@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 
 class UrlGeneratorAdapter implements UrlGenerator {
 
-	private $urlGenerator;
+	private UrlGeneratorInterface $urlGenerator;
 
 	public function __construct( UrlGeneratorInterface $urlGenerator ) {
 		$this->urlGenerator = $urlGenerator;

@@ -5,8 +5,8 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\EventHandlers;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
@@ -29,14 +29,14 @@ class StoreBucketSelection implements EventSubscriberInterface {
 		];
 	}
 
-	public function setSelectedBuckets( KernelEvent $event ): void {
+	public function setSelectedBuckets( RequestEvent $event ): void {
 		$request = $event->getRequest();
 		parse_str( $request->cookies->get( CookieNames::BUCKET_TESTING, '' ), $cookieValues );
 		$selector = $this->factory->getBucketSelector();
 		$this->factory->setSelectedBuckets( $selector->selectBuckets( $cookieValues, $request->query->all() ) );
 	}
 
-	public function storeSelectedBuckets( FilterResponseEvent $event ): void {
+	public function storeSelectedBuckets( ResponseEvent $event ): void {
 		if ( $event->getRequest()->cookies->get( 'cookie_consent' ) !== 'yes' ) {
 			return;
 		}

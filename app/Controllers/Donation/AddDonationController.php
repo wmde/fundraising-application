@@ -12,6 +12,7 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
+use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
@@ -61,7 +62,7 @@ class AddDonationController {
 			case PaymentMethod::BANK_TRANSFER:
 				return new RedirectResponse(
 					$this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-						'show-donation-confirmation',
+						Routes::SHOW_DONATION_CONFIRMATION,
 						[
 							'id' => $responseModel->getDonation()->getId(),
 							'accessToken' => $responseModel->getAccessToken()
