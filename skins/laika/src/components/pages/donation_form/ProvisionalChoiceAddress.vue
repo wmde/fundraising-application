@@ -18,30 +18,34 @@
 				v-show="!addressTypeIsNotAnon">{{ $t( 'donation_addresstype_option_anonymous_disclaimer' ) }}
 		</div>
 		<AutofillHandler @autofill="onAutofill">
-			<name
-					v-if="showName"
-					:show-error="fieldErrors"
-					:form-data="formData"
-					:address-type="addressType"
-					v-on:field-changed="onFieldChange"/>
-			<postal
-					v-if="showPostal"
-					:show-error="fieldErrors"
-					:form-data="formData"
-					:countries="countries"
-					:post-code-validation="addressValidationPatterns.postcode"
-					v-on:field-changed="onFieldChange"/>
-			<receipt-opt-out
-					:message="$t( 'receipt_needed_donation_page' )"
-					:initial-receipt-needed="receiptNeeded"
-					v-if="showPostal"
-					v-on:opted-out="setReceiptOptedOut( $event )"/>
-			<email
-					v-if="showEmail"
-					:show-error="fieldErrors.email"
-					:form-data="formData"
-					v-on:field-changed="onFieldChange"/>
-			<newsletter-opt-in v-if="showEmail"></newsletter-opt-in>
+      <div
+          data-matomo-form
+          :data-matomo-name="trackingHandle">
+        <name
+            v-if="showName"
+            :show-error="fieldErrors"
+            :form-data="formData"
+            :address-type="addressType"
+            v-on:field-changed="onFieldChange"/>
+        <postal
+            v-if="showPostal"
+            :show-error="fieldErrors"
+            :form-data="formData"
+            :countries="countries"
+            :post-code-validation="addressValidationPatterns.postcode"
+            v-on:field-changed="onFieldChange"/>
+        <receipt-opt-out
+            :message="$t( 'receipt_needed_donation_page' )"
+            :initial-receipt-needed="receiptNeeded"
+            v-if="showPostal"
+            v-on:opted-out="setReceiptOptedOut( $event )"/>
+        <email
+            v-if="showEmail"
+            :show-error="fieldErrors.email"
+            :form-data="formData"
+            v-on:field-changed="onFieldChange"/>
+        <newsletter-opt-in v-if="showEmail"></newsletter-opt-in>
+      </div>
 		</AutofillHandler>
 	</div>
 </template>
@@ -102,6 +106,13 @@ export default Vue.extend( {
 		const showName = computed( () => {
 			return isFullSelected.value || [ AddressTypeModel.EMAIL, AddressTypeModel.COMPANY, AddressTypeModel.PERSON ].includes( $store.state.address.addressType );
 		} );
+		const trackingHandle = computed( () => {
+			if ( showPostal ) {
+				return 'laika-donation-postal-section';
+			} else if ( showEmail ) {
+				return 'laika-donation-email-section';
+			}
+		} );
 
 		onMounted( () => {
 			Object.entries( addressFunctions.formData ).forEach( ( formItem ) => {
@@ -121,6 +132,7 @@ export default Vue.extend( {
 			showName,
 			showPostal,
 			showEmail,
+			trackingHandle,
 			isFullSelected,
 			setFullSelected,
 		};
