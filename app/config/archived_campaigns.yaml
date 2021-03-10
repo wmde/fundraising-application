@@ -52,3 +52,16 @@ anon_form_display:
   url_key: fd
   active: true
   param_only: true
+
+  membership_incentive:
+    description: Test if incentives help drive memberships
+    reference: "https://phabricator.wikimedia.org/T270068"
+    start: "2020-12-22"
+    end: "2021-03-09"
+    buckets:
+      - "no_incentive"
+      - "incentive"
+    default_bucket: "no_incentive"
+    url_key: incentive
+    active: true
+    param_only: true

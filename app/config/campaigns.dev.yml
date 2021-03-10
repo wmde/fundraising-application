@@ -20,11 +20,6 @@ campaigns:
     start: "2020-09-20"
     default_bucket: "provisional_address_options"
 
-  membership_incentive:
-    active: true
-    start: "2020-12-01"
-    default_bucket: "incentive"
-
   confirmation_page_layout:
     active: true
     start: "2021-02-10"

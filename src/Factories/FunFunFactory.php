@@ -1206,15 +1206,20 @@ class FunFunFactory implements LoggerAwareInterface {
 			'countries' => $this->getCountries(),
 			'addressValidationPatterns' => $validation->address,
 			'dateOfBirthValidationPattern' => $validation->dateOfBirth,
-			'incentives' => $this->getChoiceFactory()->getDefaultIncentives()
+			'incentives' => $this->getIncentives()
 		] );
 	}
 
 	public function newMembershipApplicationFormPresenter(): MembershipApplicationFormPresenter {
 		return new MembershipApplicationFormPresenter(
 			$this->getMembershipApplicationFormTemplate(),
-			$this->getChoiceFactory()->getDefaultIncentives()
+			$this->getIncentives()
 		);
+	}
+
+	private function getIncentives(): array {
+		// TODO hardcoded until the list gets extended in the near future
+		return [ 'tote_bag' ];
 	}
 
 	public function getCountries(): array {

@@ -27,7 +27,7 @@ const localVue = createLocalVue();
 localVue.use( Vuex );
 localVue.use( Buefy );
 
-localVue.use( FeatureTogglePlugin, { activeFeatures: [ 'campaigns.membership_incentive.incentive' ] } );
+localVue.use( FeatureTogglePlugin, { activeFeatures: [] } );
 
 describe( 'Address.vue', () => {
 	let wrapper: any;
