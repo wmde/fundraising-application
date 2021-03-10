@@ -4,9 +4,11 @@ current_group := $(shell id -g)
 COMPOSER_FLAGS :=
 DOCKER_FLAGS  := --interactive --tty
 TEST_DIR      :=
+BUILD_DIR     := $(PWD)
 MIGRATION_VERSION :=
 MIGRATION_CONTEXT :=
 APP_ENV       := dev
+ASSET_BRANCH  := main
 
 DOCKER_IMAGE  := registry.gitlab.com/fun-tech/fundraising-frontend-docker
 
@@ -23,7 +25,7 @@ down-app:
 
 # Installation
 
-setup: create-env install-php default-config ui setup-db
+setup: create-env download-assets install-php default-config ui setup-db
 
 create-env:
 	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
@@ -42,6 +44,9 @@ setup-db:
 
 default-config:
 	cp -i build/app/config.dev.json app/config
+
+download-assets:
+	build/download_assets.sh $(ASSET_BRANCH)
 
 # Maintenance
 
@@ -96,4 +101,4 @@ stan:
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
 
-.PHONY: up-app down-app up-debug setup create-env install-php update-php setup-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization phpmd
+.PHONY: up-app down-app up-debug setup create-env download-assets install-php update-php setup-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization phpmd
