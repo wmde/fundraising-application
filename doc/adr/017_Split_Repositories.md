@@ -8,24 +8,35 @@ Technical Story: https://phabricator.wikimedia.org/T273800
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context and Problem Statement
 
-We propose the splitting of the Fundraising Frontend App into two distinct repositories, Fundraising Frontend App and Fundraising Backend App. This would allow for a clearer separation of concerns, helping distinguish between architectures and languages (currently predominantly JavaScript on the frontend and PHP on the backend side). It would furthermore ease naming schemes for either domain, and allow for domain-specific tickets. Longer deployment processes for the frontend due to its tooling would no longer bog down backend-only tasks.
+Currently, both the client-side code (JavaScript and SCSS) and the
+server-side code are in the same repository. This leads to long build
+times and unneeccessary CI runs if either of the code parts change.
+
+Also, having both "parts" in the same repository makes it harder to talk
+about each part, because we used the terminology of the Fundraising
+Department, which called the Fundraising Application "Frontend" and the
+Fundraising Operation Center "Backend". For us as developers, "Frontend"
+and "Backend" have different meanings.
 
 ## Decision Drivers 
 
-* Reduction of deployment times for the backend repository
-* Improved separation of concerns
-* Parallel development of two distinct and independent domains, option to separate CI steps
-* Unblocks the potential creation of a server-side JSON-based API
+* Improve separation of concerns
+* Allow parallel development of two distinct and independent domains
+* Have two separate CI steps for each part
+* Unblock the potential creation of a server-side JSON-based API
+* Reduce deployment time for the backend repository
 
 ## Considered Options
 
-* Tweak build system by separating CI processes
+* Keep the "monorepo"
+* Tweak build system to run only necessary CI steps
+* Split code repository into separate client/server side code repositories
 
-## Effort
+## Effort for splitting the repository
 * Fork the repo
 * Separate either domains, removing language from opposite domain
 * Adapt deployment script to pull from either repos and go through build steps for both
@@ -33,24 +44,20 @@ We propose the splitting of the Fundraising Frontend App into two distinct repos
 * Separate out git commits that are relevant to the domain, without losing the history of the repo
 * Clean out JS side, but leave old commits in PHP code
 * Create CI for JavaScript build
+* Tweak development environment to allow standalone and integrated
+  development on either or both code bases.
 
 ## Decision Outcome
 
-**To be discussed**
+Since the tweaking of the build system would introduce addionional
+complexities in the build and CI system and would not solve the naming
+confusion, we decided to split the repository in two, named
+`fundraising-app` for the server-side code and `fundraising-app-frontend`
+for the client-side code. We'll also take the opportunity to move the code
+form GitHub to GitLab.
 
-Chosen option: "[option 1]", because [justification. e.g., only option, which meets k.o. criterion decision driver | which resolves force force | … | comes out best (see below)].
+We track the renaming of the `fundraising-backend` repository to
+`fundraising-operation-center` 
+in a [separate ticket](https://phabricator.wikimedia.org/T246796)
 
-### Positive Consequences <!-- optional -->
-
-**To be discussed**
-
-* [e.g., improvement of quality attribute satisfaction, follow-up decisions required, …]
-* …
-
-### Negative Consequences <!-- optional -->
-
-**To be discussed**
-
-* [e.g., compromising quality attribute, follow-up decisions required, …]
-* …
 
