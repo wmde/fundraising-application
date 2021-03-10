@@ -1,5 +1,3 @@
-include skins/laika/Makefile
-
 current_user  := $(shell id -u)
 current_group := $(shell id -g)
 
@@ -25,7 +23,7 @@ down-app:
 
 # Installation
 
-setup: create-env install-php install-js default-config ui setup-db
+setup: create-env install-php default-config ui setup-db
 
 create-env:
 	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
@@ -56,9 +54,9 @@ clean: clear
 
 # Continuous Integration
 
-ci: phpunit cs ci-js validate-app-config validate-campaign-config stan
+ci: phpunit cs validate-app-config validate-campaign-config stan
 
-ci-with-coverage: phpunit-with-coverage cs ci-js validate-app-config validate-campaign-config stan
+ci-with-coverage: phpunit-with-coverage cs validate-app-config validate-campaign-config stan
 
 phpunit-system:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpunit tests/System/
@@ -98,4 +96,4 @@ stan:
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
 
-.PHONY: up-app down-app up-debug setup create-env install-php update-php setup-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization phpmd install-js update-js audit-fix-js js ci-js
+.PHONY: up-app down-app up-debug setup create-env install-php update-php setup-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization phpmd
