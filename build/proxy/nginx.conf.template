@@ -39,11 +39,6 @@ server {
             fastcgi_pass   ${PHP_FPM_HOST}:9000;
         }
 
-        # proxy CSS URL images to laika skin
-        location /img/ {
-            proxy_pass http://skin_laika:8080/img/;
-        }
-
 		location = /status {
 			add_header Content-Type text/plain;
 			return 200 "Web server status: OK (Online)";

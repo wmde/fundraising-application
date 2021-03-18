@@ -10,14 +10,13 @@ install:
   - travis_retry composer install # This is a crutch to use travis tokens for github API instead of needing our own
   # Commented out for efficiency reasons
   # - travis_retry make install-php
-  - make install-js
 
 before_script:
   - bash build/travis/createLocalTestConfig.sh
   - echo "APP_ENV=dev" > .env
 
 script:
-  - make setup
+  - make default-config
   - make clear
   - make ci-with-coverage
   - make install-php COMPOSER_FLAGS="--no-dev -q" # Remove dev dependencies to make sure PHPStan creates errors if prod code depends on dev classes
