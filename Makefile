@@ -25,7 +25,7 @@ down-app:
 
 # Installation
 
-setup: create-env download-assets install-php default-config ui setup-db
+setup: create-env download-assets install-php default-config setup-db
 
 create-env:
 	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
