@@ -1,20 +1,57 @@
 
+stages:
+  - test
+  - coverage
+
 # Select what we should cache between builds
 cache:
   paths:
     - vendor/
 
+include:
+  # Run GitLab code quality job, see https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html
+  - template: Code-Quality.gitlab-ci.yml
 
-# Run the CI checks
-test:
-  image: fun-tech/fundraising-frontend-docker:latest
+ci-checks:
+  image: registry.gitlab.com/fun-tech/fundraising-frontend-docker
+  stage: test
+  artifacts:
+      reports:
+          junit: junit.xml
   before_script:
     - curl -sS https://getcomposer.org/installer | php
-    - php composer.phar install
+    - php composer.phar install -q
+    - bash build/ci/createLocalTestConfig.sh
+    - make default-config
+    - echo "APP_ENV=dev" > .env
   script:
     - vendor/bin/phpcs
-    - vendor/bin/phpunit --colors=never
+    - php -d memory_limit=1G vendor/bin/phpunit --colors=never --log-junit junit.xml
+    - php -d memory_limit=1G vendor/bin/phpstan analyse --level=1 --no-progress cli/ src/ tests/
     - bin/console app:validate:config app/config/config.dist.json app/config/config.test.json
-    - bin/console app:validate:campaigns test
+    - bin/console app:validate:campaigns dev
+    # TODO find a way to make sure we don't include test/dev dependencies, see https://stackoverflow.com/q/66693419/130121
+
+test-with-coverage:
+  image: registry.gitlab.com/fun-tech/fundraising-frontend-docker:xdebug
+  stage: coverage
+  artifacts:
+      reports:
+          cobertura: coverage-cobertura.xml
+  variables:
+      XDEBUG_MODE: coverage
+  before_script:
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install -q
+    - bash build/ci/createLocalTestConfig.sh
+    - make default-config
+    - echo "APP_ENV=dev" > .env
+  script:
+    - php -d memory_limit=1G vendor/bin/phpunit --configuration=phpunit.xml.dist --stop-on-error --coverage-cobertura coverage-cobertura.xml
+
+
+code_quality:
+  artifacts:
+    paths: [gl-code-quality-report.json]
 
 
