@@ -1,0 +1,20 @@
+
+# Select what we should cache between builds
+cache:
+  paths:
+    - vendor/
+
+
+# Run the CI checks
+test:
+  image: fun-tech/fundraising-frontend-docker:latest
+  before_script:
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install
+  script:
+    - vendor/bin/phpcs
+    - vendor/bin/phpunit --colors=never
+    - bin/console app:validate:config app/config/config.dist.json app/config/config.test.json
+    - bin/console app:validate:campaigns test
+
+
