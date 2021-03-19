@@ -158,6 +158,7 @@ class ApplyForMembershipController {
 		return new RedirectResponse(
 			$this->ffFactory->newPayPalUrlGeneratorForMembershipApplications()->generateUrl(
 				$responseModel->getMembershipApplication()->getId(),
+				$this->generatePayPalInvoiceId( $responseModel->getMembershipApplication()->getId() ),
 				$responseModel->getMembershipApplication()->getPayment()->getAmount(),
 				$responseModel->getMembershipApplication()->getPayment()->getIntervalInMonths(),
 				$responseModel->getUpdateToken(),
@@ -193,5 +194,16 @@ class ApplyForMembershipController {
 			array_keys( $violations ),
 			$formattedConstraintViolations
 		);
+	}
+
+	/**
+	 * We use the membership primary key as the InvoiceId because they're unique
+	 * But we prepend a letter to make sure they don't clash with donations
+	 *
+	 * @param int $id
+	 * @return string
+	 */
+	private function generatePayPalInvoiceId( int $id ): string {
+		return 'M' . $id;
 	}
 }
