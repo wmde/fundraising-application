@@ -42,7 +42,7 @@
 		"guzzlehttp/guzzle": "^7.2",
 		"jeroen/file-fetcher": "~6.0",
 		"justinrainbow/json-schema": "^5.2",
-		"micropayment-de/service-client": "~1.23",
+		"micropayment-de/service-client": "~1.25",
 		"monolog/monolog": "~2.1",
 		"nikic/php-parser": "~4.0",
 		"psr/log": "~1.0",
@@ -54,11 +54,11 @@
 			"type": "package",
 			"package": {
 				"name": "micropayment-de/service-client",
-				"version": "1.23.0",
+				"version": "1.25.0",
 				"dist": {
 					"type": "zip",
-					"url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_23.zip",
-					"reference": "1.23.0"
+					"url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_25.zip",
+					"reference": "1.25.0"
 				},
 				"autoload": {
 					"classmap": [
