@@ -42,6 +42,9 @@ setup-db:
 	docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
 	docker-compose run --rm app ./vendor/bin/doctrine dbal:import build/database/fixtures.sql
 
+drop-db:
+	docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:drop --force
+
 default-config:
 	cp -i build/app/config.dev.json app/config
 
@@ -101,4 +104,4 @@ stan:
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
 
-.PHONY: up-app down-app up-debug setup create-env download-assets install-php update-php setup-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization phpmd
+.PHONY: up-app down-app up-debug setup create-env download-assets install-php update-php setup-db drop-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization phpmd
