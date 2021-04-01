@@ -22,18 +22,6 @@ campaigns:
     # url_key: URL parameter key used for assigning buckets to people
     # param_only: (Optional) Set to true if the campaign should return the default bucket when the url key is not in a request. This is for A/B tests triggered by banners
 
-    membership_call_to_action:
-      description: Display different content for membership call to action on donation confirmation page
-      reference: "https://phabricator.wikimedia.org/T210083"
-      start: "2018-11-29 19:00:00"
-      end: "2019-01-07 23:59:59"
-      buckets:
-      - "regular"
-      - "video"
-      default_bucket: "regular"
-      url_key: mbcat
-      active: true
-
     amount_options:
       description: Test different amount options. First two options are the same because we want to avoid having 0 as a possible value of the URL parameter.
       reference: "https://phabricator.wikimedia.org/T211545"

@@ -23,15 +23,6 @@ class ChoiceFactory {
 		$this->featureToggle = $featureToggle;
 	}
 
-	public function getMembershipCallToActionTemplate(): string {
-		if ( $this->featureToggle->featureIsActive( 'campaigns.membership_call_to_action.regular' ) ) {
-			return 'partials/donation_confirmation/feature_toggle/call_to_action_regular.html.twig';
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.membership_call_to_action.video' ) ) {
-			return 'partials/donation_confirmation/feature_toggle/call_to_action_video.html.twig';
-		}
-		throw new UnknownChoiceDefinition( 'Membership Call to Action Template configuration failure.' );
-	}
-
 	public function getAmountOption(): array {
 		if ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.5to300_0' ) ) {
 			return $this->getAmountOptionInEuros( [ 500, 1500, 2500, 5000, 7500, 10000, 25000, 30000 ] );
