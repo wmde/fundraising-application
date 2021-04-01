@@ -23,29 +23,6 @@ class ChoiceFactory {
 		$this->featureToggle = $featureToggle;
 	}
 
-	public function getAmountOption(): array {
-		if ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.5to300_0' ) ) {
-			return $this->getAmountOptionInEuros( [ 500, 1500, 2500, 5000, 7500, 10000, 25000, 30000 ] );
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.5to300' ) ) {
-			return $this->getAmountOptionInEuros( [ 500, 1500, 2500, 5000, 7500, 10000, 25000, 30000 ] );
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.5to100' ) ) {
-			return $this->getAmountOptionInEuros( [ 500, 1000, 1500, 2000, 3000, 5000, 7500, 10000 ] );
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.15to250' ) ) {
-			return $this->getAmountOptionInEuros( [ 1500, 2000, 2500, 3000, 5000, 7500, 10000, 25000 ] );
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.30to250' ) ) {
-			return $this->getAmountOptionInEuros( [ 3000, 4000, 5000, 7500, 10000, 15000, 20000, 25000 ] );
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.amount_options.50to500' ) ) {
-			return $this->getAmountOptionInEuros( [ 5000, 10000, 15000, 20000, 25000, 30000, 50000 ] );
-		}
-		throw new UnknownChoiceDefinition( 'Amount option selection configuration failure.' );
-	}
-
-	public function getAmountOptionInEuros( array $amountOption ): array {
-		return array_map( function ( int $amount ) {
-			return Euro::newFromCents( $amount );
-		}, $amountOption );
-	}
-
 	public function getAddressType(): ?string {
 		if ( $this->featureToggle->featureIsActive( 'campaigns.address_type.no_preselection' ) ) {
 			return null;
