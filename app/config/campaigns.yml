@@ -22,19 +22,6 @@ campaigns:
     # url_key: URL parameter key used for assigning buckets to people
     # param_only: (Optional) Set to true if the campaign should return the default bucket when the url key is not in a request. This is for A/B tests triggered by banners
 
-    compact_design:
-      description: Test form design variation where the design is more compact by moving elements onto the same row and generally closer together.
-      reference: "https://phabricator.wikimedia.org/T236667"
-      start: "2019-11-05 14:00:00"
-      end: "2019-12-31 23:00:00"
-      buckets:
-        - "classic"
-        - "compact"
-      default_bucket: "classic"
-      url_key: compact
-      active: true
-      param_only: true
-
     address_type:
       description: Test if the address type not being preselected changes the user behaviour of entering nonsense address data.
       reference: "https://phabricator.wikimedia.org/T247228"
