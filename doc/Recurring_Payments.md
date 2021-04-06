@@ -1,7 +1,7 @@
 # Data model for recurring payments
 
-For all payment channels except PayPal, our data warehousing and CRM
-provider, handles the payments. We don't update our data when they process
+For all payment channels except PayPal our data warehousing and CRM
+provider handles the payments. We don't update our data when they process
 payments.
 
 For recurring donations paid with PayPal, we're getting a subscription
