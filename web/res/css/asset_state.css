@@ -1,0 +1,20 @@
+.navbar::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    padding: 0 16px;
+    border-radius: 20px;
+    margin: 5px;
+    opacity: 0.5;
+}
+
+.external-assets .navbar::after {
+    content: "External assets";
+    background: orange;
+}
+
+.no-external-assets .navbar::after {
+    content: "Builtin assets";
+    background: green;
+}
