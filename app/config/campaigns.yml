@@ -22,47 +22,6 @@ campaigns:
     # url_key: URL parameter key used for assigning buckets to people
     # param_only: (Optional) Set to true if the campaign should return the default bucket when the url key is not in a request. This is for A/B tests triggered by banners
 
-    membership_call_to_action:
-      description: Display different content for membership call to action on donation confirmation page
-      reference: "https://phabricator.wikimedia.org/T210083"
-      start: "2018-11-29 19:00:00"
-      end: "2019-01-07 23:59:59"
-      buckets:
-      - "regular"
-      - "video"
-      default_bucket: "regular"
-      url_key: mbcat
-      active: true
-
-    amount_options:
-      description: Test different amount options. First two options are the same because we want to avoid having 0 as a possible value of the URL parameter.
-      reference: "https://phabricator.wikimedia.org/T211545"
-      start: "2018-12-12 00:00:00"
-      end: "2018-12-25 23:59:59"
-      buckets:
-      - "5to300_0"
-      - "5to300"
-      - "5to100"
-      - "15to250"
-      - "30to250"
-      - "50to500"
-      default_bucket: "5to300"
-      url_key: amtopt
-      active: true
-
-    compact_design:
-      description: Test form design variation where the design is more compact by moving elements onto the same row and generally closer together.
-      reference: "https://phabricator.wikimedia.org/T236667"
-      start: "2019-11-05 14:00:00"
-      end: "2019-12-31 23:00:00"
-      buckets:
-        - "classic"
-        - "compact"
-      default_bucket: "classic"
-      url_key: compact
-      active: true
-      param_only: true
-
     address_type:
       description: Test if the address type not being preselected changes the user behaviour of entering nonsense address data.
       reference: "https://phabricator.wikimedia.org/T247228"

@@ -996,9 +996,6 @@ class FunFunFactory implements LoggerAwareInterface {
 					$this->getDefaultTwigVariables(),
 					[
 						'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
-						'featureToggle' => [
-							'callToActionTemplate' => $this->getChoiceFactory()->getMembershipCallToActionTemplate()
-						],
 					]
 				)
 			),
@@ -1012,12 +1009,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new DonorUpdateHtmlPresenter(
 			new TwigTemplate(
 				$this->getSkinTwig(), 'Donation_Confirmation.html.twig',
-				array_merge(
-					$this->getDefaultTwigVariables(),
-					[
-						'featureToggle' => [ 'callToActionTemplate' => $this->getChoiceFactory()->getMembershipCallToActionTemplate() ]
-					]
-				)
+				$this->getDefaultTwigVariables()
 			),
 			$this->getUrlGenerator()
 		);
