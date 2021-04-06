@@ -15,9 +15,9 @@
 		"wmde/email-address": "~1.0",
 		"wmde/euro": "~1.0",
 		"wmde/clock": "~1.0",
-		"wmde/fundraising-donations": "~5.0.0",
-		"wmde/fundraising-memberships": "~4.1.0",
-		"wmde/fundraising-payments": "~1.0.1",
+		"wmde/fundraising-donations": "~5.2",
+		"wmde/fundraising-memberships": "~4.2",
+		"wmde/fundraising-payments": "~2.0",
 		"wmde/fundraising-subscriptions": "~2.0.0",
 		"wmde/fundraising-content-provider": "~4.0.0",
 		"wmde/fundraising-address-change": "1.0.2",
@@ -42,7 +42,7 @@
 		"guzzlehttp/guzzle": "^7.2",
 		"jeroen/file-fetcher": "~6.0",
 		"justinrainbow/json-schema": "^5.2",
-		"micropayment-de/service-client": "~1.23",
+		"micropayment-de/service-client": "~1.25",
 		"monolog/monolog": "~2.1",
 		"nikic/php-parser": "~4.0",
 		"psr/log": "~1.0",
@@ -54,11 +54,11 @@
 			"type": "package",
 			"package": {
 				"name": "micropayment-de/service-client",
-				"version": "1.23.0",
+				"version": "1.25.0",
 				"dist": {
 					"type": "zip",
-					"url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_23.zip",
-					"reference": "1.23.0"
+					"url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_25.zip",
+					"reference": "1.25.0"
 				},
 				"autoload": {
 					"classmap": [

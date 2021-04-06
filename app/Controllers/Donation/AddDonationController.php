@@ -73,6 +73,7 @@ class AddDonationController {
 				return new RedirectResponse(
 					$this->ffFactory->newPayPalUrlGeneratorForDonations()->generateUrl(
 						$responseModel->getDonation()->getId(),
+						$this->generatePayPalInvoiceId( $responseModel->getDonation()->getId() ),
 						$responseModel->getDonation()->getAmount(),
 						$responseModel->getDonation()->getPaymentIntervalInMonths(),
 						$responseModel->getUpdateToken(),
@@ -242,5 +243,16 @@ class AddDonationController {
 		} catch ( \UnexpectedValueException $e ) {
 			return DonorType::ANONYMOUS();
 		}
+	}
+
+	/**
+	 * We use the donation primary key as the InvoiceId because they're unique
+	 * But we prepend a letter to make sure they don't clash with memberships
+	 *
+	 * @param int $id
+	 * @return string
+	 */
+	private function generatePayPalInvoiceId( int $id ): string {
+		return 'D' . $id;
 	}
 }
