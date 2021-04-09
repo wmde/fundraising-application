@@ -24,9 +24,12 @@
         {% if not assets_path %}
             <link rel="stylesheet" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/css/styles.css">
         {% endif %}
+        {% if application_environment == 'dev' %}
+             <link rel="stylesheet" href="{$ basepath $}/res/css/asset_state.css">
+        {% endif %}
     {% endblock %}
 </head>
-<body>
+<body class="{% if assets_path %}external-assets{% else %}no-external-assets{% endif %} environment-{$ application_environment $}">
 {% block main %}
     <div id="app">
         <noscript>
@@ -35,7 +38,7 @@
         </noscript>
     </div>
     <div id="appdata" data-application-vars="{$ _context|json_encode|e('html_attr') $}"
-    data-application-messages="{$ translations()|e('html_attr') $}" 
+    data-application-messages="{$ translations()|e('html_attr') $}"
     data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}"
     class="is-hidden">
     </div>

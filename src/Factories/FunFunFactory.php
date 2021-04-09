@@ -445,7 +445,8 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getFilePrefixer(),
 				[
 					'basepath' => $this->config['web-basepath'],
-					'assets_path' => $this->config['assets-path']
+					'assets_path' => $this->config['assets-path'],
+					'application_environment' => $this->getApplicationEnvironment(),
 				]
 			);
 		} );
@@ -1893,5 +1894,9 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function setMailTemplateDirectory( string $directory ): void {
 		$this->sharedObjects['MAIL_TEMPLATE_DIRECTORY'] = $directory;
+	}
+
+	private function getApplicationEnvironment(): string {
+		return $_SERVER['APP_ENV'] ?? 'dev';
 	}
 }
