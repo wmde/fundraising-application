@@ -1,5 +1,5 @@
-** ATTENTION: The code repository has moved to
-https://gitlab.com/fun-tech/fundraising-app **
+**ATTENTION: The code repository has moved to
+https://gitlab.com/fun-tech/fundraising-app**
 
 
 User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
