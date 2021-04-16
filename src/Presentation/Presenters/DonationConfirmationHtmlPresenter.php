@@ -56,6 +56,9 @@ class DonationConfirmationHtmlPresenter {
 				'bankTransferCode' => $this->donorDataFormatter->getBankTransferCode( $donation->getPaymentMethod() ),
 				'creationDate' => $this->donorDataFormatter->getDonationDate(),
 				'cookieDuration' => $this->donorDataFormatter->getHideBannerCookieDuration(),
+				'needsModeration' => $donation->needsModeration(),
+				'isCancelled' => $donation->isCancelled(),
+				'isBooked' => $donation->isBooked(),
 				'updateToken' => $updateToken,
 				'accessToken' => $accessToken
 			],
