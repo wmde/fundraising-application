@@ -58,14 +58,18 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 		$this->assertCookieIsNotSet( $client, CookieNames::TRACKING );
 	}
 
-	/**
-	 * @param HttpKernelBrowser $client
-	 * @param string $name
-	 */
-	private function assertCookieIsNotSet( HttpKernelBrowser $client, string $name ) {
-		$cookieJar = $client->getCookieJar();
-		$cookieJar->updateFromResponse( $client->getInternalResponse() );
-		$this->assertNull( $cookieJar->get( $name ) );
+	public function testWhenCookieConsentSet_bucketSelectionIsPersisted(): void {
+		$client = $this->createClient();
+
+		$client->request(
+			'POST',
+			'/set-cookie-preferences',
+			[
+				CookieNames::CONSENT => 'yes'
+			]
+		);
+
+		$this->assertNotNull( $client->getCookieJar()->get( CookieNames::BUCKET_TESTING ) );
 	}
 
 	public function testWhenCookieConsentRejected_trackingCookiesAreRemoved() {
@@ -83,5 +87,33 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 
 		$this->assertCookieIsNotSet( $client, CookieNames::TRACKING );
 		$this->assertCookieIsNotSet( $client, CookieNames::BUCKET_TESTING );
+	}
+
+	public function testWhenCookieConsentIsRemoved_trackingCookiesAreRemoved(): void {
+		$client = $this->createClient();
+		$client->getCookieJar()->set( new Cookie( CookieNames::CONSENT, 'yes' ) );
+		$client->getCookieJar()->set( new Cookie( CookieNames::TRACKING, 'nicholas/cage' ) );
+		$client->getCookieJar()->set( new Cookie( CookieNames::BUCKET_TESTING, 'set' ) );
+
+		$client->request(
+			'POST',
+			'/set-cookie-preferences',
+			[
+				CookieNames::CONSENT => 'no'
+			]
+		);
+
+		$this->assertCookieIsNotSet( $client, CookieNames::TRACKING );
+		$this->assertCookieIsNotSet( $client, CookieNames::BUCKET_TESTING );
+	}
+
+	/**
+	 * @param HttpKernelBrowser $client
+	 * @param string $name
+	 */
+	private function assertCookieIsNotSet( HttpKernelBrowser $client, string $name ) {
+		$cookieJar = $client->getCookieJar();
+		$cookieJar->updateFromResponse( $client->getInternalResponse() );
+		$this->assertNull( $cookieJar->get( $name ) );
 	}
 }

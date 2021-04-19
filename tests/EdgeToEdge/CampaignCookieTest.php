@@ -93,4 +93,20 @@ class CampaignCookieTest extends WebRouteTestCase {
 		$this->assertNull( $client->getCookieJar()->get( CookieNames::BUCKET_TESTING )->getExpiresTime() );
 	}
 
+	public function testWhenUserVisitsThePageWithoutConsentCookie_cookieIsNotSet(): void {
+		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
+		$this->modifyEnvironment( function ( FunFunFactory $ffactory ) {
+			$ffactory->setCampaignConfigurationLoader(
+				new OverridingCampaignConfigurationLoader(
+					$ffactory->getCampaignConfigurationLoader(),
+					self::TEST_CAMPAIGN_CONFIG
+				)
+			);
+		} );
+		$client = $this->createClient();
+		$client->request( 'get', '/', [] );
+
+		$this->assertNull( $client->getCookieJar()->get( CookieNames::BUCKET_TESTING ) );
+	}
+
 }

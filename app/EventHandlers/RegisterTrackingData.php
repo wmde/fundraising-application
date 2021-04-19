@@ -19,6 +19,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
  */
 class RegisterTrackingData implements EventSubscriberInterface {
 
+	public const SHOULD_STORE_TRACKING_COOKIE = 'shouldStoreTrackingCookie';
+
 	public static function getSubscribedEvents() {
 		return [
 			KernelEvents::REQUEST => 'onKernelRequest',
@@ -34,8 +36,10 @@ class RegisterTrackingData implements EventSubscriberInterface {
 
 	public function onKernelRequest( RequestEvent $event ): void {
 		$request = $event->getRequest();
+		$shouldStoreTracking = $request->cookies->get( CookieNames::CONSENT ) === 'yes';
+		$request->attributes->set( self::SHOULD_STORE_TRACKING_COOKIE, $shouldStoreTracking );
 
-		if ( $request->cookies->get( 'cookie_consent' ) !== 'yes' ) {
+		if ( !$shouldStoreTracking ) {
 			return;
 		}
 
@@ -50,23 +54,17 @@ class RegisterTrackingData implements EventSubscriberInterface {
 
 	public function onKernelResponse( ResponseEvent $event ): void {
 		$request = $event->getRequest();
-		$response = $event->getResponse();
-
+		$shouldStoreCookie = $request->attributes->get( self::SHOULD_STORE_TRACKING_COOKIE );
 		$trackingCode = $request->attributes->get( 'trackingCode', '' );
-		if ( $trackingCode !== '' ) {
-			$response->headers->setCookie( $this->cookieBuilder->newCookie(
-				CookieNames::TRACKING,
-				$trackingCode
-			) );
+
+		if ( !$shouldStoreCookie || $trackingCode === '' ) {
+			return;
 		}
 
-		$trackingSource = $request->attributes->get( 'trackingSource', '' );
-		if ( $trackingSource !== '' ) {
-			$response->headers->setCookie( $this->cookieBuilder->newCookie(
-				'spenden_source',
-				$trackingSource
-			) );
-		}
+		$event->getResponse()->headers->setCookie( $this->cookieBuilder->newCookie(
+			CookieNames::TRACKING,
+			$trackingCode
+		) );
 	}
 
 }

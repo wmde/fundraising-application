@@ -5,6 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\EventHandlers;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -14,6 +17,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class StoreBucketSelection implements EventSubscriberInterface {
 
+	public const SHOULD_STORE_BUCKET_COOKIE = 'shouldStoreBucketCookie';
 	private const PRIORITY = 256;
 
 	private FunFunFactory $factory;
@@ -34,15 +38,19 @@ class StoreBucketSelection implements EventSubscriberInterface {
 		parse_str( $request->cookies->get( CookieNames::BUCKET_TESTING, '' ), $cookieValues );
 		$selector = $this->factory->getBucketSelector();
 		$this->factory->setSelectedBuckets( $selector->selectBuckets( $cookieValues, $request->query->all() ) );
+
+		$request->attributes->set(
+			self::SHOULD_STORE_BUCKET_COOKIE,
+			$request->cookies->get( CookieNames::CONSENT ) === 'yes'
+		);
 	}
 
 	public function storeSelectedBuckets( ResponseEvent $event ): void {
-		if ( $event->getRequest()->cookies->get( 'cookie_consent' ) !== 'yes' ) {
+		if ( !$event->getRequest()->attributes->get( self::SHOULD_STORE_BUCKET_COOKIE ) ) {
 			return;
 		}
 
-		$response = $event->getResponse();
-		$response->headers->setCookie(
+		$event->getResponse()->headers->setCookie(
 			$this->factory->getCookieBuilder()->newCookie(
 				CookieNames::BUCKET_TESTING,
 				$this->getCookieValue(),
