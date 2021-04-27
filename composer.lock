@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd73a2ba26f26f3e6b61da8acc778521",
+    "content-hash": "2bbbe5b783da6d01fc7f72844438205a",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6904,7 +6904,7 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "dev-master",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
@@ -6939,7 +6939,6 @@
                 "wmde/fundraising-phpcs": "~2.0",
                 "wmde/psr-log-test-doubles": "~2.1"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -10036,7 +10035,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "wmde/fundraising-donations": 20,
         "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
