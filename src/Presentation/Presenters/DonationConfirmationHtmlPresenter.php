@@ -47,7 +47,6 @@ class DonationConfirmationHtmlPresenter {
 		return [
 			'donation' => [
 				'id' => $donation->getId(),
-				'status' => $this->donorDataFormatter->mapStatus( $donation->getStatus() ),
 				'amount' => $donation->getAmount()->getEuroFloat(),
 				'interval' => $donation->getPaymentIntervalInMonths(),
 				'paymentType' => $donation->getPaymentMethodId(),

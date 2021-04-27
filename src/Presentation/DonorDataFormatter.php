@@ -54,31 +54,6 @@ class DonorDataFormatter {
 		return [];
 	}
 
-	/**
-	 * Map donation status to a translatable message key
-	 *
-	 * @param string $status
-	 * @return string
-	 */
-	public function mapStatus( string $status ): string {
-		switch ( $status ) {
-			case Donation::STATUS_MODERATION:
-				return 'status-pending';
-			case Donation::STATUS_NEW:
-				return 'status-new';
-			case Donation::STATUS_EXTERNAL_INCOMPLETE:
-				return 'status-unconfirmed';
-			case Donation::STATUS_PROMISE:
-				return 'status-pledge';
-			case Donation::STATUS_EXTERNAL_BOOKED:
-				return 'status-booked';
-			case Donation::STATUS_CANCELLED:
-				return 'status-canceled';
-			default:
-				return 'status-unknown';
-		}
-	}
-
 	public function getDonationDate(): string {
 		return ( new \DateTime() )->format( 'd.m.Y' );
 	}

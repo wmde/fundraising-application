@@ -140,9 +140,8 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
 			);
 
-			$this->assertSame(
-				Donation::STATUS_EXTERNAL_BOOKED,
-				$factory->getDonationRepository()->getDonationById( $donation->getId() )->getStatus()
+			$this->assertTrue(
+				$factory->getDonationRepository()->getDonationById( $donation->getId() )->isBooked()
 			);
 		} );
 	}
