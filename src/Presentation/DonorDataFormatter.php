@@ -62,8 +62,6 @@ class DonorDataFormatter {
 	 */
 	public function mapStatus( string $status ): string {
 		switch ( $status ) {
-			case Donation::STATUS_MODERATION:
-				return 'status-pending';
 			case Donation::STATUS_NEW:
 				return 'status-new';
 			case Donation::STATUS_EXTERNAL_INCOMPLETE:
@@ -72,8 +70,6 @@ class DonorDataFormatter {
 				return 'status-pledge';
 			case Donation::STATUS_EXTERNAL_BOOKED:
 				return 'status-booked';
-			case Donation::STATUS_CANCELLED:
-				return 'status-canceled';
 			default:
 				return 'status-unknown';
 		}
