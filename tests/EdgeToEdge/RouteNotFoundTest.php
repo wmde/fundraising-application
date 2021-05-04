@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests
+ * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\HandleExceptions
  */
 class RouteNotFoundTest extends WebRouteTestCase {
 

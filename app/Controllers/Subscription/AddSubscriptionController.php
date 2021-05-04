@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
@@ -20,7 +21,7 @@ class AddSubscriptionController {
 		$useCase = $ffFactory->newAddSubscriptionUseCase();
 		$responseModel = $useCase->addSubscription( $this->createSubscriptionRequest( $request ) );
 
-		if ( $request->attributes->get( 'request_stack.is_json', false ) ) {
+		if ( $request->attributes->get( AddIndicatorAttributeForJsonRequests::REQUEST_IS_JSON_ATTRIBUTE, false ) ) {
 			return $this->createJsonResponse(
 				$responseModel,
 				$ffFactory->newAddSubscriptionJsonPresenter(),

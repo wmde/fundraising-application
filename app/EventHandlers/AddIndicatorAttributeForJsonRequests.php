@@ -12,9 +12,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Add indicator attribute `request_stack.is_json` to request for JSON/JSONP requests,
  * based on the HTTP `Accept` (accepted content type) header.
- *
- * @todo When https://phabricator.wikimedia.org/T263436 is done, use Symfony's "_format" parameter instead,
- *       see https://symfony.com/doc/current/routing.html#special-parameters
  */
 class AddIndicatorAttributeForJsonRequests implements EventSubscriberInterface {
 
