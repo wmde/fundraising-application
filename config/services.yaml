@@ -41,6 +41,13 @@ services:
     # when explicit configuration is needed.
     # please note that last definitions always *replace* previous ones
 
+    # Inject the log path and route into the PayPal IPN Logger
+    WMDE\Fundraising\Frontend\App\EventHandlers\PayPalRequestLogger:
+        class: WMDE\Fundraising\Frontend\App\EventHandlers\PayPalRequestLogger
+        public: true
+        arguments:
+            - "%kernel.logs_dir%/paypal_ipn_log.csv"
+            - ["handle_paypal_payment_notification", "handle_paypal_membership_fee_payments"]
 
     # We need the bootstrapper to be public to be able to access it in tests
     WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper:
