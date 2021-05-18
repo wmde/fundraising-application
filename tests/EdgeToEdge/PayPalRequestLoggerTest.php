@@ -6,9 +6,11 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WMDE\Fundraising\Frontend\App\EventHandlers\PayPalRequestLogger;
+use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\PayPalRequestLogger
@@ -26,17 +28,19 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 	private vfsStreamDirectory $filesystem;
 	private KernelBrowser $client;
 	private string $filePath;
+	private LoggerInterface $logger;
 
 	public function setUp(): void {
 		$this->filesystem = vfsStream::setup( self::LOG_DIR );
 		$this->filePath = vfsStream::url( self::LOG_DIR . '/' . self::LOG_FILENAME );
+		$this->logger = new LoggerSpy();
 
 		/** @var KernelBrowser $client */
 		$client = $this->createClient();
 		$this->client = $client;
 		self::$container->set(
 			PayPalRequestLogger::class,
-			new PayPalRequestLogger( $this->filePath, $this->paypalRoutes )
+			new PayPalRequestLogger( $this->filePath, $this->paypalRoutes, $this->logger )
 		);
 	}
 
@@ -114,4 +118,18 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 		];
 	}
 
+	public function testLogsFileCreationErrors(): void {
+		$route = self::$container->get( 'router' )->generate(
+			$this->paypalRoutes[0],
+			[],
+			UrlGeneratorInterface::RELATIVE_PATH
+		);
+		$payPalData = $this->validPayPalData();
+		$this->filesystem->chmod( 0444 );
+
+		$this->client->request( 'post', $route, $payPalData['post_vars'] );
+
+		$this->assertCount( 1, $this->logger->getLogCalls() );
+		$this->assertFalse( $this->filesystem->hasChild( self::LOG_FILENAME ) );
+	}
 }

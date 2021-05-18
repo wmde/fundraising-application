@@ -48,6 +48,7 @@ services:
         arguments:
             - "%kernel.logs_dir%/paypal_ipn_log.csv"
             - ["handle_paypal_payment_notification", "handle_paypal_membership_fee_payments"]
+            - "@logger"
 
     # We need the bootstrapper to be public to be able to access it in tests
     WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper:
