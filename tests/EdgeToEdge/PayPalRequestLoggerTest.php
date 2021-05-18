@@ -45,11 +45,7 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 	}
 
 	public function testWhenPostedPayPalData_createsLogFile(): void {
-		$route = self::$container->get( 'router' )->generate(
-			$this->paypalRoutes[0],
-			[],
-			UrlGeneratorInterface::RELATIVE_PATH
-		);
+		$route = self::newUrlForNamedRoute( $this->paypalRoutes[0] );
 		$payPalData = $this->validPayPalData();
 
 		$this->client->request( 'post', $route, $payPalData['post_vars'] );
@@ -58,12 +54,16 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 		$this->assertSame( $payPalData['stored'], file_get_contents( $this->filePath ) );
 	}
 
-	public function testWhenPostedPayPalDataAndFileExists_addsDataToLogFile(): void {
-		$route = self::$container->get( 'router' )->generate(
-			$this->paypalRoutes[0],
+	private static function newUrlForNamedRoute( $routeName ): string {
+		return self::$container->get( 'router' )->generate(
+			$routeName,
 			[],
 			UrlGeneratorInterface::RELATIVE_PATH
 		);
+	}
+
+	public function testWhenPostedPayPalDataAndFileExists_addsDataToLogFile(): void {
+		$route = self::newUrlForNamedRoute( $this->paypalRoutes[0] );
 		$payPalData = $this->validPayPalData();
 		$existingData = 'go, to, school, 99' . PHP_EOL;
 		$expectedContents = $existingData . $payPalData['stored'];
@@ -79,11 +79,7 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 	 * @dataProvider routesDataProvider
 	 */
 	public function testRunsOnPayPalNotificationRoutes( string $routeName ): void {
-		$route = self::$container->get( 'router' )->generate(
-			$routeName,
-			[],
-			UrlGeneratorInterface::RELATIVE_PATH
-		);
+		$route = self::newUrlForNamedRoute( $routeName );
 		$payPalData = $this->validPayPalData();
 
 		$this->client->request( 'post', $route, $payPalData['post_vars'] );
@@ -119,11 +115,7 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 	}
 
 	public function testLogsFileCreationErrors(): void {
-		$route = self::$container->get( 'router' )->generate(
-			$this->paypalRoutes[0],
-			[],
-			UrlGeneratorInterface::RELATIVE_PATH
-		);
+		$route = self::newUrlForNamedRoute( $this->paypalRoutes[0] );
 		$payPalData = $this->validPayPalData();
 		$this->filesystem->chmod( 0444 );
 
