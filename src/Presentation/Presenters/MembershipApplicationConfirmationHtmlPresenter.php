@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
-use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
@@ -36,7 +36,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function presentConfirmation( Application $application, string $updateToken ): void {
+	public function presentConfirmation( MembershipApplication $application, string $updateToken ): void {
 		$this->html = $this->template->render(
 			$this->getConfirmationPageArguments(
 				$application,
@@ -57,7 +57,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		return $this->html;
 	}
 
-	private function getConfirmationPageArguments( Application $membershipApplication, string $updateToken ): array {
+	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, string $updateToken ): array {
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $updateToken ),
 			'address' => $this->getAddressArguments( $membershipApplication->getApplicant() ),
@@ -77,7 +77,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		];
 	}
 
-	private function getApplicationArguments( Application $membershipApplication, string $updateToken ): array {
+	private function getApplicationArguments( MembershipApplication $membershipApplication, string $updateToken ): array {
 		return [
 			'id' => $membershipApplication->getId(),
 			'membershipType' => $membershipApplication->getType(),

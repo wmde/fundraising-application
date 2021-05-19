@@ -158,9 +158,12 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracke
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTokenFetcher;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
-use WMDE\Fundraising\MembershipContext\Domain\Event\MembershipCreatedEvent;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationEventLogger;
+use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipApplicationEventLogger;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
@@ -1039,7 +1042,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newMembershipApplicationTracker(),
 			$this->newMembershipApplicationPiwikTracker(),
 			$this->getPaymentDelayCalculator(),
-			$this->getMembershipEventEmitter()
+			$this->getMembershipEventEmitter(),
+			$this->getIncentiveFinder()
 		);
 	}
 
@@ -1101,7 +1105,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new CancelMembershipApplicationUseCase(
 			$this->getMembershipApplicationAuthorizer( $updateToken ),
 			$this->getMembershipApplicationRepository(),
-			$this->newCancelMembershipApplicationMailer()
+			$this->newCancelMembershipApplicationMailer(),
+			$this->newMembershipApplicationEventLogger(),
 		);
 	}
 
@@ -1898,5 +1903,13 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getApplicationEnvironment(): string {
 		return $_SERVER['APP_ENV'] ?? 'dev';
+	}
+
+	private function getIncentiveFinder(): IncentiveFinder {
+		return new DoctrineIncentiveFinder( $this->getEntityManager() );
+	}
+
+	private function newMembershipApplicationEventLogger(): MembershipApplicationEventLogger {
+		return new DoctrineMembershipApplicationEventLogger( $this->getEntityManager() );
 	}
 }

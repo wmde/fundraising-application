@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22109af387b89c4c5da762b7aabc8967",
+    "content-hash": "24f94f6f1862dd508b13d498dabafc43",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6866,16 +6866,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v4.2.0",
+            "version": "dev-add-db-incentive-finder",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "cdb1d2ef060c10c35f349c5a8a0bbcc8b18e054d"
+                "reference": "d0c0aa2803930f9a63eff27a6d9e094fe8cf1cdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/cdb1d2ef060c10c35f349c5a8a0bbcc8b18e054d",
-                "reference": "cdb1d2ef060c10c35f349c5a8a0bbcc8b18e054d",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/d0c0aa2803930f9a63eff27a6d9e094fe8cf1cdc",
+                "reference": "d0c0aa2803930f9a63eff27a6d9e094fe8cf1cdc",
                 "shasum": ""
             },
             "require": {
@@ -6887,7 +6887,7 @@
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~3.0.0",
-                "wmde/fundraising-payments": "~2.0"
+                "wmde/fundraising-payments": "~2.1"
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
@@ -6919,20 +6919,20 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2021-03-19T11:31:06+00:00"
+            "time": "2021-05-19T07:51:06+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v2.0.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "8471d77339ec34de63efc745cc89538aa4915970"
+                "reference": "e9aa78163d731e8c56db81330896344e96b997b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/8471d77339ec34de63efc745cc89538aa4915970",
-                "reference": "8471d77339ec34de63efc745cc89538aa4915970",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/e9aa78163d731e8c56db81330896344e96b997b5",
+                "reference": "e9aa78163d731e8c56db81330896344e96b997b5",
                 "shasum": ""
             },
             "require": {
@@ -6967,7 +6967,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2021-03-19T09:41:25+00:00"
+            "time": "2021-05-17T09:40:05+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -9941,6 +9941,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "wmde/fundraising-memberships": 20,
         "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
