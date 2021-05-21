@@ -31,10 +31,8 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 		$bankDataGeneratorStub = $this->getMockBuilder( BankDataGenerator::class )->getMock();
 		$bankDataGeneratorStub->expects( $this->never() )->method( 'getBankDataFromIban' );
 
-		$membershipApplication = ValidMembershipApplication::newDomainEntityUsingPayPal();
-		if ( $isConfirmed === true ) {
-			$membershipApplication->confirm();
-		}
+		$payPalData = $isConfirmed ? ValidMembershipApplication::newBookedPayPalData() : ValidMembershipApplication::newPayPalData();
+		$membershipApplication = ValidMembershipApplication::newDomainEntityUsingPayPal( $payPalData );
 
 		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig, $bankDataGeneratorStub, new FakeUrlGenerator() );
 		$presenter->presentConfirmation(
