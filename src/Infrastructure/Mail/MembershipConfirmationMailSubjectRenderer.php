@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
-use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 
 /**
  * @license GPL-2.0-or-later
@@ -23,7 +23,7 @@ class MembershipConfirmationMailSubjectRenderer implements MailSubjectRendererIn
 	}
 
 	public function render( array $templateArguments = [] ): string {
-		if ( $templateArguments['membershipType'] === Application::ACTIVE_MEMBERSHIP ) {
+		if ( $templateArguments['membershipType'] === MembershipApplication::ACTIVE_MEMBERSHIP ) {
 			return $this->translator->trans( $this->activeMembershipSubject );
 		}
 		return $this->translator->trans( $this->sustainingMembershipSubject );

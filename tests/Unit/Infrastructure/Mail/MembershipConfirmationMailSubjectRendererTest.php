@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
-use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
+use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer
@@ -15,7 +15,7 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\Application;
 class MembershipConfirmationMailSubjectRendererTest extends TestCase {
 
 	public function testGivenActiveMembership_activeSubjectLineIsPrinted() {
-		$templateArguments['membershipType'] = Application::ACTIVE_MEMBERSHIP;
+		$templateArguments['membershipType'] = MembershipApplication::ACTIVE_MEMBERSHIP;
 		$this->assertSame(
 			'mail_subject_confirm_membership_application_active',
 			$this->newMembershipConfirmationMailSubjectRenderer()->render( $templateArguments )
@@ -23,7 +23,7 @@ class MembershipConfirmationMailSubjectRendererTest extends TestCase {
 	}
 
 	public function testGivenSustainingMembership_sustainingSubjectLineIsPrinted() {
-		$templateArguments['membershipType'] = Application::SUSTAINING_MEMBERSHIP;
+		$templateArguments['membershipType'] = MembershipApplication::SUSTAINING_MEMBERSHIP;
 		$this->assertSame(
 			'mail_subject_confirm_membership_application_sustaining',
 			$this->newMembershipConfirmationMailSubjectRenderer()->render( $templateArguments )

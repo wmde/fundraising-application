@@ -13,7 +13,7 @@ use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\Canc
  */
 class CancelMembershipApplicationHtmlPresenter {
 
-	private $template;
+	private TwigTemplate $template;
 
 	public function __construct( TwigTemplate $template ) {
 		$this->template = $template;
@@ -22,7 +22,7 @@ class CancelMembershipApplicationHtmlPresenter {
 	public function present( CancellationResponse $response ): string {
 		return $this->template->render( [
 			'membershipId' => $response->getMembershipApplicationId(),
-			'cancellationSuccessful' => $response->cancellationWasSuccessful()
+			'cancellationSuccessful' => $response->isSuccess()
 		] );
 	}
 
