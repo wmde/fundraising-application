@@ -2,7 +2,7 @@
 {$ ( 'donation_payment_interval_' ~ donation.interval ) $}
 
 {% if donation.paymentType == 'PPL' or donation.paymentType == 'MCP' %}
-	Ihre Spende per {$ donation.paymentType $} {$ donation.status $}.
+	Ihre Spende per {$ donation.paymentType $}.
 {% elseif donation.paymentType == 'BEZ' %}
 	Sie zahlen per {$ donation.paymentType $}
 {% endif %}

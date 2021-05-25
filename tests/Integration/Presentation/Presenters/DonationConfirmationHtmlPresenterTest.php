@@ -18,16 +18,12 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
  */
 class DonationConfirmationHtmlPresenterTest extends TestCase {
 
-	private const STATUS_BOOKED = 'status-booked';
-	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
-
 	private const UPDATE_TOKEN = 'update_token';
 	private const ACCESS_TOKEN = 'access_token';
 	private const DONATION_ID = 42;
 
 	public function testWhenPresenterRenders_itPassedParamsToTemplate(): void {
 		$expectedParameters = $this->getExpectedRenderParams();
-		$expectedParameters['donation']['status'] = self::STATUS_BOOKED;
 
 		$presenter = new DonationConfirmationHtmlPresenter(
 			$this->newTwigTemplateMock( $expectedParameters ),
@@ -84,28 +80,6 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			->method( 'render' )
 			->with( $expectedParameters );
 		return $twig;
-	}
-
-	public function testWhenPresenterPresents_itPassesMappedStatus(): void {
-		$expectedParameters = $this->getExpectedRenderParams();
-		$expectedParameters['donation']['status'] = self::STATUS_UNCONFIRMED;
-
-		$presenter = new DonationConfirmationHtmlPresenter(
-			$this->newTwigTemplateMock( $expectedParameters ),
-			new FakeUrlGenerator(),
-			[],
-			(object)[]
-		);
-
-		$donation = ValidDonation::newIncompleteAnonymousPayPalDonation();
-		$donation->assignId( self::DONATION_ID );
-
-		$presenter->present(
-			$donation,
-			self::UPDATE_TOKEN,
-			self::ACCESS_TOKEN,
-			$this->newUrls()
-		);
 	}
 
 	private function newUrls(): array {

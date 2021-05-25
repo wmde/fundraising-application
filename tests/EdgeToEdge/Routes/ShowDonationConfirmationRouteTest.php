@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
@@ -20,7 +19,6 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
 class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	private const CORRECT_ACCESS_TOKEN = 'KindlyAllowMeAccess';
-	private const MAPPED_STATUS = 'status-new';
 
 	private const ACCESS_DENIED_TEXT = 'access_denied_donation_confirmation';
 
@@ -46,17 +44,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
 
 		$this->assertStringContainsString( 'Anonym', $responseContent );
-	}
-
-	public function testGivenAnonymousDonation_confirmationPageShowsStatusText(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$this->donation = $this->newBookedAnonymousPayPalDonation( $factory );
-		} );
-		$client = $this->createClient();
-
-		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
-
-		$this->assertStringContainsString( 'status-booked', $responseContent );
 	}
 
 	private function retrieveDonationConfirmation( HttpKernelBrowser $client, int $donationId ): string {
@@ -101,7 +88,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$paymentMethod = $donation->getPaymentMethod();
 
 		$this->assertStringContainsString( 'donation.id: ' . $donation->getId(), $responseContent );
-		$this->assertStringContainsString( 'donation.status: ' . self::MAPPED_STATUS, $responseContent );
 		$this->assertStringContainsString( 'donation.amount: ' . $donation->getAmount()->getEuroString(), $responseContent );
 		$this->assertStringContainsString( 'donation.interval: ' . $donation->getPaymentIntervalInMonths(), $responseContent );
 		$this->assertStringContainsString( 'donation.paymentType: ' . $donation->getPaymentMethodId(), $responseContent );
