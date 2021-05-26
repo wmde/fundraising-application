@@ -20,13 +20,13 @@ class ShowUpdateAddressController {
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$addressToken = $request->get( 'addressToken', '' );
 		if ( $addressToken === '' ) {
-			throw new AccessDeniedException();
+			throw new AccessDeniedException( 'No address change token in request' );
 		}
 
 		$addressChangeRepository = $ffFactory->newAddressChangeRepository();
 		$addressChange = $addressChangeRepository->getAddressChangeByUuid( $addressToken );
 		if ( $addressChange === null ) {
-			throw new AccessDeniedException();
+			throw new AccessDeniedException( sprintf( 'No address change record found with token %s.', $addressToken ) );
 		}
 		return new Response(
 			$ffFactory->getLayoutTemplate( 'Update_Address.html.twig' )->render(
