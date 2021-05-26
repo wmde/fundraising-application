@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+>
+    <entity name="WMDE\Fundraising\Frontend\Autocomplete\Domain\Model\Location" table="geodaten_artikelnr_1001">
+        <indexes>
+            <index name="idx_postcode" columns="POSTLEITZAHL"/>
+        </indexes>
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+
+        <field name="stateName" type="string" column="BUNDESLAND_NAME" length="30" nullable="true"/>
+        <field name="stateNutscode" type="string" column="BUNDESLAND_NUTSCODE" length="3" nullable="true"/>
+        <field name="regionName" type="string" column="REGIERUNGSBEZIRK_NAME" length="50" nullable="true"/>
+        <field name="regionNutscode" type="string" column="REGIERUNGSBEZIRK_NUTSCODE" length="5" nullable="true"/>
+        <field name="districtName" type="string" column="KREIS_NAME" length="50" nullable="true"/>
+        <field name="districtType" type="string" column="KREIS_TYP" length="40" nullable="true"/>
+        <field name="districtNutscode" type="string" column="KREIS_NUTSCODE" length="5" nullable="true"/>
+        <field name="communityName" type="string" column="GEMEINDE_NAME" length="50" nullable="true"/>
+        <field name="communityType" type="string" column="GEMEINDE_TYP" length="40" nullable="true"/>
+        <field name="communityKey" type="string" column="GEMEINDE_AGS" length="8" nullable="true"/>
+        <field name="regionKey" type="string" column="GEMEINDE_RS" length="20" nullable="false"/>
+        <field name="communityLatitude" type="decimal" column="GEMEINDE_LAT" precision="8" scale="5" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="communityLongitude" type="decimal" column="GEMEINDE_LON" precision="8" scale="5" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="cityId" type="integer" column="ORT_ID" length="8" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="cityName" type="string" column="ORT_NAME" length="80" nullable="true"/>
+        <field name="cityLatitude" type="decimal" column="ORT_LAT" precision="8" scale="5" nullable="true"/>
+        <field name="cityLongitude" type="decimal" column="ORT_LON" precision="8" scale="5" nullable="true"/>
+        <field name="postcode" type="string" column="POSTLEITZAHL" length="5">
+            <options>
+                <option name="fixed">true</option>
+            </options>
+        </field>
+    </entity>
+</doctrine-mapping>
