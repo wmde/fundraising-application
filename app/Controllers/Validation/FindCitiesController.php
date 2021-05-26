@@ -12,16 +12,9 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 class FindCitiesController {
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
-		return new JsonResponse( [
-			'Takeshi\'s Castle',
-			'Mushroom Kingdom City',
-			'Alabastia',
-			'FÜN-Stadt',
-			'Ba Sing Se',
-			'Satan City',
-			'Gotham City',
-			'Kleinstes-Kaff-der-Welt',
-			'Entenhausen',
-		] );
+		$cities = $ffFactory->newFindCitiesUseCase()
+			->getCitiesForPostcode( $request->get( 'postcode', '' ) );
+
+		return new JsonResponse( $cities );
 	}
 }
