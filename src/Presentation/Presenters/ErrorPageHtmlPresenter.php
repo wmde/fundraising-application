@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  */
 class ErrorPageHtmlPresenter {
 
-	private $template;
+	private TwigTemplate $template;
 
 	public function __construct( TwigTemplate $template ) {
 		$this->template = $template;

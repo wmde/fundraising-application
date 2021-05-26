@@ -744,15 +744,38 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new EmailAddress( $this->config['contact-info']['organization']['email'] );
 	}
 
+	/**
+	 * The ErrorPageHtmlPresenter presents specific messages for code branches that do explicit error handling
+	 *
+	 * @return ErrorPageHtmlPresenter
+	 */
 	public function newErrorPageHtmlPresenter(): ErrorPageHtmlPresenter {
 		return new ErrorPageHtmlPresenter( $this->getLayoutTemplate( 'Error_Page.html.twig' ) );
 	}
 
+	/**
+	 * The ExceptionHtmlPresenterInterface shows error pages when code threw an exception.
+	 *
+	 * It has different implementations for production and development. In development, it shows detailed information
+	 * about the error. The production implementation shows a generic error message.
+	 *
+	 * @return ExceptionHtmlPresenterInterface
+	 */
 	public function getInternalErrorHtmlPresenter(): ExceptionHtmlPresenterInterface {
 		$presenter = $this->createSharedObject( ExceptionHtmlPresenterInterface::class, function (): ExceptionHtmlPresenterInterface {
 			return new InternalErrorHtmlPresenter();
 		} );
-		$presenter->setTemplate( $this->getLayoutTemplate( 'Error_Page.html.twig' ) );
+		// Don't use $this->getLayoutTemplate or $this->getDefaultTwigVariables() because those methods need
+		// initialized buckets, which are not ready if the exception occurred early in the request cycle.
+		$presenter->setTemplate( new TwigTemplate(
+			$this->getSkinTwig(),
+			'Error_Page.html.twig',
+			[
+				'piwik' => $this->config['piwik'],
+				'locale' => $this->config['locale'],
+				'site_metadata' => $this->getSiteMetaData(),
+			]
+		) );
 		return $presenter;
 	}
 
