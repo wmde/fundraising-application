@@ -882,7 +882,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newDonationAuthorizer( $updateToken, $accessToken ),
 			$this->newUpdateDonorValidator(),
 			$this->getDonationRepository(),
-			$this->newDonationConfirmationMailer()
+			$this->newDonationConfirmationMailer(),
+			$this->getDonationEventEmitter()
 		);
 	}
 

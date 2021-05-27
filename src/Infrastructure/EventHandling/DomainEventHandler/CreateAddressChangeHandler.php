@@ -8,7 +8,10 @@ use Doctrine\ORM\EntityManager;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
+use WMDE\Fundraising\DonationContext\Domain\Event\DonorUpdatedEvent;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor\Address\NoAddress;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\AnonymousDonor;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\MembershipContext\Domain\Event\MembershipCreatedEvent;
 
@@ -19,7 +22,8 @@ class CreateAddressChangeHandler {
 	public function __construct( EntityManager $entityManager, EventDispatcher $dispatcher ) {
 		$this->entityManager = $entityManager;
 		$dispatcher->addEventListener( DonationCreatedEvent::class, [ $this, 'onDonationCreated' ] )
-			->addEventListener( MembershipCreatedEvent::class, [ $this, 'onMembershipCreated' ] );
+			->addEventListener( MembershipCreatedEvent::class, [ $this, 'onMembershipCreated' ] )
+			->addEventListener( DonorUpdatedEvent::class, [ $this, 'onDonorUpdated' ] );
 	}
 
 	public function onDonationCreated( DonationCreatedEvent $event ): void {
@@ -53,6 +57,29 @@ class CreateAddressChangeHandler {
 			$addressChangeBuilder->forCompany();
 		}
 		$this->persistIfNeeded( $addressChangeBuilder->build() );
+	}
+
+	public function onDonorUpdated( DonorUpdatedEvent $event ): void {
+		if ( !$this->donorHasNoAddress( $event->getPreviousDonor() ) || $this->donorHasNoAddress( $event->getNewDonor() ) ) {
+			return;
+		}
+
+		$addressChangeBuilder = AddressChangeBuilder::create();
+		$addressChangeBuilder->forDonation( $event->getDonationId() );
+
+		if ( $event->getNewDonor()->isPrivatePerson() ) {
+			$addressChangeBuilder->forPerson();
+		} elseif ( $event->getNewDonor()->isCompany() ) {
+			$addressChangeBuilder->forCompany();
+		}
+		$this->persistIfNeeded( $addressChangeBuilder->build() );
+	}
+
+	private function donorHasNoAddress( Donor $donor ): bool {
+		return in_array( get_class( $donor ), [
+			Donor\EmailDonor::class,
+			Donor\AnonymousDonor::class
+		] );
 	}
 
 	private function persistIfNeeded( AddressChange $addressChange ) {
