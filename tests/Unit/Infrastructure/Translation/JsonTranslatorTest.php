@@ -15,7 +15,7 @@ class JsonTranslatorTest extends TestCase {
 
 	public function testGivenATranslationKey_translatorLooksUpTranslation(): void {
 		$translator = new JsonTranslator( $this->newTranslationSource() );
-		$translator->addFile( 'messages.json' );
+		$translator->addFile( 'testytest_messages.json' );
 
 		$translatedText = $translator->trans( 'donate_now' );
 
@@ -24,7 +24,7 @@ class JsonTranslatorTest extends TestCase {
 
 	public function testGivenATranslationKeyWithParams_translatorReplacesPlaceholders(): void {
 		$translator = new JsonTranslator( $this->newTranslationSource() );
-		$translator->addFile( 'messages.json' );
+		$translator->addFile( 'testytest_messages.json' );
 
 		$translatedText = $translator->trans( 'you_will_pay', [
 			'%amount%' => '5 %currency%',
@@ -37,7 +37,7 @@ class JsonTranslatorTest extends TestCase {
 
 	public function testGivenAnUnkownTranslationKey_translatorThrowsAnException(): void {
 		$translator = new JsonTranslator( $this->newTranslationSource() );
-		$translator->addFile( 'messages.json' );
+		$translator->addFile( 'testytest_messages.json' );
 
 		$this->expectException( \InvalidArgumentException::class );
 
@@ -49,7 +49,7 @@ class JsonTranslatorTest extends TestCase {
 	private function newTranslationSource(): InMemoryFileFetcher {
 		$source = new InMemoryFileFetcher(
 			[
-				'messages.json' => json_encode(
+				'testytest_messages.json' => json_encode(
 					[
 						'donate_now' => 'Jetzt spenden',
 						'you_will_pay' => 'Sie spenden %amount% %interval%'

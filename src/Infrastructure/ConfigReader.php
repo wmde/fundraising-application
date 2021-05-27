@@ -80,9 +80,6 @@ class ConfigReader {
 		if ( empty( $config['twig']['loaders']['array'] ) ) {
 			$config['twig']['loaders']['array'] = new stdClass();
 		}
-		if ( empty( $config['translation']['files'] ) ) {
-			$config['translation']['files'] = new stdClass();
-		}
 		return json_decode( json_encode( $config ), false );
 	}
 

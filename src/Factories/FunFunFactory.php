@@ -1754,15 +1754,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		throw new \InvalidArgumentException( 'Unsupported skin for use of funds:' . $this->config['skin'] );
 	}
 
-	/**
-	 * TranslationCollector is currently only used by the Laika Vue-based frontend
-	 * In the future, the desired solution would be to use laika_messages.json exclusively
-	 * for front-end related strings and any backend strings would be separated into individual files
-	 * to avoid unnecessary strings being loaded on the client side
-	 * @see https://phabricator.wikimedia.org/T225105
-	 *
-	 * @return TranslationsCollector
-	 */
 	public function getTranslationCollector(): TranslationsCollector {
 		return $this->createSharedObject( TranslationsCollector::class, function (): TranslationsCollector {
 			$translationsCollector = new TranslationsCollector( new SimpleFileFetcher() );
@@ -1874,9 +1865,8 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function getMailTranslator(): TranslatorInterface {
 		return $this->createSharedObject( TranslatorInterface::class . '::MailTranslator', function (): TranslatorInterface {
 			$translator = new JsonTranslator( new SimpleFileFetcher() );
-			// TODO use mail.json (only with used keys) instead of messages.json when the translation handling has been deployed to prod
 			return $translator
-				->addFile( $this->getI18nDirectory() . '/messages/messages.json' )
+				->addFile( $this->getI18nDirectory() . '/messages/mail.json' )
 				->addFile( $this->getI18nDirectory() . '/messages/paymentTypes.json' )
 				->addFile( $this->getI18nDirectory() . '/messages/membershipTypes.json' );
 		} );

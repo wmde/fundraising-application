@@ -96,19 +96,6 @@
 		"siteId": 5,
 		"siteUrlBase": ""
 	},
-	"translation": {
-		"message-dir": "/messages",
-		"files": {
-			"messages": "messages.json",
-			"paymentTypes": "paymentTypes.json",
-			"paymentIntervals": "paymentIntervals.json",
-			"paymentStatus": "paymentStatus.json",
-			"validations": "validations.json",
-			"pageTitles": "pageTitles.json",
-			"membershipTypes": "membershipTypes.json",
-			"daysOfTheWeek": "daysOfTheWeek.json"
-		}
-	},
 	"payment-types": {
 		"BEZ": {
 			"donation-enabled": true,
