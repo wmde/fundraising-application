@@ -20,12 +20,13 @@ class DoctrineLocationRepository implements LocationRepository {
 		$queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
 		$metaData = $this->entityManager->getClassMetadata( Location::class );
 
-		$cityField = $metaData->getColumnName( 'cityName' );
+		$communityField = $metaData->getColumnName( 'communityName' );
 		$postcodeField = $metaData->getColumnName( 'postcode' );
 
-		$query = $queryBuilder->select( "DISTINCT $cityField" )
+		$query = $queryBuilder->select( "DISTINCT $communityField" )
 			->from( $metaData->getTableName() )
 			->where( $queryBuilder->expr()->eq( $postcodeField, $postcode ) )
+			->orderBy( $communityField )
 			->execute();
 
 		return $query->fetchFirstColumn();

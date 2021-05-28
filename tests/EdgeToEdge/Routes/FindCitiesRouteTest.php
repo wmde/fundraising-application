@@ -19,10 +19,14 @@ class FindCitiesRouteTest extends WebRouteTestCase {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( false );
 
-			$this->insertLocationForPostcodeAndCity( $factory, '12345', 'Wexford' );
-			$this->insertLocationForPostcodeAndCity( $factory, '12345', 'Waterford' );
-			$this->insertLocationForPostcodeAndCity( $factory, '34567', 'Kildare' );
-			$this->insertLocationForPostcodeAndCity( $factory, '12345', 'Wicklow' );
+			$entityManager = $factory->getEntityManager();
+
+			$entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wexford' ) );
+			$entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Waterford' ) );
+			$entityManager->persist( ValidLocation::validLocationForCommunity( '34567', 'Kildare' ) );
+			$entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wicklow' ) );
+
+			$entityManager->flush();
 
 			$client->request(
 				'POST',
@@ -32,15 +36,7 @@ class FindCitiesRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 
-			$this->assertJsonSuccessResponse( [ 'Wexford', 'Waterford', 'Wicklow' ], $response );
+			$this->assertJsonSuccessResponse( [ 'Waterford', 'Wexford', 'Wicklow' ], $response );
 		} );
-	}
-
-	private function insertLocationForPostcodeAndCity( FunFunFactory $factory, string $postcode, string $city ): void {
-		$location = ValidLocation::validLocationForPostcodeAndCity( $postcode, $city );
-		$entityManager = $factory->getEntityManager();
-
-		$entityManager->persist( $location );
-		$entityManager->flush();
 	}
 }

@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Autocomplete\Domain\Model\Location;
 
 class ValidLocation {
 
-	public static function validLocationForPostcodeAndCity( string $postcode, string $city ): Location {
+	public static function validLocationForCommunity( string $postcode, string $community ): Location {
 		return new Location(
 			'Baden-Württemberg',
 			'DE1',
@@ -17,14 +17,14 @@ class ValidLocation {
 			'Aach',
 			'Landkreis',
 			'DE138',
-			'Aach',
+			$community,
 			'Stadt',
 			'08335001',
 			'083355001001',
 			47.84279,
 			8.85104,
 			'1',
-			$city,
+			'Aach',
 			47.84277,
 			8.85111,
 			$postcode

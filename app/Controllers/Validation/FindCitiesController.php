@@ -15,6 +15,6 @@ class FindCitiesController {
 		$cities = $ffFactory->newFindCitiesUseCase()
 			->getCitiesForPostcode( $request->get( 'postcode', '' ) );
 
-		return new JsonResponse( $cities );
+		return new JsonResponse( array_map( "utf8_encode", $cities ) );
 	}
 }

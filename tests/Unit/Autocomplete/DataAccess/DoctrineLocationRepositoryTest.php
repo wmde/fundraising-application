@@ -31,22 +31,17 @@ class DoctrineLocationRepositoryTest extends KernelTestCase {
 	}
 
 	public function testGivenPostcode_returnsDistinctCities(): void {
-		$this->insertLocationForPostcodeAndCity( '12345', 'Wexford' );
-		$this->insertLocationForPostcodeAndCity( '12345', 'Wexford' );
-		$this->insertLocationForPostcodeAndCity( '12345', 'Waterford' );
-		$this->insertLocationForPostcodeAndCity( '34567', 'Kildare' );
-		$this->insertLocationForPostcodeAndCity( '12345', 'Wicklow' );
+		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wexford' ) );
+		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wexford' ) );
+		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Waterford' ) );
+		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '34567', 'Kildare' ) );
+		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wicklow' ) );
+		$this->entityManager->flush();
 
 		$locationRepository = new DoctrineLocationRepository( $this->entityManager );
 
 		$cities = $locationRepository->getCitiesForPostcode( '12345' );
 
-		$this->assertSame( [ 'Wexford', 'Waterford', 'Wicklow' ], $cities );
-	}
-
-	private function insertLocationForPostcodeAndCity( string $postcode, string $city ): void {
-		$location = ValidLocation::validLocationForPostcodeAndCity( $postcode, $city );
-		$this->entityManager->persist( $location );
-		$this->entityManager->flush();
+		$this->assertSame( [ 'Waterford', 'Wexford', 'Wicklow' ], $cities );
 	}
 }
