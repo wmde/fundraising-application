@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
+use WMDE\Fundraising\DonationContext\Domain\Event\DonorUpdatedEvent;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor\AnonymousDonor;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\CreateAddressChangeHandler;
@@ -38,7 +39,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 		new CreateAddressChangeHandler( $entityManager, $dispatcher );
 
 		$this->assertEquals(
-			[ DonationCreatedEvent::class, MembershipCreatedEvent::class ],
+			[ DonationCreatedEvent::class, MembershipCreatedEvent::class, DonorUpdatedEvent::class ],
 			$dispatcher->getObservedEventClassNames()
 		);
 	}
@@ -142,6 +143,75 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
 		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, ValidDonation::newDonor() ) );
+	}
+
+	public function testUpdateDonor_createsAddressChange() {
+		$dispatcher = $this->createMock( EventDispatcher::class );
+		$entityManager = $this->newMockEntityManager();
+
+		$entityManager->expects( $this->once() )
+			->method( 'persist' )
+			->with( $this->callback( function ( AddressChange $addressChange ) {
+				return $addressChange->getExternalId() === self::DONATION_ID &&
+					$addressChange->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION &&
+					$addressChange->isPersonalAddress();
+			} ) );
+
+		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
+		$handler->onDonorUpdated( new DonorUpdatedEvent(
+			self::DONATION_ID,
+			new AnonymousDonor(),
+			ValidDonation::newDonor()
+		) );
+	}
+
+	public function testUpdateDonor_andAddressChangeAlreadyExists_noAddressChangeIsCreated() {
+		$dispatcher = $this->createMock( EventDispatcher::class );
+		$addressChangeRepo = $this->createMock( EntityRepository::class );
+		$addressChangeRepo->expects( $this->once() )
+			->method( 'count' )
+			->with( $this->equalTo( [ 'externalId' => self::DONATION_ID, 'externalIdType' => AddressChange::EXTERNAL_ID_TYPE_DONATION ] ) )
+			->willReturn( 1 );
+		$entityManager = $this->createMock( EntityManager::class );
+		$entityManager->method( 'getRepository' )->willReturn( $addressChangeRepo );
+
+		$entityManager->expects( $this->never() )
+			->method( 'persist' );
+
+		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
+		$handler->onDonorUpdated( new DonorUpdatedEvent(
+			self::DONATION_ID,
+			new AnonymousDonor(),
+			ValidDonation::newDonor()
+		) );
+	}
+
+	public function testUpdateDonor_andPreviousHasAddress_doesNothing() {
+		$dispatcher = $this->createMock( EventDispatcher::class );
+		$entityManager = new EntityManagerSpy();
+
+		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
+		$handler->onDonorUpdated( new DonorUpdatedEvent(
+			self::DONATION_ID,
+			ValidDonation::newDonor(),
+			ValidDonation::newDonor(),
+		) );
+
+		$this->assertNull( $entityManager->getEntity() );
+	}
+
+	public function testUpdateDonor_andNewDoesNotHaveAddress_doesNothing() {
+		$dispatcher = $this->createMock( EventDispatcher::class );
+		$entityManager = new EntityManagerSpy();
+
+		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
+		$handler->onDonorUpdated( new DonorUpdatedEvent(
+			self::DONATION_ID,
+			new AnonymousDonor(),
+			new AnonymousDonor()
+		) );
+
+		$this->assertNull( $entityManager->getEntity() );
 	}
 
 	/**
