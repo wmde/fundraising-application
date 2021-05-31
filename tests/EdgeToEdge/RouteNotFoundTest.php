@@ -29,7 +29,7 @@ class RouteNotFoundTest extends WebRouteTestCase {
 		$client = $this->createClient();
 		$client->request( 'GET', '/kittens', [], [], [ 'HTTP_ACCEPT' => 'application/json' ] );
 
-		$this->assertJsonResponse( [ 'ERR' => 'No route found for "GET /kittens"' ], $client->getResponse() );
+		$this->assertJsonResponse( [ 'ERR' => 'No route found for "GET http://localhost/kittens"' ], $client->getResponse() );
 	}
 
 }
