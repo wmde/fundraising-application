@@ -80,18 +80,6 @@
     "cancel-url": "http://localhost:8082/",
     "notification-url": "https://test-spenden-2.wikimedia.de/sofort-payment-notification"
   },
-  "translation": {
-    "message-dir": "/messages",
-    "files": {
-      "membershipTypes": "membershipTypes.json",
-      "messages": "messages.json",
-      "pageTitles": "pageTitles.json",
-      "paymentStatus": "paymentStatus.json",
-      "paymentTypes": "paymentTypes.json",
-      "validations": "validations.json",
-      "daysOfTheWeek": "daysOfTheWeek.json"
-    }
-  },
   "payment-types": {
     "BEZ": {
       "donation-enabled": true,

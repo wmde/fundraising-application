@@ -661,28 +661,6 @@
         "siteUrlBase"
       ]
     },
-    "translation": {
-      "type": "object",
-      "Title": "Location of translations files",
-      "properties": {
-        "message-dir": {
-          "type": "string",
-          "title": "Folder where the translation files are stored",
-          "description": "Is relative to i18n-base-path",
-          "minLength": 1
-        },
-        "files": {
-          "type": "object",
-          "title": "Domain-Filename map of translation files",
-          "minProperties": 1
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "message-dir",
-        "files"
-      ]
-    },
     "payment-types": {
       "type": "object",
       "title": "Known payment types and their configuration",
@@ -847,7 +825,6 @@
     "sofort",
     "campaigns",
     "piwik",
-    "translation",
     "payment-types",
     "cookie",
     "preset-amounts",

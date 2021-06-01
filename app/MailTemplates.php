@@ -62,6 +62,7 @@ class MailTemplates {
 						'id' => 42,
 						'amount' => 12.34,
 						'needsModeration' => false,
+						'receiptOptIn' => false,
 					],
 					'recipient' => [
 						'lastName' => '姜',
@@ -155,6 +156,7 @@ class MailTemplates {
 					'salutation' => 'Herr',
 					'title' => 'Dr.',
 					'membershipFee' => 15.23,
+					'incentives' => [ 'totebag' ],
 				],
 				'variants' => [
 					'direct_debit_active_yearly' => [
