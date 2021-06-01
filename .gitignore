@@ -29,3 +29,7 @@ web/skins
 deployment/deployment.retry
 
 tmp/
+
+/build/database/*
+!/build/database/01.Database_Schema.sql
+!/build/database/02.Default_Data.sql
