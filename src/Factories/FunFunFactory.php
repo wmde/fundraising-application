@@ -94,6 +94,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitte
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingTemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailSubjectRendererInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailTemplateFilenameTraversable;
@@ -577,6 +578,13 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	private function newErrorHandlingTemplateMailer( Messenger $messenger, TwigTemplate $template, MailSubjectRendererInterface $subjectRenderer ): ErrorHandlingTemplateBasedMailer {
+		return new ErrorHandlingTemplateBasedMailer(
+			$this->newTemplateMailer( $messenger, $template, $subjectRenderer ),
+			$this->getLogger()
+		);
+	}
+
 	private function newTemplateMailer( Messenger $messenger, TwigTemplate $template, MailSubjectRendererInterface $subjectRenderer ): TemplateBasedMailer {
 		return new TemplateBasedMailer(
 			$messenger,
@@ -893,7 +901,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newDonationConfirmationMailer(): DonationConfirmationMailer {
 		return new DonationConfirmationMailer(
-			$this->newTemplateMailer(
+			$this->newErrorHandlingTemplateMailer(
 				$this->getSuborganizationMessenger(),
 				new TwigTemplate(
 					$this->getMailerTwig(),
@@ -1072,7 +1080,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	private function newApplyForMembershipMailer(): MembershipTemplateMailerInterface {
-		return $this->newTemplateMailer(
+		return $this->newErrorHandlingTemplateMailer(
 			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
