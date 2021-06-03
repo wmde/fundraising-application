@@ -25,7 +25,7 @@ down-app:
 
 # Installation
 
-setup: create-env download-assets install-php default-config setup-db
+setup: create-env download-assets install-php default-config setup-doctrine
 
 create-env:
 	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
@@ -36,7 +36,10 @@ install-php:
 update-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update $(COMPOSER_FLAGS)
 
-setup-db:
+generate-database-schema:
+	docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create --dump-sql | sed 's/The following SQL statements will be executed://; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/' > ./build/database/01.Database_Schema.sql
+
+setup-doctrine:
 	docker-compose run --rm start_dependencies
 	docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
 
@@ -102,4 +105,4 @@ stan:
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
 
-.PHONY: up-app down-app up-debug setup create-env download-assets install-php update-php setup-db drop-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization lint-container phpmd
+.PHONY: up-app down-app up-debug setup create-env download-assets install-php update-php generate-database-schema setup-doctrine drop-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization lint-container phpmd
