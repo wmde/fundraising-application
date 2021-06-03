@@ -9,6 +9,7 @@ MIGRATION_VERSION :=
 MIGRATION_CONTEXT :=
 APP_ENV       := dev
 ASSET_BRANCH  := main
+DOCTRINE_SCHEMA_COMMAND := docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create --dump-sql | sed 's/The following SQL statements will be executed://; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/'
 
 DOCKER_IMAGE  := registry.gitlab.com/fun-tech/fundraising-frontend-docker
 
@@ -37,7 +38,10 @@ update-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update $(COMPOSER_FLAGS)
 
 generate-database-schema:
-	docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create --dump-sql | sed 's/The following SQL statements will be executed://; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/' > ./build/database/01.Database_Schema.sql
+	$(DOCTRINE_SCHEMA_COMMAND) > ./build/database/01.Database_Schema.sql
+
+validate-sql:
+	$(DOCTRINE_SCHEMA_COMMAND) | diff - ./build/database/01.Database_Schema.sql 1>&2
 
 setup-doctrine:
 	docker-compose run --rm start_dependencies
@@ -105,4 +109,4 @@ stan:
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
 
-.PHONY: up-app down-app up-debug setup create-env download-assets install-php update-php generate-database-schema setup-doctrine drop-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization lint-container phpmd
+.PHONY: up-app down-app up-debug setup create-env download-assets install-php update-php generate-database-schema validate-sql setup-doctrine drop-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization lint-container phpmd
