@@ -62,9 +62,9 @@ clean: clear
 
 # Continuous Integration
 
-ci: phpunit cs validate-app-config validate-campaign-config stan
+ci: phpunit cs validate-app-config validate-campaign-config stan lint-container
 
-ci-with-coverage: phpunit-with-coverage cs validate-app-config validate-campaign-config stan
+ci-with-coverage: phpunit-with-coverage cs validate-app-config validate-campaign-config stan lint-container
 
 phpunit-system:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpunit tests/System/
@@ -104,4 +104,4 @@ stan:
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
 
-.PHONY: up-app down-app up-debug setup create-env download-assets install-php update-php setup-db drop-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization phpmd
+.PHONY: up-app down-app up-debug setup create-env download-assets install-php update-php setup-db drop-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization lint-container phpmd
