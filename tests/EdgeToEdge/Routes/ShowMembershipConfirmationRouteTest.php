@@ -94,7 +94,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testOnDatabaseError_errorPageIsShown(): void {
 		$membershipApplication = ValidMembershipApplication::newDomainEntity();
-		$this->modifyEnvironment( function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
+		$this->modifyEnvironment( static function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
 			$factory->setMembershipApplicationAuthorizer( new SucceedingAuthorizer() );
 
 			$applicationRepository = new FakeApplicationRepository( $membershipApplication );

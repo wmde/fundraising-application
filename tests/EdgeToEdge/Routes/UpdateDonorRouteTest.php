@@ -122,7 +122,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 			function ( Client $client, FunFunFactory $factory ): void {
 				$donation = ValidDoctrineDonation::newExportedirectDebitDoctrineDonation();
 				$donation->modifyDataObject(
-					function ( DonationData $data ) {
+					static function ( DonationData $data ) {
 						$data->setAccessToken( self::CORRECT_UPDATE_TOKEN );
 						$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
 					}
@@ -175,7 +175,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 			function ( Client $client, FunFunFactory $factory ): void {
 				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
 				$donation->modifyDataObject(
-					function ( DonationData $data ) {
+					static function ( DonationData $data ) {
 						$data->setAccessToken( self::CORRECT_UPDATE_TOKEN );
 						$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
 					}

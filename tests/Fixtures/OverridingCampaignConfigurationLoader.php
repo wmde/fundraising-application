@@ -22,7 +22,7 @@ class OverridingCampaignConfigurationLoader implements CampaignConfigurationLoad
 	) {
 		$this->additionalCampaignConfiguration = $additionalCampaignConfiguration;
 		$this->originalLoader = $originalLoader;
-		$this->modifyConfiguration = $modifyConfiguration ?: function ( $config ): array {
+		$this->modifyConfiguration = $modifyConfiguration ?: static function ( $config ): array {
 			return $config;
 		};
 	}

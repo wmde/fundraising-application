@@ -68,7 +68,7 @@ class StoreBucketSelection implements EventSubscriberInterface {
 
 	private function getParameterArrayFromSelectedBuckets(): array {
 		return array_map(
-			function ( Bucket $bucket ) {
+			static function ( Bucket $bucket ) {
 				return $bucket->getParameters();
 			},
 			$this->factory->getSelectedBuckets()

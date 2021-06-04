@@ -14,7 +14,7 @@ class BucketRenderer {
 
 	public static function renderBuckets( Bucket ...$buckets ): array {
 		return array_map(
-			function ( Bucket $b ) {
+			static function ( Bucket $b ) {
 				return $b->getId();
 			},
 			$buckets

@@ -29,7 +29,7 @@ class CommentListRssPresenter {
 
 	private function getCommentsViewModel( CommentList $commentList ): array {
 		return array_map(
-			function ( CommentWithAmount $comment ) {
+			static function ( CommentWithAmount $comment ) {
 				return [
 					'amount' => $comment->getDonationAmount(),
 					'author' => $comment->getAuthorName(),

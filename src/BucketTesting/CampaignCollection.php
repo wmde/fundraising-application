@@ -23,7 +23,7 @@ class CampaignCollection implements IteratorAggregate {
 	 */
 	public function getMostDistantCampaign(): ?Campaign {
 		$now = new \DateTime();
-		return array_reduce( $this->campaigns, function ( ?Campaign $mostDistant, Campaign $current ) use ( $now ) {
+		return array_reduce( $this->campaigns, static function ( ?Campaign $mostDistant, Campaign $current ) use ( $now ) {
 			if ( !$current->isActive() || $current->getEndTimestamp() < $now ) {
 				return $mostDistant;
 			}

@@ -36,7 +36,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 	public function testValidSubscriptionRequestGetsPersisted(): void {
 		$subscriptionRepository = new SubscriptionRepositorySpy();
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->modifyEnvironment( function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
+		$this->modifyEnvironment( static function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
 			$factory->setSubscriptionRepository( $subscriptionRepository );
 		} );
 		$client = $this->createClient();

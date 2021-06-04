@@ -60,7 +60,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 		$entityManager->expects( $this->once() )
 			->method( 'persist' )
-			->with( $this->callback( function ( AddressChange $addressChange ) {
+			->with( $this->callback( static function ( AddressChange $addressChange ) {
 			return $addressChange->getExternalId() === self::DONATION_ID &&
 				$addressChange->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION &&
 				$addressChange->isPersonalAddress();
@@ -76,7 +76,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 		$entityManager->expects( $this->once() )
 			->method( 'persist' )
-			->with( $this->callback( function ( AddressChange $addressChange ) {
+			->with( $this->callback( static function ( AddressChange $addressChange ) {
 				return $addressChange->getExternalId() === self::DONATION_ID &&
 					$addressChange->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION &&
 					$addressChange->isCompanyAddress();
@@ -92,7 +92,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 		$entityManager->expects( $this->once() )
 			->method( 'persist' )
-			->with( $this->callback( function ( AddressChange $addressChange ) {
+			->with( $this->callback( static function ( AddressChange $addressChange ) {
 				return $addressChange->getExternalId() === self::MEMBERSHIP_ID &&
 					$addressChange->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_MEMBERSHIP &&
 					$addressChange->isPersonalAddress();
@@ -113,7 +113,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 		$entityManager->expects( $this->once() )
 			->method( 'persist' )
-			->with( $this->callback( function ( AddressChange $addressChange ) {
+			->with( $this->callback( static function ( AddressChange $addressChange ) {
 				return $addressChange->getExternalId() === self::MEMBERSHIP_ID &&
 					$addressChange->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_MEMBERSHIP &&
 					$addressChange->isCompanyAddress();
@@ -151,7 +151,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 		$entityManager->expects( $this->once() )
 			->method( 'persist' )
-			->with( $this->callback( function ( AddressChange $addressChange ) {
+			->with( $this->callback( static function ( AddressChange $addressChange ) {
 				return $addressChange->getExternalId() === self::DONATION_ID &&
 					$addressChange->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION &&
 					$addressChange->isPersonalAddress();

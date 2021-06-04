@@ -69,7 +69,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithDonationIdAndCorrespondingAccessCode_successResponseWithInitialFormValuesIsReturned(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
+		$this->modifyEnvironment( static function ( FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( '4711abc' ) );
 			$factory->getDonationRepository()
 				->storeDonation( ValidDonation::newDirectDebitDonation() );

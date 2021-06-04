@@ -142,7 +142,7 @@ class DonationFormViolationPresenter {
 		];
 		return array_reduce(
 			$violations,
-			function ( $validationResult, ConstraintViolation $violation ) use ( $fieldGroups ) {
+			static function ( $validationResult, ConstraintViolation $violation ) use ( $fieldGroups ) {
 				$validationResult[$fieldGroups[$violation->getSource()]] = false;
 				return $validationResult;
 			},

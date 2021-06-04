@@ -64,7 +64,7 @@ class SubmissionRateLimitTest extends TestCase {
 			->method( 'set' )
 			->with(
 				$this->equalTo( 'donation_timestamp' ),
-				$this->callback( function ( \DateTimeImmutable $date ) {
+				$this->callback( static function ( \DateTimeImmutable $date ) {
 					$now = time();
 					// use delta of 5 seconds to make this immune against slow tests
 					return $now - $date->getTimestamp() < 5 && $now - $date->getTimestamp() >= 0;

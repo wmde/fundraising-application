@@ -52,7 +52,7 @@ class CreditCardNotificationPresenter {
 		return implode(
 			'',
 			array_map(
-				function ( $key, $value ): string {
+				static function ( $key, $value ): string {
 					return $key . self::VALUE_ASSIGNMENT . $value . self::ARG_SEPARATOR;
 				},
 				array_keys( $result ),
