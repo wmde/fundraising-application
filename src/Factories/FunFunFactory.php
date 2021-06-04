@@ -367,7 +367,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	private function getDomainNameValidator(): DomainNameValidator {
-		return $this->createSharedObject( DomainNameValidator::class, function () {
+		return $this->createSharedObject( DomainNameValidator::class, static function () {
 			return new InternetDomainNameValidator();
 		} );
 	}
@@ -507,19 +507,19 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function getLogger(): LoggerInterface {
-		return $this->createSharedObject( LoggerInterface::class . '::Application', function () {
+		return $this->createSharedObject( LoggerInterface::class . '::Application', static function () {
 			return new NullLogger();
 		} );
 	}
 
 	public function getPaypalLogger(): LoggerInterface {
-		return $this->createSharedObject( LoggerInterface::class . '::Paypal', function () {
+		return $this->createSharedObject( LoggerInterface::class . '::Paypal', static function () {
 			return new NullLogger();
 		} );
 	}
 
 	public function getSofortLogger(): LoggerInterface {
-		return $this->createSharedObject( LoggerInterface::class . '::Sofort', function () {
+		return $this->createSharedObject( LoggerInterface::class . '::Sofort', static function () {
 			return new NullLogger();
 		} );
 	}
@@ -762,7 +762,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	 * @return ExceptionHtmlPresenterInterface
 	 */
 	public function getInternalErrorHtmlPresenter(): ExceptionHtmlPresenterInterface {
-		$presenter = $this->createSharedObject( ExceptionHtmlPresenterInterface::class, function (): ExceptionHtmlPresenterInterface {
+		$presenter = $this->createSharedObject( ExceptionHtmlPresenterInterface::class, static function (): ExceptionHtmlPresenterInterface {
 			return new InternalErrorHtmlPresenter();
 		} );
 		// Don't use $this->getLayoutTemplate or $this->getDefaultTwigVariables() because those methods need
@@ -1434,21 +1434,21 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getPageCache(): Cache {
 		// TODO check config for cache options
-		return $this->createSharedObject( Cache::class . '::Page', function () {
+		return $this->createSharedObject( Cache::class . '::Page', static function () {
 			return new VoidCache();
 		} );
 	}
 
 	private function getRenderedPageCache(): Cache {
 		// TODO check config for cache options
-		return $this->createSharedObject( Cache::class . '::RenderedPage', function () {
+		return $this->createSharedObject( Cache::class . '::RenderedPage', static function () {
 			return new VoidCache();
 		} );
 	}
 
 	private function getCampaignCache(): CacheProvider {
 		// TODO check config for cache options
-		return $this->createSharedObject( Cache::class . '::Campaign', function () {
+		return $this->createSharedObject( Cache::class . '::Campaign', static function () {
 			return new VoidCache();
 		} );
 	}
@@ -1624,7 +1624,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	 * @return Euro[]
 	 */
 	public function getPresetAmountsSettings( string $presetType ): array {
-		return array_map( function ( int $amount ) {
+		return array_map( static function ( int $amount ) {
 			return Euro::newFromCents( $amount );
 		}, $this->config['preset-amounts'][$presetType] );
 	}
@@ -1741,12 +1741,12 @@ class FunFunFactory implements LoggerAwareInterface {
 				'use_of_funds_content' => $this->getApplicationOfFundsContent(),
 				'use_of_funds_messages' => $this->getApplicationOfFundsMessages()
 			] );
-			return function () use ( $template )  {
+			return static function () use ( $template )  {
 				return $template->render( [] );
 			};
 		} elseif ( $this->config['skin'] === 'test' ) {
 			// we don't care what happens in test
-			return function () {
+			return static function () {
 				return 'Test rendering: Use of funds';
 			};
 		}
@@ -1890,7 +1890,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function getCreditCardLogger(): LoggerInterface {
-		return $this->createSharedObject( LoggerInterface::class . '::CreditCard', function (): LoggerInterface {
+		return $this->createSharedObject( LoggerInterface::class . '::CreditCard', static function (): LoggerInterface {
 			return new NullLogger();
 		} );
 	}

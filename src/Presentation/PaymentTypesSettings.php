@@ -53,7 +53,7 @@ class PaymentTypesSettings {
 		return array_keys(
 			array_filter(
 				$this->settings,
-				function ( $config ) use ( $settingName ) {
+				static function ( $config ) use ( $settingName ) {
 					return ( $config[$settingName] ?? false ) === true;
 				}
 			)

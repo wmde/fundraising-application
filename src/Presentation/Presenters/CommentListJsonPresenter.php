@@ -15,7 +15,7 @@ class CommentListJsonPresenter {
 	public function present( CommentList $commentList ): array {
 		// TODO Translate keys into English once old skins are phased out
 		return array_map(
-			function ( CommentWithAmount $comment ) {
+			static function ( CommentWithAmount $comment ) {
 				return [
 					'betrag' => $comment->getDonationAmount(),
 					'spender' => $comment->getAuthorName(),

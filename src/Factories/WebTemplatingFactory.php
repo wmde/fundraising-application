@@ -18,14 +18,14 @@ class WebTemplatingFactory extends TwigFactory {
 		$functions = [
 			new TwigFunction(
 				'web_content',
-				function ( string $name, array $context = [] ) use( $contentProvider ): string {
+				static function ( string $name, array $context = [] ) use( $contentProvider ): string {
 					return $contentProvider->getWeb( $name, $context );
 				},
 				[ 'is_safe' => [ 'html' ] ]
 			),
 			new TwigFunction(
 				'translations',
-				function () use ( $translations ): string {
+				static function () use ( $translations ): string {
 					return json_encode( $translations );
 				},
 				[ 'is_safe' => [ 'html' ] ]

@@ -37,7 +37,7 @@ class JsonBucketLogger implements BucketLogger {
 	private function getBucketMap( array $buckets ): array {
 		return array_reduce(
 			$buckets,
-			function ( array $bucketMap, Bucket $bucket ) {
+			static function ( array $bucketMap, Bucket $bucket ) {
 				$bucketMap[$bucket->getCampaign()->getName()] = $bucket->getName();
 				return $bucketMap;
 			},

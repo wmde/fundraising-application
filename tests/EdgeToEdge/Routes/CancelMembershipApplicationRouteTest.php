@@ -55,7 +55,7 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 	private function storeApplication( EntityManager $entityManager ): int {
 		$application = ValidMembershipApplication::newDoctrineEntity();
 
-		$application->modifyDataObject( function ( MembershipApplicationData $data ): void {
+		$application->modifyDataObject( static function ( MembershipApplicationData $data ): void {
 			$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
 		} );
 

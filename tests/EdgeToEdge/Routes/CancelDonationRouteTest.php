@@ -119,7 +119,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 		 */
 		$doctrineDonation = $entityManager->getRepository( DoctrineDonation::class )->find( $donation->getId() );
 
-		$doctrineDonation->modifyDataObject( function ( DonationData $data ): void {
+		$doctrineDonation->modifyDataObject( static function ( DonationData $data ): void {
 			$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
 			$data->setUpdateTokenExpiry( date( 'Y-m-d H:i:s', time() + 60 * 60 ) );
 		} );

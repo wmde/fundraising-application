@@ -28,7 +28,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 
 	public function testWhenUserVisitsThePage_cookieIsSet(): void {
 		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
-		$this->modifyEnvironment( function ( FunFunFactory $ffactory ) {
+		$this->modifyEnvironment( static function ( FunFunFactory $ffactory ) {
 			$ffactory->setCampaignConfigurationLoader(
 				new OverridingCampaignConfigurationLoader(
 					$ffactory->getCampaignConfigurationLoader(),
@@ -47,7 +47,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 	}
 
 	public function testWhenUserVisitsThePageWithUrlParams_cookieIsChanged(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $ffactory ) {
+		$this->modifyEnvironment( static function ( FunFunFactory $ffactory ) {
 			$ffactory->setCampaignConfigurationLoader(
 				new OverridingCampaignConfigurationLoader(
 					$ffactory->getCampaignConfigurationLoader(),
@@ -60,7 +60,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::CONSENT, 'yes' ) );
 		$client->request( 'get', '/', [ 'omg' => 1 ] );
 		$responseCookies = $client->getResponse()->headers->getCookies();
-		$bucketCookie = array_values( array_filter( $responseCookies, function ( Cookie $cookie ): bool {
+		$bucketCookie = array_values( array_filter( $responseCookies, static function ( Cookie $cookie ): bool {
 			return $cookie->getName() === CookieNames::BUCKET_TESTING;
 		} ) )[0];
 		$this->assertStringContainsString( 'omg=1', $bucketCookie->getValue() );
@@ -68,12 +68,12 @@ class CampaignCookieTest extends WebRouteTestCase {
 
 	public function testWhenCampaignsAreInactive_cookieExpiresAtEndOfSession(): void {
 		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
-		$this->modifyEnvironment( function ( FunFunFactory $ffactory ) {
+		$this->modifyEnvironment( static function ( FunFunFactory $ffactory ) {
 			$ffactory->setCampaignConfigurationLoader(
 				new OverridingCampaignConfigurationLoader(
 					$ffactory->getCampaignConfigurationLoader(),
 					[],
-					function ( $campaigns ): array {
+					static function ( $campaigns ): array {
 						foreach ( $campaigns as $name => $campaign ) {
 							$campaigns[$name]['active'] = false;
 						}
@@ -95,7 +95,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 
 	public function testWhenUserVisitsThePageWithoutConsentCookie_cookieIsNotSet(): void {
 		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
-		$this->modifyEnvironment( function ( FunFunFactory $ffactory ) {
+		$this->modifyEnvironment( static function ( FunFunFactory $ffactory ) {
 			$ffactory->setCampaignConfigurationLoader(
 				new OverridingCampaignConfigurationLoader(
 					$ffactory->getCampaignConfigurationLoader(),

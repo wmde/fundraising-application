@@ -39,7 +39,7 @@ class EnvironmentDependentConfigReaderFactory {
 
 	private static function checkIfPathsExist( string ...$paths ): void {
 		array_map(
-			function ( $path ) {
+			static function ( $path ) {
 				if ( !is_readable( $path ) ) {
 					throw new \RuntimeException( 'Configuration file "' . $path . '" not found' );
 				}

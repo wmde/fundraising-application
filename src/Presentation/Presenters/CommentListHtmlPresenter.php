@@ -23,7 +23,7 @@ class CommentListHtmlPresenter {
 	public function present( CommentList $commentList, int $pageNumber ): string {
 		return $this->template->render( [
 			'comments' => array_map(
-				function ( CommentWithAmount $comment ) {
+				static function ( CommentWithAmount $comment ) {
 					return [
 						'amount' => $comment->getDonationAmount(),
 						'author' => $comment->getAuthorName(),

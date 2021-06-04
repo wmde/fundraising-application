@@ -18,19 +18,19 @@ class MailerTemplatingFactory extends TwigFactory {
 			new TwigFilter(
 				'payment_interval',
 				/** @var int|string $interval */
-				function ( $interval ) use ( $translator ): string {
+				static function ( $interval ) use ( $translator ): string {
 					return $translator->trans( "donation_payment_interval_{$interval}" );
 				}
 			),
 			new TwigFilter(
 				'payment_method',
-				function ( string $method ) use ( $translator ): string {
+				static function ( string $method ) use ( $translator ): string {
 					return $translator->trans( $method );
 				}
 			),
 			new TwigFilter(
 				'membership_type',
-				function ( string $membershipType ) use ( $translator ): string {
+				static function ( string $membershipType ) use ( $translator ): string {
 					return $translator->trans( $membershipType );
 				}
 			),
@@ -38,14 +38,14 @@ class MailerTemplatingFactory extends TwigFactory {
 		$functions = [
 			new TwigFunction(
 				'mail_content',
-				function ( string $name, array $context = [] ) use ( $contentProvider ): string {
+				static function ( string $name, array $context = [] ) use ( $contentProvider ): string {
 					return $contentProvider->getMail( $name, $context );
 				},
 				[ 'is_safe' => [ 'all' ] ]
 			),
 			new TwigFunction(
 				'url',
-				function ( string $name, array $parameters = [] ) use ( $urlGenerator ): string {
+				static function ( string $name, array $parameters = [] ) use ( $urlGenerator ): string {
 					return $urlGenerator->generateAbsoluteUrl( $name, $parameters );
 				}
 			)
