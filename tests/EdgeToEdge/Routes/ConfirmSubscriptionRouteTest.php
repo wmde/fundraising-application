@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Domain\Model\Subscription;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Routes
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\StaticContent\PageDisplayController
  */
 class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
