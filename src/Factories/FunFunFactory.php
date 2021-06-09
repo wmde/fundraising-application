@@ -68,6 +68,7 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
+use WMDE\Fundraising\Frontend\BannerImpressionData\BannerImpressionDataContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder;
@@ -292,6 +293,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$subscriptionContextFactory = new SubscriptionContextFactory();
 			$addressChangeContextFactory = new AddressChangeContextFactory();
 			$bucketTestingContextFactory = new BucketTestingContextFactory();
+			$bannerImpressionContextFactory = new BannerImpressionDataContextFactory();
 			return new DoctrineFactory(
 				$this->getConnection(),
 				$this->getDoctrineConfiguration(),
@@ -299,7 +301,8 @@ class FunFunFactory implements LoggerAwareInterface {
 				$membershipContextFactory,
 				$subscriptionContextFactory,
 				$addressChangeContextFactory,
-				$bucketTestingContextFactory
+				$bucketTestingContextFactory,
+				$bannerImpressionContextFactory
 			);
 		} );
 	}
