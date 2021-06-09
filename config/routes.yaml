@@ -204,6 +204,12 @@ legacy_routes.php:
         route: index
         permanent: true
 
+legacy_route_posts.php:
+    path: '/spenden{wildcard}'
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\PageNotFoundController::index'
+    requirements: { wildcard: .* }
+
 purge_cache:
     path: /purge-cache
     methods: [GET]
