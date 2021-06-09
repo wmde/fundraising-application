@@ -34,6 +34,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	private const VALID_VERIFICATION_RESPONSE = 'VERIFIED';
 	private const FAILING_VERIFICATION_RESPONSE = 'FAIL';
 	private const PATH = '/handle-paypal-payment-notification';
+	private const LEGACY_PATH = '/spenden/paypal_handler.php';
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
@@ -51,6 +52,30 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_POST,
 				self::PATH,
+				$this->newHttpParamsForPayment()
+			);
+
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+			$this->assertPayPalDataGotPersisted( $factory->getDonationRepository(), $this->newHttpParamsForPayment() );
+		} );
+	}
+
+	public function testGivenValidRequestToLegacyPath_applicationIndicatesSuccess(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setDonationTokenGenerator( new FixedTokenGenerator(
+				self::UPDATE_TOKEN,
+				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
+			) );
+
+			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
+
+			$factory->setPayPalPaymentNotificationVerifier(
+				$this->newNonNetworkUsingNotificationVerifier()
+			);
+
+			$client->request(
+				Request::METHOD_POST,
+				self::LEGACY_PATH,
 				$this->newHttpParamsForPayment()
 			);
 

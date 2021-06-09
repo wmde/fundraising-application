@@ -158,6 +158,11 @@ handle_paypal_payment_notification:
     methods: [POST]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationController::index'
 
+handle_legacy_paypal_payment_notification:
+    path: /spenden/paypal_handler.php
+    methods: [ POST ]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationController::index'
+
 sofort_payment_notification:
     path: /sofort-payment-notification
     methods: [POST]
