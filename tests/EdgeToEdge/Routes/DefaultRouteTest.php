@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Routes
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController
  */
 class DefaultRouteTest extends WebTestCase {
 

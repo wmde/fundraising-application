@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Routes
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\ListCommentsController
  */
 class ListCommentsRssRouteTest extends WebRouteTestCase {
 

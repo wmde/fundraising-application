@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Routes
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\PurgeCacheController
  */
 class PurgeCacheRouteTest extends WebRouteTestCase {
 
