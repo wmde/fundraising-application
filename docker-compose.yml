@@ -43,6 +43,7 @@ services:
     expose:
       - "3306"
     volumes:
+      - ./build/database:/docker-entrypoint-initdb.d
       - db-storage:/var/lib/mysql
     networks:
       - default

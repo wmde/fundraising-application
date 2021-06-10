@@ -68,6 +68,9 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
+use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
+use WMDE\Fundraising\Frontend\Autocomplete\Domain\DataAccess\DoctrineLocationRepository;
+use WMDE\Fundraising\Frontend\Autocomplete\UseCases\FindCitiesUseCase;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder;
@@ -292,6 +295,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$subscriptionContextFactory = new SubscriptionContextFactory();
 			$addressChangeContextFactory = new AddressChangeContextFactory();
 			$bucketTestingContextFactory = new BucketTestingContextFactory();
+			$autocompleteContextFactory = new AutocompleteContextFactory();
 			return new DoctrineFactory(
 				$this->getConnection(),
 				$this->getDoctrineConfiguration(),
@@ -299,7 +303,8 @@ class FunFunFactory implements LoggerAwareInterface {
 				$membershipContextFactory,
 				$subscriptionContextFactory,
 				$addressChangeContextFactory,
-				$bucketTestingContextFactory
+				$bucketTestingContextFactory,
+				$autocompleteContextFactory
 			);
 		} );
 	}
@@ -1933,5 +1938,11 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newMembershipApplicationEventLogger(): MembershipApplicationEventLogger {
 		return new DoctrineMembershipApplicationEventLogger( $this->getEntityManager() );
+	}
+
+	public function newFindCitiesUseCase(): FindCitiesUseCase {
+		return new FindCitiesUseCase(
+			new DoctrineLocationRepository( $this->getEntityManager() )
+		);
 	}
 }
