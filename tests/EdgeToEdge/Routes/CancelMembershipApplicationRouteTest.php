@@ -12,7 +12,7 @@ use WMDE\Fundraising\MembershipContext\DataAccess\MembershipApplicationData;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Routes
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\CancelMembershipApplicationController
  */
 class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 
