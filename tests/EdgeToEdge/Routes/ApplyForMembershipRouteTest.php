@@ -21,6 +21,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineEntities\MembershipApplication;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Incentive;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalData;
@@ -224,12 +225,16 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_applicationIsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+			$incentive = new Incentive( ValidMembershipApplication::INCENTIVE_NAME );
+			$this->insertIncentives( $factory, $incentive );
 			$this->consentToCookies( $client );
 
+			$parameters = $this->newValidHttpParameters();
+			$parameters['incentives'] = [ ValidMembershipApplication::INCENTIVE_NAME ];
 			$client->request(
 				'POST',
 				'apply-for-membership',
-				$this->newValidHttpParameters()
+				$parameters
 			);
 
 			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
@@ -238,6 +243,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$expectedApplication = ValidMembershipApplication::newDomainEntity();
 			$expectedApplication->assignId( 1 );
+			$expectedApplication->addIncentive( $incentive );
 
 			$this->assertEquals( $expectedApplication, $application );
 		} );
@@ -564,6 +570,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_andCookieConsentNotGiven_bucketsAreNotLogged(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 				$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+				$this->insertIncentives( $factory );
 				$bucketLogger = new BucketLoggerSpy();
 				$factory->setBucketLogger( $bucketLogger );
 
@@ -618,5 +625,13 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	 */
 	private function consentToCookies( Client $client ): void {
 		$client->getCookieJar()->set( new Cookie( CookieNames::CONSENT, 'yes' ) );
+	}
+
+	private function insertIncentives( FunFunFactory $factory, Incentive ...$incentives ): void {
+		$em = $factory->getEntityManager();
+		foreach ( $incentives as $incentive ) {
+			$em->persist( $incentive );
+		}
+		$em->flush();
 	}
 }
