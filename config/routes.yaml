@@ -210,11 +210,6 @@ legacy_route_posts.php:
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\PageNotFoundController::index'
     requirements: { wildcard: .* }
 
-purge_cache:
-    path: /purge-cache
-    methods: [GET]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\PurgeCacheController::index'
-
 status:
     path: /status
     methods: [GET]

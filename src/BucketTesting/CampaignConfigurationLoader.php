@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\BucketTesting;
 
-use Doctrine\Common\Cache\CacheProvider;
 use FileFetcher\FileFetcher;
+use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Yaml;
 
@@ -15,17 +15,17 @@ use Symfony\Component\Yaml\Yaml;
 class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 
 	private FileFetcher $fileFetcher;
-	private CacheProvider $cache;
+	private CacheInterface $cache;
 
-	public function __construct( FileFetcher $fileFetcher, CacheProvider $cache ) {
+	public function __construct( FileFetcher $fileFetcher, CacheInterface $cache ) {
 		$this->fileFetcher = $fileFetcher;
 		$this->cache = $cache;
 	}
 
 	public function loadCampaignConfiguration( string ...$configFiles ): array {
 		$cacheKey = $this->getCacheKey( ...$configFiles );
-		if ( $cacheKey !== '' && $this->cache->contains( $cacheKey ) ) {
-			return $this->cache->fetch( $cacheKey )['campaigns'];
+		if ( $cacheKey !== '' && $this->cache->has( $cacheKey ) ) {
+			return $this->cache->get( $cacheKey )['campaigns'];
 		}
 		$configs = $this->loadFiles( ...$configFiles );
 
@@ -34,7 +34,7 @@ class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterfac
 		}
 		$processor = new Processor();
 		$processedConfiguration = $processor->processConfiguration( new CampaignConfiguration(), $configs );
-		$this->cache->save( $cacheKey, $processedConfiguration );
+		$this->cache->set( $cacheKey, $processedConfiguration );
 		return $processedConfiguration['campaigns'];
 	}
 
