@@ -14,20 +14,21 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class ProductionEnvironmentSetupTest extends TestCase {
 	public function testEnvironmentSetsUpEnvironmentDependentServices() {
-		$expectedSetters = [
+		$expectedCalls = [
+			'setCampaignCache',
+			'getCachePath',
 			'setPaypalLogger',
 			'setSofortLogger',
 			'setCreditCardLogger',
-			'enableCaching',
 			'setDoctrineConfiguration',
 		];
 		$supportingGetters = [ 'getLoggingPath', 'getWritableApplicationDataPath' ];
 		/** @var FunFunFactory&MockObject $factory */
 		$factory = $this->createMock( FunFunFactory::class );
-		foreach ( $expectedSetters as $setterName ) {
-			$factory->expects( $this->once() )->method( $setterName );
+		foreach ( $expectedCalls as $methodName ) {
+			$factory->expects( $this->once() )->method( $methodName );
 		}
-		$methodNameMatcher = '/^(?:' . implode( '|', array_merge( $expectedSetters, $supportingGetters ) ) . ')$/';
+		$methodNameMatcher = '/^(?:' . implode( '|', array_merge( $expectedCalls, $supportingGetters ) ) . ')$/';
 		$factory->expects( $this->never() )->method( $this->logicalNot( $this->matchesRegularExpression( $methodNameMatcher ) ) );
 
 		$setup = new ProductionEnvironmentSetup();

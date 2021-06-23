@@ -4,10 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
-use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\CacheProvider;
-use Doctrine\Common\Cache\FilesystemCache;
-use Doctrine\Common\Cache\VoidCache;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
@@ -19,11 +15,14 @@ use NumberFormatter;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Psr\SimpleCache\CacheInterface;
 use RemotelyLiving\Doorkeeper\Doorkeeper;
 use RemotelyLiving\Doorkeeper\Features\Set;
 use RemotelyLiving\Doorkeeper\Requestor;
 use Swift_NullTransport;
 use Swift_SmtpTransport;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Psr16Cache;
 use TNvpServiceDispatcher;
 use Twig\Environment;
 use WMDE\Clock\SystemClock;
@@ -43,7 +42,6 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationEventLogger;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationTokenFetcher;
 use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
-use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
@@ -681,17 +679,6 @@ class FunFunFactory implements LoggerAwareInterface {
 				$honorificsData = json_decode( $json, true, 16, JSON_THROW_ON_ERROR );
 				return new Honorifics( $honorificsData );
 			} );
-	}
-
-	public function newAuthorizedCachePurger(): AuthorizedCachePurger {
-		return new AuthorizedCachePurger(
-			new AllOfTheCachePurger(
-				$this->getPageCache(),
-				$this->getRenderedPageCache(),
-				$this->getCampaignCache()
-			),
-			$this->config['purging-secret']
-		);
 	}
 
 	private function newBankDataValidator(): BankDataValidator {
@@ -1445,41 +1432,14 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new AddCommentValidator();
 	}
 
-	private function getPageCache(): Cache {
-		// TODO check config for cache options
-		return $this->createSharedObject( Cache::class . '::Page', static function () {
-			return new VoidCache();
-		} );
+	public function setCampaignCache( CacheInterface $cache ): void {
+		$this->sharedObjects['Cache::Campaign'] = $cache;
 	}
 
-	private function getRenderedPageCache(): Cache {
-		// TODO check config for cache options
-		return $this->createSharedObject( Cache::class . '::RenderedPage', static function () {
-			return new VoidCache();
+	private function getCampaignCache(): CacheInterface {
+		return $this->createSharedObject( 'Cache::Campaign', static function () {
+			return new Psr16Cache( new ArrayAdapter() );
 		} );
-	}
-
-	private function getCampaignCache(): CacheProvider {
-		// TODO check config for cache options
-		return $this->createSharedObject( Cache::class . '::Campaign', static function () {
-			return new VoidCache();
-		} );
-	}
-
-	/**
-	 * Caching should be a configuration value.
-	 *
-	 * This method violates the on-demand initialization of caches when they are requested.
-	 * Instead the getXXXCache methods should check the config and return the appropriate cache
-	 *
-	 * Or even better, use Symfony DI and service definitions
-	 *
-	 * @deprecated
-	 */
-	public function enableCaching(): void {
-		$this->sharedObjects[Cache::class . '::Page'] = new FilesystemCache( $this->getCachePath() . '/pages/raw' );
-		$this->sharedObjects[Cache::class . '::RenderedPage'] = new FilesystemCache( $this->getCachePath() . '/pages/rendered' );
-		$this->sharedObjects[Cache::class . '::Campaign'] = new FilesystemCache( $this->getCachePath() . '/campaigns' );
 	}
 
 	public function setLogger( LoggerInterface $logger ): void {

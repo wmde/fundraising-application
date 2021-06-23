@@ -9,14 +9,15 @@ use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Psr16Cache;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class ProductionEnvironmentSetup implements EnvironmentSetup {
 
 	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
+		$this->setCampaignCache( $factory );
 		$this->initializeLoggers( $factory );
-
-		$factory->enableCaching();
 	}
 
 	private function initializeLoggers( FunFunFactory $factory ) {
@@ -24,6 +25,14 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 		$this->setSofortLogger( $factory );
 		$this->setCreditCardLogger( $factory );
 		$this->setDoctrineConfiguration( $factory );
+	}
+
+	private function setCampaignCache( FunFunFactory $factory ) {
+		$factory->setCampaignCache(
+			new Psr16Cache(
+				new FilesystemAdapter( 'campaigns', 60 * 60 * 24 * 7, $factory->getCachePath() . '/campaigns' )
+			)
+		);
 	}
 
 	private function setPaypalLogger( FunFunFactory $factory ) {
