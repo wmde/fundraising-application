@@ -443,7 +443,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->createSharedObject( Environment::class . '::Skin', function (): Environment {
 			$config = $this->config['twig'];
 			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
-			$factory = new WebTemplatingFactory( $config, $this->getCachePath() . '/twig', $this->config['locale'] );
+			$factory = new WebTemplatingFactory( $config, $this->getCachePath() . '/twig', $this->getLocale() );
 			return $factory->newTemplatingEnvionment(
 				$this->getTranslationCollector()->collectTranslations(),
 				$this->getContentProvider(),
@@ -464,7 +464,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$factory = new MailerTemplatingFactory(
 				$config,
 				$this->getCachePath() . '/twig',
-				$this->config['locale']
+				$this->getLocale()
 			);
 			return $factory->newTemplatingEnvironment(
 				$this->getMailTranslator(),
@@ -502,7 +502,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		return [
 			'honorifics' => $this->getHonorifics()->getList(),
 			'piwik' => $this->config['piwik'],
-			'locale' => $this->config['locale'],
 			'site_metadata' => $this->getSiteMetaData(),
 			'selectedBuckets' => BucketRenderer::renderBuckets( ...$this->getSelectedBuckets() ),
 		];
@@ -770,7 +769,6 @@ class FunFunFactory implements LoggerAwareInterface {
 			'Error_Page.html.twig',
 			[
 				'piwik' => $this->config['piwik'],
-				'locale' => $this->config['locale'],
 				'site_metadata' => $this->getSiteMetaData(),
 			]
 		) );
@@ -990,11 +988,11 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	private function newAmountFormatter(): AmountFormatter {
-		return new AmountFormatter( $this->config['locale'] );
+		return new AmountFormatter( $this->getLocale() );
 	}
 
 	public function newDecimalNumberFormatter(): NumberFormatter {
-		return new NumberFormatter( $this->config['locale'], NumberFormatter::DECIMAL );
+		return new NumberFormatter( $this->getLocale(), NumberFormatter::DECIMAL );
 	}
 
 	public function newAddCommentUseCase( string $updateToken ): AddCommentUseCase {
@@ -1491,7 +1489,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function getI18nDirectory(): string {
-		return $this->getAbsolutePath( $this->config['i18n-base-path'] ) . '/' . $this->config['locale'];
+		return $this->getAbsolutePath( $this->config['i18n-base-path'] ) . '/' . $this->getLocale();
 	}
 
 	/**
@@ -1902,5 +1900,16 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new FindCitiesUseCase(
 			new DoctrineLocationRepository( $this->getEntityManager() )
 		);
+	}
+
+	private function getLocale(): string {
+		if ( !isset( $this->sharedObjects[ 'locale' ] ) ) {
+			throw new \LogicException( 'Locale was not selected yet, you must not initialize locale dependant classes before the app processes the request.' );
+		}
+		return $this->sharedObjects[ 'locale' ];
+	}
+
+	public function setLocale( string $locale ): void {
+		$this->sharedObjects[ 'locale' ] = $locale;
 	}
 }

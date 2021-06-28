@@ -1,3 +1,6 @@
+parameters:
+  app.allowed_locales: [ 'de_DE', 'en_GB' ]
+
 services:
   WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper:
     class: WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper

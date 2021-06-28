@@ -59,6 +59,7 @@ class MailTemplatesTest extends KernelTestCase {
 
 		$ffFactory->setContentProvider( $contentProvider );
 		$ffFactory->setMailTranslator( new FakeTranslator() );
+		$ffFactory->setLocale( 'de_DE' );
 
 		return $ffFactory;
 	}

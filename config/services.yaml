@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app.allowed_locales: [ 'de_DE' ]
 
 services:
     # default configuration for services in *this* file
@@ -49,6 +50,14 @@ services:
             - "%kernel.logs_dir%/paypal_ipn_log.csv"
             - ["handle_paypal_payment_notification", "handle_paypal_membership_fee_payments"]
             - "@logger"
+
+        # Inject the log path and route into the PayPal IPN Logger
+    WMDE\Fundraising\Frontend\App\EventHandlers\StoreLocale:
+        class: WMDE\Fundraising\Frontend\App\EventHandlers\StoreLocale
+        public: true
+        arguments:
+            - '@WMDE\Fundraising\Frontend\Factories\FunFunFactory'
+            - "%app.allowed_locales%"
 
     # We need the bootstrapper to be public to be able to access it in tests
     WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper:
