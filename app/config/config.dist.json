@@ -43,7 +43,6 @@
 	},
 	"email-address-blacklist": [],
 	"subscription-interval": "PT30M",
-	"locale": "de_DE",
 	"referrer-generalization": {
 		"default": "",
 		"domain-map": {

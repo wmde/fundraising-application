@@ -289,12 +289,6 @@
       "title": "List of blocked e-mail addresses",
       "description": "List of e-mail addresses that automatically mark data sets as deleted"
     },
-    "locale": {
-      "type": "string",
-      "minLength": 2,
-      "description": "Default locale, used for formatting numbers and displaying texts",
-      "default": "de_DE"
-    },
     "referrer-generalization": {
       "type": "object",
       "title": "Referrer normalization",
@@ -812,7 +806,6 @@
     "contact-info",
     "text-policies",
     "subscription-interval",
-    "locale",
     "referrer-generalization",
     "donation-timeframe-limit",
     "membership-application-timeframe-limit",

@@ -40,6 +40,7 @@ class WebTemplatingFactoryTest extends KernelTestCase {
 		$bootstrapper->overrideConfiguration( $configOverrides );
 
 		$factory = static::$container->get( FunFunFactory::class );
+		$factory->setLocale( 'de_DE' );
 		$factory->setSkinDirectory( vfsStream::url( self::TEMPLATE_DIR ) );
 		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 		return $factory;
