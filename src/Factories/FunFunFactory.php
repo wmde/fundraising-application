@@ -1213,6 +1213,7 @@ class FunFunFactory implements LoggerAwareInterface {
 				'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 				'countries' => $this->getCountries(),
 				'addressValidationPatterns' => $this->getValidationRules()->address,
+				'donationMaximumAmount' => $this->config[ 'donation-maximum-amount' ],
 			]
 		);
 	}
