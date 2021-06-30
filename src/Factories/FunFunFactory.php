@@ -443,11 +443,14 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->createSharedObject( Environment::class . '::Skin', function (): Environment {
 			$config = $this->config['twig'];
 			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
-			$factory = new WebTemplatingFactory( $config, $this->getCachePath() . '/twig', $this->getLocale() );
-			return $factory->newTemplatingEnvionment(
+			$factory = new WebTemplatingFactory(
+				$config,
+				$this->getCachePath() . '/twig',
 				$this->getTranslationCollector()->collectTranslations(),
 				$this->getContentProvider(),
-				$this->getFilePrefixer(),
+				$this->getFilePrefixer()
+			);
+			return $factory->newTemplatingEnvironment(
 				[
 					'basepath' => $this->config['web-basepath'],
 					'assets_path' => $this->config['assets-path'],
@@ -464,12 +467,11 @@ class FunFunFactory implements LoggerAwareInterface {
 			$factory = new MailerTemplatingFactory(
 				$config,
 				$this->getCachePath() . '/twig',
-				$this->getLocale()
-			);
-			return $factory->newTemplatingEnvironment(
 				$this->getMailTranslator(),
 				$this->getContentProvider(),
 				$this->getUrlGenerator(),
+			);
+			return $factory->newTemplatingEnvironment(
 				$this->getDayOfWeekName()
 			);
 		} );

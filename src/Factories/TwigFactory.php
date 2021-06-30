@@ -12,24 +12,18 @@ use Twig\Lexer;
 use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
 use Twig\TwigFilter;
-use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
+use Twig\TwigFunction;
 
 abstract class TwigFactory {
 
 	private array $config;
 	private string $cachePath;
-	private string $locale;
 	private ?CacheInterface $cache;
 
-	public function __construct( array $config, string $cachePath, string $locale ) {
+	public function __construct( array $config, string $cachePath ) {
 		$this->config = $config;
 		$this->cachePath = $cachePath;
-		$this->locale = $locale;
 		$this->cache = null;
-	}
-
-	protected function newFilePrefixFilter( FilePrefixer $filePrefixer ): TwigFilter {
-		return new TwigFilter( 'prefix_file', [ $filePrefixer, 'prefixFile' ] );
 	}
 
 	private function getLoader(): LoaderInterface {
@@ -39,7 +33,7 @@ abstract class TwigFactory {
 		throw new \UnexpectedValueException( 'Invalid Twig loader configuration - missing filesystem' );
 	}
 
-	protected function newTwigEnvironment( array $filters, array $functions, array $globals = [] ): Environment {
+	protected function newTwigEnvironment( array $globals = [] ): Environment {
 		$options = [
 			'strict_variables' => isset( $this->config['strict-variables'] ) && $this->config['strict-variables'] === true,
 			'cache' => $this->getCache()
@@ -50,11 +44,11 @@ abstract class TwigFactory {
 			$twig->addGlobal( $name, $global );
 		}
 
-		foreach ( $functions as $function ) {
+		foreach ( $this->getFunctions() as $function ) {
 			$twig->addFunction( $function );
 		}
 
-		foreach ( $filters as $filter ) {
+		foreach ( $this->getFilters() as $filter ) {
 			$twig->addFilter( $filter );
 		}
 
@@ -75,6 +69,20 @@ abstract class TwigFactory {
 			$this->cache = new FilesystemCache( $this->cachePath );
 		}
 		return $this->cache;
+	}
+
+	/**
+	 * @return TwigFilter[]
+	 */
+	protected function getFilters(): array {
+		return [];
+	}
+
+	/**
+	 * @return TwigFunction[]
+	 */
+	protected function getFunctions(): array {
+		return [];
 	}
 
 }
