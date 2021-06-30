@@ -11,11 +11,11 @@
          class="is-hidden"
          data-application-vars="{$ use_of_funds_content|e('html_attr') $}"
          data-application-messages="{$ translations()|e('html_attr') $}"
-         data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
+         data-assets-path="{$ asset( '', 'skin') $}">
     </div>
 {% endblock %}
 
 {% block scripts %}
     {$ parent() $}
-    <script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/js/funds_usage.js"></script>
+    <script src="{$ asset( 'js/funds_usage.js', 'skin' ) $}"></script>
 {% endblock %}

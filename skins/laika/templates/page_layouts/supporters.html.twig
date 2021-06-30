@@ -12,7 +12,7 @@
 		 data-page-title="{$ title | e('html_attr') $}"
 		 data-application-vars="{$ supporters|e('html_attr') $}"
 		 data-application-messages="{$ translations()|e('html_attr') $}"
-		 data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}"
+		 data-assets-path="{$ asset( '', 'skin') $}"
 		 class="is-hidden">
 	</div>
 {% endblock %}
@@ -20,5 +20,5 @@
 
 {% block scripts %}
 	{$ parent() $}
-	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/js/supporters.js"></script>
+	<script src="{$ asset( 'js/supporters.js', 'skin' ) $}"></script>
 {% endblock %}

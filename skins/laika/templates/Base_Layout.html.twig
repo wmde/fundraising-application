@@ -18,14 +18,14 @@
     <meta property="og:description" content="{$ site_metadata.wikimedia_description $}" />
 
     <link rel="preconnect" href="{$ piwik.baseUrl $}">
-    <link rel="shortcut icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/images/favicon.ico" />
-    <link rel="apple-touch-icon" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/images/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="{$ asset( 'images/favicon.ico', 'skin' ) $}" />
+    <link rel="apple-touch-icon" href="{$ asset( 'images/apple-touch-icon.png', 'skin' ) $}" />
     {% block styles %}
         {% if not assets_path %}
-            <link rel="stylesheet" href="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/css/styles.css">
+            <link rel="stylesheet" href="{$ asset( 'css/styles.css', 'skin' ) $}">
         {% endif %}
         {% if application_environment == 'dev' %}
-             <link rel="stylesheet" href="{$ basepath $}/res/css/asset_state.css">
+             <link rel="stylesheet" href="{$ asset( 'css/asset_state.css' ) $}">
         {% endif %}
     {% endblock %}
 </head>
@@ -39,7 +39,7 @@
     </div>
     <div id="appdata" data-application-vars="{$ _context|json_encode|e('html_attr') $}"
     data-application-messages="{$ translations()|e('html_attr') $}"
-    data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}"
+    data-assets-path="{$ asset( '', 'skin') $}"
     class="is-hidden">
     </div>
 {% endblock %}
@@ -54,22 +54,7 @@
         {% endfor %}
     </script>
     {% endif %}
-    {% if assets_path %}
-        <script src="{$ assets_path $}/js/chunk-vendors.js"></script>
-        <script src="{$ assets_path $}/js/chunk-common.js"></script>
-    {% else %}
-        <script src="{$ basepath $}/skins/laika/js/chunk-vendors.js"></script>
-        {#
-           The file `styles.js` is needed due to a webpack error that propagates to the CSS-extract plugin.
-           Hopefully, the error gets fixed before this skin is released, so we can remove this silly dependency.
-           Otherwise, we must integrate the contents of styles.js into chunk-vendors.js during the build process.
-           See
-           https://github.com/webpack/webpack/issues/7300
-           https://github.com/webpack-contrib/mini-css-extract-plugin/issues/85
-           https://github.com/webpack-contrib/mini-css-extract-plugin/issues/113
-        #}
-        <script src="{$ basepath $}/skins/laika/js/styles.js"></script>
-    {% endif %}
+    <script src="{$ asset( 'js/chunk-vendors.js', 'skin' ) $}"></script>
 {% endblock %}
 
 </body>

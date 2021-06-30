@@ -8,6 +8,7 @@ use Twig\Cache\CacheInterface;
 use Twig\Cache\FilesystemCache;
 use Twig\Cache\NullCache;
 use Twig\Environment;
+use Twig\Extension\AbstractExtension;
 use Twig\Lexer;
 use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
@@ -42,6 +43,10 @@ abstract class TwigFactory {
 
 		foreach ( $globals as $name => $global ) {
 			$twig->addGlobal( $name, $global );
+		}
+
+		foreach ( $this->getExtensions() as $extension ) {
+			$twig->addExtension( $extension );
 		}
 
 		foreach ( $this->getFunctions() as $function ) {
@@ -82,6 +87,13 @@ abstract class TwigFactory {
 	 * @return TwigFunction[]
 	 */
 	protected function getFunctions(): array {
+		return [];
+	}
+
+	/**
+	 * @return AbstractExtension[]
+	 */
+	protected function getExtensions(): array {
 		return [];
 	}
 

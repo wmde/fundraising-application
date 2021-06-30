@@ -12,7 +12,6 @@ use WMDE\Fundraising\ContentProvider\ContentException;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
-use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
@@ -22,6 +21,7 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
  * @covers \WMDE\Fundraising\Frontend\Factories\WebTemplatingFactory
  * @covers \WMDE\Fundraising\Frontend\Factories\TwigFactory
  * @covers \WMDE\Fundraising\Frontend\Factories\FunFunFactory::getSkinTwig
+ * @covers \WMDE\Fundraising\Frontend\Factories\AssetPackageFactory
  *
  * @license GPL-2.0-or-later
  */
@@ -31,7 +31,7 @@ class WebTemplatingFactoryTest extends KernelTestCase {
 
 	private function getFactory( array $configOverrides = [] ): FunFunFactory {
 		static::bootKernel();
-		$bootstrapper = static::$container->get( EnvironmentBootstrapper::class );
+		$bootstrapper = static::getContainer()->get( EnvironmentBootstrapper::class );
 
 		if ( !( $bootstrapper instanceof TestEnvironmentBootstrapper ) ) {
 			throw new \LogicException( 'We need to use TestEnvironmentBootstrapper to be able to override the configuration' );
@@ -39,7 +39,7 @@ class WebTemplatingFactoryTest extends KernelTestCase {
 
 		$bootstrapper->overrideConfiguration( $configOverrides );
 
-		$factory = static::$container->get( FunFunFactory::class );
+		$factory = static::getContainer()->get( FunFunFactory::class );
 		$factory->setLocale( 'de_DE' );
 		$factory->setSkinDirectory( vfsStream::url( self::TEMPLATE_DIR ) );
 		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
@@ -60,17 +60,16 @@ class WebTemplatingFactoryTest extends KernelTestCase {
 		$this->assertSame( '<style src="/mydevsubdir/someFile.css"><img src="/assets/kitty.jpg" />', $output );
 	}
 
-	public function testFilePrefixerFilter(): void {
+	public function testAssetsGetRendered(): void {
 		$factory = $this->getFactory();
-		$prefixer = new FilePrefixer( 'mylittleprefix' );
-		$factory->setFilePrefixer( $prefixer );
 		vfsStream::setup( self::TEMPLATE_DIR, null, [
-			'unicorns.html.twig' => '{$ "testfile.js"|prefix_file $}'
+			'unicorns.html.twig' => 'default: {$ asset( "css/styles.css" ) $} skin: {$ asset( "js/main.js", "skin" ) $}'
 		] );
 
 		$output = $factory->getLayoutTemplate( 'unicorns.html.twig' )->render( [] );
 
-		$this->assertStringContainsString( 'mylittleprefix.testfile.js', $output );
+		$this->assertMatchesRegularExpression( '!/res/css/styles.css!', $output );
+		$this->assertMatchesRegularExpression( '!/skins/\w+/js/main.js!', $output );
 	}
 
 	public function testGivenSandboxedWebContent_itIsReturnedAndContextPassed(): void {
