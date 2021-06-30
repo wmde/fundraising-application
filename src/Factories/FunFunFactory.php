@@ -120,7 +120,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
-use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
@@ -443,12 +442,13 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->createSharedObject( Environment::class . '::Skin', function (): Environment {
 			$config = $this->config['twig'];
 			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
+			$packageFactory = new AssetPackageFactory();
 			$factory = new WebTemplatingFactory(
 				$config,
 				$this->getCachePath() . '/twig',
 				$this->getTranslationCollector()->collectTranslations(),
 				$this->getContentProvider(),
-				$this->getFilePrefixer()
+				$packageFactory->newAssetPackages()
 			);
 			return $factory->newTemplatingEnvironment(
 				[
@@ -1458,24 +1458,6 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newIbanBlockList(): IbanBlocklist {
 		return new IbanBlocklist( $this->config['banned-ibans'] );
-	}
-
-	public function setFilePrefixer( FilePrefixer $prefixer ): void {
-		$this->sharedObjects[FilePrefixer::class] = $prefixer;
-	}
-
-	private function getFilePrefixer(): FilePrefixer {
-		return $this->createSharedObject( FilePrefixer::class, function () {
-			return new FilePrefixer( $this->getFilePrefix() );
-		} );
-	}
-
-	private function getFilePrefix(): string {
-		$prefixContentFile = $this->getWritableApplicationDataPath() . '/file_prefix.txt';
-		if ( !file_exists( $prefixContentFile ) ) {
-			return '';
-		}
-		return preg_replace( '/[^0-9a-f]/', '', file_get_contents( $prefixContentFile ) );
 	}
 
 	public function newDonationAcceptedEventHandler( string $updateToken ): DonationAcceptedEventHandler {

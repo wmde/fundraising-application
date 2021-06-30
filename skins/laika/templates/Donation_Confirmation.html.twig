@@ -2,5 +2,5 @@
 
 {% block scripts %}
 	{$ parent() $}
-	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/js/donation_confirmation.js"></script>
+	<script src="{$ asset( 'js/donation_confirmation.js', 'skin' ) $}"></script>
 {% endblock %}

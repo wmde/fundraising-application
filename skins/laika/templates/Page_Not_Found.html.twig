@@ -11,11 +11,11 @@
 		 class="is-hidden"
 		 data-application-vars="{$ _context|json_encode|e('html_attr') $}"
 		 data-application-messages="{$ translations()|e('html_attr') $}"
-		 data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}">
+		 data-assets-path="{$ asset( '', 'skin') $}">
 	</div>
 {% endblock %}
 
 {% block scripts %}
 	{$ parent() $}
-	<script src="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}/js/page_not_found.js"></script>
+	<script src="{$ asset( 'js/page_not_found.js', 'skin' ) $}"></script>
 {% endblock %}

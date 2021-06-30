@@ -4,23 +4,23 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
+use Symfony\Bridge\Twig\Extension\AssetExtension;
+use Symfony\Component\Asset\Packages;
 use Twig\Environment;
-use Twig\TwigFilter;
 use Twig\TwigFunction;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
-use WMDE\Fundraising\Frontend\Presentation\FilePrefixer;
 
 class WebTemplatingFactory extends TwigFactory {
 
 	private array $translations;
 	private ContentProvider $contentProvider;
-	private FilePrefixer $filePrefixer;
+	private Packages $packages;
 
-	public function __construct( array $config, string $cachePath, array $translations, ContentProvider $contentProvider, FilePrefixer $filePrefixer ) {
+	public function __construct( array $config, string $cachePath, array $translations, ContentProvider $contentProvider, Packages $assetPackages ) {
 		parent::__construct( $config, $cachePath );
 		$this->translations = $translations;
 		$this->contentProvider = $contentProvider;
-		$this->filePrefixer = $filePrefixer;
+		$this->packages = $assetPackages;
 	}
 
 	public function newTemplatingEnvironment( array $globals ): Environment {
@@ -46,9 +46,9 @@ class WebTemplatingFactory extends TwigFactory {
 		];
 	}
 
-	protected function getFilters(): array {
+	protected function getExtensions(): array {
 		return [
-			new TwigFilter( 'prefix_file', [ $this->filePrefixer, 'prefixFile' ] )
+			new AssetExtension( $this->packages )
 		];
 	}
 
