@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Infrastructure\Payment;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiry;
 use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiryFetchingException;
@@ -15,7 +16,7 @@ use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiryFetchingExcep
  * @license GPL-2.0-or-later
  * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
-class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
+class McpCreditCardServiceTest extends TestCase {
 
 	private const ACCESS_KEY = 'pink fluffy unicorns';
 	private const CUSTOMER_ID = '31333333333333333337';
@@ -27,6 +28,21 @@ class McpCreditCardServiceTest extends \PHPUnit\Framework\TestCase {
 		'expiryMonth' => self::EXPIRY_MONTH,
 		'expiryYear' => self::EXPIRY_YEAR,
 	];
+
+	private static int $oldErrorReportingLevel;
+
+	public static function setUpBeforeClass(): void {
+		// Version <=1.25 of the Mcp library uses default parameters before parameters without defaults,
+		// which is deprecated in PHP 8. This causes 20+ deprecation warnings during the unit tests.
+		// To keep the unit test output useful, we suppress the warnings for now (and have notified the provider
+		// of the library).
+		// When the deprecation has been fixed, revert the commit that introduced this workaround
+		self::$oldErrorReportingLevel = error_reporting( E_ALL ^ E_DEPRECATED );
+	}
+
+	public static function tearDownAfterClass(): void {
+		error_reporting( self::$oldErrorReportingLevel );
+	}
 
 	public function testMicroPaymentServiceGetsCalledWithAccessKeyAndCustomerId(): void {
 		$microPaymentServiceMock = $this->getMicroPaymentServiceTestDouble();
