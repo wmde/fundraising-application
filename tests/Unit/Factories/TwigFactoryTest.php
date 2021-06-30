@@ -14,7 +14,7 @@ use Twig\Cache\NullCache;
 class TwigFactoryTest extends TestCase {
 
 	public function testEnabledCacheReturnsFilesystemCache(): void {
-		$factory = new TwigFactoryTestImplementation( [ 'enable-cache' => true ], '/tmp', 'NONE' );
+		$factory = new TwigFactoryTestImplementation( [ 'enable-cache' => true ], '/tmp' );
 
 		$cache = $factory->getCache();
 
@@ -23,7 +23,7 @@ class TwigFactoryTest extends TestCase {
 	}
 
 	public function testDisabledCacheReturnsNullCache(): void {
-		$factory = new TwigFactoryTestImplementation( [ 'enable-cache' => false ], '/tmp', 'NONE' );
+		$factory = new TwigFactoryTestImplementation( [ 'enable-cache' => false ], '/tmp' );
 
 		$cache = $factory->getCache();
 

@@ -13,48 +13,65 @@ use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 
 class MailerTemplatingFactory extends TwigFactory {
 
-	public function newTemplatingEnvironment( TranslatorInterface $translator, ContentProvider $contentProvider, UrlGenerator $urlGenerator, string $dayOfWeek ): Environment {
-		$filters = [
+	private TranslatorInterface $translator;
+	private ContentProvider $contentProvider;
+	private UrlGenerator $urlGenerator;
+
+	public function __construct( array $config, string $cachePath, TranslatorInterface $translator, ContentProvider $contentProvider, UrlGenerator $urlGenerator ) {
+		parent::__construct( $config, $cachePath );
+		$this->translator = $translator;
+		$this->contentProvider = $contentProvider;
+		$this->urlGenerator = $urlGenerator;
+	}
+
+	public function newTemplatingEnvironment( string $dayOfWeek ): Environment {
+		$globals = [
+			'day_of_the_week' => $dayOfWeek
+		];
+
+		return $this->newTwigEnvironment( $globals );
+	}
+
+	protected function getFilters(): array {
+		return [
 			new TwigFilter(
 				'payment_interval',
 				/** @var int|string $interval */
-				static function ( $interval ) use ( $translator ): string {
-					return $translator->trans( "donation_payment_interval_{$interval}" );
+				function ( $interval ): string {
+					return $this->translator->trans( "donation_payment_interval_{$interval}" );
 				}
 			),
 			new TwigFilter(
 				'payment_method',
-				static function ( string $method ) use ( $translator ): string {
-					return $translator->trans( $method );
+				function ( string $method ): string {
+					return $this->translator->trans( $method );
 				}
 			),
 			new TwigFilter(
 				'membership_type',
-				static function ( string $membershipType ) use ( $translator ): string {
-					return $translator->trans( $membershipType );
+				function ( string $membershipType ): string {
+					return $this->translator->trans( $membershipType );
 				}
 			),
 		];
-		$functions = [
+	}
+
+	protected function getFunctions(): array {
+		return [
 			new TwigFunction(
 				'mail_content',
-				static function ( string $name, array $context = [] ) use ( $contentProvider ): string {
-					return $contentProvider->getMail( $name, $context );
+				function ( string $name, array $context = [] ): string {
+					return $this->contentProvider->getMail( $name, $context );
 				},
 				[ 'is_safe' => [ 'all' ] ]
 			),
 			new TwigFunction(
 				'url',
-				static function ( string $name, array $parameters = [] ) use ( $urlGenerator ): string {
-					return $urlGenerator->generateAbsoluteUrl( $name, $parameters );
+				function ( string $name, array $parameters = [] ): string {
+					return $this->urlGenerator->generateAbsoluteUrl( $name, $parameters );
 				}
 			)
 		];
-		$globals = [
-			'day_of_the_week' => $dayOfWeek
-		];
-
-		return $this->newTwigEnvironment( $filters, $functions, $globals );
 	}
 
 }
