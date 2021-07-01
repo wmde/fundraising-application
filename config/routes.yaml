@@ -8,11 +8,6 @@ validate-donor-address:
     methods: [POST]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateAddressController::index'
 
-validate-donation-amount:
-    path: /validate-donation-amount
-    methods: [POST]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateDonationAmountController::index'
-
 validate-fee:
     path: /validate-fee
     methods: [POST]

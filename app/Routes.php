@@ -24,7 +24,6 @@ class Routes {
 	public const UPDATE_ADDRESS = 'update-address';
 	public const UPDATE_DONOR = 'update-donor';
 	public const VALIDATE_ADDRESS = 'validate-donor-address';
-	public const VALIDATE_DONATION_AMOUNT = 'validate-donation-amount';
 	public const VALIDATE_EMAIL = 'validate-email';
 	public const VALIDATE_MEMBERSHIP_FEE = 'validate-fee';
 	public const VALIDATE_IBAN = 'check_iban';
@@ -39,7 +38,6 @@ class Routes {
 	 */
 	public static function getNamedRouteUrls( UrlGenerator $urlGenerator ): array {
 		return [
-			'validateDonationAmount' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_DONATION_AMOUNT ),
 			'validateAddress' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_ADDRESS ),
 			'validateEmail' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_EMAIL ),
 			'validateIban' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_IBAN ),
