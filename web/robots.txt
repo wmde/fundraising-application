@@ -10,7 +10,6 @@ Disallow: /donation/update
 Disallow: /validate-email
 Disallow: /validate-payment-data
 Disallow: /validate-address
-Disallow: /validate-donation-amount
 Disallow: /validate-fee
 Disallow: /check-iban
 Disallow: /generate-iban
