@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf5e12ba05f7eb8771fdfa6478255101",
+    "content-hash": "446f3a6b2382cbf7fb9b397117b87e62",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6052,16 +6052,16 @@
         },
         {
             "name": "symfony/twig-bridge",
-            "version": "v5.2.10",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/twig-bridge.git",
-                "reference": "3590e0e352a038b23f65410f388ce1a800debc6c"
+                "reference": "61d1415392e260fb66ede48cc5a2a6e82a323db2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/3590e0e352a038b23f65410f388ce1a800debc6c",
-                "reference": "3590e0e352a038b23f65410f388ce1a800debc6c",
+                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/61d1415392e260fb66ede48cc5a2a6e82a323db2",
+                "reference": "61d1415392e260fb66ede48cc5a2a6e82a323db2",
                 "shasum": ""
             },
             "require": {
@@ -6074,13 +6074,14 @@
                 "phpdocumentor/reflection-docblock": "<3.2.2",
                 "phpdocumentor/type-resolver": "<1.4.0",
                 "symfony/console": "<4.4",
-                "symfony/form": "<5.1",
-                "symfony/http-foundation": "<4.4",
+                "symfony/form": "<5.3",
+                "symfony/http-foundation": "<5.3",
                 "symfony/http-kernel": "<4.4",
                 "symfony/translation": "<5.2",
                 "symfony/workflow": "<5.2"
             },
             "require-dev": {
+                "doctrine/annotations": "^1.12",
                 "egulias/email-validator": "^2.1.10|^3",
                 "phpdocumentor/reflection-docblock": "^3.0|^4.0|^5.0",
                 "symfony/asset": "^4.4|^5.0",
@@ -6088,8 +6089,8 @@
                 "symfony/dependency-injection": "^4.4|^5.0",
                 "symfony/expression-language": "^4.4|^5.0",
                 "symfony/finder": "^4.4|^5.0",
-                "symfony/form": "^5.1.9",
-                "symfony/http-foundation": "^4.4|^5.0",
+                "symfony/form": "^5.3",
+                "symfony/http-foundation": "^5.3",
                 "symfony/http-kernel": "^4.4|^5.0",
                 "symfony/intl": "^4.4|^5.0",
                 "symfony/mime": "^5.2",
@@ -6152,7 +6153,7 @@
             "description": "Provides integration for Twig with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/twig-bridge/tree/v5.2.10"
+                "source": "https://github.com/symfony/twig-bridge/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -6168,7 +6169,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-26T12:52:38+00:00"
+            "time": "2021-06-24T08:13:00+00:00"
         },
         {
             "name": "symfony/validator",
@@ -10096,5 +10097,5 @@
     "platform-dev": {
         "ext-pdo_sqlite": "*"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
