@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e0dc70c06ddbff11a8d68dafdc62699",
+    "content-hash": "9cde1b28488c2d8b70cfba3e2121a40e",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -2082,16 +2082,16 @@
         },
         {
             "name": "laminas/laminas-code",
-            "version": "4.4.0",
+            "version": "4.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-code.git",
-                "reference": "2b0bb59ade31a045fd3ff0097dc558bb896f6596"
+                "reference": "54251ab2b16c41c6980387839496b235f5f6e10b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/2b0bb59ade31a045fd3ff0097dc558bb896f6596",
-                "reference": "2b0bb59ade31a045fd3ff0097dc558bb896f6596",
+                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/54251ab2b16c41c6980387839496b235f5f6e10b",
+                "reference": "54251ab2b16c41c6980387839496b235f5f6e10b",
                 "shasum": ""
             },
             "require": {
@@ -2145,7 +2145,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-06-17T13:39:43+00:00"
+            "time": "2021-07-09T11:58:40+00:00"
         },
         {
             "name": "micropayment-de/service-client",
@@ -6924,28 +6924,25 @@
         },
         {
             "name": "wmde/fun-validators",
-            "version": "v3.0.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators",
-                "reference": "70d2af1579f820715e33f42cac0c22b6c6843e8c"
+                "reference": "8fa812eac67d93faf1711b1c3a700736b699329b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/70d2af1579f820715e33f42cac0c22b6c6843e8c",
-                "reference": "70d2af1579f820715e33f42cac0c22b6c6843e8c",
+                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/8fa812eac67d93faf1711b1c3a700736b699329b",
+                "reference": "8fa812eac67d93faf1711b1c3a700736b699329b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2"
+                "php": ">=8.0"
             },
             "require-dev": {
-                "mediawiki/mediawiki-codesniffer": "~30.0",
-                "ockcyp/covers-validator": "~1.0",
-                "phpstan/phpstan": "^0.11",
-                "phpunit/phpunit": "~8.0",
-                "slevomat/coding-standard": "~4.4",
-                "squizlabs/php_codesniffer": "~3.4"
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "~9.5.1",
+                "wmde/fundraising-phpcs": "~3.0"
             },
             "type": "library",
             "extra": {
@@ -6967,7 +6964,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "General and shared validation services created as part of the WMDE fundraising software",
-            "time": "2020-06-17T14:53:10+00:00"
+            "time": "2021-07-05T14:06:58+00:00"
         },
         {
             "name": "wmde/fundraising-address-change",
@@ -7081,30 +7078,30 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v7.0.2",
+            "version": "v8.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "b05c1379a78fbd397858f3d7e90cc3dccde97bb3"
+                "reference": "fcd226f60cf8abc75df03953651c2e4faee98752"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/b05c1379a78fbd397858f3d7e90cc3dccde97bb3",
-                "reference": "b05c1379a78fbd397858f3d7e90cc3dccde97bb3",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/fcd226f60cf8abc75df03953651c2e4faee98752",
+                "reference": "fcd226f60cf8abc75df03953651c2e4faee98752",
                 "shasum": ""
             },
             "require": {
-                "doctrine/orm": "~2.7",
+                "doctrine/orm": "~2.9",
                 "ext-curl": "*",
                 "gedmo/doctrine-extensions": "^3.0",
-                "php": ">=7.4",
+                "php": ">=8.0",
                 "psr/log": "~1.0",
                 "symfony/http-client": "^5.2",
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
-                "wmde/fun-validators": "~3.0.0",
-                "wmde/fundraising-payments": "~2.2"
+                "wmde/fun-validators": "~4.0",
+                "wmde/fundraising-payments": "~4.0"
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
@@ -7113,7 +7110,8 @@
                 "phpmd/phpmd": "~2.6",
                 "phpstan/phpstan": "^0.12",
                 "phpunit/phpunit": "~9.5.1",
-                "wmde/fundraising-phpcs": "~2.0",
+                "symfony/cache": "^5.3",
+                "wmde/fundraising-phpcs": "~3.0",
                 "wmde/psr-log-test-doubles": "~2.1"
             },
             "type": "library",
@@ -7133,38 +7131,39 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2021-06-03T18:48:15+00:00"
+            "time": "2021-07-07T07:01:37+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v5.1.1",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "876a017c4ea0f2d62ecc4a4423f6a1210435c19c"
+                "reference": "c0617605ee0594a2b4ad8cac4ce69ab6e499fa50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/876a017c4ea0f2d62ecc4a4423f6a1210435c19c",
-                "reference": "876a017c4ea0f2d62ecc4a4423f6a1210435c19c",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/c0617605ee0594a2b4ad8cac4ce69ab6e499fa50",
+                "reference": "c0617605ee0594a2b4ad8cac4ce69ab6e499fa50",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.7",
                 "gedmo/doctrine-extensions": "^3.0",
-                "php": ">=7.4",
+                "php": ">=8.0",
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
-                "wmde/fun-validators": "~3.0.0",
-                "wmde/fundraising-payments": "~2.2"
+                "wmde/fun-validators": "~4.0.0",
+                "wmde/fundraising-payments": "~4.0"
             },
             "require-dev": {
                 "codeception/specify": "~1.0",
                 "phpstan/phpstan": "~0.11",
                 "phpstan/phpstan-phpunit": "^0.12.6",
                 "phpunit/phpunit": "~9.5.0",
+                "symfony/cache": "^5.3",
                 "wmde/fundraising-phpcs": "~3.0",
                 "wmde/psr-log-test-doubles": "~2.2"
             },
@@ -7176,9 +7175,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "WMDE\\Fundraising\\MembershipContext\\": "src/",
-                    "WMDE\\Fundraising\\MembershipContext\\Tests\\Data\\": "tests/Data/",
-                    "WMDE\\Fundraising\\MembershipContext\\Tests\\Fixtures\\": "tests/Fixtures/"
+                    "WMDE\\Fundraising\\MembershipContext\\": "src/"
                 }
             },
             "autoload-dev": {
@@ -7190,33 +7187,33 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2021-06-18T12:37:34+00:00"
+            "time": "2021-07-07T06:26:00+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v2.2.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "e9aa78163d731e8c56db81330896344e96b997b5"
+                "reference": "70b88912f9c22f244a4487b9fdaf552179f7fd57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/e9aa78163d731e8c56db81330896344e96b997b5",
-                "reference": "e9aa78163d731e8c56db81330896344e96b997b5",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/70b88912f9c22f244a4487b9fdaf552179f7fd57",
+                "reference": "70b88912f9c22f244a4487b9fdaf552179f7fd57",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4",
+                "php": ">=8.0",
                 "sofort/sofortlib-php": "^3.2",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
-                "wmde/fun-validators": "~v3.0.0"
+                "wmde/fun-validators": "~v4.0.0"
             },
             "require-dev": {
                 "phpstan/phpstan": "~0.12.0",
                 "phpunit/phpunit": "~9.4",
-                "wmde/fundraising-phpcs": "~2.0"
+                "wmde/fundraising-phpcs": "~3.0"
             },
             "type": "library",
             "extra": {
@@ -7238,35 +7235,35 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2021-05-17T09:40:05+00:00"
+            "time": "2021-07-07T11:21:30+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "v2.0.1",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "be359e484b7c2318738f7ba4250cccf367711427"
+                "reference": "0881575183107efb7796d53349fd5c79e4fbdacc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/be359e484b7c2318738f7ba4250cccf367711427",
-                "reference": "be359e484b7c2318738f7ba4250cccf367711427",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/0881575183107efb7796d53349fd5c79e4fbdacc",
+                "reference": "0881575183107efb7796d53349fd5c79e4fbdacc",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.7",
                 "gedmo/doctrine-extensions": "^3.0",
-                "php": ">=7.4",
+                "php": ">=8.0",
                 "psr/log": "~1.0",
                 "wmde/email-address": "~1.0",
-                "wmde/fun-validators": "~3.0.0"
+                "wmde/fun-validators": "~4.0"
             },
             "require-dev": {
-                "ockcyp/covers-validator": "~1.0",
                 "phpstan/phpstan": "~0.11",
-                "phpunit/phpunit": "~9.2.6",
-                "wmde/fundraising-phpcs": "~1.0"
+                "phpunit/phpunit": "~9.5.1",
+                "symfony/cache": "^5.3",
+                "wmde/fundraising-phpcs": "~3.0"
             },
             "type": "library",
             "extra": {
@@ -7288,7 +7285,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for fundraising subcriptions",
-            "time": "2020-09-24T13:04:20+00:00"
+            "time": "2021-07-07T07:09:06+00:00"
         }
     ],
     "packages-dev": [
@@ -8258,16 +8255,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.91",
+            "version": "0.12.92",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "8226701cd228a0d63c2df995de7ab6070c69ac6a"
+                "reference": "64d4c5dc8ea96972bc18432d137a330239a5d2b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8226701cd228a0d63c2df995de7ab6070c69ac6a",
-                "reference": "8226701cd228a0d63c2df995de7ab6070c69ac6a",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/64d4c5dc8ea96972bc18432d137a330239a5d2b2",
+                "reference": "64d4c5dc8ea96972bc18432d137a330239a5d2b2",
                 "shasum": ""
             },
             "require": {
@@ -8298,7 +8295,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.91"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.92"
             },
             "funding": [
                 {
@@ -8318,7 +8315,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-04T15:31:48+00:00"
+            "time": "2021-07-10T13:53:49+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
