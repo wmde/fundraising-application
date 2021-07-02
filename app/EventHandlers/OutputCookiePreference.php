@@ -26,7 +26,7 @@ class OutputCookiePreference implements EventSubscriberInterface {
 	}
 
 	public function addCookiePreference( ResponseEvent $event ): void {
-		if ( !$event->isMasterRequest() ) {
+		if ( !$event->isMainRequest() ) {
 			return;
 		}
 
