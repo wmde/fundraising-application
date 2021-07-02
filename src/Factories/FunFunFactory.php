@@ -442,7 +442,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->createSharedObject( Environment::class . '::Skin', function (): Environment {
 			$config = $this->config['twig'];
 			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
-			$packageFactory = new AssetPackageFactory();
+			$packageFactory = new AssetPackageFactory( $this->config['assets-path'] );
 			$factory = new WebTemplatingFactory(
 				$config,
 				$this->getCachePath() . '/twig',
