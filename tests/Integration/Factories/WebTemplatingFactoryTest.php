@@ -49,7 +49,7 @@ class WebTemplatingFactoryTest extends KernelTestCase {
 	public function testFunFunFactoryPassesGlobalsFromConfig(): void {
 		$factory = $this->getFactory( [
 			'web-basepath' => '/mydevsubdir',
-			'assets-path' => '/assets'
+			'assets-path' => 'http://example.com/assets'
 		] );
 		vfsStream::setup( self::TEMPLATE_DIR, null, [
 			'kittens.html.twig' => '<style src="{$ basepath $}/someFile.css"><img src="{$ assets_path $}/kitty.jpg" />'
@@ -57,7 +57,7 @@ class WebTemplatingFactoryTest extends KernelTestCase {
 
 		$output = $factory->getLayoutTemplate( 'kittens.html.twig' )->render( [] );
 
-		$this->assertSame( '<style src="/mydevsubdir/someFile.css"><img src="/assets/kitty.jpg" />', $output );
+		$this->assertSame( '<style src="/mydevsubdir/someFile.css"><img src="http://example.com/assets/kitty.jpg" />', $output );
 	}
 
 	public function testAssetsGetRendered(): void {
