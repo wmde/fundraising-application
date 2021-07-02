@@ -442,7 +442,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->createSharedObject( Environment::class . '::Skin', function (): Environment {
 			$config = $this->config['twig'];
 			$config['loaders']['filesystem']['template-dir'] = $this->getSkinDirectory();
-			$packageFactory = new AssetPackageFactory( $this->config['assets-path'] );
+			$packageFactory = new AssetPackageFactory( $this->getApplicationEnvironment(), $this->config['assets-path'], $this->getRootPath() );
 			$factory = new WebTemplatingFactory(
 				$config,
 				$this->getCachePath() . '/twig',
@@ -1895,5 +1895,9 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function setLocale( string $locale ): void {
 		$this->sharedObjects[ 'locale' ] = $locale;
+	}
+
+	private function getRootPath(): string {
+		return $this->getAbsolutePath( __DIR__ . '/../..' );
 	}
 }
