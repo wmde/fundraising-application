@@ -7,15 +7,16 @@ use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\PathPackage;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
+use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
+use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
 
 class AssetPackageFactory {
 
-	public function __construct( private string $externalSkinAssetsUrl ) {
+	public function __construct( private string $applicationEnvironment, private string $externalSkinAssetsUrl, private string $appRoot ) {
 	}
 
 	public function newAssetPackages(): Packages {
-		// TODO use manifest instead of EmptyVersionStrategy
-		$skinPackage = new PathPackage( '/skins/laika/', new EmptyVersionStrategy() );
+		$skinPackage = new PathPackage( '/skins/laika/', $this->newVersionStrategyForSkin() );
 		if ( !empty( $this->externalSkinAssetsUrl ) ) {
 			$skinPackage = new UrlPackage( $this->externalSkinAssetsUrl, new EmptyVersionStrategy() );
 		}
@@ -25,5 +26,12 @@ class AssetPackageFactory {
 				'skin' => $skinPackage
 			]
 		);
+	}
+
+	private function newVersionStrategyForSkin(): VersionStrategyInterface {
+		if ( $this->applicationEnvironment === 'test' ) {
+			return new EmptyVersionStrategy();
+		}
+		return new JsonManifestVersionStrategy( $this->appRoot . '/web/skins/laika/manifest.json' );
 	}
 }
