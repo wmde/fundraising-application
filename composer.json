@@ -4,7 +4,7 @@
 	"homepage": "https://github.com/wmde/FundraisingFrontend",
 	"license": "GPL-2.0+",
 	"require": {
-		"php": ">=7.4",
+		"php": ">=8.0",
 		"ext-intl": "*",
 		"ext-curl": "*",
 		"ext-json": "*",
@@ -15,14 +15,14 @@
 		"wmde/email-address": "~1.0",
 		"wmde/euro": "~1.0",
 		"wmde/clock": "~1.0",
-		"wmde/fundraising-donations": "~8.0",
-		"wmde/fundraising-memberships": "~6.0",
-		"wmde/fundraising-payments": "~3.0",
-		"wmde/fundraising-subscriptions": "~2.0.0",
+		"wmde/fundraising-donations": "dev-update-payments",
+		"wmde/fundraising-memberships": "dev-update-payments",
+		"wmde/fundraising-payments": "~4.0",
+		"wmde/fundraising-subscriptions": "dev-update-validators",
 		"wmde/fundraising-content-provider": "~4.0.0",
 		"wmde/fundraising-address-change": "1.0.2",
 		"wmde/freezable-value-object": "~2.0",
-		"wmde/fun-validators": "~3.0.0",
+		"wmde/fun-validators": "~4.0",
 
 		"symfony/config": "~5.3.0",
 		"symfony/console": "~5.2.0",
@@ -146,7 +146,8 @@
 	"autoload-dev": {
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\Tests\\": "tests/",
-			"WMDE\\Fundraising\\SubscriptionContext\\Tests\\": "vendor/wmde/fundraising-subscriptions/tests/"
+			"WMDE\\Fundraising\\SubscriptionContext\\Tests\\": "vendor/wmde/fundraising-subscriptions/tests/",
+			"WMDE\\Fundraising\\MembershipContext\\Tests\\": "vendor/wmde/fundraising-memberships/tests/"
 		}
 	},
 	"config": {
