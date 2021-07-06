@@ -147,7 +147,8 @@
 	"autoload-dev": {
 		"psr-4": {
 			"WMDE\\Fundraising\\Frontend\\Tests\\": "tests/",
-			"WMDE\\Fundraising\\SubscriptionContext\\Tests\\": "vendor/wmde/fundraising-subscriptions/tests/"
+			"WMDE\\Fundraising\\SubscriptionContext\\Tests\\": "vendor/wmde/fundraising-subscriptions/tests/",
+			"WMDE\\Fundraising\\MembershipContext\\Tests\\": "vendor/wmde/fundraising-memberships/tests/"
 		}
 	},
 	"config": {
