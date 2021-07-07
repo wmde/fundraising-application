@@ -176,7 +176,8 @@ use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotifica
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
-use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Client as SofortClient;
+use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
+use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortLibClient;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\DefaultPaymentDelayCalculator;
@@ -924,19 +925,24 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	private function getPayPalUrlConfigForDonations(): PayPalConfig {
-		return PayPalConfig::newFromConfig( $this->config['paypal-donation'] );
+		return PayPalConfig::newFromConfig(
+			array_merge( $this->config['paypal-donation'], [ 'locale' => $this->getLocale() ] )
+		);
 	}
 
 	private function getPayPalUrlConfigForMembershipApplications(): PayPalConfig {
-		return PayPalConfig::newFromConfig( $this->config['paypal-membership'] );
+		return PayPalConfig::newFromConfig(
+			array_merge( $this->config['paypal-membership'], [ 'locale' => $this->getLocale() ] )
+		);
 	}
 
 	public function newSofortUrlGeneratorForDonations(): SofortUrlGenerator {
 		$config = $this->config['sofort'];
-
+		$locale = \Locale::parseLocale( $this->getLocale() );
 		return new SofortUrlGenerator(
 			new SofortConfig(
 				$this->getPaymentProviderItemsTranslator()->trans( 'sofort_item_name_donation' ),
+				strtoupper( $locale['language'] ),
 				$config['return-url'],
 				$config['cancel-url'],
 				$config['notification-url']
@@ -952,7 +958,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function getSofortClient(): SofortClient {
 		return $this->createSharedObject( SofortClient::class, function () {
 			$config = $this->config['sofort'];
-			return new SofortClient( $config['config-key'] );
+			return new SofortLibClient( $config['config-key'] );
 		} );
 	}
 
@@ -961,7 +967,8 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	private function newCreditCardUrlConfig(): CreditCardConfig {
-		return CreditCardConfig::newFromConfig( $this->config['creditcard'] );
+		$locale = \Locale::parseLocale( $this->getLocale() );
+		return CreditCardConfig::newFromConfig( array_merge( $this->config['creditcard'], [ 'locale' => $locale['language'] ] ) );
 	}
 
 	public function getDonationRepository(): DonationRepository {
