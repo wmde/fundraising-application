@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1d05c9364aa19ba03b8f137fddf10fb",
+    "content-hash": "1f64d0d82ebbc419ad23f192d21ad769",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7005,16 +7005,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "dev-update-payments",
+            "version": "v8.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "c75f0e2ad2e0a9e4ab1aef97d4e2e28ec139da4c"
+                "reference": "fcd226f60cf8abc75df03953651c2e4faee98752"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/c75f0e2ad2e0a9e4ab1aef97d4e2e28ec139da4c",
-                "reference": "c75f0e2ad2e0a9e4ab1aef97d4e2e28ec139da4c",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/fcd226f60cf8abc75df03953651c2e4faee98752",
+                "reference": "fcd226f60cf8abc75df03953651c2e4faee98752",
                 "shasum": ""
             },
             "require": {
@@ -7062,16 +7062,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "dev-update-payments",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "54044855fac63d177849d1d02d71b17e8209f205"
+                "reference": "c0617605ee0594a2b4ad8cac4ce69ab6e499fa50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/54044855fac63d177849d1d02d71b17e8209f205",
-                "reference": "54044855fac63d177849d1d02d71b17e8209f205",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/c0617605ee0594a2b4ad8cac4ce69ab6e499fa50",
+                "reference": "c0617605ee0594a2b4ad8cac4ce69ab6e499fa50",
                 "shasum": ""
             },
             "require": {
@@ -7122,12 +7122,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "8bf213a42fe2920b2b60b4b0cf64898234122fca"
+                "reference": "70b88912f9c22f244a4487b9fdaf552179f7fd57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/8bf213a42fe2920b2b60b4b0cf64898234122fca",
-                "reference": "8bf213a42fe2920b2b60b4b0cf64898234122fca",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/70b88912f9c22f244a4487b9fdaf552179f7fd57",
+                "reference": "70b88912f9c22f244a4487b9fdaf552179f7fd57",
                 "shasum": ""
             },
             "require": {
@@ -7162,20 +7162,20 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2021-07-06T15:06:35+00:00"
+            "time": "2021-07-07T11:21:30+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "dev-update-validators",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "6a741f3f717861e88b7f13caaf4bdcf78352c56f"
+                "reference": "0881575183107efb7796d53349fd5c79e4fbdacc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/6a741f3f717861e88b7f13caaf4bdcf78352c56f",
-                "reference": "6a741f3f717861e88b7f13caaf4bdcf78352c56f",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/0881575183107efb7796d53349fd5c79e4fbdacc",
+                "reference": "0881575183107efb7796d53349fd5c79e4fbdacc",
                 "shasum": ""
             },
             "require": {
@@ -10152,9 +10152,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "wmde/fundraising-donations": 20,
-        "wmde/fundraising-memberships": 20,
-        "wmde/fundraising-subscriptions": 20,
         "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
