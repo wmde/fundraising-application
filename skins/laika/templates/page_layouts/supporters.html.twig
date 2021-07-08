@@ -10,7 +10,7 @@
 	</div>
 	<div id="appdata"
 		 data-page-title="{$ title | e('html_attr') $}"
-		 data-application-vars="{$ supporters|e('html_attr') $}"
+		 data-application-vars="{$ _context|json_encode|e('html_attr') $}"
 		 data-application-messages="{$ translations()|e('html_attr') $}"
 		 data-assets-path="{% if assets_path %}{$ assets_path $}{% else %}{$ basepath $}/skins/laika{% endif %}"
 		 class="is-hidden">

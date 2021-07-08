@@ -504,6 +504,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			'piwik' => $this->config['piwik'],
 			'site_metadata' => $this->getSiteMetaData(),
 			'selectedBuckets' => BucketRenderer::renderBuckets( ...$this->getSelectedBuckets() ),
+			'locale' => $this->getLocale(),
 		];
 	}
 
