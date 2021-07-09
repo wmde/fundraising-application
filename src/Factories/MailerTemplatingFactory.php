@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Factories;
 
 use Twig\Environment;
+use Twig\Extra\Intl\IntlExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
@@ -24,9 +25,10 @@ class MailerTemplatingFactory extends TwigFactory {
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function newTemplatingEnvironment( string $dayOfWeek ): Environment {
+	public function newTemplatingEnvironment( string $dayOfWeek, string $locale ): Environment {
 		$globals = [
-			'day_of_the_week' => $dayOfWeek
+			'day_of_the_week' => $dayOfWeek,
+			'locale' => $locale,
 		];
 
 		return $this->newTwigEnvironment( $globals );
@@ -71,6 +73,12 @@ class MailerTemplatingFactory extends TwigFactory {
 					return $this->urlGenerator->generateAbsoluteUrl( $name, $parameters );
 				}
 			)
+		];
+	}
+
+	protected function getExtensions(): array {
+		return [
+			new IntlExtension()
 		];
 	}
 
