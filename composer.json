@@ -11,6 +11,7 @@
 		"ext-sodium": "*",
 
 		"twig/twig": "^3.0",
+		"twig/intl-extra": "^3.3",
 
 		"wmde/email-address": "~1.0",
 		"wmde/euro": "~1.0",

@@ -1,4 +1,4 @@
-{%- set formattedAmount = membershipFee|number_format(2, ',', '.') ~ ' Euro' -%}
+{%- set formattedAmount = membershipFee|format_number(locale=locale) ~ ' Euro' -%}
 
 {# TODO improve incentive handling  #}
 {% set incentiveText = ( incentives|length > 0 ) ? 'mit dem Wikipedia-Stoffbeutel ' : '' %}

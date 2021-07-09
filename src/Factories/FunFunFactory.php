@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManager;
 use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
+use Locale;
 use NumberFormatter;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -472,8 +473,10 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getContentProvider(),
 				$this->getUrlGenerator(),
 			);
+			$locale = Locale::parseLocale( $this->getLocale() );
 			return $factory->newTemplatingEnvironment(
-				$this->getDayOfWeekName()
+				$this->getDayOfWeekName(),
+				$locale['language']
 			);
 		} );
 	}
