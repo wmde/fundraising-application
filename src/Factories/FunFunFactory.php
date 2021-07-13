@@ -1717,7 +1717,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function getTranslationCollector(): TranslationsCollector {
 		return $this->createSharedObject( TranslationsCollector::class, function (): TranslationsCollector {
 			$translationsCollector = new TranslationsCollector( new SimpleFileFetcher() );
-			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/messages_laika.json' );
+			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/messages.json' );
 			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/membershipTypes.json' );
 			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/validations.json' );
 			return $translationsCollector;
