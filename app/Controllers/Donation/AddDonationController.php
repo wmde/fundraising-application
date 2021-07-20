@@ -133,11 +133,11 @@ class AddDonationController {
 
 	private function getBankDataFromRequest( Request $request ): BankData {
 		$bankData = new BankData();
-		$bankData->setIban( new Iban( $request->get( 'iban', '' ) ) )
-			->setBic( $request->get( 'bic', '' ) )
-			->setAccount( $request->get( 'konto', '' ) )
-			->setBankCode( $request->get( 'blz', '' ) )
-			->setBankName( $request->get( 'bankname', '' ) );
+		$bankData->setIban( new Iban( trim( $request->get( 'iban', '' ) ) ) )
+			->setBic( trim( $request->get( 'bic', '' ) ) )
+			->setAccount( trim( $request->get( 'konto', '' ) ) )
+			->setBankCode( trim( $request->get( 'blz', '' ) ) )
+			->setBankName( trim( $request->get( 'bankname', '' ) ) );
 
 		if ( $bankData->isComplete() ) {
 			return $bankData->freeze()->assertNoNullFields();
