@@ -103,11 +103,11 @@ class ApplyForMembershipController {
 	private function createBakData( Request $httpRequest ): BankData {
 		$bankData = new BankData();
 
-		$bankData->setBankName( $httpRequest->request->get( 'bank_name', '' ) );
-		$bankData->setIban( new Iban( $httpRequest->request->get( 'iban', '' ) ) );
-		$bankData->setBic( $httpRequest->request->get( 'bic', '' ) );
-		$bankData->setAccount( $httpRequest->request->get( 'account_number', '' ) );
-		$bankData->setBankCode( $httpRequest->request->get( 'bank_code', '' ) );
+		$bankData->setBankName( trim( $httpRequest->request->get( 'bank_name', '' ) ) );
+		$bankData->setIban( new Iban( trim( $httpRequest->request->get( 'iban', '' ) ) ) );
+		$bankData->setBic( trim( $httpRequest->request->get( 'bic', '' ) ) );
+		$bankData->setAccount( trim( $httpRequest->request->get( 'account_number', '' ) ) );
+		$bankData->setBankCode( trim( $httpRequest->request->get( 'bank_code', '' ) ) );
 
 		$bankData->assertNoNullFields()->freeze();
 
