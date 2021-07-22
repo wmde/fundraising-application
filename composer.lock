@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cdab216ba7ec74880bb2d6795091e0bb",
+    "content-hash": "fe504f9aa3f49339168642e76363901e",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -361,24 +361,23 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "2.0.3",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "c9622c6820d3ede1e2315a6a377ea1076e421d88"
+                "reference": "331b4d5dbaeab3827976273e9356b3b453c300ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/c9622c6820d3ede1e2315a6a377ea1076e421d88",
-                "reference": "c9622c6820d3ede1e2315a6a377ea1076e421d88",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/331b4d5dbaeab3827976273e9356b3b453c300ce",
+                "reference": "331b4d5dbaeab3827976273e9356b3b453c300ce",
                 "shasum": ""
             },
             "require": {
                 "php": "~7.1 || ^8.0"
             },
             "conflict": {
-                "doctrine/common": ">2.2,<2.4",
-                "psr/cache": ">=3"
+                "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
                 "alcaeus/mongo-php-adapter": "^1.1",
@@ -387,8 +386,9 @@
                 "mongodb/mongodb": "^1.1",
                 "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
                 "predis/predis": "~1.0",
-                "psr/cache": "^1.0 || ^2.0",
-                "symfony/cache": "^4.4 || ^5.2"
+                "psr/cache": "^1.0 || ^2.0 || ^3.0",
+                "symfony/cache": "^4.4 || ^5.2 || ^6.0@dev",
+                "symfony/var-exporter": "^4.4 || ^5.2 || ^6.0@dev"
             },
             "suggest": {
                 "alcaeus/mongo-php-adapter": "Required to use legacy MongoDB driver"
@@ -440,7 +440,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/cache/issues",
-                "source": "https://github.com/doctrine/cache/tree/2.0.3"
+                "source": "https://github.com/doctrine/cache/tree/2.1.1"
             },
             "funding": [
                 {
@@ -456,7 +456,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-25T09:43:04+00:00"
+            "time": "2021-07-17T14:49:29+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -7125,16 +7125,16 @@
         },
         {
             "name": "wmde/fundraising-address-change",
-            "version": "1.0.2",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-address-change",
-                "reference": "135bf7ff0ad1033c593ce6d9656e8fb18b6b0a56"
+                "reference": "14719f922c423a86dd6862e4a6160ad6560e5fd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/135bf7ff0ad1033c593ce6d9656e8fb18b6b0a56",
-                "reference": "135bf7ff0ad1033c593ce6d9656e8fb18b6b0a56",
+                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/14719f922c423a86dd6862e4a6160ad6560e5fd8",
+                "reference": "14719f922c423a86dd6862e4a6160ad6560e5fd8",
                 "shasum": ""
             },
             "require": {
@@ -7145,12 +7145,12 @@
                 "wmde/freezable-value-object": "~2.0"
             },
             "require-dev": {
-                "ockcyp/covers-validator": "~1.0",
                 "phpmd/phpmd": "~2.6",
                 "phpstan/phpstan": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
                 "phpunit/phpunit": "~9.2",
-                "wmde/fundraising-phpcs": "~1.0"
+                "symfony/cache": "^5.3",
+                "wmde/fundraising-phpcs": "~3.0"
             },
             "type": "library",
             "autoload": {
@@ -7167,7 +7167,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Address change use case for fundraising application",
-            "time": "2020-07-06T05:26:59+00:00"
+            "time": "2021-07-21T08:01:17+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
