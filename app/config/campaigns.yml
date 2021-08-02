@@ -64,8 +64,8 @@ campaigns:
     encryption_hint:
       description: Testing users seeing/not seeing the hint about encrypted connection when they submit a form.
       reference: "https://phabricator.wikimedia.org/T286446"
-      start: "2021-07-29"
-      end: "2021-08-12"
+      start: "2021-08-02"
+      end: "2021-08-20"
       buckets:
         - "visible"
         - "not_visible"
