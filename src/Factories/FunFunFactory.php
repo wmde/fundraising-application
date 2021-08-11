@@ -1016,7 +1016,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newDonationAuthorizer( string $updateToken = null, string $accessToken = null ): DonationAuthorizer {
+	private function newDonationAuthorizer( string $updateToken = '', string $accessToken = '' ): DonationAuthorizer {
 		return new DoctrineDonationAuthorizer(
 			$this->getEntityManager(),
 			$updateToken,
@@ -1142,8 +1142,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function getMembershipApplicationAuthorizer(
-		string $updateToken = null, string $accessToken = null ): ApplicationAuthorizer {
+	private function getMembershipApplicationAuthorizer( string $updateToken = '', string $accessToken = '' ): ApplicationAuthorizer {
 		return $this->createSharedObject(
 			ApplicationAuthorizer::class,
 			function () use ( $accessToken, $updateToken ): ApplicationAuthorizer {
@@ -1184,7 +1183,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function newMembershipApplicationConfirmationUseCase( ShowApplicationConfirmationPresenter $presenter, string $accessToken ): ShowApplicationConfirmationUseCase {
 		return new ShowApplicationConfirmationUseCase(
 			$presenter,
-			$this->getMembershipApplicationAuthorizer( null, $accessToken ),
+			$this->getMembershipApplicationAuthorizer( '', $accessToken ),
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher()
 		);
@@ -1192,7 +1191,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newGetDonationUseCase( string $accessToken ): GetDonationUseCase {
 		return new GetDonationUseCase(
-			$this->newDonationAuthorizer( null, $accessToken ),
+			$this->newDonationAuthorizer( '', $accessToken ),
 			$this->newDonationTokenFetcher(),
 			$this->getDonationRepository()
 		);
