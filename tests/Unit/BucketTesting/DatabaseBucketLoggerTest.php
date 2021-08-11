@@ -60,6 +60,7 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 			true
 		);
 	}
+
 	public function testWhenBucketLogIsCreatedAddsBucketLog() {
 		$databaseBucketLogger = $this->getDatabaseBucketLogger();
 		$event = new FakeBucketLoggingEvent();
