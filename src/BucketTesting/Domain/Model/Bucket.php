@@ -5,9 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\BucketTesting\Domain\Model;
 
 class Bucket {
-	private $name;
-	private $campaign;
-	private $defaultBucket;
+	private string $name;
+	private Campaign $campaign;
+	private bool $defaultBucket;
 
 	public const DEFAULT = true;
 	public const NON_DEFAULT = false;

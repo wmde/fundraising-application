@@ -41,15 +41,21 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 		return $this->entityManager->getRepository( BucketLog::class );
 	}
 
-	private function newBucket( string $bucketName, string $campaignName ): Bucket {
+	private function newBucket(
+			string $bucketName,
+			string $campaignName,
+			CampaignDate $start,
+			CampaignDate $end,
+			bool $isActive = true,
+		): Bucket {
 		return new Bucket(
 			$bucketName,
 			new Campaign(
 				$campaignName,
 				$bucketName . $campaignName,
-				new CampaignDate(),
-				( new CampaignDate() )->modify( '+1 month' ),
-				true
+				$start,
+				$end,
+				$isActive
 			),
 			true
 		);
@@ -71,8 +77,10 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 
 	public function testWhenBucketLogIsCreatedAddsRelatedBuckets() {
 		$databaseBucketLogger = $this->getDatabaseBucketLogger();
-		$bucket1 = $this->newBucket( 'bucket_1', 'campaign_1' );
-		$bucket2 = $this->newBucket( 'bucket_2', 'campaign_1' );
+		$start = new CampaignDate();
+		$end = ( new CampaignDate() )->modify( '+1 month' );
+		$bucket1 = $this->newBucket( 'bucket_1', 'campaign_1', $start, $end );
+		$bucket2 = $this->newBucket( 'bucket_2', 'campaign_1', $start, $end );
 
 		$databaseBucketLogger->writeEvent( new FakeBucketLoggingEvent(), $bucket1, $bucket2 );
 
@@ -89,6 +97,46 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 		$this->assertEquals( $bucket2->getName(), $bucketLogBucket2->getName() );
 		$this->assertEquals( $bucket2->getCampaign()->getName(), $bucketLogBucket2->getCampaign() );
 		$this->assertEquals( $bucketLog, $bucketLogBucket2->getBucketLog() );
+	}
+
+	public function testInactiveCampaignBucketDoesNotGetAdded() {
+		$databaseBucketLogger = $this->getDatabaseBucketLogger();
+		$start = new CampaignDate();
+		$end = ( new CampaignDate() )->modify( '+1 month' );
+		$inactiveCampaignBucket = $this->newBucket( 'bucket_1', 'campaign_1', $start, $end, false );
+		$activeCampaignBucket = $this->newBucket( 'bucket_1', 'campaign_1', $start, $end, true );
+
+		$databaseBucketLogger->writeEvent( new FakeBucketLoggingEvent(), $inactiveCampaignBucket, $activeCampaignBucket );
+
+		/** @var BucketLog[] $bucketLogs */
+		$bucketLogs = $this->getOrmRepository()->findAll();
+		$bucketLog = $bucketLogs[0];
+		$this->assertCount( 1, $bucketLog->getBuckets() );
+	}
+
+	public function testExpiredCampaignBucketDoesNotGetAdded() {
+		$databaseBucketLogger = $this->getDatabaseBucketLogger();
+		$start = new CampaignDate();
+		$end = ( new CampaignDate() )->modify( '+1 month' );
+		$currentCampaignBucket = $this->newBucket(
+			'bucket_1',
+			'campaign_1',
+			$start,
+			$end
+		);
+		$expiredCampaignBucket = $this->newBucket(
+			'bucket_1',
+			'campaign_1',
+			$start->modify( '-5 month' ),
+			$end->modify( '-4 month' ),
+		);
+
+		$databaseBucketLogger->writeEvent( new FakeBucketLoggingEvent(), $currentCampaignBucket, $expiredCampaignBucket );
+
+		/** @var BucketLog[] $bucketLogs */
+		$bucketLogs = $this->getOrmRepository()->findAll();
+		$bucketLog = $bucketLogs[0];
+		$this->assertCount( 1, $bucketLog->getBuckets() );
 	}
 
 	public function testWhenNotPassedEntityIdThrowsException() {

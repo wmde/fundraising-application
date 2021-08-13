@@ -11,14 +11,14 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Domain\Model;
  */
 class Campaign {
 
-	private $name;
-	private $active;
-	private $startTimestamp;
-	private $endTimestamp;
-	private $buckets;
-	private $urlKey;
-	private $defaultBucketIndex;
-	private $onlyActiveWithUrlKey;
+	private string $name;
+	private bool $active;
+	private CampaignDate $startTimestamp;
+	private CampaignDate $endTimestamp;
+	private array $buckets;
+	private string $urlKey;
+	private int $defaultBucketIndex;
+	private bool $onlyActiveWithUrlKey;
 
 	public const ACTIVE = true;
 	public const INACTIVE = false;

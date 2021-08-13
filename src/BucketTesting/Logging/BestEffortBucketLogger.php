@@ -12,8 +12,8 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
  */
 class BestEffortBucketLogger implements BucketLogger {
 
-	private $bucketLogger;
-	private $errorLogging;
+	private BucketLogger $bucketLogger;
+	private LoggerInterface $errorLogging;
 	private $caughtException;
 
 	public function __construct( BucketLogger $bucketLogger, LoggerInterface $errorLogging ) {
