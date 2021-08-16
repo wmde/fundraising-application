@@ -15,18 +15,17 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class ShowUpdateAddressController {
 
-	public const ADDRESS_CHANGE_SESSION_KEY = 'address_changed';
-
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$addressToken = $request->get( 'addressToken', '' );
 		if ( $addressToken === '' ) {
-			throw new AccessDeniedException( 'No address change token in request' );
+			throw new AccessDeniedException( 'address_change_no_token_in_request' );
 		}
 
 		$addressChangeRepository = $ffFactory->newAddressChangeRepository();
 		$addressChange = $addressChangeRepository->getAddressChangeByUuid( $addressToken );
 		if ( $addressChange === null ) {
-			throw new AccessDeniedException( sprintf( 'No address change record found with token %s.', $addressToken ) );
+			$ffFactory->getLogger()->notice( 'Address change record not found', [ 'addressChangeToken' => $addressToken ] );
+			throw new AccessDeniedException( 'address_change_token_not_found' );
 		}
 		return new Response(
 			$ffFactory->getLayoutTemplate( 'Update_Address.html.twig' )->render(
