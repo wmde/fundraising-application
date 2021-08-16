@@ -52,4 +52,9 @@ class BucketLog {
 	public function addBucket( string $bucketName, string $campaign ) {
 		$this->buckets->add( new BucketLogBucket( $this, $bucketName, $campaign ) );
 	}
+
+	public function shouldBeLogged(): bool {
+		return $this->getBuckets()->count() > 0;
+	}
+
 }

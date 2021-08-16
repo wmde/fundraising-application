@@ -25,6 +25,9 @@ class DatabaseBucketLogger implements BucketLogger {
 
 		$bucketLog = new BucketLog( $metadata['id'], $event->getName() );
 		$this->addBucketLogBuckets( $bucketLog, ...$buckets );
+		if ( !$bucketLog->shouldBeLogged() ) {
+			return;
+		}
 
 		$this->bucketLoggingRepository->storeBucketLog( $bucketLog );
 	}
