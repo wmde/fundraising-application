@@ -8,6 +8,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
+/**
+ * This class receives an HTTP request from the Fundraising Operation Center for sending a notification email.
+ *
+ * This controller exists because we have not yet shared the mail templating code (esp. for the confirmation mail)
+ * between Fundraising Frontend and Fundraising Operation Center.
+ *
+ * We're tracking progress and ideas for improving the situation in https://phabricator.wikimedia.org/T254028
+ */
 class DonationAcceptedController {
 
 	public function index( FunFunFactory $ffFactory, Request $request ): JsonResponse {
@@ -16,7 +24,7 @@ class DonationAcceptedController {
 		);
 		$result = $eventHandler->onDonationAccepted( (int)$request->query->get( 'donation_id', '' ) );
 
-		return JsonResponse::create(
+		return new JsonResponse(
 			$result === null ? [ 'status' => 'OK' ] : [ 'status' => 'ERR', 'message' => $result ]
 		);
 	}

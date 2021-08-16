@@ -47,7 +47,7 @@ class SofortNotificationController {
 	}
 
 	private function newUseCase(): SofortPaymentNotificationUseCase {
-		return $this->ffFactory->newHandleSofortPaymentNotificationUseCase( $this->request->query->get( 'updateToken' ) );
+		return $this->ffFactory->newHandleSofortPaymentNotificationUseCase( $this->request->query->get( 'updateToken', '' ) );
 	}
 
 	private function newUseCaseRequest(): SofortNotificationRequest {
