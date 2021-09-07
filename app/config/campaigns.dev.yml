@@ -19,3 +19,8 @@ campaigns:
     active: true
     start: "2021-07-15"
     default_bucket: "visible"
+
+  address_type_steps:
+    active: true
+    start: "2021-09-01"
+    default_bucket: "direct"
