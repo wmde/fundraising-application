@@ -81,6 +81,19 @@ incoming request:
 * We find a donation with matching ID and security token in the database
 * The found donation was not booked before
 
+### IPN History
+
+PayPal stores a history of IPNs that were sent to us in the last 28 days.
+The [IPN History][4] page can only be accessed when logged in using the
+receiver e-mail address of the respective account. The Head of Team
+Finance and the Head of Team Spenden und Mitglieder both have access to
+that account and need to be contacted in order to get information from
+the IPN history.
+
+Apart from a date, the only available filters are the transaction ID and
+the delivery status of IPNs. PayPal has a more detailed [documentation][5]
+on how to use it.
+
 
 ### Processing PayPal-only donations
 
@@ -156,4 +169,6 @@ points when redirecting the user to PayPal.
 [1]: https://developer.paypal.com/docs/api-basics/notifications/ipn/
 [2]: https://developer.paypal.com/docs/api-basics/notifications/ipn/IPNIntro/#ipn-protocol-and-architecture
 [3]: https://phabricator.wikimedia.org/T147400
+[4]: https://www.paypal.com/ie/cgi-bin/webscr?cmd=_display-ipns-history&nav=0.3.2
+[5]: https://developer.paypal.com/docs/api-basics/notifications/ipn/IPNOperations/
 
