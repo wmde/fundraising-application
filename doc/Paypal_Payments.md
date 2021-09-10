@@ -84,6 +84,15 @@ incoming request:
 ### IPN History
 
 PayPal stores a history of IPNs that were sent to us in the last 28 days.
+It provides detailed information about single IPNs including transmission
+meta data and the message body, which can be used to troubleshoot failed
+notifications.
+
+The IPNs can also be triggered to be sent again, either single
+notifications or in bulk. The notifications will not be sent immediately
+but added to PayPal's notification queue. It may take some minutes
+for the notifications to hit our servers.
+
 The [IPN History][4] page can only be accessed when logged in using the
 receiver e-mail address of the respective account. The Head of Team
 Finance and the Head of Team Spenden und Mitglieder both have access to
