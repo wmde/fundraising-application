@@ -7706,21 +7706,21 @@
         },
         {
             "name": "matthiasnoback/symfony-config-test",
-            "version": "4.2.1",
+            "version": "4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyTest/SymfonyConfigTest.git",
-                "reference": "8b1408d2d9c2530bbba550f272061c4736052c80"
+                "reference": "e7db0f5ea98817c7ba1b9266f8039c085e673db4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyTest/SymfonyConfigTest/zipball/8b1408d2d9c2530bbba550f272061c4736052c80",
-                "reference": "8b1408d2d9c2530bbba550f272061c4736052c80",
+                "url": "https://api.github.com/repos/SymfonyTest/SymfonyConfigTest/zipball/e7db0f5ea98817c7ba1b9266f8039c085e673db4",
+                "reference": "e7db0f5ea98817c7ba1b9266f8039c085e673db4",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0",
-                "symfony/config": "^2.7 || ^3.4 || ^4.0 || ^5.0"
+                "symfony/config": "^4.4 || ^5.3 || ^6.0"
             },
             "conflict": {
                 "phpunit/phpunit": "<7.0"
@@ -7759,9 +7759,9 @@
             ],
             "support": {
                 "issues": "https://github.com/SymfonyTest/SymfonyConfigTest/issues",
-                "source": "https://github.com/SymfonyTest/SymfonyConfigTest/tree/4.2.1"
+                "source": "https://github.com/SymfonyTest/SymfonyConfigTest/tree/4.3.0"
             },
-            "time": "2020-11-15T15:13:34+00:00"
+            "time": "2021-09-15T12:30:20+00:00"
         },
         {
             "name": "mediawiki/mediawiki-codesniffer",
