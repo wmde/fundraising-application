@@ -64,7 +64,6 @@ class DonorUpdateHtmlPresenter {
 			],
 			'address' => $this->donorDataFormatter->getAddressArguments( $donation ),
 			'bankData' => $this->donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),
-			'piwikEvents' => [],
 			'commentUrl' => $this->urlGenerator->generateRelativeUrl(
 				'AddCommentPage',
 				[

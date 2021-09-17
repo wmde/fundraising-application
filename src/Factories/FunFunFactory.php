@@ -329,7 +329,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function newCommentListHtmlPresenter(): CommentListHtmlPresenter {
-		return new CommentListHtmlPresenter( $this->getLayoutTemplate( 'Comment_List.html.twig', [ 'piwikGoals' => [ 1 ] ] ) );
+		return new CommentListHtmlPresenter( $this->getLayoutTemplate( 'Comment_List.html.twig' ) );
 	}
 
 	private function getCommentFinder(): CommentFinder {
