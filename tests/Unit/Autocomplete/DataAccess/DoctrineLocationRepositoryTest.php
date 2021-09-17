@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Autocomplete\DataAccess;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\Autocomplete\Domain\DataAccess\DoctrineLocationRepository;
-use WMDE\Fundraising\Frontend\Autocomplete\Domain\Model\Location;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidLocation;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
