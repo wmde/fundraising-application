@@ -4,10 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
+use RuntimeException;
+use Swift_Message;
+use Swift_Transport;
 use WMDE\EmailAddress\EmailAddress;
 
 /**
@@ -15,14 +14,14 @@ use WMDE\EmailAddress\EmailAddress;
  */
 class Messenger {
 
-	private MailerInterface $mailer;
+	private Swift_Transport $mailTransport;
 	private EmailAddress $operatorAddress;
 	private string $operatorName;
 
-	public function __construct( MailerInterface $mailer,
+	public function __construct( Swift_Transport $mailTransport,
 								 EmailAddress $operatorAddress,
 								 string $operatorName = '' ) {
-		$this->mailer = $mailer;
+		$this->mailTransport = $mailTransport;
 		$this->operatorAddress = $operatorAddress;
 		$this->operatorName = $operatorName;
 	}
@@ -36,26 +35,22 @@ class Messenger {
 	}
 
 	private function createMessage( Message $messageContent, EmailAddress $recipient,
-									EmailAddress $replyTo = null ): Email {
-		$message = new Email();
-		$message
-			->text( $messageContent->getMessageBody() )
-			->subject( $messageContent->getSubject() )
-			->from( new Address( $this->operatorAddress->getNormalizedAddress(), $this->operatorName ) )
-			->to( new Address( $recipient->getNormalizedAddress() ) );
+									EmailAddress $replyTo = null ): Swift_Message {
+		$message = new Swift_Message( $messageContent->getSubject(), $messageContent->getMessageBody() );
+		$message->setFrom( $this->operatorAddress->getNormalizedAddress(), $this->operatorName );
+		$message->setTo( $recipient->getNormalizedAddress() );
 
 		if ( $replyTo ) {
-			$message->replyTo( new Address( $replyTo->getNormalizedAddress() ) );
+			$message->setReplyTo( $replyTo->getNormalizedAddress() );
 		}
 
 		return $message;
 	}
 
-	private function sendMessage( Email $message ): void {
-		try {
-			$this->mailer->send( $message );
-		} catch ( TransportExceptionInterface $e ) {
-			throw new MailerException( 'Message delivery failed', $e );
+	private function sendMessage( Swift_Message $message ): void {
+		$deliveryCount = $this->mailTransport->send( $message );
+		if ( $deliveryCount === 0 ) {
+			throw new MailerException( 'Message delivery failed' );
 		}
 	}
 
