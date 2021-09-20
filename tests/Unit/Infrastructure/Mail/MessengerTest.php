@@ -4,11 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Mailer\Exception\TransportException;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\Transport\NullTransport;
-use Symfony\Component\Mailer\Transport\TransportInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Swift_NullTransport;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailerException;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Message;
@@ -18,27 +15,34 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger
  * @license GPL-2.0-or-later
  */
-class MessengerTest extends TestCase {
+class MessengerTest extends \PHPUnit\Framework\TestCase {
 
-	public function testItWrapsTransportExceptions(): void {
-		$mailTransport = $this->createMock( TransportInterface::class );
+	public function testWhenSendReturnsZero_exceptionIsThrown(): void {
+		$mailTransport = $this->newMailTransport();
 
 		$mailTransport->expects( $this->once() )
 			->method( 'send' )
-			->willThrowException( new TransportException( "The drone crashed" ) );
+			->willReturn( 0 );
 
 		$this->expectException( MailerException::class );
 		$this->expectExceptionMessage( 'Message delivery failed' );
-		( new Messenger( new Mailer( $mailTransport ), new EmailAddress( 'hostmaster@thatoperator.com' ) ) )
+		( new Messenger( $mailTransport, new EmailAddress( 'hostmaster@thatoperator.com' ) ) )
 			->sendMessageToUser(
 				new Message( 'Test message', 'This is just a test' ),
 				new EmailAddress( 'i.want@to.receive.com' )
 			);
 	}
 
+	/**
+	 * @return Swift_NullTransport & MockObject
+	 */
+	private function newMailTransport(): Swift_NullTransport {
+		return $this->createMock( Swift_NullTransport::class );
+	}
+
 	public function testSendToAddressWithInternationalCharacters_doesNotCauseException(): void {
 		$messenger = new Messenger(
-			new Mailer( new NullTransport() ),
+			$this->newMailTransport(),
 			new EmailAddress( 'hostmaster@thatoperator.com' )
 		);
 
