@@ -77,7 +77,7 @@ campaigns:
     address_type_steps:
       description: Test choosing address type directly (person, company, anonymous) or via 2 step (full, email, anonymous)
       reference: "https://phabricator.wikimedia.org/T289460"
-      start: "2021-12-31"
+      start: "2021-01-01"
       end: "2021-12-31"
       buckets:
         - "direct"
