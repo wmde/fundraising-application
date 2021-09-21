@@ -93,6 +93,8 @@
 	"piwik": {
 		"baseUrl": "//tracking.wikimedia.de/",
 		"siteId": 5,
+		"donationConfirmationGoalId": 1,
+		"membershipApplicationConfirmationGoalId": 2,
 		"siteUrlBase": ""
 	},
 	"payment-types": {
