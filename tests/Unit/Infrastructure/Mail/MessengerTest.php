@@ -21,19 +21,24 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 class MessengerTest extends TestCase {
 
 	public function testItWrapsTransportExceptions(): void {
+		$transportException = new TransportException( "The drone crashed" );
 		$mailTransport = $this->createMock( TransportInterface::class );
-
 		$mailTransport->expects( $this->once() )
 			->method( 'send' )
-			->willThrowException( new TransportException( "The drone crashed" ) );
+			->willThrowException( $transportException );
 
-		$this->expectException( MailerException::class );
-		$this->expectExceptionMessage( 'Message delivery failed' );
-		( new Messenger( new Mailer( $mailTransport ), new EmailAddress( 'hostmaster@thatoperator.com' ) ) )
-			->sendMessageToUser(
-				new Message( 'Test message', 'This is just a test' ),
-				new EmailAddress( 'i.want@to.receive.com' )
-			);
+		try{
+			( new Messenger( new Mailer( $mailTransport ), new EmailAddress( 'hostmaster@thatoperator.com' ) ) )
+				->sendMessageToUser(
+					new Message( 'Test message', 'This is just a test' ),
+					new EmailAddress( 'i.want@to.receive.com' )
+				);
+		} catch ( MailerException $e ) {
+			$this->assertSame( 'Message delivery failed', $e->getMessage() );
+			$this->assertSame( $transportException, $e->getPrevious() );
+			return;
+		}
+		$this->fail( 'Messenger did not throw MailerException' );
 	}
 
 	public function testSendToAddressWithInternationalCharacters_doesNotCauseException(): void {

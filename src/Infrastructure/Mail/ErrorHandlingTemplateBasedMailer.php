@@ -32,7 +32,14 @@ class ErrorHandlingTemplateBasedMailer implements DonationTemplateMailerInterfac
 			$this->templateBasedMailer->sendMail( $recipient, $templateArguments );
 		}
 		catch ( \RuntimeException $e ) {
-			$this->logger->error( $e->getMessage() );
+			$message = $e->getMessage();
+			$exception = $e;
+			$previous = $e->getPrevious();
+			if ( $previous !== null ) {
+				$message .= ' ' . $previous->getMessage();
+				$exception = $previous;
+			}
+			$this->logger->error( $message, [ 'exception' => $exception ] );
 		}
 	}
 }
