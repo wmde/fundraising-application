@@ -20,10 +20,12 @@ use Psr\SimpleCache\CacheInterface;
 use RemotelyLiving\Doorkeeper\Doorkeeper;
 use RemotelyLiving\Doorkeeper\Features\Set;
 use RemotelyLiving\Doorkeeper\Requestor;
-use Swift_NullTransport;
-use Swift_SmtpTransport;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Psr16Cache;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport\NullTransport;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use TNvpServiceDispatcher;
 use Twig\Environment;
 use WMDE\Clock\SystemClock;
@@ -691,7 +693,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function getSuborganizationMessenger(): Messenger {
 		return $this->createSharedObject( Messenger::class . 'suborganization', function (): Messenger {
 			return new Messenger(
-				$this->getSmtpTransport(),
+				$this->getMailer(),
 				$this->getSubOrganizationEmailAddress(),
 				$this->config['contact-info']['suborganization']['name']
 			);
@@ -705,7 +707,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function getOrganizationMessenger(): Messenger {
 		return $this->createSharedObject( Messenger::class . 'organization', function (): Messenger {
 			return new Messenger(
-				$this->getSmtpTransport(),
+				$this->getMailer(),
 				$this->getOrganizationEmailAddress(),
 				$this->config['contact-info']['organization']['name']
 			);
@@ -716,25 +718,26 @@ class FunFunFactory implements LoggerAwareInterface {
 		$this->sharedObjects[Messenger::class . 'organization'] = $messenger;
 	}
 
-	private function getSmtpTransport(): Swift_SmtpTransport {
-		return $this->createSharedObject( Swift_SmtpTransport::class, function (): Swift_SmtpTransport {
-			return ( new Swift_SmtpTransport(
+	private function getMailer(): MailerInterface {
+		return $this->createSharedObject( MailerInterface::class, function (): MailerInterface {
+			$transport = new EsmtpTransport(
 				$this->config['smtp']['host'],
 				$this->config['smtp']['port'],
-				$this->config['smtp']['encryption']
-			) )
-				->setUsername( $this->config['smtp']['username'] )
+				$this->config['smtp']['encryption'] === 'tls'
+			);
+			$transport->setUsername( $this->config['smtp']['username'] )
 				->setPassword( $this->config['smtp']['password'] );
+			return new Mailer( $transport );
 		} );
 	}
 
 	public function setNullMessenger(): void {
 		$this->setSuborganizationMessenger( new Messenger(
-			new Swift_NullTransport(),
+			new Mailer( new NullTransport() ),
 			$this->getSubOrganizationEmailAddress()
 		) );
 		$this->setOrganizationMessenger( new Messenger(
-			new Swift_NullTransport(),
+			new Mailer( new NullTransport() ),
 			$this->getOrganizationEmailAddress()
 		) );
 	}
