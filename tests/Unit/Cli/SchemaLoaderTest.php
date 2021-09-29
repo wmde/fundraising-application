@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 
 use FileFetcher\FileFetcher;
 use FileFetcher\StubFileFetcher;
-use FileFetcher\ThrowingFileFetcher;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation\ConfigValidationException;

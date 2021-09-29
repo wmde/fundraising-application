@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
-use WMDE\Fundraising\Frontend\Tests\TestEnvironment;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier

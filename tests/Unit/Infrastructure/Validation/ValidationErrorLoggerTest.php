@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Validation;
 
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger;
-use WMDE\FunValidators\ConstraintViolation;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**

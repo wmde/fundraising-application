@@ -61,7 +61,7 @@ class McpCreditCardServiceTest extends TestCase {
 	}
 
 	/**
-	 * @return \IMcpCreditcardService_v1_5 & MockObject
+	 * @return \IMcpCreditcardService_v1_5&MockObject
 	 */
 	private function getMicroPaymentServiceTestDouble(): \IMcpCreditcardService_v1_5 {
 		return $this->createMock( \IMcpCreditcardService_v1_5::class );

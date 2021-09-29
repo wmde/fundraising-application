@@ -108,7 +108,7 @@ class WebTemplatingFactoryTest extends KernelTestCase {
 	}
 
 	/**
-	 * @return ContentProvider & MockObject
+	 * @return ContentProvider&MockObject
 	 */
 	public function getMockContentProvider(): ContentProvider {
 		return $this->createMock( ContentProvider::class );

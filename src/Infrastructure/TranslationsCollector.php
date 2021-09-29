@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use FileFetcher\FileFetcher;
-use FileFetcher\FileFetchingException;
 use RuntimeException;
 
 class TranslationsCollector {

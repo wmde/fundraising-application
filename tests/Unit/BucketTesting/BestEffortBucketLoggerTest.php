@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;

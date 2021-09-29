@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
-use InvalidArgumentException;
-
 /**
  * Takes a config like the following and provides read and write interface
  *

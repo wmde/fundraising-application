@@ -435,7 +435,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	/**
-	 * @return PaymentNotificationVerifier & MockObject
+	 * @return PaymentNotificationVerifier&MockObject
 	 */
 	private function newSucceedingNotificationVerifier(): PaymentNotificationVerifier {
 		// The PayPal verifier throws exceptions on verification failure.

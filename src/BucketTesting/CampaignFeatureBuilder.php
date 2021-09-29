@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\BucketTesting;
 
 use RemotelyLiving\Doorkeeper\Features\Feature;
 use RemotelyLiving\Doorkeeper\Features\Set;
-use RemotelyLiving\Doorkeeper\Rules\Percentage;
 use RemotelyLiving\Doorkeeper\Rules\RuleInterface;
 use RemotelyLiving\Doorkeeper\Rules\StringHash;
 use RemotelyLiving\Doorkeeper\Rules\TimeAfter;
