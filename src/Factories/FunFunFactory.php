@@ -723,7 +723,6 @@ class FunFunFactory implements LoggerAwareInterface {
 			$transport = new EsmtpTransport(
 				$this->config['smtp']['host'],
 				$this->config['smtp']['port'],
-				$this->config['smtp']['encryption'] === 'tls'
 			);
 			$transport->setUsername( $this->config['smtp']['username'] )
 				->setPassword( $this->config['smtp']['password'] );
