@@ -148,6 +148,7 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfi
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Salutations;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
@@ -509,6 +510,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function getDefaultTwigVariables(): array {
 		return [
 			'honorifics' => $this->getHonorifics()->getList(),
+			'salutations' => $this->getSalutations()->getList(),
 			'piwik' => $this->config['piwik'],
 			'site_metadata' => $this->getSiteMetaData(),
 			'selectedBuckets' => BucketRenderer::renderBuckets( ...$this->getSelectedBuckets() ),
@@ -683,6 +685,15 @@ class FunFunFactory implements LoggerAwareInterface {
 				$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/honorifics.json' );
 				$honorificsData = json_decode( $json, true, 16, JSON_THROW_ON_ERROR );
 				return new Honorifics( $honorificsData );
+			} );
+	}
+
+	private function getSalutations(): Salutations {
+		return $this->createSharedObject( Salutations::class,
+			function () {
+				$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/salutations.json' );
+				$data = json_decode( $json, true, 16, JSON_THROW_ON_ERROR );
+				return new Salutations( $data[ 'salutations' ] );
 			} );
 	}
 
