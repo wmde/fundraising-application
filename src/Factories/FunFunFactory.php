@@ -605,7 +605,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function getGreetingGenerator(): GreetingGenerator {
 		return $this->createSharedObject( GreetingGenerator::class, function (): GreetingGenerator {
-			return new GreetingGenerator( $this->getMailTranslator() );
+			return new GreetingGenerator( $this->getMailTranslator(), $this->getSalutations(), 'mail_introduction_generic' );
 		} );
 	}
 

@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
+use WMDE\Fundraising\Frontend\Presentation\Salutations;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 
 /**
@@ -13,110 +14,134 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
  */
 class GreetingGeneratorTest extends TestCase {
 
-	public function testGivenNoLastNameForFormalGreeting_neutralGreetingIsGenerated(): void {
-		$this->assertSame(
-			'mail_introduction_generic',
-			$this->getGreetingGenerator()->createFormalGreeting( '', 'Herr', '' )
-		);
-	}
-
-	public function testGivenNoSalutationForFormalGreeting_neutralGreetingIsGenerated(): void {
-		$this->assertSame(
-			'mail_introduction_generic',
-			$this->getGreetingGenerator()->createFormalGreeting( 'Nyan', '', '' )
-		);
-	}
-
 	/**
 	 * @dataProvider formalGreetingProvider
 	 */
-	public function testGivenASalutationForFormalGreeting_specificGreetingIsGenerated( string $salutation, string $expected ): void {
+	public function testSpecificFormalGreetingIsGenerated( string $salutation, string $expected ): void {
 		$this->assertSame(
 			$expected,
-			$this->getGreetingGenerator()->createFormalGreeting( 'Nyan', $salutation, '' )
+			$this->getGreetingGenerator()->createFormalGreeting( $salutation, firstName: 'Nyan', lastName: 'Cat', title: '' )
 		);
 	}
 
-	public function formalGreetingProvider(): array {
-		return [
-			[ 'Herr', 'mail_introduction_male_formal' ],
-			[ 'Frau', 'mail_introduction_female_formal' ],
-			[ 'Familie', 'mail_introduction_family_formal' ]
-		];
-	}
-
-	public function testGivenNoFirstNameForInformalPersonalGreeting_neutralGreetingIsGenerated(): void {
+	public function testGivenNoLastNameForFormalGreeting_genericGreetingIsGenerated(): void {
 		$this->assertSame(
-			'mail_introduction_generic',
-			$this->getGreetingGenerator()->createInformalGreeting( 'Herr', '', 'Zuse' )
+			'genericGreeting',
+			$this->getGreetingGenerator()->createFormalGreeting( salutation: 'Herr', firstName: 'Nyan', lastName: '', title: '' )
 		);
 	}
 
-	public function testGivenNoLastNameForInformalFamilyGreeting_neutralGreetingIsGenerated(): void {
+	public function testGivenUnknownSalutationForFormalGreeting_genericGreetingIsGenerated(): void {
 		$this->assertSame(
-			'mail_introduction_generic',
-			$this->getGreetingGenerator()->createInformalGreeting( 'Familie', 'Konrad', '' )
-		);
-	}
-
-	public function testGivenNoSalutationForInformalGreeting_neutralGreetingIsGenerated(): void {
-		$this->assertSame(
-			'mail_introduction_generic',
-			$this->getGreetingGenerator()->createInformalGreeting( '', 'Testy', 'MacTest' )
+			'genericGreeting',
+			$this->getGreetingGenerator()->createFormalGreeting( salutation: '', firstName: 'Nyan', lastName: 'Cat', title: '' )
 		);
 	}
 
 	/**
 	 * @dataProvider informalGreetingProvider
 	 */
-	public function testGivenASalutationForInformalGreeting_specificGreetingIsGenerated( string $salutation, string $expected ): void {
+	public function testSpecificInformalGreetingIsGenerated( string $salutation, string $expected ): void {
 		$this->assertSame(
 			$expected,
-			$this->getGreetingGenerator()->createInformalGreeting( $salutation, 'Sascha', 'Mustermann' )
+			$this->getGreetingGenerator()->createInformalGreeting( $salutation, firstName: 'Sascha', lastName: 'Mustermann' )
 		);
 	}
 
-	public function informalGreetingProvider(): array {
-		return [
-			[ 'Herr', 'mail_introduction_male_informal' ],
-			[ 'Frau', 'mail_introduction_female_informal' ],
-			[ 'Familie', 'mail_introduction_family_informal' ]
-		];
-	}
-
-	public function testGivenNoLastnameForInformalLastnameGreeting_neutralGreetingIsGenerated(): void {
+	public function testGivenNoFirstNameForInformalGreeting_genericGreetingIsGenerated(): void {
 		$this->assertSame(
-			'mail_introduction_generic',
-			$this->getGreetingGenerator()->createInformalLastnameGreeting( 'Herr', '', '' )
+			'genericGreeting',
+			$this->getGreetingGenerator()->createInformalGreeting( salutation: 'Herr', firstName: '', lastName: 'Zuse' )
 		);
 	}
 
-	public function testGivenNoSalutationForInformalLastnameGreeting_neutralGreetingIsGenerated(): void {
+	public function testGivenUnknownSalutationForInformalGreeting_genericGreetingIsGenerated(): void {
 		$this->assertSame(
-			'mail_introduction_generic',
-			$this->getGreetingGenerator()->createInformalLastnameGreeting( '', 'Testname', '' )
+			'genericGreeting',
+			$this->getGreetingGenerator()->createInformalGreeting( salutation: 'Sky Pirate', firstName: 'Testy', lastName: 'MacTest' )
 		);
 	}
 
 	/**
 	 * @dataProvider informalLastnameGreetingProvider
 	 */
-	public function testGivenValidDataForInformalLastnameGreeting_specificGreetingIsGenerated( string $salutation, string $expected ): void {
+	public function testSpecificInformalLastNameGreetingIsGenerated( string $salutation, string $expected ): void {
 		$this->assertSame(
 			$expected,
-			$this->getGreetingGenerator()->createInformalLastnameGreeting( $salutation, 'Mustermann', '' )
+			$this->getGreetingGenerator()->createInformalLastnameGreeting( $salutation, firstName: '', lastName: 'Mustermann', title: '' )
 		);
+	}
+
+	public function testGivenNoLastnameForInformalLastnameGreeting_genericGreetingIsGenerated(): void {
+		$this->assertSame(
+			'genericGreeting',
+			$this->getGreetingGenerator()->createInformalLastnameGreeting( salutation: 'Herr', firstName: 'Nyan', lastName: '', title: '' )
+		);
+	}
+
+	public function testGivenUnknownSalutationForInformalLastnameGreeting_genericGreetingIsGenerated(): void {
+		$this->assertSame(
+			'genericGreeting',
+			$this->getGreetingGenerator()->createInformalLastnameGreeting( salutation: 'Dark Priest', firstName: 'Testname', lastName: '', title: '' )
+		);
+	}
+
+	public function formalGreetingProvider(): array {
+		return [
+			[ 'Herr', 'formalHerr' ],
+			[ 'Frau', 'formalFrau' ],
+			[ 'Divers', 'formalDivers' ]
+		];
+	}
+
+	public function informalGreetingProvider(): array {
+		return [
+			[ 'Herr', 'informalHerr' ],
+			[ 'Frau', 'informalFrau' ],
+			[ 'Divers', 'informalDivers' ]
+		];
 	}
 
 	public function informalLastnameGreetingProvider(): array {
 		return [
-			[ 'Herr', 'mail_introduction_male_lastname_informal' ],
-			[ 'Frau', 'mail_introduction_female_lastname_informal' ],
-			[ 'Familie', 'mail_introduction_family_informal' ]
+			[ 'Herr', 'lastNameInformalHerr' ],
+			[ 'Frau', 'lastNameInformalFrau' ],
+			[ 'Divers', 'lastNameInformalDivers' ]
 		];
 	}
 
 	private function getGreetingGenerator(): GreetingGenerator {
-		return new GreetingGenerator( new FakeTranslator() );
+		return new GreetingGenerator( new FakeTranslator(), new Salutations( [
+			[
+				'label' => 'Herr',
+				'value' => 'Herr',
+				'display' => 'Herr',
+				'greetings' => [
+					'formal' => 'formalHerr',
+					'informal' => 'informalHerr',
+					'lastNameInformal' => 'lastNameInformalHerr',
+				],
+			],
+			[
+				'label' => 'Frau',
+				'value' => 'Frau',
+				'display' => 'Frau',
+				'greetings' => [
+					'formal' => 'formalFrau',
+					'informal' => 'informalFrau',
+					'lastNameInformal' => 'lastNameInformalFrau',
+				],
+			],
+			[
+				'label' => 'Divers',
+				'value' => 'Divers',
+				'display' => '',
+				'greetings' => [
+					'formal' => 'formalDivers',
+					'informal' => 'informalDivers',
+					'lastNameInformal' => 'lastNameInformalDivers',
+				],
+			]
+		] ), 'genericGreeting' );
 	}
 }
