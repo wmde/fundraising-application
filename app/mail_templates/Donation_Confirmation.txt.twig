@@ -1,5 +1,5 @@
 {%- set formattedAmount = donation.amount|format_number(locale=locale) ~ ' Euro' -%}
-{$ greeting_generator.createInformalLastnameGreeting( recipient.salutation, recipient.lastName, recipient.title )|raw $}
+{$ greeting_generator.createInformalLastnameGreeting( recipient.salutation, recipient.firstName, recipient.lastName, recipient.title )|raw $}
 
 {% if donation.needsModeration %}{# Moderated emails look completely different #}
 	{$ mail_content('donation_confirmation/needs_moderation', {

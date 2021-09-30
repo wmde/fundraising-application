@@ -4,7 +4,7 @@
 {% set incentiveText = ( incentives|length > 0 ) ? 'mit dem Wikipedia-Stoffbeutel ' : '' %}
 
 {% if membershipType == 'sustaining' %}
-{$- greeting_generator.createInformalLastnameGreeting( salutation, lastName, title )|raw $}
+{$- greeting_generator.createInformalLastnameGreeting( salutation, firstName, lastName, title )|raw $}
 {% else %}
 {$- greeting_generator.createInformalGreeting( salutation, firstName, lastName )|raw $}
 {% endif %}

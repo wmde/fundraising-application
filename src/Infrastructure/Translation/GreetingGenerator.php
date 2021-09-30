@@ -4,87 +4,66 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure\Translation;
 
+use WMDE\Fundraising\Frontend\Presentation\Salutations;
+
 /**
  * @license GPL-2.0-or-later
  */
 class GreetingGenerator {
-
-	private const GREETING_MALE = 'Herr';
-	private const GREETING_FEMALE = 'Frau';
-	private const GREETING_FAMILY = 'Familie';
-
 	private TranslatorInterface $translator;
+	private Salutations $salutations;
+	private string $genericGreeting;
 
-	public function __construct( TranslatorInterface $translator ) {
+	public function __construct( TranslatorInterface $translator, Salutations $salutations, string $genericGreeting ) {
 		$this->translator = $translator;
+		$this->salutations = $salutations;
+		$this->genericGreeting = $genericGreeting;
 	}
 
 	private static function getSpacedTitle( ?string $title ): string {
 		return $title ? $title . ' ' : '';
 	}
 
-	public function createFormalGreeting( ?string $lastName, ?string $salutation, ?string $title ): string {
+	public function createFormalGreeting( ?string $salutation, ?string $firstName, ?string $lastName, ?string $title ): string {
 		if ( !$lastName ) {
-			return $this->translator->trans( 'mail_introduction_generic' );
+			return $this->translator->trans( $this->genericGreeting );
 		}
 
-		$spacedTitle = self::getSpacedTitle( $title );
-
-		switch ( $salutation ) {
-			case self::GREETING_MALE:
-				return $this->translator->trans( 'mail_introduction_male_formal', [ '%spacedTitle%' => $spacedTitle, '%lastName%' => $lastName ] );
-			case self::GREETING_FEMALE:
-				return $this->translator->trans( 'mail_introduction_female_formal', [ '%spacedTitle%' => $spacedTitle, '%lastName%' => $lastName ] );
-			case self::GREETING_FAMILY:
-				return $this->translator->trans( 'mail_introduction_family_formal', [ '%spacedTitle%' => $spacedTitle, '%lastName%' => $lastName ] );
-			default:
-				return $this->translator->trans( 'mail_introduction_generic' );
-		}
+		return $this->translator->trans( $this->getSalutationTranslationKey( $salutation, 'formal' ), [
+			'%spacedTitle%' => self::getSpacedTitle( $title ),
+			'%firstName%' => $firstName,
+			'%lastName%' => $lastName,
+		] );
 	}
 
 	public function createInformalGreeting( ?string $salutation, ?string $firstName, ?string $lastName ): string {
-		if ( ( $salutation !== self::GREETING_FAMILY && !$firstName ) ||
-			( $salutation === self::GREETING_FAMILY && !$lastName ) ) {
-			return $this->translator->trans( 'mail_introduction_generic' );
+		if ( !$firstName || !$lastName ) {
+			return $this->translator->trans( $this->genericGreeting );
 		}
 
-		switch ( $salutation ) {
-			case self::GREETING_MALE:
-				return $this->translator->trans( 'mail_introduction_male_informal', [ '%firstName%' => $firstName ] );
-			case self::GREETING_FEMALE:
-				return $this->translator->trans( 'mail_introduction_female_informal', [ '%firstName%' => $firstName ] );
-			case self::GREETING_FAMILY:
-				return $this->translator->trans( 'mail_introduction_family_informal', [ '%lastName%' => $lastName ] );
-			default:
-				return $this->translator->trans( 'mail_introduction_generic' );
-		}
+		return $this->translator->trans( $this->getSalutationTranslationKey( $salutation, 'informal' ), [
+			'%firstName%' => $firstName,
+			'%lastName%' => $lastName,
+		] );
 	}
 
-	public function createInformalLastnameGreeting( ?string $salutation, ?string $lastName, ?string $title ): string {
+	public function createInformalLastnameGreeting( ?string $salutation, ?string $firstName, ?string $lastName, ?string $title ): string {
 		if ( !$lastName ) {
-			return $this->translator->trans( 'mail_introduction_generic' );
+			return $this->translator->trans( $this->genericGreeting );
 		}
 
-		$spacedTitle = self::getSpacedTitle( $title );
+		return $this->translator->trans( $this->getSalutationTranslationKey( $salutation, 'lastNameInformal' ), [
+			'%spacedTitle%' => self::getSpacedTitle( $title ),
+			'%firstName%' => $firstName,
+			'%lastName%' => $lastName,
+		] );
+	}
 
-		switch ( $salutation ) {
-			case self::GREETING_MALE:
-				return $this->translator->trans( 'mail_introduction_male_lastname_informal', [
-					'%spacedTitle%' => $spacedTitle,
-					'%lastName%' => $lastName
-				] );
-			case self::GREETING_FEMALE:
-				return $this->translator->trans( 'mail_introduction_female_lastname_informal', [
-					'%spacedTitle%' => $spacedTitle,
-					'%lastName%' => $lastName
-				] );
-			case self::GREETING_FAMILY:
-				return $this->translator->trans( 'mail_introduction_family_informal', [
-					'%spacedTitle%' => $spacedTitle,
-					'%lastName%' => $lastName
-				] );
-			default:
-				return $this->translator->trans( 'mail_introduction_generic' );
+	private function getSalutationTranslationKey( ?string $salutation, string $greetingType ): string {
+		$salutationConfig = $this->salutations->getSalutation( $salutation );
+		if ( !$salutation || !$salutationConfig ) {
+			return $this->genericGreeting;
 		}
+		return $salutationConfig['greetings'][$greetingType];
 	}
 }
