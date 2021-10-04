@@ -6,7 +6,9 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Validation;
 
 use FileFetcher\SimpleFileFetcher;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
 
@@ -28,7 +30,12 @@ class FeatureToggleParser {
 			if ( count( $featureToggleCheck->args ) !== 1 ) {
 				throw new \LogicException( self::FEATURE_TOGGLE_METHOD_NAME . ' should have exactly one argument.' );
 			}
-			$featureToggleChecks[] = $featureToggleCheck->args[0]->value->value;
+			/** @var Arg|VariadicPlaceholder $argument */
+			$argument = $featureToggleCheck->args[0]->value;
+			if ( ( $argument instanceof VariadicPlaceholder ) ) {
+				throw new \LogicException( self::FEATURE_TOGGLE_METHOD_NAME . ' should have exactly one argument, not a variadic argument.' );
+			}
+			$featureToggleChecks[] = $argument->value;
 		}
 		return $featureToggleChecks;
 	}
