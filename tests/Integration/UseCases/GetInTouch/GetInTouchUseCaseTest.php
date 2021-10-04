@@ -40,7 +40,6 @@ class GetInTouchUseCaseTest extends TestCase {
 
 	public function setUp(): void {
 		$this->validator = $this->newSucceedingValidator();
-		/** @var OperatorMailer&MockObject operatorMailer */
 		$this->operatorMailer = $this->createMock( OperatorMailer::class );
 		$this->userMailer = new TemplateBasedMailerSpy( $this );
 	}

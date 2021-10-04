@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use Symfony\Component\HttpKernel\KernelInterface;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
@@ -51,7 +50,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 * Initializes a new test environment and returns a HttpKernel client to
 	 * make requests to the application.
 	 *
-	 * @return HttpKernelBrowser
+	 * @return KernelBrowser
 	 */
 	protected static function createClient(): AbstractBrowser {
 		if ( static::$booted ) {
@@ -78,7 +77,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 * This is a "legacy" function for test code that needs access to FunFunFactory
 	 * (which was not accessible before). For new test code you should use "getFactory" instead.
 	 *
-	 * @param callable(HttpKernelBrowser, FunFunFactory): void $onEnvironmentCreated
+	 * @param callable(KernelBrowser, FunFunFactory): void $onEnvironmentCreated
 	 */
 	protected function createEnvironment( callable $onEnvironmentCreated ): void {
 		$client = static::createClient();
@@ -203,7 +202,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		$this->assertArrayHasKey( 'message', $responseData );
 	}
 
-	protected function assertInitialFormValues( array $expected, HttpKernelBrowser $client ): void {
+	protected function assertInitialFormValues( array $expected, KernelBrowser $client ): void {
 		$initialFormValues = $client->getCrawler()->filter( 'script[data-initial-form-values]' );
 		$this->assertGreaterThan(
 			0,
