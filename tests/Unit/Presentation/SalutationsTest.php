@@ -20,7 +20,7 @@ class SalutationsTest extends TestCase {
 				'greetings' => [
 					'formal' => 'formal',
 					'informal' => 'informal',
-					'lastNameInformal' => 'lastNameInformal',
+					'last_name_informal' => 'lastNameInformal',
 				],
 			]
 		];
@@ -39,7 +39,7 @@ class SalutationsTest extends TestCase {
 				'greetings' => [
 					'formal' => 'formal',
 					'informal' => 'informal',
-					'lastNameInformal' => 'lastNameInformal',
+					'last_name_informal' => 'lastNameInformal',
 				],
 			],
 			[
@@ -49,7 +49,7 @@ class SalutationsTest extends TestCase {
 				'greetings' => [
 					'formal' => 'formal',
 					'informal' => 'informal',
-					'lastNameInformal' => 'lastNameInformal',
+					'last_name_informal' => 'lastNameInformal',
 				],
 			]
 		];

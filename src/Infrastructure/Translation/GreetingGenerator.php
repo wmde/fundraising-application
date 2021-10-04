@@ -52,7 +52,7 @@ class GreetingGenerator {
 			return $this->translator->trans( $this->genericGreeting );
 		}
 
-		return $this->translator->trans( $this->getSalutationTranslationKey( $salutation, 'lastNameInformal' ), [
+		return $this->translator->trans( $this->getSalutationTranslationKey( $salutation, 'last_name_informal' ), [
 			'%spacedTitle%' => self::getSpacedTitle( $title ),
 			'%firstName%' => $firstName,
 			'%lastName%' => $lastName,
