@@ -28,7 +28,7 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 	private vfsStreamDirectory $filesystem;
 	private KernelBrowser $client;
 	private string $filePath;
-	private LoggerInterface $logger;
+	private LoggerSpy $logger;
 
 	public function setUp(): void {
 		$this->filesystem = vfsStream::setup( self::LOG_DIR );
@@ -38,7 +38,7 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 		/** @var KernelBrowser $client */
 		$client = $this->createClient();
 		$this->client = $client;
-		self::$container->set(
+		self::getContainer()->set(
 			PayPalRequestLogger::class,
 			new PayPalRequestLogger( $this->filePath, $this->paypalRoutes, $this->logger )
 		);
@@ -55,7 +55,7 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 	}
 
 	private static function newUrlForNamedRoute( $routeName ): string {
-		return self::$container->get( 'router' )->generate(
+		return self::getContainer()->get( 'router' )->generate(
 			$routeName,
 			[],
 			UrlGeneratorInterface::RELATIVE_PATH
