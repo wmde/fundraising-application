@@ -4,8 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
-use PHPUnit\Framework\MockObject\MockObject;
-use Swift_NullTransport;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport\NullTransport;
+use Symfony\Component\Mailer\Transport\TransportInterface;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailerException;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Message;
@@ -15,34 +18,32 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger
  * @license GPL-2.0-or-later
  */
-class MessengerTest extends \PHPUnit\Framework\TestCase {
+class MessengerTest extends TestCase {
 
-	public function testWhenSendReturnsZero_exceptionIsThrown(): void {
-		$mailTransport = $this->newMailTransport();
-
+	public function testItWrapsTransportExceptions(): void {
+		$transportException = new TransportException( "The drone crashed" );
+		$mailTransport = $this->createMock( TransportInterface::class );
 		$mailTransport->expects( $this->once() )
 			->method( 'send' )
-			->willReturn( 0 );
+			->willThrowException( $transportException );
 
-		$this->expectException( MailerException::class );
-		$this->expectExceptionMessage( 'Message delivery failed' );
-		( new Messenger( $mailTransport, new EmailAddress( 'hostmaster@thatoperator.com' ) ) )
-			->sendMessageToUser(
-				new Message( 'Test message', 'This is just a test' ),
-				new EmailAddress( 'i.want@to.receive.com' )
-			);
-	}
-
-	/**
-	 * @return Swift_NullTransport & MockObject
-	 */
-	private function newMailTransport(): Swift_NullTransport {
-		return $this->createMock( Swift_NullTransport::class );
+		try{
+			( new Messenger( new Mailer( $mailTransport ), new EmailAddress( 'hostmaster@thatoperator.com' ) ) )
+				->sendMessageToUser(
+					new Message( 'Test message', 'This is just a test' ),
+					new EmailAddress( 'i.want@to.receive.com' )
+				);
+		} catch ( MailerException $e ) {
+			$this->assertSame( 'Message delivery failed', $e->getMessage() );
+			$this->assertSame( $transportException, $e->getPrevious() );
+			return;
+		}
+		$this->fail( 'Messenger did not throw MailerException' );
 	}
 
 	public function testSendToAddressWithInternationalCharacters_doesNotCauseException(): void {
 		$messenger = new Messenger(
-			$this->newMailTransport(),
+			new Mailer( new NullTransport() ),
 			new EmailAddress( 'hostmaster@thatoperator.com' )
 		);
 

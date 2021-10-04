@@ -48,4 +48,19 @@ class ErrorHandlingTemplateBasedMailerTest extends TestCase {
 		$this->assertSame( [ ErrorThrowingTemplateBasedMailer::ERROR_MESSAGE ], $loggerSpy->getLogCalls()->getMessages() );
 		$this->assertSame( LogLevel::ERROR, $loggerSpy->getLogCalls()->getFirstCall()->getLevel() );
 	}
+
+	public function testItLogsPreviousException(): void {
+		$loggerSpy = new LoggerSpy();
+
+		$errorHandlingMailer = new ErrorHandlingTemplateBasedMailer(
+			new ErrorThrowingTemplateBasedMailer( new \RuntimeException( 'Transport error - The mule ran away' ) ),
+			$loggerSpy
+		);
+
+		$errorHandlingMailer->sendMail( new EmailAddress( 'happy@bunny.carrot' ) );
+
+		$this->assertSame( 1, $loggerSpy->getLogCalls()->count() );
+		$this->assertStringContainsString( 'Transport error - The mule ran away', $loggerSpy->getLogCalls()->getMessages()[0] );
+		$this->assertStringContainsString( ErrorThrowingTemplateBasedMailer::ERROR_MESSAGE, $loggerSpy->getLogCalls()->getMessages()[0] );
+	}
 }

@@ -4,9 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
-use RuntimeException;
-use Swift_Message;
-use Swift_Transport;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use WMDE\EmailAddress\EmailAddress;
 
 /**
@@ -14,14 +15,14 @@ use WMDE\EmailAddress\EmailAddress;
  */
 class Messenger {
 
-	private Swift_Transport $mailTransport;
+	private MailerInterface $mailer;
 	private EmailAddress $operatorAddress;
 	private string $operatorName;
 
-	public function __construct( Swift_Transport $mailTransport,
+	public function __construct( MailerInterface $mailer,
 								 EmailAddress $operatorAddress,
 								 string $operatorName = '' ) {
-		$this->mailTransport = $mailTransport;
+		$this->mailer = $mailer;
 		$this->operatorAddress = $operatorAddress;
 		$this->operatorName = $operatorName;
 	}
@@ -35,22 +36,26 @@ class Messenger {
 	}
 
 	private function createMessage( Message $messageContent, EmailAddress $recipient,
-									EmailAddress $replyTo = null ): Swift_Message {
-		$message = new Swift_Message( $messageContent->getSubject(), $messageContent->getMessageBody() );
-		$message->setFrom( $this->operatorAddress->getNormalizedAddress(), $this->operatorName );
-		$message->setTo( $recipient->getNormalizedAddress() );
+									EmailAddress $replyTo = null ): Email {
+		$message = new Email();
+		$message
+			->text( $messageContent->getMessageBody() )
+			->subject( $messageContent->getSubject() )
+			->from( new Address( $this->operatorAddress->getNormalizedAddress(), $this->operatorName ) )
+			->to( new Address( $recipient->getNormalizedAddress() ) );
 
 		if ( $replyTo ) {
-			$message->setReplyTo( $replyTo->getNormalizedAddress() );
+			$message->replyTo( new Address( $replyTo->getNormalizedAddress() ) );
 		}
 
 		return $message;
 	}
 
-	private function sendMessage( Swift_Message $message ): void {
-		$deliveryCount = $this->mailTransport->send( $message );
-		if ( $deliveryCount === 0 ) {
-			throw new MailerException( 'Message delivery failed' );
+	private function sendMessage( Email $message ): void {
+		try {
+			$this->mailer->send( $message );
+		} catch ( TransportExceptionInterface $e ) {
+			throw new MailerException( 'Message delivery failed', $e );
 		}
 	}
 

@@ -32,6 +32,7 @@
 		"symfony/filesystem": "~5.2.0",
 		"symfony/framework-bundle": "~5.3.2",
 		"symfony/http-foundation": "~5.3.2",
+		"symfony/mailer": "~5.3.2",
 		"symfony/monolog-bundle": "^3.6",
 		"symfony/property-access": "~5.3.0",
 		"symfony/stopwatch": "~5.2.0",
@@ -50,8 +51,7 @@
 		"nikic/php-parser": "~4.0",
 		"psr/log": "~1.0",
 		"psr/simple-cache": "~1.0",
-		"remotelyliving/doorkeeper": "^1.4",
-		"swiftmailer/swiftmailer": "~6.2"
+		"remotelyliving/doorkeeper": "^1.4"
 	},
 	"repositories": [
 		{
