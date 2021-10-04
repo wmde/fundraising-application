@@ -119,7 +119,7 @@ class GreetingGeneratorTest extends TestCase {
 				'greetings' => [
 					'formal' => 'formalHerr',
 					'informal' => 'informalHerr',
-					'lastNameInformal' => 'lastNameInformalHerr',
+					'last_name_informal' => 'lastNameInformalHerr',
 				],
 			],
 			[
@@ -129,7 +129,7 @@ class GreetingGeneratorTest extends TestCase {
 				'greetings' => [
 					'formal' => 'formalFrau',
 					'informal' => 'informalFrau',
-					'lastNameInformal' => 'lastNameInformalFrau',
+					'last_name_informal' => 'lastNameInformalFrau',
 				],
 			],
 			[
@@ -139,7 +139,7 @@ class GreetingGeneratorTest extends TestCase {
 				'greetings' => [
 					'formal' => 'formalDivers',
 					'informal' => 'informalDivers',
-					'lastNameInformal' => 'lastNameInformalDivers',
+					'last_name_informal' => 'lastNameInformalDivers',
 				],
 			]
 		] ), 'genericGreeting' );
