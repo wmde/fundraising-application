@@ -50,7 +50,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 * Initializes a new test environment and returns a HttpKernel client to
 	 * make requests to the application.
 	 *
-	 * @return KernelBrowser
+	 * @return AbstractBrowser
 	 */
 	protected static function createClient(): AbstractBrowser {
 		if ( static::$booted ) {
@@ -202,7 +202,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		$this->assertArrayHasKey( 'message', $responseData );
 	}
 
-	protected function assertInitialFormValues( array $expected, KernelBrowser $client ): void {
+	protected function assertInitialFormValues( array $expected, AbstractBrowser $client ): void {
 		$initialFormValues = $client->getCrawler()->filter( 'script[data-initial-form-values]' );
 		$this->assertGreaterThan(
 			0,

@@ -8,7 +8,7 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
+use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,7 +70,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		/** @var SessionInterface $session */
-		$session = $client->getContainer()->get( 'session' );
+		$session = static::getContainer()->get( 'session' );
 		$donationTimestamp = $session->get( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY );
 		$this->assertNotNull( $donationTimestamp );
 		$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
@@ -79,7 +79,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected(): void {
 		$client = $this->createClient();
 		/** @var SessionInterface $session */
-		$session = $client->getContainer()->get( 'session' );
+		$session = static::getContainer()->get( 'session' );
 		$session->set( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
 
 		$client->request(
@@ -94,7 +94,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			/** @var SessionInterface $session */
-			$session = $client->getContainer()->get( 'session' );
+			$session = static::getContainer()->get( 'session' );
 			$session->set(
 				FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY,
 				( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT35M' ) )
@@ -776,7 +776,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	private function getDataApplicationVars( Crawler $crawler ): object {
-		/** @var \DOMElement $appElement */
+		/** @var \DOMElement|null $appElement */
 		$appElement = $crawler->filter( '#appdata' )->getNode( 0 );
 		if ( $appElement === null ) {
 			$this->fail( 'Response did not contain an element with id "#appdata". Please check if you need to follow a redirect.' );

@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
+use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
@@ -46,7 +46,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( 'Anonym', $responseContent );
 	}
 
-	private function retrieveDonationConfirmation( HttpKernelBrowser $client, int $donationId ): string {
+	private function retrieveDonationConfirmation( Client $client, int $donationId ): string {
 		$client->request(
 			'GET',
 			'show-donation-confirmation',

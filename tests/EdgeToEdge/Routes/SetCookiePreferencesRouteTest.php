@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\HttpKernel\HttpKernelBrowser;
 use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
@@ -107,11 +107,7 @@ class SetCookiePreferencesRouteTest extends WebRouteTestCase {
 		$this->assertCookieIsNotSet( $client, CookieNames::BUCKET_TESTING );
 	}
 
-	/**
-	 * @param HttpKernelBrowser $client
-	 * @param string $name
-	 */
-	private function assertCookieIsNotSet( HttpKernelBrowser $client, string $name ) {
+	private function assertCookieIsNotSet( AbstractBrowser $client, string $name ) {
 		$cookieJar = $client->getCookieJar();
 		$cookieJar->updateFromResponse( $client->getInternalResponse() );
 		$this->assertNull( $cookieJar->get( $name ) );
