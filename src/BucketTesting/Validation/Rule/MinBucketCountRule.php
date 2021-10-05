@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 /**
  * @license GPL-2.0-or-later
  */
-class MinBucketCountRule {
+class MinBucketCountRule implements CampaignValidationRuleInterface {
 
 	public function validate( Campaign $campaign, CampaignErrorCollection $errorLogger ): bool {
 		if ( count( $campaign->getBuckets() ) < 2 ) {

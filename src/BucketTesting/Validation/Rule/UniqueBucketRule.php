@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 /**
  * @license GPL-2.0-or-later
  */
-class UniqueBucketRule {
+class UniqueBucketRule implements CampaignValidationRuleInterface {
 
 	public function validate( Campaign $campaign, CampaignErrorCollection $errorLogger ): bool {
 		$buckets = [];

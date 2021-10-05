@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
+use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -291,7 +291,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 
 		/** @var SessionInterface $session */
-		$session = $client->getContainer()->get( 'session' );
+		$session = static::getContainer()->get( 'session' );
 		$lastMembership = $session->get( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY );
 		$this->assertNotNull( $lastMembership );
 		$this->assertEqualsWithDelta( time(), $lastMembership->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
@@ -300,7 +300,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected(): void {
 		$client = $this->createClient();
 		/** @var SessionInterface $session */
-		$session = $client->getContainer()->get( 'session' );
+		$session = static::getContainer()->get( 'session' );
 		$session->set( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
 
 		$client->request(
@@ -314,7 +314,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected(): void {
 		$client = $this->createClient();
-		$session = $client->getContainer()->get( 'session' );
+		$session = static::getContainer()->get( 'session' );
 		$session->set(
 			FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY,
 			( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT12M' ) )
@@ -327,10 +327,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertStringNotContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
-	}
-
-	private function getPastTimestamp( string $interval = 'PT10S' ): string {
-		return ( new \DateTime() )->sub( new \DateInterval( $interval ) )->format( 'Y-m-d H:i:s' );
 	}
 
 	public function testWhenTrackingCookieExists_andCookieConsentGiven_valueIsPersisted(): void {

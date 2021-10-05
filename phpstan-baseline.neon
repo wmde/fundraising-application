@@ -5,3 +5,23 @@ parameters:
 			count: 1
 			path: src/BucketTesting/CampaignConfiguration.php
 
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\Validation\\\\FeatureToggleParser\\:\\:getFeatureToggleChecks\\(\\) should return array\\<string\\> but returns array\\<int, PhpParser\\\\Node\\\\Expr\\>\\.$#"
+			count: 1
+			path: src/BucketTesting/Validation/FeatureToggleParser.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\Validation\\\\FeatureToggleParser\\:\\:parseMethodCalls\\(\\) should return array\\<PhpParser\\\\Node\\\\Expr\\\\MethodCall\\> but returns array\\<PhpParser\\\\Node\\>\\.$#"
+			count: 1
+			path: src/BucketTesting/Validation/FeatureToggleParser.php
+
+		-
+			message: "#^Parameter \\#1 \\$level of static method Monolog\\\\Logger\\:\\:toMonologLevel\\(\\) expects 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600\\|non\\-empty\\-string, string given\\.$#"
+			count: 1
+			path: src/Factories/ErrbitLoggerFactory.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: tests/EdgeToEdge/StoreLocaleTest.php
+
