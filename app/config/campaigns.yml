@@ -75,13 +75,14 @@ campaigns:
       param_only: true
 
     address_type_steps:
-      description: Test choosing address type directly (person, company, anonymous) or via 2 step (full, email, anonymous)
-      reference: "https://phabricator.wikimedia.org/T289460"
-      start: "2021-01-01"
+      description: Test different texts for the multistep address type
+      reference: "https://phabricator.wikimedia.org/T291362"
+      start: "2021-10-07"
       end: "2021-12-31"
       buckets:
         - "direct"
         - "multistep"
+        - "multistep_var"
       default_bucket: "direct"
       url_key: ast
       active: true
