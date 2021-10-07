@@ -4,11 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
-use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 
 /**
  * Factory for generating classes whose implementations differ due to A/B testing.

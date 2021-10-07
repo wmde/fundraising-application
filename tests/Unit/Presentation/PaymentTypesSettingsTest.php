@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
 

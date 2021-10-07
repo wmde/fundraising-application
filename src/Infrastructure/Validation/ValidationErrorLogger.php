@@ -5,7 +5,6 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure\Validation;
 
 use Psr\Log\LoggerInterface;
-use WMDE\FunValidators\ConstraintViolation;
 
 class ValidationErrorLogger {
 
