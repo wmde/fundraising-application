@@ -46,6 +46,10 @@ class StoreLocale implements EventSubscriberInterface {
 			return $request->cookies->get( CookieNames::LOCALE );
 		}
 
+		if ( $request->query->has( CookieNames::LOCALE ) ) {
+			return $request->query->get( CookieNames::LOCALE );
+		}
+
 		return $request->getPreferredLanguage() ?? '';
 	}
 }
