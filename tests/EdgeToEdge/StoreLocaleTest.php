@@ -12,24 +12,46 @@ use WMDE\Fundraising\Frontend\App\CookieNames;
  */
 class StoreLocaleTest extends WebRouteTestCase {
 
-	public function testWhenGivenSupportedLocale_setsLocale(): void {
-		$this->markTestSkipped( 'This test needs to be reactivated once we have the English translations' );
-
-		$supportedLocale = 'en_GB';
+	public function testWhenGivenSupportedCookieLocale_setsLocale(): void {
 		$client = $this->createClient();
-		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::LOCALE, $supportedLocale ) );
+		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::LOCALE, 'en_GB' ) );
 
 		$client->request( 'GET', '/actually-every-route' );
 
-		$this->assertSame( $supportedLocale, $client->getRequest()->getLocale() );
+		$this->assertSame( 'en_GB', $client->getRequest()->getLocale() );
 	}
 
-	public function testWhenGivenUnsupportedLocale_defaultsToGerman(): void {
+	public function testWhenGivenUnsupportedCookieLocale_defaultsToGerman(): void {
 		$client = $this->createClient();
 		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::LOCALE, 'I AM NOT A VALID LOCALE' ) );
 
 		$client->request( 'GET', '/actually-every-route' );
 
 		$this->assertSame( 'de_DE', $client->getRequest()->getLocale() );
+	}
+
+	public function testWhenGivenSupportedUrlLocale_setsLocale(): void {
+		$client = $this->createClient();
+
+		$client->request( 'GET', '/actually-every-route?locale=en_GB' );
+
+		$this->assertSame( 'en_GB', $client->getRequest()->getLocale() );
+	}
+
+	public function testWhenGivenUnsupportedUrlLocale_defaultsToGerman(): void {
+		$client = $this->createClient();
+
+		$client->request( 'GET', '/actually-every-route?locale=I-AM-NOT-A-VALID-LOCALE' );
+
+		$this->assertSame( 'de_DE', $client->getRequest()->getLocale() );
+	}
+
+	public function testWhenGivenUrlLocale_andCookieLocaleIsSet_doesNotUpdateLocale(): void {
+		$client = $this->createClient();
+		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::LOCALE, 'en_GB' ) );
+
+		$client->request( 'GET', '/actually-every-route?locale=de_DE' );
+
+		$this->assertSame( 'en_GB', $client->getRequest()->getLocale() );
 	}
 }
