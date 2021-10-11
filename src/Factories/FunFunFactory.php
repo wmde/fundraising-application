@@ -120,7 +120,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\InternetDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
-use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
@@ -1012,10 +1011,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newAmountFormatter(): AmountFormatter {
-		return new AmountFormatter( $this->getLocale() );
-	}
-
 	public function newDecimalNumberFormatter(): NumberFormatter {
 		return new NumberFormatter( $this->getLocale(), NumberFormatter::DECIMAL );
 	}
@@ -1211,13 +1206,12 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function newDonationFormViolationPresenter(): DonationFormViolationPresenter {
-		return new DonationFormViolationPresenter( $this->getDonationFormTemplate(), $this->newAmountFormatter() );
+		return new DonationFormViolationPresenter( $this->getDonationFormTemplate() );
 	}
 
 	public function newDonationFormPresenter(): DonationFormPresenter {
 		return new DonationFormPresenter(
 			$this->getDonationFormTemplate(),
-			$this->newAmountFormatter(),
 			$this->newIsCustomDonationAmountValidator()
 		);
 	}

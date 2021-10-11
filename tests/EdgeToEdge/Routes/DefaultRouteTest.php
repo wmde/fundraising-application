@@ -24,7 +24,7 @@ class DefaultRouteTest extends WebTestCase {
 		);
 
 		$responseContent = $client->getResponse()->getContent();
-		$this->assertStringContainsString( 'Amount: 12,34', $responseContent );
+		$this->assertStringContainsString( 'Amount: 1234', $responseContent );
 		$this->assertStringContainsString( 'Payment type: UEB', $responseContent );
 		$this->assertStringContainsString( 'Interval: 6', $responseContent );
 	}
@@ -42,7 +42,7 @@ class DefaultRouteTest extends WebTestCase {
 		);
 
 		$responseContent = $client->getResponse()->getContent();
-		$this->assertStringContainsString( 'Amount: 0,00', $responseContent );
+		$this->assertStringContainsString( 'Amount: 0', $responseContent );
 		$this->assertStringContainsString( 'Payment type: UEB', $responseContent );
 		$this->assertStringContainsString( 'Interval: 6', $responseContent );
 	}
