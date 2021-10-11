@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidationResult as Result;
-use WMDE\Fundraising\Frontend\Presentation\AmountFormatter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidationResult;
@@ -21,11 +20,9 @@ use WMDE\FunValidators\ConstraintViolation;
 class DonationFormViolationPresenter {
 
 	private TwigTemplate $template;
-	private AmountFormatter $amountFormatter;
 
-	public function __construct( TwigTemplate $template, AmountFormatter $amountFormatter ) {
+	public function __construct( TwigTemplate $template ) {
 		$this->template = $template;
-		$this->amountFormatter = $amountFormatter;
 	}
 
 	/**
@@ -51,7 +48,7 @@ class DonationFormViolationPresenter {
 	private function getDonationFormArguments( AddDonationRequest $request ): array {
 		return array_merge(
 			[
-				'amount' => $this->amountFormatter->format( $request->getAmount() ),
+				'amount' => $request->getAmount()->getEuroCents(),
 				'paymentType' => $request->getPaymentType(),
 				'paymentIntervalInMonths' => $request->getInterval(),
 			],
