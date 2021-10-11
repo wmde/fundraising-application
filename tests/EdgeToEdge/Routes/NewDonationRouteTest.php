@@ -26,7 +26,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertStringContainsString(
-			'Amount: ' . $expected['formattedAmount'] . "\n",
+			'Amount: ' . $expected['amount'] . "\n",
 			$client->getResponse()->getContent()
 		);
 
@@ -46,7 +46,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				],
 				[
 					'validity' => 'valid',
-					'formattedAmount' => '100,00',
+					'amount' => '10000',
 					'isCustomAmount' => false
 				]
 			],
@@ -58,7 +58,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				],
 				[
 					'validity' => 'valid',
-					'formattedAmount' => '123,45',
+					'amount' => '12345',
 					'isCustomAmount' => true
 				]
 			],
@@ -70,7 +70,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				],
 				[
 					'validity' => 'valid',
-					'formattedAmount' => '8,70',
+					'amount' => '870',
 					'isCustomAmount' => true
 				]
 			],
@@ -82,7 +82,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				],
 				[
 					'validity' => 'invalid',
-					'formattedAmount' => '0,00',
+					'amount' => '0',
 					'isCustomAmount' => false
 				]
 			],
@@ -94,7 +94,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 				],
 				[
 					'validity' => 'invalid',
-					'formattedAmount' => '100,00',
+					'amount' => '10000',
 					'isCustomAmount' => false
 				]
 			]

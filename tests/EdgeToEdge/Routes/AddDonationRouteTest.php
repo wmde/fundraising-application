@@ -507,7 +507,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse()->getContent();
 
-		$this->assertStringContainsString( 'Amount: 0,00', $response );
+		$this->assertStringContainsString( 'Amount: 0', $response );
 		$this->assertStringContainsString( 'Payment type: BEZ', $response );
 		$this->assertStringContainsString( 'Interval: 3', $response );
 		$this->assertStringContainsString( 'IBAN: DE12500105170648489890', $response );
@@ -559,7 +559,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse()->getContent();
 
-		$this->assertStringContainsString( 'Amount: 0,00', $response );
+		$this->assertStringContainsString( 'Amount: 0', $response );
 	}
 
 	public function testGivenInvalidRequest_errorsAreLogged(): void {
