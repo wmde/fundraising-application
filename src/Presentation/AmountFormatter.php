@@ -16,7 +16,7 @@ class AmountFormatter {
 
 	private $localeData = [
 		'de_DE' => [ 2, ',', '' ],
-		'en_US' => [ 2, '.', '' ]
+		'en_GB' => [ 2, '.', '' ]
 	];
 
 	public function __construct( string $locale ) {
@@ -25,7 +25,7 @@ class AmountFormatter {
 
 	public function format( Euro $amount ): string {
 		if ( !array_key_exists( $this->locale, $this->localeData ) ) {
-			throw new \RuntimeException( 'Unknown locale' );
+			throw new \RuntimeException( "Unknown locale $this->locale" );
 		}
 		return number_format(
 			$amount->getEuroFloat(),

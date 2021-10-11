@@ -28,13 +28,13 @@ class AmountFormatterTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testGivenUSLocaleAndFractionalAmount_amountIsFormattedAsUSString(): void {
-		$formatter = new AmountFormatter( 'en_US' );
+		$formatter = new AmountFormatter( 'en_GB' );
 		$euro = Euro::newFromCents( 2342 );
 		$this->assertSame( '23.42', $formatter->format( $euro ) );
 	}
 
 	public function testGivenUSLocaleAndIntegerAmount_amountIsFormattedAsUSString(): void {
-		$formatter = new AmountFormatter( 'en_US' );
+		$formatter = new AmountFormatter( 'en_GB' );
 		$euro = Euro::newFromInt( 23 );
 		$this->assertSame( '23.00', $formatter->format( $euro ) );
 	}
