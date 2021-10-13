@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\EventHandlers;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -50,10 +51,18 @@ class StoreLocale implements EventSubscriberInterface {
 			return;
 		}
 
+		// TODO: Review the best way to create this cookie
 		$event->getResponse()->headers->setCookie(
-			$this->factory->getCookieBuilder()->newCookie(
+			new Cookie(
 				CookieNames::LOCALE,
-				$locale
+				$locale,
+				0,
+				'/',
+				null,
+				false,
+				false,
+				false,
+				"Lax"
 			)
 		);
 	}
