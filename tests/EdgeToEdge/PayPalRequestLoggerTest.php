@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WMDE\Fundraising\Frontend\App\EventHandlers\PayPalRequestLogger;
