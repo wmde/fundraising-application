@@ -181,7 +181,7 @@ These tasks are also performed during the [travis](.travis.yml) runs.
 
 ## Emails
 
-You can insprect all emails sent by the application via [mailhog](https://github.com/mailhog/MailHog)
+You can inspect all emails sent by the application via [mailhog](https://github.com/mailhog/MailHog)
 at [http://localhost:8025/](http://localhost:8025/)
 
 ## Database
@@ -219,7 +219,7 @@ vendor/doctrine/migrations/bin/doctrine-migrations migrations:version
 
 Have a look the [deployment documentation](https://github.com/wmde/fundraising-infrastructure/blob/master/docs/deployment/Fundraising_Application.md) on how to run the migrations on the server.
 
-**Note:** If you're getting errors that the a configuration file was nor found, make sure to set `APP_ENV` to the right value.
+**Note:** If you're getting errors that the configuration file was nor found, make sure to set `APP_ENV` to the right value.
 See section "Running in different environments" in this document.
 
 ### Accessing the database from a Docker image
@@ -296,7 +296,7 @@ By default, the application uses pre-built frontend assets from [fundraising-app
 
     make download-assets
 
-To get the pre-built asssets from a specific branch of that repository,
+To get the pre-built assets from a specific branch of that repository,
 run
 
     make download-assets ASSET_BRANCH=your_branch_name
@@ -353,22 +353,21 @@ Used Bounded Contexts:
     * `Domain/`: domain model and domain services
     * `UseCases/`: one directory per use case
     * `DataAccess/`: implementations of services that binds to database, network, etc
-    * `Infrastructure/`: implementations of services binding to cross cutting concerns, ie logging
+    * `Infrastructure/`: implementations of services binding to cross cutting concerns, i.e. logging
 * `web/`: web accessible code
     * `index.php`: HTTP entry point
     * `skins`: Asset files (CSS, JavaScript, images, fonts) for different
     skins
-* `app/`: contains configuration and all framework (Symfony) dependent code
-    * `bootstrap.php`: framework application bootstrap (used by System tests)
-    * `routes.php`: defines the routes and their handlers
-    * `RouteHandlers/`: route handlers that get benefit from having their own class are placed here
+* `app/`: contains application-specific configuration and all framework (Symfony) dependent code
+    * `Controllers/`: Symfony Controllers
+	* `EventHandlers`: "Middleware" code that performs tasks before or
+		after HTTP request handling
     * `config/`: configuration files
         * `config.dist.json`: default configuration
         * `config.test.json`: configuration used by integration and system tests (gets merged into default config)
         * `config.test.local.json`:  instance specific (gitignored) test config (gets merged into config.test.json)
         * `config.development.json`: instance specific (gitignored) production configuration (gets merged into default config)
-    * `js/lib`: Javascript modules, will be compiled into one file for the frontend.
-    * `js/test`: Unit tests for the JavaScript modules
+* `config/`: Symfony configuration files
 * `cli/`: Command line commands, integrated into the Symfony console
 * `var/`: Ephemeral application data
     * `log/`: Log files (in debug mode, every request creates a log file)
@@ -378,15 +377,15 @@ Used Bounded Contexts:
 ### Test code layout
 
 The test directory structure (and namespace structure) mirrors the production code. Tests for code
-in `src/` can be found in `tests/`.
+in `src/` and `app/` is in `tests/`.
 
 Tests are categorized by their type. To run only tests of a given type, you can use one of the
-testsuites defined in `phpunit.xml.dist`.
+test suites defined in `phpunit.xml.dist`.
 
 * `Unit/`: small isolated tests (one class or a small number of related classes)
 * `Integration/`: tests combining several units
 * `EdgeToEdge/`: edge-to-edge tests (fake HTTP requests to the framework)
-* `System/`: tests involving outside systems (ie, beyond our PHP app and database)
+* `System/`: tests involving outside systems (i.e., beyond our PHP app and database)
 * `Fixtures/`: test doubles (stubs, spies and mocks)
 
 If you need access the `FunFunFactory` in your non-unit tests, for instance to interact with
