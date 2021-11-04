@@ -2,7 +2,7 @@
 
 Date: 2021-10-01
 
-Deciders: 
+Deciders: Abban Dunne, Corinna Hillebrand, Gabriel Birke
 
 Technical Story: https://phabricator.wikimedia.org/T220365
 
