@@ -110,6 +110,22 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testWhenRedirectingToExternalProvider_requestLimitCookieIsNotSet(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$client->followRedirects( true );
+
+			$client->request(
+				'POST',
+				'/donation/add',
+				$this->newValidPayPalInput()
+			);
+
+			/** @var SessionInterface $session */
+			$session = static::getContainer()->get( 'session' );
+			$this->assertNull( $session->get( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY ) );
+		} );
+	}
+
 	private function newValidFormInput(): array {
 		return [
 			'amount' => '551',

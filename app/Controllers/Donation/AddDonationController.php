@@ -56,7 +56,6 @@ class AddDonationController {
 	}
 
 	private function newHttpResponse( SessionInterface $session, AddDonationResponse $responseModel ): Response {
-		$this->ffFactory->getDonationSubmissionRateLimiter()->setRateLimitCookie( $session );
 		switch ( $responseModel->getDonation()->getPaymentMethodId() ) {
 			case PaymentMethod::DIRECT_DEBIT:
 			case PaymentMethod::BANK_TRANSFER:

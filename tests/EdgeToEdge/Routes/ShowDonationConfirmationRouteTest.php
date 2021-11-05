@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\BrowserKit\AbstractBrowser as Client;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -146,6 +147,28 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$responseContent = $this->retrieveDonationConfirmation( $client, 1 );
 
 		$this->assertStringContainsString( self::ACCESS_DENIED_TEXT, $responseContent );
+	}
+
+	public function testRateLimitTimestampIsStoredInSession(): void {
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
+			$this->donation = $this->newStoredDonation( $factory );
+		} );
+		$client = $this->createClient();
+
+		$client->request(
+			'GET',
+			'show-donation-confirmation',
+			[
+				'id' => $this->donation->getId(),
+				'accessToken' => self::CORRECT_ACCESS_TOKEN
+			]
+		);
+
+		/** @var SessionInterface $session */
+		$session = static::getContainer()->get( 'session' );
+		$donationTimestamp = $session->get( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY );
+		$this->assertNotNull( $donationTimestamp );
+		$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
 	}
 
 }
