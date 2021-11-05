@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Donation;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\App\Routes;
@@ -17,7 +18,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  */
 class ShowDonationConfirmationController {
 
-	public function index( Request $request, FunFunFactory $ffFactory ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory, SessionInterface $session ): Response {
 		$useCase = $ffFactory->newGetDonationUseCase( $request->get( 'accessToken', '' ) );
 
 		$responseModel = $useCase->showConfirmation( new GetDonationRequest(
@@ -27,6 +28,7 @@ class ShowDonationConfirmationController {
 		if ( !$responseModel->accessIsPermitted() ) {
 			throw new AccessDeniedException( 'access_denied_donation_confirmation' );
 		}
+		$ffFactory->getDonationSubmissionRateLimiter()->setRateLimitCookie( $session );
 
 		$ffFactory->getTranslationCollector()->addTranslationFile( $ffFactory->getI18nDirectory() . '/messages/paymentTypes.json' );
 		return new Response(
