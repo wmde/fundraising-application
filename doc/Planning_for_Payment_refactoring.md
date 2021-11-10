@@ -75,4 +75,10 @@ Construct minimal payment method data from request (only bank data has real data
 
 **Suggestion:** Create an `AddPayment` use case in Payment domain, that constructs the PaymentMethod (and saves it if needed).
 
+### Iban should be a valid domain object
+The `Iban` class should not allow for malformed IBANs (not starting with 2 letters, shorter than 12 chars) to perform its duties.
+It should throw `UnexpectedValueException` when it encounters an invalid string. 
+Code using the domain object should pre-check for malformed IBANs and validate accordingly (avoiding the `UnexpectedValueException`).
+The `IbanValidator` (and its kontocheck implementation) should validate the *Domain* validity of the IBAN object (i.e. country prefix, bank or account does not exist).
 
+ 

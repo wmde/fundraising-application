@@ -80,4 +80,17 @@ class KontoCheckIbanValidatorTest extends TestCase {
 		$validator = $this->newValidator();
 		$this->assertFalse( $validator->validate( new Iban( $iban ) )->isSuccessful() );
 	}
+
+	/**
+	 * @dataProvider notWellFormedIbanProvider
+	 */
+	public function testGivenNotWellFormedIban_validationResultIsOneViolationWithStringifiedIban( string $malformedIban ): void {
+		$validator = $this->newValidator();
+		$iban = new Iban( $malformedIban );
+
+		$violations = $validator->validate( $iban )->getViolations();
+
+		$this->assertCount( 1, $violations );
+		$this->assertSame( $iban->toString(), $violations[0]->getValue() );
+	}
 }
