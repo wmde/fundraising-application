@@ -59,8 +59,9 @@ download-assets:
 # Maintenance
 
 clear:
-	rm -rf var/cache/
-	docker-compose run --rm --no-deps app rm -rf var/cache/
+	rm -rf var/cache/*
+	docker-compose run --rm --no-deps app rm -rf var/cache/*
+	docker-compose run --rm --no-deps app chown -R www-data:www-data var/cache/
 
 # n alias to avoid frequent typo
 clean: clear
@@ -104,7 +105,6 @@ fix-cs:
 
 stan:
 	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):stan analyse --level=5 --no-progress cli/ src/ tests/
-
 
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml

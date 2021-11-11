@@ -1,0 +1,99 @@
+swagger: "2.0"
+info:
+  title: Address Change
+  description: Address Changes allow users to change their address
+  version: 1.0.0
+host: spenden.wikimedia.de
+schemes:
+  - https
+basePath: /api/v1
+paths:
+  /address_change.json:
+    get:
+      tags:
+        - "Address Change"
+      summary: Retrieve an Address Change by identifier
+      responses:
+        "200":
+          description: Update successful
+          schema:
+            type: object
+            items:
+              $ref: "#/definitions/AddressChangeResponse"
+        "400":
+          description: Missing identifier
+          schema:
+            type: object
+            items:
+              $ref: "#/definitions/ErrorResponse"
+        "404":
+          description: Address Change not found
+          schema:
+            type: object
+            items:
+              $ref: "#/definitions/ErrorResponse"
+    put:
+      tags:
+        - "Address Change"
+      summary: Update an Address Change
+      responses:
+        "200":
+          description: Update successful
+          schema:
+            type: object
+            items:
+              $ref: "#/definitions/AddressChangeResponse"
+        "400":
+          description: Update failed
+          schema:
+            type: object
+            items:
+              $ref: "#/definitions/ErrorResponse"
+definitions:
+  AddressChangeResponse:
+    type: object
+    properties:
+      identifier:
+        type: string
+      previousIdentifier:
+        type: string
+      address:
+        type: object
+        items:
+          $ref: "#/definitions/Address"
+      donationReceipt:
+        type: boolean
+      exportState:
+        type: string
+  ErrorResponse:
+    type: object
+    properties:
+      ERR:
+        type: string
+      errors:
+        type: array
+  Address:
+    type: object
+    properties:
+      salutation:
+        type: string
+      company:
+        type: string
+      title:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      street:
+        type: string
+      postcode:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      isPersonalAddress:
+        type: boolean
+      isCompanyAddress:
+        type: boolean

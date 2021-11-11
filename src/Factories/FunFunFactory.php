@@ -35,6 +35,7 @@ use WMDE\Fundraising\AddressChangeContext\AddressChangeContextFactory;
 use WMDE\Fundraising\AddressChangeContext\DataAccess\DoctrineAddressChangeRepository;
 use WMDE\Fundraising\AddressChangeContext\Domain\AddressChangeRepository;
 use WMDE\Fundraising\AddressChangeContext\UseCases\ChangeAddress\ChangeAddressUseCase;
+use WMDE\Fundraising\AddressChangeContext\UseCases\ReadAddressChange\ReadAddressChangeUseCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\DonationContext\Authorization\DonationTokenFetcher;
@@ -995,12 +996,18 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	public function newAddressChangeRepository(): AddressChangeRepository {
-		return new DoctrineAddressChangeRepository( $this->getEntityManager() );
+	public function getAddressChangeRepository(): AddressChangeRepository {
+		return $this->createSharedObject( AddressChangeRepository::class, function () {
+			return new DoctrineAddressChangeRepository( $this->getEntityManager() );
+		} );
 	}
 
 	public function newChangeAddressUseCase(): ChangeAddressUseCase {
-		return new ChangeAddressUseCase( $this->newAddressChangeRepository() );
+		return new ChangeAddressUseCase( $this->getAddressChangeRepository() );
+	}
+
+	public function newReadAddressChangeUseCase(): ReadAddressChangeUseCase {
+		return new ReadAddressChangeUseCase( $this->getAddressChangeRepository() );
 	}
 
 	public function newPaymentDataValidator(): PaymentDataValidator {

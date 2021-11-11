@@ -25,5 +25,6 @@ class Kernel extends BaseKernel {
 
 	protected function configureRoutes( RoutingConfigurator $routes ): void {
 		$routes->import( '../config/routes.yaml' );
+		$routes->import( '../config/api-routes.yaml' );
 	}
 }

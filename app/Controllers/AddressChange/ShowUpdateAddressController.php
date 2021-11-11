@@ -21,7 +21,7 @@ class ShowUpdateAddressController {
 			throw new AccessDeniedException( 'address_change_no_token_in_request' );
 		}
 
-		$addressChangeRepository = $ffFactory->newAddressChangeRepository();
+		$addressChangeRepository = $ffFactory->getAddressChangeRepository();
 		$addressChange = $addressChangeRepository->getAddressChangeByUuid( $addressToken );
 		if ( $addressChange === null ) {
 			$ffFactory->getLogger()->notice( 'Address change record not found', [ 'addressChangeToken' => $addressToken ] );

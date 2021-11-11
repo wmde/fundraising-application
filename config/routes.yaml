@@ -209,8 +209,3 @@ status:
     path: /status
     methods: [GET]
     controller: null
-
-api_cities.json:
-    path: /api/v1/cities.json
-    methods: [POST]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Validation\FindCitiesController::index'
