@@ -205,7 +205,7 @@ legacy_route_posts.php:
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\PageNotFoundController::index'
     requirements: { wildcard: .* }
 
-api_cities.json:
-    path: /api/v1/cities.json
-    methods: [POST]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Validation\FindCitiesController::index'
+status:
+    path: /status
+    methods: [GET]
+    controller: null

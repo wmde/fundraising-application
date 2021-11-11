@@ -1,0 +1,16 @@
+api_cities.json:
+    path: /api/v1/cities.json
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Validation\FindCitiesController::index'
+
+api_address_change_get:
+    path: /api/v1/address_change/{identifier}/{previousIdentifier}
+    methods: [GET]
+    defaults:
+        previousIdentifier: null
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\API\Donation\AddressChangeController::show'
+
+api_address_change_put:
+    path: /api/v1/address_change/{identifier}
+    methods: [PUT]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\API\Donation\AddressChangeController::update'
