@@ -9,6 +9,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
 
@@ -16,7 +17,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVe
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier
  * @license GPL-2.0-or-later
  */
-class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase {
+class PayPalPaymentNotificationVerifierTest extends TestCase {
 
 	private const VALID_ACCOUNT_EMAIL = 'foerderpp@wikimedia.de';
 	private const INVALID_ACCOUNT_EMAIL = 'this.is.not@my.email.address';
@@ -27,11 +28,11 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 	private const CURRENCY_EUR = 'EUR';
 	private const RECURRING_NO_PAYMENT = 'recurring_payment_suspended_due_to_max_failed_payment';
 
-	private $expectedRequestparameters;
-	private $receivedRequests;
+	private array $expectedRequestParameters;
+	private array $receivedRequests;
 
 	protected function setUp(): void {
-		$this->expectedRequestparameters = [];
+		$this->expectedRequestParameters = [];
 		$this->receivedRequests = [];
 	}
 
@@ -157,7 +158,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 		] );
 		$handlerStack = HandlerStack::create( $mock );
 		$handlerStack->push( $history );
-		$this->expectedRequestparameters = $expectedParams;
+		$this->expectedRequestParameters = $expectedParams;
 		return new Client( [ 'handler' => $handlerStack ] );
 	}
 
@@ -170,7 +171,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 	}
 
 	private function assertVerificationParametersWereSent(): void {
-		if ( count( $this->expectedRequestparameters ) == 0 ) {
+		if ( count( $this->expectedRequestParameters ) == 0 ) {
 			return;
 		}
 		if ( count( $this->receivedRequests ) == 0 ) {
@@ -180,7 +181,7 @@ class PayPalPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase 
 		$req = $this->receivedRequests[0]['request'];
 		parse_str( $req->getBody()->getContents(), $receivedArguments );
 
-		$this->assertEquals( $this->expectedRequestparameters, $receivedArguments );
+		$this->assertEquals( $this->expectedRequestParameters, $receivedArguments );
 	}
 
 }
