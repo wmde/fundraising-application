@@ -27,7 +27,7 @@ class KontoCheckIbanValidator implements IbanValidator {
 
 	public function validate( Iban $value, string $fieldName = '' ): ValidationResult {
 		if ( iban_check( $value->toString() ) <= 0 ) {
-			return new ValidationResult( new ConstraintViolation( $value, 'iban_invalid', $fieldName ) );
+			return new ValidationResult( new ConstraintViolation( $value->toString(), 'iban_invalid', $fieldName ) );
 		}
 
 		return new ValidationResult();
