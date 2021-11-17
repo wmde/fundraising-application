@@ -74,3 +74,16 @@ campaigns:
       url_key: ast
       active: true
       param_only: true
+
+    optional_cookie_notice:
+      description: Test what effect the cookie notice has on donations
+      reference: "https://phabricator.wikimedia.org/T295869"
+      start: "2021-11-18"
+      end: "2021-12-31"
+      buckets:
+        - "show"
+        - "hide"
+      default_bucket: "show"
+      url_key: ocn
+      active: true
+      param_only: true

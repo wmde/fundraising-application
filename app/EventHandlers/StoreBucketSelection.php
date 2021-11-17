@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\EventHandlers;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -38,8 +39,21 @@ class StoreBucketSelection implements EventSubscriberInterface {
 
 		$request->attributes->set(
 			self::SHOULD_STORE_BUCKET_COOKIE,
-			$request->cookies->get( CookieNames::CONSENT ) === 'yes'
+			$this->shouldStoreCookie( $request )
 		);
+	}
+
+	/**
+	 * TODO: Remove this after C21_WMDE_Test_12
+	 *
+	 * @param Request $request
+	 * @return bool
+	 */
+	private function shouldStoreCookie( Request $request ): bool {
+		if ( $this->factory->forceChoiceCookieStorage() ) {
+			return true;
+		}
+		return $request->cookies->get( CookieNames::CONSENT ) === 'yes';
 	}
 
 	public function storeSelectedBuckets( ResponseEvent $event ): void {
