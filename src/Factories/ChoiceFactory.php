@@ -27,4 +27,16 @@ class ChoiceFactory {
 		}
 		throw new UnknownChoiceDefinition( 'Address type configuration failure.' );
 	}
+
+	/**
+	 * TODO: Remove this after C21_WMDE_Test_12
+	 *
+	 * @return bool
+	 */
+	public function forceChoiceCookieStorage(): bool {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.optional_cookie_notice.hide' ) ) {
+			return true;
+		}
+		return false;
+	}
 }

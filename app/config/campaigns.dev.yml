@@ -19,3 +19,8 @@ campaigns:
     active: true
     start: "2021-09-01"
     default_bucket: "direct"
+
+  optional_cookie_notice:
+    active: true
+    start: "2021-01-01"
+    default_bucket: "show"
