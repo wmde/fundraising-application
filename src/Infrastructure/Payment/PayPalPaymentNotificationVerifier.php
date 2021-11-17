@@ -8,6 +8,11 @@ use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 
 /**
+ * This class checks some basic properties of a PayPal IPN message
+ * and sends it back to PayPal to make sure it originated from PayPal.
+ *
+ * See https://developer.paypal.com/docs/api-basics/notifications/ipn/IPNImplementation/#specs
+ *
  * @license GPL-2.0-or-later
  * @author Kai Nissen < kai.nissen@wikimedia.de >
  * @author Gabriel Birke < gabriel.birke@wikimedia.de >
@@ -19,9 +24,17 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 		'recurring_payment_suspended_due_to_max_failed_payment'
 	];
 
-	private $httpClient;
-	private $baseUrl;
-	private $accountAddress;
+	private Client $httpClient;
+
+	/**
+	 * @var string PayPal IPN verification end point
+	 */
+	private string $baseUrl;
+
+	/**
+	 * @var string Email address of our PayPal account
+	 */
+	private string $accountAddress;
 
 	public function __construct( Client $httpClient, string $baseUrl, string $accountAddress ) {
 		$this->httpClient = $httpClient;
@@ -69,19 +82,18 @@ class PayPalPaymentNotificationVerifier implements PaymentNotificationVerifier {
 		}
 
 		$responseBody = trim( $result->getBody()->getContents() );
-		if ( $responseBody === 'INVALID' ) {
-			throw new PayPalPaymentNotificationVerifierException(
-				'Payment provider did not confirm the sent data',
-				PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED
-			);
+		if ( $responseBody === 'VERIFIED' ) {
+			return;
 		}
 
-		if ( $responseBody !== 'VERIFIED' ) {
-			throw new PayPalPaymentNotificationVerifierException(
-				'An error occurred while trying to confirm the sent data',
-				PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED
-			);
-		}
+		$failureMessage = $responseBody === 'INVALID' ?
+			'Payment provider did not confirm the sent data' :
+			sprintf( "An error occurred while trying to confirm the sent data. PayPal response: %s", $responseBody );
+
+		throw new PayPalPaymentNotificationVerifierException(
+			$failureMessage,
+			PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED
+		);
 	}
 
 	private function matchesReceiverAddress( array $request ): bool {

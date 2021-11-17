@@ -280,7 +280,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 				$this->newHttpParamsForPayment()
 			);
 
-			$this->assertSame( 'An error occurred while trying to confirm the sent data', $client->getResponse()->getContent() );
+			$this->assertSame( 'An error occurred while trying to confirm the sent data. PayPal response: FAIL', $client->getResponse()->getContent() );
 			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
 		} );
 	}
