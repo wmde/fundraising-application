@@ -70,6 +70,7 @@ campaigns:
         - "direct"
         - "multistep"
         - "multistep_var"
+        - "multistep_checkmarks"
       default_bucket: "direct"
       url_key: ast
       active: true
