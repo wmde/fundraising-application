@@ -89,6 +89,11 @@ services:
         class: WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder
         factory: ['@WMDE\Fundraising\Frontend\Factories\FunFunFactory', 'getCookieBuilder']
 
+    WMDE\Fundraising\Frontend\Infrastructure\SkinCacheWarmer:
+        class: WMDE\Fundraising\Frontend\Infrastructure\SkinCacheWarmer
+        tags:
+            - { name: kernel.cache_warmer }
+
     app.errbit_logger:
         class: Airbrake\MonologHandler
         factory: ['WMDE\Fundraising\Frontend\Factories\ErrbitLoggerFactory', 'createErrbitHandler']
