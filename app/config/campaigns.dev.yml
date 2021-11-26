@@ -10,11 +10,6 @@ campaigns:
     start: "2020-09-20"
     default_bucket: "provisional_address_options"
 
-  confirmation_page_layout:
-    active: true
-    start: "2021-02-10"
-    default_bucket: "new_layout"
-
   address_type_steps:
     active: true
     start: "2021-09-01"

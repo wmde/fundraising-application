@@ -48,19 +48,6 @@ campaigns:
       active: true
       param_only: true
 
-    confirmation_page_layout:
-      description: Testing a new layout for the confirmation page
-      reference: "https://phabricator.wikimedia.org/T268649"
-      start: "2021-02-10"
-      end: "2021-12-31"
-      buckets:
-          - "old_layout"
-          - "new_layout"
-      default_bucket: "new_layout"
-      url_key: confirmation
-      active: true
-      param_only: false
-
     address_type_steps:
       description: Test different texts for the multistep address type
       reference: "https://phabricator.wikimedia.org/T291362"
