@@ -51,13 +51,22 @@ services:
             - ["handle_paypal_payment_notification", "handle_paypal_membership_fee_payments"]
             - "@logger"
 
-        # Inject the log path and route into the PayPal IPN Logger
     WMDE\Fundraising\Frontend\App\EventHandlers\StoreLocale:
         class: WMDE\Fundraising\Frontend\App\EventHandlers\StoreLocale
         public: true
         arguments:
             - '@WMDE\Fundraising\Frontend\Factories\FunFunFactory'
             - "%app.allowed_locales%"
+
+    # Inject the allowed routes and url parameter into the Banner Tracker
+    WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects:
+        class: WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects
+        public: true
+        arguments:
+            - '@Symfony\Component\HttpFoundation\Session\SessionInterface'
+            - "add_donation"
+            - "show_donation_confirmation"
+            - "banner_submission"
 
     # We need the bootstrapper to be public to be able to access it in tests
     WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper:
