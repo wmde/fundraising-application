@@ -1,0 +1,11 @@
+# config/packages/api_platform.yaml
+api_platform:
+  # TODO enable when we have mappings
+  enable_docs: false
+  show_webby: false
+  mapping:
+    paths: []
+  patch_formats:
+    json: ['application/merge-patch+json']
+  swagger:
+    versions: [3]
