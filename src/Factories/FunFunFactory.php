@@ -35,6 +35,7 @@ use WMDE\Fundraising\AddressChangeContext\AddressChangeContextFactory;
 use WMDE\Fundraising\AddressChangeContext\DataAccess\DoctrineAddressChangeRepository;
 use WMDE\Fundraising\AddressChangeContext\Domain\AddressChangeRepository;
 use WMDE\Fundraising\AddressChangeContext\UseCases\ChangeAddress\ChangeAddressUseCase;
+use WMDE\Fundraising\AddressChangeContext\UseCases\ReadAddressChange\ReadAddressChangeUseCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\DonationContext\Authorization\DonationTokenFetcher;
@@ -1001,6 +1002,10 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newChangeAddressUseCase(): ChangeAddressUseCase {
 		return new ChangeAddressUseCase( $this->newAddressChangeRepository() );
+	}
+
+	public function newReadAddressChangeUseCase(): ReadAddressChangeUseCase {
+		return new ReadAddressChangeUseCase( $this->newAddressChangeRepository() );
 	}
 
 	public function newPaymentDataValidator(): PaymentDataValidator {

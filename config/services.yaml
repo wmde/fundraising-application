@@ -26,6 +26,10 @@ services:
         resource: '../app/EventHandlers/*'
         exclude: '../app/EventHandlers/{LogErrors}.php'
 
+    # API data providers
+    WMDE\Fundraising\Frontend\App\API\DataProviders\:
+        resource: '../app/API/DataProviders/*'
+
     # register console commands
     WMDE\Fundraising\Frontend\Cli\:
         resource: '../cli/*'
@@ -102,6 +106,11 @@ services:
         class: WMDE\Fundraising\Frontend\Infrastructure\SkinCacheWarmer
         tags:
             - { name: kernel.cache_warmer }
+
+    # TODO create compiler pass that automatically adds all use cases from FunFunFactory to the container
+    WMDE\Fundraising\AddressChangeContext\UseCases\ReadAddressChange\ReadAddressChangeUseCase:
+        class: WMDE\Fundraising\AddressChangeContext\UseCases\ReadAddressChange\ReadAddressChangeUseCase
+        factory: ['@WMDE\Fundraising\Frontend\Factories\FunFunFactory', 'newReadAddressChangeUseCase']
 
     app.errbit_logger:
         class: Airbrake\MonologHandler

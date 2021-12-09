@@ -17,6 +17,7 @@ var/
 .phpunit.result.cache
 
 app/config/
+!app/config/Resources/*
 
 app/fundraising-frontend-content/
 

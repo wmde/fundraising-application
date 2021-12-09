@@ -1,10 +1,9 @@
 # config/packages/api_platform.yaml
 api_platform:
-  # TODO enable when we have mappings
-  enable_docs: false
+  enable_docs: true
   show_webby: false
   mapping:
-    paths: []
+    paths: ['%kernel.project_dir%/app/config/Resources/']
   patch_formats:
     json: ['application/merge-patch+json']
   swagger:
