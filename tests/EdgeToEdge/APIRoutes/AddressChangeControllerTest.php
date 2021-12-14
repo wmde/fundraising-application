@@ -30,7 +30,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 
 			$response = $this->whenGetRequestIsSubmitted( $client, $identifier );
 
-			// $this->assertSame( Response::HTTP_OK, $response->getStatusCode() );
+			$this->assertSame( Response::HTTP_OK, $response->getStatusCode() );
 			$this->assertJsonResponse( $expectedResponse, $response );
 		} );
 	}
