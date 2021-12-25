@@ -58,6 +58,7 @@ campaigns:
         - "multistep"
         - "multistep_var"
         - "multistep_checkmarks"
+        - "require_address"
       default_bucket: "direct"
       url_key: ast
       active: true
