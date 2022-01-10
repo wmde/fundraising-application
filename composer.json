@@ -124,7 +124,7 @@
 	"require-dev": {
 		"ext-pdo_sqlite": "*",
 
-		"codeception/specify": "~1.1",
+		"codeception/specify": "~2.0",
 		"matthiasnoback/symfony-config-test": "^4.0",
 		"mikey179/vfsstream": "~1.6",
 		"phpmd/phpmd": "~2.6",
