@@ -11,6 +11,12 @@ use Doctrine\Common\Collections\Collection;
 
 class BucketLog {
 
+	/**
+	 * ID automagically set by Doctrine ORM
+	 *
+	 * @var int
+	 * @phpstan-ignore-next-line
+	 */
 	private int $id;
 	private int $externalId;
 	private string $eventName;

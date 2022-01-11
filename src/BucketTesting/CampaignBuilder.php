@@ -15,11 +15,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 class CampaignBuilder {
 
 	private DateTimeZone $timezone;
-	private DateTimeZone $utc;
 
 	public function __construct( DateTimeZone $timezone ) {
 		$this->timezone = $timezone;
-		$this->utc = new DateTimeZone( 'UTC' );
 	}
 
 	public function getCampaigns( array $campaignConfig ): array {

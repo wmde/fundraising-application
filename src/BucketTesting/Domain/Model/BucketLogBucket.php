@@ -6,6 +6,12 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Domain\Model;
 
 class BucketLogBucket {
 
+	/**
+	 * ID automagically set by Doctrine ORM
+	 *
+	 * @var int
+	 * @phpstan-ignore-next-line
+	 */
 	private int $id;
 	private BucketLog $bucketLog;
 	private string $name;

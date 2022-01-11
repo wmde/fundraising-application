@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorResponse;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
-use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\Frontend\Presentation\DonorDataFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
@@ -18,16 +17,12 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
  */
 class DonorUpdateHtmlPresenter {
 
-	private $template;
-	private $donationMembershipApplicationAdapter;
-	private $urlGenerator;
-	private $donorDataFormatter;
+	private TwigTemplate $template;
+	private UrlGenerator $urlGenerator;
 
 	public function __construct( TwigTemplate $template, UrlGenerator $urlGenerator ) {
 		$this->template = $template;
 		$this->urlGenerator = $urlGenerator;
-		$this->donationMembershipApplicationAdapter = new DonationMembershipApplicationAdapter();
-		$this->donorDataFormatter = new DonorDataFormatter();
 	}
 
 	public function present( UpdateDonorResponse $updateDonorResponse, Donation $donation, string $updateToken, string $accessToken ): string {
@@ -46,6 +41,7 @@ class DonorUpdateHtmlPresenter {
 	}
 
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken ): array {
+		$donorDataFormatter = new DonorDataFormatter();
 		return [
 			'donation' => [
 				'id' => $donation->getId(),
@@ -54,16 +50,16 @@ class DonorUpdateHtmlPresenter {
 				'paymentType' => $donation->getPaymentMethodId(),
 				'optsIntoDonationReceipt' => $donation->getOptsIntoDonationReceipt(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
-				'bankTransferCode' => $this->donorDataFormatter->getBankTransferCode(
+				'bankTransferCode' => $donorDataFormatter->getBankTransferCode(
 					$donation->getPaymentMethod()
 				),
-				'creationDate' => $this->donorDataFormatter->getDonationDate(),
-				'cookieDuration' => $this->donorDataFormatter->getHideBannerCookieDuration(),
+				'creationDate' => $donorDataFormatter->getDonationDate(),
+				'cookieDuration' => $donorDataFormatter->getHideBannerCookieDuration(),
 				'updateToken' => $updateToken,
 				'accessToken' => $accessToken
 			],
-			'address' => $this->donorDataFormatter->getAddressArguments( $donation ),
-			'bankData' => $this->donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),
+			'address' => $donorDataFormatter->getAddressArguments( $donation ),
+			'bankData' => $donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),
 			'commentUrl' => $this->urlGenerator->generateRelativeUrl(
 				'AddCommentPage',
 				[
