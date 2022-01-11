@@ -29,8 +29,8 @@ class AddDonationController {
 	private SessionInterface $session;
 	private FunFunFactory $ffFactory;
 
-	public function index( FunFunFactory $ffFactory, Request $request, SessionInterface $session ): Response {
-		$this->session = $session;
+	public function index( FunFunFactory $ffFactory, Request $request ): Response {
+		$this->session = $session = $request->getSession();
 		$this->ffFactory = $ffFactory;
 		if ( !$ffFactory->getDonationSubmissionRateLimiter()->isSubmissionAllowed( $session ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
@@ -50,12 +50,10 @@ class AddDonationController {
 			);
 		}
 
-		$this->resetAddressChangeDataInSession();
-
-		return $this->newHttpResponse( $session, $responseModel );
+		return $this->newHttpResponse( $responseModel );
 	}
 
-	private function newHttpResponse( SessionInterface $session, AddDonationResponse $responseModel ): Response {
+	private function newHttpResponse( AddDonationResponse $responseModel ): Response {
 		switch ( $responseModel->getDonation()->getPaymentMethodId() ) {
 			case PaymentMethod::DIRECT_DEBIT:
 			case PaymentMethod::BANK_TRANSFER:
@@ -189,16 +187,6 @@ class AddDonationController {
 	 */
 	private function filterAutofillCommas( string $value ): string {
 		return trim( preg_replace( [ '/,/', '/\s{2,}/' ], [ ' ', ' ' ], $value ) );
-	}
-
-	/**
-	 * Reset session data to prevent old donations from changing the application output due to old data leaking into the new session
-	 */
-	private function resetAddressChangeDataInSession(): void {
-		$this->session->set(
-			UpdateDonorController::ADDRESS_CHANGE_SESSION_KEY,
-			false
-		);
 	}
 
 	/**
