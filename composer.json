@@ -135,7 +135,7 @@
 		"wmde/fundraising-phpcs": "~4.0",
 		"wmde/fundraising-frontend-content": "dev-test",
 
-		"symfony/css-selector": "^5.2",
+		"symfony/css-selector": "^6.0",
 		"symfony/browser-kit": "^5.2"
 	},
 	"autoload": {
