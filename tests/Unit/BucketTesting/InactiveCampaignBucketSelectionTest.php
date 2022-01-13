@@ -25,8 +25,8 @@ class InactiveCampaignBucketSelectionTest extends TestCase {
 		$campaign = new Campaign(
 			'test1',
 			't1',
-			( new CampaignDate() )->sub( new \DateInterval( 'P1M' ) ),
-			( new CampaignDate() )->add( new \DateInterval( 'P1M' ) ),
+			( $this->now )->sub( new \DateInterval( 'P1M' ) ),
+			( $this->now )->add( new \DateInterval( 'P1M' ) ),
 			Campaign::INACTIVE
 		);
 		$defaultBucket = new Bucket( 'bucket1', $campaign, Bucket::DEFAULT );
@@ -34,7 +34,7 @@ class InactiveCampaignBucketSelectionTest extends TestCase {
 			->addBucket( $defaultBucket )
 			->addBucket( new Bucket( 'bucket2', $campaign, Bucket::NON_DEFAULT ) );
 
-		$selectionStrategy = new InactiveCampaignBucketSelection( new CampaignDate() );
+		$selectionStrategy = new InactiveCampaignBucketSelection( $this->now );
 
 		$this->assertSame( $defaultBucket, $selectionStrategy->selectBucketForCampaign( $campaign ) );
 	}
@@ -43,8 +43,8 @@ class InactiveCampaignBucketSelectionTest extends TestCase {
 		$campaign = new Campaign(
 			'test1',
 			't1',
-			( new CampaignDate() )->sub( new \DateInterval( 'P2M' ) ),
-			( new CampaignDate() )->sub( new \DateInterval( 'P1M' ) ),
+			( $this->now )->sub( new \DateInterval( 'P2M' ) ),
+			( $this->now )->sub( new \DateInterval( 'P1M' ) ),
 			Campaign::ACTIVE
 		);
 		$defaultBucket = new Bucket( 'bucket1', $campaign, Bucket::DEFAULT );
@@ -52,7 +52,7 @@ class InactiveCampaignBucketSelectionTest extends TestCase {
 			->addBucket( $defaultBucket )
 			->addBucket( new Bucket( 'bucket2', $campaign, Bucket::NON_DEFAULT ) );
 
-		$selectionStrategy = new InactiveCampaignBucketSelection( new CampaignDate() );
+		$selectionStrategy = new InactiveCampaignBucketSelection( $this->now );
 
 		$this->assertSame( $defaultBucket, $selectionStrategy->selectBucketForCampaign( $campaign ) );
 	}
@@ -61,15 +61,15 @@ class InactiveCampaignBucketSelectionTest extends TestCase {
 		$campaign = new Campaign(
 			'test1',
 			't1',
-			( new CampaignDate() )->sub( new \DateInterval( 'P1M' ) ),
-			( new CampaignDate() )->add( new \DateInterval( 'P1M' ) ),
+			( $this->now )->sub( new \DateInterval( 'P1M' ) ),
+			( $this->now )->add( new \DateInterval( 'P1M' ) ),
 			Campaign::ACTIVE
 		);
 		$campaign
 			->addBucket( new Bucket( 'bucket1', $campaign, Bucket::DEFAULT ) )
 			->addBucket( new Bucket( 'bucket2', $campaign, Bucket::NON_DEFAULT ) );
 
-		$selectionStrategy = new InactiveCampaignBucketSelection( new CampaignDate() );
+		$selectionStrategy = new InactiveCampaignBucketSelection( $this->now );
 
 		$this->assertNull( $selectionStrategy->selectBucketForCampaign( $campaign ) );
 	}

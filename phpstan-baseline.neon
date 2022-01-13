@@ -16,6 +16,6 @@ parameters:
 			path: src/BucketTesting/Validation/FeatureToggleParser.php
 
 		-
-			message: "#^Parameter \\#1 \\$level of static method Monolog\\\\Logger\\:\\:toMonologLevel\\(\\) expects 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600\\|non\\-empty\\-string, string given\\.$#"
+			message: "#^Parameter \\#1 \\$level of static method Monolog\\\\Logger\\:\\:toMonologLevel\\(\\) expects 100\\|200\\|250\\|300\\|400\\|500\\|550\\|600\\|'ALERT'\\|'alert'\\|'CRITICAL'\\|'critical'\\|'DEBUG'\\|'debug'\\|'EMERGENCY'\\|'emergency'\\|'ERROR'\\|'error'\\|'INFO'\\|'info'\\|'NOTICE'\\|'notice'\\|'WARNING'\\|'warning', string given\\.$#"
 			count: 1
 			path: src/Factories/ErrbitLoggerFactory.php

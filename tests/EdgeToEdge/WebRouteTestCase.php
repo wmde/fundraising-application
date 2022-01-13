@@ -136,7 +136,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	protected static function bootKernel( array $options = [] ): KernelInterface {
 		$kernel = parent::bootKernel( $options );
 
-		static::modifyBootstrapperConfiguration();
+		self::modifyBootstrapperConfiguration();
 		$factory = static::getFactory();
 		static::rebuildDatabaseSchema( $factory );
 

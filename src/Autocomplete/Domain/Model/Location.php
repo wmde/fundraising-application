@@ -10,6 +10,12 @@ namespace WMDE\Fundraising\Frontend\Autocomplete\Domain\Model;
  */
 class Location {
 
+	/**
+	 * ID automagically set by Doctrine ORM if needed
+	 *
+	 * @var int|null
+	 * @phpstan-ignore-next-line
+	 */
 	private ?int $id;
 	private string $stateName;
 	private string $stateNutscode;
