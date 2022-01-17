@@ -26,7 +26,8 @@ class ApplyForMembershipController {
 
 	private FunFunFactory $ffFactory;
 
-	public function index( FunFunFactory $ffFactory, Request $httpRequest, SessionInterface $session ): Response {
+	public function index( FunFunFactory $ffFactory, Request $httpRequest ): Response {
+		$session = $httpRequest->getSession();
 		$this->ffFactory = $ffFactory;
 		if ( !$ffFactory->getMembershipSubmissionRateLimiter()->isSubmissionAllowed( $session ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'membership_application_rejected_limit' ) );

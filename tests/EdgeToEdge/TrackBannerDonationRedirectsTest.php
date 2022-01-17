@@ -6,9 +6,6 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
@@ -28,20 +25,16 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	private const TEST_CAMPAIGN = 'test_campaign';
 	private const TEST_KEYWORD = 'test_keyword';
 
-	private SessionInterface $session;
 	private KernelBrowser $client;
 	private Donation $donation;
 
 	public function setUp(): void {
-		$this->session = new Session( new MockArraySessionStorage() );
-
 		/** @var KernelBrowser $client */
 		$client = $this->createClient();
 		$this->client = $client;
 		self::getContainer()->set(
 			TrackBannerDonationRedirects::class,
 			new TrackBannerDonationRedirects(
-				$this->session,
 				self::ADD_ROUTE,
 				self::CONFIRMATION_ROUTE,
 				self::URL_PARAMETER
@@ -163,18 +156,22 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	private function whenTrackingItemsAreInSession(): void {
-		$this->session->set( TrackBannerDonationRedirects::PIWIK_CAMPAIGN, self::TEST_CAMPAIGN );
-		$this->session->set( TrackBannerDonationRedirects::PIWIK_KWD, self::TEST_KEYWORD );
+		$this->prepareSessionValues( [
+			TrackBannerDonationRedirects::PIWIK_CAMPAIGN => self::TEST_CAMPAIGN,
+			TrackBannerDonationRedirects::PIWIK_KWD => self::TEST_KEYWORD,
+		] );
 	}
 
 	private function verifySessionItemsExist(): void {
-		$this->assertSame( self::TEST_CAMPAIGN, $this->session->get( TrackBannerDonationRedirects::PIWIK_CAMPAIGN ) );
-		$this->assertSame( self::TEST_KEYWORD, $this->session->get( TrackBannerDonationRedirects::PIWIK_KWD ) );
+		$session = $this->client->getRequest()->getSession();
+		$this->assertSame( self::TEST_CAMPAIGN, $session->get( TrackBannerDonationRedirects::PIWIK_CAMPAIGN ) );
+		$this->assertSame( self::TEST_KEYWORD, $session->get( TrackBannerDonationRedirects::PIWIK_KWD ) );
 	}
 
 	private function verifySessionItemsWereRemoved(): void {
-		$this->assertNull( $this->session->get( TrackBannerDonationRedirects::PIWIK_CAMPAIGN ) );
-		$this->assertNull( $this->session->get( TrackBannerDonationRedirects::PIWIK_KWD ) );
+		$session = $this->client->getRequest()->getSession();
+		$this->assertNull( $session->get( TrackBannerDonationRedirects::PIWIK_CAMPAIGN ) );
+		$this->assertNull( $session->get( TrackBannerDonationRedirects::PIWIK_KWD ) );
 	}
 
 	private function makeStoredDonation(): void {

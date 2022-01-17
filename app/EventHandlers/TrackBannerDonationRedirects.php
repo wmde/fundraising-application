@@ -25,7 +25,6 @@ class TrackBannerDonationRedirects implements EventSubscriberInterface {
 	public const PIWIK_CAMPAIGN = 'piwik_campaign';
 	public const PIWIK_KWD = 'piwik_kwd';
 
-	private SessionInterface $session;
 	private string $submissionRoute;
 	private string $confirmationRoute;
 	private string $bannerSubmissionUrlParameter;
@@ -37,8 +36,7 @@ class TrackBannerDonationRedirects implements EventSubscriberInterface {
 		];
 	}
 
-	public function __construct( SessionInterface $session, string $submissionRoute, string $confirmationRoute, string $bannerSubmissionUrlParameter ) {
-		$this->session = $session;
+	public function __construct( string $submissionRoute, string $confirmationRoute, string $bannerSubmissionUrlParameter ) {
 		$this->submissionRoute = $submissionRoute;
 		$this->confirmationRoute = $confirmationRoute;
 		$this->bannerSubmissionUrlParameter = $bannerSubmissionUrlParameter;
@@ -59,10 +57,11 @@ class TrackBannerDonationRedirects implements EventSubscriberInterface {
 
 	public function onKernelResponse( ResponseEvent $event ): void {
 		$request = $event->getRequest();
+		$session = $request->getSession();
 
 		if ( $request->attributes->get( '_route' ) !== $this->submissionRoute ) {
-			$this->session->remove( self::PIWIK_CAMPAIGN );
-			$this->session->remove( self::PIWIK_KWD );
+			$session->remove( self::PIWIK_CAMPAIGN );
+			$session->remove( self::PIWIK_KWD );
 		}
 	}
 
@@ -71,19 +70,21 @@ class TrackBannerDonationRedirects implements EventSubscriberInterface {
 			return;
 		}
 
-		$this->session->set( self::PIWIK_CAMPAIGN, $request->get( self::PIWIK_CAMPAIGN, '' ) );
-		$this->session->set( self::PIWIK_KWD, $request->get( self::PIWIK_KWD, '' ) );
+		$session = $request->getSession();
+		$session->set( self::PIWIK_CAMPAIGN, $request->get( self::PIWIK_CAMPAIGN, '' ) );
+		$session->set( self::PIWIK_KWD, $request->get( self::PIWIK_KWD, '' ) );
 	}
 
 	private function restoreCampaignParameters( RequestEvent $event, Request $request ): void {
-		if ( $this->hasQueryTracking( $request ) || !$this->hasSessionCampaignParameters() ) {
+		if ( $this->hasQueryTracking( $request ) || !$this->hasSessionCampaignParameters( $request->getSession() ) ) {
 			return;
 		}
 
 		$campaignKey = self::PIWIK_CAMPAIGN;
 		$keywordKey = self::PIWIK_KWD;
-		$campaign = $this->session->get( $campaignKey );
-		$keyword = $this->session->get( $keywordKey );
+		$session = $request->getSession();
+		$campaign = $session->get( $campaignKey );
+		$keyword = $session->get( $keywordKey );
 
 		$separator = $request->getQueryString() ? '&' : '?';
 		$extraQueryParameters = "{$campaignKey}={$campaign}&{$keywordKey}={$keyword}";
@@ -100,8 +101,8 @@ class TrackBannerDonationRedirects implements EventSubscriberInterface {
 		return $request->get( self::PIWIK_CAMPAIGN ) || $request->get( self::PIWIK_KWD );
 	}
 
-	private function hasSessionCampaignParameters(): bool {
-		return $this->session->has( self::PIWIK_CAMPAIGN ) && $this->session->has( self::PIWIK_KWD );
+	private function hasSessionCampaignParameters( SessionInterface $session ): bool {
+		return $session->has( self::PIWIK_CAMPAIGN ) && $session->has( self::PIWIK_KWD );
 	}
 
 }

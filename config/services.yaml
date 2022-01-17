@@ -63,7 +63,6 @@ services:
         class: WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects
         public: true
         arguments:
-            - '@Symfony\Component\HttpFoundation\Session\SessionInterface'
             - "add_donation"
             - "show_donation_confirmation"
             - "banner_submission"

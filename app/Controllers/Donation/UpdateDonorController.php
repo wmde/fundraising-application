@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorRequest;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorResponse;
@@ -22,9 +21,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
  */
 class UpdateDonorController {
 
-	public const ADDRESS_CHANGE_SESSION_KEY = 'address_changed';
-
-	public function index( Request $request, FunFunFactory $ffFactory, SessionInterface $session ): Response {
+	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$updateToken = $request->request->get( 'updateToken', '' );
 		$accessToken = $request->query->get( 'accessToken', '' );
 		$responseModel = $ffFactory
@@ -33,7 +30,7 @@ class UpdateDonorController {
 		if ( $this->requestNeedsJsonResponse( $request ) ) {
 			return $this->createJsonResponse( $responseModel );
 		}
-		return $this->createHtmlResponse( $session, $ffFactory, $responseModel, $updateToken, $accessToken );
+		return $this->createHtmlResponse( $ffFactory, $responseModel, $updateToken, $accessToken );
 	}
 
 	private function createJsonResponse( UpdateDonorResponse $responseModel ): JsonResponse {
@@ -44,7 +41,6 @@ class UpdateDonorController {
 	}
 
 	private function createHtmlResponse(
-		SessionInterface $session,
 		FunFunFactory $ffFactory,
 		UpdateDonorResponse $responseModel,
 		string $updateToken,
@@ -54,10 +50,6 @@ class UpdateDonorController {
 			throw new AccessDeniedException();
 		}
 		if ( $responseModel->isSuccessful() ) {
-			$session->set(
-				self::ADDRESS_CHANGE_SESSION_KEY,
-				true
-			);
 			return new RedirectResponse(
 				$ffFactory->getUrlGenerator()->generateAbsoluteUrl(
 					Routes::SHOW_DONATION_CONFIRMATION,

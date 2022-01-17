@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
+use WMDE\Fundraising\Frontend\Tests\PrepareSessionValuesTrait;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
@@ -23,6 +24,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 
 	use BrowserKitAssertionsTrait;
 	use RebuildDatabaseSchemaTrait;
+	use PrepareSessionValuesTrait;
 
 	protected const DISABLE_DEBUG = false;
 	protected const ENABLE_DEBUG = true;

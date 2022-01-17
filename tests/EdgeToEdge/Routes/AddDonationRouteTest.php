@@ -13,7 +13,6 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\App\CookieNames;
@@ -56,31 +55,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenDonationGetsPersisted_timestampIsStoredInSession(): void {
-		$client = $this->createClient();
-		// Don't throw away the environment between http requests, otherwise the in-memory SQLite database would be gone
-		if ( $client instanceof KernelBrowser ) {
-			$client->disableReboot();
-		}
-		$client->followRedirects( true );
-		$client->request(
-			'POST',
-			'/donation/add',
-			$this->newValidFormInput()
-		);
-
-		/** @var SessionInterface $session */
-		$session = static::getContainer()->get( 'session' );
-		$donationTimestamp = $session->get( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY );
-		$this->assertNotNull( $donationTimestamp );
-		$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
-	}
-
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected(): void {
 		$client = $this->createClient();
-		/** @var SessionInterface $session */
-		$session = static::getContainer()->get( 'session' );
-		$session->set( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
+		$this->prepareSessionValues( [ FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY => new \DateTimeImmutable() ] );
 
 		$client->request(
 			'POST',
@@ -92,38 +69,17 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			/** @var SessionInterface $session */
-			$session = static::getContainer()->get( 'session' );
-			$session->set(
-				FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY,
-				( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT35M' ) )
-			);
+		$client = $this->createClient();
+		$someMinutesAgo = ( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT35M' ) );
+		$this->prepareSessionValues( [ FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY => $someMinutesAgo ] );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
 
-			$this->assertStringNotContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() );
-		} );
-	}
-
-	public function testWhenRedirectingToExternalProvider_requestLimitCookieIsNotSet(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$client->followRedirects( true );
-
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidPayPalInput()
-			);
-
-			/** @var SessionInterface $session */
-			$session = static::getContainer()->get( 'session' );
-			$this->assertNull( $session->get( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY ) );
-		} );
+		$this->assertStringNotContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() );
 	}
 
 	private function newValidFormInput(): array {

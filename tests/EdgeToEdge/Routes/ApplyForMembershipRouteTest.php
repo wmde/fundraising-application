@@ -291,7 +291,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 
 		/** @var SessionInterface $session */
-		$session = static::getContainer()->get( 'session' );
+		$session = $client->getRequest()->getSession();
 		$lastMembership = $session->get( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY );
 		$this->assertNotNull( $lastMembership );
 		$this->assertEqualsWithDelta( time(), $lastMembership->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );
@@ -299,9 +299,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleMembershipFormSubmissions_requestGetsRejected(): void {
 		$client = $this->createClient();
-		/** @var SessionInterface $session */
-		$session = static::getContainer()->get( 'session' );
-		$session->set( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY, new \DateTimeImmutable() );
+		$this->prepareSessionValues( [ FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY => new \DateTimeImmutable() ] );
 
 		$client->request(
 			'POST',
@@ -314,11 +312,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected(): void {
 		$client = $this->createClient();
-		$session = static::getContainer()->get( 'session' );
-		$session->set(
-			FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY,
-			( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT12M' ) )
-		);
+		$someMinutesAgo = ( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT12M' ) );
+		$this->prepareSessionValues( [ FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY => $someMinutesAgo ] );
 
 		$client->request(
 			'POST',
