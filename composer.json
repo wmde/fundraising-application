@@ -30,7 +30,7 @@
 		"symfony/console": "~5.4.0",
 		"symfony/dotenv": "~5.4.0",
 		"symfony/filesystem": "~5.4.0",
-		"symfony/framework-bundle": "~5.4.0",
+		"symfony/framework-bundle": "~6.0.2",
 		"symfony/http-foundation": "~5.4.0",
 		"symfony/mailer": "~5.4.0",
 		"symfony/monolog-bundle": "^3.6",
