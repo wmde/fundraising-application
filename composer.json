@@ -37,7 +37,7 @@
 		"symfony/property-access": "~5.4.0",
 		"symfony/twig-bridge": "~5.4.0",
 		"symfony/validator": "~5.4.0",
-		"symfony/yaml": "~5.4.0",
+		"symfony/yaml": "~6.0.2",
 		"symfony/cache": "^5.4",
 
 		"airbrake/phpbrake": "~0.7",
