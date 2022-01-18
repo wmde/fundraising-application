@@ -22,7 +22,7 @@ class CampaignFeatureBuilderTest extends TestCase {
 	public function testWhenNoCampaignsAreDefined_featureSetIsEmpty() {
 		$factory = new CampaignFeatureBuilder();
 		$result = $factory->getFeatures()->jsonSerialize();
-		$this->assertSame( [ 'features' => null ], $result );
+		$this->assertSame( [ 'features' => [] ], $result );
 	}
 
 	public function testCampaignAndBucketNamesAreConvertedIntoFeatureNames() {

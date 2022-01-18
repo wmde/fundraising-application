@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e12ddf7a60c6a5609301cfe876ffe093",
+    "content-hash": "af4323681bfd5e1a80149714a70264d4",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -2343,21 +2343,85 @@
             "time": "2021-11-30T19:35:32+00:00"
         },
         {
-            "name": "psr/cache",
-            "version": "1.0.1",
+            "name": "phpstan/phpstan",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-fig/cache.git",
-                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "1dd8f3e40bf7aa30031a75c65cece99220a161b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
-                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1dd8f3e40bf7aa30031a75c65cece99220a161b8",
+                "reference": "1dd8f3e40bf7aa30031a75c65cece99220a161b8",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^7.1|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "source": "https://github.com/phpstan/phpstan/tree/1.4.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpstan",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-01-18T16:09:11+00:00"
+        },
+        {
+            "name": "psr/cache",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/cache.git",
+                "reference": "213f9dbc5b9bfbc4f8db86d2838dc968752ce13b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/213f9dbc5b9bfbc4f8db86d2838dc968752ce13b",
+                "reference": "213f9dbc5b9bfbc4f8db86d2838dc968752ce13b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.0"
             },
             "type": "library",
             "extra": {
@@ -2377,7 +2441,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
+                    "homepage": "https://www.php-fig.org/"
                 }
             ],
             "description": "Common interface for caching libraries",
@@ -2387,9 +2451,9 @@
                 "psr-6"
             ],
             "support": {
-                "source": "https://github.com/php-fig/cache/tree/master"
+                "source": "https://github.com/php-fig/cache/tree/2.0.0"
             },
-            "time": "2016-08-06T20:24:11+00:00"
+            "time": "2021-02-03T23:23:37+00:00"
         },
         {
             "name": "psr/container",
@@ -2973,28 +3037,34 @@
         },
         {
             "name": "remotelyliving/doorkeeper",
-            "version": "1.4.0",
+            "version": "dev-php-8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/remotelyliving/doorkeeper.git",
-                "reference": "aaaf7f9111c389acfdc59f9467be6f0afd378f20"
+                "url": "https://github.com/wmde/doorkeeper",
+                "reference": "5e12c76ad2127299ef76723eb676f295f50da04b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/remotelyliving/doorkeeper/zipball/aaaf7f9111c389acfdc59f9467be6f0afd378f20",
-                "reference": "aaaf7f9111c389acfdc59f9467be6f0afd378f20",
+                "url": "https://api.github.com/repos/wmde/doorkeeper/zipball/5e12c76ad2127299ef76723eb676f295f50da04b",
+                "reference": "5e12c76ad2127299ef76723eb676f295f50da04b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0.0",
-                "psr/cache": "^1.0",
+                "ext-filter": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=8.0",
+                "phpstan/phpstan": "^1.4",
+                "psr/cache": "^1.0 || ^2.0 || ^3.0",
                 "psr/http-message": "^1.0",
-                "psr/log": "^1.0"
+                "psr/log": "^1.0",
+                "ramsey/uuid": "^3.8 || ^4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.1",
-                "satooshi/php-coveralls": "^1.0",
-                "squizlabs/php_codesniffer": "^2.8"
+                "maglnet/composer-require-checker": "^4.0",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.0"
             },
             "type": "library",
             "autoload": {
@@ -3002,7 +3072,11 @@
                     "RemotelyLiving\\Doorkeeper\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "RemotelyLiving\\Doorkeeper\\Tests\\": "tests/"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -3015,13 +3089,9 @@
             "description": "A Feature Toggle",
             "keywords": [
                 "Doorkeeper",
-                "feature flag"
+                "Feature Flag"
             ],
-            "support": {
-                "issues": "https://github.com/remotelyliving/doorkeeper/issues",
-                "source": "https://github.com/remotelyliving/doorkeeper/tree/master"
-            },
-            "time": "2018-01-18T00:09:39+00:00"
+            "time": "2022-01-18T16:26:47+00:00"
         },
         {
             "name": "sofort/sofortlib-php",
@@ -8477,70 +8547,6 @@
             "time": "2021-12-08T12:19:24+00:00"
         },
         {
-            "name": "phpstan/phpstan",
-            "version": "1.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "1dd8f3e40bf7aa30031a75c65cece99220a161b8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1dd8f3e40bf7aa30031a75c65cece99220a161b8",
-                "reference": "1dd8f3e40bf7aa30031a75c65cece99220a161b8",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1|^8.0"
-            },
-            "conflict": {
-                "phpstan/phpstan-shim": "*"
-            },
-            "bin": [
-                "phpstan",
-                "phpstan.phar"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.4-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PHPStan - PHP Static Analysis Tool",
-            "support": {
-                "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.4.2"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/ondrejmirtes",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/phpstan",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/phpstan",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2022-01-18T16:09:11+00:00"
-        },
-        {
             "name": "phpunit/php-code-coverage",
             "version": "9.2.10",
             "source": {
@@ -10448,6 +10454,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "remotelyliving/doorkeeper": 20,
         "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
