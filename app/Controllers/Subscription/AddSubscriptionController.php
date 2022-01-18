@@ -65,7 +65,7 @@ class AddSubscriptionController {
 	}
 
 	private function createJsonResponse( ValidationResponse $responseModel, AddSubscriptionJsonPresenter $presenter, ?string $callback = '' ): Response {
-		$response = JsonResponse::create( $presenter->present( $responseModel ) );
+		$response = new JsonResponse( $presenter->present( $responseModel ) );
 		// set JsonP callback
 		if ( $callback ) {
 			$response->setCallback( $callback );

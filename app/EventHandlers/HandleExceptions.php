@@ -60,26 +60,27 @@ class HandleExceptions implements EventSubscriberInterface {
 
 	private function createNotFoundResponse( ExceptionEvent $event ): void {
 		if ( $this->isJsonRequest( $event ) ) {
-			$event->setResponse( JsonResponse::create(
+			$event->setResponse( new JsonResponse(
 				[ 'ERR' => $event->getThrowable()->getMessage() ],
-				404,
-				[ 'X-Status-Code' => 404 ]
+				Response::HTTP_NOT_FOUND,
+				[ 'X-Status-Code' => Response::HTTP_NOT_FOUND ]
 			) );
 			return;
 		}
 
 		$event->setResponse( new Response(
 			$this->presenterFactory->newPageNotFoundHtmlPresenter()->present(),
-			404,
-			[ 'X-Status-Code' => 404 ]
+			Response::HTTP_NOT_FOUND,
+			[ 'X-Status-Code' => Response::HTTP_NOT_FOUND ]
 		) );
 	}
 
 	private function createInternalErrorResponse( ExceptionEvent $event ) {
 		$exception = $event->getThrowable();
 		if ( $this->isJsonRequest( $event ) ) {
-			$event->setResponse( JsonResponse::create(
-				[ 'ERR' => $exception->getMessage() ]
+			$event->setResponse( new JsonResponse(
+				[ 'ERR' => $exception->getMessage() ],
+				// TODO check if we can return $code (see below) instead of 200
 			) );
 			return;
 		}
