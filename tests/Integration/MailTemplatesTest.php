@@ -44,7 +44,7 @@ class MailTemplatesTest extends KernelTestCase {
 
 	private function newFactory(): FunFunFactory {
 		static::bootKernel();
-		$bootstrapper = static::$container->get( EnvironmentBootstrapper::class );
+		$bootstrapper = static::getContainer()->get( EnvironmentBootstrapper::class );
 
 		if ( !( $bootstrapper instanceof TestEnvironmentBootstrapper ) ) {
 			throw new \LogicException( 'We need to use TestEnvironmentBootstrapper to be able to override the configuration' );
@@ -52,7 +52,7 @@ class MailTemplatesTest extends KernelTestCase {
 
 		$bootstrapper->overrideConfiguration( $this->getConfig() );
 
-		$ffFactory = static::$container->get( FunFunFactory::class );
+		$ffFactory = static::getContainer()->get( FunFunFactory::class );
 
 		$contentProvider = $this->createMock( ContentProvider::class );
 		$contentProvider->method( 'getMail' )->willReturnArgument( 0 );
