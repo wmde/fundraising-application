@@ -38,7 +38,7 @@
 		"symfony/twig-bridge": "~6.0.0",
 		"symfony/validator": "~6.0.0",
 		"symfony/yaml": "~6.0.0",
-		"symfony/cache": "^5.4",
+		"symfony/cache": "^6.0",
 
 		"airbrake/phpbrake": "~0.7",
 		"doctrine/migrations": "~3.0",
