@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8401333acf097454a4897803c6ec1aa3",
+    "content-hash": "cb98b2e0f472e3f480f9d0a0f5051a96",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7182,28 +7182,28 @@
         },
         {
             "name": "wmde/fundraising-content-provider",
-            "version": "v4.0.0",
+            "version": "v5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-content-provider",
-                "reference": "dfd29933e7cb7f52bcdfd0ea0daefde1b78f8ddf"
+                "reference": "1992c89f3d698cb57029efede658cd44cc9befed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/dfd29933e7cb7f52bcdfd0ea0daefde1b78f8ddf",
-                "reference": "dfd29933e7cb7f52bcdfd0ea0daefde1b78f8ddf",
+                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/1992c89f3d698cb57029efede658cd44cc9befed",
+                "reference": "1992c89f3d698cb57029efede658cd44cc9befed",
                 "shasum": ""
             },
             "require": {
                 "ezyang/htmlpurifier": "^4.9",
-                "php": ">=7.4",
-                "symfony/console": "^5.1",
+                "php": ">=8.0",
+                "symfony/console": "^5.4 || ^6.0",
                 "twig/twig": "~3.0"
             },
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "~8.0",
-                "wmde/fundraising-phpcs": "~1.0"
+                "phpunit/phpunit": "~9.5",
+                "wmde/fundraising-phpcs": "~5.0"
             },
             "bin": [
                 "bin/lint_content"
@@ -7242,7 +7242,7 @@
                 "GPL-2.0+"
             ],
             "description": "WMDE fundraising application content provider and filter",
-            "time": "2021-01-14T14:07:41+00:00"
+            "time": "2022-01-18T12:35:57+00:00"
         },
         {
             "name": "wmde/fundraising-donations",
