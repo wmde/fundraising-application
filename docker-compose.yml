@@ -11,6 +11,7 @@ services:
       - ./build/proxy/nginx.conf.template:/etc/nginx/conf.d/nginx.conf.template:ro
       - ./build/proxy/includes:/etc/nginx/conf.d/includes:ro
       - ./web:/usr/share/nginx/www/spenden.wikimedia.de/current/web:ro
+      - ./vendor/wmde/fundraising-frontend-content:/usr/share/nginx/www/fundraising-frontend-content:ro
     environment:
       - NGINX_HOST=spenden.wikimedia.de
       - NGINX_PORT=8080
