@@ -24,7 +24,7 @@ class MailerTemplatingFactoryTest extends KernelTestCase {
 	/**
 	 * @var MockObject & ContentProvider
 	 */
-	private $contentProvider;
+	private ContentProvider $contentProvider;
 
 	private FunFunFactory $factory;
 
@@ -56,7 +56,7 @@ class MailerTemplatingFactoryTest extends KernelTestCase {
 
 	private function getFactory( array $configOverrides = [] ): FunFunFactory {
 		static::bootKernel();
-		$bootstrapper = static::$container->get( EnvironmentBootstrapper::class );
+		$bootstrapper = static::getContainer()->get( EnvironmentBootstrapper::class );
 
 		if ( !( $bootstrapper instanceof TestEnvironmentBootstrapper ) ) {
 			throw new \LogicException( 'We need to use TestEnvironmentBootstrapper to be able to override the configuration' );
@@ -64,7 +64,7 @@ class MailerTemplatingFactoryTest extends KernelTestCase {
 
 		$bootstrapper->overrideConfiguration( $configOverrides );
 
-		$factory = static::$container->get( FunFunFactory::class );
+		$factory = static::getContainer()->get( FunFunFactory::class );
 		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 		$factory->setLocale( 'de_DE' );
 		return $factory;

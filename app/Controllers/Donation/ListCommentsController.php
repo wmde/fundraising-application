@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 class ListCommentsController {
 
 	public function handleJson( FunFunFactory $ffFactory, Request $request ): Response {
-		$response = JsonResponse::create(
+		$response = new JsonResponse(
 			$ffFactory->newCommentListJsonPresenter()->present(
 				$ffFactory->newListCommentsUseCase()->listComments(
 					new CommentListingRequest(

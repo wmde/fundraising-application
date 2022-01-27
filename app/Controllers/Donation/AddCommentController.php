@@ -29,7 +29,7 @@ class AddCommentController {
 		$updateToken = $request->request->get( 'updateToken', '' );
 
 		if ( $updateToken === '' ) {
-			return JsonResponse::create(
+			return new JsonResponse(
 				[
 					'status' => 'ERR',
 					'message' => 'comment_failure_access_denied',
@@ -40,7 +40,7 @@ class AddCommentController {
 		$response = $ffFactory->newAddCommentUseCase( $updateToken )->addComment( $addCommentRequest );
 
 		if ( $response->isSuccessful() ) {
-			return JsonResponse::create(
+			return new JsonResponse(
 				[
 					'status' => 'OK',
 					'message' => $response->getSuccessMessage(),
@@ -48,7 +48,7 @@ class AddCommentController {
 			);
 		}
 
-		return JsonResponse::create(
+		return new JsonResponse(
 			[
 				'status' => 'ERR',
 				'message' => $response->getErrorMessage(),

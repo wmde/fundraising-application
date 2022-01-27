@@ -122,7 +122,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		if ( !static::$booted ) {
 			throw new \LogicException( sprintf( 'Currently, the kernel must be booted before calling "%s()". Try calling "createClient" or "bootKernel"', __METHOD__ ) );
 		}
-		return static::$container->get( FunFunFactory::class );
+		return static::getContainer()->get( FunFunFactory::class );
 	}
 
 	/**
@@ -154,7 +154,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 			return;
 		}
 
-		$bootstrapper = static::$container->get( EnvironmentBootstrapper::class );
+		$bootstrapper = static::getContainer()->get( EnvironmentBootstrapper::class );
 		if ( !( $bootstrapper instanceof TestEnvironmentBootstrapper ) ) {
 			throw new \LogicException( 'When overriding configuration, the environment must use TestEnvironmentBootstrapper' );
 		}
