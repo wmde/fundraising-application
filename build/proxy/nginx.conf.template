@@ -16,6 +16,11 @@ server {
             rewrite ^/piwik/(.*) https://tracking.wikimedia.de/$1 permanent;
         }
 
+		# fundraising-frontend-content, mounted into container from vendor
+		location /resources/ {
+			root /usr/share/nginx/www/fundraising-frontend-content;
+		}
+
         # deny access to dot files
         location ~ (^|/)\. {
                 return 403;
