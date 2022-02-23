@@ -10,13 +10,11 @@ use WMDE\Fundraising\MembershipContext\Domain\Event as MembershipEvent;
 
 class EventDispatcherSpy extends EventDispatcher {
 
-	private array $events = [];
-
 	/**
 	 * @param DonationEvent|MembershipEvent $event
 	 */
 	public function dispatch( $event ): void {
-		$this->events[] = $event;
+		// do nothing, currently this class is just for checking that the right event listeners are initilized
 	}
 
 	public function getObservedEventClassNames(): array {
