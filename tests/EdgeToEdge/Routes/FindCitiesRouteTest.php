@@ -25,6 +25,7 @@ class FindCitiesRouteTest extends WebRouteTestCase {
 			$entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Waterford' ) );
 			$entityManager->persist( ValidLocation::validLocationForCommunity( '34567', 'Kildare' ) );
 			$entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wicklow' ) );
+			$entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Großröhrsdorf' ) );
 
 			$entityManager->flush();
 
@@ -36,7 +37,7 @@ class FindCitiesRouteTest extends WebRouteTestCase {
 
 			$response = $client->getResponse();
 
-			$this->assertJsonSuccessResponse( [ 'Waterford', 'Wexford', 'Wicklow' ], $response );
+			$this->assertJsonSuccessResponse( [ 'Großröhrsdorf', 'Waterford', 'Wexford', 'Wicklow' ], $response );
 		} );
 	}
 }
