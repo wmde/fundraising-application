@@ -15,7 +15,6 @@ class EventDispatcher {
 	protected array $listeners = [];
 
 	public function addEventListener( string $eventClassName, callable $listener ): self {
-		assert( class_exists( $eventClassName ) );
 		if ( empty( $this->listeners[$eventClassName] ) ) {
 			$this->listeners[$eventClassName] = [];
 		}
@@ -23,10 +22,7 @@ class EventDispatcher {
 		return $this;
 	}
 
-	/**
-	 * @param DonationEvent|MembershipEvent $event
-	 */
-	public function dispatch( $event ): void {
+	public function dispatch( DonationEvent|MembershipEvent $event ): void {
 		$eventName = get_class( $event );
 		if ( empty( $this->listeners[$eventName] ) ) {
 			return;
