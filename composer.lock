@@ -1958,32 +1958,31 @@
         },
         {
             "name": "jeroen/file-fetcher",
-            "version": "6.0.0",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JeroenDeDauw/FileFetcher.git",
-                "reference": "7a17d947e268e351efc42386d4454a41b07ad481"
+                "reference": "d38fb0587b52b28bd24fda599f2da69ac8530453"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JeroenDeDauw/FileFetcher/zipball/7a17d947e268e351efc42386d4454a41b07ad481",
-                "reference": "7a17d947e268e351efc42386d4454a41b07ad481",
+                "url": "https://api.github.com/repos/JeroenDeDauw/FileFetcher/zipball/d38fb0587b52b28bd24fda599f2da69ac8530453",
+                "reference": "d38fb0587b52b28bd24fda599f2da69ac8530453",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1",
-                "psr/log": "~1.0"
+                "php": ">=7.3",
+                "psr/log": "~3.0|~2.0|~1.0"
             },
             "require-dev": {
-                "ockcyp/covers-validator": "~1.0",
-                "phpmd/phpmd": "~2.6",
-                "phpstan/phpstan": "~0.10.1",
-                "phpunit/phpunit": "~7.2",
+                "jeroen/psr-log-test-doubles": "~3.1",
+                "phpstan/phpstan": "~1.6.0",
+                "phpunit/phpunit": "~9.5",
                 "squizlabs/php_codesniffer": "~3.2",
-                "wmde/psr-log-test-doubles": "~2.1"
+                "vimeo/psalm": "^4.22.0"
             },
             "suggest": {
-                "jeroen/file-fetcher-cache ": "Provides a SimpleCache (PSR-16) decorator for file fetchers",
+                "jeroen/file-fetcher-cache": "Provides a SimpleCache (PSR-16) decorator for file fetchers",
                 "jeroen/file-fetcher-stopwatch": "Provides a Symfony Stopwatch decorator for file fetchers"
             },
             "type": "library",
@@ -2005,7 +2004,7 @@
                 {
                     "name": "Jeroen De Dauw",
                     "email": "jeroendedauw@gmail.com",
-                    "homepage": "http://jeroendedauw.com",
+                    "homepage": "https://EntropyWins.wtf",
                     "role": "Developer"
                 }
             ],
@@ -2013,7 +2012,6 @@
             "homepage": "https://github.com/JeroenDeDauw/FileFetcher",
             "keywords": [
                 "Test Doubles",
-                "cache",
                 "curl",
                 "file fetcher",
                 "file_get_contents",
@@ -2029,9 +2027,15 @@
             ],
             "support": {
                 "issues": "https://github.com/JeroenDeDauw/FileFetcher/issues",
-                "source": "https://github.com/JeroenDeDauw/FileFetcher/tree/master"
+                "source": "https://github.com/JeroenDeDauw/FileFetcher/tree/6.1.0"
             },
-            "time": "2019-01-17T11:44:23+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/JeroenDeDauw",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-04-26T17:29:31+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
