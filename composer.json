@@ -136,7 +136,7 @@
 		"phpunit/phpunit": "~9.5.0",
 
 		"wmde/psr-log-test-doubles": "~2.1",
-		"wmde/fundraising-phpcs": "~6.0",
+		"wmde/fundraising-phpcs": "~7.0",
 		"wmde/fundraising-frontend-content": "dev-test",
 
 		"symfony/css-selector": "^6.0",
