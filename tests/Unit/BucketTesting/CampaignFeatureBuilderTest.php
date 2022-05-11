@@ -105,7 +105,7 @@ class CampaignFeatureBuilderTest extends TestCase {
 		$rulesInDefaultBucket  = $features->getFeatureByName( 'campaigns.test_active.bucket1' )->getRules();
 		$rulesInOtherBucket = $features->getFeatureByName( 'campaigns.test_active.bucket2' )->getRules();
 
-		$this->assertEmpty( $rulesInDefaultBucket[0]->getPrerequisites(), 'Default bucket should not have prerequisites' );
+		$this->assertCount( 0, $rulesInDefaultBucket[0]->getPrerequisites(), 'Default bucket should not have prerequisites' );
 
 		$timeAfter = $rulesInOtherBucket[0]->getPrerequisites()[0]->getValue();
 		$timeBefore = $rulesInOtherBucket[0]->getPrerequisites()[0]->getPrerequisites()[0]->getValue();

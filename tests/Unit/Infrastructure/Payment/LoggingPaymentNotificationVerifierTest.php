@@ -145,7 +145,7 @@ class LoggingPaymentNotificationVerifierTest extends \PHPUnit\Framework\TestCase
 		);
 		$verifier->verify( [] );
 
-		$this->assertEmpty( $logger->getLogCalls(), 'No log calls should be made' );
+		$this->assertcount( 0, $logger->getLogCalls(), 'No log calls should be made' );
 	}
 
 }
