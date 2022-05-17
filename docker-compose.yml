@@ -33,12 +33,12 @@ services:
       - mailhog
 
   database:
-    image: mysql:5.6
+    image: mariadb:10.4
     environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      - MYSQL_USER=fundraising
-      - MYSQL_PASSWORD=INSECURE PASSWORD
-      - MYSQL_DATABASE=fundraising
+      - MARIADB_RANDOM_ROOT_PASSWORD=yes
+      - MARIADB_USER=fundraising
+      - MARIADB_PASSWORD=INSECURE PASSWORD
+      - MARIADB_DATABASE=fundraising
     ports:
       - '3307:3306'
     expose:
