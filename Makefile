@@ -38,10 +38,10 @@ update-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update $(COMPOSER_FLAGS)
 
 generate-database-schema:
-	$(DOCTRINE_SCHEMA_COMMAND) > ./build/database/01.Database_Schema.sql
+	$(DOCTRINE_SCHEMA_COMMAND) > ./.docker/database/01.Database_Schema.sql
 
 validate-sql:
-	$(DOCTRINE_SCHEMA_COMMAND) | diff - ./build/database/01.Database_Schema.sql 1>&2
+	$(DOCTRINE_SCHEMA_COMMAND) | diff - ./.docker/database/01.Database_Schema.sql 1>&2
 
 setup-doctrine:
 	docker-compose run --rm start_dependencies
@@ -51,10 +51,10 @@ drop-db:
 	docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:drop --force
 
 default-config:
-	cp -i build/app/config.dev.json app/config
+	cp -i .docker/app/config.dev.json app/config
 
 download-assets:
-	build/download_assets.sh $(ASSET_BRANCH)
+	./bin/download_assets.sh $(ASSET_BRANCH)
 
 # Maintenance
 
