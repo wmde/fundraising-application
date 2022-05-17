@@ -28,7 +28,7 @@ markdown-toc --maxdepth 2 --bullets '*' -i README.md
 
 ## Installation
 
-For development, you need to have Docker and docker-compose installed. You need at least Docker Version >= 17.09.0 and docker-compose version >= 1.17.0. If your OS does not come with the right version, please use the official installation instructions for [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/). You don't need to install other dependencies (PHP, Node.js, MySQL) on your machine.
+For development, you need to have Docker and docker-compose installed. You need at least Docker Version >= 17.09.0 and docker-compose version >= 1.17.0. If your OS does not come with the right version, please use the official installation instructions for [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/). You don't need to install other dependencies (PHP, Node.js, MariaDB) on your machine.
 
 Get a clone of our git repository and then run:
 
@@ -36,17 +36,17 @@ Get a clone of our git repository and then run:
 
 This will
 
-- Install PHP and Node.js dependencies
+- Install PHP dependencies
 - Copy a basic configuration file. See section [Configuration](#configuration) for more details on the configuration.
 - (Re-)Create the database structure and generate the Doctrine Proxy classes
-- Dowload and install the frontend assets from
+- Download and install the frontend assets from
     [fundraising-app-frontend](https://gitlab.com/fun-tech/fundraising-app-frontend)
 
 ## Running the application
 
     docker-compose up
 
-The application can now be reached at [http://localhost:8082/](http://localhost:8082/).
+You can now access the application at [http://localhost:8082/](http://localhost:8082/).
 
 ## Configuration
 
@@ -75,10 +75,10 @@ development server:
 The application will show a blank white page if the browser can't find the
 assets.
 
-### Create a test configuration that uses the MySQL database
+### Create a test configuration that uses the MariaDB database
 
-To speed up the tests when running them locally, use SQLite instead of the
-default MySQL. You can configure this by adding the file
+To speed up the tests when running them locally, the tests use SQLite
+instead of MariaDB. To run the tests with the real database, add the file
 `app/config/config.test.local.json` with the following content:
 
 ```json
@@ -192,6 +192,8 @@ Out of the box, the database should be in a usable state for local development. 
 schema, you must provide a migration script for the production database. Store the migration scripts in the `migrations`
 directory of the bounded context where you made the changes.
 
+#### Testing migrations
+
 To test you migration in your Docker development environment, update the bounded context dependency in composer and run
 the `make migration MIGRATION_CONTEXT=<CTX>` command. Replace the placeholder `<CTX>` with the name of of the configuration
 file in `app/config/migrations` (without the `.yml` suffix).
@@ -217,16 +219,34 @@ command from doctrine-migrations which supports `--add` and `--delete` parameter
 vendor/doctrine/migrations/bin/doctrine-migrations migrations:version
 ```
 
+#### Running migrations on the server
+
 Have a look the [deployment documentation](https://github.com/wmde/fundraising-infrastructure/blob/master/docs/deployment/Fundraising_Application.md) on how to run the migrations on the server.
 
 **Note:** If you're getting errors that the configuration file was nor found, make sure to set `APP_ENV` to the right value.
 See section "Running in different environments" in this document.
 
+### Accessing the database with the command line client
+
+To start the command line client, use the following commands:
+
+	docker-compose up -d database
+	docker-compose exec database mysql -u fundraising -p"INSECURE PASSWORD" fundraising
+
+### Accessing the database from your host machine
+
+If you want to use a different client for accessing the database, you need
+to connect to port 3307.
+
+
 ### Accessing the database from a Docker image
 
-The database container of the Docker development environment is not exposed to the outside. If you want to connect to
-the default fundraising frontend database using the MySQL command line client, you need first to find out the Docker
-network name where the database is running in. With the command
+If you want to connect to the database container from another docker
+container that's not part of the `docker-compose.yml` configuration (for
+example to use a tool like [Adminer](https://www.adminer.org/) or
+[PHPMyAdmin](https://www.phpmyadmin.net/)), you need to put that container
+in the same virtual network as the rest of the application containers.
+With the command
 
     docker network ls
 
@@ -240,34 +260,9 @@ Next up is finding out the full name of the database container with the command
 The database container will be the one ending in `_database_1`. The prefix is probably the directory name where you checked out this repository.
 
 Copy the full network name and container name and use them instead of the placeholders `__CONTAINER_NAME__` and
-`__NETWORK_NAME__` in the following command to run the MySQL command line client:
-
-    docker run -it --link __CONTAINER_NAME__:mysql --net __NETWORK_NAME__ --rm mysql:5.6 \
-        sh -c 'exec mysql -h database -P 3306 -u fundraising -p"INSECURE PASSWORD" fundraising'
-
-To use PHPMyAdmin, use the following command to run it on port 8099:
+`__NETWORK_NAME__` in the following command to run PHPMyAdmin, port 8099:
 
     docker run -it --link __CONTAINER_NAME__:db --net __NETWORK_NAME__ -p 8099:80 phpmyadmin/phpmyadmin
-
-### Accessing the database from your host machine
-
-If you want to expose the port of the database on your guest host (localhost), for example for using a GUI client,
-you need to create an "override" file for `docker-compose.yml`. Example file, called `docker-compose.db.yml`:
-
-```yaml
-version: '3'
-
-services:
-    database:
-        ports:
-            - "3306:3306"
-```
-
-You then start the environment with the following command:
-
-    docker-compose -f docker-compose.yml -f docker-compose.db.yml up
-
-You will be prompted for a password which you can grab from `config/config.prod.json`.
 
 ### Resetting the database in your local environment
 
@@ -340,6 +335,7 @@ Used Bounded Contexts:
 * [Donation Context](https://github.com/wmde/fundraising-donations)
 * [Membership Context](https://github.com/wmde/fundraising-memberships)
 * [Payment Context](https://github.com/wmde/fundraising-payments)
+* [Address Change Context](https://github.com/wmde/fundraising-address-change)
 * [Subscription Context](https://github.com/wmde/fundraising-subscriptions)
 
 ### Production code layout
