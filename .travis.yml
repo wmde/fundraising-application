@@ -22,7 +22,7 @@ script:
   - docker run -v $PWD:/app --rm  registry.gitlab.com/fun-tech/fundraising-frontend-docker:stan analyse --level 5 --no-progress cli/ src/ # Can't use "make stan" it contains the test directory
 
 after_success:
-  - if [ "$TYPE" == "coverage" ]; then bash build/travis/uploadCoverage.sh; fi
+  - if [ "$TYPE" == "coverage" ]; then bash bin/uploadCoverage.sh; fi
 
 cache:
   directories:
