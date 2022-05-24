@@ -31,7 +31,7 @@ the campaign name and the bucket name, separated by dots.
 Class: `WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket`
 
 ### Campaigns
-Campaigns are a collection of *Buckets*. One of these buckets is the **Default Bucket** - 
+Campaigns can have 2 or more *Buckets*. One of these buckets is the **Default Bucket** - 
 the one that the bucket selection algorithm will choose as a fallback 
 (see "Bucket selection algorithm" below).
 
