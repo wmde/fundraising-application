@@ -7051,28 +7051,25 @@
         },
         {
             "name": "wmde/euro",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/Euro.git",
-                "reference": "58020c9999db73556b300ce66b7dcda23e500eef"
+                "reference": "dfcfb7aab1f0c3867e5a9cdddef18205ca796a5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/Euro/zipball/58020c9999db73556b300ce66b7dcda23e500eef",
-                "reference": "58020c9999db73556b300ce66b7dcda23e500eef",
+                "url": "https://api.github.com/repos/wmde/Euro/zipball/dfcfb7aab1f0c3867e5a9cdddef18205ca796a5e",
+                "reference": "dfcfb7aab1f0c3867e5a9cdddef18205ca796a5e",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": ">=7.1"
+                "php": ">=7.4"
             },
             "require-dev": {
-                "giorgiosironi/eris": "~0.9.0",
-                "mediawiki/mediawiki-codesniffer": "~15.0",
-                "ockcyp/covers-validator": "~0.6",
-                "phpunit/phpunit": "~6.2",
-                "squizlabs/php_codesniffer": "~3.2"
+                "phpunit/phpunit": "~9.0",
+                "wmde/fundraising-phpcs": "~7.0"
             },
             "type": "library",
             "extra": {
@@ -7093,9 +7090,9 @@
             "homepage": "https://github.com/wmde/Euro",
             "support": {
                 "issues": "https://github.com/wmde/Euro/issues",
-                "source": "https://github.com/wmde/Euro/tree/master"
+                "source": "https://github.com/wmde/Euro/tree/1.3.0"
             },
-            "time": "2019-05-03T08:17:37+00:00"
+            "time": "2022-05-24T08:33:29+00:00"
         },
         {
             "name": "wmde/freezable-value-object",
