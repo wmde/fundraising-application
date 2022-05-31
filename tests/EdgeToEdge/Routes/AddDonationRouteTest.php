@@ -9,13 +9,10 @@ use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\AbstractBrowser as Client;
-use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
-use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
@@ -42,7 +39,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_donationGetsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
-			$this->consentToCookies( $client );
 			$client->followRedirects( false );
 
 			$client->request(
@@ -193,7 +189,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
-			$this->consentToCookies( $client );
 			$client->followRedirects( false );
 
 			$client->request(
@@ -265,7 +260,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( false );
-			$this->consentToCookies( $client );
 
 			$client->request(
 				'POST',
@@ -306,7 +300,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testGivenNonGermanDonor_donationGetsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( false );
-			$this->consentToCookies( $client );
 
 				$client->request(
 					'POST',
@@ -500,7 +493,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 	public function testGivenInvalidRequest_formStillContainsBannerTrackingData(): void {
 		$client = $this->createClient();
-		$this->consentToCookies( $client );
 
 		$client->request(
 			'POST',
@@ -642,47 +634,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testWhenTrackingCookieExists_andCookieConsentGiven_valueIsPersisted(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->consentToCookies( $client );
-			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
-
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newComplementableFormInput()
-			);
-
-			$donation = $this->getDonationFromDatabase( $factory );
-			$data = $donation->getDecodedData();
-
-			$this->assertSame( 'test/blue', $data['tracking'] );
-		} );
-	}
-
-	public function testWhenTrackingCookieExists_andNoCookieConsentGiven_valueIsNotPersisted(): void {
-		$this->createEnvironment(
-			function ( Client $client, FunFunFactory $factory ): void {
-				$client->getCookieJar()->set( new Cookie( CookieNames::TRACKING, 'test/blue' ) );
-
-				$client->request(
-					'POST',
-					'/donation/add',
-					$this->newComplementableFormInput()
-				);
-
-				$donation = $this->getDonationFromDatabase( $factory );
-				$data = $donation->getDecodedData();
-
-				$this->assertSame( '', $data['tracking'] );
-			}
-		);
-	}
-
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
-			$this->consentToCookies( $client );
 			$client->followRedirects( false );
 
 			$formInput = $this->newValidFormInput();
@@ -709,12 +663,11 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_andCookieConsentGiven_bucketsAreLogged(): void {
+	public function testGivenValidRequest_bucketsAreLogged(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$bucketLogger = new BucketLoggerSpy();
 			$factory->setBucketLogger( $bucketLogger );
 			$client->followRedirects( false );
-			$this->consentToCookies( $client );
 
 			$client->request(
 				'POST',
@@ -727,26 +680,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_andCookieConsentNotGiven_bucketsAreNotLogged(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$bucketLogger = new BucketLoggerSpy();
-			$factory->setBucketLogger( $bucketLogger );
-			$client->followRedirects( false );
-
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
-
-			/** @var AddressChange[] $addressChanges */
-			$addressChanges = $factory->getEntityManager()->getRepository( AddressChange::class )->findAll();
-			$this->assertCount( 1, $addressChanges );
-			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_DONATION );
-			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
-		} );
-	}
-
 	private function getDataApplicationVars( Crawler $crawler ): object {
 		/** @var \DOMElement|null $appElement */
 		$appElement = $crawler->filter( '#appdata' )->getNode( 0 );
@@ -754,9 +687,5 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->fail( 'Response did not contain an element with id "#appdata". Please check if you need to follow a redirect.' );
 		}
 		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
-	}
-
-	private function consentToCookies( Client $client ): void {
-		$client->getCookieJar()->set( new Cookie( CookieNames::CONSENT, 'yes' ) );
 	}
 }

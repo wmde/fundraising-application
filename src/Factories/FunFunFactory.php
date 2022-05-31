@@ -88,7 +88,6 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
-use WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\CreateAddressChangeHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
@@ -1559,20 +1558,6 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function setUrlGenerator( UrlGenerator $urlGenerator ): void {
 		$this->sharedObjects[UrlGenerator::class] = $urlGenerator;
-	}
-
-	public function getCookieBuilder(): CookieBuilder {
-		return $this->createSharedObject( CookieBuilder::class, function (): CookieBuilder {
-			return new CookieBuilder(
-				$this->config['cookie']['expiration'],
-				$this->config['cookie']['path'],
-				$this->config['cookie']['domain'],
-				$this->config['cookie']['secure'],
-				$this->config['cookie']['httpOnly'],
-				$this->config['cookie']['raw'],
-				$this->config['cookie']['sameSite']
-			);
-		} );
 	}
 
 	public function getDonationSubmissionRateLimiter(): SubmissionRateLimit {

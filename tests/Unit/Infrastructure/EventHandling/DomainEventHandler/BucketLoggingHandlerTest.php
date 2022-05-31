@@ -36,8 +36,7 @@ class BucketLoggingHandlerTest extends TestCase {
 		$logger = new BucketLoggerSpy();
 		$eventDispatcher = new EventDispatcherSpy();
 
-		$this->createBucketLoggingHandler( $eventDispatcher, $logger )
-			->setConsentGiven( true );
+		$this->createBucketLoggingHandler( $eventDispatcher, $logger );
 
 		$this->assertEquals(
 			[ DonationCreatedEvent::class, MembershipCreatedEvent::class ],
@@ -49,7 +48,6 @@ class BucketLoggingHandlerTest extends TestCase {
 		$logger = new BucketLoggerSpy();
 		$eventDispatcher = $this->createMock( EventDispatcher::class );
 		$handler = $this->createBucketLoggingHandler( $eventDispatcher, $logger );
-		$handler->setConsentGiven( true );
 
 		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, ValidDonation::newDonor() ) );
 
@@ -59,22 +57,10 @@ class BucketLoggingHandlerTest extends TestCase {
 		$this->assertCount( 1, $logger->getFirstBuckets() );
 	}
 
-	public function testOnDonationCreatedHandlerAndConsentNotGivenDoesNotLog(): void {
-		$logger = new BucketLoggerSpy();
-		$eventDispatcher = $this->createMock( EventDispatcher::class );
-		$handler = $this->createBucketLoggingHandler( $eventDispatcher, $logger );
-		$handler->setConsentGiven( false );
-
-		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, ValidDonation::newDonor() ) );
-
-		$this->assertSame( 0, $logger->getEventCount() );
-	}
-
 	public function testOnMembershipCreatedHandlerLogsDonationIdAndBucket(): void {
 		$logger = new BucketLoggerSpy();
 		$eventDispatcher = $this->createMock( EventDispatcher::class );
 		$handler = $this->createBucketLoggingHandler( $eventDispatcher, $logger );
-		$handler->setConsentGiven( true );
 
 		$handler->onMembershipCreated(
 			new MembershipCreatedEvent( self::MEMBERSHIP_ID,
@@ -91,26 +77,6 @@ class BucketLoggingHandlerTest extends TestCase {
 		$this->assertInstanceOf( MembershipApplicationCreated::class, $logger->getFirstEvent() );
 		$this->assertSame( self::MEMBERSHIP_ID, $logger->getFirstEvent()->getMetaData()['id'] );
 		$this->assertCount( 1, $logger->getFirstBuckets() );
-	}
-
-	public function testOnMembershipCreatedHandlerAndConsentNotGivenDoesNotLog(): void {
-		$logger = new BucketLoggerSpy();
-		$eventDispatcher = $this->createMock( EventDispatcher::class );
-		$handler = $this->createBucketLoggingHandler( $eventDispatcher, $logger );
-		$handler->setConsentGiven( false );
-
-		$handler->onMembershipCreated(
-			new MembershipCreatedEvent( self::MEMBERSHIP_ID,
-				new Applicant(
-					ApplicantName::newPrivatePersonName(),
-					new ApplicantAddress(),
-					new EmailAddress( 'nobody@nowhere.com' ),
-					new PhoneNumber( '' )
-				)
-			)
-		);
-
-		$this->assertSame( 0, $logger->getEventCount() );
 	}
 
 	/**
