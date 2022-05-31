@@ -93,10 +93,6 @@ services:
         class: WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler
         factory: ['@WMDE\Fundraising\Frontend\Factories\FunFunFactory', 'getBucketLoggingHandler']
 
-    WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder:
-        class: WMDE\Fundraising\Frontend\Infrastructure\CookieBuilder
-        factory: ['@WMDE\Fundraising\Frontend\Factories\FunFunFactory', 'getCookieBuilder']
-
     WMDE\Fundraising\Frontend\Infrastructure\SkinCacheWarmer:
         class: WMDE\Fundraising\Frontend\Infrastructure\SkinCacheWarmer
         tags:

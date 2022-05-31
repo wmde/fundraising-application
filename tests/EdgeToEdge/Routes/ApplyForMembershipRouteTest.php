@@ -7,12 +7,10 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use Symfony\Component\BrowserKit\AbstractBrowser as Client;
-use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
@@ -227,7 +225,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 			$incentive = new Incentive( ValidMembershipApplication::INCENTIVE_NAME );
 			$this->insertIncentives( $factory, $incentive );
-			$this->consentToCookies( $client );
 
 			$parameters = $this->newValidHttpParameters();
 			$parameters['incentives'] = [ ValidMembershipApplication::INCENTIVE_NAME ];
@@ -246,6 +243,27 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$expectedApplication->addIncentive( $incentive );
 
 			$this->assertEquals( $expectedApplication, $application );
+		} );
+	}
+
+	public function testGivenValidRequestWithTracking_trackingIsPersisted(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
+			$incentive = new Incentive( ValidMembershipApplication::INCENTIVE_NAME );
+			$this->insertIncentives( $factory, $incentive );
+
+			$parameters = $this->newValidHttpParameters();
+			$parameters['piwik_campaign'] = 'test';
+			$parameters['piwik_kwd'] = 'blue';
+
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$parameters
+			);
+
+			$application = $this->getApplicationFromDatabase( $factory );
+			$this->assertSame( 'test/blue', $application->getTracking() );
 		} );
 	}
 
@@ -322,38 +340,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertStringNotContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
-	}
-
-	public function testWhenTrackingCookieExists_andCookieConsentGiven_valueIsPersisted(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
-			$this->consentToCookies( $client );
-
-			$client->request(
-				'POST',
-				'/apply-for-membership',
-				$this->newValidHttpParameters()
-			);
-
-			$application = $this->getApplicationFromDatabase( $factory );
-			$this->assertSame( 'test/blue', $application->getTracking() );
-		} );
-	}
-
-	public function testWhenTrackingCookieExists_andNoCookieConsentGiven_valueIsNotPersisted(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-				$client->getCookieJar()->set( new Cookie( 'spenden_tracking', 'test/blue' ) );
-
-				$client->request(
-					'POST',
-					'/apply-for-membership',
-					$this->newValidHttpParameters()
-				);
-
-				$application = $this->getApplicationFromDatabase( $factory );
-				$this->assertSame( '', $application->getTracking() );
-		}
-		);
 	}
 
 	private function getApplicationFromDatabase( FunFunFactory $factory ): MembershipApplication {
@@ -461,7 +447,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				'apply-for-membership',
 				$params
 			);
-			$this->consentToCookies( $client );
 
 			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
 
@@ -477,7 +462,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testWhenCompaniesApply_salutationIsSetToFixedValue(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$params = $this->newValidHttpParametersForCompanies();
-			$this->consentToCookies( $client );
 			$client->request(
 				'POST',
 				'apply-for-membership',
@@ -545,7 +529,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 			$bucketLogger = new BucketLoggerSpy();
 			$factory->setBucketLogger( $bucketLogger );
-			$this->consentToCookies( $client );
 
 			$client->request(
 				'POST',
@@ -556,24 +539,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->assertSame( 1, $bucketLogger->getEventCount() );
 			$this->assertInstanceOf( MembershipApplicationCreated::class, $bucketLogger->getFirstEvent() );
 		} );
-	}
-
-	public function testGivenValidRequest_andCookieConsentNotGiven_bucketsAreNotLogged(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-				$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
-				$this->insertIncentives( $factory );
-				$bucketLogger = new BucketLoggerSpy();
-				$factory->setBucketLogger( $bucketLogger );
-
-				$client->request(
-					'POST',
-					'apply-for-membership',
-					$this->newValidHttpParameters()
-				);
-
-				$this->assertSame( 0, $bucketLogger->getEventCount() );
-		}
-		);
 	}
 
 	public function testGivenInvalidRequest_errorsAreLogged(): void {
@@ -609,13 +574,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->assertTrue( $addressChanges[0]->getExternalIdType() === AddressChange::EXTERNAL_ID_TYPE_MEMBERSHIP );
 			$this->assertTrue( $addressChanges[0]->isPersonalAddress() );
 		} );
-	}
-
-	/**
-	 * @param Client $client
-	 */
-	private function consentToCookies( Client $client ): void {
-		$client->getCookieJar()->set( new Cookie( CookieNames::CONSENT, 'yes' ) );
 	}
 
 	private function insertIncentives( FunFunFactory $factory, Incentive ...$incentives ): void {

@@ -29,10 +29,8 @@ class BucketSelector {
 		return $sanitized;
 	}
 
-	public function selectBuckets( array $cookie = [], array $urlParameters = [] ): array {
-		$urlParameters = $this->sanitizeParameters( $urlParameters );
-		$cookie = $this->sanitizeParameters( $cookie );
-		$possibleParameters = array_merge( $cookie, $urlParameters );
+	public function selectBuckets( array $urlParameters = [] ): array {
+		$possibleParameters = $this->sanitizeParameters( $urlParameters );
 
 		$selectionStrategies = [
 			new InactiveCampaignBucketSelection( new CampaignDate() ),

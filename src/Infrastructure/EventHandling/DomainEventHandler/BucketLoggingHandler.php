@@ -20,18 +20,12 @@ class BucketLoggingHandler {
 	/** @var callable */
 	private $getSelectedBuckets;
 
-	private bool $consentGiven = false;
-
 	public function __construct( BucketLogger $bucketLogger, callable $getSelectedBuckets ) {
 		$this->bucketLogger = $bucketLogger;
 		$this->getSelectedBuckets = $getSelectedBuckets;
 	}
 
 	public function onDonationCreated( DonationCreatedEvent $event ): void {
-		if ( !$this->consentGiven ) {
-			return;
-		}
-
 		$this->bucketLogger->writeEvent(
 			new DonationCreated( $event->getDonationId() ),
 			...\call_user_func( $this->getSelectedBuckets )
@@ -39,18 +33,10 @@ class BucketLoggingHandler {
 	}
 
 	public function onMembershipCreated( MembershipCreatedEvent $event ): void {
-		if ( !$this->consentGiven ) {
-			return;
-		}
-
 		$this->bucketLogger->writeEvent(
 			new MembershipApplicationCreated( $event->getMembershipId() ),
 			...\call_user_func( $this->getSelectedBuckets )
 		);
-	}
-
-	public function setConsentGiven( bool $consentGiven ): void {
-		$this->consentGiven = $consentGiven;
 	}
 
 	public static function getSubscribedEvents() {
