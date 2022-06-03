@@ -133,7 +133,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	public function testWhenMailDeliveryFails_noticeIsDisplayed(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
-			$factory->setSuborganizationMessenger( $this->newThrowingMessenger() );
+			$factory->setSubOrganizationMessenger( $this->newThrowingMessenger() );
 
 			$client->request(
 				'POST',

@@ -26,7 +26,6 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport\NullTransport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
-use TNvpServiceDispatcher;
 use Twig\Environment;
 use WMDE\Clock\SystemClock;
 use WMDE\EmailAddress\EmailAddress;
@@ -45,7 +44,6 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationEventLogger;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationTokenFetcher;
-use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
@@ -56,12 +54,14 @@ use WMDE\Fundraising\DonationContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\DonationContext\Infrastructure\LoggingCommentFinder;
 use WMDE\Fundraising\DonationContext\Infrastructure\LoggingDonationRepository;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
+use WMDE\Fundraising\DonationContext\Services\PaymentBookingService;
+use WMDE\Fundraising\DonationContext\Services\PaymentBookingServiceWithUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentValidator;
-use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationPolicyValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidator;
-use WMDE\Fundraising\DonationContext\UseCases\AddDonation\InitialDonationStatusPicker;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\CreatePaymentWithUseCase;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\ModerationService;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationUseCase;
@@ -107,12 +107,12 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckBankDataGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\McpCreditCardService;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatableDescriptionStub;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -133,7 +133,6 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardNotificationPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardPaymentUrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
@@ -174,30 +173,36 @@ use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembe
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
-use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
-use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
+use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentIDRepository;
+use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentRepository;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortLibClient;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\DefaultPaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\IbanBlocklist;
-use WMDE\Fundraising\PaymentContext\Domain\LessSimpleTransferCodeGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCard as CreditCardUrlGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPal as PayPalUrlGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PaymentURLFactory;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\Sofort as SofortUrlGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
-use WMDE\Fundraising\PaymentContext\Domain\TransferCodeGenerator;
-use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardService;
-use WMDE\Fundraising\PaymentContext\UseCases\CheckIban\CheckIbanUseCase;
-use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanUseCase;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentValidator;
+use WMDE\Fundraising\PaymentContext\Domain\Repositories\PaymentIDRepository;
+use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\ExternalVerificationServiceFactory;
+use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\CharacterPickerPaymentReferenceCodeGenerator;
+use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\RandomCharacterIndexGenerator;
+use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\UniquePaymentReferenceCodeGenerator;
+use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\BookPaymentUseCase;
+use WMDE\Fundraising\PaymentContext\UseCases\CancelPayment\CancelPaymentUseCase;
+use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\CreatePaymentUseCase;
+use WMDE\Fundraising\PaymentContext\UseCases\GenerateBankData\GenerateBankDataFromGermanLegacyBankDataUseCase;
+use WMDE\Fundraising\PaymentContext\UseCases\GetPayment\GetPaymentUseCase;
+use WMDE\Fundraising\PaymentContext\UseCases\ValidateIban\ValidateIbanUseCase;
 use WMDE\Fundraising\SubscriptionContext\DataAccess\DoctrineSubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Domain\Repositories\SubscriptionRepository;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\LoggingSubscriptionRepository;
@@ -563,7 +568,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newAddSubscriptionMailer(): SubscriptionTemplateMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getSuborganizationMessenger(),
+			$this->getSubOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Subscription_Request.txt.twig',
@@ -577,7 +582,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newConfirmSubscriptionMailer(): SubscriptionTemplateMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getSuborganizationMessenger(),
+			$this->getSubOrganizationMessenger(),
 			new TwigTemplate(
 					$this->getMailerTwig(),
 					'Subscription_Confirmation.txt.twig',
@@ -608,16 +613,18 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	public function newCheckIbanUseCase(): CheckIbanUseCase {
-		return new CheckIbanUseCase(
-			$this->newBankDataConverter(),
+	public function newCheckIbanUseCase(): ValidateIbanUseCase {
+		return new ValidateIbanUseCase(
 			$this->newIbanValidator(),
 			$this->newIbanBlockList()
 		);
 	}
 
-	public function newGenerateIbanUseCase(): GenerateIbanUseCase {
-		return new GenerateIbanUseCase( $this->newBankDataConverter(), $this->newIbanBlockList() );
+	public function newGenerateBankDataFromGermanLegacyBankDataUseCase(): GenerateBankDataFromGermanLegacyBankDataUseCase {
+		return new GenerateBankDataFromGermanLegacyBankDataUseCase(
+			$this->newBankDataConverter(),
+			$this->newIbanBlockList()
+		);
 	}
 
 	public function newIbanPresenter(): IbanPresenter {
@@ -642,7 +649,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newContactUserMailer(): GetInTouchMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getSuborganizationMessenger(),
+			$this->getSubOrganizationMessenger(),
 			new TwigTemplate( $this->getMailerTwig(), 'Contact_Confirm_to_User.txt.twig' ),
 			new BasicMailSubjectRenderer( $this->getMailTranslator(), 'mail_subject_getintouch' )
 		);
@@ -650,7 +657,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newContactOperatorMailer(): OperatorMailer {
 		return new OperatorMailer(
-			$this->getSuborganizationMessenger(),
+			$this->getSubOrganizationMessenger(),
 			new TwigTemplate( $this->getMailerTwig(), 'Contact_Forward_to_Operator.txt.twig' )
 		);
 	}
@@ -672,6 +679,13 @@ class FunFunFactory implements LoggerAwareInterface {
 		$cutoffDateTime = new \DateTime();
 		$cutoffDateTime->sub( new \DateInterval( $this->config['subscription-interval'] ) );
 		return $cutoffDateTime;
+	}
+
+	private function newGetPaymentUseCase(): GetPaymentUseCase {
+		return new GetPaymentUseCase(
+			new DoctrinePaymentRepository( $this->getEntityManager() ),
+			new KontoCheckBankDataGenerator( $this->newIbanValidator() )
+		);
 	}
 
 	private function newHonorificValidator(): AllowedValuesValidator {
@@ -700,7 +714,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new BankDataValidator( $this->newIbanValidator() );
 	}
 
-	private function getSuborganizationMessenger(): Messenger {
+	private function getSubOrganizationMessenger(): Messenger {
 		return $this->createSharedObject( Messenger::class . 'suborganization', function (): Messenger {
 			return new Messenger(
 				$this->getMailer(),
@@ -710,7 +724,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	public function setSuborganizationMessenger( Messenger $messenger ): void {
+	public function setSubOrganizationMessenger( Messenger $messenger ): void {
 		$this->sharedObjects[Messenger::class . 'suborganization'] = $messenger;
 	}
 
@@ -741,7 +755,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function setNullMessenger(): void {
-		$this->setSuborganizationMessenger( new Messenger(
+		$this->setSubOrganizationMessenger( new Messenger(
 			new Mailer( new NullTransport() ),
 			$this->getSubOrganizationEmailAddress()
 		) );
@@ -828,13 +842,14 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getDonationRepository(),
 			$this->newCancelDonationMailer(),
 			$this->newDonationAuthorizer( $updateToken ),
-			$this->newDonationEventLogger()
+			$this->newDonationEventLogger(),
+			$this->newCancelPaymentUseCase()
 		);
 	}
 
 	private function newCancelDonationMailer(): DonationTemplateMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getSuborganizationMessenger(),
+			$this->getSubOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Donation_Cancellation_Confirmation.txt.twig',
@@ -848,27 +863,42 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new AddDonationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationValidator(),
-			$this->newDonationPolicyValidator(),
+			$this->newDonationModerationService(),
 			$this->newDonationConfirmationMailer(),
-			$this->newBankTransferCodeGenerator(),
 			$this->newDonationTokenFetcher(),
-			new InitialDonationStatusPicker(),
-			$this->getDonationEventEmitter()
+			$this->getDonationEventEmitter(),
+			new CreatePaymentWithUseCase( $this->newCreatePaymentUseCase() )
 		);
 	}
 
-	private function newBankTransferCodeGenerator(): TransferCodeGenerator {
-		return new UniqueTransferCodeGenerator(
-			LessSimpleTransferCodeGenerator::newRandomGenerator(),
+	public function newCreatePaymentUseCase(): CreatePaymentUseCase {
+		return new CreatePaymentUseCase(
+			$this->newPaymentIDRepository(),
+			$this->newPaymentRepository(),
+			$this->newPaymentReferenceCodeGenerator(),
+			new PaymentValidator(),
+			new ValidateIbanUseCase(
+				new KontoCheckIbanValidator(),
+				$this->newIbanBlockList()
+			),
+			new PaymentURLFactory(
+				$this->newCreditCardUrlConfig(),
+				$this->getPayPalUrlConfigForDonations(),
+				$this->getSofortConfigForDonations(),
+				$this->getSofortClient()
+			)
+		);
+	}
+
+	private function newPaymentReferenceCodeGenerator(): PaymentReferenceCodeGenerator {
+		return new UniquePaymentReferenceCodeGenerator(
+			new CharacterPickerPaymentReferenceCodeGenerator( new RandomCharacterIndexGenerator() ),
 			$this->getEntityManager()
 		);
 	}
 
 	private function newDonationValidator(): AddDonationValidator {
 		return new AddDonationValidator(
-			$this->newPaymentDataValidator(),
-			$this->newBankDataValidator(),
-			$this->newIbanBlockList(),
 			$this->getEmailValidator(),
 			$this->newAddressValidator()
 		);
@@ -908,7 +938,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function newDonationConfirmationMailer(): DonationConfirmationMailer {
 		return new DonationConfirmationMailer(
 			$this->newErrorHandlingTemplateMailer(
-				$this->getSuborganizationMessenger(),
+				$this->getSubOrganizationMessenger(),
 				new TwigTemplate(
 					$this->getMailerTwig(),
 					'Donation_Confirmation.txt.twig',
@@ -921,48 +951,35 @@ class FunFunFactory implements LoggerAwareInterface {
 					'mail_subject_confirm_donation',
 					'mail_subject_confirm_donation_promise'
 				)
-			)
-		);
-	}
-
-	public function newPayPalUrlGeneratorForDonations(): PayPalUrlGenerator {
-		return new PayPalUrlGenerator(
-			$this->getPayPalUrlConfigForDonations(),
-			$this->getPaymentProviderItemsTranslator()->trans( 'paypal_item_name_donation' )
-		);
-	}
-
-	public function newPayPalUrlGeneratorForMembershipApplications(): PayPalUrlGenerator {
-		return new PayPalUrlGenerator(
-			$this->getPayPalUrlConfigForMembershipApplications(),
-			$this->getPaymentProviderItemsTranslator()->trans( 'paypal_item_name_membership' )
+			),
+			$this->newGetPaymentUseCase()
 		);
 	}
 
 	private function getPayPalUrlConfigForDonations(): PayPalConfig {
 		return PayPalConfig::newFromConfig(
-			array_merge( $this->config['paypal-donation'], [ 'locale' => $this->getLocale() ] )
+			array_merge( $this->config['paypal-donation'], [ 'locale' => $this->getLocale() ] ),
+			new TranslatableDescriptionStub( 'paypal_item_name_donation' )
 		);
 	}
 
 	private function getPayPalUrlConfigForMembershipApplications(): PayPalConfig {
 		return PayPalConfig::newFromConfig(
-			array_merge( $this->config['paypal-membership'], [ 'locale' => $this->getLocale() ] )
+			array_merge( $this->config['paypal-membership'], [ 'locale' => $this->getLocale() ] ),
+			new TranslatableDescriptionStub( 'paypal_item_name_donation' )
 		);
 	}
 
-	public function newSofortUrlGeneratorForDonations(): SofortUrlGenerator {
+	private function getSofortConfigForDonations(): SofortConfig {
 		$config = $this->config['sofort'];
 		$locale = \Locale::parseLocale( $this->getLocale() );
-		return new SofortUrlGenerator(
-			new SofortConfig(
-				$this->getPaymentProviderItemsTranslator()->trans( 'sofort_item_name_donation' ),
-				strtoupper( $locale['language'] ),
-				$config['return-url'],
-				$config['cancel-url'],
-				$config['notification-url']
-			),
-			$this->getSofortClient()
+		return new SofortConfig(
+			$this->getPaymentProviderItemsTranslator()->trans( 'sofort_item_name_donation' ),
+			strtoupper( $locale['language'] ),
+			$config['return-url'],
+			$config['cancel-url'],
+			$config['notification-url'],
+			new TranslatableDescriptionStub( 'sofort_item_name_donation' )
 		);
 	}
 
@@ -977,20 +994,38 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	private function newCreditCardUrlGenerator(): CreditCardUrlGenerator {
-		return new CreditCardUrlGenerator( $this->newCreditCardUrlConfig() );
-	}
-
 	private function newCreditCardUrlConfig(): CreditCardConfig {
 		$locale = \Locale::parseLocale( $this->getLocale() );
-		return CreditCardConfig::newFromConfig( array_merge( $this->config['creditcard'], [ 'locale' => $locale['language'] ] ) );
+		return CreditCardConfig::newFromConfig(
+			array_merge( $this->config['creditcard'], [ 'locale' => $locale['language'] ] ),
+			new TranslatableDescriptionStub( 'credit_card_item_name_donation' )
+		);
 	}
 
 	public function getDonationRepository(): DonationRepository {
 		return $this->createSharedObject( DonationRepository::class, function () {
 			return new LoggingDonationRepository(
-				new DoctrineDonationRepository( $this->getEntityManager() ),
+				new DoctrineDonationRepository(
+					$this->getEntityManager(),
+					$this->newGetPaymentUseCase()
+				),
 				$this->getLogger()
+			);
+		} );
+	}
+
+	public function newPaymentIDRepository(): PaymentIDRepository {
+		return $this->createSharedObject( PaymentIDRepository::class, function () {
+			return new DoctrinePaymentIDRepository(
+				$this->getEntityManager()
+			);
+		} );
+	}
+
+	public function newPaymentRepository(): PaymentRepository {
+		return $this->createSharedObject( PaymentRepository::class, function () {
+			return new DoctrinePaymentRepository(
+				$this->getEntityManager()
 			);
 		} );
 	}
@@ -1009,12 +1044,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new ReadAddressChangeUseCase( $this->getAddressChangeRepository() );
 	}
 
-	public function newPaymentDataValidator(): PaymentDataValidator {
-		return new PaymentDataValidator(
-			$this->config['donation-minimum-amount'],
-			$this->config['donation-maximum-amount'],
-			$this->getPaymentTypesSettings()->getEnabledForDonation()
-		);
+	public function newPaymentValidator(): PaymentValidator {
+		return new PaymentValidator();
 	}
 
 	public function newDecimalNumberFormatter(): NumberFormatter {
@@ -1062,13 +1093,6 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getDefaultTwigVariables()
 			),
 			$this->getUrlGenerator()
-		);
-	}
-
-	public function newCreditCardPaymentUrlGenerator(): CreditCardPaymentUrlGenerator {
-		return new CreditCardPaymentUrlGenerator(
-			$this->getPaymentProviderItemsTranslator(),
-			$this->newCreditCardUrlGenerator()
 		);
 	}
 
@@ -1153,6 +1177,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getMembershipApplicationRepository(),
 			$this->newCancelMembershipApplicationMailer(),
 			$this->newMembershipApplicationEventLogger(),
+			$this->newCancelPaymentUseCase()
 		);
 	}
 
@@ -1286,7 +1311,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new SofortPaymentNotificationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
-			$this->newDonationConfirmationMailer()
+			$this->newDonationConfirmationMailer(),
+			$this->newPaymentBookingService(),
+			$this->newDonationEventLogger()
 		);
 	}
 
@@ -1295,25 +1322,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->newDonationConfirmationMailer(),
+			$this->newPaymentBookingService(),
 			$this->newDonationEventLogger()
-		);
-	}
-
-	public function newMembershipApplicationSubscriptionSignupNotificationUseCase( string $updateToken ): HandleSubscriptionSignupNotificationUseCase {
-		return new HandleSubscriptionSignupNotificationUseCase(
-			$this->getMembershipApplicationRepository(),
-			$this->getMembershipApplicationAuthorizer( $updateToken ),
-			$this->newApplyForMembershipMailer(),
-			$this->getLogger()
-		);
-	}
-
-	public function newMembershipApplicationSubscriptionPaymentNotificationUseCase( string $updateToken ): HandleSubscriptionPaymentNotificationUseCase {
-		return new HandleSubscriptionPaymentNotificationUseCase(
-			$this->getMembershipApplicationRepository(),
-			$this->getMembershipApplicationAuthorizer( $updateToken ),
-			$this->newApplyForMembershipMailer(),
-			$this->getLogger()
 		);
 	}
 
@@ -1355,8 +1365,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new CreditCardNotificationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
-			$this->getCreditCardService(),
 			$this->newDonationConfirmationMailer(),
+			$this->newPaymentBookingService(),
 			$this->newDonationEventLogger()
 		);
 	}
@@ -1379,23 +1389,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new MembershipFormViolationPresenter(
 			$this->getMembershipApplicationFormTemplate()
 		);
-	}
-
-	public function setCreditCardService( CreditCardService $ccService ): void {
-		$this->sharedObjects[CreditCardService::class] = $ccService;
-	}
-
-	public function getCreditCardService(): CreditCardService {
-		return $this->createSharedObject( CreditCardService::class, function () {
-			return new McpCreditCardService(
-				new TNvpServiceDispatcher(
-					'IMcpCreditcardService_v1_5',
-					'https://sipg.micropayment.de/public/creditcard/v1.5/nvp/'
-				),
-				$this->config['creditcard']['access-key'],
-				$this->config['creditcard']['testmode']
-			);
-		} );
 	}
 
 	public function newCreditCardNotificationPresenter(): CreditCardNotificationPresenter {
@@ -1430,8 +1423,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newDonationPolicyValidator(): AddDonationPolicyValidator {
-		return new AddDonationPolicyValidator(
+	private function newDonationModerationService(): ModerationService {
+		return new ModerationService(
 			$this->newDonationAmountPolicyValidator(),
 			$this->newTextPolicyValidator( 'fields' ),
 			$this->config['email-address-blacklist']
@@ -1916,5 +1909,23 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getRootPath(): string {
 		return $this->getAbsolutePath( __DIR__ . '/../..' );
+	}
+
+	private function newCancelPaymentUseCase(): CancelPaymentUseCase {
+		return new CancelPaymentUseCase( $this->newPaymentRepository() );
+	}
+
+	private function newPaymentBookingService(): PaymentBookingService {
+		return new PaymentBookingServiceWithUseCase(
+			new BookPaymentUseCase(
+				$this->newPaymentRepository(),
+				$this->newPaymentIDRepository(),
+				new ExternalVerificationServiceFactory(
+					new Client(),
+					$this->config['paypal-donation']['base-url'],
+					$this->config['paypal-donation']['paypal-donation']
+				)
+			)
+		);
 	}
 }
