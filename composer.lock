@@ -2115,16 +2115,16 @@
         },
         {
             "name": "laminas/laminas-code",
-            "version": "4.5.1",
+            "version": "4.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-code.git",
-                "reference": "6fd96d4d913571a2cd056a27b123fa28cb90ac4e"
+                "reference": "da01fb74c08f37e20e7ae49f1e3ee09aa401ebad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/6fd96d4d913571a2cd056a27b123fa28cb90ac4e",
-                "reference": "6fd96d4d913571a2cd056a27b123fa28cb90ac4e",
+                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/da01fb74c08f37e20e7ae49f1e3ee09aa401ebad",
+                "reference": "da01fb74c08f37e20e7ae49f1e3ee09aa401ebad",
                 "shasum": ""
             },
             "require": {
@@ -2177,7 +2177,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-12-19T18:06:55+00:00"
+            "time": "2022-06-06T11:26:02+00:00"
         },
         {
             "name": "micropayment-de/service-client",
@@ -7174,12 +7174,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "70e283a7b770bc7da55af534989f22a9e6d3d1a0"
+                "reference": "b65ba4ed446f56e4bf8e4e1a02216920b1d32e7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/70e283a7b770bc7da55af534989f22a9e6d3d1a0",
-                "reference": "70e283a7b770bc7da55af534989f22a9e6d3d1a0",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/b65ba4ed446f56e4bf8e4e1a02216920b1d32e7a",
+                "reference": "b65ba4ed446f56e4bf8e4e1a02216920b1d32e7a",
                 "shasum": ""
             },
             "require": {
@@ -7223,7 +7223,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2022-06-03T11:46:10+00:00"
+            "time": "2022-06-07T14:00:01+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -7287,12 +7287,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "5ae41dc2e550084a75c1d3623bff7b69a7531753"
+                "reference": "37aba5984b243a1081cfc94597f677e16638860b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/5ae41dc2e550084a75c1d3623bff7b69a7531753",
-                "reference": "5ae41dc2e550084a75c1d3623bff7b69a7531753",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/37aba5984b243a1081cfc94597f677e16638860b",
+                "reference": "37aba5984b243a1081cfc94597f677e16638860b",
                 "shasum": ""
             },
             "require": {
@@ -7332,7 +7332,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2022-05-31T07:44:40+00:00"
+            "time": "2022-06-03T13:13:06+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -8499,16 +8499,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.7.9",
+            "version": "1.7.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "22e7559489776846e7c9d92ca43e8d1e53d18b94"
+                "reference": "62fcadcde81b4037e42ad2489119d31c46f00191"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/22e7559489776846e7c9d92ca43e8d1e53d18b94",
-                "reference": "22e7559489776846e7c9d92ca43e8d1e53d18b94",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/62fcadcde81b4037e42ad2489119d31c46f00191",
+                "reference": "62fcadcde81b4037e42ad2489119d31c46f00191",
                 "shasum": ""
             },
             "require": {
@@ -8534,7 +8534,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.7.9"
+                "source": "https://github.com/phpstan/phpstan/tree/1.7.11"
             },
             "funding": [
                 {
@@ -8554,7 +8554,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-02T13:27:46+00:00"
+            "time": "2022-06-07T08:47:03+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -10255,21 +10255,21 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "6964c76c7804814a842473e0c8fd15bab0f18e25"
+                "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/6964c76c7804814a842473e0c8fd15bab0f18e25",
-                "reference": "6964c76c7804814a842473e0c8fd15bab0f18e25",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/11cb2199493b2f8a3b53e7f19068fc6aac760991",
+                "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8.0",
-                "symfony/polyfill-ctype": "^1.8"
+                "ext-ctype": "*",
+                "php": "^7.2 || ^8.0"
             },
             "conflict": {
                 "phpstan/phpstan": "<0.12.20",
@@ -10307,9 +10307,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/1.10.0"
+                "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
-            "time": "2021-03-09T10:59:23+00:00"
+            "time": "2022-06-03T18:03:27+00:00"
         },
         {
             "name": "wmde/fundraising-frontend-content",

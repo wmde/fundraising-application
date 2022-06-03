@@ -21,7 +21,7 @@ class BankDataToIbanController {
 			$request->query->get( 'bankCode', '' )
 		);
 
-		$generateIbanResponse = $ffFactory->newGenerateIbanUseCase()->generateIban( $generateIbanRequest );
+		$generateIbanResponse = $ffFactory->newGenerateBankDataFromGermanLegacyBankDataUseCase()->generateIban( $generateIbanRequest );
 		return new JsonResponse( $ffFactory->newIbanPresenter()->present( $generateIbanResponse ) );
 	}
 }

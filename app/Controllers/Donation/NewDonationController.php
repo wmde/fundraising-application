@@ -30,7 +30,7 @@ class NewDonationController {
 			$interval = intval( $interval );
 		}
 
-		$validationResult = $ffFactory->newPaymentDataValidator()->validate( $amount, $paymentType );
+		$validationResult = $ffFactory->newPaymentValidator()->validate( $amount, $paymentType );
 
 		$trackingInfo = new ImpressionCounts(
 			intval( $request->get( 'impCount' ) ),
