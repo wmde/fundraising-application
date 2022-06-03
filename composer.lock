@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98afb29c69f7f028c6f39e4f7ce2c5a5",
+    "content-hash": "bf1787d0d925e90b8fa09c141f1edfe2",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -4255,32 +4255,29 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v5.4.12",
+            "version": "v6.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "6a057be154824487fd5e6b65ab83899e0c5ac550"
+                "reference": "06dc27cbdcee26d6796c226db5266a0d58359739"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/6a057be154824487fd5e6b65ab83899e0c5ac550",
-                "reference": "6a057be154824487fd5e6b65ab83899e0c5ac550",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/06dc27cbdcee26d6796c226db5266a0d58359739",
+                "reference": "06dc27cbdcee26d6796c226db5266a0d58359739",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5",
+                "php": ">=8.1",
                 "psr/log": "^1|^2|^3",
-                "symfony/deprecation-contracts": "^2.1|^3",
-                "symfony/http-client-contracts": "^2.4",
-                "symfony/polyfill-php73": "^1.11",
-                "symfony/polyfill-php80": "^1.16",
+                "symfony/http-client-contracts": "^3",
                 "symfony/service-contracts": "^1.0|^2|^3"
             },
             "provide": {
                 "php-http/async-client-implementation": "*",
                 "php-http/client-implementation": "*",
                 "psr/http-client-implementation": "1.0",
-                "symfony/http-client-implementation": "2.4"
+                "symfony/http-client-implementation": "3.0"
             },
             "require-dev": {
                 "amphp/amp": "^2.5",
@@ -4291,10 +4288,10 @@
                 "nyholm/psr7": "^1.0",
                 "php-http/httplug": "^1.0|^2.0",
                 "psr/http-client": "^1.0",
-                "symfony/dependency-injection": "^4.4|^5.0|^6.0",
-                "symfony/http-kernel": "^4.4.13|^5.1.5|^6.0",
-                "symfony/process": "^4.4|^5.0|^6.0",
-                "symfony/stopwatch": "^4.4|^5.0|^6.0"
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/http-kernel": "^5.4|^6.0",
+                "symfony/process": "^5.4|^6.0",
+                "symfony/stopwatch": "^5.4|^6.0"
             },
             "type": "library",
             "autoload": {
@@ -4322,7 +4319,7 @@
             "description": "Provides powerful methods to fetch HTTP resources synchronously or asynchronously",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v5.4.12"
+                "source": "https://github.com/symfony/http-client/tree/v6.1.4"
             },
             "funding": [
                 {
@@ -4338,24 +4335,24 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-02T15:52:22+00:00"
+            "time": "2022-08-02T16:17:38+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
-            "version": "v2.5.2",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client-contracts.git",
-                "reference": "ba6a9f0e8f3edd190520ee3b9a958596b6ca2e70"
+                "reference": "fd038f08c623ab5d22b26e9ba35afe8c79071800"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/ba6a9f0e8f3edd190520ee3b9a958596b6ca2e70",
-                "reference": "ba6a9f0e8f3edd190520ee3b9a958596b6ca2e70",
+                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/fd038f08c623ab5d22b26e9ba35afe8c79071800",
+                "reference": "fd038f08c623ab5d22b26e9ba35afe8c79071800",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5"
+                "php": ">=8.1"
             },
             "suggest": {
                 "symfony/http-client-implementation": ""
@@ -4363,7 +4360,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.5-dev"
+                    "dev-main": "3.1-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -4373,7 +4370,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Contracts\\HttpClient\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Test/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -4400,7 +4400,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client-contracts/tree/v2.5.2"
+                "source": "https://github.com/symfony/http-client-contracts/tree/v3.1.1"
             },
             "funding": [
                 {
@@ -4416,7 +4416,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-12T15:48:08+00:00"
+            "time": "2022-04-22T07:30:54+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -5478,85 +5478,6 @@
             ],
             "support": {
                 "source": "https://github.com/symfony/polyfill-php72/tree/v1.26.0"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2022-05-24T11:49:31+00:00"
-        },
-        {
-            "name": "symfony/polyfill-php73",
-            "version": "v1.26.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-php73.git",
-                "reference": "e440d35fa0286f77fb45b79a03fedbeda9307e85"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php73/zipball/e440d35fa0286f77fb45b79a03fedbeda9307e85",
-                "reference": "e440d35fa0286f77fb45b79a03fedbeda9307e85",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "1.26-dev"
-                },
-                "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php73\\": ""
-                },
-                "classmap": [
-                    "Resources/stubs"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "compatibility",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/polyfill-php73/tree/v1.26.0"
             },
             "funding": [
                 {
@@ -7262,43 +7183,46 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v10.0.0",
+            "version": "dev-new-payment-domain",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "eb8e221de41bcf35e6b4a4892baec90bbf7c27de"
+                "reference": "49817b1202d65f24f7cca2bc5a460f714d1b3b65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/eb8e221de41bcf35e6b4a4892baec90bbf7c27de",
-                "reference": "eb8e221de41bcf35e6b4a4892baec90bbf7c27de",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/49817b1202d65f24f7cca2bc5a460f714d1b3b65",
+                "reference": "49817b1202d65f24f7cca2bc5a460f714d1b3b65",
                 "shasum": ""
             },
             "require": {
+                "doctrine/migrations": "^3.5",
                 "doctrine/orm": "~2.9",
                 "ext-curl": "*",
                 "gedmo/doctrine-extensions": "^3.0",
                 "php": ">=8.1",
-                "psr/log": "^1.0|^2.0|^3.0",
-                "symfony/http-client": "^5.2",
+                "psr/log": "^3.0",
+                "symfony/http-client": "^6.1",
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~4.0",
-                "wmde/fundraising-payments": "~4.0"
+                "wmde/fundraising-payments": "~5.0"
             },
             "require-dev": {
-                "codeception/specify": "~2.0",
-                "doctrine/migrations": "^3.5",
                 "ext-pdo_sqlite": "*",
                 "mikey179/vfsstream": "~1.6",
                 "phpmd/phpmd": "~2.6",
                 "phpstan/phpstan": "^1.7",
                 "phpunit/phpunit": "~9.5.1",
-                "symfony/cache": "^5.3",
+                "symfony/cache": "^6.1",
                 "wmde/fundraising-phpcs": "~7.0.0",
-                "wmde/psr-log-test-doubles": "^2.1|^3.0"
+                "wmde/psr-log-test-doubles": "~3.0"
             },
+            "bin": [
+                "bin/check-donation-payment-data",
+                "bin/migrate-donation-payment-data"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -7316,43 +7240,46 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2022-07-22T13:58:33+00:00"
+            "time": "2022-08-29T16:34:19+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v8.0.0",
+            "version": "dev-update-payments",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "45bb23353876c620bd3988f7317d4822a1c58ae0"
+                "reference": "714612ba28b60e35b0c0f02641f21375b82c5e29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/45bb23353876c620bd3988f7317d4822a1c58ae0",
-                "reference": "45bb23353876c620bd3988f7317d4822a1c58ae0",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/714612ba28b60e35b0c0f02641f21375b82c5e29",
+                "reference": "714612ba28b60e35b0c0f02641f21375b82c5e29",
                 "shasum": ""
             },
             "require": {
+                "doctrine/migrations": "^3.5",
                 "doctrine/orm": "~2.7",
                 "gedmo/doctrine-extensions": "^3.0",
                 "php": ">=8.1",
-                "psr/log": "^1.0|^2.0|^3.0",
+                "psr/log": "~3.0",
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~4.0.0",
-                "wmde/fundraising-payments": "~4.0"
+                "wmde/fundraising-payments": "~5.0"
             },
             "require-dev": {
-                "codeception/specify": "~2.0",
-                "doctrine/migrations": "^3.5",
                 "phpstan/phpstan": "~1.2",
                 "phpstan/phpstan-phpunit": "~1.0",
                 "phpunit/phpunit": "~9.5.0",
                 "symfony/cache": "^6.1",
                 "wmde/fundraising-phpcs": "~7.0.0",
-                "wmde/psr-log-test-doubles": "~2.2|~3.0"
+                "wmde/psr-log-test-doubles": "~3.0"
             },
+            "bin": [
+                "bin/migrate-membership-payment-data",
+                "bin/check-membership-payment-data"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -7373,33 +7300,40 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2022-07-18T14:10:05+00:00"
+            "time": "2022-08-29T16:31:14+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v4.0.0",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "70b88912f9c22f244a4487b9fdaf552179f7fd57"
+                "reference": "260dc6b348b36660edd02e0d4e261af578227d69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/70b88912f9c22f244a4487b9fdaf552179f7fd57",
-                "reference": "70b88912f9c22f244a4487b9fdaf552179f7fd57",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/260dc6b348b36660edd02e0d4e261af578227d69",
+                "reference": "260dc6b348b36660edd02e0d4e261af578227d69",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0",
+                "doctrine/dbal": "^3.3",
+                "doctrine/migrations": "^3.5",
+                "doctrine/orm": "^2.11",
+                "guzzlehttp/guzzle": "^7.4",
+                "php": ">=8.1",
                 "sofort/sofortlib-php": "^3.2",
+                "symfony/cache": "^6.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~v4.0.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "~0.12.0",
+                "phpstan/phpstan": "~1.3",
+                "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "~9.4",
-                "wmde/fundraising-phpcs": "~3.0"
+                "wmde/fundraising-phpcs": "~7.0",
+                "wmde/inspector-generator": "dev-main"
             },
             "type": "library",
             "extra": {
@@ -7421,7 +7355,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2021-07-07T11:21:30+00:00"
+            "time": "2022-08-29T16:24:07+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -8064,16 +7998,16 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.10.3",
+            "version": "2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "da3166a06b4a89915920a42444f707122a1584c9"
+                "reference": "9141e6f8e1f044aa64aedb0e6894d12618cdcb3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/da3166a06b4a89915920a42444f707122a1584c9",
-                "reference": "da3166a06b4a89915920a42444f707122a1584c9",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/9141e6f8e1f044aa64aedb0e6894d12618cdcb3e",
+                "reference": "9141e6f8e1f044aa64aedb0e6894d12618cdcb3e",
                 "shasum": ""
             },
             "require": {
@@ -8109,7 +8043,7 @@
             "description": "Official version of pdepend to be handled with Composer",
             "support": {
                 "issues": "https://github.com/pdepend/pdepend/issues",
-                "source": "https://github.com/pdepend/pdepend/tree/2.10.3"
+                "source": "https://github.com/pdepend/pdepend/tree/2.11.0"
             },
             "funding": [
                 {
@@ -8117,7 +8051,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-23T07:53:09+00:00"
+            "time": "2022-08-29T11:21:12+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -8692,16 +8626,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.23",
+            "version": "9.5.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "888556852e7e9bbeeedb9656afe46118765ade34"
+                "reference": "d0aa6097bef9fd42458a9b3c49da32c6ce6129c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/888556852e7e9bbeeedb9656afe46118765ade34",
-                "reference": "888556852e7e9bbeeedb9656afe46118765ade34",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d0aa6097bef9fd42458a9b3c49da32c6ce6129c5",
+                "reference": "d0aa6097bef9fd42458a9b3c49da32c6ce6129c5",
                 "shasum": ""
             },
             "require": {
@@ -8730,7 +8664,7 @@
                 "sebastian/global-state": "^5.0.1",
                 "sebastian/object-enumerator": "^4.0.3",
                 "sebastian/resource-operations": "^3.0.3",
-                "sebastian/type": "^3.0",
+                "sebastian/type": "^3.1",
                 "sebastian/version": "^3.0.2"
             },
             "suggest": {
@@ -8774,7 +8708,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.23"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.24"
             },
             "funding": [
                 {
@@ -8786,7 +8720,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-22T14:01:36+00:00"
+            "time": "2022-08-30T07:42:16+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -9645,16 +9579,16 @@
         },
         {
             "name": "sebastian/type",
-            "version": "3.0.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/type.git",
-                "reference": "b233b84bc4465aff7b57cf1c4bc75c86d00d6dad"
+                "reference": "fb44e1cc6e557418387ad815780360057e40753e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/b233b84bc4465aff7b57cf1c4bc75c86d00d6dad",
-                "reference": "b233b84bc4465aff7b57cf1c4bc75c86d00d6dad",
+                "url": "https://api.github.com/repos/sebastianbergmann/type/zipball/fb44e1cc6e557418387ad815780360057e40753e",
+                "reference": "fb44e1cc6e557418387ad815780360057e40753e",
                 "shasum": ""
             },
             "require": {
@@ -9666,7 +9600,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -9689,7 +9623,7 @@
             "homepage": "https://github.com/sebastianbergmann/type",
             "support": {
                 "issues": "https://github.com/sebastianbergmann/type/issues",
-                "source": "https://github.com/sebastianbergmann/type/tree/3.0.0"
+                "source": "https://github.com/sebastianbergmann/type/tree/3.1.0"
             },
             "funding": [
                 {
@@ -9697,7 +9631,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-15T09:54:48+00:00"
+            "time": "2022-08-29T06:55:37+00:00"
         },
         {
             "name": "sebastian/version",
@@ -10213,6 +10147,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "wmde/fundraising-donations": 20,
+        "wmde/fundraising-memberships": 20,
         "remotelyliving/doorkeeper": 20,
         "wmde/fundraising-frontend-content": 20
     },
@@ -10228,5 +10164,5 @@
     "platform-dev": {
         "ext-pdo_sqlite": "*"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
