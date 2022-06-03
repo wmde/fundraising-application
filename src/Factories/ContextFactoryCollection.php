@@ -12,6 +12,7 @@ use WMDE\Fundraising\DonationContext\DonationContextFactory;
 use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
+use WMDE\Fundraising\PaymentContext\PaymentContextFactory;
 use WMDE\Fundraising\SubscriptionContext\SubscriptionContextFactory;
 
 /**
@@ -21,11 +22,11 @@ use WMDE\Fundraising\SubscriptionContext\SubscriptionContextFactory;
  */
 class ContextFactoryCollection {
 	/**
-	 * @var AddressChangeContextFactory[]|DonationContextFactory[]|AutocompleteContextFactory[]|BucketTestingContextFactory[]|MembershipContextFactory[]|SubscriptionContextFactory[]
+	 * @var AddressChangeContextFactory[]|DonationContextFactory[]|AutocompleteContextFactory[]|BucketTestingContextFactory[]|MembershipContextFactory[]|SubscriptionContextFactory[]|PaymentContextFactory[]
 	 */
 	private array $contextFactories;
 
-	public function __construct( DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory|BucketTestingContextFactory|AutocompleteContextFactory ...$contextFactories ) {
+	public function __construct( DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory|BucketTestingContextFactory|AutocompleteContextFactory|PaymentContextFactory ...$contextFactories ) {
 		$this->contextFactories = $contextFactories;
 	}
 
