@@ -192,6 +192,7 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Repositories\PaymentIDRepository;
+use WMDE\Fundraising\PaymentContext\PaymentContextFactory;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\ExternalVerificationServiceFactory;
 use WMDE\Fundraising\PaymentContext\Services\KontoCheck\KontoCheckBankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Services\KontoCheck\KontoCheckIbanValidator;
@@ -277,7 +278,6 @@ class FunFunFactory implements LoggerAwareInterface {
 				$entityManager->getEventManager(),
 				// if we have custom Doctrine event subscribers, add them here
 			);
-
 		}
 
 		return $entityManager;
@@ -297,6 +297,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->createSharedObject( DoctrineFactory::class, function () {
 			$donationContextFactory = $this->getDonationContextFactory();
 			$membershipContextFactory = $this->getMembershipContextFactory();
+			$paymentContextFactory = $this->getPaymentContextFactory();
 			$subscriptionContextFactory = new SubscriptionContextFactory();
 			$addressChangeContextFactory = new AddressChangeContextFactory();
 			$bucketTestingContextFactory = new BucketTestingContextFactory();
@@ -306,6 +307,7 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getDoctrineConfiguration(),
 				$donationContextFactory,
 				$membershipContextFactory,
+				$paymentContextFactory,
 				$subscriptionContextFactory,
 				$addressChangeContextFactory,
 				$bucketTestingContextFactory,
@@ -1776,6 +1778,13 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getDoctrineConfiguration()
 			);
 		} );
+	}
+
+	private function getPaymentContextFactory(): PaymentContextFactory {
+		return $this->createSharedObject(
+			PaymentContextFactory::class,
+			fn(): PaymentContextFactory => new PaymentContextFactory()
+		);
 	}
 
 	private function getUserDataKeyGenerator(): UserDataKeyGenerator {

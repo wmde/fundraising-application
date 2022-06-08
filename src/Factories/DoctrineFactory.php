@@ -17,6 +17,7 @@ use WMDE\Fundraising\DonationContext\DonationContextFactory;
 use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
+use WMDE\Fundraising\PaymentContext\PaymentContextFactory;
 use WMDE\Fundraising\SubscriptionContext\SubscriptionContextFactory;
 
 class DoctrineFactory {
@@ -29,7 +30,7 @@ class DoctrineFactory {
 	/**
 	 * @param Connection $connection
 	 * @param Configuration $config
-	 * @param DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory|BucketTestingContextFactory|AutocompleteContextFactory ...$contextFactories
+	 * @param DonationContextFactory|MembershipContextFactory|PaymentContextFactory|SubscriptionContextFactory|AddressChangeContextFactory|BucketTestingContextFactory|AutocompleteContextFactory ...$contextFactories
 	 */
 	public function __construct( Connection $connection, Configuration $config, ...$contextFactories ) {
 		$this->connection = $connection;
@@ -46,6 +47,7 @@ class DoctrineFactory {
 		if ( $this->entityManager === null ) {
 			$this->entityManager = $this->newEntityManager();
 		}
+		$this->registerCustomTypes();
 		return $this->entityManager;
 	}
 
@@ -57,7 +59,7 @@ class DoctrineFactory {
 
 	private function createMappingDriver(): MappingDriver {
 		$driver = new MappingDriverChain();
-		/** @var DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory $contextFactory */
+		/** @var DonationContextFactory|MembershipContextFactory|PaymentContextFactory|SubscriptionContextFactory|AddressChangeContextFactory $contextFactory */
 		foreach ( $this->contextFactories as $contextFactory ) {
 			if ( method_exists( $contextFactory, 'visitMappingDriver' ) ) {
 				$contextFactory->visitMappingDriver( $driver );
@@ -69,7 +71,7 @@ class DoctrineFactory {
 	}
 
 	public function setupEventSubscribers( EventManager $eventManager, EventSubscriber ...$additionalEventSubscribers ): void {
-		/** @var DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory $contextFactory */
+		/** @var DonationContextFactory|MembershipContextFactory|PaymentContextFactory|SubscriptionContextFactory|AddressChangeContextFactory $contextFactory */
 		foreach ( $this->contextFactories as $contextFactory ) {
 			if ( !method_exists( $contextFactory, 'newEventSubscribers' ) ) {
 				continue;
@@ -82,6 +84,16 @@ class DoctrineFactory {
 	private function setupEventSubscriber( EventManager $eventManager, EventSubscriber ...$eventSubscribers ): void {
 		foreach ( $eventSubscribers as $subscriber ) {
 			$eventManager->addEventSubscriber( $subscriber );
+		}
+	}
+
+	public function registerCustomTypes(): void {
+		/** @var DonationContextFactory|MembershipContextFactory|PaymentContextFactory|SubscriptionContextFactory|AddressChangeContextFactory $contextFactory */
+		foreach ( $this->contextFactories as $contextFactory ) {
+			if ( !method_exists( $contextFactory, 'registerCustomTypes' ) ) {
+				continue;
+			}
+			$contextFactory->registerCustomTypes( $this->getConnection() );
 		}
 	}
 }

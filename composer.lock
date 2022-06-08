@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea10a7659ebc72531fe48360fce6b66e",
+    "content-hash": "41af66690bfa486750530a071020f7e8",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -1849,16 +1849,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.2.1",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "c94a94f120803a18554c1805ef2e539f8285f9a2"
+                "reference": "83260bb50b8fc753c72d14dc1621a2dac31877ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/c94a94f120803a18554c1805ef2e539f8285f9a2",
-                "reference": "c94a94f120803a18554c1805ef2e539f8285f9a2",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/83260bb50b8fc753c72d14dc1621a2dac31877ee",
+                "reference": "83260bb50b8fc753c72d14dc1621a2dac31877ee",
                 "shasum": ""
             },
             "require": {
@@ -1882,7 +1882,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
@@ -1944,7 +1944,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.2.1"
+                "source": "https://github.com/guzzle/psr7/tree/2.3.0"
             },
             "funding": [
                 {
@@ -1960,7 +1960,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-20T21:55:58+00:00"
+            "time": "2022-06-09T08:26:02+00:00"
         },
         {
             "name": "jeroen/file-fetcher",
@@ -2200,16 +2200,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "2.6.0",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "247918972acd74356b0a91dfaa5adcaec069b6c0"
+                "reference": "5579edf28aee1190a798bfa5be8bc16c563bd524"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/247918972acd74356b0a91dfaa5adcaec069b6c0",
-                "reference": "247918972acd74356b0a91dfaa5adcaec069b6c0",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5579edf28aee1190a798bfa5be8bc16c563bd524",
+                "reference": "5579edf28aee1190a798bfa5be8bc16c563bd524",
                 "shasum": ""
             },
             "require": {
@@ -2288,7 +2288,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/2.6.0"
+                "source": "https://github.com/Seldaek/monolog/tree/2.7.0"
             },
             "funding": [
                 {
@@ -2300,7 +2300,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-10T09:36:00+00:00"
+            "time": "2022-06-09T08:59:12+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -7227,16 +7227,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "dev-update-payments",
+            "version": "dev-change-create-membership-UC",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "1cd0452ef2d733889be71de435ae601c410280a6"
+                "reference": "70e05810c7fef545a6d923ae49a68652f1cd8b75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/1cd0452ef2d733889be71de435ae601c410280a6",
-                "reference": "1cd0452ef2d733889be71de435ae601c410280a6",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/70e05810c7fef545a6d923ae49a68652f1cd8b75",
+                "reference": "70e05810c7fef545a6d923ae49a68652f1cd8b75",
                 "shasum": ""
             },
             "require": {
@@ -7257,7 +7257,7 @@
                 "phpunit/phpunit": "~9.5.0",
                 "symfony/cache": "^6.0",
                 "wmde/fundraising-phpcs": "~6.0.0",
-                "wmde/psr-log-test-doubles": "dev-update-for-php-8"
+                "wmde/psr-log-test-doubles": "~3.0"
             },
             "type": "library",
             "extra": {
@@ -7279,7 +7279,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2022-05-23T08:00:03+00:00"
+            "time": "2022-05-17T15:58:20+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -7287,12 +7287,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "37aba5984b243a1081cfc94597f677e16638860b"
+                "reference": "691b846c17f0a422876bae98fd7a7f2f5461190a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/37aba5984b243a1081cfc94597f677e16638860b",
-                "reference": "37aba5984b243a1081cfc94597f677e16638860b",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/691b846c17f0a422876bae98fd7a7f2f5461190a",
+                "reference": "691b846c17f0a422876bae98fd7a7f2f5461190a",
                 "shasum": ""
             },
             "require": {
@@ -7332,7 +7332,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2022-06-03T13:13:06+00:00"
+            "time": "2022-06-08T11:06:36+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
