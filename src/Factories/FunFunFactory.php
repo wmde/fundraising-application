@@ -295,7 +295,6 @@ class FunFunFactory implements LoggerAwareInterface {
 				$entityManager->getEventManager(),
 				// if we have custom Doctrine event subscribers, add them here
 			);
-
 		}
 
 		return $entityManager;
@@ -1800,6 +1799,13 @@ class FunFunFactory implements LoggerAwareInterface {
 				]
 			);
 		} );
+	}
+
+	private function getPaymentContextFactory(): PaymentContextFactory {
+		return $this->createSharedObject(
+			PaymentContextFactory::class,
+			fn(): PaymentContextFactory => new PaymentContextFactory()
+		);
 	}
 
 	private function getUserDataKeyGenerator(): UserDataKeyGenerator {
