@@ -104,8 +104,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubj
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckBankDataGenerator;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\KontoCheckIbanValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
@@ -194,6 +192,8 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentValidator;
 use WMDE\Fundraising\PaymentContext\Domain\Repositories\PaymentIDRepository;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\ExternalVerificationServiceFactory;
+use WMDE\Fundraising\PaymentContext\Services\KontoCheck\KontoCheckBankDataGenerator;
+use WMDE\Fundraising\PaymentContext\Services\KontoCheck\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\CharacterPickerPaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\RandomCharacterIndexGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\UniquePaymentReferenceCodeGenerator;
