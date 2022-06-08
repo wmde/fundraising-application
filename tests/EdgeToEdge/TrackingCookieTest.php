@@ -16,6 +16,8 @@ class TrackingCookieTest extends WebRouteTestCase {
 	private const PARAM_NAME_KEYWORD = 'piwik_kwd';
 
 	public function testWhenTrackingParamsArePassed_valuesAreStoredInCookie(): void {
+		$this->markTestIncomplete( "This will go away when the remove cookies PR is merged" );
+
 		$client = $this->createClient();
 		$client->getCookieJar()->set( new Cookie( CookieNames::CONSENT, 'yes' ) );
 		$client->request( 'get', '/', [
@@ -27,6 +29,8 @@ class TrackingCookieTest extends WebRouteTestCase {
 	}
 
 	public function testWhenTrackingParamsAreNotPassed_noCookieIsCreated(): void {
+		$this->markTestIncomplete( "This will go away when the remove cookies PR is merged" );
+
 		$client = $this->createClient();
 		$client->request( 'get', '/', [] );
 
@@ -34,6 +38,8 @@ class TrackingCookieTest extends WebRouteTestCase {
 	}
 
 	public function testWhenEmptyTrackingParamsArePassed_noCookieIsCreated(): void {
+		$this->markTestIncomplete( "This will go away when the remove cookies PR is merged" );
+
 		$client = $this->createClient();
 		$client->request( 'get', '/', [
 			self::PARAM_NAME_CAMPAIGN => '',
@@ -44,6 +50,8 @@ class TrackingCookieTest extends WebRouteTestCase {
 	}
 
 	public function testWhenNewValuesAreProvided_theOldOnesAreKept(): void {
+		$this->markTestIncomplete( "This will go away when the remove cookies PR is merged" );
+
 		$client = $this->createClient();
 
 		$client->getCookieJar()->set( new Cookie(

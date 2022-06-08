@@ -27,6 +27,8 @@ class CampaignCookieTest extends WebRouteTestCase {
 	];
 
 	public function testWhenUserVisitsThePage_cookieIsSet(): void {
+		$this->markTestIncomplete( "This will be gone when we merge the removal PR" );
+
 		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
 		$this->modifyEnvironment( static function ( FunFunFactory $ffactory ) {
 			$ffactory->setCampaignConfigurationLoader(
@@ -47,6 +49,8 @@ class CampaignCookieTest extends WebRouteTestCase {
 	}
 
 	public function testWhenUserVisitsThePageWithUrlParams_cookieIsChanged(): void {
+		$this->markTestIncomplete( "This will be gone when we merge the removal PR" );
+
 		$this->modifyEnvironment( static function ( FunFunFactory $ffactory ) {
 			$ffactory->setCampaignConfigurationLoader(
 				new OverridingCampaignConfigurationLoader(
@@ -67,6 +71,8 @@ class CampaignCookieTest extends WebRouteTestCase {
 	}
 
 	public function testWhenCampaignsAreInactive_cookieExpiresAtEndOfSession(): void {
+		$this->markTestIncomplete( "This will be gone when we merge the removal PR" );
+
 		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
 		$this->modifyEnvironment( static function ( FunFunFactory $ffactory ) {
 			$ffactory->setCampaignConfigurationLoader(
@@ -94,6 +100,8 @@ class CampaignCookieTest extends WebRouteTestCase {
 	}
 
 	public function testWhenUserVisitsThePageWithoutConsentCookie_cookieIsNotSet(): void {
+		$this->markTestIncomplete( "This will be gone when we merge the removal PR" );
+
 		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
 		$this->modifyEnvironment( static function ( FunFunFactory $ffactory ) {
 			$ffactory->setCampaignConfigurationLoader(
