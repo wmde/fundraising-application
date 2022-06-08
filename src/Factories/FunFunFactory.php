@@ -181,7 +181,7 @@ use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortLibClient;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\DefaultPaymentDelayCalculator;
-use WMDE\Fundraising\PaymentContext\Domain\IbanBlocklist;
+use WMDE\Fundraising\PaymentContext\Domain\IbanBlockList;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
@@ -1197,7 +1197,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function getMembershipApplicationRepository(): ApplicationRepository {
 		return $this->createSharedObject( ApplicationRepository::class, function () {
 			return new LoggingApplicationRepository(
-				new DoctrineApplicationRepository( $this->getEntityManager() ),
+				new DoctrineApplicationRepository( $this->getEntityManager(), $this->newGetPaymentUseCase() ),
 				$this->getLogger()
 			);
 		} );
@@ -1471,8 +1471,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new KontoCheckIbanValidator();
 	}
 
-	private function newIbanBlockList(): IbanBlocklist {
-		return new IbanBlocklist( $this->config['banned-ibans'] );
+	private function newIbanBlockList(): IbanBlockList {
+		return new IbanBlockList( $this->config['banned-ibans'] );
 	}
 
 	public function newDonationAcceptedEventHandler( string $updateToken ): DonationAcceptedEventHandler {

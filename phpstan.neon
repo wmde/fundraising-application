@@ -3,4 +3,40 @@ includes:
 
 parameters:
 	excludePaths:
-		- tests/System/McpCreditCardServiceTest.php
+		- src/Infrastructure/Mail/DonationConfirmationMailSubjectRenderer.php
+		- src/Presentation/DonationMembershipApplicationAdapter.php
+		- src/Presentation/DonorDataFormatter.php
+		- src/Presentation/Presenters/CreditCardPaymentUrlGenerator.php
+		- src/Presentation/Presenters/DonationConfirmationHtmlPresenter.php
+		- src/Presentation/Presenters/DonationFormViolationPresenter.php
+		- src/Presentation/Presenters/DonorUpdateHtmlPresenter.php
+		- src/Presentation/Presenters/IbanPresenter.php
+		- src/Presentation/Presenters/MembershipApplicationConfirmationHtmlPresenter.php
+		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
+		- tests/EdgeToEdge/CampaignCookieTest.php
+		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
+		- tests/EdgeToEdge/PiwikTest.php
+		- tests/EdgeToEdge/Routes/AddCommentPostRouteTest.php
+		- tests/EdgeToEdge/Routes/AddDonationRouteTest.php
+		- tests/EdgeToEdge/Routes/ApplyForMembershipRouteTest.php
+		- tests/EdgeToEdge/Routes/CancelDonationRouteTest.php
+		- tests/EdgeToEdge/Routes/CancelMembershipApplicationRouteTest.php
+		- tests/EdgeToEdge/Routes/CheckIbanRouteTest.php
+		- tests/EdgeToEdge/Routes/CreditCardPaymentNotificationRouteTest.php
+		- tests/EdgeToEdge/Routes/DefaultRouteTest.php
+		- tests/EdgeToEdge/Routes/DonationAcceptedRouteTest.php
+		- tests/EdgeToEdge/Routes/GenerateIbanRouteTest.php
+		- tests/EdgeToEdge/Routes/HandlePayPalPaymentNotificationRouteTest.php
+		- tests/EdgeToEdge/Routes/NewDonationRouteTest.php
+		- tests/EdgeToEdge/Routes/ShowDonationConfirmationRouteTest.php
+		- tests/EdgeToEdge/Routes/ShowMembershipConfirmationRouteTest.php
+		- tests/EdgeToEdge/Routes/SofortPaymentNotificationRouteTest.php
+		- tests/EdgeToEdge/Routes/UpdateDonorRouteTest.php
+		- tests/EdgeToEdge/TrackBannerDonationRedirectsTest.php
+		- tests/EdgeToEdge/TrackingCookieTest.php
+		- tests/Integration/Presentation/Presenters/DonationConfirmationHtmlPresenterTest.php
+		- tests/Integration/Presentation/Presenters/MembershipApplicationConfirmationHtmlPresenterTest.php
+		- tests/Unit/Infrastructure/Mail/BasicMailSubjectRendererTest.php
+		- tests/Unit/Infrastructure/Mail/DonationConfirmationMailSubjectRendererTest.php
+		- tests/Unit/Presentation/DonationMembershipApplicationAdapterTest.php
+		- tests/Unit/Routes/SofortNotificationRequestTest.php
