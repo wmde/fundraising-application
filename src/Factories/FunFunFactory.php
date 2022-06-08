@@ -1521,8 +1521,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new KontoCheckIbanValidator();
 	}
 
-	private function newIbanBlockList(): IbanBlocklist {
-		return new IbanBlocklist( $this->config['banned-ibans'] );
+	private function newIbanBlockList(): IbanBlockList {
+		return new IbanBlockList( $this->config['banned-ibans'] );
 	}
 
 	public function newDonationAcceptedEventHandler( string $updateToken ): DonationAcceptedEventHandler {
