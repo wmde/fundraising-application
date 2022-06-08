@@ -23,6 +23,8 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 	private const DONATION_ID = 42;
 
 	public function testWhenPresenterRenders_itPassedParamsToTemplate(): void {
+		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
+
 		$expectedParameters = $this->getExpectedRenderParams();
 
 		$presenter = new DonationConfirmationHtmlPresenter(
