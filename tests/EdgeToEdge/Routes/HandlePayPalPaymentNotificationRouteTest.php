@@ -60,6 +60,33 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
+	public function testGivenRequestWithMissingItemId_getsIdFromCustomArray(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$factory->setDonationTokenGenerator( new FixedTokenGenerator(
+				self::UPDATE_TOKEN,
+				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
+			) );
+
+			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompletePayPalDonation() );
+
+			$factory->setPayPalPaymentNotificationVerifier(
+				$this->newNonNetworkUsingNotificationVerifier()
+			);
+
+			$request = $this->newHttpParamsForPayment();
+			$request['item_number'] = '';
+
+			$client->request(
+				Request::METHOD_POST,
+				self::PATH,
+				$request
+			);
+
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+			$this->assertPayPalDataGotPersisted( $factory->getDonationRepository(), $this->newHttpParamsForPayment() );
+		} );
+	}
+
 	public function testGivenValidRequestToLegacyPath_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator(
@@ -152,7 +179,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			'address_name' => 'Generous Donor',
 			'item_name' => self::ITEM_NAME,
 			'item_number' => 1,
-			'custom' => '{"id": "1", "utoken": "my_secret_token"}',
+			'custom' => '{"sid": "1", "utoken": "my_secret_token"}',
 			'txn_id' => '61E67681CH3238416',
 			'payment_type' => 'instant',
 			'txn_type' => 'express_checkout',

@@ -98,7 +98,7 @@ class PaypalNotificationController {
 			->setPayerAddressCity( $postRequest->get( 'address_city', '' ) )
 			->setPayerAddressCountryCode( $postRequest->get( 'address_country_code', '' ) )
 			->setPayerAddressStatus( $postRequest->get( 'address_status', '' ) )
-			->setInternalId( (int)$postRequest->get( 'item_number', 0 ) )
+			->setInternalId( $this->getDonationId( $postRequest ) )
 			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) )
 			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) )
 			->setAmountGross( Euro::newFromString( $postRequest->get( 'mc_gross', '0' ) ) )
@@ -106,6 +106,15 @@ class PaypalNotificationController {
 			->setPaymentTimestamp( $postRequest->get( 'payment_date', '' ) )
 			->setPaymentStatus( $postRequest->get( 'payment_status', '' ) )
 			->setPaymentType( $postRequest->get( 'payment_type', '' ) );
+	}
+
+	private function getDonationId( ParameterBag $postRequest ): int {
+		$itemId = $postRequest->getInt( 'item_number', 0 );
+		if ( $itemId ) {
+			return $itemId;
+		}
+
+		return (int)$this->getValueFromCustomVars( $postRequest->get( 'custom', '' ), 'sid' );
 	}
 
 	private function createErrorResponse( PayPalPaymentNotificationVerifierException $e ): Response {
