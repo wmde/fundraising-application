@@ -39,3 +39,4 @@ parameters:
 		- tests/Unit/Infrastructure/Mail/DonationConfirmationMailSubjectRendererTest.php
 		- tests/Unit/Presentation/DonationMembershipApplicationAdapterTest.php
 		- tests/Unit/Routes/SofortNotificationRequestTest.php
+		- tests/EdgeToEdge/Routes/ValidateFeeRouteTest.php
