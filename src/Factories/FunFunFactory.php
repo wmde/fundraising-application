@@ -163,6 +163,8 @@ use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipApplicationEventLogger;
+use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipConfirmationMailer;
+use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipNotifier;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
@@ -173,14 +175,12 @@ use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApp
 use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
-use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
 use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentIDRepository;
 use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentRepository;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortLibClient;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
-use WMDE\Fundraising\PaymentContext\Domain\DefaultPaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\IbanBlockList;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
@@ -965,13 +965,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function getPayPalUrlConfigForMembershipApplications(): PayPalConfig {
-		return PayPalConfig::newFromConfig(
-			array_merge( $this->config['paypal-membership'], [ 'locale' => $this->getLocale() ] ),
-			new TranslatableDescriptionStub( 'paypal_item_name_donation' )
-		);
-	}
-
 	private function getSofortConfigForDonations(): SofortConfig {
 		$config = $this->config['sofort'];
 		$locale = \Locale::parseLocale( $this->getLocale() );
@@ -1108,14 +1101,21 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new ApplyForMembershipUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher(),
-			$this->newApplyForMembershipMailer(),
+			$this->newMembershipNotifier(),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
 			$this->newMembershipApplicationTracker(),
 			$this->newMembershipApplicationPiwikTracker(),
-			$this->getPaymentDelayCalculator(),
 			$this->getMembershipEventEmitter(),
-			$this->getIncentiveFinder()
+			$this->getIncentiveFinder(),
+			$this->newCreatePaymentUseCase()
+		);
+	}
+
+	private function newMembershipNotifier(): MembershipNotifier {
+		return new MembershipConfirmationMailer(
+			$this->newApplyForMembershipMailer(),
+			$this->newGetPaymentUseCase()
 		);
 	}
 
@@ -1137,9 +1137,6 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newMembershipApplicationValidator(): MembershipApplicationValidator {
 		return new MembershipApplicationValidator(
-			new ValidateMembershipFeeUseCase(),
-			$this->newBankDataValidator(),
-			$this->newIbanBlockList(),
 			$this->getEmailValidator()
 		);
 	}
@@ -1150,16 +1147,6 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newMembershipApplicationPiwikTracker(): ApplicationPiwikTracker {
 		return new DoctrineApplicationPiwikTracker( $this->getEntityManager() );
-	}
-
-	private function getPaymentDelayCalculator(): PaymentDelayCalculator {
-		return $this->createSharedObject( PaymentDelayCalculator::class, function () {
-			return new DefaultPaymentDelayCalculator( $this->getPaymentDelayInDays() );
-		} );
-	}
-
-	public function getPaymentDelayInDays(): int {
-		return $this->getPayPalUrlConfigForMembershipApplications()->getDelayInDays();
 	}
 
 	public function setPaymentDelayCalculator( PaymentDelayCalculator $paymentDelayCalculator ): void {
