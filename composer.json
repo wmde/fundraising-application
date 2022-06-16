@@ -19,7 +19,7 @@
 		"wmde/fundraising-donations": "~9.1",
 		"wmde/fundraising-memberships": "~7.0",
 		"wmde/fundraising-payments": "~4.0",
-		"wmde/fundraising-subscriptions": "~3.1.0",
+		"wmde/fundraising-subscriptions": "~3.1",
 		"wmde/fundraising-content-provider": "~5.1",
 		"wmde/fundraising-address-change": "~1.2.0",
 		"wmde/freezable-value-object": "~2.0",
@@ -48,7 +48,7 @@
 		"micropayment-de/service-client": "~1.25",
 		"monolog/monolog": "~2.1",
 		"nikic/php-parser": "~4.0",
-		"psr/log": "~2.0",
+		"psr/log": "~2.0|~3.0",
 		"psr/simple-cache": "~1.0",
 		"remotelyliving/doorkeeper": "dev-php-8"
 	},
