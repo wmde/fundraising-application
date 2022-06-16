@@ -4,10 +4,12 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\Tests;
 
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentId;
 
 trait RebuildDatabaseSchemaTrait {
 	public static function rebuildDatabaseSchema( FunFunFactory $factory ): void {
-		$schemaCreator = new SchemaCreator( $factory->getPlainEntityManager() );
+		$entityManager = $factory->getPlainEntityManager();
+		$schemaCreator = new SchemaCreator( $entityManager );
 
 		try {
 			$schemaCreator->dropSchema();
@@ -16,6 +18,8 @@ trait RebuildDatabaseSchemaTrait {
 		}
 
 		$schemaCreator->createSchema();
+		$entityManager->persist( new PaymentId() );
+		$entityManager->flush();
 	}
 
 }

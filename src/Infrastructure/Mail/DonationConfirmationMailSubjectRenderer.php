@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
 /**
  * @license GPL-2.0-or-later
@@ -23,7 +23,7 @@ class DonationConfirmationMailSubjectRenderer implements MailSubjectRendererInte
 	}
 
 	public function render( array $templateArguments = [] ): string {
-		if ( $templateArguments['donation']['paymentType'] === PaymentMethod::BANK_TRANSFER ) {
+		if ( $templateArguments['donation']['paymentType'] === PaymentType::BankTransfer->value ) {
 			return $this->translator->trans( $this->bankTransferSubjectKey );
 		}
 		return $this->translator->trans( $this->defaultSubjectKey );
