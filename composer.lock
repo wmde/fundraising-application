@@ -7179,12 +7179,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "17a95a7b5c2ef08b4804e7c7e66dc86f5d7358f6"
+                "reference": "5078e04cec9115b1e20569c2ba4a82eff8892f24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/17a95a7b5c2ef08b4804e7c7e66dc86f5d7358f6",
-                "reference": "17a95a7b5c2ef08b4804e7c7e66dc86f5d7358f6",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/5078e04cec9115b1e20569c2ba4a82eff8892f24",
+                "reference": "5078e04cec9115b1e20569c2ba4a82eff8892f24",
                 "shasum": ""
             },
             "require": {
@@ -7228,7 +7228,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2022-06-27T07:58:21+00:00"
+            "time": "2022-06-28T08:31:11+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -7236,12 +7236,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "d06ce40973bd05867fd2cda4b38ded8a0a06c8ad"
+                "reference": "4be54f1853fdec6a98814f811938208a827e0b03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/d06ce40973bd05867fd2cda4b38ded8a0a06c8ad",
-                "reference": "d06ce40973bd05867fd2cda4b38ded8a0a06c8ad",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/4be54f1853fdec6a98814f811938208a827e0b03",
+                "reference": "4be54f1853fdec6a98814f811938208a827e0b03",
                 "shasum": ""
             },
             "require": {
@@ -7284,7 +7284,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2022-06-27T07:57:49+00:00"
+            "time": "2022-06-28T08:37:21+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -7292,12 +7292,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "159a78d4129fffdd957ed43cb1cec2152c484f1b"
+                "reference": "d0eeb52c92b333e8754f9d856c4c9fd939a15d2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/159a78d4129fffdd957ed43cb1cec2152c484f1b",
-                "reference": "159a78d4129fffdd957ed43cb1cec2152c484f1b",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/d0eeb52c92b333e8754f9d856c4c9fd939a15d2b",
+                "reference": "d0eeb52c92b333e8754f9d856c4c9fd939a15d2b",
                 "shasum": ""
             },
             "require": {
@@ -7338,7 +7338,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2022-06-23T12:39:38+00:00"
+            "time": "2022-06-28T08:44:11+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",

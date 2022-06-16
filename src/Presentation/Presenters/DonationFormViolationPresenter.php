@@ -9,7 +9,7 @@ use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidationR
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataValidationResult;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 use WMDE\FunValidators\ConstraintViolation;
 
 /**
@@ -103,7 +103,7 @@ class DonationFormViolationPresenter {
 	}
 
 	private function getBankData( AddDonationRequest $request ): array {
-		if ( $request->getPaymentType() !== PaymentMethod::DIRECT_DEBIT ) {
+		if ( $request->getPaymentType() !== PaymentType::DirectDebit->value ) {
 			return [];
 		}
 		$bankData = $request->getBankData();
