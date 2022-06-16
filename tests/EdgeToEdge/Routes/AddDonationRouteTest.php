@@ -37,8 +37,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	private const ADD_DONATION_PATH = '/donation/add';
 
 	public function testGivenValidRequest_donationGetsPersisted(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -48,7 +46,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				'/donation/add',
 				$this->newValidFormInput()
 			);
-
 			$this->assertIsExpectedDonation( $this->getDonationFromDatabase( $factory ) );
 		} );
 	}
@@ -68,8 +65,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$client = $this->createClient();
 		$someMinutesAgo = ( new \DateTimeImmutable() )->sub( new \DateInterval( 'PT35M' ) );
 		$this->prepareSessionValues( [ FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY => $someMinutesAgo ] );
@@ -189,8 +184,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidBankTransferRequest_donationGetsPersisted(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		/**
 		 * @var FunFunFactory
 		 */
@@ -267,8 +260,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenComplementableBankData_donationStillGetsPersisted(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( false );
 
@@ -309,11 +300,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenNonGermanDonor_donationGetsPersisted(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->followRedirects( false );
-
 				$client->request(
 					'POST',
 					'/donation/add',
@@ -368,7 +356,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidPayPalData_redirectsToPayPal(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
+		$this->markTestIncomplete( "This should work again when we have an implementation of TranslatableDescription" );
 
 		$client = $this->createClient();
 		$client->followRedirects( false );
@@ -385,7 +373,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
+		$this->markTestIncomplete( "This should work again when we have an implementation of TranslatableDescription" );
 
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$translator = $this->createMock( TranslatorInterface::class );
@@ -419,7 +407,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidCreditCardData_redirectsToPaymentProvider(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
+		$this->markTestIncomplete( "This should work again when we have an implementation of TranslatableDescription" );
 
 		$client = $this->createClient();
 		$client->request(
@@ -436,7 +424,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
+		$this->markTestIncomplete( "This should work again when we have an implementation of TranslatableDescription" );
 
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$response = new SofortResponse();
@@ -483,9 +471,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenInvalidRequest_formIsReloadedAndPrefilled(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
+	public function testGivenInvalidRequest_genericErrorMessageIsDisplayed(): void {
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -495,67 +481,10 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse()->getContent();
 
-		$this->assertStringContainsString( 'Amount: 0', $response );
-		$this->assertStringContainsString( 'Payment type: BEZ', $response );
-		$this->assertStringContainsString( 'Interval: 3', $response );
-		$this->assertStringContainsString( 'IBAN: DE12500105170648489890', $response );
-		$this->assertStringContainsString( 'BIC: INGDDEFFXXX', $response );
-		$this->assertStringContainsString( 'Bank name: ING-DiBa', $response );
-		$this->assertStringContainsString( 'Address type: person', $response );
-		$this->assertStringContainsString( 'Salutation: Frau', $response );
-		$this->assertStringContainsString( 'Title: Prof. Dr.', $response );
-		$this->assertStringContainsString( 'Company: ', $response );
-		$this->assertStringContainsString( 'First name: Karla', $response );
-		$this->assertStringContainsString( 'Last name: Kennichnich', $response );
-		$this->assertStringContainsString( 'Street: Lehmgasse 12', $response );
-		$this->assertStringContainsString( 'Postal code: 12345', $response );
-		$this->assertStringContainsString( 'City: Einort', $response );
-		$this->assertStringContainsString( 'Country code: DE', $response );
-		$this->assertStringContainsString( 'Email address: karla@kennichnich.de', $response );
-	}
-
-	public function testGivenInvalidRequest_formStillContainsBannerTrackingData(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
-		$client = $this->createClient();
-
-		$client->request(
-			'POST',
-			'/donation/add',
-			[
-				'impCount' => 12,
-				'bImpCount' => 3
-			]
-		);
-
-		$response = $client->getResponse()->getContent();
-
-		$this->assertStringContainsString( 'Impression Count: 12', $response );
-		$this->assertStringContainsString( 'Banner Impression Count: 3', $response );
-	}
-
-	public function testGivenNegativeDonationAmount_formIsReloadedAndPrefilledWithZero(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
-		$client = $this->createClient();
-
-		$formValues = $this->newInvalidFormInput();
-		$formValues['amount'] = '-5';
-
-		$client->request(
-			'POST',
-			'/donation/add',
-			$formValues
-		);
-
-		$response = $client->getResponse()->getContent();
-
-		$this->assertStringContainsString( 'Amount: 0', $response );
+		$this->assertStringContainsString( 'Internal Error: Creating a donation was not successful.', $response );
 	}
 
 	public function testGivenInvalidRequest_errorsAreLogged(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->createEnvironment(
 			function ( Client $client, FunFunFactory $factory ): void {
 				$testHandler = new TestHandler();
@@ -605,35 +534,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenInvalidAnonymousRequest_formIsReloadedAndPrefilled(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
-		$client = $this->createClient();
-		$client->request(
-			'POST',
-			'/donation/add',
-			$this->newAnonymousFormInput()
-		);
-
-		$response = $client->getResponse()->getContent();
-
-		$this->assertStringContainsString( 'Amount: 0', $response );
-		$this->assertStringContainsString( 'Payment type: UEB', $response );
-		$this->assertStringContainsString( 'Interval: 1', $response );
-		$this->assertStringContainsString( 'Value of field "amount" violates rule: Amount too low', $response );
-	}
-
-	private function newAnonymousFormInput(): array {
-		return [
-			'amount' => '0',
-			'paymentType' => 'UEB',
-			'interval' => 1,
-			'addressType' => 'anonym'
-		];
-	}
-
 	public function testGivenValidRequest_tokensAreReturned(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
+		$this->markTestIncomplete( "This should work again when we we implemented the TranslatableDescription" );
 
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
@@ -653,8 +555,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_clientIsRedirected(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 			$client->followRedirects( false );
@@ -664,14 +564,11 @@ class AddDonationRouteTest extends WebRouteTestCase {
 				'/donation/add',
 				$this->newValidFormInput()
 			);
-
 			$this->assertTrue( $client->getResponse()->isRedirect() );
 		} );
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
 			$client->followRedirects( false );
@@ -690,8 +587,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testDonationReceiptOptOut_persistedInDonation(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$parameters = $this->newValidFormInput();
 			$parameters['donationReceipt'] = '0';
