@@ -55,7 +55,7 @@ class PaypalNotificationController {
 
 	private function getValueFromCustomVars( string $customVars, string $key ): string {
 		$vars = json_decode( $customVars, true );
-		return !empty( $vars[$key] ) ? $vars[$key] : '';
+		return !empty( $vars[$key] ) ? strval( $vars[$key] ) : '';
 	}
 
 	private function requestIsForPaymentCompletion( ParameterBag $post ): bool {

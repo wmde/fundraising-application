@@ -179,7 +179,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			'address_name' => 'Generous Donor',
 			'item_name' => self::ITEM_NAME,
 			'item_number' => 1,
-			'custom' => '{"sid": "1", "utoken": "my_secret_token"}',
+			'custom' => '{"sid": 1, "utoken": "my_secret_token"}',
 			'txn_id' => '61E67681CH3238416',
 			'payment_type' => 'instant',
 			'txn_type' => 'express_checkout',
