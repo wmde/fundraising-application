@@ -127,7 +127,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVe
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
-use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatableDescriptionStub;
+use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatablePaymentItemDescription;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -1000,19 +1000,20 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function getPayPalUrlConfigForDonations(): PayPalConfig {
 		return PayPalConfig::newFromConfig(
 			array_merge( $this->config['paypal-donation'], [ 'locale' => $this->getLocale() ] ),
-			new TranslatableDescriptionStub( 'paypal_item_name_donation' )
+			new TranslatablePaymentItemDescription( 'paypal_item_name_donation', $this->getPaymentProviderItemsTranslator() )
 		);
 	}
 
 	private function getSofortConfigForDonations(): SofortConfig {
 		$config = $this->config['sofort'];
 		$locale = \Locale::parseLocale( $this->getLocale() );
+		$translator = $this->getPaymentProviderItemsTranslator();
 		return new SofortConfig(
 			strtoupper( $locale['language'] ),
 			$config['return-url'],
 			$config['cancel-url'],
 			$config['notification-url'],
-			new TranslatableDescriptionStub( 'sofort_item_name_donation' )
+			new TranslatablePaymentItemDescription( 'sofort_item_name_donation', $translator )
 		);
 	}
 
@@ -1031,7 +1032,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		$locale = \Locale::parseLocale( $this->getLocale() );
 		return CreditCardConfig::newFromConfig(
 			array_merge( $this->config['creditcard'], [ 'locale' => $locale['language'] ] ),
-			new TranslatableDescriptionStub( 'credit_card_item_name_donation' )
+			new TranslatablePaymentItemDescription( 'credit_card_item_name_donation', $this->getPaymentProviderItemsTranslator() )
 		);
 	}
 
