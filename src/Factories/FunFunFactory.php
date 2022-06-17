@@ -718,7 +718,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new GetPaymentUseCase(
 			new DoctrinePaymentRepository( $this->getEntityManager() ),
 			new KontoCheckBankDataGenerator( $this->newIbanValidator() ),
-			new DoctrineTransactionIdFinder( $this->getConnection() )
+			$this->newDoctrineTransactionIdFinder()
 		);
 	}
 
@@ -2003,8 +2003,12 @@ class FunFunFactory implements LoggerAwareInterface {
 					$this->config['paypal-donation']['base-url'],
 					$this->config['paypal-donation']['paypal-donation']
 				),
-				new DoctrineTransactionIdFinder( $this->getConnection() )
+				$this->newDoctrineTransactionIdFinder()
 			)
 		);
+	}
+
+	private function newDoctrineTransactionIdFinder(): DoctrineTransactionIdFinder {
+		return new DoctrineTransactionIdFinder( $this->getConnection() );
 	}
 }
