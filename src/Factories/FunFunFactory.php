@@ -198,6 +198,7 @@ use WMDE\Fundraising\PaymentContext\Services\KontoCheck\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\CharacterPickerPaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\RandomCharacterIndexGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\UniquePaymentReferenceCodeGenerator;
+use WMDE\Fundraising\PaymentContext\Services\TransactionIdFinder\DoctrineTransactionIdFinder;
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\BookPaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\CancelPayment\CancelPaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\CreatePaymentUseCase;
@@ -686,7 +687,8 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function newGetPaymentUseCase(): GetPaymentUseCase {
 		return new GetPaymentUseCase(
 			new DoctrinePaymentRepository( $this->getEntityManager() ),
-			new KontoCheckBankDataGenerator( $this->newIbanValidator() )
+			new KontoCheckBankDataGenerator( $this->newIbanValidator() ),
+			$this->newDoctrineTransactionIdFinder()
 		);
 	}
 
@@ -1920,8 +1922,13 @@ class FunFunFactory implements LoggerAwareInterface {
 					new Client(),
 					$this->config['paypal-donation']['base-url'],
 					$this->config['paypal-donation']['paypal-donation']
-				)
+				),
+				$this->newDoctrineTransactionIdFinder()
 			)
 		);
+	}
+
+	private function newDoctrineTransactionIdFinder(): DoctrineTransactionIdFinder {
+		return new DoctrineTransactionIdFinder( $this->getConnection() );
 	}
 }
