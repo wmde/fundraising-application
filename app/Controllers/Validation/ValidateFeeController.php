@@ -9,17 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use UnexpectedValueException;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateFeeRequest;
-use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateFeeResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
 
 class ValidateFeeController {
-
-	private const ERROR_RESPONSE_MAP = [
-		ValidateFeeResult::ERROR_TOO_LOW => 'too-low',
-		ValidateFeeResult::ERROR_INTERVAL_INVALID => 'interval-invalid',
-		'not-money' => 'not-money'
-	];
 
 	public function index( Request $httpRequest ): Response {
 		try {
@@ -29,18 +21,18 @@ class ValidateFeeController {
 			return $this->newJsonErrorResponse( 'not-money' );
 		}
 
-		$request = ValidateFeeRequest::newInstance()
-			->withFee( $fee )
-			->withInterval( (int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ) )
-			->withApplicantType( $httpRequest->request->get( 'addressType', '' ) );
-
-		$response = ( new ValidateMembershipFeeUseCase() )->validate( $request );
+		$response = ( new ValidateMembershipFeeUseCase() )->validate(
+			$fee->getEuros(),
+			(int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ),
+			$httpRequest->request->get( 'addressType', '' ),
+			$httpRequest->request->get( 'paymentType', '' )
+		);
 
 		if ( $response->isSuccessful() ) {
 			return new JsonResponse( [ 'status' => 'OK' ] );
 		}
 
-		return $this->newJsonErrorResponse( $response->getErrorCode() );
+		return $this->newJsonErrorResponse( $response->getValidationErrors()[0]->getMessageIdentifier() );
 	}
 
 	private function euroFromRequest( Request $httpRequest ): Euro {
@@ -54,13 +46,10 @@ class ValidateFeeController {
 	}
 
 	private function newJsonErrorResponse( string $errorCode ): Response {
-		if ( empty( self::ERROR_RESPONSE_MAP[$errorCode] ) ) {
-			throw new \OutOfRangeException( 'Validation error code not found' );
-		}
 		return new JsonResponse( [
 			'status' => 'ERR',
 			'messages' => [
-				'membershipFee' => self::ERROR_RESPONSE_MAP[$errorCode]
+				'membershipFee' => $errorCode
 			]
 		] );
 	}
