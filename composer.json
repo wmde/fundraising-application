@@ -17,7 +17,7 @@
 		"wmde/euro": "~1.0",
 		"wmde/clock": "~1.0",
 		"wmde/fundraising-donations": "dev-new-payment-domain",
-		"wmde/fundraising-memberships": "dev-change-create-membership-UC",
+		"wmde/fundraising-memberships": "dev-update-payments",
 		"wmde/fundraising-payments": "dev-refactor-payment-domain",
 		"wmde/fundraising-subscriptions": "~3.1.0",
 		"wmde/fundraising-content-provider": "~5.1",

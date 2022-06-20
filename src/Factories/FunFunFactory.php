@@ -973,7 +973,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		$locale = \Locale::parseLocale( $this->getLocale() );
 		$translator = $this->getPaymentProviderItemsTranslator();
 		return new SofortConfig(
-			$translator->trans( 'sofort_item_name_donation' ),
 			strtoupper( $locale['language'] ),
 			$config['return-url'],
 			$config['cancel-url'],
