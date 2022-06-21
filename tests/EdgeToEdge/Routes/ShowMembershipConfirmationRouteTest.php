@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tests\Data\ValidPayments;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FakeApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
@@ -25,6 +26,8 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	private const UNKNOWN_APPLICATION_ID = 9998;
 
 	private function newStoredMembershipApplication( FunFunFactory $factory ): MembershipApplication {
+		$factory->newPaymentRepository()->storePayment( ValidPayments::newDirectDebitPayment() );
+
 		$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
 			self::CORRECT_ACCESS_TOKEN
 		) );
@@ -37,8 +40,6 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCallWithWrongAccessToken_deniedPageIsShown(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$membershipApplication = $this->newStoredMembershipApplication( $factory );
 
@@ -56,8 +57,6 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCallOnAnonymizedRecord_deniedPageIsShown(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
 				self::CORRECT_ACCESS_TOKEN
@@ -82,8 +81,6 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCallOnUnknownApplicationId_deniedPageIsShown(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->request(
 				Request::METHOD_GET,
