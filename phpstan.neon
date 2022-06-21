@@ -7,7 +7,6 @@ parameters:
 		- src/Presentation/DonationMembershipApplicationAdapter.php
 		- src/Presentation/DonorDataFormatter.php
 		- src/Presentation/Presenters/CreditCardPaymentUrlGenerator.php
-		- src/Presentation/Presenters/DonationConfirmationHtmlPresenter.php
 		- src/Presentation/Presenters/DonationFormViolationPresenter.php
 		- src/Presentation/Presenters/DonorUpdateHtmlPresenter.php
 		- src/Presentation/Presenters/IbanPresenter.php
@@ -28,7 +27,6 @@ parameters:
 		- tests/EdgeToEdge/Routes/GenerateIbanRouteTest.php
 		- tests/EdgeToEdge/Routes/HandlePayPalPaymentNotificationRouteTest.php
 		- tests/EdgeToEdge/Routes/NewDonationRouteTest.php
-		- tests/EdgeToEdge/Routes/ShowDonationConfirmationRouteTest.php
 		- tests/EdgeToEdge/Routes/ShowMembershipConfirmationRouteTest.php
 		- tests/EdgeToEdge/Routes/SofortPaymentNotificationRouteTest.php
 		- tests/EdgeToEdge/Routes/UpdateDonorRouteTest.php

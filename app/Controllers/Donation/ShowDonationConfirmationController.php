@@ -30,9 +30,14 @@ class ShowDonationConfirmationController {
 		$ffFactory->getDonationSubmissionRateLimiter()->setRateLimitCookie( $request->getSession() );
 
 		$ffFactory->getTranslationCollector()->addTranslationFile( $ffFactory->getI18nDirectory() . '/messages/paymentTypes.json' );
+
+		$donation = $responseModel->getDonation();
+		$paymentData = $ffFactory->newGetPaymentUseCase()->getPaymentDataArray( $donation->getPaymentId() );
+
 		return new Response(
 			$ffFactory->newDonationConfirmationPresenter()->present(
-				$responseModel->getDonation(),
+				$donation,
+				$paymentData,
 				$responseModel->getUpdateToken(),
 				$request->get( 'accessToken', '' ),
 				array_merge(
