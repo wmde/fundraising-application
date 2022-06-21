@@ -1216,7 +1216,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			$presenter,
 			$this->getMembershipApplicationAuthorizer( '', $accessToken ),
 			$this->getMembershipApplicationRepository(),
-			$this->newMembershipApplicationTokenFetcher()
+			$this->newMembershipApplicationTokenFetcher(),
+			$this->newGetPaymentUseCase()
 		);
 	}
 
@@ -1372,7 +1373,6 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function newMembershipApplicationConfirmationHtmlPresenter(): MembershipApplicationConfirmationHtmlPresenter {
 		return new MembershipApplicationConfirmationHtmlPresenter(
 			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig' ),
-			$this->newBankDataConverter(),
 			$this->getUrlGenerator()
 		);
 	}

@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use DateTime;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -13,10 +12,6 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 
 /**
  * @license GPL-2.0-or-later
@@ -24,22 +19,21 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalPayment;
 class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationConfirmationPresenter {
 
 	private TwigTemplate $template;
-	private BankDataGenerator $bankDataGenerator;
 	private string $html = '';
 	private UrlGenerator $urlGenerator;
 
 	private ?\Exception $exception = null;
 
-	public function __construct( TwigTemplate $template, BankDataGenerator $bankDataGenerator, UrlGenerator $urlGenerator ) {
+	public function __construct( TwigTemplate $template, UrlGenerator $urlGenerator ) {
 		$this->template = $template;
-		$this->bankDataGenerator = $bankDataGenerator;
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function presentConfirmation( MembershipApplication $application, string $updateToken ): void {
+	public function presentConfirmation( MembershipApplication $application, array $paymentData, string $updateToken ): void {
 		$this->html = $this->template->render(
 			$this->getConfirmationPageArguments(
 				$application,
+				$paymentData,
 				$updateToken
 			)
 		);
@@ -57,14 +51,15 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		return $this->html;
 	}
 
-	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, string $updateToken ): array {
+	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData, string $updateToken ): array {
 		return [
-			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $updateToken ),
+			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $paymentData, $updateToken ),
 			'address' => $this->getAddressArguments( $membershipApplication->getApplicant() ),
-			'bankData' => $this->getBankDataArguments( $membershipApplication->getPayment()->getPaymentMethod() ),
-			'payPalData' => $this->getPayPalDataArguments(
-				$membershipApplication->getPayment()->getPaymentMethod()
-			),
+			'bankData' => [
+				'iban' => $paymentData['iban'] ?? '',
+				'bic' => $paymentData['bic'] ?? '',
+				'bankname' => $paymentData['bankname'] ?? '',
+			],
 			'urls' => [
 				'cancelMembership'  => $this->urlGenerator->generateRelativeUrl(
 					Routes::CANCEL_MEMBERSHIP,
@@ -77,14 +72,14 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		];
 	}
 
-	private function getApplicationArguments( MembershipApplication $membershipApplication, string $updateToken ): array {
+	private function getApplicationArguments( MembershipApplication $membershipApplication, array $paymentData, string $updateToken ): array {
 		return [
 			'id' => $membershipApplication->getId(),
 			'membershipType' => $membershipApplication->getType(),
-			'paymentType' => $membershipApplication->getPayment()->getPaymentMethod()->getId(),
-			'status' => $this->mapStatus( $membershipApplication->isConfirmed() ),
-			'membershipFee' => $membershipApplication->getPayment()->getAmount()->getEuroString(),
-			'paymentIntervalInMonths' => $membershipApplication->getPayment()->getIntervalInMonths(),
+			'paymentType' => $paymentData['paymentType'],
+			'status' => 'status-booked',
+			'membershipFee' => $paymentData['amount'],
+			'paymentIntervalInMonths' => $paymentData['interval'],
 			'updateToken' => $updateToken,
 			'incentives' => iterator_to_array( $membershipApplication->getIncentives() )
 		];
@@ -102,40 +97,6 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'countryCode' => $applicant->getPhysicalAddress()->getCountryCode(),
 			'applicantType' => $applicant->isPrivatePerson() ? ApplicantName::PERSON_PRIVATE : ApplicantName::PERSON_COMPANY
 		];
-	}
-
-	private function getBankDataArguments( PaymentMethod $payment ): array {
-		if ( $payment instanceof DirectDebitPayment ) {
-			// Generating bank name and BIC from IBAN because not all data is stored in $payment.bankData
-			$bankData = $this->bankDataGenerator->getBankDataFromIban( $payment->getBankData()->getIban() );
-			return [
-				'iban' => $bankData->getIban()->toString(),
-				'bic' => $bankData->getBic(),
-				'bankName' => $bankData->getBankName(),
-			];
-		}
-
-		return [];
-	}
-
-	private function getPayPalDataArguments( PaymentMethod $payment ): array {
-		if ( $payment instanceof PayPalPayment ) {
-			return [
-				'firstPaymentDate' => ( new DateTime( $payment->getPayPalData()->getFirstPaymentDate() ) )->format( 'd.m.Y' )
-			];
-		}
-
-		return [];
-	}
-
-	/**
-	 * Maps the membership application's status to a translatable message key
-	 *
-	 * @param bool $isConfirmed
-	 * @return string
-	 */
-	private function mapStatus( bool $isConfirmed ): string {
-		return $isConfirmed ? 'status-booked' : 'status-unconfirmed';
 	}
 
 	public function presentApplicationWasAnonymized(): void {
