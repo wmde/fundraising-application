@@ -714,7 +714,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $cutoffDateTime;
 	}
 
-	private function newGetPaymentUseCase(): GetPaymentUseCase {
+	public function newGetPaymentUseCase(): GetPaymentUseCase {
 		return new GetPaymentUseCase(
 			new DoctrinePaymentRepository( $this->getEntityManager() ),
 			new KontoCheckBankDataGenerator( $this->newIbanValidator() ),
