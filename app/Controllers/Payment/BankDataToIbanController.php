@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 
 /**
  * @license GPL-2.0-or-later
@@ -16,12 +15,10 @@ use WMDE\Fundraising\PaymentContext\UseCases\GenerateIban\GenerateIbanRequest;
 class BankDataToIbanController {
 
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
-		$generateIbanRequest = new GenerateIbanRequest(
+		$generateIbanResponse = $ffFactory->newGenerateBankDataFromGermanLegacyBankDataUseCase()->generateIban(
 			$request->query->get( 'accountNumber', '' ),
 			$request->query->get( 'bankCode', '' )
 		);
-
-		$generateIbanResponse = $ffFactory->newGenerateBankDataFromGermanLegacyBankDataUseCase()->generateIban( $generateIbanRequest );
 		return new JsonResponse( $ffFactory->newIbanPresenter()->present( $generateIbanResponse ) );
 	}
 }
