@@ -112,6 +112,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 * This is a "legacy" function for test code that needs access to FunFunFactory
 	 * (which was not accessible before). For new test code you should use "getFactory" instead.
 	 *
+	 * @deprecated use getFactory instead
 	 * @param callable(FunFunFactory): void $doModify
 	 */
 	protected static function modifyEnvironment( callable $doModify ): void {
