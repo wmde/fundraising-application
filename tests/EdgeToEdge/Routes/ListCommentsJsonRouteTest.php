@@ -4,11 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use DateTime;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\Data\CommentsForTesting;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
@@ -31,13 +28,8 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testRouteShowsComments(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$factory->disableDoctrineSubscribers();
-			$this->persistFirstComment( $factory->getEntityManager() );
-			$this->persistSecondComment( $factory->getEntityManager() );
-			$factory->getEntityManager()->flush();
-		} );
 		$client = $this->createClient();
+		$this->givenComments();
 
 		$client->request( 'GET', '/list-comments.json?n=10' );
 
@@ -52,7 +44,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 	private function getFirstCommentAsArray(): array {
 		return [
-			'betrag' => 100,
+			'betrag' => 100.42,
 			'spender' => 'First name',
 			'kommentar' => 'First comment',
 			'datum' => 'Sun, 01 Jan 1984 00:00:00 +0100',
@@ -63,7 +55,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 	private function getSecondCommentAsArray(): array {
 		return [
-			'betrag' => 200,
+			'betrag' => 9001,
 			'spender' => 'Second name',
 			'kommentar' => 'Second comment',
 			'datum' => 'Thu, 02 Feb 1984 00:00:00 +0100',
@@ -72,34 +64,9 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function persistFirstComment( EntityManager $entityManager ): void {
-		$firstDonation = new Donation();
-		$firstDonation->setPublicRecord( 'First name' );
-		$firstDonation->setComment( 'First comment' );
-		$firstDonation->setAmount( '100' );
-		$firstDonation->setCreationTime( new DateTime( '1984-01-01' ) );
-		$firstDonation->setIsPublic( true );
-		$entityManager->persist( $firstDonation );
-	}
-
-	private function persistSecondComment( EntityManager $entityManager ): void {
-		$secondDonation = new Donation();
-		$secondDonation->setPublicRecord( 'Second name' );
-		$secondDonation->setComment( 'Second comment' );
-		$secondDonation->setAmount( '200' );
-		$secondDonation->setCreationTime( new DateTime( '1984-02-02' ) );
-		$secondDonation->setIsPublic( true );
-		$entityManager->persist( $secondDonation );
-	}
-
 	public function testGivenLimitSmallerThanCommentCount_onlySoManyCommentsAreShown(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$factory->disableDoctrineSubscribers();
-			$this->persistFirstComment( $factory->getEntityManager() );
-			$this->persistSecondComment( $factory->getEntityManager() );
-			$factory->getEntityManager()->flush();
-		} );
 		$client = $this->createClient();
+		$this->givenComments();
 
 		$client->request( 'GET', '/list-comments.json?n=1' );
 
@@ -112,13 +79,8 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenJsonpCallback_jsonIsWrappedInCallback(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$factory->disableDoctrineSubscribers();
-			$this->persistFirstComment( $factory->getEntityManager() );
-			$this->persistSecondComment( $factory->getEntityManager() );
-			$factory->getEntityManager()->flush();
-		} );
 		$client = $this->createClient();
+		$this->givenComments();
 
 		$client->request( 'GET', '/list-comments.json?n=1&f=kittens' );
 
@@ -139,13 +101,8 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$factory->disableDoctrineSubscribers();
-			$this->persistFirstComment( $factory->getEntityManager() );
-			$this->persistSecondComment( $factory->getEntityManager() );
-			$factory->getEntityManager()->flush();
-		} );
 		$client = $this->createClient();
+		$this->givenComments();
 
 		$client->request( 'GET', '/list-comments.json?n=1&page=2' );
 
@@ -155,6 +112,15 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 			],
 			$client->getResponse()
 		);
+	}
+
+	private function givenComments() {
+		$factory = $this->getFactory();
+		$factory->disableDoctrineSubscribers();
+		$em = $factory->getEntityManager();
+		CommentsForTesting::persistFirstComment( $em );
+		CommentsForTesting::persistSecondComment( $em );
+		$em->flush();
 	}
 
 }
