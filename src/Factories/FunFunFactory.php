@@ -910,10 +910,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newPaymentRepository(),
 			$this->newPaymentReferenceCodeGenerator(),
 			new PaymentValidator(),
-			new ValidateIbanUseCase(
-				$this->newIbanBlockList(),
-				$this->newBankDataConverter()
-			),
+			$this->newCheckIbanUseCase(),
 			new PaymentURLFactory(
 				$this->newCreditCardUrlConfig(),
 				$this->getPayPalUrlConfigForDonations(),
