@@ -181,7 +181,6 @@ use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentRepository;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortLibClient;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataValidator;
 use WMDE\Fundraising\PaymentContext\Domain\IbanBlockList;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
@@ -619,8 +618,8 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newCheckIbanUseCase(): ValidateIbanUseCase {
 		return new ValidateIbanUseCase(
-			$this->newIbanValidator(),
-			$this->newIbanBlockList()
+			$this->newIbanBlockList(),
+			$this->newBankDataConverter()
 		);
 	}
 
@@ -713,10 +712,6 @@ class FunFunFactory implements LoggerAwareInterface {
 				$data = json_decode( $json, true, 16, JSON_THROW_ON_ERROR );
 				return new Salutations( $data[ 'salutations' ] );
 			} );
-	}
-
-	private function newBankDataValidator(): BankDataValidator {
-		return new BankDataValidator( $this->newIbanValidator() );
 	}
 
 	private function getSubOrganizationMessenger(): Messenger {
@@ -882,10 +877,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newPaymentRepository(),
 			$this->newPaymentReferenceCodeGenerator(),
 			new PaymentValidator(),
-			new ValidateIbanUseCase(
-				new KontoCheckIbanValidator(),
-				$this->newIbanBlockList()
-			),
+			$this->newCheckIbanUseCase(),
 			new PaymentURLFactory(
 				$this->newCreditCardUrlConfig(),
 				$this->getPayPalUrlConfigForDonations(),
@@ -1752,7 +1744,6 @@ class FunFunFactory implements LoggerAwareInterface {
 					'token-length' => $this->config['token-length'],
 					'token-validity-timestamp' => $this->config['token-validity-timestamp']
 				],
-				$this->getDoctrineConfiguration()
 			);
 		} );
 	}
@@ -1764,7 +1755,6 @@ class FunFunFactory implements LoggerAwareInterface {
 					'token-length' => $this->config['token-length'],
 					'token-validity-timestamp' => $this->config['token-validity-timestamp']
 				],
-				$this->getDoctrineConfiguration()
 			);
 		} );
 	}
