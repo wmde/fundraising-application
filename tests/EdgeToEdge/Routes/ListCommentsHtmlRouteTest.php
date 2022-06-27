@@ -4,10 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use DateTime;
-use Doctrine\ORM\EntityManager;
-use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Tests\Data\CommentsForTesting;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
@@ -29,11 +26,8 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenAreThreeComments_listSizeIsShownAsThree(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$factory->disableDoctrineSubscribers();
-			$this->createThreeComments( $factory->getEntityManager() );
-		} );
 		$client = $this->createClient();
+		$this->createThreeComments();
 
 		$crawler = $client->request( 'GET', '/list-comments.html' );
 
@@ -43,90 +37,36 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function createThreeComments( EntityManager $entityManager ): void {
-		$this->persistFirstComment( $entityManager );
-		$this->persistSecondComment( $entityManager );
-		$this->persistMaliciousComment( $entityManager );
-		$entityManager->flush();
-	}
-
-	private function persistFirstComment( EntityManager $entityManager ): void {
-		$firstDonation = new Donation();
-		$firstDonation->setPublicRecord( 'First name' );
-		$firstDonation->setComment( 'First comment' );
-		$firstDonation->setAmount( '100.42' );
-		$firstDonation->setCreationTime( new DateTime( '1984-01-01' ) );
-		$firstDonation->setIsPublic( true );
-		$firstDonation->setPaymentId( 1 );
-		$entityManager->persist( $firstDonation );
-	}
-
-	private function persistSecondComment( EntityManager $entityManager ): void {
-		$secondDonation = new Donation();
-		$secondDonation->setPublicRecord( 'Second name' );
-		$secondDonation->setComment( 'Second comment' );
-		$secondDonation->setAmount( '9001' );
-		$secondDonation->setCreationTime( new DateTime( '1984-02-02' ) );
-		$secondDonation->setIsPublic( true );
-		$secondDonation->setPaymentId( 2 );
-		$entityManager->persist( $secondDonation );
-	}
-
-	private function persistMaliciousComment( EntityManager $entityManager ): void {
-		$maliciousDonation = new Donation();
-		$maliciousDonation->setPublicRecord( 'Third name & company' );
-		$maliciousDonation->setComment( 'Third <script> comment' );
-		$maliciousDonation->setAmount( '9001' );
-		$maliciousDonation->setCreationTime( new DateTime( '1984-03-03' ) );
-		$maliciousDonation->setIsPublic( true );
-		$maliciousDonation->setPaymentId( 3 );
-		$entityManager->persist( $maliciousDonation );
+	private function createThreeComments(): void {
+		$factory = $this->getFactory();
+		$factory->disableDoctrineSubscribers();
+		$em = $factory->getEntityManager();
+		CommentsForTesting::persistFirstComment( $em );
+		CommentsForTesting::persistSecondComment( $em );
+		CommentsForTesting::persistEvilComment( $em );
+		$em->flush();
 	}
 
 	public function testWhenAreComments_theyAreInTheHtml(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$factory->disableDoctrineSubscribers();
-			$this->createThreeComments( $factory->getEntityManager() );
-		} );
 		$client = $this->createClient();
+		$this->createThreeComments();
 
 		$client->request( 'GET', '/list-comments.html' );
 
 		// TODO Restructure template to use elements and classes.
 		// Then we can use $crawler instead of searching strings
 
-		$this->assertStringContainsString(
-			'100,42&euro; von First name am',
-			$client->getResponse()->getContent()
-		);
-
-		$this->assertStringContainsString(
-			'First comment',
-			$client->getResponse()->getContent()
-		);
-
-		$this->assertStringContainsString(
-			'9.001,00&euro; von Second name am',
-			$client->getResponse()->getContent()
-		);
-
-		$this->assertStringContainsString(
-			'Second comment',
-			$client->getResponse()->getContent()
-		);
-
-		$this->assertStringContainsString(
-			'name &amp; company',
-			$client->getResponse()->getContent()
-		);
+		$content = $client->getResponse()->getContent();
+		$this->assertStringContainsString( '100,42&euro; von First name am', $content );
+		$this->assertStringContainsString( 'First comment', $content );
+		$this->assertStringContainsString( '9.001,00&euro; von Second name am', $content );
+		$this->assertStringContainsString( 'Second comment', $content );
+		$this->assertStringContainsString( 'name &amp; company', $content );
 	}
 
 	public function testCommentsGetEscaped(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$factory->disableDoctrineSubscribers();
-			$this->createThreeComments( $factory->getEntityManager() );
-		} );
 		$client = $this->createClient();
+		$this->createThreeComments();
 
 		$client->request( 'GET', '/list-comments.html' );
 
@@ -137,11 +77,8 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenLimitAndPageTwo_limitNumberOfCommentsAreSkipped(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$factory->disableDoctrineSubscribers();
-			$this->createThreeComments( $factory->getEntityManager() );
-		} );
 		$client = $this->createClient();
+		$this->createThreeComments();
 
 		$client->request( 'GET', '/list-comments.json?n=2&page=2' );
 
