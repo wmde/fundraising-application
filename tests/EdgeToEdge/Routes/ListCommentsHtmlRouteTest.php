@@ -57,6 +57,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$firstDonation->setAmount( '100.42' );
 		$firstDonation->setCreationTime( new DateTime( '1984-01-01' ) );
 		$firstDonation->setIsPublic( true );
+		$firstDonation->setPaymentId( 1 );
 		$entityManager->persist( $firstDonation );
 	}
 
@@ -67,6 +68,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$secondDonation->setAmount( '9001' );
 		$secondDonation->setCreationTime( new DateTime( '1984-02-02' ) );
 		$secondDonation->setIsPublic( true );
+		$secondDonation->setPaymentId( 2 );
 		$entityManager->persist( $secondDonation );
 	}
 
@@ -77,6 +79,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		$maliciousDonation->setAmount( '9001' );
 		$maliciousDonation->setCreationTime( new DateTime( '1984-03-03' ) );
 		$maliciousDonation->setIsPublic( true );
+		$maliciousDonation->setPaymentId( 3 );
 		$entityManager->persist( $maliciousDonation );
 	}
 
