@@ -41,25 +41,24 @@ class DonorUpdateHtmlPresenter {
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken ): array {
 		$donorDataFormatter = new DonorDataFormatter();
 		$paymentData = $this->getPaymentUseCase->getPaymentDataArray( $donation->getPaymentId() );
-		$bankDataKeys = [ 'iban', 'bic', 'bankname' ];
 		return [
 			'donation' => [
 				'id' => $donation->getId(),
+				// TODO: Adapt the front end to take cents here for currency localisation
 				'amount' => Euro::newFromCents( $paymentData['amount'] )->getEuroFloat(),
 				'amountInCents' => $paymentData['amount'],
 				'interval' => $paymentData['interval'],
 				'paymentType' => $paymentData['paymentType'],
 				'optsIntoDonationReceipt' => $donation->getOptsIntoDonationReceipt(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
-				// TODO rename ueb_code to paymentReferenceCode when https://github.com/wmde/fundraising-payments/pull/114 is merged
-				'bankTransferCode' => $paymentData['ueb_code'] ?? '',
+				'bankTransferCode' => $paymentData['paymentReferenceCode'] ?? '',
 				'creationDate' => $donorDataFormatter->getDonationDate(),
 				'cookieDuration' => $donorDataFormatter->getHideBannerCookieDuration(),
 				'updateToken' => $updateToken,
 				'accessToken' => $accessToken
 			],
 			'address' => $donorDataFormatter->getAddressArguments( $donation ),
-			'bankData' => array_intersect_key( $bankDataKeys, array_flip( $bankDataKeys ) ),
+			'bankData' => BankDataPresenter::getBankDataArray( $paymentData ),
 			'commentUrl' => $this->urlGenerator->generateRelativeUrl(
 				'AddCommentPage',
 				[
