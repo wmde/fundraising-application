@@ -906,7 +906,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newCreatePaymentUseCase(): CreatePaymentUseCase {
 		return new CreatePaymentUseCase(
-			$this->newPaymentIDRepository(),
+			$this->newPaymentIdRepository(),
 			$this->newPaymentRepository(),
 			$this->newPaymentReferenceCodeGenerator(),
 			new PaymentValidator(),
@@ -1994,7 +1994,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new PaymentBookingServiceWithUseCase(
 			new BookPaymentUseCase(
 				$this->newPaymentRepository(),
-				$this->newPaymentIDRepository(),
+				$this->newPaymentIdRepository(),
 				new ExternalVerificationServiceFactory(
 					new Client(),
 					$this->config['paypal-donation']['base-url'],
