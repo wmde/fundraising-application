@@ -145,8 +145,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 		if ( $client instanceof KernelBrowser ) {
@@ -355,8 +353,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidPayPalData_redirectsToPayPal(): void {
-		$this->markTestIncomplete( "This should work again when we have an implementation of TranslatableDescription" );
-
 		$client = $this->createClient();
 		$client->followRedirects( false );
 
@@ -372,8 +368,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
-		$this->markTestIncomplete( "This should work again when we have an implementation of TranslatableDescription" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$translator = $this->createMock( TranslatorInterface::class );
 			$translator->expects( $this->once() )
@@ -406,8 +400,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidCreditCardData_redirectsToPaymentProvider(): void {
-		$this->markTestIncomplete( "This should work again when we have an implementation of TranslatableDescription" );
-
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -423,8 +415,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
-		$this->markTestIncomplete( "This should work again when we have an implementation of TranslatableDescription" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$response = new SofortResponse();
 			$response->setPaymentUrl( 'https://bankingpin.please' );
@@ -534,8 +524,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_tokensAreReturned(): void {
-		$this->markTestIncomplete( "This should work again when we we implemented the TranslatableDescription" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 
