@@ -25,14 +25,19 @@ class DonationFormPresenter {
 		$this->isCustomDonationAmountValidator = $isCustomDonationAmountValidator;
 	}
 
-	public function present( Euro $amount, string $paymentType, ?int $paymentInterval, bool $paymentDataIsValid,
+	public function present( int $amount, string $paymentType, ?int $paymentInterval, bool $paymentDataIsValid,
 							 ImpressionCounts $trackingInfo, ?string $addressType, array $urlEndpoints ): string {
+		try {
+			$euroAmount = Euro::newFromCents( $amount );
+		} catch ( \InvalidArgumentException $ex ) {
+			$euroAmount = Euro::newFromCents( 0 );
+		}
 		return $this->template->render( [
 			'initialFormValues' => [
-				'amount' => $amount->getEuroCents(),
+				'amount' => $euroAmount->getEuroCents(),
 				'paymentType' => $paymentType,
 				'paymentIntervalInMonths' => $paymentInterval,
-				'isCustomAmount' => $this->isCustomDonationAmountValidator->validate( $amount ),
+				'isCustomAmount' => $this->isCustomDonationAmountValidator->validate( $euroAmount ),
 				'addressType' => $addressType
 			],
 			'validationResult' => [

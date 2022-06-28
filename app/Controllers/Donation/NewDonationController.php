@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Donation;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Euro\Euro;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\DonationPaymentValidator;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
@@ -18,19 +18,14 @@ class NewDonationController {
 			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
 		);
 
-		try {
-			$amount = Euro::newFromCents( intval( $request->get( 'amount', 0 ) ) );
-		}
-		catch ( \InvalidArgumentException $ex ) {
-			$amount = Euro::newFromCents( 0 );
-		}
+		$amount = intval( $request->get( 'amount', 0 ) );
 		$paymentType = (string)$request->get( 'paymentType', '' );
 		$interval = $request->get( 'interval', 0 );
 		if ( $interval !== null ) {
 			$interval = intval( $interval );
 		}
 
-		$validationResult = $ffFactory->newPaymentValidator()->validate( $amount, $paymentType );
+		$validationResult = $ffFactory->newPaymentValidator()->validatePaymentData( $amount, $interval, $paymentType, new DonationPaymentValidator() );
 
 		$trackingInfo = new ImpressionCounts(
 			intval( $request->get( 'impCount' ) ),
