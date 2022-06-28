@@ -50,7 +50,7 @@ class DonationConfirmationHtmlPresenter {
 				'paymentType' => $paymentData['paymentType'],
 				'optsIntoDonationReceipt' => $donation->getOptsIntoDonationReceipt(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
-				'bankTransferCode' => $paymentData['ueb_code'] ?? '',
+				'bankTransferCode' => $paymentData['paymentReferenceCode'] ?? '',
 				'creationDate' => $donorDataFormatter->getDonationDate(),
 				'cookieDuration' => $donorDataFormatter->getHideBannerCookieDuration(),
 				'updateToken' => $updateToken,
