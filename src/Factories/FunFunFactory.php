@@ -175,13 +175,14 @@ use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApp
 use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
-use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentIDRepository;
+use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentIdRepository;
 use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentRepository;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortLibClient;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\IbanBlockList;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentIdRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
@@ -189,7 +190,6 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PaymentURLFactory
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentValidator;
-use WMDE\Fundraising\PaymentContext\Domain\Repositories\PaymentIDRepository;
 use WMDE\Fundraising\PaymentContext\PaymentContextFactory;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\ExternalVerificationServiceFactory;
 use WMDE\Fundraising\PaymentContext\Services\KontoCheck\KontoCheckBankDataGenerator;
@@ -872,7 +872,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newCreatePaymentUseCase(): CreatePaymentUseCase {
 		return new CreatePaymentUseCase(
-			$this->newPaymentIDRepository(),
+			$this->newPaymentIdRepository(),
 			$this->newPaymentRepository(),
 			$this->newPaymentReferenceCodeGenerator(),
 			new PaymentValidator(),
@@ -1003,9 +1003,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	public function newPaymentIDRepository(): PaymentIDRepository {
-		return $this->createSharedObject( PaymentIDRepository::class, function () {
-			return new DoctrinePaymentIDRepository(
+	public function newPaymentIdRepository(): PaymentIdRepository {
+		return $this->createSharedObject( PaymentIdRepository::class, function () {
+			return new DoctrinePaymentIdRepository(
 				$this->getEntityManager()
 			);
 		} );
@@ -1907,7 +1907,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new PaymentBookingServiceWithUseCase(
 			new BookPaymentUseCase(
 				$this->newPaymentRepository(),
-				$this->newPaymentIDRepository(),
+				$this->newPaymentIdRepository(),
 				new ExternalVerificationServiceFactory(
 					new Client(),
 					$this->config['paypal-donation']['base-url'],
