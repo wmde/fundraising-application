@@ -79,6 +79,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 * This is a "legacy" function for test code that needs access to FunFunFactory
 	 * (which was not accessible before). For new test code you should use "getFactory" instead.
 	 *
+	 * @deprecated Use getClient instead
 	 * @param callable(KernelBrowser, FunFunFactory): void $onEnvironmentCreated
 	 */
 	protected function createEnvironment( callable $onEnvironmentCreated ): void {
