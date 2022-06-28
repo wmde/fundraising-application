@@ -6,11 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\MembershipContext\Tests\Data\ValidPayments;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationAcceptedController
@@ -43,12 +42,7 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 	private function storeDonation( FunFunFactory $factory ): int {
 		$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::CORRECT_UPDATE_TOKEN ) );
 
-		$payment = ValidPayments::newDirectDebitPayment();
-		$em = $factory->getEntityManager();
-		$em->persist( $payment );
-		$em->flush();
-		$donation = ValidDonation::newDirectDebitDonation();
-		$factory->getDonationRepository()->storeDonation( $donation );
+		$donation = ( new StoredDonations( $factory ) )->newStoredDirectDebitDonation();
 
 		return $donation->getId();
 	}
