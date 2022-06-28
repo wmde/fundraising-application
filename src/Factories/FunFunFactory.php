@@ -1125,7 +1125,8 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getSkinTwig(), 'Donation_Confirmation.html.twig',
 				$this->getDefaultTwigVariables()
 			),
-			$this->getUrlGenerator()
+			$this->getUrlGenerator(),
+			$this->newGetPaymentUseCase()
 		);
 	}
 

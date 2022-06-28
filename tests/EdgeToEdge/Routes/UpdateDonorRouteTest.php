@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDoctrineDonation;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\UpdateDonorController
@@ -27,8 +27,6 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	private const INVALID_UPDATE_TOKEN = '2ba905fe68e61f3a681d8faf689bfeeb8c942b5b';
 
 	public function testWhenCorrectPrivatePersonDataIsPosted_addressIsChanged(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
 			function ( Client $client, FunFunFactory $factory ): void {
@@ -59,8 +57,6 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenCorrectCompanyDataIsPosted_addressIsChanged(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
 			function ( Client $client, FunFunFactory $factory ): void {
@@ -102,8 +98,6 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenInvalidUpdateTokenIsSupplied_requestIsDenied(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->createEnvironment(
 			function ( Client $client, FunFunFactory $factory ): void {
 				$donation = $this->newStoredDonation( $factory );
@@ -151,8 +145,6 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenDonationDataIsInvalid_requestIsDenied(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->createEnvironment(
 			function ( Client $client, FunFunFactory $factory ): void {
@@ -226,11 +218,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 			)
 		);
 
-		$donation = ValidDonation::newIncompleteAnonymousPayPalDonation();
-
-		$factory->getDonationRepository()->storeDonation( $donation );
-
-		return $donation;
+		return ( new StoredDonations( $factory ) )->newStoredIncompleteAnonymousPayPalDonation();
 	}
 
 	private function newPrivateDonorData(): array {
