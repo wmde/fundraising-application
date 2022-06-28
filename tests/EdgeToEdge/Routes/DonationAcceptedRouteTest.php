@@ -10,6 +10,7 @@ use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\MembershipContext\Tests\Data\ValidPayments;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationAcceptedController
@@ -20,8 +21,6 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 	private const CORRECT_UPDATE_TOKEN = 'Correct update token';
 
 	public function testGivenInvalidUpdateToken_errorIsReturned(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$existingDonationId = $this->storeDonation( $factory );
 
@@ -44,6 +43,10 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 	private function storeDonation( FunFunFactory $factory ): int {
 		$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::CORRECT_UPDATE_TOKEN ) );
 
+		$payment = ValidPayments::newDirectDebitPayment();
+		$em = $factory->getEntityManager();
+		$em->persist( $payment );
+		$em->flush();
 		$donation = ValidDonation::newDirectDebitDonation();
 		$factory->getDonationRepository()->storeDonation( $donation );
 
@@ -51,8 +54,6 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenKnownIdAndValidUpdateToken_successIsReturned(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$existingDonationId = $this->storeDonation( $factory );
 
