@@ -13,8 +13,6 @@ class NewDonationRouteTest extends WebRouteTestCase {
 
 	/** @dataProvider paymentInputProvider */
 	public function testGivenPaymentInput_paymentDataIsInitiallyValidated( array $validPaymentInput, array $expected ): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$client = $this->createClient();
 		$client->request(
 			'POST',
@@ -104,8 +102,6 @@ class NewDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenPassingTrackingData_itGetsPassedToThePresenter(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$client = $this->createClient();
 		$client->request(
 			'POST',
