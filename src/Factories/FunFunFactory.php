@@ -76,6 +76,7 @@ use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\CreatePaymentWithUseCase;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\DonationPaymentValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\Moderation\ModerationService as DonationModerationService;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
@@ -945,6 +946,10 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getEmailValidator(),
 			$this->newAddressValidator()
 		);
+	}
+
+	public function newDonationPaymentValidator(): DonationPaymentValidator {
+		return new DonationPaymentValidator( $this->getPaymentTypesSettings()->getPaymentTypesForDonation() );
 	}
 
 	public function newAddressValidator(): AddressValidator {

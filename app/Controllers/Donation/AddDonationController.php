@@ -12,7 +12,6 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
-use WMDE\Fundraising\DonationContext\UseCases\AddDonation\DonationPaymentValidator;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
@@ -99,7 +98,7 @@ class AddDonationController {
 			$bic = trim( $request->get( 'bic', '' ) );
 			$paymentCreationRequest = new PaymentCreationRequest( $amount->getEuroCents(), $interval, $paymentType, $iban->toString(), $bic );
 		}
-		$paymentCreationRequest->setDomainSpecificPaymentValidator( new DonationPaymentValidator() );
+		$paymentCreationRequest->setDomainSpecificPaymentValidator( $this->ffFactory->newDonationPaymentValidator() );
 		return $paymentCreationRequest;
 	}
 

@@ -3,9 +3,7 @@ includes:
 
 parameters:
 	excludePaths:
-		- src/Infrastructure/Mail/DonationConfirmationMailSubjectRenderer.php
 		- src/Presentation/DonationMembershipApplicationAdapter.php
-		- src/Presentation/DonorDataFormatter.php
 		- src/Presentation/Presenters/CreditCardPaymentUrlGenerator.php
 		- src/Presentation/Presenters/DonationFormViolationPresenter.php
 		- src/Presentation/Presenters/DonorUpdateHtmlPresenter.php
@@ -14,7 +12,6 @@ parameters:
 		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
 		- tests/EdgeToEdge/PiwikTest.php
 		- tests/EdgeToEdge/Routes/AddCommentPostRouteTest.php
-		- tests/EdgeToEdge/Routes/AddDonationRouteTest.php
 		- tests/EdgeToEdge/Routes/ApplyForMembershipRouteTest.php
 		- tests/EdgeToEdge/Routes/CancelDonationRouteTest.php
 		- tests/EdgeToEdge/Routes/CancelMembershipApplicationRouteTest.php
@@ -35,8 +32,6 @@ parameters:
 		- tests/EdgeToEdge/TrackingCookieTest.php
 		- tests/EdgeToEdge/TrackingDataTest.php
 		- tests/Integration/Presentation/Presenters/DonationConfirmationHtmlPresenterTest.php
-		- tests/Unit/Infrastructure/Mail/BasicMailSubjectRendererTest.php
-		- tests/Unit/Infrastructure/Mail/DonationConfirmationMailSubjectRendererTest.php
 		- tests/Unit/Presentation/DonationMembershipApplicationAdapterTest.php
 		- tests/Unit/Routes/SofortNotificationRequestTest.php
 		- tests/EdgeToEdge/Routes/ValidateFeeRouteTest.php
