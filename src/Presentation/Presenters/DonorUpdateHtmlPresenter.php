@@ -4,25 +4,23 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorResponse;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\DonorDataFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
+use WMDE\Fundraising\PaymentContext\UseCases\GetPayment\GetPaymentUseCase;
 
 /**
  * Render the confirmation pages for donations with additional form to enter / update donation data
- *
- * @license GPL-2.0-or-later
  */
 class DonorUpdateHtmlPresenter {
 
-	private TwigTemplate $template;
-	private UrlGenerator $urlGenerator;
-
-	public function __construct( TwigTemplate $template, UrlGenerator $urlGenerator ) {
-		$this->template = $template;
-		$this->urlGenerator = $urlGenerator;
+	public function __construct(
+		private TwigTemplate $template,
+		private UrlGenerator $urlGenerator,
+		private GetPaymentUseCase $getPaymentUseCase ) {
 	}
 
 	public function present( UpdateDonorResponse $updateDonorResponse, Donation $donation, string $updateToken, string $accessToken ): string {
@@ -42,24 +40,26 @@ class DonorUpdateHtmlPresenter {
 
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken ): array {
 		$donorDataFormatter = new DonorDataFormatter();
+		$paymentData = $this->getPaymentUseCase->getPaymentDataArray( $donation->getPaymentId() );
+		$bankDataKeys = [ 'iban', 'bic', 'bankname' ];
 		return [
 			'donation' => [
 				'id' => $donation->getId(),
-				'amount' => $donation->getAmount()->getEuroFloat(),
-				'interval' => $donation->getPaymentIntervalInMonths(),
-				'paymentType' => $donation->getPaymentMethodId(),
+				'amount' => Euro::newFromCents( $paymentData['amount'] )->getEuroFloat(),
+				'amountInCents' => $paymentData['amount'],
+				'interval' => $paymentData['interval'],
+				'paymentType' => $paymentData['paymentType'],
 				'optsIntoDonationReceipt' => $donation->getOptsIntoDonationReceipt(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
-				'bankTransferCode' => $donorDataFormatter->getBankTransferCode(
-					$donation->getPaymentMethod()
-				),
+				// TODO rename ueb_code to paymentReferenceCode when https://github.com/wmde/fundraising-payments/pull/114 is merged
+				'bankTransferCode' => $paymentData['ueb_code'] ?? '',
 				'creationDate' => $donorDataFormatter->getDonationDate(),
 				'cookieDuration' => $donorDataFormatter->getHideBannerCookieDuration(),
 				'updateToken' => $updateToken,
 				'accessToken' => $accessToken
 			],
 			'address' => $donorDataFormatter->getAddressArguments( $donation ),
-			'bankData' => $donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),
+			'bankData' => array_intersect_key( $bankDataKeys, array_flip( $bankDataKeys ) ),
 			'commentUrl' => $this->urlGenerator->generateRelativeUrl(
 				'AddCommentPage',
 				[
