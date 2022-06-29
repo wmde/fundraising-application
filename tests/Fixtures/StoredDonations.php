@@ -3,6 +3,8 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation as DoctrineDonation;
+use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayments;
@@ -30,6 +32,25 @@ class StoredDonations {
 		$this->persistPayment( $payment );
 		$donation = ValidDonation::newIncompleteAnonymousPayPalDonation();
 		$this->factory->getDonationRepository()->storeDonation( $donation );
+		return $donation;
+	}
+
+	public function newDeletableDirectDebitDonation( string $updateToken ): Donation {
+		$donation = $this->newStoredDirectDebitDonation();
+
+		$entityManager = $this->factory->getEntityManager();
+		/**
+		 * @var DoctrineDonation $doctrineDonation
+		 */
+		$doctrineDonation = $entityManager->getRepository( DoctrineDonation::class )->find( $donation->getId() );
+
+		$doctrineDonation->modifyDataObject( static function ( DonationData $data ) use ( $updateToken ): void {
+			$data->setUpdateToken( $updateToken );
+			$data->setUpdateTokenExpiry( date( 'Y-m-d H:i:s', time() + 60 * 60 ) );
+		} );
+
+		$entityManager->persist( $doctrineDonation );
+		$entityManager->flush();
 		return $donation;
 	}
 
