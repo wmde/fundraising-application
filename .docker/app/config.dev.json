@@ -75,7 +75,7 @@
     "testmode": true
   },
   "sofort": {
-    "config-key": "CONFIG_KEY_IS_MISSING",
+    "config-key": "MISSING_USER_ID:MISSING_PROJECT_ID:MISSING_API_KEY",
     "return-url": "http://localhost:8082/show-donation-confirmation",
     "cancel-url": "http://localhost:8082/",
     "notification-url": "https://test-spenden-2.wikimedia.de/sofort-payment-notification"
