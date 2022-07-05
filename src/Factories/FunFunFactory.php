@@ -1369,7 +1369,8 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newMembershipFormViolationPresenter(): MembershipFormViolationPresenter {
 		return new MembershipFormViolationPresenter(
-			$this->getMembershipApplicationFormTemplate()
+			$this->getMembershipApplicationFormTemplate(),
+			$this->newBankDataConverter()
 		);
 	}
 
