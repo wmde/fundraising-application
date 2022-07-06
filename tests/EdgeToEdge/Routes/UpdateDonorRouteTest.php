@@ -48,15 +48,16 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 		$crawler = $client->followRedirect();
 		$dataVars = $this->getDataApplicationVars( $crawler );
-		$this->assertEquals( $this->newPrivateDonorData()['addressType'], $dataVars->addressType );
-		$this->assertEquals( $this->newPrivateDonorData()['salutation'], $dataVars->address->salutation );
-		$this->assertEquals( $this->newPrivateDonorData()['firstName'], $dataVars->address->firstName );
-		$this->assertEquals( $this->newPrivateDonorData()['lastName'], $dataVars->address->lastName );
-		$this->assertEquals( $this->newPrivateDonorData()['street'], $dataVars->address->streetAddress );
-		$this->assertEquals( $this->newPrivateDonorData()['postcode'], $dataVars->address->postalCode );
-		$this->assertEquals( $this->newPrivateDonorData()['city'], $dataVars->address->city );
-		$this->assertEquals( $this->newPrivateDonorData()['country'], $dataVars->address->countryCode );
-		$this->assertEquals( $this->newPrivateDonorData()['email'], $dataVars->address->email );
+		$expectedDonor = $this->newPrivateDonorData();
+		$this->assertEquals( $expectedDonor['addressType'], $dataVars->addressType );
+		$this->assertEquals( $expectedDonor['salutation'], $dataVars->address->salutation );
+		$this->assertEquals( $expectedDonor['firstName'], $dataVars->address->firstName );
+		$this->assertEquals( $expectedDonor['lastName'], $dataVars->address->lastName );
+		$this->assertEquals( $expectedDonor['street'], $dataVars->address->streetAddress );
+		$this->assertEquals( $expectedDonor['postcode'], $dataVars->address->postalCode );
+		$this->assertEquals( $expectedDonor['city'], $dataVars->address->city );
+		$this->assertEquals( $expectedDonor['country'], $dataVars->address->countryCode );
+		$this->assertEquals( $expectedDonor['email'], $dataVars->address->email );
 	}
 
 	public function testWhenCorrectCompanyDataIsPosted_addressIsChanged(): void {
@@ -78,13 +79,14 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 		$crawler = $client->followRedirect();
 		$dataVars = $this->getDataApplicationVars( $crawler );
-		$this->assertEquals( $this->newCompanyDonorData()['addressType'], $dataVars->addressType );
-		$this->assertEquals( $this->newCompanyDonorData()['companyName'], $dataVars->address->fullName );
-		$this->assertEquals( $this->newCompanyDonorData()['street'], $dataVars->address->streetAddress );
-		$this->assertEquals( $this->newCompanyDonorData()['postcode'], $dataVars->address->postalCode );
-		$this->assertEquals( $this->newCompanyDonorData()['city'], $dataVars->address->city );
-		$this->assertEquals( $this->newCompanyDonorData()['country'], $dataVars->address->countryCode );
-		$this->assertEquals( $this->newCompanyDonorData()['email'], $dataVars->address->email );
+		$expectedDonorData = $this->newCompanyDonorData();
+		$this->assertEquals( $expectedDonorData['addressType'], $dataVars->addressType );
+		$this->assertEquals( $expectedDonorData['companyName'], $dataVars->address->fullName );
+		$this->assertEquals( $expectedDonorData['street'], $dataVars->address->streetAddress );
+		$this->assertEquals( $expectedDonorData['postcode'], $dataVars->address->postalCode );
+		$this->assertEquals( $expectedDonorData['city'], $dataVars->address->city );
+		$this->assertEquals( $expectedDonorData['country'], $dataVars->address->countryCode );
+		$this->assertEquals( $expectedDonorData['email'], $dataVars->address->email );
 	}
 
 	public function testGivenRequestWithoutParameters_resultIsError(): void {
