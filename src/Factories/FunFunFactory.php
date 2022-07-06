@@ -133,7 +133,6 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPre
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CreditCardNotificationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonorUpdateHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ErrorPageHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ExceptionHtmlPresenterInterface;
@@ -1219,10 +1218,6 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newDonationTokenFetcher(),
 			$this->getDonationRepository()
 		);
-	}
-
-	public function newDonationFormViolationPresenter(): DonationFormViolationPresenter {
-		return new DonationFormViolationPresenter( $this->getDonationFormTemplate() );
 	}
 
 	public function newDonationFormPresenter(): DonationFormPresenter {
