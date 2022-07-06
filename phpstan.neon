@@ -4,21 +4,16 @@ includes:
 parameters:
 	excludePaths:
 		- src/Presentation/DonationMembershipApplicationAdapter.php
-		- src/Presentation/Presenters/CreditCardPaymentUrlGenerator.php
-		- src/Presentation/Presenters/DonationFormViolationPresenter.php
 		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
-		- tests/EdgeToEdge/CampaignCookieTest.php
 		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
-		- tests/EdgeToEdge/PiwikTest.php
 		- tests/EdgeToEdge/Routes/AddCommentPostRouteTest.php
 		- tests/EdgeToEdge/Routes/ApplyForMembershipRouteTest.php
+		- tests/EdgeToEdge/CampaignCookieTest.php
 		- tests/EdgeToEdge/Routes/CancelDonationRouteTest.php
 		- tests/EdgeToEdge/Routes/CancelMembershipApplicationRouteTest.php
 		- tests/EdgeToEdge/Routes/CreditCardPaymentNotificationRouteTest.php
 		- tests/EdgeToEdge/Routes/HandlePayPalPaymentNotificationRouteTest.php
 		- tests/EdgeToEdge/Routes/SofortPaymentNotificationRouteTest.php
-		- tests/EdgeToEdge/TrackBannerDonationRedirectsTest.php
-		- tests/EdgeToEdge/TrackingCookieTest.php
 		- tests/EdgeToEdge/TrackingDataTest.php
 		- tests/Unit/Presentation/DonationMembershipApplicationAdapterTest.php
 		- tests/Unit/Routes/SofortNotificationRequestTest.php
