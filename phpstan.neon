@@ -6,7 +6,6 @@ parameters:
 		- src/Presentation/DonationMembershipApplicationAdapter.php
 		- src/Presentation/Presenters/CreditCardPaymentUrlGenerator.php
 		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
-		- tests/EdgeToEdge/CampaignCookieTest.php
 		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
 		- tests/EdgeToEdge/PiwikTest.php
 		- tests/EdgeToEdge/Routes/AddCommentPostRouteTest.php
@@ -17,7 +16,6 @@ parameters:
 		- tests/EdgeToEdge/Routes/HandlePayPalPaymentNotificationRouteTest.php
 		- tests/EdgeToEdge/Routes/SofortPaymentNotificationRouteTest.php
 		- tests/EdgeToEdge/TrackBannerDonationRedirectsTest.php
-		- tests/EdgeToEdge/TrackingCookieTest.php
 		- tests/Unit/Presentation/DonationMembershipApplicationAdapterTest.php
 		- tests/Unit/Routes/SofortNotificationRequestTest.php
 		- tests/EdgeToEdge/Routes/ValidateFeeRouteTest.php
