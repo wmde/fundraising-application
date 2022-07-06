@@ -272,12 +272,12 @@ You can shut down all containers and delete all volumes with the command
     docker-compose down -v
 
 The next time you run `docker-compose up`, the database container will
-process all SQL files in [build/database](build/database).
+process all SQL files in [.docker/database](.docker/database).
 
 ### Importing the address completion data
 
 To import the German postcode database, you need to place it in
-`build/database/00.postcodes.sql`. The database container will pick it up
+`.docker/database/00.postcodes.sql`. The database container will pick it up
 when running for the first time (when it creates the volume `db-storage`).
 This happens when you run `docker-compose up` for the first time or when
 you reset the database (see above). Depending on the speed of you machine,
@@ -430,7 +430,7 @@ from the container.
 
 ### Other directories
 
-* `build/`: Configuration and Dockerfiles for the development environment and Travis CI
+* `.docker/`: Configuration and Dockerfiles for the development environment
 
 ## See also
 

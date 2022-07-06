@@ -8,8 +8,8 @@ services:
     ports:
       - "8082:8080"
     volumes:
-      - ./build/proxy/nginx.conf.template:/etc/nginx/conf.d/nginx.conf.template:ro
-      - ./build/proxy/includes:/etc/nginx/conf.d/includes:ro
+      - ./.docker/proxy/nginx.conf.template:/etc/nginx/conf.d/nginx.conf.template:ro
+      - ./.docker/proxy/includes:/etc/nginx/conf.d/includes:ro
       - ./web:/usr/share/nginx/www/spenden.wikimedia.de/current/web:ro
       - ./vendor/wmde/fundraising-frontend-content:/usr/share/nginx/www/fundraising-frontend-content:ro
     environment:
@@ -44,7 +44,7 @@ services:
     expose:
       - "3306"
     volumes:
-      - ./build/database:/docker-entrypoint-initdb.d
+      - ./.docker/database:/docker-entrypoint-initdb.d
       - db-storage:/var/lib/mysql
     networks:
       - default
