@@ -2,7 +2,7 @@
 
 The Geodata zip contains 2 sql files, a small one with community names, and a large one which includes streets.
 
-1. Copy the smaller sql file into /build/database.
+1. Copy the smaller sql file into /.docker/database.
 2. Rename it to `00.Geodata.sql`. This is needed because Docker runs the files in order, and the Geodata import needs to run before the Schema.
 3. Remove the database volume with the command:
    

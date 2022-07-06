@@ -30,6 +30,6 @@ deployment/deployment.retry
 
 tmp/
 
-/build/database/*
-!/build/database/01.Database_Schema.sql
-!/build/database/02.Default_Data.sql
+/.docker/database/*
+!/.docker/database/01.Database_Schema.sql
+!/.docker/database/02.Default_Data.sql
