@@ -4,7 +4,6 @@ includes:
 parameters:
 	excludePaths:
 		- src/Presentation/DonationMembershipApplicationAdapter.php
-		- src/Presentation/Presenters/CreditCardPaymentUrlGenerator.php
 		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
 		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
 		- tests/EdgeToEdge/PiwikTest.php
