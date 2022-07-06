@@ -8,9 +8,8 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects
@@ -43,8 +42,6 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRedirectingToPaymentProcessor_withUrlParameter_tracksRequest(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->whenPostingDataToRoute(
 			self::ADD_ROUTE,
 			[
@@ -58,8 +55,6 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	public function testWhenRedirectingToPaymentProcessor_withoutUrlParameter_doesNotTrackRequest(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->whenPostingDataToRoute(
 			self::ADD_ROUTE,
 			[
@@ -72,8 +67,6 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	public function testWhenNotOnAddRoute_doesNotTrackRequest(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->whenPostingDataToRoute(
 			self::DISALLOWED_ROUTE,
 			[
@@ -87,8 +80,6 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	public function testWhenNotOnAddRoute_andSessionItemsExist_removesSessionItems(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->whenTrackingItemsAreInSession();
 		$this->whenRequestingRoute( self::DISALLOWED_ROUTE );
 
@@ -96,8 +87,6 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	public function testWhenOnConfirmationRouteWithSessionItems_addsTrackingItemsToQuery(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->makeStoredDonation();
 		$this->whenTrackingItemsAreInSession();
 
@@ -119,8 +108,6 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	public function testWhenOnConfirmationRouteWithSessionItems_andQueryItemsAreInUrl_doesNotRedirect(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->makeStoredDonation();
 		$this->whenTrackingItemsAreInSession();
 
@@ -138,8 +125,6 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	public function testWhenOnConfirmationRouteWithQueryItems_removesSessionItems(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->makeStoredDonation();
 		$this->whenTrackingItemsAreInSession();
 
@@ -189,19 +174,8 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	private function makeStoredDonation(): void {
-		$factory = $this->getFactory();
-
-		$factory->setDonationTokenGenerator(
-			new FixedTokenGenerator(
-				self::CORRECT_ACCESS_TOKEN
-			)
-		);
-
-		$donation = ValidDonation::newDirectDebitDonation();
-
-		$factory->getDonationRepository()->storeDonation( $donation );
-
-		$this->donation = $donation;
+		$storedDonations = new StoredDonations( $this->getFactory() );
+		$this->donation = $storedDonations->newStoredDirectDebitDonation();
 	}
 
 	private static function newUrlForNamedRoute( string $routeName ): string {
