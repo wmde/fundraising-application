@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\Factories;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use WMDE\Fundraising\AddressChangeContext\AddressChangeContextFactory;
 use WMDE\Fundraising\DonationContext\DonationContextFactory;
@@ -27,19 +28,29 @@ class ContextFactoryCollection implements \IteratorAggregate {
 		$this->contextFactories = $contextFactories;
 	}
 
+	public function getDoctrineXMLMappingPaths(): array {
+		$paths = $this->getDoctrineXMLMappingPathsFromSupportedFactories();
+		$driverChain = $this->addLegacyMappingDrivers( new MappingDriverChain() );
+		foreach ( $driverChain->getDrivers() as $driver ) {
+			if ( !( $driver instanceof XmlDriver ) ) {
+				throw new \InvalidArgumentException( 'Bounded contexts must use XML mapping drivers!' );
+			}
+			array_push( $paths, ...$driver->getLocator()->getPaths() );
+		}
+		return $paths;
+	}
+
 	/**
 	 * This method is for backwards compatibility, until all context factories expose their
 	 * Doctrine XML mapping paths via the "getDoctrineMappingPaths" method.
-	 * When all classes support it, you can
-	 *   - use ORMSetup::createXMLMetadataConfiguration( $factory->getDoctrineXmlMappingPaths() ) in the environment setup factories
-	 *   - Remove createMappingDriver in DoctrineFactory
-	 *   - Remove `addLegacyMappingDrivers`
+	 * When all classes support it, you can remove this method
+	 *
 	 * See https://phabricator.wikimedia.org/T312080
 	 *
 	 * @param MappingDriverChain $driverChain
 	 * @return MappingDriverChain
 	 */
-	public function addLegacyMappingDrivers( MappingDriverChain $driverChain ): MappingDriverChain {
+	private function addLegacyMappingDrivers( MappingDriverChain $driverChain ): MappingDriverChain {
 		foreach ( $this->contextFactories as $contextFactory ) {
 			if ( method_exists( $contextFactory, 'getDoctrineMappingPaths' ) ) {
 				continue;
@@ -53,7 +64,7 @@ class ContextFactoryCollection implements \IteratorAggregate {
 		return $driverChain;
 	}
 
-	public function getDoctrineXMLMappingPaths(): array {
+	private function getDoctrineXMLMappingPathsFromSupportedFactories(): array {
 		$paths = [];
 		foreach ( $this->contextFactories as $contextFactory ) {
 			if ( method_exists( $contextFactory, 'getDoctrineMappingPaths' ) ) {

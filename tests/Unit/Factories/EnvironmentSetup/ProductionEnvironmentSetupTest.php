@@ -22,7 +22,7 @@ class ProductionEnvironmentSetupTest extends TestCase {
 			'setCreditCardLogger',
 			'setDoctrineConfiguration',
 		];
-		$supportingGetters = [ 'getLoggingPath', 'getWritableApplicationDataPath' ];
+		$supportingGetters = [ 'getLoggingPath', 'getWritableApplicationDataPath', 'getDoctrineXMLMappingPaths' ];
 		/** @var FunFunFactory&MockObject $factory */
 		$factory = $this->createMock( FunFunFactory::class );
 		foreach ( $expectedCalls as $methodName ) {

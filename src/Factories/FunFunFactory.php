@@ -8,6 +8,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
 use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
@@ -1755,7 +1756,8 @@ class FunFunFactory implements LoggerAwareInterface {
 					'token-length' => $this->config['token-length'],
 					'token-validity-timestamp' => $this->config['token-validity-timestamp']
 				],
-				$this->getDoctrineConfiguration()
+				// Dummy config for soon-to-be-deprecated & unused parameter
+				ORMSetup::createConfiguration( true )
 			);
 		} );
 	}
@@ -1767,7 +1769,8 @@ class FunFunFactory implements LoggerAwareInterface {
 					'token-length' => $this->config['token-length'],
 					'token-validity-timestamp' => $this->config['token-validity-timestamp']
 				],
-				$this->getDoctrineConfiguration()
+				// Dummy config for soon-to-be-deprecated & unused parameter
+				ORMSetup::createConfiguration( true )
 			);
 		} );
 	}
@@ -1903,6 +1906,15 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new FindCitiesUseCase(
 			new DoctrineLocationRepository( $this->getEntityManager() )
 		);
+	}
+
+	/**
+	 * Paths for ORMSetup::createXMLMetadataConfiguration
+	 *
+	 * @return string[]
+	 */
+	public function getDoctrineXMLMappingPaths(): array {
+		return $this->getBoundedContextFactoryCollection()->getDoctrineXMLMappingPaths();
 	}
 
 	private function getLocale(): string {

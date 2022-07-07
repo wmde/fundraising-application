@@ -9,9 +9,6 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\Driver\XmlDriver;
-use Doctrine\Persistence\Mapping\Driver\MappingDriver;
-use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 
 class DoctrineFactory {
 	private Connection $connection;
@@ -33,30 +30,9 @@ class DoctrineFactory {
 
 	public function getEntityManager(): EntityManager {
 		if ( $this->entityManager === null ) {
-			$this->entityManager = $this->newEntityManager();
+			$this->entityManager = EntityManager::create( $this->getConnection(), $this->config );
 		}
 		return $this->entityManager;
-	}
-
-	private function newEntityManager(): EntityManager {
-		// While https://phabricator.wikimedia.org/T312080 is not complete,
-		// we need to add drivers. When all factories support direct XML mapping,
-		// delete the following line and change the environment factories to use
-		// ORMSetup::createXMLMetadataConfiguration
-		$this->config->setMetadataDriverImpl( $this->createMappingDriver() );
-		return EntityManager::create( $this->getConnection(), $this->config );
-	}
-
-	private function createMappingDriver(): MappingDriver {
-		$paths = $this->contextFactories->getDoctrineXMLMappingPaths();
-		$driverChain = $this->contextFactories->addLegacyMappingDrivers( new MappingDriverChain() );
-		foreach ( $driverChain->getDrivers() as $driver ) {
-			if ( !( $driver instanceof XmlDriver ) ) {
-				throw new \InvalidArgumentException( 'Bounded contexts must use XML mapping drivers!' );
-			}
-			array_push( $paths, ...$driver->getLocator()->getPaths() );
-		}
-		return new XmlDriver( $paths );
 	}
 
 	public function setupEventSubscribers( EventManager $eventManager, EventSubscriber ...$additionalEventSubscribers ): void {

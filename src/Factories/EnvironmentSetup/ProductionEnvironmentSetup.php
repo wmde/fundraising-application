@@ -44,7 +44,11 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 	}
 
 	private function setDoctrineConfiguration( FunFunFactory $factory ) {
-		$factory->setDoctrineConfiguration( ORMSetup::createConfiguration( false, $factory->getWritableApplicationDataPath() . '/doctrine_proxies' ) );
+		$factory->setDoctrineConfiguration( ORMSetup::createXMLMetadataConfiguration(
+			$factory->getDoctrineXMLMappingPaths(),
+			false,
+			$factory->getWritableApplicationDataPath() . '/doctrine_proxies' )
+		);
 	}
 
 	private function setCreditCardLogger( FunFunFactory $factory ) {

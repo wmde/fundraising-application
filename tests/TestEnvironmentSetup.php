@@ -17,7 +17,7 @@ class TestEnvironmentSetup implements EnvironmentSetup {
 	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
 		$factory->setNullMessenger();
 		$factory->setDomainNameValidator( new NullDomainNameValidator() );
-		$factory->setDoctrineConfiguration( ORMSetup::createConfiguration( true ) );
+		$factory->setDoctrineConfiguration( ORMSetup::createXMLMetadataConfiguration( $factory->getDoctrineXMLMappingPaths(), true ) );
 		$factory->setInternalErrorHtmlPresenter( new DevelopmentInternalErrorHtmlPresenter() );
 	}
 }
