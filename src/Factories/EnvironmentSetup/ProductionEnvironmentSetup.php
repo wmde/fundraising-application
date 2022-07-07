@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories\EnvironmentSetup;
 
-use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\ORMSetup;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -44,9 +44,7 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 	}
 
 	private function setDoctrineConfiguration( FunFunFactory $factory ) {
-		// Setup will choose its own caching (APCu, Redis, Memcached, Array) based on the PHP environment and its extensions.
-		// See https://phabricator.wikimedia.org/T249338
-		$factory->setDoctrineConfiguration( Setup::createConfiguration( false, $factory->getWritableApplicationDataPath() . '/doctrine_proxies' ) );
+		$factory->setDoctrineConfiguration( ORMSetup::createConfiguration( false, $factory->getWritableApplicationDataPath() . '/doctrine_proxies' ) );
 	}
 
 	private function setCreditCardLogger( FunFunFactory $factory ) {

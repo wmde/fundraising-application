@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
-use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\ORMSetup;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
@@ -17,7 +17,7 @@ class TestEnvironmentSetup implements EnvironmentSetup {
 	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
 		$factory->setNullMessenger();
 		$factory->setDomainNameValidator( new NullDomainNameValidator() );
-		$factory->setDoctrineConfiguration( Setup::createConfiguration( true ) );
+		$factory->setDoctrineConfiguration( ORMSetup::createConfiguration( true ) );
 		$factory->setInternalErrorHtmlPresenter( new DevelopmentInternalErrorHtmlPresenter() );
 	}
 }

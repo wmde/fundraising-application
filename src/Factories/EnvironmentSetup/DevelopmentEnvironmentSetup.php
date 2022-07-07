@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories\EnvironmentSetup;
 
-use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\ORMSetup;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Logger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -40,7 +40,7 @@ class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 
 	private function setDoctrineConfiguration( FunFunFactory $factory ) {
 		// Setup will use /tmp for proxies and ArrayCache for caching
-		$factory->setDoctrineConfiguration( Setup::createConfiguration( true ) );
+		$factory->setDoctrineConfiguration( ORMSetup::createConfiguration( true ) );
 	}
 
 }
