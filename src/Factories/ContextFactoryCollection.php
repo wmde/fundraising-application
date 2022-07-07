@@ -53,6 +53,16 @@ class ContextFactoryCollection implements \IteratorAggregate {
 		return $driverChain;
 	}
 
+	public function getDoctrineXMLMappingPaths(): array {
+		$paths = [];
+		foreach ( $this->contextFactories as $contextFactory ) {
+			if ( method_exists( $contextFactory, 'getDoctrineMappingPaths' ) ) {
+				array_push( $paths, ...$contextFactory->getDoctrineMappingPaths() );
+			}
+		}
+		return array_unique( $paths );
+	}
+
 	/**
 	 * @return EventSubscriber[]
 	 */

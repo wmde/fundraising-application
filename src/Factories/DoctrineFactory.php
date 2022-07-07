@@ -9,6 +9,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 
@@ -47,9 +48,15 @@ class DoctrineFactory {
 	}
 
 	private function createMappingDriver(): MappingDriver {
-		$driver = new MappingDriverChain();
-		// TODO initialize XML Driver for all context factories that support it
-		return $this->contextFactories->addLegacyMappingDrivers( $driver );
+		$paths = $this->contextFactories->getDoctrineXMLMappingPaths();
+		$driverChain = $this->contextFactories->addLegacyMappingDrivers( new MappingDriverChain() );
+		foreach ( $driverChain->getDrivers() as $driver ) {
+			if ( !( $driver instanceof XmlDriver ) ) {
+				throw new \InvalidArgumentException( 'Bounded contexts must use XML mapping drivers!' );
+			}
+			array_push( $paths, ...$driver->getLocator()->getPaths() );
+		}
+		return new XmlDriver( $paths );
 	}
 
 	public function setupEventSubscribers( EventManager $eventManager, EventSubscriber ...$additionalEventSubscribers ): void {
