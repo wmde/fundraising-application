@@ -164,6 +164,7 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationEventLogger;
 use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
+use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipApplicationEventLogger;
@@ -171,9 +172,10 @@ use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
-use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipPolicyValidator;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Moderation\ModerationService;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Notification\MailMembershipApplicationNotifier;
 use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionSignupNotification\HandleSubscriptionSignupNotificationUseCase;
@@ -279,7 +281,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	/**
-	 * Returns an EntityManager without
+	 * Returns an EntityManager without event subscribers
 	 * @return EntityManager
 	 */
 	public function getPlainEntityManager(): EntityManager {
@@ -365,6 +367,12 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getEmailValidator(),
 				$this->newSubscriptionDuplicateValidator(),
 			);
+		} );
+	}
+
+	public function getModerationReasonRepository(): ModerationReasonRepository {
+		return $this->createSharedObject( ModerationReasonRepository::class, function (): ModerationReasonRepository {
+			return new ModerationReasonRepository( $this->getEntityManager() );
 		} );
 	}
 
@@ -1082,10 +1090,26 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function newApplyForMembershipUseCase(): ApplyForMembershipUseCase {
+		$adminMailer = new TemplateBasedMailer(
+			$this->getOrganizationMessenger(),
+			new TwigTemplate(
+				$this->getMailerTwig(),
+				'Membership_Application_Confirmation.txt.twig',
+				[ 'greeting_generator' => $this->getGreetingGenerator() ] ),
+			new class implements MailSubjectRendererInterface {
+				public function render( array $templateArguments = [] ): string {
+					return "[Spendenmoderation] Eine Spende hat einen ungewöhnlich hohen Betrag";
+				}
+			} );
+
+		// TODO extract admin mail address to config files
 		return new ApplyForMembershipUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher(),
-			$this->newApplyForMembershipMailer(),
+			new MailMembershipApplicationNotifier(
+				$this->newApplyForMembershipMailer(),
+				$adminMailer,
+				"spenden@wikimedia.de" ),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
 			$this->newMembershipApplicationTracker(),
@@ -1143,8 +1167,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		$this->sharedObjects[PaymentDelayCalculator::class] = $paymentDelayCalculator;
 	}
 
-	private function newApplyForMembershipPolicyValidator(): ApplyForMembershipPolicyValidator {
-		return new ApplyForMembershipPolicyValidator(
+	private function newApplyForMembershipPolicyValidator(): ModerationService {
+		return new ModerationService(
 			$this->newTextPolicyValidator( 'fields' ),
 			$this->config['email-address-blacklist']
 		);
@@ -1175,7 +1199,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function getMembershipApplicationRepository(): ApplicationRepository {
 		return $this->createSharedObject( ApplicationRepository::class, function () {
 			return new LoggingApplicationRepository(
-				new DoctrineApplicationRepository( $this->getEntityManager() ),
+				new DoctrineApplicationRepository( $this->getEntityManager(), $this->getModerationReasonRepository() ),
 				$this->getLogger()
 			);
 		} );
