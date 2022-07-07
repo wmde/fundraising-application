@@ -289,21 +289,23 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getDoctrineFactory(): DoctrineFactory {
 		return $this->createSharedObject( DoctrineFactory::class, function () {
-			$donationContextFactory = $this->getDonationContextFactory();
-			$membershipContextFactory = $this->getMembershipContextFactory();
-			$subscriptionContextFactory = new SubscriptionContextFactory();
-			$addressChangeContextFactory = new AddressChangeContextFactory();
-			$bucketTestingContextFactory = new BucketTestingContextFactory();
-			$autocompleteContextFactory = new AutocompleteContextFactory();
 			return new DoctrineFactory(
 				$this->getConnection(),
 				$this->getDoctrineConfiguration(),
-				$donationContextFactory,
-				$membershipContextFactory,
-				$subscriptionContextFactory,
-				$addressChangeContextFactory,
-				$bucketTestingContextFactory,
-				$autocompleteContextFactory
+				$this->getBoundedContextFactoryCollection()
+			);
+		} );
+	}
+
+	public function getBoundedContextFactoryCollection(): ContextFactoryCollection {
+		return $this->createSharedObject( ContextFactoryCollection::class, function () {
+			return new ContextFactoryCollection(
+				$this->getDonationContextFactory(),
+				$this->getMembershipContextFactory(),
+				new SubscriptionContextFactory(),
+				new AddressChangeContextFactory(),
+				new BucketTestingContextFactory(),
+				new AutocompleteContextFactory()
 			);
 		} );
 	}
