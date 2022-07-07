@@ -1,0 +1,6 @@
+{%- set formattedAmount = amount | default(  membershipFee ) |format_number(locale=locale) ~ ' Euro' -%}
+Hallo,
+
+{$ itemType $} wurde automatisch moderiert, da der Betrag verdächtig hoch ist ( {$ formattedAmount $} ).
+
+Zum Überprüfen der Moderation bitte {$ focURL $} aufrufen und dort nach ID {$ id $} suchen.

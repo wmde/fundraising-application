@@ -9,19 +9,36 @@
 {$- greeting_generator.createInformalGreeting( salutation, firstName, lastName )|raw $}
 {% endif %}
 
-{$ mail_content('membership_application_confirmation/intro', {
-    'formatted_amount': formattedAmount,
-    'donation_interval': paymentIntervalInMonths|payment_interval,
-    'membership_type': membershipType|membership_type,
-    'incentive': incentiveText
-}) $}
+{% if moderationFlags is empty %}
+	{$ mail_content('membership_application_confirmation/intro', {
+		'formatted_amount': formattedAmount,
+		'donation_interval': paymentIntervalInMonths|payment_interval,
+		'interval': paymentIntervalInMonths|payment_interval,
+		'membership_type': membershipType|membership_type,
+		'incentive': incentiveText
+	}) $}
 
-{$ mail_content('membership_application_confirmation/contact', {
-    'membership_type': membershipType|membership_type,
-}) $} {% if hasReceiptEnabled == false %} {$- mail_content('membership_application_confirmation/receipt') $} {% endif %}
+	{$ mail_content('membership_application_confirmation/contact', {
+		'membership_type': membershipType|membership_type,
+	}) $} {% if hasReceiptEnabled == false %} {$- mail_content('membership_application_confirmation/receipt') $} {% endif %}
 
 
-{$ mail_content('membership_application_confirmation/outro', { 'day_of_the_week': day_of_the_week } ) $}
+	{$ mail_content('membership_application_confirmation/outro', { 'day_of_the_week': day_of_the_week } ) $}
+{% else %}
+	{%  if moderationFlags.MEMBERSHIP_FEE_TOO_HIGH is defined %}
+		{$ mail_content('membership_application_confirmation/moderation_amount_too_high', {
+		'formatted_amount': formattedAmount,
+		'interval': paymentIntervalInMonths|payment_interval,
+		'membership_type': membershipType|membership_type
+		}) $}
+	{% else %}
+		{$ mail_content('membership_application_confirmation/moderation_other_reason', {
+		'formatted_amount': formattedAmount,
+		'interval': paymentIntervalInMonths|payment_interval,
+		'membership_type': membershipType|membership_type
+		}) $}
+	{% endif %}
+{% endif %}
 
 {$ mail_content('name_head_of_organization') $}
 {$ mail_content('title_head_of_organization') $}

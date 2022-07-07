@@ -95,6 +95,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\AdminModerationMailRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingTemplateBasedMailer;
@@ -1090,26 +1091,16 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function newApplyForMembershipUseCase(): ApplyForMembershipUseCase {
-		$adminMailer = new TemplateBasedMailer(
-			$this->getOrganizationMessenger(),
-			new TwigTemplate(
-				$this->getMailerTwig(),
-				'Membership_Application_Confirmation.txt.twig',
-				[ 'greeting_generator' => $this->getGreetingGenerator() ] ),
-			new class implements MailSubjectRendererInterface {
-				public function render( array $templateArguments = [] ): string {
-					return "[Spendenmoderation] Eine Spende hat einen ungewöhnlich hohen Betrag";
-				}
-			} );
-
 		// TODO extract admin mail address to config files
+		//TODO ask PM if membership notificaitons should go to mitglieder@wikimedia.de instead
 		return new ApplyForMembershipUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher(),
 			new MailMembershipApplicationNotifier(
 				$this->newApplyForMembershipMailer(),
-				$adminMailer,
-				"spenden@wikimedia.de" ),
+				$this->newAdminMailer( 'ein Mitgliedschaftsantrag', 'https://backend.wikimedia.de/backend/member/list' ),
+				"spenden@wikimedia.de"
+			),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
 			$this->newMembershipApplicationTracker(),
@@ -1117,6 +1108,21 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getPaymentDelayCalculator(),
 			$this->getMembershipEventEmitter(),
 			$this->getIncentiveFinder()
+		);
+	}
+
+	private function newAdminMailer( string $itemType, string $focURL ) {
+		return new TemplateBasedMailer(
+			$this->getOrganizationMessenger(),
+			new TwigTemplate(
+				$this->getMailerTwig(),
+				'Admin_Moderation.txt.twig',
+				[
+					'itemType' => $itemType,
+					'focURL' => $focURL
+				]
+			),
+			new AdminModerationMailRenderer()
 		);
 	}
 
