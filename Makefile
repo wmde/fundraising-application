@@ -60,7 +60,7 @@ download-assets:
 
 clear:
 	rm -rf var/cache/*
-	docker-compose run --rm --no-deps app rm -rf var/cache/*
+	docker-compose run --rm --no-deps app sh -c "rm -rf var/cache/*"
 	docker-compose run --rm --no-deps app chown -R www-data:www-data var/cache/
 
 # n alias to avoid frequent typo
