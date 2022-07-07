@@ -38,7 +38,7 @@ This will
 
 - Install PHP dependencies
 - Copy a basic configuration file. See section [Configuration](#configuration) for more details on the configuration.
-- (Re-)Create the database structure and generate the Doctrine Proxy classes
+- Generate the [Doctrine Proxy classes](https://www.doctrine-project.org/projects/doctrine-orm/en/2.9/reference/advanced-configuration.html#proxy-objects)
 - Download and install the frontend assets from
     [fundraising-app-frontend](https://gitlab.com/fun-tech/fundraising-app-frontend)
 
@@ -186,17 +186,56 @@ at [http://localhost:8025/](http://localhost:8025/)
 
 ## Database
 
+### Resetting the database in your local environment
+
+To drop the database and rebuild it from scratch the database, you need to stop the database container, delete the volume `db-storage` defined in `docker-compose.yml` and start the database container again.
+
+You can shut down all containers and delete all volumes with the command
+
+    docker-compose down -v
+
+The next time you run `docker-compose up`, the database container will
+process all SQL files in [.docker/database](.docker/database).
+
+### Accessing the database with the command line client
+
+To start the command line client, use the following commands:
+
+	docker-compose up -d database
+	docker-compose exec database mysql -u fundraising -p"INSECURE PASSWORD" fundraising
+
+### Accessing the database from your host machine
+
+If you want to use a different client for accessing the database, you need
+to connect to port 3307.
+
+
 ### Database migrations
 
-Out of the box, the database should be in a usable state for local development. If you make changes to the database
-schema, you must provide a migration script for the production database. Store the migration scripts in the `migrations`
-directory of the bounded context where you made the changes.
+Out of the box, the database should be in a usable state for local development.
+
+If you make changes to the database schema, you have to do two things:
+
+1. Create a [Doctrine
+   migration](https://www.doctrine-project.org/projects/migrations.html)
+   script for the production database. Store the migration scripts in the
+   `migrations` directory of the bounded context where you made the
+   changes.
+2. In your development environment, create the new database schema
+   definitions with the `make generate-database-schema` command. This will
+   refresh the file `./docker/database/01_Database_Schema.sql`. Then 
+   restart the container environment while dropping the database volume.
+   See section "Resetting the database in your local environment" below.
 
 #### Testing migrations
 
-To test you migration in your Docker development environment, update the bounded context dependency in composer and run
-the `make migration MIGRATION_CONTEXT=<CTX>` command. Replace the placeholder `<CTX>` with the name of of the configuration
-file in `app/config/migrations` (without the `.yml` suffix).
+To test a migration using the local Docker development environment, make
+sure you still have the old database schema in
+`.docker/database/01_Database_Schema.sql` and in your running database.
+Update the bounded context dependency in composer and run the `make
+migration MIGRATION_CONTEXT=<CTX>` command. Replace the placeholder
+`<CTX>` with the name of the configuration file in `app/config/migrations`
+(without the `.yml` suffix).
 
 To execute a specific script, run the following command and add the version number of the migration script you want to use.
 As an example, executing `migrations/Version20180612000000.php` for the subscription context would look like this:
@@ -226,18 +265,6 @@ Have a look the [deployment documentation](https://github.com/wmde/fundraising-i
 **Note:** If you're getting errors that the configuration file was nor found, make sure to set `APP_ENV` to the right value.
 See section "Running in different environments" in this document.
 
-### Accessing the database with the command line client
-
-To start the command line client, use the following commands:
-
-	docker-compose up -d database
-	docker-compose exec database mysql -u fundraising -p"INSECURE PASSWORD" fundraising
-
-### Accessing the database from your host machine
-
-If you want to use a different client for accessing the database, you need
-to connect to port 3307.
-
 
 ### Accessing the database from a Docker image
 
@@ -263,16 +290,6 @@ Copy the full network name and container name and use them instead of the placeh
 `__NETWORK_NAME__` in the following command to run PHPMyAdmin, port 8099:
 
     docker run -it --link __CONTAINER_NAME__:db --net __NETWORK_NAME__ -p 8099:80 phpmyadmin/phpmyadmin
-
-### Resetting the database in your local environment
-
-To completely delete the database data you need to delete the volume `db-storage` defined in `docker-compose.yml`.
-You can shut down all containers and delete all volumes with the command
-
-    docker-compose down -v
-
-The next time you run `docker-compose up`, the database container will
-process all SQL files in [.docker/database](.docker/database).
 
 ### Importing the address completion data
 
