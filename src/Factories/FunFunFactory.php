@@ -125,6 +125,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\PaymentTypeConfiguration;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
@@ -203,6 +204,7 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentIdRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PaymentURLFactory;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
@@ -909,7 +911,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newPaymentIdRepository(),
 			$this->newPaymentRepository(),
 			$this->newPaymentReferenceCodeGenerator(),
-			new PaymentValidator(),
+			$this->newPaymentValidator(),
 			$this->newCheckIbanUseCase(),
 			new PaymentURLFactory(
 				$this->newCreditCardUrlConfig(),
@@ -2008,5 +2010,19 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newDoctrineTransactionIdFinder(): DoctrineTransactionIdFinder {
 		return new DoctrineTransactionIdFinder( $this->getConnection() );
+	}
+
+	/**
+	 * @return PaymentType[]
+	 */
+	private function getAllowedPaymentTypesForDonation(): array {
+		return PaymentTypeConfiguration::getAllowedPaymentTypesForDonation( $this->config['payment-types'] );
+	}
+
+	/**
+	 * @return PaymentType[]
+	 */
+	private function getAllowedPaymentTypesForMembership(): array {
+		return PaymentTypeConfiguration::getAllowedPaymentTypesForMembership( $this->config['payment-types'] );
 	}
 }
