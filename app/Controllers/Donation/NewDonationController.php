@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Donation;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\DonationContext\UseCases\AddDonation\DonationPaymentValidator;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
@@ -25,7 +24,7 @@ class NewDonationController {
 			$interval = intval( $interval );
 		}
 
-		$validationResult = $ffFactory->newPaymentValidator()->validatePaymentData( $amount, $interval, $paymentType, new DonationPaymentValidator() );
+		$validationResult = $ffFactory->newPaymentValidator()->validatePaymentData( $amount, $interval, $paymentType, $ffFactory->newDonationPaymentValidator() );
 
 		$trackingInfo = new ImpressionCounts(
 			intval( $request->get( 'impCount' ) ),

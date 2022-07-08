@@ -12,7 +12,6 @@ use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
 use Locale;
-use NumberFormatter;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -61,6 +60,7 @@ use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\CreatePaymentWithUseCase;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\DonationPaymentValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\ModerationService;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
@@ -107,6 +107,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
+use WMDE\Fundraising\Frontend\Infrastructure\PaymentTypeConfiguration;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
@@ -164,6 +165,7 @@ use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationReposito
 use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipApplicationEventLogger;
 use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipConfirmationMailer;
 use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipNotifier;
+use WMDE\Fundraising\MembershipContext\Infrastructure\PaymentServiceFactory;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
@@ -184,6 +186,7 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentIdRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PaymentURLFactory;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
@@ -865,7 +868,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newDonationConfirmationMailer(),
 			$this->newDonationTokenFetcher(),
 			$this->getDonationEventEmitter(),
-			new CreatePaymentWithUseCase( $this->newCreatePaymentUseCase() )
+			new CreatePaymentWithUseCase( $this->newCreatePaymentUseCase(), $this->getAllowedPaymentTypesForDonation() )
 		);
 	}
 
@@ -874,7 +877,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newPaymentIdRepository(),
 			$this->newPaymentRepository(),
 			$this->newPaymentReferenceCodeGenerator(),
-			new PaymentValidator(),
+			$this->newPaymentValidator(),
 			$this->newCheckIbanUseCase(),
 			new PaymentURLFactory(
 				$this->newCreditCardUrlConfig(),
@@ -1036,8 +1039,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new PaymentValidator();
 	}
 
-	public function newDecimalNumberFormatter(): NumberFormatter {
-		return new NumberFormatter( $this->getLocale(), NumberFormatter::DECIMAL );
+	public function newDonationPaymentValidator(): DonationPaymentValidator {
+		return new DonationPaymentValidator( $this->getAllowedPaymentTypesForDonation() );
 	}
 
 	public function newAddCommentUseCase( string $updateToken ): AddCommentUseCase {
@@ -1102,7 +1105,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newMembershipApplicationPiwikTracker(),
 			$this->getMembershipEventEmitter(),
 			$this->getIncentiveFinder(),
-			$this->newCreatePaymentUseCase()
+			new PaymentServiceFactory( $this->newCreatePaymentUseCase(), $this->getAllowedPaymentTypesForMembership() )
 		);
 	}
 
@@ -1916,5 +1919,19 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newDoctrineTransactionIdFinder(): DoctrineTransactionIdFinder {
 		return new DoctrineTransactionIdFinder( $this->getConnection() );
+	}
+
+	/**
+	 * @return PaymentType[]
+	 */
+	private function getAllowedPaymentTypesForDonation(): array {
+		return PaymentTypeConfiguration::getAllowedPaymentTypesForDonation( $this->config['payment-types'] );
+	}
+
+	/**
+	 * @return PaymentType[]
+	 */
+	private function getAllowedPaymentTypesForMembership(): array {
+		return PaymentTypeConfiguration::getAllowedPaymentTypesForMembership( $this->config['payment-types'] );
 	}
 }
