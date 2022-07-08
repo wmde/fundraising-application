@@ -1,0 +1,6 @@
+Hallo,
+
+ein Mitgliedschaftsantrag wurde automatisch moderiert, da der Betrag verdächtig hoch ist ( 90.000 Euro ).
+
+Zum Überprüfen der Moderation bitte https://backend.wikimedia.de/backend/member/list aufrufen und dort nach ID 1 suchen.
+

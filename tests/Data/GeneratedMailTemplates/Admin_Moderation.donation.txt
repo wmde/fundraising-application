@@ -1,0 +1,6 @@
+Hallo,
+
+eine Spende wurde automatisch moderiert, da der Betrag verdächtig hoch ist ( 7.777.777,77 Euro ).
+
+Zum Überprüfen der Moderation bitte https://backend.wikimedia.de/backend/donation/list aufrufen und dort nach ID 42 suchen.
+

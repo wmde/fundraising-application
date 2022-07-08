@@ -1091,15 +1091,13 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function newApplyForMembershipUseCase(): ApplyForMembershipUseCase {
-		// TODO extract admin mail address to config files
-		//TODO ask PM if membership notificaitons should go to mitglieder@wikimedia.de instead
 		return new ApplyForMembershipUseCase(
 			$this->getMembershipApplicationRepository(),
 			$this->newMembershipApplicationTokenFetcher(),
 			new MailMembershipApplicationNotifier(
 				$this->newApplyForMembershipMailer(),
 				$this->newAdminMailer( 'ein Mitgliedschaftsantrag', 'https://backend.wikimedia.de/backend/member/list' ),
-				"spenden@wikimedia.de"
+				$this->config['contact-info']['organization']['email']
 			),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),

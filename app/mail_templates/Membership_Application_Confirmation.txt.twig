@@ -9,7 +9,7 @@
 {$- greeting_generator.createInformalGreeting( salutation, firstName, lastName )|raw $}
 {% endif %}
 
-{% if moderationFlags is empty %}
+{% if moderationFlags is not defined or moderationFlags is empty %}
 	{$ mail_content('membership_application_confirmation/intro', {
 		'formatted_amount': formattedAmount,
 		'donation_interval': paymentIntervalInMonths|payment_interval,

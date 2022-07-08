@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App;
 
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\MembershipContext\Domain\Model\ModerationIdentifier as MembershipModerationIdentifier;
 
 /**
  * This file contains a list of all Mail templates and the variables rendered in them.
@@ -66,6 +67,7 @@ class MailTemplates {
 					],
 					'recipient' => [
 						'lastName' => '姜',
+						'firstName' => '留美子',
 						'salutation' => 'Frau',
 						'title' => ''
 					],
@@ -155,34 +157,71 @@ class MailTemplates {
 					'lastName' => "O'Reilly",
 					'salutation' => 'Herr',
 					'title' => 'Dr.',
-					'membershipFee' => 15.23,
 					'incentives' => [ 'totebag' ],
 				],
 				'variants' => [
 					'direct_debit_active_yearly' => [
+						'membershipFee' => 15.23,
 						'membershipType' => 'active',
 						'paymentIntervalInMonths' => 12,
 						'paymentType' => 'BEZ',
 						'hasReceiptEnabled' => true
 					],
 					'direct_debit_active_yearly_receipt_optout' => [
+						'membershipFee' => 15.23,
 						'membershipType' => 'active',
 						'paymentIntervalInMonths' => 12,
 						'paymentType' => 'BEZ',
 						'hasReceiptEnabled' => false
 					],
 					'direct_debit_sustaining_quarterly' => [
+						'membershipFee' => 15.23,
 						'membershipType' => 'sustaining',
 						'paymentIntervalInMonths' => 3,
 						'paymentType' => 'BEZ',
 						'hasReceiptEnabled' => true
 					],
 					'paypal_sustaining_monthly' => [
+						'membershipFee' => 15.23,
 						'membershipType' => 'sustaining',
 						'paymentIntervalInMonths' => 1,
 						'paymentType' => 'PPL',
 						'hasReceiptEnabled' => true
+					],
+					'moderated_amount_too_high' => [
+						'membershipFee' => 90000.00,
+						'paymentIntervalInMonths' => 1,
+						'membershipType' => 'sustaining',
+						'moderationFlags' => [
+							MembershipModerationIdentifier::MEMBERSHIP_FEE_TOO_HIGH->name => true
+						]
+					],
+					'moderated_other_reason' => [
+						'membershipFee' => 15.23,
+						'paymentIntervalInMonths' => 1,
+						'membershipType' => 'sustaining',
+						'moderationFlags' => [
+							MembershipModerationIdentifier::MANUALLY_FLAGGED_BY_ADMIN->name => true
+						]
 					]
+				]
+			],
+
+			'Admin_Moderation.txt.twig' => [
+				'context' => [],
+				'variants' => [
+					'membership' => [
+						'membershipFee' => 90000.00,
+						'itemType' => 'ein Mitgliedschaftsantrag',
+						'focURL' => 'https://backend.wikimedia.de/backend/member/list',
+						'id' => '1'
+					],
+					'donation' => [
+						'amount' => 7777777.77,
+						'itemType' => 'eine Spende',
+						'focURL' => 'https://backend.wikimedia.de/backend/donation/list',
+						'id' => '42'
+					],
 				]
 			],
 
