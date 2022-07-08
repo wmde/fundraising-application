@@ -18,7 +18,7 @@ use WMDE\Fundraising\SubscriptionContext\SubscriptionContextFactory;
  *
  * It contains methods for calling methods in the instances, based on their capabilities.
  */
-class ContextFactoryCollection implements \IteratorAggregate {
+class ContextFactoryCollection {
 	/**
 	 * @var AddressChangeContextFactory[]|DonationContextFactory[]|AutocompleteContextFactory[]|BucketTestingContextFactory[]|MembershipContextFactory[]|SubscriptionContextFactory[]
 	 */
@@ -28,8 +28,47 @@ class ContextFactoryCollection implements \IteratorAggregate {
 		$this->contextFactories = $contextFactories;
 	}
 
+	/**
+	 * Paths that can be used for {@see ORMSetup::createXMLMetadataConfiguration()}
+	 *
+	 * @return string[]
+	 */
 	public function getDoctrineXMLMappingPaths(): array {
-		$paths = $this->getDoctrineXMLMappingPathsFromSupportedFactories();
+		return [
+			...$this->getDoctrineXMLMappingPathsFromSupportedFactories(),
+			...$this->getDoctrineXMLMappingPathsFromLegacyFactories()
+			];
+	}
+
+	/**
+	 * Paths that can be used for {@see ORMSetup::createXMLMetadataConfiguration()}
+	 *
+	 * When https://phabricator.wikimedia.org/T312080 is done, you can inline this method
+	 *
+	 * @return string[]
+	 */
+	private function getDoctrineXMLMappingPathsFromSupportedFactories(): array {
+		$paths = [];
+		foreach ( $this->contextFactories as $contextFactory ) {
+			if ( method_exists( $contextFactory, 'getDoctrineMappingPaths' ) ) {
+				array_push( $paths, ...$contextFactory->getDoctrineMappingPaths() );
+			}
+		}
+		return array_unique( $paths );
+	}
+
+	/**
+	 * This method is for backwards compatibility, until all context factories expose their
+	 * Doctrine XML mapping paths via the "getDoctrineMappingPaths" method.
+	 * When all classes support it, you can remove this method
+	 *
+	 * See https://phabricator.wikimedia.org/T312080
+	 *
+	 * @codeCoverageIgnore
+	 * @return string[]
+	 */
+	private function getDoctrineXMLMappingPathsFromLegacyFactories(): array {
+		$paths = [];
 		$driverChain = $this->addLegacyMappingDrivers( new MappingDriverChain() );
 		foreach ( $driverChain->getDrivers() as $driver ) {
 			if ( !( $driver instanceof XmlDriver ) ) {
@@ -47,31 +86,28 @@ class ContextFactoryCollection implements \IteratorAggregate {
 	 *
 	 * See https://phabricator.wikimedia.org/T312080
 	 *
+	 * @codeCoverageIgnore
 	 * @param MappingDriverChain $driverChain
 	 * @return MappingDriverChain
 	 */
 	private function addLegacyMappingDrivers( MappingDriverChain $driverChain ): MappingDriverChain {
+		$skippedFactories = 0;
 		foreach ( $this->contextFactories as $contextFactory ) {
 			if ( method_exists( $contextFactory, 'getDoctrineMappingPaths' ) ) {
-				continue;
+				$skippedFactories++;
 			} elseif ( method_exists( $contextFactory, 'visitMappingDriver' ) ) {
 				$contextFactory->visitMappingDriver( $driverChain );
 			} else {
 				$driverChain->addDriver( $contextFactory->newMappingDriver(), $contextFactory::ENTITY_NAMESPACE );
 			}
 		}
-		// TODO trigger deprecation warning if all factories supported getDoctrineMappingPaths
-		return $driverChain;
-	}
-
-	private function getDoctrineXMLMappingPathsFromSupportedFactories(): array {
-		$paths = [];
-		foreach ( $this->contextFactories as $contextFactory ) {
-			if ( method_exists( $contextFactory, 'getDoctrineMappingPaths' ) ) {
-				array_push( $paths, ...$contextFactory->getDoctrineMappingPaths() );
-			}
+		if ( $skippedFactories === count( $this->contextFactories ) ) {
+			\trigger_error(
+				'All Context Factories are now refactored - you can remove legacy code from ' . __CLASS__,
+				\E_USER_DEPRECATED
+			);
 		}
-		return array_unique( $paths );
+		return $driverChain;
 	}
 
 	/**
@@ -87,9 +123,4 @@ class ContextFactoryCollection implements \IteratorAggregate {
 		}
 		return $eventSubscribers;
 	}
-
-	public function getIterator(): \Iterator {
-		return new \ArrayIterator( $this->contextFactories );
-	}
-
 }
