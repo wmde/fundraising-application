@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "763703346ec2af0d7842e4637c6bd285",
+    "content-hash": "e063992048d14dc7509d5a41e5c340b4",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7255,23 +7255,23 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v9.1.3",
+            "version": "dev-store-moderation-reasons",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "041729a84012a5273a2ae0c3b1885c747b409f5c"
+                "reference": "f44537e01d92b45e833f0b11fc5a48782a4333c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/041729a84012a5273a2ae0c3b1885c747b409f5c",
-                "reference": "041729a84012a5273a2ae0c3b1885c747b409f5c",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/f44537e01d92b45e833f0b11fc5a48782a4333c8",
+                "reference": "f44537e01d92b45e833f0b11fc5a48782a4333c8",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.9",
                 "ext-curl": "*",
                 "gedmo/doctrine-extensions": "^3.0",
-                "php": ">=8.0",
+                "php": ">=8.1",
                 "psr/log": "^1.0|^2.0|^3.0",
                 "symfony/http-client": "^5.2",
                 "wmde/email-address": "~1.0",
@@ -7282,6 +7282,7 @@
             },
             "require-dev": {
                 "codeception/specify": "~2.0",
+                "doctrine/migrations": "^3.5",
                 "ext-pdo_sqlite": "*",
                 "mikey179/vfsstream": "~1.6",
                 "phpmd/phpmd": "~2.6",
@@ -7308,7 +7309,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2022-05-30T08:08:52+00:00"
+            "time": "2022-07-11T15:14:27+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -7316,12 +7317,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "cb15ab93a587ef611686b261899d63b1a2f95c24"
+                "reference": "b1f40e4c1c7c3f478c617573a93c38edcaa8dfbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/cb15ab93a587ef611686b261899d63b1a2f95c24",
-                "reference": "cb15ab93a587ef611686b261899d63b1a2f95c24",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/b1f40e4c1c7c3f478c617573a93c38edcaa8dfbd",
+                "reference": "b1f40e4c1c7c3f478c617573a93c38edcaa8dfbd",
                 "shasum": ""
             },
             "require": {
@@ -7341,7 +7342,7 @@
                 "phpstan/phpstan": "~1.2",
                 "phpstan/phpstan-phpunit": "~1.0",
                 "phpunit/phpunit": "~9.5.0",
-                "symfony/cache": "^5.3",
+                "symfony/cache": "^6.1",
                 "wmde/fundraising-phpcs": "~7.0.0",
                 "wmde/psr-log-test-doubles": "~2.2|~3.0"
             },
@@ -7366,7 +7367,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2022-07-01T16:25:57+00:00"
+            "time": "2022-07-11T08:04:49+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -10398,12 +10399,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "1186a8aac1ac4a11611f6375a88b65fc2ee7500c"
+                "reference": "7c40413be8d5a0733b90584cee24224245e3145c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/1186a8aac1ac4a11611f6375a88b65fc2ee7500c",
-                "reference": "1186a8aac1ac4a11611f6375a88b65fc2ee7500c",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/7c40413be8d5a0733b90584cee24224245e3145c",
+                "reference": "7c40413be8d5a0733b90584cee24224245e3145c",
                 "shasum": ""
             },
             "require": {
@@ -10447,7 +10448,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2022-07-04T10:58:09+00:00"
+            "time": "2022-07-11T12:30:25+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
@@ -10541,6 +10542,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "wmde/fundraising-donations": 20,
         "wmde/fundraising-memberships": 20,
         "remotelyliving/doorkeeper": 20,
         "wmde/fundraising-frontend-content": 20

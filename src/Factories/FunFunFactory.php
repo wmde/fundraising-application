@@ -8,7 +8,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMSetup;
 use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
@@ -46,23 +45,24 @@ use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationEventLogger;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationTokenFetcher;
+use WMDE\Fundraising\DonationContext\DataAccess\ModerationReasonRepository as DonationModerationReasonRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\UniqueTransferCodeGenerator;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\DonationContext\DonationContextFactory;
 use WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger;
-use WMDE\Fundraising\DonationContext\Infrastructure\DonationConfirmationMailer;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationEventLogger;
+use WMDE\Fundraising\DonationContext\Infrastructure\DonationMailer;
 use WMDE\Fundraising\DonationContext\Infrastructure\LoggingCommentFinder;
 use WMDE\Fundraising\DonationContext\Infrastructure\LoggingDonationRepository;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentValidator;
-use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationPolicyValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\InitialDonationStatusPicker;
+use WMDE\Fundraising\DonationContext\UseCases\AddDonation\Moderation\ModerationService as DonationModerationService;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationUseCase;
@@ -82,6 +82,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignFeatureBuilder;
 use WMDE\Fundraising\Frontend\BucketTesting\DataAccess\DoctrineBucketLogRepository;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\DoorkeeperFeatureToggle;
 use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
@@ -165,7 +166,7 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationEventLogger;
 use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
-use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository;
+use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository as MembershipModerationReasonRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipApplicationEventLogger;
@@ -175,7 +176,7 @@ use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
-use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Moderation\ModerationService;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Moderation\ModerationService as MembershipModerationService;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Notification\MailMembershipApplicationNotifier;
 use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\HandleSubscriptionPaymentNotification\HandleSubscriptionPaymentNotificationUseCase;
@@ -371,9 +372,15 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	public function getModerationReasonRepository(): ModerationReasonRepository {
-		return $this->createSharedObject( ModerationReasonRepository::class, function (): ModerationReasonRepository {
-			return new ModerationReasonRepository( $this->getEntityManager() );
+	public function getModerationReasonRepositoryForMembership(): MembershipModerationReasonRepository {
+		return $this->createSharedObject( MembershipModerationReasonRepository::class, function (): MembershipModerationReasonRepository {
+			return new MembershipModerationReasonRepository( $this->getEntityManager() );
+		} );
+	}
+
+	public function getModerationReasonRepositoryForDonation(): DonationModerationReasonRepository {
+		return $this->createSharedObject( DonationModerationReasonRepository::class, function (): DonationModerationReasonRepository {
+			return new DonationModerationReasonRepository( $this->getEntityManager() );
 		} );
 	}
 
@@ -861,11 +868,23 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getDonationRepository(),
 			$this->newDonationValidator(),
 			$this->newDonationPolicyValidator(),
-			$this->newDonationConfirmationMailer(),
+			$this->newDonationMailer(),
 			$this->newBankTransferCodeGenerator(),
 			$this->newDonationTokenFetcher(),
 			new InitialDonationStatusPicker(),
 			$this->getDonationEventEmitter()
+		);
+	}
+
+	private function newDonationMailer(): DonationMailer {
+		return new DonationMailer(
+			$this->newDonationConfirmationMailer(),
+			$this->newAdminMailer(
+				'eine Spende',
+				'https://backend.wikimedia.de/backend/donation/list',
+				$this->getSuborganizationMessenger()
+			),
+			adminEmailAddress: $this->config['contact-info']['suborganization']['email']
 		);
 	}
 
@@ -908,7 +927,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newDonationAuthorizer( $updateToken, $accessToken ),
 			$this->newUpdateDonorValidator(),
 			$this->getDonationRepository(),
-			$this->newDonationConfirmationMailer(),
+			$this->newDonationMailer(),
 			$this->getDonationEventEmitter()
 		);
 	}
@@ -917,22 +936,18 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new UpdateDonorValidator( $this->newAddressValidator(), $this->getEmailValidator() );
 	}
 
-	private function newDonationConfirmationMailer(): DonationConfirmationMailer {
-		return new DonationConfirmationMailer(
-			$this->newErrorHandlingTemplateMailer(
-				$this->getSuborganizationMessenger(),
-				new TwigTemplate(
-					$this->getMailerTwig(),
-					'Donation_Confirmation.txt.twig',
-					[
-						'greeting_generator' => $this->getGreetingGenerator()
-					]
-				),
-				new DonationConfirmationMailSubjectRenderer(
-					$this->getMailTranslator(),
-					'mail_subject_confirm_donation',
-					'mail_subject_confirm_donation_promise'
-				)
+	private function newDonationConfirmationMailer(): DonationTemplateMailerInterface {
+		return $this->newErrorHandlingTemplateMailer(
+			$this->getSuborganizationMessenger(),
+			new TwigTemplate(
+				$this->getMailerTwig(),
+				'Donation_Confirmation.txt.twig',
+				[ 'greeting_generator' => $this->getGreetingGenerator() ]
+			),
+			new DonationConfirmationMailSubjectRenderer(
+				$this->getMailTranslator(),
+				'mail_subject_confirm_donation',
+				'mail_subject_confirm_donation_promise'
 			)
 		);
 	}
@@ -1001,7 +1016,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function getDonationRepository(): DonationRepository {
 		return $this->createSharedObject( DonationRepository::class, function () {
 			return new LoggingDonationRepository(
-				new DoctrineDonationRepository( $this->getEntityManager() ),
+				new DoctrineDonationRepository( $this->getEntityManager(), $this->getModerationReasonRepositoryForDonation() ),
 				$this->getLogger()
 			);
 		} );
@@ -1096,8 +1111,12 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newMembershipApplicationTokenFetcher(),
 			new MailMembershipApplicationNotifier(
 				$this->newApplyForMembershipMailer(),
-				$this->newAdminMailer( 'ein Mitgliedschaftsantrag', 'https://backend.wikimedia.de/backend/member/list' ),
-				$this->config['contact-info']['organization']['email']
+				$this->newAdminMailer(
+					'ein Mitgliedschaftsantrag',
+					'https://backend.wikimedia.de/backend/member/list',
+					$this->getOrganizationMessenger()
+				),
+				adminEmailAddress: $this->config['contact-info']['organization']['email']
 			),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
@@ -1109,9 +1128,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newAdminMailer( string $itemType, string $focURL ) {
+	private function newAdminMailer( string $itemType, string $focURL, Messenger $messenger ) {
 		return new TemplateBasedMailer(
-			$this->getOrganizationMessenger(),
+			$messenger,
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Admin_Moderation.txt.twig',
@@ -1171,8 +1190,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		$this->sharedObjects[PaymentDelayCalculator::class] = $paymentDelayCalculator;
 	}
 
-	private function newApplyForMembershipPolicyValidator(): ModerationService {
-		return new ModerationService(
+	private function newApplyForMembershipPolicyValidator(): MembershipModerationService {
+		return new MembershipModerationService(
 			$this->newTextPolicyValidator( 'fields' ),
 			$this->config['email-address-blacklist']
 		);
@@ -1203,7 +1222,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function getMembershipApplicationRepository(): ApplicationRepository {
 		return $this->createSharedObject( ApplicationRepository::class, function () {
 			return new LoggingApplicationRepository(
-				new DoctrineApplicationRepository( $this->getEntityManager(), $this->getModerationReasonRepository() ),
+				new DoctrineApplicationRepository( $this->getEntityManager(), $this->getModerationReasonRepositoryForMembership() ),
 				$this->getLogger()
 			);
 		} );
@@ -1317,7 +1336,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new SofortPaymentNotificationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
-			$this->newDonationConfirmationMailer()
+			$this->newDonationMailer(),
 		);
 	}
 
@@ -1325,7 +1344,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new HandlePayPalPaymentCompletionNotificationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
-			$this->newDonationConfirmationMailer(),
+			$this->newDonationMailer(),
 			$this->newDonationEventLogger()
 		);
 	}
@@ -1387,7 +1406,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->getCreditCardService(),
-			$this->newDonationConfirmationMailer(),
+			$this->newDonationMailer(),
 			$this->newDonationEventLogger()
 		);
 	}
@@ -1461,8 +1480,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newDonationPolicyValidator(): AddDonationPolicyValidator {
-		return new AddDonationPolicyValidator(
+	private function newDonationPolicyValidator(): DonationModerationService {
+		return new DonationModerationService(
 			$this->newDonationAmountPolicyValidator(),
 			$this->newTextPolicyValidator( 'fields' ),
 			$this->config['email-address-blacklist']
@@ -1517,7 +1536,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new DonationAcceptedEventHandler(
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->getDonationRepository(),
-			$this->newDonationConfirmationMailer()
+			$this->newDonationMailer()
 		);
 	}
 
@@ -1774,9 +1793,7 @@ class FunFunFactory implements LoggerAwareInterface {
 				[
 					'token-length' => $this->config['token-length'],
 					'token-validity-timestamp' => $this->config['token-validity-timestamp']
-				],
-				// Dummy config for soon-to-be-deprecated & unused parameter
-				ORMSetup::createConfiguration( true )
+				]
 			);
 		} );
 	}
@@ -1787,9 +1804,7 @@ class FunFunFactory implements LoggerAwareInterface {
 				[
 					'token-length' => $this->config['token-length'],
 					'token-validity-timestamp' => $this->config['token-validity-timestamp']
-				],
-				// Dummy config for soon-to-be-deprecated & unused parameter
-				ORMSetup::createConfiguration( true )
+				]
 			);
 		} );
 	}

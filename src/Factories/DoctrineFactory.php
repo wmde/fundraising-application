@@ -30,7 +30,9 @@ class DoctrineFactory {
 
 	public function getEntityManager(): EntityManager {
 		if ( $this->entityManager === null ) {
-			$this->entityManager = EntityManager::create( $this->getConnection(), $this->config );
+			$connection = $this->getConnection();
+			$this->entityManager = EntityManager::create( $connection, $this->config );
+			$this->contextFactories->registerCustomTypes( $connection );
 		}
 		return $this->entityManager;
 	}

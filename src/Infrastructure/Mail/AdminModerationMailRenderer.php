@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
+use WMDE\Fundraising\DonationContext\Domain\Model\ModerationIdentifier as DonationModerationIdentifier;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ModerationIdentifier as MembershipModerationIdentifier;
 
 class AdminModerationMailRenderer implements MailSubjectRendererInterface {
@@ -12,11 +13,9 @@ class AdminModerationMailRenderer implements MailSubjectRendererInterface {
 		if ( isset( $templateArguments['moderationFlags'][MembershipModerationIdentifier::MEMBERSHIP_FEE_TOO_HIGH->name] ) ) {
 			return "[Mitgliedschaftenmoderation] Ein Mitgliedschaftsantrag hat einen ungewöhnlich hohen Betrag";
 		}
-		/*
-		 * TODO implement this
-		if ( isset($templateArguments['moderationFlags'][DonationModerationIdentifier::AMOUNT_TOO_HIGH->name]) ) {
+		if ( isset( $templateArguments['moderationFlags'][DonationModerationIdentifier::AMOUNT_TOO_HIGH->name] ) ) {
 			return "[Spendenmoderation] Eine Spende hat einen ungewöhnlich hohen Betrag";
-		}*/
+		}
 
 		// this should never happen
 		// only if the fundraising team wants more mails for different moderation reasons

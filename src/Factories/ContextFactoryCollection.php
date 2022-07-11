@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\Factories;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use WMDE\Fundraising\AddressChangeContext\AddressChangeContextFactory;
@@ -122,5 +123,13 @@ class ContextFactoryCollection {
 			array_push( $eventSubscribers, ...array_values( $contextFactory->newEventSubscribers() ) );
 		}
 		return $eventSubscribers;
+	}
+
+	public function registerCustomTypes( Connection $connection ): void {
+		foreach ( $this->contextFactories as $contextFactory ) {
+			if ( method_exists( $contextFactory, 'registerCustomTypes' ) ) {
+				$contextFactory->registerCustomTypes( $connection );
+			}
+		}
 	}
 }

@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App;
 
+use WMDE\Fundraising\DonationContext\Domain\Model\ModerationIdentifier as DonationModerationIdentifier;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ModerationIdentifier as MembershipModerationIdentifier;
 
@@ -61,8 +62,6 @@ class MailTemplates {
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'donation' => [
 						'id' => 42,
-						'amount' => 12.34,
-						'needsModeration' => false,
 						'receiptOptIn' => false,
 					],
 					'recipient' => [
@@ -75,6 +74,7 @@ class MailTemplates {
 				'variants' => [
 					'deposit_unmoderated_non_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'UEB',
 							'interval' => 0,
 							'bankTransferCode' => 'WZF3984Y',
@@ -83,6 +83,7 @@ class MailTemplates {
 					],
 					'deposit_unmoderated_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'UEB',
 							'interval' => 6,
 							'bankTransferCode' => 'WZF3984Y',
@@ -90,12 +91,14 @@ class MailTemplates {
 					],
 					'direct_debit_unmoderated_non_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'BEZ',
 							'interval' => 0,
 						]
 					],
 					'direct_debit_unmoderated_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'BEZ',
 							'interval' => 3,
 							'receiptOptIn' => true
@@ -103,12 +106,14 @@ class MailTemplates {
 					],
 					'paypal_unmoderated_non_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'PPL',
 							'interval' => 0,
 						]
 					],
 					'sofort_unmoderated_non_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'SUB',
 							'interval' => 0,
 							'status' => 'Z'
@@ -116,23 +121,45 @@ class MailTemplates {
 					],
 					'credit_card_unmoderated_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'MCP',
 							'interval' => 1
 						]
 					],
 					'paypal_unmoderated_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'PPL',
 							'interval' => 6,
 						]
 					],
-					// moderated all generate the same message, no need to test different payment types
-					'micropayment_moderated_recurring' => [
+					'micropayment_unmoderated_recurring' => [
 						'donation' => [
-							'needsModeration' => true,
+							'amount' => 12.34,
 							'paymentType' => 'MCP',
 							'interval' => 6
 						],
+					],
+					'moderated_amount_too_high' => [
+						'donation' => [
+							'paymentType' => 'UEB',
+							'amount' => 99999.99,
+							'interval' => 1,
+							'moderationFlags' => [
+								DonationModerationIdentifier::AMOUNT_TOO_HIGH->name => true
+							]
+						],
+					],
+					'moderated_other_reason' => [
+						'donation' => [
+							'amount' => 12.34,
+							'paymentType' => 'PPL',
+							'interval' => 1,
+							'moderationFlags' => [
+								DonationModerationIdentifier::MANUALLY_FLAGGED_BY_ADMIN->name => true
+							]
+						]
+
 					]
 				],
 			],
