@@ -8,6 +8,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
 use FileFetcher\ErrorLoggingFileFetcher;
 use FileFetcher\SimpleFileFetcher;
 use GuzzleHttp\Client;
@@ -289,21 +290,23 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getDoctrineFactory(): DoctrineFactory {
 		return $this->createSharedObject( DoctrineFactory::class, function () {
-			$donationContextFactory = $this->getDonationContextFactory();
-			$membershipContextFactory = $this->getMembershipContextFactory();
-			$subscriptionContextFactory = new SubscriptionContextFactory();
-			$addressChangeContextFactory = new AddressChangeContextFactory();
-			$bucketTestingContextFactory = new BucketTestingContextFactory();
-			$autocompleteContextFactory = new AutocompleteContextFactory();
 			return new DoctrineFactory(
 				$this->getConnection(),
 				$this->getDoctrineConfiguration(),
-				$donationContextFactory,
-				$membershipContextFactory,
-				$subscriptionContextFactory,
-				$addressChangeContextFactory,
-				$bucketTestingContextFactory,
-				$autocompleteContextFactory
+				$this->getBoundedContextFactoryCollection()
+			);
+		} );
+	}
+
+	public function getBoundedContextFactoryCollection(): ContextFactoryCollection {
+		return $this->createSharedObject( ContextFactoryCollection::class, function () {
+			return new ContextFactoryCollection(
+				$this->getDonationContextFactory(),
+				$this->getMembershipContextFactory(),
+				new SubscriptionContextFactory(),
+				new AddressChangeContextFactory(),
+				new BucketTestingContextFactory(),
+				new AutocompleteContextFactory()
 			);
 		} );
 	}
@@ -1753,7 +1756,8 @@ class FunFunFactory implements LoggerAwareInterface {
 					'token-length' => $this->config['token-length'],
 					'token-validity-timestamp' => $this->config['token-validity-timestamp']
 				],
-				$this->getDoctrineConfiguration()
+				// Dummy config for soon-to-be-deprecated & unused parameter
+				ORMSetup::createConfiguration( true )
 			);
 		} );
 	}
@@ -1765,7 +1769,8 @@ class FunFunFactory implements LoggerAwareInterface {
 					'token-length' => $this->config['token-length'],
 					'token-validity-timestamp' => $this->config['token-validity-timestamp']
 				],
-				$this->getDoctrineConfiguration()
+				// Dummy config for soon-to-be-deprecated & unused parameter
+				ORMSetup::createConfiguration( true )
 			);
 		} );
 	}
@@ -1901,6 +1906,15 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new FindCitiesUseCase(
 			new DoctrineLocationRepository( $this->getEntityManager() )
 		);
+	}
+
+	/**
+	 * Paths for ORMSetup::createXMLMetadataConfiguration
+	 *
+	 * @return string[]
+	 */
+	public function getDoctrineXMLMappingPaths(): array {
+		return $this->getBoundedContextFactoryCollection()->getDoctrineXMLMappingPaths();
 	}
 
 	private function getLocale(): string {

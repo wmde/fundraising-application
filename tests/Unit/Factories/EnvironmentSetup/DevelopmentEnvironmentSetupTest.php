@@ -21,7 +21,7 @@ class DevelopmentEnvironmentSetupTest extends TestCase {
 			'setDoctrineConfiguration',
 			'setInternalErrorHtmlPresenter',
 		];
-		$supportingGetters = [ 'getLoggingPath' ];
+		$supportingGetters = [ 'getLoggingPath', 'getDoctrineXMLMappingPaths' ];
 		/** @var FunFunFactory&MockObject $factory */
 		$factory = $this->createMock( FunFunFactory::class );
 		foreach ( $expectedSetters as $setterName ) {
