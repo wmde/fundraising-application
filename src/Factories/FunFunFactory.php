@@ -1660,15 +1660,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->getChoiceFactory()->getAddressType();
 	}
 
-	/**
-	 * TODO: Remove this after C21_WMDE_Test_12
-	 *
-	 * @return bool
-	 */
-	public function forceChoiceCookieStorage(): bool {
-		return $this->getChoiceFactory()->forceChoiceCookieStorage();
-	}
-
 	public function getBucketSelector(): BucketSelector {
 		return $this->createSharedObject( BucketSelector::class, function (): BucketSelector {
 			return new BucketSelector( $this->getCampaignCollection(), new RandomBucketSelection() );
