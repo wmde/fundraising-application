@@ -21,6 +21,8 @@ use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentCreationReques
  */
 class ApplyForMembershipController {
 
+	private const TRANSFER_CODE_PREFIX = 'XM';
+
 	private FunFunFactory $ffFactory;
 
 	public function index( FunFunFactory $ffFactory, Request $httpRequest ): Response {
@@ -99,7 +101,8 @@ class ApplyForMembershipController {
 			$httpRequest->request->getInt( 'membership_fee_interval', 0 ),
 			$httpRequest->request->get( 'payment_type', '' ),
 			trim( $httpRequest->request->get( 'iban', '' ) ),
-			trim( $httpRequest->request->get( 'bic', '' ) )
+			trim( $httpRequest->request->get( 'bic', '' ) ),
+			self::TRANSFER_CODE_PREFIX
 		);
 	}
 
