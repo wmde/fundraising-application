@@ -19,6 +19,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Incentive;
+use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
@@ -256,7 +257,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$this->assertNotNull( $application );
 
-			$expectedApplication = ValidMembershipApplication::newDomainEntity();
+			$expectedApplication = $this->givenConfirmedMembershipApplication();
 			$expectedApplication->assignId( 1 );
 			$expectedApplication->addIncentive( $incentive );
 
@@ -339,6 +340,12 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertStringNotContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 	}
 
+	private function givenConfirmedMembershipApplication(): MembershipApplication {
+		$application = ValidMembershipApplication::newDomainEntity();
+		$application->confirm();
+		return $application;
+	}
+
 	private function getApplicationFromDatabase( FunFunFactory $factory ): MembershipApplication {
 		$repository = $factory->getEntityManager()->getRepository( MembershipApplication::class );
 		$application = $repository->find( 1 );
@@ -386,7 +393,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$this->assertNotNull( $application );
 
-			$expectedApplication = ValidMembershipApplication::newDomainEntity();
+			$expectedApplication = $this->givenConfirmedMembershipApplication();
 			$expectedApplication->assignId( 1 );
 
 			$this->assertEquals( $expectedApplication, $application );
@@ -407,6 +414,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->assertNotNull( $application );
 
 			$expectedApplication = ValidMembershipApplication::newCompanyApplication();
+			$expectedApplication->confirm();
 			$expectedApplication->assignId( 1 );
 
 			$this->assertEquals( $expectedApplication, $application );
