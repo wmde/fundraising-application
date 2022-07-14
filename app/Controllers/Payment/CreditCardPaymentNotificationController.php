@@ -7,17 +7,17 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Payment;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Euro\Euro;
-use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
-use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardPaymentNotificationRequest;
+use WMDE\Fundraising\DonationContext\UseCases\NotificationRequest;
+use WMDE\Fundraising\DonationContext\UseCases\NotificationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
-/**
- * @license GPL-2.0-or-later
- */
 class CreditCardPaymentNotificationController {
 
 	private const MSG_NOT_HANDLED = 'Credit card request "%s" not handled';
+	private const MSG_NOT_SUPPORTED = 'Function "%s" not supported by this end point';
+	private const MSG_ERROR = 'Credit Card Notification Error: %s';
+	private const MSG_WARNING = 'Failed to send conformation email for credit card notification';
+	private const MSG_CRITICAL = 'An Exception happened: %s';
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$queryParams = $request->query;
@@ -40,45 +40,48 @@ class CreditCardPaymentNotificationController {
 			$queryParams->all()
 		);
 
-		return new Response( $ffFactory->newCreditCardNotificationPresenter()->present(
-			new CreditCardNotificationResponse(
-				false,
-				sprintf( 'Function "%s" not supported by this end point', $queryParams->get( 'function' ) )
-			),
-			$donationId,
-			$queryParams->get( 'token', '' )
-		) );
+		return new Response(
+			$ffFactory->newCreditCardNotificationPresenter()->present(
+				NotificationResponse::newFailureResponse(
+					sprintf( self::MSG_NOT_SUPPORTED, $queryParams->get( 'function' ) )
+				),
+				$donationId,
+				$queryParams->get( 'token', '' )
+			)
+		);
 	}
 
 	private function handleBillingNotification( FunFunFactory $ffFactory, ParameterBag $queryParams, string $donationId, string $clientIp ): Response {
-		$response = $ffFactory->newCreditCardNotificationUseCase( $queryParams->get( 'utoken', '' ) )
-			->handleNotification(
-				( new CreditCardPaymentNotificationRequest() )
-					->setTransactionId( $queryParams->get( 'transactionId', '' ) )
-					->setDonationId( (int)$donationId )
-					->setAmount( Euro::newFromCents( (int)$queryParams->get( 'amount' ) ) )
-					->setCustomerId( $queryParams->get( 'customerId', '' ) )
-					->setSessionId( $queryParams->get( 'sessionId', '' ) )
-					->setAuthId( $queryParams->get( 'auth', '' ) )
-					->setTitle( $queryParams->get( 'title', '' ) )
-					->setCountry( $queryParams->get( 'country', '' ) )
-					->setCurrency( $queryParams->get( 'currency', '' ) )
+		try {
+			$response = $ffFactory->newCreditCardNotificationUseCase( $queryParams->get( 'utoken', '' ) )
+				->handleNotification( new NotificationRequest( $queryParams->all(), intval( $donationId ) ) );
+		} catch ( \Exception $e ) {
+			$ffFactory->getLogger()->critical(
+				sprintf( self::MSG_CRITICAL, $e->getMessage() ),
+				[ 'stacktrace' => $e->getTraceAsString() ]
 			);
-
-		$loggingContext = $response->getLowLevelError() === null ? [] : [ 'exception' => $response->getLowLevelError() ];
-		if ( !$response->isSuccessful() ) {
-			$loggingContext['queryParams'] = $queryParams->all();
-			$loggingContext['clientIP'] = $clientIp;
-			$ffFactory->getLogger()->error( 'Credit Card Notification Error: ' . $response->getErrorMessage(), $loggingContext );
-		} elseif ( $loggingContext !== [] ) {
-			$ffFactory->getLogger()->warning( 'Failed to send conformation email for credit card notification', $loggingContext );
+			return new Response( $e->getMessage(), 500 );
 		}
 
-		return new Response( $ffFactory->newCreditCardNotificationPresenter()->present(
-			$response,
-			$donationId,
-			$queryParams->get( 'token', '' )
-		) );
+		if ( $response->hasErrors() ) {
+			$ffFactory->getLogger()->error(
+				sprintf( self::MSG_ERROR, $response->getMessage() ),
+				[ 'queryParams' => $queryParams->all(), 'clientIP' => $clientIp ]
+			);
+		} elseif ( !$response->notificationWasHandled() ) {
+			$ffFactory->getLogger()->warning(
+				self::MSG_WARNING,
+				[ 'exception' => $response->getMessage() ]
+			);
+		}
+
+		return new Response(
+			$ffFactory->newCreditCardNotificationPresenter()->present(
+				$response,
+				$donationId,
+				$queryParams->get( 'token', '' )
+			)
+		);
 	}
 
 }

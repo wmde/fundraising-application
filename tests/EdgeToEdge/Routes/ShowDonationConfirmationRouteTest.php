@@ -86,7 +86,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			self::CORRECT_ACCESS_TOKEN
 		) );
 
-		$factory->newPaymentRepository()->storePayment( $payment );
+		$factory->getPaymentRepository()->storePayment( $payment );
 
 		$this->payment = $payment;
 	}
