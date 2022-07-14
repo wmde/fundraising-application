@@ -26,7 +26,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	private const UNKNOWN_APPLICATION_ID = 9998;
 
 	private function newStoredMembershipApplication( FunFunFactory $factory ): MembershipApplication {
-		$factory->newPaymentRepository()->storePayment( ValidPayments::newDirectDebitPayment() );
+		$factory->getPaymentRepository()->storePayment( ValidPayments::newDirectDebitPayment() );
 
 		$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
 			self::CORRECT_ACCESS_TOKEN
