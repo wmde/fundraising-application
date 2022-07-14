@@ -908,8 +908,8 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newCreatePaymentUseCase(): CreatePaymentUseCase {
 		return new CreatePaymentUseCase(
-			$this->newPaymentIdRepository(),
-			$this->newPaymentRepository(),
+			$this->getPaymentIdRepository(),
+			$this->getPaymentRepository(),
 			$this->newPaymentReferenceCodeGenerator(),
 			$this->newPaymentValidator(),
 			$this->newCheckIbanUseCase(),
@@ -1052,7 +1052,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	public function newPaymentIDRepository(): PaymentIdRepository {
+	public function getPaymentIdRepository(): PaymentIdRepository {
 		return $this->createSharedObject( PaymentIdRepository::class, function () {
 			return new DoctrinePaymentIdRepository(
 				$this->getEntityManager()
@@ -1060,7 +1060,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	public function newPaymentRepository(): PaymentRepository {
+	public function getPaymentRepository(): PaymentRepository {
 		return $this->createSharedObject( PaymentRepository::class, function () {
 			return new DoctrinePaymentRepository(
 				$this->getEntityManager()
@@ -1988,18 +1988,18 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	private function newCancelPaymentUseCase(): CancelPaymentUseCase {
-		return new CancelPaymentUseCase( $this->newPaymentRepository() );
+		return new CancelPaymentUseCase( $this->getPaymentRepository() );
 	}
 
 	private function newPaymentBookingService(): PaymentBookingService {
 		return new PaymentBookingServiceWithUseCase(
 			new BookPaymentUseCase(
-				$this->newPaymentRepository(),
-				$this->newPaymentIdRepository(),
+				$this->getPaymentRepository(),
+				$this->getPaymentIdRepository(),
 				new ExternalVerificationServiceFactory(
 					new Client(),
 					$this->config['paypal-donation']['base-url'],
-					$this->config['paypal-donation']['paypal-donation']
+					$this->config['paypal-donation']['account-address']
 				),
 				$this->newDoctrineTransactionIdFinder()
 			)
