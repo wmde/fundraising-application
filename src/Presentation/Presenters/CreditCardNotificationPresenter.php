@@ -4,28 +4,23 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationResponse;
+use WMDE\Fundraising\DonationContext\UseCases\NotificationResponse;
 
-/**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
- */
 class CreditCardNotificationPresenter {
 
 	private const VALUE_ASSIGNMENT = '=';
 	private const ARG_SEPARATOR = "\n";
 
-	private $returnUrl;
-
-	public function __construct( string $returnUrl ) {
-		$this->returnUrl = $returnUrl;
+	public function __construct(
+		private readonly string $returnUrl
+	) {
 	}
 
-	public function present( CreditCardNotificationResponse $response, string $donationId, string $accessToken ): string {
-		if ( !$response->isSuccessful() ) {
+	public function present( NotificationResponse $response, string $donationId, string $accessToken ): string {
+		if ( $response->hasErrors() ) {
 			return $this->render( [
 				'status' => 'error',
-				'msg' => $response->getErrorMessage()
+				'msg' => $response->getMessage()
 			] );
 		}
 
