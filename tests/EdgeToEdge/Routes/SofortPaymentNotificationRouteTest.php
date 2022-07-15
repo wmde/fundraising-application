@@ -9,10 +9,10 @@ use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
@@ -26,13 +26,15 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	private const VALID_TRANSACTION_ID = '99999-53245-5483-4891';
 	private const VALID_TRANSACTION_TIME = '2010-04-14T19:01:08+02:00';
+	private const VALID_TRANSACTION_DATETIME = '2010-04-14 19:01:08';
 
-	public function testGivenWrongPaymentType_applicationRefuses(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
+	public function storedDonations(): StoredDonations {
+		return new StoredDonations( $this->getFactory() );
+	}
 
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = ValidDonation::newIncompletePayPalDonation();
-			$factory->getDonationRepository()->storeDonation( $donation );
+	public function testGivenWrongBookingData_applicationRefuses(): void {
+		$this->newEnvironment( function ( Client $client ): void {
+			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
 			$client->request(
 				Request::METHOD_POST,
@@ -40,10 +42,31 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				[],
 				[],
 				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+				'{"not":"real","proper":"data"}'
 			);
 
 			$this->assertIsBadRequestResponse( $client->getResponse() );
+		} );
+	}
+
+	public function testGivenWrongBookingData_applicationLogs(): void {
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$logger = $this->getLogger( $factory );
+
+			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
+
+			$client->request(
+				Request::METHOD_POST,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
+				[],
+				[],
+				[],
+				'{"not":"real","proper":"data"}'
+			);
+
+			$this->assertErrorCauseIsLogged( $logger, 'Invalid notification request' );
+			$this->assertRequestVarsAreLogged( $logger, '{"not":"real","proper":"data"}' );
+			$this->assertLogLevel( $logger, LogLevel::ERROR );
 		} );
 	}
 
@@ -66,11 +89,8 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenWrongToken_applicationRefuses(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = ValidDonation::newIncompleteSofortDonation();
-			$factory->getDonationRepository()->storeDonation( $donation );
+		$this->newEnvironment( function ( Client $client ): void {
+			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
 			$client->request(
 				Request::METHOD_POST,
@@ -85,12 +105,30 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenBadTimeFormat_applicationRefuses(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
+	public function testGivenWrongToken_applicationLogs(): void {
 		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = ValidDonation::newIncompleteSofortDonation();
-			$factory->getDonationRepository()->storeDonation( $donation );
+			$logger = $this->getLogger( $factory );
+
+			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
+
+			$client->request(
+				Request::METHOD_POST,
+				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::INVALID_TOKEN,
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+			);
+
+			$this->assertErrorCauseIsLogged( $logger, 'Wrong access code for donation' );
+			$this->assertRequestVarsAreLogged( logger: $logger, token: self::INVALID_TOKEN );
+			$this->assertLogLevel( $logger, LogLevel::ERROR );
+		} );
+	}
+
+	public function testGivenBadTimeFormat_applicationRefuses(): void {
+		$this->newEnvironment( function ( Client $client ): void {
+			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
 			$client->request(
 				Request::METHOD_POST,
@@ -106,11 +144,8 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = ValidDonation::newIncompleteSofortDonation();
-			$factory->getDonationRepository()->storeDonation( $donation );
+			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
 			$client->request(
 				Request::METHOD_POST,
@@ -125,20 +160,17 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertSame( Response::HTTP_OK, $client->getResponse()->getStatusCode() );
 
 			/** @var SofortPayment $paymentMethod */
-			$paymentMethod = $factory->getDonationRepository()->getDonationById( $donation->getId() )->getPaymentMethod();
+			$paymentMethod = $factory->getPaymentRepository()->getPaymentById( $donation->getPaymentId() );
 			$this->assertEquals(
-				new DateTime( self::VALID_TRANSACTION_TIME ),
-				$paymentMethod->getConfirmedAt()
+				self::VALID_TRANSACTION_DATETIME,
+				$paymentMethod->getDisplayValues()['valuationDate']
 			);
 		} );
 	}
 
 	public function testGivenValidRequest_donationStateIsChangedToBooked(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = ValidDonation::newIncompleteSofortDonation();
-			$factory->getDonationRepository()->storeDonation( $donation );
+			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
 			$client->request(
 				Request::METHOD_POST,
@@ -150,20 +182,16 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertTrue(
-				$factory->getDonationRepository()->getDonationById( $donation->getId() )->isBooked()
+				$factory->getPaymentRepository()->getPaymentById( $donation->getPaymentId() )->isCompleted()
 			);
 		} );
 	}
 
 	public function testGivenAlreadyConfirmedPayment_requestDataIsLogged(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$logger = new LoggerSpy();
-			$factory->setSofortLogger( $logger );
+			$logger = $this->getLogger( $factory );
 
-			$donation = ValidDonation::newCompletedSofortDonation();
-			$factory->getDonationRepository()->storeDonation( $donation );
+			$donation = $this->storedDonations()->newStoredCompleteSofortDonation();
 
 			$client->request(
 				Request::METHOD_POST,
@@ -175,9 +203,9 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertIsBadRequestResponse( $client->getResponse() );
-			$this->assertErrorCauseIsLogged( $logger, 'Duplicate notification' );
+			$this->assertErrorCauseIsLogged( $logger, 'Payment is already completed' );
 			$this->assertRequestVarsAreLogged( $logger );
-			$this->assertLogLevel( $logger, LogLevel::INFO );
+			$this->assertLogLevel( $logger, LogLevel::ERROR );
 		} );
 	}
 
@@ -188,14 +216,14 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function assertRequestVarsAreLogged( LoggerSpy $logger ): void {
+	private function assertRequestVarsAreLogged( LoggerSpy $logger, ?string $logContent = null, ?string $token = null ): void {
 		$this->assertStringContainsString(
-			'<transaction>' . self::VALID_TRANSACTION_ID . '</transaction>',
+			$logContent ?? '<transaction>' . self::VALID_TRANSACTION_ID . '</transaction>',
 			$logger->getLogCalls()->getFirstCall()->getContext()['request_content']
 		);
 
 		$this->assertEquals(
-			self::VALID_TOKEN,
+			$token ?? self::VALID_TOKEN,
 			$logger->getLogCalls()->getFirstCall()->getContext()['query_vars']['updateToken']
 		);
 	}
@@ -205,14 +233,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenUnknownDonation_requestDataIsLogged(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$logger = new LoggerSpy();
-			$factory->setSofortLogger( $logger );
+			$logger = $this->getLogger( $factory );
 
-			$donation = ValidDonation::newCompletedSofortDonation();
-			$factory->getDonationRepository()->storeDonation( $donation );
+			$donation = $this->storedDonations()->newStoredCompleteSofortDonation();
 
 			$client->request(
 				Request::METHOD_POST,
@@ -236,14 +260,10 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenBadTime_requestDataIsLogged(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the membership controllers" );
-
 		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$logger = new LoggerSpy();
-			$factory->setSofortLogger( $logger );
+			$logger = $this->getLogger( $factory );
 
-			$donation = ValidDonation::newCompletedSofortDonation();
-			$factory->getDonationRepository()->storeDonation( $donation );
+			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
 			$client->request(
 				Request::METHOD_POST,
@@ -259,6 +279,12 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertRequestVarsAreLogged( $logger );
 			$this->assertLogLevel( $logger, LogLevel::ERROR );
 		} );
+	}
+
+	private function getLogger( FunFunFactory $factory ): LoggerSpy {
+		$logger = new LoggerSpy();
+		$factory->setSofortLogger( $logger );
+		return $logger;
 	}
 
 	private function buildRawRequestBody( string $transactionId, string $time ): string {
