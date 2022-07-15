@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation as DoctrineDonation;
 use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
@@ -10,6 +11,9 @@ use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayments;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentReferenceCode;
+use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 
 /**
  * This is a fixture class that stores donations and payments from data fixtures
@@ -17,6 +21,25 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 class StoredDonations {
 
 	public function __construct( private FunFunFactory $factory ) {
+	}
+
+	public function newStoredIncompleteSofortDonation(): Donation {
+		$this->persistPayment( SofortPayment::create(
+			5,
+			Euro::newFromFloat( 100 ),
+			PaymentInterval::OneTime,
+			PaymentReferenceCode::newFromString( ValidPayments::PAYMENT_BANK_TRANSFER_CODE )
+		) );
+		$donation = ValidDonation::newIncompleteSofortDonation();
+		$this->factory->getDonationRepository()->storeDonation( $donation );
+		return $donation;
+	}
+
+	public function newStoredCompleteSofortDonation(): Donation {
+		$this->persistPayment( ValidPayments::newCompletedSofortPayment() );
+		$donation = ValidDonation::newIncompleteSofortDonation();
+		$this->factory->getDonationRepository()->storeDonation( $donation );
+		return $donation;
 	}
 
 	public function newStoredDirectDebitDonation(): Donation {

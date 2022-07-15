@@ -7,5 +7,4 @@ parameters:
 		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
 		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
 		- tests/EdgeToEdge/Routes/HandlePayPalPaymentNotificationRouteTest.php
-		- tests/EdgeToEdge/Routes/SofortPaymentNotificationRouteTest.php
 		- tests/Unit/Routes/SofortNotificationRequestTest.php
