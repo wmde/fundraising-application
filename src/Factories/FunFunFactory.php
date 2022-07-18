@@ -6,6 +6,21 @@ namespace WMDE\Fundraising\Frontend\Factories;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
+use Doctrine\Migrations\Configuration\Migration\PhpFile;
+use Doctrine\Migrations\DependencyFactory;
+use Doctrine\Migrations\Tools\Console\Command\CurrentCommand;
+use Doctrine\Migrations\Tools\Console\Command\DumpSchemaCommand;
+use Doctrine\Migrations\Tools\Console\Command\ExecuteCommand;
+use Doctrine\Migrations\Tools\Console\Command\GenerateCommand;
+use Doctrine\Migrations\Tools\Console\Command\LatestCommand;
+use Doctrine\Migrations\Tools\Console\Command\ListCommand;
+use Doctrine\Migrations\Tools\Console\Command\MigrateCommand;
+use Doctrine\Migrations\Tools\Console\Command\RollupCommand;
+use Doctrine\Migrations\Tools\Console\Command\StatusCommand;
+use Doctrine\Migrations\Tools\Console\Command\SyncMetadataCommand;
+use Doctrine\Migrations\Tools\Console\Command\UpToDateCommand;
+use Doctrine\Migrations\Tools\Console\Command\VersionCommand;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use FileFetcher\ErrorLoggingFileFetcher;
@@ -1949,6 +1964,30 @@ class FunFunFactory implements LoggerAwareInterface {
 	 */
 	public function getDoctrineXMLMappingPaths(): array {
 		return $this->getBoundedContextFactoryCollection()->getDoctrineXMLMappingPaths();
+	}
+
+	/**
+	 * @return \Doctrine\Migrations\Tools\Console\Command\DoctrineCommand[]
+	 */
+	public function newDoctrineMigrationCommands(): array {
+		$dependencyFactory = DependencyFactory::fromEntityManager(
+			new PhpFile( __DIR__ . '/../../app/config/migrations.php' ),
+			new ExistingEntityManager( $this->getEntityManager() )
+		);
+		return [
+			new CurrentCommand( $dependencyFactory ),
+			new DumpSchemaCommand( $dependencyFactory ),
+			new ExecuteCommand( $dependencyFactory ),
+			new GenerateCommand( $dependencyFactory ),
+			new LatestCommand( $dependencyFactory ),
+			new MigrateCommand( $dependencyFactory ),
+			new RollupCommand( $dependencyFactory ),
+			new StatusCommand( $dependencyFactory ),
+			new VersionCommand( $dependencyFactory ),
+			new UpToDateCommand( $dependencyFactory ),
+			new SyncMetadataCommand( $dependencyFactory ),
+			new ListCommand( $dependencyFactory ),
+		];
 	}
 
 	private function getLocale(): string {

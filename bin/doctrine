@@ -23,5 +23,8 @@ $kernel = new Kernel( $_SERVER['APP_ENV'], false );
 $kernel->boot();
 $factory = $kernel->getContainer()->get( FunFunFactory::class );
 
-$cli = ConsoleRunner::createApplication( new SingleManagerProvider( $factory->getEntityManager() ) );
+$cli = ConsoleRunner::createApplication(
+    new SingleManagerProvider( $factory->getEntityManager() ),
+    $factory->newDoctrineMigrationCommands()
+);
 $cli->run();

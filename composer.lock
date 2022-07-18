@@ -1540,16 +1540,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v3.7.0",
+            "version": "v3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine-extensions/DoctrineExtensions.git",
-                "reference": "42d9acf02281bb46f9b741f4a9f033e3453e2d36"
+                "reference": "4ba5377b1a1d9a988205c4e37f5d5287eb8ebd28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/42d9acf02281bb46f9b741f4a9f033e3453e2d36",
-                "reference": "42d9acf02281bb46f9b741f4a9f033e3453e2d36",
+                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/4ba5377b1a1d9a988205c4e37f5d5287eb8ebd28",
+                "reference": "4ba5377b1a1d9a988205c4e37f5d5287eb8ebd28",
                 "shasum": ""
             },
             "require": {
@@ -1640,10 +1640,10 @@
             "support": {
                 "email": "gediminas.morkevicius@gmail.com",
                 "issues": "https://github.com/doctrine-extensions/DoctrineExtensions/issues",
-                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.7.0",
+                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.8.0",
                 "wiki": "https://github.com/Atlantic18/DoctrineExtensions/tree/main/doc"
             },
-            "time": "2022-05-17T06:58:52+00:00"
+            "time": "2022-07-17T12:04:16+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -7259,12 +7259,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "f44537e01d92b45e833f0b11fc5a48782a4333c8"
+                "reference": "141bff5791a8cbee462e87a81b1a1ca91e04a6c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/f44537e01d92b45e833f0b11fc5a48782a4333c8",
-                "reference": "f44537e01d92b45e833f0b11fc5a48782a4333c8",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/141bff5791a8cbee462e87a81b1a1ca91e04a6c9",
+                "reference": "141bff5791a8cbee462e87a81b1a1ca91e04a6c9",
                 "shasum": ""
             },
             "require": {
@@ -7309,7 +7309,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2022-07-11T15:14:27+00:00"
+            "time": "2022-07-15T15:33:01+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -7317,12 +7317,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "b1f40e4c1c7c3f478c617573a93c38edcaa8dfbd"
+                "reference": "45bb23353876c620bd3988f7317d4822a1c58ae0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/b1f40e4c1c7c3f478c617573a93c38edcaa8dfbd",
-                "reference": "b1f40e4c1c7c3f478c617573a93c38edcaa8dfbd",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/45bb23353876c620bd3988f7317d4822a1c58ae0",
+                "reference": "45bb23353876c620bd3988f7317d4822a1c58ae0",
                 "shasum": ""
             },
             "require": {
@@ -7367,7 +7367,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2022-07-11T08:04:49+00:00"
+            "time": "2022-07-18T14:10:05+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -10399,12 +10399,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "7c40413be8d5a0733b90584cee24224245e3145c"
+                "reference": "8be5d9636fcee6c06bfd6b91f1f8fd3a74924db2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/7c40413be8d5a0733b90584cee24224245e3145c",
-                "reference": "7c40413be8d5a0733b90584cee24224245e3145c",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/8be5d9636fcee6c06bfd6b91f1f8fd3a74924db2",
+                "reference": "8be5d9636fcee6c06bfd6b91f1f8fd3a74924db2",
                 "shasum": ""
             },
             "require": {
@@ -10448,7 +10448,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2022-07-11T12:30:25+00:00"
+            "time": "2022-07-18T10:14:56+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
