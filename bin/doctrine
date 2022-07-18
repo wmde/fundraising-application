@@ -1,24 +1,27 @@
+#!/usr/bin/env php
 <?php
 /**
- * This is a CLI configuration file for Doctrine
- * https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/tools.html
+ * This is the project-specific CLI command for the Doctrine ORM
+ * https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/tools.html#doctrine-console
  */
 
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Symfony\Component\Dotenv\Dotenv;
 use WMDE\Fundraising\Frontend\App\Kernel;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 if ( !class_exists( Dotenv::class ) ) {
 	throw new LogicException( 'You need to add "symfony/framework-bundle" and "symfony/dotenv" as Composer dependencies.' );
 }
 
-( new Dotenv() )->bootEnv( __DIR__ . '/.env' );
+( new Dotenv() )->bootEnv( __DIR__ . '/../.env' );
 
 $kernel = new Kernel( $_SERVER['APP_ENV'], false );
 $kernel->boot();
 $factory = $kernel->getContainer()->get( FunFunFactory::class );
 
-return ConsoleRunner::createHelperSet( $factory->getEntityManager() );
+$cli = ConsoleRunner::createApplication( new SingleManagerProvider( $factory->getEntityManager() ) );
+$cli->run();
