@@ -71,17 +71,20 @@ use WMDE\Fundraising\DonationContext\Infrastructure\LoggingDonationRepository;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\DonationContext\Services\PaymentBookingService;
 use WMDE\Fundraising\DonationContext\Services\PaymentBookingServiceWithUseCase;
+use WMDE\Fundraising\DonationContext\Services\PaypalBookingService;
+use WMDE\Fundraising\DonationContext\Services\PaypalBookingServiceWithUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\CreatePaymentWithUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\DonationPaymentValidator;
+use WMDE\Fundraising\DonationContext\UseCases\BookDonationUseCase\BookDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\Moderation\ModerationService as DonationModerationService;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationUseCase;
-use WMDE\Fundraising\DonationContext\UseCases\HandlePayPalPaymentNotification\HandlePayPalPaymentCompletionNotificationUseCase;
+use WMDE\Fundraising\DonationContext\UseCases\HandlePaypalPaymentWithoutDonation\HandlePaypalPaymentWithoutDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
@@ -122,9 +125,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubj
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\LoggingPaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\PaymentNotificationVerifier;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Infrastructure\PaymentTypeConfiguration;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
@@ -212,6 +212,7 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentValidator;
 use WMDE\Fundraising\PaymentContext\PaymentContextFactory;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\ExternalVerificationServiceFactory;
+use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\PayPal\PayPalVerificationService;
 use WMDE\Fundraising\PaymentContext\Services\KontoCheck\KontoCheckBankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Services\KontoCheck\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\CharacterPickerPaymentReferenceCodeGenerator;
@@ -219,7 +220,10 @@ use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\Rando
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\UniquePaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Services\TransactionIdFinder\DoctrineTransactionIdFinder;
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\BookPaymentUseCase;
+use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\VerificationService;
+use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\VerificationServiceFactory;
 use WMDE\Fundraising\PaymentContext\UseCases\CancelPayment\CancelPaymentUseCase;
+use WMDE\Fundraising\PaymentContext\UseCases\CreateBookedPayPalPayment\CreateBookedPayPalPaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\CreatePaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\GenerateBankData\GenerateBankDataFromGermanLegacyBankDataUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\GetPayment\GetPaymentUseCase;
@@ -1364,8 +1368,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	public function newHandlePayPalPaymentCompletionNotificationUseCase( string $updateToken ): HandlePayPalPaymentCompletionNotificationUseCase {
-		return new HandlePayPalPaymentCompletionNotificationUseCase(
+	public function newBookDonationUseCase( string $updateToken ): BookDonationUseCase {
+		return new BookDonationUseCase(
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->newDonationMailer(),
@@ -1374,38 +1378,13 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	public function getPayPalPaymentNotificationVerifier(): PaymentNotificationVerifier {
-		return $this->createSharedObject( PaymentNotificationVerifier::class . '::Donation', function () {
-			return new LoggingPaymentNotificationVerifier(
-				new PayPalPaymentNotificationVerifier(
-					new Client(),
-					$this->config['paypal-donation']['base-url'],
-					$this->config['paypal-donation']['account-address']
-				),
-				$this->getLogger()
-			);
-		} );
-	}
-
-	public function setPayPalPaymentNotificationVerifier( PaymentNotificationVerifier $verifier ): void {
-		$this->sharedObjects[PaymentNotificationVerifier::class . '::Donation'] = $verifier;
-	}
-
-	public function getPayPalMembershipFeeNotificationVerifier(): PaymentNotificationVerifier {
-		return $this->createSharedObject( PaymentNotificationVerifier::class . '::Membership', function () {
-			return new LoggingPaymentNotificationVerifier(
-				new PayPalPaymentNotificationVerifier(
-					new Client(),
-					$this->config['paypal-membership']['base-url'],
-					$this->config['paypal-membership']['account-address']
-				),
-				$this->getLogger()
-			);
-		} );
-	}
-
-	public function setPayPalMembershipFeeNotificationVerifier( PaymentNotificationVerifier $verifier ): void {
-		$this->sharedObjects[ PaymentNotificationVerifier::class . '::Membership' ] = $verifier;
+	public function newHandlePaypalPaymentWithoutDonationUseCase(): HandlePaypalPaymentWithoutDonationUseCase {
+		return new HandlePaypalPaymentWithoutDonationUseCase(
+			$this->newPayPalBookingService(),
+			$this->getDonationRepository(),
+			$this->newDonationMailer(),
+			$this->newDonationEventLogger()
+		);
 	}
 
 	public function newCreditCardNotificationUseCase( string $updateToken ): CreditCardNotificationUseCase {
@@ -1996,14 +1975,49 @@ class FunFunFactory implements LoggerAwareInterface {
 			new BookPaymentUseCase(
 				$this->getPaymentRepository(),
 				$this->getPaymentIdRepository(),
-				new ExternalVerificationServiceFactory(
-					new Client(),
-					$this->config['paypal-donation']['base-url'],
-					$this->config['paypal-donation']['account-address']
-				),
+				$this->getVerificationServiceFactory(),
 				$this->newDoctrineTransactionIdFinder()
 			)
 		);
+	}
+
+	private function newPayPalBookingService(): PaypalBookingService {
+		return new PaypalBookingServiceWithUseCase(
+			new CreateBookedPayPalPaymentUseCase(
+				$this->getPaymentRepository(),
+				$this->getPaymentIdRepository(),
+				$this->getPayPalVerificationService(),
+				$this->newDoctrineTransactionIdFinder()
+			)
+		);
+	}
+
+	private function getPayPalVerificationService(): VerificationService {
+		return $this->createSharedObject( PayPalVerificationService::class, function (): VerificationService {
+			return new PayPalVerificationService(
+				new Client(),
+				$this->config['paypal-donation']['base-url'],
+				$this->config['paypal-donation']['account-address']
+			);
+		} );
+	}
+
+	public function setPayPalVerificationService( VerificationService $payPalVerificationService ): void {
+		$this->sharedObjects[PayPalVerificationService::class] = $payPalVerificationService;
+	}
+
+	private function getVerificationServiceFactory(): VerificationServiceFactory {
+		return $this->createSharedObject( VerificationServiceFactory::class, function (): VerificationServiceFactory {
+			return new ExternalVerificationServiceFactory(
+				new Client(),
+				$this->config['paypal-donation']['base-url'],
+				$this->config['paypal-donation']['account-address']
+			);
+		} );
+	}
+
+	public function setVerificationServiceFactory( VerificationServiceFactory $verificationServiceFactory ): void {
+		$this->sharedObjects[VerificationServiceFactory::class] = $verificationServiceFactory;
 	}
 
 	private function newDoctrineTransactionIdFinder(): DoctrineTransactionIdFinder {
