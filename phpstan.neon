@@ -6,5 +6,4 @@ parameters:
 		- src/Presentation/DonationMembershipApplicationAdapter.php
 		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
 		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
-		- tests/EdgeToEdge/Routes/HandlePayPalPaymentNotificationRouteTest.php
 		- tests/Unit/Routes/SofortNotificationRequestTest.php

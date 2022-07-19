@@ -5,12 +5,15 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\Controllers\Payment;
 
 use Psr\Log\LogLevel;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\DonationContext\UseCases\NotificationRequest;
+use WMDE\Fundraising\DonationContext\UseCases\NotificationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifierException;
+use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\PayPal\PayPalVerificationService;
 
 class PaypalNotificationController {
 
@@ -26,25 +29,44 @@ class PaypalNotificationController {
 		}
 
 		try {
-			$ffFactory->getPayPalPaymentNotificationVerifier()->verify( $post->all() );
-		} catch ( PayPalPaymentNotificationVerifierException $e ) {
-			$parametersToLog = $post->all();
-			foreach ( self::PAYPAL_LOG_FILTER as $remove ) {
-				unset( $parametersToLog[$remove] );
+			$useCase = $ffFactory->newBookDonationUseCase( $this->getUpdateToken( $post ) );
+			$response = $useCase->handleNotification( new NotificationRequest(
+				$post->all(),
+				$this->getDonationId( $post )
+			) );
+			if ( $response->donationWasNotFound() ) {
+				$response = $this->createAnonymousDonation( $ffFactory, $request );
 			}
-			$ffFactory->getPaypalLogger()->log( LogLevel::ERROR, $e->getMessage(), [
-				'post_vars' => $parametersToLog
-			] );
-			return $this->createErrorResponse( $e );
+		} catch ( \Exception $e ) {
+			$this->logError( $ffFactory, $post, $e->getMessage() );
+			return new Response( $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
 
-		$useCase = $ffFactory->newHandlePayPalPaymentCompletionNotificationUseCase( $this->getUpdateToken( $post ) );
+		if ( $response->hasErrors() ) {
+			$this->logError( $ffFactory, $post, $response->getMessage() );
+			return $this->createErrorResponse( $response->getMessage() );
+		}
 
-		$response = $useCase->handleNotification( $this->newUseCaseRequestFromPost( $post ) );
-		$this->logResponseIfNeeded( $ffFactory, $response, $post );
+		$this->logResponseIfNeeded( $ffFactory, $request, $response );
 
 		// PayPal expects an empty response
 		return new Response( '', Response::HTTP_OK );
+	}
+
+	private function createAnonymousDonation( FunFunFactory $ffFactory, Request $request ): NotificationResponse {
+		$useCase = $ffFactory->newHandlePaypalPaymentWithoutDonationUseCase();
+		$amount = Euro::newFromString( $request->request->get( 'mc_gross', '0' ) );
+		return $useCase->handleNotification( $amount->getEuroCents(), $request->request->all() );
+	}
+
+	private function logError( $ffFactory, InputBag $post, string $message ): void {
+		$parametersToLog = $post->all();
+		foreach ( self::PAYPAL_LOG_FILTER as $remove ) {
+			unset( $parametersToLog[$remove] );
+		}
+		$ffFactory->getPaypalLogger()->log( LogLevel::ERROR, $message, [
+			'post_vars' => $parametersToLog
+		] );
 	}
 
 	private function getUpdateToken( ParameterBag $postRequest ): string {
@@ -76,34 +98,7 @@ class PaypalNotificationController {
 	}
 
 	private function isForRecurringPayment( ParameterBag $post ): bool {
-		return strpos( $post->get( 'txn_type', '' ), 'subscr_' ) === 0;
-	}
-
-	private function newUseCaseRequestFromPost( ParameterBag $postRequest ): PayPalPaymentNotificationRequest {
-		// we're not using Euro class for amounts to avoid exceptions on fees or other fields where the value is < 0
-		return ( new PayPalPaymentNotificationRequest() )
-			->setTransactionType( $postRequest->get( 'txn_type', '' ) )
-			->setTransactionId( $postRequest->get( 'txn_id', '' ) )
-			->setPayerId( $postRequest->get( 'payer_id', '' ) )
-			->setSubscriptionId( $postRequest->get( 'subscr_id', '' ) )
-			->setPayerEmail( $postRequest->get( 'payer_email', '' ) )
-			->setPayerStatus( $postRequest->get( 'payer_status', '' ) )
-			->setPayerFirstName( $postRequest->get( 'first_name', '' ) )
-			->setPayerLastName( $postRequest->get( 'last_name', '' ) )
-			->setPayerAddressName( $postRequest->get( 'address_name', '' ) )
-			->setPayerAddressStreet( $postRequest->get( 'address_street', '' ) )
-			->setPayerAddressPostalCode( $postRequest->get( 'address_zip', '' ) )
-			->setPayerAddressCity( $postRequest->get( 'address_city', '' ) )
-			->setPayerAddressCountryCode( $postRequest->get( 'address_country_code', '' ) )
-			->setPayerAddressStatus( $postRequest->get( 'address_status', '' ) )
-			->setInternalId( $this->getDonationId( $postRequest ) )
-			->setCurrencyCode( $postRequest->get( 'mc_currency', '' ) )
-			->setTransactionFee( $postRequest->get( 'mc_fee', '0' ) )
-			->setAmountGross( Euro::newFromString( $postRequest->get( 'mc_gross', '0' ) ) )
-			->setSettleAmount( Euro::newFromString( $postRequest->get( 'settle_amount', '0' ) ) )
-			->setPaymentTimestamp( $postRequest->get( 'payment_date', '' ) )
-			->setPaymentStatus( $postRequest->get( 'payment_status', '' ) )
-			->setPaymentType( $postRequest->get( 'payment_type', '' ) );
+		return str_starts_with( $post->get( 'txn_type', '' ), 'subscr_' );
 	}
 
 	private function getDonationId( ParameterBag $postRequest ): int {
@@ -115,30 +110,53 @@ class PaypalNotificationController {
 		return (int)$this->getValueFromCustomVars( $postRequest->get( 'custom', '' ), 'sid' );
 	}
 
-	private function createErrorResponse( PayPalPaymentNotificationVerifierException $e ): Response {
-		switch ( $e->getCode() ) {
-			case PayPalPaymentNotificationVerifierException::ERROR_WRONG_RECEIVER:
-				return new Response( $e->getMessage(), Response::HTTP_FORBIDDEN );
-			case PayPalPaymentNotificationVerifierException::ERROR_VERIFICATION_FAILED:
-				return new Response( $e->getMessage(), Response::HTTP_FORBIDDEN );
-			case PayPalPaymentNotificationVerifierException::ERROR_UNSUPPORTED_CURRENCY:
-				return new Response( $e->getMessage(), Response::HTTP_NOT_ACCEPTABLE );
+	private function createErrorResponse( string $message ): Response {
+		if ( $this->messageIsErrorUnknown( $message ) ) {
+			return new Response( $message, Response::HTTP_FORBIDDEN );
+		}
+
+		switch ( $message ) {
+			case PayPalVerificationService::ERROR_WRONG_RECEIVER:
+			case PayPalVerificationService::ERROR_UNCONFIRMED:
+				return new Response( $message, Response::HTTP_FORBIDDEN );
+			case PayPalVerificationService::ERROR_UNSUPPORTED_CURRENCY:
+				return new Response( $message, Response::HTTP_NOT_ACCEPTABLE );
 			default:
-				return new Response( $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR );
+				return new Response( $message, Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
 	}
 
-	private function logResponseIfNeeded( FunFunFactory $ffFactory, PaypalNotificationResponse $response, ParameterBag $post ) {
+	/**
+	 * The ERROR_UNKNOWN message has the returned error in it meaning
+	 * we need to check that the original string is in there
+	 *
+	 * @param string $message
+	 *
+	 * @return bool
+	 */
+	private function messageIsErrorUnknown( string $message ): bool {
+		$unknownMessageSubstring = substr(
+			PayPalVerificationService::ERROR_UNKNOWN,
+			0,
+			strpos( PayPalVerificationService::ERROR_UNKNOWN, "%s" )
+		);
+
+		return str_contains( $message, $unknownMessageSubstring );
+	}
+
+	private function logResponseIfNeeded( FunFunFactory $ffFactory, Request $request, NotificationResponse $response ): void {
 		if ( $response->notificationWasHandled() ) {
 			return;
 		}
 
-		$context = $response->getContext();
-		$message = $context['message'] ?? self::MSG_NOT_HANDLED;
-		$logLevel = $response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO;
-		unset( $context['message'] );
-		$context['post_vars'] = $post->all();
-		$ffFactory->getPaypalLogger()->log( $logLevel, $message, $context );
+		$ffFactory->getPaypalLogger()->log(
+			$response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO,
+			$response->getMessage() ?? self::MSG_NOT_HANDLED,
+			[
+				'request_content' => $request->getContent(),
+				'query_vars' => $request->query->all()
+			]
+		);
 	}
 
 }
