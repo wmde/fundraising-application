@@ -30,32 +30,29 @@ class StoredDonations {
 			PaymentInterval::OneTime,
 			PaymentReferenceCode::newFromString( ValidPayments::PAYMENT_BANK_TRANSFER_CODE )
 		) );
-		$donation = ValidDonation::newIncompleteSofortDonation();
-		$this->factory->getDonationRepository()->storeDonation( $donation );
-		return $donation;
+		return $this->persistDonation( ValidDonation::newIncompleteSofortDonation() );
 	}
 
 	public function newStoredCompleteSofortDonation(): Donation {
 		$this->persistPayment( ValidPayments::newCompletedSofortPayment() );
-		$donation = ValidDonation::newIncompleteSofortDonation();
-		$this->factory->getDonationRepository()->storeDonation( $donation );
-		return $donation;
+		return $this->persistDonation( ValidDonation::newIncompleteSofortDonation() );
+	}
+
+	public function newStoredIncompletePayPalDonation(): Donation {
+		$this->persistPayment( ValidPayments::newPayPalPayment() );
+		return $this->persistDonation( ValidDonation::newIncompletePayPalDonation() );
 	}
 
 	public function newStoredDirectDebitDonation(): Donation {
 		$payment = ValidPayments::newDirectDebitPayment();
 		$this->persistPayment( $payment );
-		$donation = ValidDonation::newDirectDebitDonation();
-		$this->factory->getDonationRepository()->storeDonation( $donation );
-		return $donation;
+		return $this->persistDonation( ValidDonation::newDirectDebitDonation() );
 	}
 
 	public function newStoredIncompleteAnonymousPayPalDonation(): Donation {
 		$payment = ValidPayments::newPayPalPayment();
 		$this->persistPayment( $payment );
-		$donation = ValidDonation::newIncompleteAnonymousPayPalDonation();
-		$this->factory->getDonationRepository()->storeDonation( $donation );
-		return $donation;
+		return $this->persistDonation( ValidDonation::newIncompleteAnonymousPayPalDonation() );
 	}
 
 	public function newUpdatableDirectDebitDonation( string $updateToken ): Donation {
@@ -74,6 +71,11 @@ class StoredDonations {
 
 		$entityManager->persist( $doctrineDonation );
 		$entityManager->flush();
+		return $donation;
+	}
+
+	private function persistDonation( Donation $donation ): Donation {
+		$this->factory->getDonationRepository()->storeDonation( $donation );
 		return $donation;
 	}
 
