@@ -35,7 +35,7 @@ class StoredDonations {
 		return $donation;
 	}
 
-	public function newDeletableDirectDebitDonation( string $updateToken ): Donation {
+	public function newUpdatableDirectDebitDonation( string $updateToken ): Donation {
 		$donation = $this->newStoredDirectDebitDonation();
 
 		$entityManager = $this->factory->getEntityManager();

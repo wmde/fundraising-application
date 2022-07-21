@@ -102,7 +102,7 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	private function storeDonation(): int {
-		$donation = ( new StoredDonations( $this->getFactory() ) )->newDeletableDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
+		$donation = ( new StoredDonations( $this->getFactory() ) )->newUpdatableDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
 
 		return $donation->getId();
 	}

@@ -6,11 +6,9 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
-use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\AddCommentController
@@ -25,8 +23,6 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	 * @todo this test and behavior seems wrong
 	 */
 	public function testGivenRequestWithoutParameters_resultIsError(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
 		$client = $this->createClient();
 
 		$client->request(
@@ -42,10 +38,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithoutTokens_resultIsError(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->getNewlyStoredDonation( $factory );
+			$donation = ( new StoredDonations( $factory ) )->newStoredDirectDebitDonation();
 
 			$client->request(
 				Request::METHOD_POST,
@@ -62,24 +56,9 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function getNewlyStoredDonation( FunFunFactory $factory ): Donation {
-		$factory->setDonationTokenGenerator( new FixedTokenGenerator(
-			self::CORRECT_UPDATE_TOKEN,
-			new \DateTime( '9001-01-01' )
-		) );
-
-		$donation = ValidDonation::newDirectDebitDonation();
-
-		$factory->getDonationRepository()->storeDonation( $donation );
-
-		return $donation;
-	}
-
 	public function testGivenRequestWithValidParameters_resultIsSuccess(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->getNewlyStoredDonation( $factory );
+			$donation = ( new StoredDonations( $factory ) )->newUpdatableDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
 
 			$client->request(
 				Request::METHOD_POST,
@@ -98,11 +77,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithUnknownDonationId_resultIsError(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->getNewlyStoredDonation( $factory );
-
 			$client->request(
 				Request::METHOD_POST,
 				self::PATH,
@@ -120,10 +95,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithInvalidUpdateToken_resultIsError(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->getNewlyStoredDonation( $factory );
+			$donation = ( new StoredDonations( $factory ) )->newUpdatableDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
 
 			$client->request(
 				Request::METHOD_POST,
@@ -142,10 +115,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithEmoticons_resultIsError(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->getNewlyStoredDonation( $factory );
+			$donation = ( new StoredDonations( $factory ) )->newUpdatableDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
 
 			$client->request(
 				Request::METHOD_POST,
