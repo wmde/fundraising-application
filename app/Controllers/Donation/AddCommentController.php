@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\Controllers\Donation;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentRequest;
@@ -12,29 +13,18 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class AddCommentController {
 
+	/**
+	 * @todo Expose this text as a public constant in AddCommentUseCase instead
+	 */
+	private const ACCESS_DENIED_MSG = 'comment_failure_access_denied';
+
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
-		$addCommentRequest = new AddCommentRequest();
-		$addCommentRequest->setCommentText( trim( $request->request->get( 'comment', '' ) ) );
-		$addCommentRequest->setIsPublic( $request->request->getBoolean( 'public' ) );
-		$addCommentRequest->setDonationId( (int)$request->request->get( 'donationId', '' ) );
+		$postVars = $request->request;
+		$addCommentRequest = $this->buildAddCommentRequest( $postVars );
 
-		if ( $request->request->getBoolean( 'isAnonymous' ) ) {
-			$addCommentRequest->setIsAnonymous();
-		} else {
-			$addCommentRequest->setIsNamed();
-		}
-
-		$addCommentRequest->freeze()->assertNoNullFields();
-
-		$updateToken = $request->request->get( 'updateToken', '' );
-
+		$updateToken = $postVars->get( 'updateToken', '' );
 		if ( $updateToken === '' ) {
-			return new JsonResponse(
-				[
-					'status' => 'ERR',
-					'message' => 'comment_failure_access_denied',
-				]
-			);
+			return $this->newErrorResponse( self::ACCESS_DENIED_MSG );
 		}
 
 		$response = $ffFactory->newAddCommentUseCase( $updateToken )->addComment( $addCommentRequest );
@@ -48,11 +38,33 @@ class AddCommentController {
 			);
 		}
 
+		return $this->newErrorResponse( $response->getErrorMessage() );
+	}
+
+	private function buildAddCommentRequest( ParameterBag $postVars ): AddCommentRequest {
+		$addCommentRequest = new AddCommentRequest();
+		$addCommentRequest->setCommentText( trim( $postVars->get( 'comment', '' ) ) );
+		$addCommentRequest->setIsPublic( $postVars->getBoolean( 'public' ) );
+		$addCommentRequest->setDonationId( (int)$postVars->get( 'donationId', '' ) );
+
+		if ( $postVars->getBoolean( 'isAnonymous' ) ) {
+			$addCommentRequest->setIsAnonymous();
+		} else {
+			$addCommentRequest->setIsNamed();
+		}
+
+		$addCommentRequest->freeze()->assertNoNullFields();
+		return $addCommentRequest;
+	}
+
+	private function newErrorResponse( string $message ): Response {
 		return new JsonResponse(
 			[
 				'status' => 'ERR',
-				'message' => $response->getErrorMessage(),
-			]
+				'message' => $message,
+			],
+			$message === self::ACCESS_DENIED_MSG ? Response::HTTP_FORBIDDEN : Response::HTTP_OK
 		);
 	}
+
 }

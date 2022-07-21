@@ -4,7 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
@@ -18,10 +20,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	private const NON_EXISTING_DONATION_ID = 25502;
 	private const PATH = '/add-comment';
 
-	/**
-	 * @todo this test and behavior seems wrong
-	 */
 	public function testGivenRequestWithoutParameters_resultIsError(): void {
+		/** @var KernelBrowser $client */
 		$client = $this->createClient();
 
 		$client->request(
@@ -31,8 +31,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-
-		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
+		$this->assertSame( Response::HTTP_FORBIDDEN, $response->getStatusCode() );
 		$this->assertErrorJsonResponse( $response );
 	}
 
@@ -51,7 +50,9 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$this->assertErrorJsonResponse( $client->getResponse() );
+		$response = $client->getResponse();
+		$this->assertSame( Response::HTTP_FORBIDDEN, $response->getStatusCode() );
+		$this->assertErrorJsonResponse( $response );
 	}
 
 	public function testGivenRequestWithValidParameters_resultIsSuccess(): void {
@@ -70,7 +71,9 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$this->assertSuccessJsonResponse( $client->getResponse() );
+		$response = $client->getResponse();
+		$this->assertSame( Response::HTTP_OK, $response->getStatusCode() );
+		$this->assertSuccessJsonResponse( $response );
 	}
 
 	public function testGivenRequestWithUnknownDonationId_resultIsError(): void {
@@ -88,7 +91,9 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$this->assertErrorJsonResponse( $client->getResponse() );
+		$response = $client->getResponse();
+		$this->assertSame( Response::HTTP_FORBIDDEN, $response->getStatusCode() );
+		$this->assertErrorJsonResponse( $response );
 	}
 
 	public function testGivenRequestWithInvalidUpdateToken_resultIsError(): void {
@@ -107,7 +112,9 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$this->assertErrorJsonResponse( $client->getResponse() );
+		$response = $client->getResponse();
+		$this->assertSame( Response::HTTP_FORBIDDEN, $response->getStatusCode() );
+		$this->assertErrorJsonResponse( $response );
 	}
 
 	public function testGivenRequestWithEmoticons_resultIsError(): void {
@@ -127,7 +134,7 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-
+		$this->assertSame( Response::HTTP_OK, $response->getStatusCode() );
 		$this->assertErrorJsonResponse( $response );
 		$this->assertSame( 'comment_failure_text_invalid_chars', $this->getJsonFromResponse( $response )['message'] );
 	}
