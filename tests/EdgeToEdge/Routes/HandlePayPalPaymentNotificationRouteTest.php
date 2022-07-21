@@ -4,14 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Payment\PayPalPaymentNotificationVerifier;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingPayPalVerificationService;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingVerificationServiceFactory;
@@ -27,12 +22,10 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
  */
 class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
-	private const BASE_URL = 'https://that.paymentprovider.com/';
 	private const EMAIL_ADDRESS = 'foerderpp@wikimedia.de';
 	private const ITEM_NAME = 'My preciousss';
 	private const UPDATE_TOKEN = 'my_secret_token';
 	private const DONATION_ID = 1;
-	private const VALID_VERIFICATION_RESPONSE = 'VERIFIED';
 	private const PATH = '/handle-paypal-payment-notification';
 	private const LEGACY_PATH = '/spenden/paypal_handler.php';
 
@@ -94,22 +87,6 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 			$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
 		} );
-	}
-
-	private function newNonNetworkUsingNotificationVerifier(): PayPalPaymentNotificationVerifier {
-		return new PayPalPaymentNotificationVerifier(
-			$this->newGuzzleClientMock( self::VALID_VERIFICATION_RESPONSE ),
-			self::BASE_URL,
-			self::EMAIL_ADDRESS
-		);
-	}
-
-	private function newGuzzleClientMock( string $responseBody ): GuzzleClient {
-		$mock = new MockHandler( [
-			new Response( 200, [], $responseBody )
-		] );
-		$handlerStack = HandlerStack::create( $mock );
-		return new GuzzleClient( [ 'handler' => $handlerStack ] );
 	}
 
 	private function assertPayPalDataGotPersisted( array $request ): void {
