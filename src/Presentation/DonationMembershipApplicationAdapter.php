@@ -10,15 +10,22 @@ use WMDE\Fundraising\DonationContext\Domain\Model\Donor\AnonymousDonor;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor\CompanyDonor;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor\PersonDonor;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 
 class DonationMembershipApplicationAdapter {
 
-	public function getInitialMembershipFormValues( Donation $donation ): array {
+	public function __construct(
+		private readonly BankDataGenerator $bankDataGenerator
+	) {
+	}
+
+	public function getInitialMembershipFormValues( Donation $donation, Payment $payment ): array {
 		return array_merge(
 			$this->getMembershipFormPersonValues( $donation->getDonor() ),
-			$this->getMembershipFormBankDataValues( $donation->getPaymentMethod() )
+			$this->getMembershipFormBankDataValues( $payment )
 		);
 	}
 
@@ -30,43 +37,45 @@ class DonationMembershipApplicationAdapter {
 		return array_merge(
 			$donor->getName()->toArray(),
 			[
-			'addressType' => AddressType::donorToPresentationAddressType( $donor ),
-			'street' => $donor->getPhysicalAddress()->getStreetAddress(),
-			'postcode' => $donor->getPhysicalAddress()->getPostalCode(),
-			'city' => $donor->getPhysicalAddress()->getCity(),
-			'country' => $donor->getPhysicalAddress()->getCountryCode(),
-			'email' => $donor->getEmailAddress(),
-		] );
+				'addressType' => AddressType::donorToPresentationAddressType( $donor ),
+				'street' => $donor->getPhysicalAddress()->getStreetAddress(),
+				'postcode' => $donor->getPhysicalAddress()->getPostalCode(),
+				'city' => $donor->getPhysicalAddress()->getCity(),
+				'country' => $donor->getPhysicalAddress()->getCountryCode(),
+				'email' => $donor->getEmailAddress(),
+			]
+		);
 	}
 
-	private function getMembershipFormBankDataValues( PaymentMethod $paymentMethod ): array {
-		if ( !$paymentMethod instanceof DirectDebitPayment ) {
+	private function getMembershipFormBankDataValues( Payment $payment ): array {
+		if ( !$payment instanceof DirectDebitPayment ) {
 			return [];
 		}
 
+		$displayValues = $payment->getDisplayValues();
+		$bankData = $this->bankDataGenerator->getBankDataFromIban( new Iban( $displayValues['iban'] ) );
+
 		return [
-			'iban' => $paymentMethod->getBankData()->getIban()->toString(),
-			'bic' => $paymentMethod->getBankData()->getBic(),
-			'bankname' => $paymentMethod->getBankData()->getBankName(),
-			// TODO delete the following fields as part of https://phabricator.wikimedia.org/T224220
-			'accountNumber' => $paymentMethod->getBankData()->getAccount(),
-			'bankCode' => $paymentMethod->getBankData()->getBankCode(),
+			'iban' => $displayValues['iban'],
+			'bic' => $displayValues['bic'],
+			'bankname' => $bankData->bankName
 		];
 	}
 
-	public function getInitialValidationState( Donation $donation ): array {
+	public function getInitialValidationState( Donation $donation, Payment $payment ): array {
 		$validationState = [];
 		if ( $donation->getDonor() instanceof PersonDonor || $donation->getDonor() instanceof CompanyDonor ) {
 			$validationState['address'] = true;
 		}
-		if ( $donation->getPaymentMethodId() !== PaymentMethod::DIRECT_DEBIT ) {
+
+		if ( !$payment instanceof DirectDebitPayment ) {
 			return $validationState;
 		}
-		/** @var DirectDebitPayment $paymentMethod */
-		$paymentMethod = $donation->getPayment()->getPaymentMethod();
-		if ( $paymentMethod->getBankData()->hasIban() ) {
+
+		if ( !empty( $payment->getDisplayValues()['iban'] ) ) {
 			$validationState['bankData'] = true;
 		}
+
 		return $validationState;
 	}
 

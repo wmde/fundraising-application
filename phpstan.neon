@@ -13,6 +13,5 @@ parameters:
 		- tests/EdgeToEdge/Routes/HandlePayPalPaymentNotificationRouteTest.php
 		- tests/EdgeToEdge/Routes/SofortPaymentNotificationRouteTest.php
 		- tests/EdgeToEdge/TrackingDataTest.php
-		- tests/Unit/Presentation/DonationMembershipApplicationAdapterTest.php
 		- tests/Unit/Routes/SofortNotificationRequestTest.php
 		- tests/EdgeToEdge/Routes/ValidateFeeRouteTest.php
