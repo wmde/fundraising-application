@@ -24,16 +24,15 @@ class ShowMembershipApplicationFormController {
 			)
 		);
 
+		$donation = $responseModel->getDonation();
+
 		$initialDonationFormValues = [];
 		$initialDonationValidationResult = [];
 		if ( $responseModel->accessIsPermitted() ) {
-			$adapter = new DonationMembershipApplicationAdapter();
-			$initialDonationFormValues = $adapter->getInitialMembershipFormValues(
-				$responseModel->getDonation()
-			);
-			$initialDonationValidationResult = $adapter->getInitialValidationState(
-				$responseModel->getDonation()
-			);
+			$payment = $ffFactory->newPaymentRepository()->getPaymentById( $donation->getPaymentId() );
+			$adapter = new DonationMembershipApplicationAdapter( $ffFactory->newBankDataConverter() );
+			$initialDonationFormValues = $adapter->getInitialMembershipFormValues( $donation, $payment );
+			$initialDonationValidationResult = $adapter->getInitialValidationState( $donation, $payment );
 		}
 
 		return new Response( $ffFactory->newMembershipApplicationFormPresenter()->present(
