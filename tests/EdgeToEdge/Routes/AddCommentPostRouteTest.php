@@ -4,9 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
@@ -38,103 +37,103 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithoutTokens_resultIsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = ( new StoredDonations( $factory ) )->newStoredDirectDebitDonation();
+		$client = $this->createClient();
+		$donation = $this->storeDirectDebitDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				[
-					'comment' => 'Take my money!',
-					'public' => '1',
-					'isAnonymous' => '0',
-					'donationId' => (string)$donation->getId(),
-				]
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			[
+				'comment' => 'Take my money!',
+				'public' => '1',
+				'isAnonymous' => '0',
+				'donationId' => (string)$donation->getId(),
+			]
+		);
 
-			$this->assertErrorJsonResponse( $client->getResponse() );
-		} );
+		$this->assertErrorJsonResponse( $client->getResponse() );
 	}
 
 	public function testGivenRequestWithValidParameters_resultIsSuccess(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = ( new StoredDonations( $factory ) )->newUpdatableDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
+		$client = $this->createClient();
+		$donation = $this->storeDirectDebitDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				[
-					'comment' => 'Take my money!',
-					'public' => '1',
-					'isAnonymous' => '0',
-					'donationId' => (string)$donation->getId(),
-					'updateToken' => self::CORRECT_UPDATE_TOKEN,
-				]
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			[
+				'comment' => 'Take my money!',
+				'public' => '1',
+				'isAnonymous' => '0',
+				'donationId' => (string)$donation->getId(),
+				'updateToken' => self::CORRECT_UPDATE_TOKEN,
+			]
+		);
 
-			$this->assertSuccessJsonResponse( $client->getResponse() );
-		} );
+		$this->assertSuccessJsonResponse( $client->getResponse() );
 	}
 
 	public function testGivenRequestWithUnknownDonationId_resultIsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				[
-					'comment' => 'Take my money!',
-					'public' => '1',
-					'isAnonymous' => '0',
-					'donationId' => self::NON_EXISTING_DONATION_ID,
-					'updateToken' => self::CORRECT_UPDATE_TOKEN,
-				]
-			);
+		$client = $this->createClient();
 
-			$this->assertErrorJsonResponse( $client->getResponse() );
-		} );
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			[
+				'comment' => 'Take my money!',
+				'public' => '1',
+				'isAnonymous' => '0',
+				'donationId' => self::NON_EXISTING_DONATION_ID,
+				'updateToken' => self::CORRECT_UPDATE_TOKEN,
+			]
+		);
+
+		$this->assertErrorJsonResponse( $client->getResponse() );
 	}
 
 	public function testGivenRequestWithInvalidUpdateToken_resultIsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = ( new StoredDonations( $factory ) )->newUpdatableDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
+		$client = $this->createClient();
+		$donation = $this->storeDirectDebitDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				[
-					'comment' => 'Take my money!',
-					'public' => '1',
-					'isAnonymous' => '0',
-					'donationId' => (string)$donation->getId(),
-					'updateToken' => 'Not the correct token',
-				]
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			[
+				'comment' => 'Take my money!',
+				'public' => '1',
+				'isAnonymous' => '0',
+				'donationId' => (string)$donation->getId(),
+				'updateToken' => 'Not the correct token',
+			]
+		);
 
-			$this->assertErrorJsonResponse( $client->getResponse() );
-		} );
+		$this->assertErrorJsonResponse( $client->getResponse() );
 	}
 
 	public function testGivenRequestWithEmoticons_resultIsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = ( new StoredDonations( $factory ) )->newUpdatableDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
+		$client = $this->createClient();
+		$donation = $this->storeDirectDebitDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				[
-					'comment' => 'Gotta make dat 💲',
-					'public' => '1',
-					'isAnonymous' => '0',
-					'donationId' => (string)$donation->getId(),
-					'updateToken' => self::CORRECT_UPDATE_TOKEN,
-				]
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			[
+				'comment' => 'Gotta make dat 💲',
+				'public' => '1',
+				'isAnonymous' => '0',
+				'donationId' => (string)$donation->getId(),
+				'updateToken' => self::CORRECT_UPDATE_TOKEN,
+			]
+		);
 
-			$response = $client->getResponse();
+		$response = $client->getResponse();
 
-			$this->assertErrorJsonResponse( $response );
-			$this->assertSame( 'comment_failure_text_invalid_chars', $this->getJsonFromResponse( $response )['message'] );
-		} );
+		$this->assertErrorJsonResponse( $response );
+		$this->assertSame( 'comment_failure_text_invalid_chars', $this->getJsonFromResponse( $response )['message'] );
+	}
+
+	private function storeDirectDebitDonation(): Donation {
+		return ( new StoredDonations( $this->getFactory() ) )->newUpdatableDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
 	}
 
 }
