@@ -69,8 +69,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithDonationIdAndCorrespondingAccessCode_successResponseWithInitialFormValuesIsReturned(): void {
-		$this->markTestIncomplete( "This should work again when we finish updating the donation controllers" );
-
 		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$this->givenStoredDirectDebitDonation( $factory );
 		} );
@@ -96,8 +94,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				'email' => 'foo@bar.baz',
 				'iban' => 'DE12500105170648489890',
 				'bic' => 'INGDDEFFXXX',
-				'accountNumber' => '0648489890',
-				'bankCode' => '50010517',
 				'bankname' => 'ING-DiBa',
 				'paymentType' => 'BEZ',
 				'incentives' => [ 0 => 'tote_bag' ]
