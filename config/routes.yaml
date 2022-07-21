@@ -173,11 +173,6 @@ donation_accepted:
     methods: [GET]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationAcceptedController::index'
 
-handle_paypal_membership_fee_payments:
-    path: /handle-paypal-membership-fee-payments
-    methods: [POST]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationControllerForMembershipFee::index'
-
 index:
     path: /
     methods: [ POST, GET ]
