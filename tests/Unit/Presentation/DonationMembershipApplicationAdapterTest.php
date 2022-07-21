@@ -4,18 +4,22 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
-use WMDE\Fundraising\DonationContext\Domain\Model\DonationPayment;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
-use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\BankTransferPayment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\ExtendedBankData;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentReferenceCode;
 use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 
 /**
@@ -23,17 +27,19 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
  */
 class DonationMembershipApplicationAdapterTest extends TestCase {
 
-	public function testCompleteDonation_isCorrectlyConvertedToArray(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
+	private const IBAN = 'DE49123455679923567800';
+	private const BIC = 'COBADE4711';
+	private const BANKNAME = 'Co Dir';
 
-		$donor = $this->getPrivateDonor(
+	public function testCompleteDonation_isCorrectlyConvertedToArray(): void {
+		$donor = $this->givenPrivateDonor(
 			'Herr', 'Dr.', 'Max', 'Mustermann', 'Demostr. 42',
 			'08771', 'Bärlin', 'DE', 'demo@cat.goat'
 		);
-		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getDirectDebitPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
+		$payment = $this->givenDirectDebitPayment();
+		$donation = $this->givenDonation( $donor );
 
-		$adapter = new DonationMembershipApplicationAdapter();
+		$adapter = $this->givenAdapter();
 		$this->assertEquals(
 			[
 				'addressType' => 'person',
@@ -46,27 +52,23 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 				'city' => 'Bärlin',
 				'country' => 'DE',
 				'email' => 'demo@cat.goat',
-				'iban' => 'DE49123455679923567800',
-				'bic' => 'COBADE4711',
-				'accountNumber' => '9923 5678 00',
-				'bankCode' => '1234 5567',
-				'bankname' => 'Co Dir',
+				'iban' => self::IBAN,
+				'bic' => self::BIC,
+				'bankname' => self::BANKNAME,
 			],
-			$adapter->getInitialMembershipFormValues( $donation )
+			$adapter->getInitialMembershipFormValues( $donation, $payment )
 		);
 	}
 
 	public function testCompleteCompanyDonation_isCorrectlyConvertedToArray(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
 		$donor = $this->getCompanyDonor(
 			'ACME Inc', 'Demostr. 42',
 			'08771', 'Bärlin', 'DE', 'demo@cat.goat'
 		);
-		$payment = new DonationPayment( Euro::newFromCents( 100000 ), 1, $this->getDirectDebitPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
+		$payment = $this->givenDirectDebitPayment();
+		$donation = $this->givenDonation( $donor );
 
-		$adapter = new DonationMembershipApplicationAdapter();
+		$adapter = $this->givenAdapter();
 		$this->assertEquals(
 			[
 				'addressType' => 'firma',
@@ -76,27 +78,23 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 				'city' => 'Bärlin',
 				'country' => 'DE',
 				'email' => 'demo@cat.goat',
-				'iban' => 'DE49123455679923567800',
-				'bic' => 'COBADE4711',
-				'accountNumber' => '9923 5678 00',
-				'bankCode' => '1234 5567',
-				'bankname' => 'Co Dir',
+				'iban' => self::IBAN,
+				'bic' => self::BIC,
+				'bankname' => self::BANKNAME,
 			],
-			$adapter->getInitialMembershipFormValues( $donation )
+			$adapter->getInitialMembershipFormValues( $donation, $payment )
 		);
 	}
 
 	public function testDonationWithNonDebitPayment_isCorrectlyConvertedToArray(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
-		$donor = $this->getPrivateDonor(
+		$donor = $this->givenPrivateDonor(
 			'Frau', 'Prof. Dr.', 'Minna', 'Mustermann', 'Demostr. 42',
 			'3389', 'Wien', 'AT', 'demo2@cat.goat'
 		);
-		$payment = new DonationPayment( Euro::newFromCents( 55000 ), 1, new SofortPayment( 'DXB' ) );
-		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
+		$payment = $this->givenSofortPayment();
+		$donation = $this->givenDonation( $donor );
 
-		$adapter = new DonationMembershipApplicationAdapter();
+		$adapter = $this->givenAdapter();
 		$this->assertEquals(
 			[
 				'addressType' => 'person',
@@ -110,21 +108,19 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 				'country' => 'AT',
 				'email' => 'demo2@cat.goat'
 			],
-			$adapter->getInitialMembershipFormValues( $donation )
+			$adapter->getInitialMembershipFormValues( $donation, $payment )
 		);
 	}
 
 	public function testDonationWithEmptiedSensitiveFields_isCorrectlyConvertedToArray(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
-		$donor = $this->getPrivateDonor(
+		$donor = $this->givenPrivateDonor(
 			'', '', '', '', '',
 			'', '', 'AT', 'demo2@cat.goat'
 		);
-		$payment = new DonationPayment( Euro::newFromCents( 55000 ), 1, new SofortPayment( 'FFG' ) );
-		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
+		$payment = $this->givenSofortPayment();
+		$donation = $this->givenDonation( $donor );
 
-		$adapter = new DonationMembershipApplicationAdapter();
+		$adapter = $this->givenAdapter();
 		$this->assertEquals(
 			[
 				'addressType' => 'person',
@@ -138,11 +134,11 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 				'country' => 'AT',
 				'email' => 'demo2@cat.goat'
 			],
-			$adapter->getInitialMembershipFormValues( $donation )
+			$adapter->getInitialMembershipFormValues( $donation, $payment )
 		);
 	}
 
-	private function getPrivateDonor( string $salutation, string $title, string $firstName, string $lastName,
+	private function givenPrivateDonor( string $salutation, string $title, string $firstName, string $lastName,
 		string $street, string $postCode, string $city, string $countryCode, string $email
 	): Donor\PersonDonor {
 		return new Donor\PersonDonor(
@@ -158,71 +154,110 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 			$email );
 	}
 
-	private function getDirectDebitPayment(): DirectDebitPayment {
-		$bankData = new BankData();
-		$bankData->setBankName( 'Co Dir' );
-		$bankData->setAccount( '9923 5678 00' );
-		$bankData->setBankCode( '1234 5567' );
-		$bankData->setIban( new Iban( 'DE49123455679923567800' ) );
-		$bankData->setBic( 'COBADE4711' );
-		return new DirectDebitPayment( $bankData );
-	}
-
-	private function getBankTransferPayment(): BankTransferPayment {
-		return new BankTransferPayment( 'WQXXXX' );
-	}
-
 	public function testDefaultValidationStateIsEmpty(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
+		$payment = $this->givenBankTransferPayment();
+		$donation = $this->givenDonation( new Donor\AnonymousDonor() );
+		$adapter = $this->givenAdapter();
 
-		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getBankTransferPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, new Donor\AnonymousDonor(), $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
-		$adapter = new DonationMembershipApplicationAdapter();
-
-		$this->assertEquals( [], $adapter->getInitialValidationState( $donation ) );
+		$this->assertEquals( [], $adapter->getInitialValidationState( $donation, $payment ) );
 	}
 
 	public function testDonationWitDonorReturnsValidationStateForPersonalData(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
-		$donor = $this->getPrivateDonor(
+		$donor = $this->givenPrivateDonor(
 			'Herr', 'Dr.', 'Max', 'Mustermann', 'Demostr. 42',
 			'08771', 'Bärlin', 'DE', 'demo@cat.goat'
 		);
-		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getBankTransferPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, $donor, $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
-
-		$adapter = new DonationMembershipApplicationAdapter();
+		$payment = $this->givenBankTransferPayment();
+		$donation = $this->givenDonation( $donor );
+		$adapter = $this->givenAdapter();
 
 		$this->assertEquals(
 			[ 'address' => true ],
-			$adapter->getInitialValidationState( $donation )
+			$adapter->getInitialValidationState( $donation, $payment )
 		);
 	}
 
 	public function testDonationWithDirectDebitAndIbanHasValidBankData(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
-		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $this->getDirectDebitPayment() );
-		$donation = new Donation( null, Donation::STATUS_NEW, ValidDonation::newDonor(), $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
-		$adapter = new DonationMembershipApplicationAdapter();
+		$payment = $this->givenDirectDebitPayment();
+		$donation = $this->givenDonation( ValidDonation::newDonor() );
+		$adapter = $this->givenAdapter();
 
 		$this->assertEquals(
 			[ 'bankData' => true, 'address' => true ],
-			$adapter->getInitialValidationState( $donation )
+			$adapter->getInitialValidationState( $donation, $payment )
 		);
 	}
 
 	public function testDonationWithDirectDebitAndMissingIbanHasNoValidBankData(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
+		$payment = DirectDebitPayment::create(
+			1,
+			Euro::newFromCents( 1000 ),
+			PaymentInterval::OneTime,
+			new Iban( '' ),
+			self::BIC
+		);
 
-		$bankData = new BankData();
-		$bankData->setIban( new Iban( '' ) );
-		$paymentMethod = new DirectDebitPayment( $bankData );
-		$payment = new DonationPayment( Euro::newFromCents( 45000 ), 1, $paymentMethod );
-		$donation = new Donation( null, Donation::STATUS_NEW, ValidDonation::newDonor(), $payment, false, DonationTrackingInfo::newBlankTrackingInfo(), null );
-		$adapter = new DonationMembershipApplicationAdapter();
+		$donation = $this->givenDonation( ValidDonation::newDonor() );
+		$adapter = $this->givenAdapter();
 
-		$this->assertEquals( [ 'address' => true ], $adapter->getInitialValidationState( $donation ) );
+		$this->assertEquals( [ 'address' => true ], $adapter->getInitialValidationState( $donation, $payment ) );
+	}
+
+	private function givenBankDataGeneratorForBankName( string $bankname ): MockObject|BankDataGenerator {
+		$bankDataGenerator = $this->createMock( BankDataGenerator::class );
+		$bankDataGenerator->method( 'getBankDataFromIban' )->willReturn(
+			new ExtendedBankData(
+				new Iban( self::IBAN ),
+				self::BIC,
+				'any account',
+				'any code',
+				$bankname
+			)
+		);
+
+		return $bankDataGenerator;
+	}
+
+	private function givenDirectDebitPayment(): Payment {
+		return DirectDebitPayment::create(
+			1,
+			Euro::newFromCents( 1000 ),
+			PaymentInterval::OneTime,
+			new Iban( self::IBAN ),
+			self::BIC
+		);
+	}
+
+	private function givenSofortPayment(): Payment {
+		return SofortPayment::create(
+			1,
+			Euro::newFromCents( 1000 ),
+			PaymentInterval::OneTime,
+			new PaymentReferenceCode( 'AA', 'AAAAAA', 'A' )
+		);
+	}
+
+	private function givenBankTransferPayment(): Payment {
+		return BankTransferPayment::create(
+			1,
+			Euro::newFromCents( 1000 ),
+			PaymentInterval::OneTime,
+			new PaymentReferenceCode( 'AA', 'AAAAAA', 'A' )
+		);
+	}
+
+	private function givenDonation( Donor $donor ): Donation {
+		return new Donation(
+			null,
+			$donor,
+			1,
+			false,
+			DonationTrackingInfo::newBlankTrackingInfo(),
+			null
+		);
+	}
+
+	private function givenAdapter(): DonationMembershipApplicationAdapter {
+		return new DonationMembershipApplicationAdapter( $this->givenBankDataGeneratorForBankName( self::BANKNAME ) );
 	}
 }
