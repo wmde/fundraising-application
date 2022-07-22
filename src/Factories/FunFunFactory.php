@@ -1056,6 +1056,17 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
+	/**
+	 * This is used to inject fakes for testing
+	 *
+	 * @param DonationRepository $repository
+	 *
+	 * @return void
+	 */
+	public function setDonationRepository( DonationRepository $repository ): void {
+		$this->sharedObjects[DonationRepository::class] = $repository;
+	}
+
 	public function getPaymentIdRepository(): PaymentIdRepository {
 		return $this->createSharedObject( PaymentIdRepository::class, function () {
 			return new DoctrinePaymentIdRepository(
