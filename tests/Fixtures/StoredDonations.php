@@ -4,8 +4,6 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation as DoctrineDonation;
-use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayments;
@@ -21,6 +19,12 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 class StoredDonations {
 
 	public function __construct( private FunFunFactory $factory ) {
+	}
+
+	public function newStoredIncompleteCreditCardDonation( string $updateToken ): Donation {
+		$this->setDonationTokenGenerator( $updateToken );
+		$this->persistPayment( ValidPayments::newCreditCardPayment() );
+		return $this->persistDonation( ValidDonation::newIncompleteCreditCardDonation() );
 	}
 
 	public function newStoredIncompleteSofortDonation(): Donation {
@@ -55,23 +59,9 @@ class StoredDonations {
 		return $this->persistDonation( ValidDonation::newIncompleteAnonymousPayPalDonation() );
 	}
 
-	public function newUpdatableDirectDebitDonation( string $updateToken ): Donation {
-		$donation = $this->newStoredDirectDebitDonation();
-
-		$entityManager = $this->factory->getEntityManager();
-		/**
-		 * @var DoctrineDonation $doctrineDonation
-		 */
-		$doctrineDonation = $entityManager->getRepository( DoctrineDonation::class )->find( $donation->getId() );
-
-		$doctrineDonation->modifyDataObject( static function ( DonationData $data ) use ( $updateToken ): void {
-			$data->setUpdateToken( $updateToken );
-			$data->setUpdateTokenExpiry( date( 'Y-m-d H:i:s', time() + 60 * 60 ) );
-		} );
-
-		$entityManager->persist( $doctrineDonation );
-		$entityManager->flush();
-		return $donation;
+	public function newDeletableDirectDebitDonation( string $updateToken ): Donation {
+		$this->setDonationTokenGenerator( $updateToken );
+		return $this->newStoredDirectDebitDonation();
 	}
 
 	private function persistDonation( Donation $donation ): Donation {
@@ -83,6 +73,13 @@ class StoredDonations {
 		$em = $this->factory->getEntityManager();
 		$em->persist( $payment );
 		$em->flush();
+	}
+
+	private function setDonationTokenGenerator( string $updateToken ): void {
+		$this->factory->setDonationTokenGenerator( new FixedTokenGenerator(
+			$updateToken,
+			\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
+		) );
 	}
 
 }
