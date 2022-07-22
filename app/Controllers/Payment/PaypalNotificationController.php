@@ -38,7 +38,12 @@ class PaypalNotificationController {
 				$response = $this->createAnonymousDonation( $ffFactory, $request );
 			}
 		} catch ( \Exception $e ) {
-			$this->logError( $ffFactory, $post, $e->getMessage() );
+			$this->logError(
+				$ffFactory,
+				$post,
+				'An Exception happened: ' . $e->getMessage(),
+				[ 'stacktrace' => $e->getTraceAsString() ]
+			);
 			return new Response( $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
 
@@ -46,8 +51,6 @@ class PaypalNotificationController {
 			$this->logError( $ffFactory, $post, $response->getMessage() );
 			return $this->createErrorResponse( $response->getMessage() );
 		}
-
-		$this->logResponseIfNeeded( $ffFactory, $request, $response );
 
 		// PayPal expects an empty response
 		return new Response( '', Response::HTTP_OK );
@@ -59,13 +62,14 @@ class PaypalNotificationController {
 		return $useCase->handleNotification( $amount->getEuroCents(), $request->request->all() );
 	}
 
-	private function logError( $ffFactory, InputBag $post, string $message ): void {
+	private function logError( $ffFactory, InputBag $post, string $message, array $additionalContext = [] ): void {
 		$parametersToLog = $post->all();
 		foreach ( self::PAYPAL_LOG_FILTER as $remove ) {
 			unset( $parametersToLog[$remove] );
 		}
 		$ffFactory->getPaypalLogger()->log( LogLevel::ERROR, $message, [
-			'post_vars' => $parametersToLog
+			'post_vars' => $parametersToLog,
+			...$additionalContext
 		] );
 	}
 
@@ -143,20 +147,4 @@ class PaypalNotificationController {
 
 		return str_contains( $message, $unknownMessageSubstring );
 	}
-
-	private function logResponseIfNeeded( FunFunFactory $ffFactory, Request $request, NotificationResponse $response ): void {
-		if ( $response->notificationWasHandled() ) {
-			return;
-		}
-
-		$ffFactory->getPaypalLogger()->log(
-			$response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO,
-			$response->getMessage() ?? self::MSG_NOT_HANDLED,
-			[
-				'request_content' => $request->getContent(),
-				'query_vars' => $request->query->all()
-			]
-		);
-	}
-
 }
