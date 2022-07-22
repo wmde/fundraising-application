@@ -11,6 +11,7 @@ use UnexpectedValueException;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
 class ValidateFeeController {
 
@@ -26,7 +27,9 @@ class ValidateFeeController {
 			$fee->getEuros(),
 			(int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ),
 			$httpRequest->request->get( 'addressType', '' ),
-			$httpRequest->request->get( 'paymentType', '' )
+			// Until we implement a choice in the frontend, we default to the only payment we support
+			// See https://phabricator.wikimedia.org/T312071
+			$httpRequest->request->get( 'paymentType', PaymentType::DirectDebit->value )
 		);
 
 		if ( $response->isSuccessful() ) {
