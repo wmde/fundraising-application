@@ -117,7 +117,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			self::CORRECT_ACCESS_TOKEN
 		) );
 
-		$factory->newPaymentRepository()->storePayment( $payment );
+		$factory->getPaymentRepository()->storePayment( $payment );
 	}
 
 	private function newValidHttpParameters(): array {

@@ -29,7 +29,7 @@ class ShowMembershipApplicationFormController {
 		$initialDonationFormValues = [];
 		$initialDonationValidationResult = [];
 		if ( $responseModel->accessIsPermitted() ) {
-			$payment = $ffFactory->newPaymentRepository()->getPaymentById( $donation->getPaymentId() );
+			$payment = $ffFactory->getPaymentRepository()->getPaymentById( $donation->getPaymentId() );
 			$adapter = new DonationMembershipApplicationAdapter( $ffFactory->newBankDataConverter() );
 			$initialDonationFormValues = $adapter->getInitialMembershipFormValues( $donation, $payment );
 			$initialDonationValidationResult = $adapter->getInitialValidationState( $donation, $payment );

@@ -59,7 +59,7 @@ class StoredDonations {
 		return $this->persistDonation( ValidDonation::newIncompleteAnonymousPayPalDonation() );
 	}
 
-	public function newDeletableDirectDebitDonation( string $updateToken ): Donation {
+	public function newUpdatableDirectDebitDonation( string $updateToken ): Donation {
 		$this->setDonationTokenGenerator( $updateToken );
 		return $this->newStoredDirectDebitDonation();
 	}

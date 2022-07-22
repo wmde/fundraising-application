@@ -6,5 +6,3 @@ parameters:
 		- src/Presentation/DonationMembershipApplicationAdapter.php
 		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
 		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
-		- tests/EdgeToEdge/CampaignCookieTest.php
-		- tests/EdgeToEdge/TrackingDataTest.php
