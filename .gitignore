@@ -8,6 +8,7 @@ coverage.clover
 vendor/
 node_modules/
 var/
+coverage/
 
 .env
 .idea/
