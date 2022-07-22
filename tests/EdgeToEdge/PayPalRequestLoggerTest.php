@@ -83,8 +83,6 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 	}
 
 	public function testDoesNotRunOnNonPayPalRoute(): void {
-		$this->markTestIncomplete( "This will need to be updated when updating the donation controllers" );
-
 		$payPalData = $this->validPayPalData();
 
 		$this->client->request( 'post', '/', $payPalData['post_vars'] );
