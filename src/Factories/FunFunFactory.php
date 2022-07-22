@@ -79,8 +79,8 @@ use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\CreatePaymentWithUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\DonationPaymentValidator;
-use WMDE\Fundraising\DonationContext\UseCases\BookDonationUseCase\BookDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\Moderation\ModerationService as DonationModerationService;
+use WMDE\Fundraising\DonationContext\UseCases\BookDonationUseCase\BookDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationUseCase;
@@ -125,7 +125,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubj
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\PaymentTypeConfiguration;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
@@ -204,7 +203,6 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentIdRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PaymentURLFactory;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
@@ -1789,13 +1787,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	private function getPaymentContextFactory(): PaymentContextFactory {
-		return $this->createSharedObject(
-			PaymentContextFactory::class,
-			fn(): PaymentContextFactory => new PaymentContextFactory()
-		);
-	}
-
 	private function getUserDataKeyGenerator(): UserDataKeyGenerator {
 		return $this->createSharedObject( UserDataKeyGenerator::class, function (): UserDataKeyGenerator {
 			return new UserDataKeyGenerator( $this->config['user-data-key'], new SystemClock() );
@@ -2035,23 +2026,10 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new DoctrineTransactionIdFinder( $this->getConnection() );
 	}
 
-	/**
-	 * @return PaymentType[]
-	 */
-	private function getAllowedPaymentTypesForDonation(): array {
-		return PaymentTypeConfiguration::getAllowedPaymentTypesForDonation( $this->config['payment-types'] );
-	}
-
-	/**
-	 * @return PaymentType[]
-	 */
-	private function getAllowedPaymentTypesForMembership(): array {
-		return PaymentTypeConfiguration::getAllowedPaymentTypesForMembership( $this->config['payment-types'] );
-	}
-
 	public function newPaymentServiceFactory(): PaymentServiceFactory {
 		return new PaymentServiceFactory(
-			$this->newCreatePaymentUseCase(), $this->getAllowedPaymentTypesForMembership()
+			$this->newCreatePaymentUseCase(),
+			$this->getPaymentTypesSettings()->getPaymentTypesForMembershipApplication()
 		);
 	}
 }

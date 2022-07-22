@@ -61,7 +61,7 @@ class PaymentTypesSettings {
 	public function getPaymentTypesForMembershipApplication(): array {
 		return array_map(
 			fn( string $paymentTypeName ) => PaymentType::from( $paymentTypeName ),
-			$this->getEnabledForDonation()
+			$this->getEnabledForMembershipApplication()
 		);
 	}
 
