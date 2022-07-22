@@ -342,39 +342,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		return $application;
 	}
 
-	private function getApplicationFromDatabase( FunFunFactory $factory ): MembershipApplication {
-		$repository = $factory->getEntityManager()->getRepository( MembershipApplication::class );
-		$application = $repository->find( 1 );
-		$this->assertInstanceOf( MembershipApplication::class, $application );
-		return $application;
-	}
-
-	private function newValidHttpParametersUsingPayPal(): array {
-		return [
-			'membership_type' => ValidMembershipApplication::MEMBERSHIP_TYPE,
-
-			'adresstyp' => 'person',
-			'anrede' => ValidMembershipApplication::APPLICANT_SALUTATION,
-			'titel' => ValidMembershipApplication::APPLICANT_TITLE,
-			'vorname' => ValidMembershipApplication::APPLICANT_FIRST_NAME,
-			'nachname' => ValidMembershipApplication::APPLICANT_LAST_NAME,
-			'firma' => '',
-
-			'strasse' => ValidMembershipApplication::APPLICANT_STREET_ADDRESS,
-			'postcode' => ValidMembershipApplication::APPLICANT_POSTAL_CODE,
-			'ort' => ValidMembershipApplication::APPLICANT_CITY,
-			'country' => ValidMembershipApplication::APPLICANT_COUNTRY_CODE,
-
-			'email' => ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS,
-			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
-			'dob' => ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH,
-
-			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_PAYPAL,
-			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
-			'membership_fee' => '1000',
-		];
-	}
-
 	public function testCommasInStreetNamesAreRemoved(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$params = $this->newValidHttpParameters();
