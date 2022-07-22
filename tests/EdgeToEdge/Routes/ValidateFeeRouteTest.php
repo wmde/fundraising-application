@@ -13,8 +13,6 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 class ValidateFeeRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidParameters_successResponseIsReturned(): void {
-		$this->markTestIncomplete( "We need to add a use case in Memberships to encapsulate required functionality" );
-
 		$client = $this->createClient();
 
 		$client->request(
@@ -35,8 +33,6 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidParameters_failureResponseIsReturned(): void {
-		$this->markTestIncomplete( "We need to add a use case in Memberships to encapsulate required functionality" );
-
 		$client = $this->createClient();
 
 		$client->request(
@@ -65,8 +61,6 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 	}
 
 	public function testInvalidFee_failureResponseIsReturned(): void {
-		$this->markTestIncomplete( "We need to add a use case in Memberships to encapsulate required functionality" );
-
 		$client = $this->createClient();
 
 		$client->request(
