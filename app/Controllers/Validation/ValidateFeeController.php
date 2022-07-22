@@ -9,11 +9,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use UnexpectedValueException;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
 
 class ValidateFeeController {
 
-	public function index( Request $httpRequest ): Response {
+	public function index( Request $httpRequest, FunFunFactory $factory ): Response {
 		try {
 			$fee = $this->euroFromRequest( $httpRequest );
 		}
@@ -21,7 +22,7 @@ class ValidateFeeController {
 			return $this->newJsonErrorResponse( 'not-money' );
 		}
 
-		$response = ( new ValidateMembershipFeeUseCase() )->validate(
+		$response = ( new ValidateMembershipFeeUseCase( $factory->newPaymentServiceFactory() ) )->validate(
 			$fee->getEuros(),
 			(int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ),
 			$httpRequest->request->get( 'addressType', '' ),
