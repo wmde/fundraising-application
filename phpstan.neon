@@ -1,8 +1,2 @@
 includes:
 	- phpstan-baseline.neon
-
-parameters:
-	excludePaths:
-		- src/Presentation/DonationMembershipApplicationAdapter.php
-		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
-		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
