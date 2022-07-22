@@ -13,4 +13,3 @@ parameters:
 		- tests/EdgeToEdge/Routes/SofortPaymentNotificationRouteTest.php
 		- tests/EdgeToEdge/TrackingDataTest.php
 		- tests/Unit/Routes/SofortNotificationRequestTest.php
-		- tests/EdgeToEdge/Routes/ValidateFeeRouteTest.php

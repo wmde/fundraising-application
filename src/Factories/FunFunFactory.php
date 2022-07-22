@@ -1157,10 +1157,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newMembershipApplicationPiwikTracker(),
 			$this->getMembershipEventEmitter(),
 			$this->getIncentiveFinder(),
-			new PaymentServiceFactory(
-				$this->newCreatePaymentUseCase(),
-				$this->getPaymentTypesSettings()->getPaymentTypesForMembershipApplication()
-			)
+			$this->newPaymentServiceFactory()
 		);
 	}
 
@@ -2025,5 +2022,11 @@ class FunFunFactory implements LoggerAwareInterface {
 	 */
 	private function getAllowedPaymentTypesForMembership(): array {
 		return PaymentTypeConfiguration::getAllowedPaymentTypesForMembership( $this->config['payment-types'] );
+	}
+
+	public function newPaymentServiceFactory(): PaymentServiceFactory {
+		return new PaymentServiceFactory(
+			$this->newCreatePaymentUseCase(), $this->getAllowedPaymentTypesForMembership()
+		);
 	}
 }
