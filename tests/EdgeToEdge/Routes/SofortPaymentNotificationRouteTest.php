@@ -9,6 +9,7 @@ use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
@@ -64,7 +65,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 				'{"not":"real","proper":"data"}'
 			);
 
-			$this->assertErrorCauseIsLogged( $logger, 'Invalid notification request' );
+			$this->assertErrorCauseIsLogged( $logger, 'An Exception happened: Invalid notification request' );
 			$this->assertRequestVarsAreLogged( $logger, '{"not":"real","proper":"data"}' );
 			$this->assertLogLevel( $logger, LogLevel::ERROR );
 		} );
@@ -275,9 +276,56 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertIsBadRequestResponse( $client->getResponse() );
-			$this->assertErrorCauseIsLogged( $logger, 'Invalid notification request' );
+			$this->assertErrorCauseIsLogged( $logger, 'An Exception happened: Invalid notification request' );
 			$this->assertRequestVarsAreLogged( $logger );
 			$this->assertLogLevel( $logger, LogLevel::ERROR );
+		} );
+	}
+
+	public function testOnInternalError_applicationReturnsErrorResponse(): void {
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$repository = new ThrowingDonationRepository();
+			$repository->throwOnGetDonationById();
+			$factory->setDonationRepository( $repository );
+
+			$client->request(
+				Request::METHOD_POST,
+				'/sofort-payment-notification?id=' . 1 . '&updateToken=' . self::VALID_TOKEN,
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+			);
+
+			$this->assertSame( 500, $client->getResponse()->getStatusCode() );
+			$this->assertStringContainsString( "Error", $client->getResponse()->getContent() );
+		} );
+	}
+
+	public function testOnInternalError_applicationLogsError(): void {
+		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$repository = new ThrowingDonationRepository();
+			$repository->throwOnGetDonationById();
+			$factory->setDonationRepository( $repository );
+
+			$logger = new LoggerSpy();
+			$factory->setSofortLogger( $logger );
+
+			$client->request(
+				Request::METHOD_POST,
+				'/sofort-payment-notification?id=' . 1 . '&updateToken=' . self::VALID_TOKEN,
+				[],
+				[],
+				[],
+				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+			);
+
+			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$firstCallContext = $logger->getFirstLogCall()->getContext();
+			$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
+			$this->assertArrayHasKey( 'request_content', $firstCallContext );
+			$this->assertArrayHasKey( 'query_vars', $firstCallContext );
+			$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()->getMessage() );
 		} );
 	}
 

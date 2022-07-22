@@ -42,10 +42,6 @@ class SofortNotificationController {
 			return new Response( 'Error', Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
 
-		if ( $response->hasErrors() ) {
-			return new Response( 'Bad request', Response::HTTP_BAD_REQUEST );
-		}
-
 		if ( $response->notificationWasHandled() ) {
 			return new Response( 'Ok', Response::HTTP_OK );
 		}
@@ -103,8 +99,8 @@ class SofortNotificationController {
 	private function logException( UnexpectedValueException|\Exception $e ): void {
 		$this->ffFactory->getSofortLogger()->log(
 			LogLevel::ERROR,
-			$e->getMessage(),
-			$this->getRequestVars()
+			'An Exception happened: ' . $e->getMessage(),
+			array_merge( $this->getRequestVars(), [ 'stacktrace' => $e->getTraceAsString() ] )
 		);
 	}
 }
