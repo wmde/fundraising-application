@@ -16,7 +16,6 @@ class CreditCardPaymentNotificationController {
 	private const MSG_NOT_HANDLED = 'Credit card request "%s" not handled';
 	private const MSG_NOT_SUPPORTED = 'Function "%s" not supported by this end point';
 	private const MSG_ERROR = 'Credit Card Notification Error: %s';
-	private const MSG_WARNING = 'Failed to send conformation email for credit card notification';
 	private const MSG_CRITICAL = 'An Exception happened: %s';
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
@@ -67,11 +66,6 @@ class CreditCardPaymentNotificationController {
 			$ffFactory->getLogger()->error(
 				sprintf( self::MSG_ERROR, $response->getMessage() ),
 				[ 'queryParams' => $queryParams->all(), 'clientIP' => $clientIp ]
-			);
-		} elseif ( !$response->notificationWasHandled() ) {
-			$ffFactory->getLogger()->warning(
-				self::MSG_WARNING,
-				[ 'exception' => $response->getMessage() ]
 			);
 		}
 
