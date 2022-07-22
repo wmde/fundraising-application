@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingPayPalVerificationService;
@@ -427,6 +428,56 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 				[ 'Awoo! Nyaa!' ],
 				$logger->getLogCalls()->getMessages()
 			);
+		} );
+	}
+
+	public function testOnInternalError_applicationIndicatesError(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$this->setSucceedingDonationTokenGenerator( $factory );
+			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+
+			$repository = new ThrowingDonationRepository();
+			$repository->throwOnGetDonationById();
+			$factory->setDonationRepository( $repository );
+
+			$this->storedDonations()->newStoredIncompletePayPalDonation();
+
+			$client->request(
+				Request::METHOD_POST,
+				self::PATH,
+				$this->newHttpParamsForPayment()
+			);
+
+			$this->assertSame( 500, $client->getResponse()->getStatusCode() );
+			$this->assertStringContainsString( "Could not get donation", $client->getResponse()->getContent() );
+		} );
+	}
+
+	public function testOnInternalError_applicationLogsError(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$this->setSucceedingDonationTokenGenerator( $factory );
+			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+
+			$repository = new ThrowingDonationRepository();
+			$repository->throwOnGetDonationById();
+			$factory->setDonationRepository( $repository );
+
+			$logger = new LoggerSpy();
+			$factory->setPaypalLogger( $logger );
+
+			$this->storedDonations()->newStoredIncompletePayPalDonation();
+
+			$client->request(
+				Request::METHOD_POST,
+				self::PATH,
+				$this->newHttpParamsForPayment()
+			);
+
+			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$firstCallContext = $logger->getFirstLogCall()->getContext();
+			$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
+			$this->assertArrayHasKey( 'post_vars', $firstCallContext );
+			$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()->getMessage() );
 		} );
 	}
 
