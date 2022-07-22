@@ -8,4 +8,3 @@ parameters:
 		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
 		- tests/EdgeToEdge/CampaignCookieTest.php
 		- tests/EdgeToEdge/TrackingDataTest.php
-		- tests/Unit/Routes/SofortNotificationRequestTest.php
