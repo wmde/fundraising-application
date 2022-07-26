@@ -1,6 +1,10 @@
 mail_introduction_male_informal
 
-membership_application_confirmation/intro
+membership_application_confirmation/intro_start
+
+membership_application_confirmation/intro_bez
+
+membership_application_confirmation/intro_end
 
 membership_application_confirmation/contact membership_application_confirmation/receipt
 

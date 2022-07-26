@@ -6,6 +6,11 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use Doctrine\ORM\EntityManager;
 
+/**
+ * TODO: EntityManager is now a final class which Stan doesn't like. We
+ *       should change the tests at some point
+ */
+/** @phpstan-ignore-next-line */
 class EntityManagerSpy extends EntityManager {
 
 	/** @var mixed */

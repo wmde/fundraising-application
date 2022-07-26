@@ -1,8 +1,8 @@
-mail_introduction_male_lastname_informal
+mail_introduction_male_informal
 
 membership_application_confirmation/intro_start
 
-membership_application_confirmation/intro_bez
+membership_application_confirmation/intro_ueb
 
 membership_application_confirmation/intro_end
 
