@@ -10,13 +10,29 @@
 {% endif %}
 
 {% if moderationFlags is not defined or moderationFlags is empty %}
-	{$ mail_content('membership_application_confirmation/intro', {
-		'formatted_amount': formattedAmount,
-		'donation_interval': paymentIntervalInMonths|payment_interval,
-		'interval': paymentIntervalInMonths|payment_interval,
-		'membership_type': membershipType|membership_type,
-		'incentive': incentiveText
-	}) $}
+	{$ mail_content('membership_application_confirmation/intro_start') $}
+
+	{% if paymentType == 'UEB' %}
+		{$ mail_content('membership_application_confirmation/intro_ueb', {
+			'formatted_amount': formattedAmount,
+			'donation_interval': paymentIntervalInMonths|payment_interval,
+			'interval': paymentIntervalInMonths|payment_interval,
+			'membership_type': membershipType|membership_type,
+			'incentive': incentiveText,
+			'payment_type': paymentType
+		}) $}
+	{% else %}
+		{$ mail_content('membership_application_confirmation/intro_bez', {
+			'formatted_amount': formattedAmount,
+			'donation_interval': paymentIntervalInMonths|payment_interval,
+			'interval': paymentIntervalInMonths|payment_interval,
+			'membership_type': membershipType|membership_type,
+			'incentive': incentiveText,
+			'payment_type': paymentType
+		}) $}
+	{% endif %}
+
+	{$ mail_content('membership_application_confirmation/intro_end') $}
 
 	{$ mail_content('membership_application_confirmation/contact', {
 		'membership_type': membershipType|membership_type,

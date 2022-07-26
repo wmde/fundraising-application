@@ -230,6 +230,13 @@ class MailTemplates {
 						'moderationFlags' => [
 							MembershipModerationIdentifier::MANUALLY_FLAGGED_BY_ADMIN->name => true
 						]
+					],
+					'payment_type_UEB' => [
+						'membershipFee' => 15.23,
+						'membershipType' => 'active',
+						'paymentIntervalInMonths' => 12,
+						'paymentType' => 'UEB',
+						'hasReceiptEnabled' => true
 					]
 				]
 			],
