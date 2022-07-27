@@ -27,13 +27,18 @@ parameters:
 		- tests/EdgeToEdge/Routes/DonationAcceptedRouteTest.php
 		- tests/EdgeToEdge/Routes/GenerateIbanRouteTest.php
 		- tests/EdgeToEdge/Routes/HandlePayPalPaymentNotificationRouteTest.php
+		- tests/EdgeToEdge/Routes/ListCommentsHtmlRouteTest.php
+		- tests/EdgeToEdge/Routes/ListCommentsJsonRouteTest.php
+		- tests/EdgeToEdge/Routes/ListCommentsRssRouteTest.php
 		- tests/EdgeToEdge/Routes/NewDonationRouteTest.php
 		- tests/EdgeToEdge/Routes/ShowDonationConfirmationRouteTest.php
 		- tests/EdgeToEdge/Routes/ShowMembershipConfirmationRouteTest.php
 		- tests/EdgeToEdge/Routes/SofortPaymentNotificationRouteTest.php
 		- tests/EdgeToEdge/Routes/UpdateDonorRouteTest.php
+		- tests/EdgeToEdge/Routes/ValidateFeeRouteTest.php
 		- tests/EdgeToEdge/TrackBannerDonationRedirectsTest.php
 		- tests/EdgeToEdge/TrackingCookieTest.php
+		- tests/EdgeToEdge/TrackingDataTest.php
 		- tests/Integration/Presentation/Presenters/DonationConfirmationHtmlPresenterTest.php
 		- tests/Integration/Presentation/Presenters/MembershipApplicationConfirmationHtmlPresenterTest.php
 		- tests/Unit/Infrastructure/Mail/BasicMailSubjectRendererTest.php
