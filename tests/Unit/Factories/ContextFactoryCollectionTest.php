@@ -3,7 +3,6 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Factories;
 
-use Doctrine\ORM\ORMSetup;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\AddressChangeContext\AddressChangeContextFactory;
 use WMDE\Fundraising\DonationContext\DonationContextFactory;
@@ -75,10 +74,9 @@ class ContextFactoryCollectionTest extends TestCase {
 	 * @return void
 	 */
 	public function testSomeBoundedContextsFactoriesAreStillLegacy(): void {
-		$dummyConfig = ORMSetup::createConfiguration();
 		$collection = new ContextFactoryCollection(
-			new DonationContextFactory( [], $dummyConfig ),
-			new MembershipContextFactory( [], $dummyConfig ),
+			new DonationContextFactory( [] ),
+			new MembershipContextFactory( [] ),
 			new AddressChangeContextFactory(),
 			new SubscriptionContextFactory()
 		);

@@ -227,35 +227,22 @@ If you make changes to the database schema, you have to do two things:
    restart the container environment while dropping the database volume.
    See section "Resetting the database in your local environment" below.
 
-#### Testing migrations
+#### Migrations CLI and configuration
 
-To test a migration using the local Docker development environment, make
-sure you still have the old database schema in
-`.docker/database/01_Database_Schema.sql` and in your running database.
-Update the bounded context dependency in composer and run the `make
-migration MIGRATION_CONTEXT=<CTX>` command. Replace the placeholder
-`<CTX>` with the name of the configuration file in `app/config/migrations`
-(without the `.yml` suffix).
+The configuration file for migrations is in `app/config/migrations.php`
 
-To execute a specific script, run the following command and add the version number of the migration script you want to use.
-As an example, executing `migrations/Version20180612000000.php` for the subscription context would look like this:
+The `bin/doctrine` CLI command comes with the pre-configured migrations
+command for the Fundraising App. Wherever the Doctrine migrations
+documentation mentions running the command
+`vendor/bin/doctrine-migrations`, use the command `bin/doctrine` instead.
+E.g. `bin/doctrine migrations:status`.
 
-```
-make migration-execute MIGRATION_CONTEXT=subscriptions MIGRATION_VERSION=20180612000000
-```
-
-You can also revert a script (if implemented) through an equivalent `migration-revert` command:
+In your Docker-based development environment, run the command in the `app`
+container, using `docker-compose exec`. The container environment must be
+running for this to work. Example:
 
 ```
-make migration-revert  MIGRATION_CONTEXT=subscriptions MIGRATION_VERSION=20180612000000
-```
-
-Note that Doctrine creates its own `doctrine_migration_versions` table where it stores the status of individual migrations.
-If you run into issues and want to reset the state of a migrations it's best to check that table directly or use the `versions`
-command from doctrine-migrations which supports `--add` and `--delete` parameters:
-
-```
-vendor/doctrine/migrations/bin/doctrine-migrations migrations:version
+docker-compose exec app bin/doctrine migrations:status
 ```
 
 #### Running migrations on the server

@@ -4,7 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App;
 
+use WMDE\Fundraising\DonationContext\Domain\Model\ModerationIdentifier as DonationModerationIdentifier;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\MembershipContext\Domain\Model\ModerationIdentifier as MembershipModerationIdentifier;
 
 /**
  * This file contains a list of all Mail templates and the variables rendered in them.
@@ -60,12 +62,11 @@ class MailTemplates {
 					'greeting_generator' => $this->factory->getGreetingGenerator(),
 					'donation' => [
 						'id' => 42,
-						'amount' => 12.34,
-						'needsModeration' => false,
 						'receiptOptIn' => false,
 					],
 					'recipient' => [
 						'lastName' => '姜',
+						'firstName' => '留美子',
 						'salutation' => 'Frau',
 						'title' => ''
 					],
@@ -73,6 +74,7 @@ class MailTemplates {
 				'variants' => [
 					'deposit_unmoderated_non_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'UEB',
 							'interval' => 0,
 							'bankTransferCode' => 'WZF3984Y',
@@ -81,6 +83,7 @@ class MailTemplates {
 					],
 					'deposit_unmoderated_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'UEB',
 							'interval' => 6,
 							'bankTransferCode' => 'WZF3984Y',
@@ -88,12 +91,14 @@ class MailTemplates {
 					],
 					'direct_debit_unmoderated_non_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'BEZ',
 							'interval' => 0,
 						]
 					],
 					'direct_debit_unmoderated_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'BEZ',
 							'interval' => 3,
 							'receiptOptIn' => true
@@ -101,12 +106,14 @@ class MailTemplates {
 					],
 					'paypal_unmoderated_non_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'PPL',
 							'interval' => 0,
 						]
 					],
 					'sofort_unmoderated_non_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'SUB',
 							'interval' => 0,
 							'status' => 'Z'
@@ -114,23 +121,45 @@ class MailTemplates {
 					],
 					'credit_card_unmoderated_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'MCP',
 							'interval' => 1
 						]
 					],
 					'paypal_unmoderated_recurring' => [
 						'donation' => [
+							'amount' => 12.34,
 							'paymentType' => 'PPL',
 							'interval' => 6,
 						]
 					],
-					// moderated all generate the same message, no need to test different payment types
-					'micropayment_moderated_recurring' => [
+					'micropayment_unmoderated_recurring' => [
 						'donation' => [
-							'needsModeration' => true,
+							'amount' => 12.34,
 							'paymentType' => 'MCP',
 							'interval' => 6
 						],
+					],
+					'moderated_amount_too_high' => [
+						'donation' => [
+							'paymentType' => 'UEB',
+							'amount' => 99999.99,
+							'interval' => 1,
+							'moderationFlags' => [
+								DonationModerationIdentifier::AMOUNT_TOO_HIGH->name => true
+							]
+						],
+					],
+					'moderated_other_reason' => [
+						'donation' => [
+							'amount' => 12.34,
+							'paymentType' => 'PPL',
+							'interval' => 1,
+							'moderationFlags' => [
+								DonationModerationIdentifier::MANUALLY_FLAGGED_BY_ADMIN->name => true
+							]
+						]
+
 					]
 				],
 			],
@@ -155,34 +184,71 @@ class MailTemplates {
 					'lastName' => "O'Reilly",
 					'salutation' => 'Herr',
 					'title' => 'Dr.',
-					'membershipFee' => 15.23,
 					'incentives' => [ 'totebag' ],
 				],
 				'variants' => [
 					'direct_debit_active_yearly' => [
+						'membershipFee' => 15.23,
 						'membershipType' => 'active',
 						'paymentIntervalInMonths' => 12,
 						'paymentType' => 'BEZ',
 						'hasReceiptEnabled' => true
 					],
 					'direct_debit_active_yearly_receipt_optout' => [
+						'membershipFee' => 15.23,
 						'membershipType' => 'active',
 						'paymentIntervalInMonths' => 12,
 						'paymentType' => 'BEZ',
 						'hasReceiptEnabled' => false
 					],
 					'direct_debit_sustaining_quarterly' => [
+						'membershipFee' => 15.23,
 						'membershipType' => 'sustaining',
 						'paymentIntervalInMonths' => 3,
 						'paymentType' => 'BEZ',
 						'hasReceiptEnabled' => true
 					],
 					'paypal_sustaining_monthly' => [
+						'membershipFee' => 15.23,
 						'membershipType' => 'sustaining',
 						'paymentIntervalInMonths' => 1,
 						'paymentType' => 'PPL',
 						'hasReceiptEnabled' => true
+					],
+					'moderated_amount_too_high' => [
+						'membershipFee' => 90000.00,
+						'paymentIntervalInMonths' => 1,
+						'membershipType' => 'sustaining',
+						'moderationFlags' => [
+							MembershipModerationIdentifier::MEMBERSHIP_FEE_TOO_HIGH->name => true
+						]
+					],
+					'moderated_other_reason' => [
+						'membershipFee' => 15.23,
+						'paymentIntervalInMonths' => 1,
+						'membershipType' => 'sustaining',
+						'moderationFlags' => [
+							MembershipModerationIdentifier::MANUALLY_FLAGGED_BY_ADMIN->name => true
+						]
 					]
+				]
+			],
+
+			'Admin_Moderation.txt.twig' => [
+				'context' => [],
+				'variants' => [
+					'membership' => [
+						'membershipFee' => 90000.00,
+						'itemType' => 'ein Mitgliedschaftsantrag',
+						'focURL' => 'https://backend.wikimedia.de/backend/member/list',
+						'id' => '1'
+					],
+					'donation' => [
+						'amount' => 7777777.77,
+						'itemType' => 'eine Spende',
+						'focURL' => 'https://backend.wikimedia.de/backend/donation/list',
+						'id' => '42'
+					],
 				]
 			],
 

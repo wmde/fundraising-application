@@ -34,6 +34,7 @@ class RenderMailTemplatesCommand extends Command {
 	public function __construct( FunFunFactory $ffFactory ) {
 		parent::__construct( self::NAME );
 		$this->ffFactory = $ffFactory;
+		$this->ffFactory->setLocale( "de_DE" );
 	}
 
 	protected function configure(): void {

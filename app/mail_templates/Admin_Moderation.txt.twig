@@ -1,0 +1,12 @@
+{% if amount is defined %}
+	{%- set formattedAmount = amount |format_number(locale=locale) ~ ' Euro' -%}
+{% elseif membershipFee is defined %}
+	{%- set formattedAmount = membershipFee |format_number(locale=locale) ~ ' Euro' -%}
+{% else %}
+	{% set formattedAmount = "-- ! Fehler im E-Mail-Template, bitte Templates überprüfen. ! --" %}
+{% endif %}
+Hallo,
+
+{$ itemType $} wurde automatisch moderiert, da der Betrag verdächtig hoch ist ( {$ formattedAmount $} ).
+
+Zum Überprüfen der Moderation bitte {$ focURL $} aufrufen und dort nach ID {$ id $} suchen.

@@ -9,9 +9,9 @@ MIGRATION_VERSION :=
 MIGRATION_CONTEXT :=
 APP_ENV       := dev
 ASSET_BRANCH  := main
-DOCTRINE_SCHEMA_COMMAND := docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:create --dump-sql | sed 's/The following SQL statements will be executed://; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/'
+DOCTRINE_SCHEMA_COMMAND := docker-compose run --rm app ./bin/doctrine orm:schema-tool:create --dump-sql | sed 's/The following SQL statements will be executed://; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/'
 
-DOCKER_IMAGE  := registry.gitlab.com/fun-tech/fundraising-frontend-docker
+DOCKER_IMAGE  := registry.gitlab.com/fun-tech/fundraising-frontend-docker/php-8.1
 
 .DEFAULT_GOAL := ci
 
@@ -45,10 +45,10 @@ validate-sql:
 
 setup-doctrine:
 	docker-compose run --rm start_dependencies
-	docker-compose run --rm app ./vendor/bin/doctrine orm:generate-proxies var/doctrine_proxies
+	docker-compose run --rm app ./bin/doctrine orm:generate-proxies var/doctrine_proxies
 
 drop-db:
-	docker-compose run --rm app ./vendor/bin/doctrine orm:schema-tool:drop --force
+	docker-compose run --rm app ./bin/doctrine orm:schema-tool:drop --force
 
 default-config:
 	cp -i .docker/app/config.dev.json app/config
