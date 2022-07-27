@@ -29,6 +29,7 @@ class ApplyForMembershipController {
 	public function index( FunFunFactory $ffFactory, Request $httpRequest ): Response {
 		$session = $httpRequest->getSession();
 		$this->ffFactory = $ffFactory;
+		$ffFactory->getTranslationCollector()->addTranslationFile( $ffFactory->getI18nDirectory() . '/messages/paymentTypes.json' );
 		if ( !$ffFactory->getMembershipSubmissionRateLimiter()->isSubmissionAllowed( $session ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'membership_application_rejected_limit' ) );
 		}
