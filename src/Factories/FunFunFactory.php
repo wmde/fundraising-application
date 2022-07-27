@@ -198,7 +198,7 @@ use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentRepository;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortLibClient;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\IbanBlocklist;
+use WMDE\Fundraising\PaymentContext\Domain\IbanBlockList;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentIdRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;

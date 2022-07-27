@@ -36,7 +36,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function presentConfirmation( MembershipApplication $application, string $updateToken ): void {
+	public function presentConfirmation( MembershipApplication $application, array $paymentData, string $updateToken ): void {
 		$this->html = $this->template->render(
 			$this->getConfirmationPageArguments(
 				$application,
