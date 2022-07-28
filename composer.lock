@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1fbed58080561b5e0c76afb0e275e630",
+    "content-hash": "dd0df6585da4b17445477847c8be9eca",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7463,52 +7463,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "codeception/specify",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Codeception/Specify.git",
-                "reference": "b718b4b9bb722be4756aa7c9aa7e89b6babc2cf6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Specify/zipball/b718b4b9bb722be4756aa7c9aa7e89b6babc2cf6",
-                "reference": "b718b4b9bb722be4756aa7c9aa7e89b6babc2cf6",
-                "shasum": ""
-            },
-            "require": {
-                "myclabs/deep-copy": "^1.10",
-                "php": ">=7.4.0",
-                "phpunit/phpunit": "^8.0|^9.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Codeception\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Bodnarchuk",
-                    "email": "davert@codeception.com"
-                },
-                {
-                    "name": "Gustavo Nieves",
-                    "homepage": "https://medium.com/@ganieves"
-                }
-            ],
-            "description": "BDD code blocks for PHPUnit and Codeception",
-            "support": {
-                "issues": "https://github.com/Codeception/Specify/issues",
-                "source": "https://github.com/Codeception/Specify/tree/2.0.0"
-            },
-            "time": "2021-11-22T00:16:11+00:00"
-        },
         {
             "name": "composer/pcre",
             "version": "3.0.0",
