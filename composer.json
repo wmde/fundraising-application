@@ -35,7 +35,7 @@
 		"symfony/mailer": "~6.1.2",
 		"symfony/monolog-bundle": "^3.6",
 		"symfony/property-access": "~6.0.0",
-		"symfony/twig-bridge": "~6.0.0",
+		"symfony/twig-bridge": "~6.1.2",
 		"symfony/validator": "~6.0.0",
 		"symfony/yaml": "~6.0.0",
 		"symfony/cache": "^6.0",
