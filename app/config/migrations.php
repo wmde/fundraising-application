@@ -13,6 +13,7 @@ return [
 	'migrations_paths' => [
 		'WMDE\Fundraising\DonationContext\DataAccess\Migrations' => './vendor/wmde/fundraising-donations/src/DataAccess/Migrations',
 		'WMDE\Fundraising\MembershipContext\DataAccess\Migrations' => './vendor/wmde/fundraising-memberships/src/DataAccess/Migrations',
+		'WMDE\Fundraising\PaymentContext\DataAccess\Migrations' => './vendor/wmde/fundraising-payments/src/DataAccess/Migrations',
 	],
 
 	'all_or_nothing' => true,
