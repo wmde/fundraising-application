@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateFeeController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateMembershipPaymentController
  */
 class ValidateFeeRouteTest extends WebRouteTestCase {
 
@@ -48,35 +48,59 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertErrorJsonResponse( $response );
-		$this->assertSame( $this->newErrorResponse(), json_decode( $response->getContent(), true ) );
+		$this->assertSame(
+			[
+				'status' => 'ERR',
+				'messages' => [ 'fee' => 'error_too_low' ]
+			],
+			json_decode( $response->getContent(), true )
+		);
 	}
 
-	private function newErrorResponse(): array {
-		return [
-			'status' => 'ERR',
-			'messages' => [
-				'membershipFee' => 'error_too_low'
-			]
-		];
-	}
-
-	public function testInvalidFee_failureResponseIsReturned(): void {
+	public function testGivenEmptyParameters_failureResponseIsReturned(): void {
 		$client = $this->createClient();
 
 		$client->request(
 			'POST',
 			'/validate-fee',
-			[ 'membershipFee' => 'such', 'paymentIntervalInMonths' => '6', 'addressType' => 'person' ]
 		);
 
+		$response = $client->getResponse();
+		$this->assertErrorJsonResponse( $response );
 		$this->assertSame(
 			[
 				'status' => 'ERR',
 				'messages' => [
-					'membershipFee' => 'not-money'
+					'applicant-type' => 'invalid-applicant-type',
+					'fee' => 'cannot_parse_fee'
 				]
 			],
-			json_decode( $client->getResponse()->getContent(), true )
+			json_decode( $response->getContent(), true )
+		);
+	}
+
+	public function testGivenInvalidFeeValue_failureResponseIsReturned(): void {
+		$client = $this->createClient();
+
+		$client->request(
+			'POST',
+			'/validate-fee',
+			[
+				'membershipFee' => 'NOTHING!',
+				'paymentIntervalInMonths' => '6',
+				'addressType' => 'firma',
+				'paymentType' => PaymentType::DirectDebit->value
+			]
+		);
+
+		$response = $client->getResponse();
+		$this->assertErrorJsonResponse( $response );
+		$this->assertSame(
+			[
+				'status' => 'ERR',
+				'messages' => [ 'fee' => 'cannot_parse_fee' ]
+			],
+			json_decode( $response->getContent(), true )
 		);
 	}
 

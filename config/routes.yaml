@@ -11,7 +11,7 @@ validate-donor-address:
 validate-fee:
     path: /validate-fee
     methods: [POST]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateFeeController::index'
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateMembershipPaymentController::index'
 
 GET_list_comments.json:
     path: /list-comments.json
