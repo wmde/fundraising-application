@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeMembershipEvent;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeMembershipEvent;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter

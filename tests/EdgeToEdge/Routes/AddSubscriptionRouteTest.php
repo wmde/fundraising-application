@@ -138,7 +138,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
 		$this->assertSame(
-			file_get_contents( __DIR__ . '/../../Data/files/addSubscriptionResponse.js' ),
+			file_get_contents( __DIR__ . '/../../Fixtures/files/addSubscriptionResponse.js' ),
 			$response->getContent()
 		);
 	}

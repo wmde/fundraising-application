@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\OverridingCampaignConfigurationLoader;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\StoreBucketSelection

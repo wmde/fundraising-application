@@ -15,9 +15,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplication
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\BucketLoggerSpy;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FixedPaymentDelayCalculator;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FixedTokenGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineEntities\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Incentive;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;

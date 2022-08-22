@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationEvent;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeDonationEvent;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter

@@ -14,7 +14,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\DefaultBucketRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\MinBucketCountRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\StartAndEndTimeRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\UniqueBucketRule;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\CampaignFixture;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator

@@ -9,7 +9,7 @@ use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentS
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetupException;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\ProductionEnvironmentSetup;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeEnvironmentSetup;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeEnvironmentSetup;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper

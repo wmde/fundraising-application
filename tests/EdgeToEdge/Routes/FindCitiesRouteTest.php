@@ -6,8 +6,8 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidLocation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\ValidLocation;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\FindCitiesController

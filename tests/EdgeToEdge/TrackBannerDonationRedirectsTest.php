@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FixedTokenGenerator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects

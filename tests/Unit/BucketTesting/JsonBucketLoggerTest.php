@@ -12,8 +12,8 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\LogWriterSpy;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeBucketLoggingEvent;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\LogWriterSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger

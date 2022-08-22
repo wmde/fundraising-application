@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\Autocomplete\Domain\DataAccess\DoctrineLocationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Data\ValidLocation;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\ValidLocation;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 
 /**

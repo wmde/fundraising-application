@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Yaml\Exception\ParseException;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingCampaignConfigurationLoader;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\ThrowingCampaignConfigurationLoader;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader

@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeTranslator;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 
 /**

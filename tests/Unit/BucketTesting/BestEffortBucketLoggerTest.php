@@ -11,8 +11,8 @@ use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingError;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\BucketLoggerSpy;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeBucketLoggingEvent;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger

@@ -10,7 +10,7 @@ use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FixedTokenGenerator;
 use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiry;
 use WMDE\Fundraising\PaymentContext\Infrastructure\FakeCreditCardService;
 use WMDE\PsrLogTestDoubles\LoggerSpy;

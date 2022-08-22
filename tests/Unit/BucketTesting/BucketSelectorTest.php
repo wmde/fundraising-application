@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketSelectionSpy;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\BucketSelectionSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\BucketSelector

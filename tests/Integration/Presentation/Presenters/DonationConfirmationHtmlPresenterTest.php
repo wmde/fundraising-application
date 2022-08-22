@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeUrlGenerator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter

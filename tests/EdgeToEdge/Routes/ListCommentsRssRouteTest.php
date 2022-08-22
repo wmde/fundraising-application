@@ -22,7 +22,7 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 		$this->assertTrue( $client->getResponse()->isSuccessful(), 'request is successful' );
 
 		$this->assertEquals(
-			file_get_contents( __DIR__ . '/../../Data/files/emptyCommentList.rss' ),
+			file_get_contents( __DIR__ . '/../../Fixtures/files/emptyCommentList.rss' ),
 			$client->getResponse()->getContent()
 		);
 	}

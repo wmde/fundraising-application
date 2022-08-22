@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
+namespace WMDE\Fundraising\Frontend\Tests\TestDoubles;
 
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 

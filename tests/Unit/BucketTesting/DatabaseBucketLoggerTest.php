@@ -13,8 +13,8 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingError;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeBucketLoggingEvent;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger

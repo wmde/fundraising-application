@@ -8,8 +8,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingTemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\ErrorThrowingTemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\ErrorThrowingTemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\TemplateBasedMailerSpy;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**

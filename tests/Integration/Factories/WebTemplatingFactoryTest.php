@@ -12,7 +12,7 @@ use WMDE\Fundraising\ContentProvider\ContentException;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\CampaignFixture;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**

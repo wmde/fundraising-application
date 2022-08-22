@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Salutations;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeTranslator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator

@@ -1,7 +1,7 @@
 <?php
 declare( strict_types=1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
+namespace WMDE\Fundraising\Frontend\Tests\TestDoubles;
 
 use Doctrine\Common\EventArgs;
 use Doctrine\Common\EventSubscriber;

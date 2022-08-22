@@ -9,7 +9,7 @@ use WMDE\Fundraising\DonationContext\DonationContextFactory;
 use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\Frontend\Factories\ContextFactoryCollection;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeEventSubscriber;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeEventSubscriber;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\SubscriptionContext\SubscriptionContextFactory;
 

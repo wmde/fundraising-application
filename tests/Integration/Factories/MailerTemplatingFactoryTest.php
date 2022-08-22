@@ -8,9 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\CampaignFixture;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeTranslator;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeUrlGenerator;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**

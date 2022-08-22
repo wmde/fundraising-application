@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\App\MailTemplates;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
+use WMDE\Fundraising\Frontend\Tests\TestDoubles\FakeTranslator;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**
@@ -98,7 +98,7 @@ class MailTemplatesTest extends KernelTestCase {
 	}
 
 	private function createTestFilePath( string $templateFileName, string $variantName ): string {
-		return __DIR__ . '/../Data/GeneratedMailTemplates/'
+		return __DIR__ . '/../Fixtures/GeneratedMailTemplates/'
 			. basename( $templateFileName, '.txt.twig' )
 			. ( $variantName === '' ? '' : ".$variantName" )
 			. '.txt';
