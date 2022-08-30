@@ -26,7 +26,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 		$presenter->presentConfirmation(
 			$membershipApplication,
 			[
-				'amount' => 10.00,
+				'amount' => 1000,
 				'interval' => 3,
 				'paymentType' => 'BEZ',
 				'iban' => 'I has IBAN',
@@ -45,6 +45,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 				'paymentType' => 'BEZ',
 				'status' => 'status-booked',
 				'membershipFee' => 10.00,
+				'membershipFeeInCents' => 1000,
 				'paymentIntervalInMonths' => 3,
 				'updateToken' => 'update_token',
 				'incentives' => []
