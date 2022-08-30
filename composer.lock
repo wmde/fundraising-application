@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff253723f09c4d6d0e661be9b6c5a783",
+    "content-hash": "442deab925f2a980e706afd78ed57dfd",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -543,16 +543,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.4.2",
+            "version": "3.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "22de295f10edbe00df74f517612f1fbd711131e2"
+                "reference": "a24b89d663d8f261199bc0a91c48016042ebda85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/22de295f10edbe00df74f517612f1fbd711131e2",
-                "reference": "22de295f10edbe00df74f517612f1fbd711131e2",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/a24b89d663d8f261199bc0a91c48016042ebda85",
+                "reference": "a24b89d663d8f261199bc0a91c48016042ebda85",
                 "shasum": ""
             },
             "require": {
@@ -565,8 +565,8 @@
                 "psr/log": "^1|^2|^3"
             },
             "require-dev": {
-                "doctrine/coding-standard": "9.0.0",
-                "jetbrains/phpstorm-stubs": "2022.1",
+                "doctrine/coding-standard": "10.0.0",
+                "jetbrains/phpstorm-stubs": "2022.2",
                 "phpstan/phpstan": "1.8.2",
                 "phpstan/phpstan-strict-rules": "^1.3",
                 "phpunit/phpunit": "9.5.21",
@@ -634,7 +634,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.4.2"
+                "source": "https://github.com/doctrine/dbal/tree/3.4.3"
             },
             "funding": [
                 {
@@ -650,7 +650,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-21T14:21:06+00:00"
+            "time": "2022-08-28T17:26:36+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -7183,16 +7183,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "dev-new-payment-domain",
+            "version": "v11.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "49817b1202d65f24f7cca2bc5a460f714d1b3b65"
+                "reference": "99083884d490be819ea9dc0e4dc63b8b5c7df7a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/49817b1202d65f24f7cca2bc5a460f714d1b3b65",
-                "reference": "49817b1202d65f24f7cca2bc5a460f714d1b3b65",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/99083884d490be819ea9dc0e4dc63b8b5c7df7a7",
+                "reference": "99083884d490be819ea9dc0e4dc63b8b5c7df7a7",
                 "shasum": ""
             },
             "require": {
@@ -7240,20 +7240,20 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2022-08-29T16:34:19+00:00"
+            "time": "2022-08-30T07:33:45+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "dev-update-payments",
+            "version": "v9.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "714612ba28b60e35b0c0f02641f21375b82c5e29"
+                "reference": "1e58e7b161631b0724a8e46c3297d20d220a9861"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/714612ba28b60e35b0c0f02641f21375b82c5e29",
-                "reference": "714612ba28b60e35b0c0f02641f21375b82c5e29",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/1e58e7b161631b0724a8e46c3297d20d220a9861",
+                "reference": "1e58e7b161631b0724a8e46c3297d20d220a9861",
                 "shasum": ""
             },
             "require": {
@@ -7300,20 +7300,20 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2022-08-29T16:31:14+00:00"
+            "time": "2022-08-30T07:34:43+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v5.0.0",
+            "version": "v5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "260dc6b348b36660edd02e0d4e261af578227d69"
+                "reference": "c9b4774e6e584b3604fdd28d1f6068ea1ee36f8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/260dc6b348b36660edd02e0d4e261af578227d69",
-                "reference": "260dc6b348b36660edd02e0d4e261af578227d69",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/c9b4774e6e584b3604fdd28d1f6068ea1ee36f8b",
+                "reference": "c9b4774e6e584b3604fdd28d1f6068ea1ee36f8b",
                 "shasum": ""
             },
             "require": {
@@ -7355,7 +7355,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2022-08-29T16:24:07+00:00"
+            "time": "2022-08-31T17:46:58+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -8308,16 +8308,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.16",
+            "version": "9.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "2593003befdcc10db5e213f9f28814f5aa8ac073"
+                "reference": "aa94dc41e8661fe90c7316849907cba3007b10d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2593003befdcc10db5e213f9f28814f5aa8ac073",
-                "reference": "2593003befdcc10db5e213f9f28814f5aa8ac073",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/aa94dc41e8661fe90c7316849907cba3007b10d8",
+                "reference": "aa94dc41e8661fe90c7316849907cba3007b10d8",
                 "shasum": ""
             },
             "require": {
@@ -8373,7 +8373,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.16"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.17"
             },
             "funding": [
                 {
@@ -8381,7 +8381,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-20T05:26:47+00:00"
+            "time": "2022-08-30T12:24:04+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -10147,8 +10147,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "wmde/fundraising-donations": 20,
-        "wmde/fundraising-memberships": 20,
         "remotelyliving/doorkeeper": 20,
         "wmde/fundraising-frontend-content": 20
     },
