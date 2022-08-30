@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -78,7 +79,9 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'membershipType' => $membershipApplication->getType(),
 			'paymentType' => $paymentData['paymentType'],
 			'status' => 'status-booked',
-			'membershipFee' => $paymentData['amount'],
+			// TODO: Adapt the front end to take cents here for currency localisation
+			'membershipFee' => Euro::newFromCents( $paymentData['amount'] )->getEuroFloat(),
+			'membershipFeeInCents' => $paymentData['amount'],
 			'paymentIntervalInMonths' => $paymentData['interval'],
 			'updateToken' => $updateToken,
 			'incentives' => iterator_to_array( $membershipApplication->getIncentives() )
