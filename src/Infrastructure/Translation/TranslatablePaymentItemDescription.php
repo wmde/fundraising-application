@@ -21,8 +21,14 @@ class TranslatablePaymentItemDescription implements TranslatableDescription {
 			$this->localisationString,
 			[
 				'%amount%' => $paymentAmount->getEuroFloat(),
-				'%interval%' => $paymentInterval->value
+				'%interval%' => $this->getTranslatedInterval( $paymentInterval->value )
 			]
 		);
+	}
+
+	private function getTranslatedInterval( int $value ): string {
+		// See i18n repository, messages/paymentIntervals.json
+		$messageKey = "payment_interval_$value";
+		return $this->translatorInterface->trans( $messageKey );
 	}
 }

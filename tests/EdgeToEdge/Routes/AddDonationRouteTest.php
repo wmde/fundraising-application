@@ -15,10 +15,10 @@ use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryTranslator;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
 
@@ -361,11 +361,10 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$translator = $this->createMock( TranslatorInterface::class );
-		$translator->expects( $this->once() )
-			->method( 'trans' )
-			->with( 'paypal_item_name_donation' )
-			->willReturn( 'Ihre Spende' );
+		$translator = new InMemoryTranslator( [
+				'paypal_item_name_donation' => 'Ihre Spende',
+				'payment_interval_3' => 'vierteljährlich',
+		] );
 		$factory->setPaymentProviderItemsTranslator( $translator );
 
 		$client->followRedirects( false );
