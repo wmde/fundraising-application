@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer
@@ -15,7 +15,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 class DonationConfirmationMailSubjectRendererTest extends TestCase {
 
 	public function testGivenPaypalPayment_defaultSubjectLineIsPrinted() {
-		$templateArguments['donation']['paymentType'] = PaymentMethod::PAYPAL;
+		$templateArguments['donation']['paymentType'] = PaymentType::Paypal->value;
 		$this->assertSame(
 			'mail_subject_confirm_donation',
 			$this->newDonationConfirmationMailSubjectRenderer()->render( $templateArguments )
@@ -23,7 +23,7 @@ class DonationConfirmationMailSubjectRendererTest extends TestCase {
 	}
 
 	public function testGivenBankTransferPayment_bankTransferSubjectLineIsPrinted() {
-		$templateArguments['donation']['paymentType'] = PaymentMethod::BANK_TRANSFER;
+		$templateArguments['donation']['paymentType'] = PaymentType::BankTransfer->value;
 		$this->assertSame(
 			'mail_subject_confirm_donation_promise',
 			$this->newDonationConfirmationMailSubjectRenderer()->render( $templateArguments )

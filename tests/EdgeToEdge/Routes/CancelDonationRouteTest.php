@@ -4,18 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation as DoctrineDonation;
-use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
-use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\CancelDonationController
@@ -40,42 +34,40 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testCancellationIsSuccessful_cookieIsCleared(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$client->getCookieJar()->set( new Cookie( 'donation_timestamp', '49152 B.C.' ) );
+		$client = $this->createClient();
+		$client->getCookieJar()->set( new Cookie( 'donation_timestamp', '49152 B.C.' ) );
 
-			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
+		$donationId = $this->storeDonation();
 
-			$client->request(
-				'POST',
-				'/donation/cancel',
-				[
-					'sid' => (string)$donationId,
-					'utoken' => self::CORRECT_UPDATE_TOKEN,
-				]
-			);
+		$client->request(
+			'POST',
+			'/donation/cancel',
+			[
+				'sid' => (string)$donationId,
+				'utoken' => self::CORRECT_UPDATE_TOKEN,
+			]
+		);
 
-			/** @var Cookie $cookie */
-			$cookie = $client->getResponse()->headers->getCookies()[0];
-			$this->assertSame( 'donation_timestamp', $cookie->getName() );
-			$this->assertNull( $cookie->getValue() );
-		} );
+		/** @var Cookie $cookie */
+		$cookie = $client->getResponse()->headers->getCookies()[0];
+		$this->assertSame( 'donation_timestamp', $cookie->getName() );
+		$this->assertNull( $cookie->getValue() );
 	}
 
 	public function testGivenValidUpdateToken_confirmationPageIsShown(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
+		$client = $this->createClient();
+		$donationId = $this->storeDonation();
 
-			$client->request(
-				'POST',
-				'/donation/cancel',
-				[
-					'sid' => (string)$donationId,
-					'utoken' => self::CORRECT_UPDATE_TOKEN,
-				]
-			);
+		$client->request(
+			'POST',
+			'/donation/cancel',
+			[
+				'sid' => (string)$donationId,
+				'utoken' => self::CORRECT_UPDATE_TOKEN,
+			]
+		);
 
-			$this->assertStringContainsString( 'Cancellation status: successful', $client->getResponse()->getContent() );
-		} );
+		$this->assertStringContainsString( 'Cancellation status: successful', $client->getResponse()->getContent() );
 	}
 
 	public function testGivenGetRequest_resultHasMethodNotAllowedStatus(): void {
@@ -94,58 +86,42 @@ class CancelDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidUpdateToken_resultIsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
+		$client = $this->createClient();
+		$donationId = $this->storeDonation();
 
-			$client->request(
-				'POST',
-				'/donation/cancel',
-				[
-					'sid' => (string)$donationId,
-					'utoken' => 'Not the correct update token',
-				]
-			);
+		$client->request(
+			'POST',
+			'/donation/cancel',
+			[
+				'sid' => (string)$donationId,
+				'utoken' => 'Not the correct update token',
+			]
+		);
 
-			$this->assertStringContainsString( 'Cancellation status: failed', $client->getResponse()->getContent() );
-		} );
+		$this->assertStringContainsString( 'Cancellation status: failed', $client->getResponse()->getContent() );
 	}
 
-	private function storeDonation( DonationRepository $repo, EntityManager $entityManager ): int {
-		$donation = ValidDonation::newDirectDebitDonation();
-		$repo->storeDonation( $donation );
-
-		/**
-		 * @var DoctrineDonation $doctrineDonation
-		 */
-		$doctrineDonation = $entityManager->getRepository( DoctrineDonation::class )->find( $donation->getId() );
-
-		$doctrineDonation->modifyDataObject( static function ( DonationData $data ): void {
-			$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
-			$data->setUpdateTokenExpiry( date( 'Y-m-d H:i:s', time() + 60 * 60 ) );
-		} );
-
-		$entityManager->persist( $doctrineDonation );
-		$entityManager->flush();
+	private function storeDonation(): int {
+		$donation = ( new StoredDonations( $this->getFactory() ) )->newUpdatableDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
 
 		return $donation->getId();
 	}
 
 	public function testWhenMailDeliveryFails_noticeIsDisplayed(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donationId = $this->storeDonation( $factory->getDonationRepository(), $factory->getEntityManager() );
-			$factory->setSuborganizationMessenger( $this->newThrowingMessenger() );
+		$client = $this->createClient();
+		$this->getFactory()->setSubOrganizationMessenger( $this->newThrowingMessenger() );
+		$donationId = $this->storeDonation();
 
-			$client->request(
-				'POST',
-				'/donation/cancel',
-				[
-					'sid' => (string)$donationId,
-					'utoken' => self::CORRECT_UPDATE_TOKEN,
-				]
-			);
+		$client->request(
+			'POST',
+			'/donation/cancel',
+			[
+				'sid' => (string)$donationId,
+				'utoken' => self::CORRECT_UPDATE_TOKEN,
+			]
+		);
 
-			$this->assertStringContainsString( 'Mail delivery status: failed', $client->getResponse()->getContent() );
-		} );
+		$this->assertStringContainsString( 'Mail delivery status: failed', $client->getResponse()->getContent() );
 	}
 
 	/**

@@ -6,17 +6,14 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
+use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 
-/**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
- */
 class MembershipFormViolationPresenter {
 
-	private $template;
-
-	public function __construct( TwigTemplate $template ) {
-		$this->template = $template;
+	public function __construct(
+		private readonly TwigTemplate $template,
+		private readonly BankDataGenerator $bankDataGenerator ) {
 	}
 
 	public function present( ApplyForMembershipRequest $request, bool $showMembershipTypeOption ): string {
@@ -29,6 +26,9 @@ class MembershipFormViolationPresenter {
 	}
 
 	private function getMembershipFormArguments( ApplyForMembershipRequest $request ): array {
+		$paymentRequest = $request->getPaymentCreationRequest();
+		$bankData = $this->bankDataGenerator->getBankDataFromIban( new Iban( $paymentRequest->iban ) );
+
 		return [
 			'addressType' => $request->isCompanyApplication() ? 'firma' : 'person',
 			'salutation' => $request->getApplicantSalutation(),
@@ -41,11 +41,11 @@ class MembershipFormViolationPresenter {
 			'city' => $request->getApplicantCity(),
 			'country' => $request->getApplicantCountryCode(),
 			'email' => $request->getApplicantEmailAddress(),
-			'iban' => $request->getBankData()->getIban()->toString(),
-			'bic' => $request->getBankData()->getBic(),
-			'accountNumber' => $request->getBankData()->getAccount(),
-			'bankCode' => $request->getBankData()->getBankCode(),
-			'bankname' => $request->getBankData()->getBankName()
+			'iban' => $request->getPaymentCreationRequest()->iban,
+			'bic' => $request->getPaymentCreationRequest()->bic,
+			'accountNumber' => $bankData->account,
+			'bankCode' => $bankData->bankCode,
+			'bankname' => $bankData->bankName
 		];
 	}
 

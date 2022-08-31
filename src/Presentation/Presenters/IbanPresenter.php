@@ -4,31 +4,28 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
-use WMDE\Fundraising\PaymentContext\ResponseModel\IbanResponse;
+use WMDE\Fundraising\PaymentContext\Domain\Model\ExtendedBankData;
+use WMDE\Fundraising\PaymentContext\UseCases\BankDataFailureResponse;
+use WMDE\Fundraising\PaymentContext\UseCases\BankDataSuccessResponse;
 
-/**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
- */
 class IbanPresenter {
 
-	public function present( IbanResponse $iban ): array {
-		if ( $iban->isSuccessful() ) {
-			return $this->newSuccessResponse( $iban->getBankData() );
+	public function present( BankDataSuccessResponse|BankDataFailureResponse $response ): array {
+		if ( $response instanceof BankDataSuccessResponse ) {
+			return $this->newSuccessResponse( $response->bankData );
 		}
 
 		return $this->newErrorResponse();
 	}
 
-	private function newSuccessResponse( BankData $bankData ): array {
+	private function newSuccessResponse( ExtendedBankData $bankData ): array {
 		return array_filter( [
 			'status' => 'OK',
-			'bic' => $bankData->getBic(),
-			'iban' => $bankData->getIban()->toString(),
-			'account' => $bankData->getAccount(),
-			'bankCode' => $bankData->getBankCode(),
-			'bankName' => $bankData->getBankName(),
+			'bic' => $bankData->bic,
+			'iban' => $bankData->iban->toString(),
+			'account' => $bankData->account,
+			'bankCode' => $bankData->bankCode,
+			'bankName' => $bankData->bankName,
 		] );
 	}
 

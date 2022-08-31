@@ -3,4 +3,6 @@ includes:
 
 parameters:
 	excludePaths:
-		- tests/System/McpCreditCardServiceTest.php
+		- src/Presentation/DonationMembershipApplicationAdapter.php
+		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
+		- tests/EdgeToEdge/PayPalRequestLoggerTest.php

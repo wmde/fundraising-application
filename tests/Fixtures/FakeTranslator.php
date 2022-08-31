@@ -15,7 +15,7 @@ class FakeTranslator implements TranslatorInterface {
 	 *                               by the translator. Must contain exactly one %s placeholder to indicate message key.
 	 */
 	public function __construct( string $messageWrapper = "%s" ) {
- $this->messageWrapper = $messageWrapper;
+		$this->messageWrapper = $messageWrapper;
 	}
 
 	public function trans( string $messageKey, array $parameters = [] ): string {

@@ -7,12 +7,11 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\PaymentContext\Infrastructure\CreditCardExpiry;
-use WMDE\Fundraising\PaymentContext\Infrastructure\FakeCreditCardService;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
@@ -37,14 +36,16 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenInvalidRequest_applicationIndicatesError(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setCreditCardService( new FakeCreditCardService() );
+			$logger = new LoggerSpy();
+			$factory->setCreditCardLogger( $logger );
+
 			$client->request(
 				Request::METHOD_GET,
 				self::PATH,
-				[]
+				[ 'function' => 'BAD FUNCTION' ]
 			);
 
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+			$this->assertSame( 1, $logger->getLogCalls()->count() );
 			$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
 			$this->assertStringContainsString( 'msg=', $client->getResponse()->getContent() );
 		} );
@@ -52,7 +53,6 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenNonBillingRequest_applicationIndicatesError(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setCreditCardService( new FakeCreditCardService() );
 			$client->request(
 				Request::METHOD_GET,
 				self::PATH,
@@ -70,7 +70,6 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenNonBillingRequest_applicationLogsRequest(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setCreditCardService( new FakeCreditCardService() );
 			$logger = new LoggerSpy();
 			$factory->setCreditCardLogger( $logger );
 			$client->request(
@@ -92,14 +91,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setDonationTokenGenerator( new FixedTokenGenerator(
-				self::UPDATE_TOKEN,
-				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
-			) );
-
-			$factory->setCreditCardService( new FakeCreditCardService() );
-
-			$factory->getDonationRepository()->storeDonation( ValidDonation::newIncompleteCreditCardDonation() );
+			$this->storedDonations()->newStoredIncompleteCreditCardDonation( self::UPDATE_TOKEN );
 
 			$client->request(
 				Request::METHOD_GET,
@@ -113,7 +105,84 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 				"url=http://my.donation.app/show-donation-confirmation?id=1&accessToken=my_secret_access_token\n",
 				$client->getResponse()->getContent()
 			);
-			$this->assertCreditCardDataGotPersisted( $factory->getDonationRepository(), $this->newRequest() );
+			$this->assertCreditCardDataGotPersisted(
+				$factory->getDonationRepository(),
+				$factory->getPaymentRepository(),
+				$this->newRequest()
+			);
+		} );
+	}
+
+	public function testGivenRequestForMissingDonation_applicationIndicatesError(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$client->request(
+				Request::METHOD_GET,
+				self::PATH,
+				$this->newRequest()
+			);
+
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+			$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
+			$this->assertStringContainsString( "msg=Donation not found\n", $client->getResponse()->getContent() );
+		} );
+	}
+
+	public function testGivenRequestForMissingDonation_applicationLogsRequest(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$logger = new LoggerSpy();
+			$factory->setLogger( $logger );
+			$requestData = $this->newRequest();
+
+			$client->request(
+				Request::METHOD_GET,
+				self::PATH,
+				$requestData
+			);
+
+			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$firstCallContext = $logger->getFirstLogCall()->getContext();
+			$requestData['amount'] = (string)$requestData['amount'];
+			$this->assertSame( $requestData, $firstCallContext['queryParams'] );
+			$this->assertSame( 'Credit Card Notification Error: Donation not found', $logger->getFirstLogCall()->getMessage() );
+		} );
+	}
+
+	public function testOnInternalError_applicationIndicatesError(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$repository = new ThrowingDonationRepository();
+			$repository->throwOnGetDonationById();
+			$factory->setDonationRepository( $repository );
+
+			$client->request(
+				Request::METHOD_GET,
+				self::PATH,
+				$this->newRequest()
+			);
+
+			$this->assertSame( 500, $client->getResponse()->getStatusCode() );
+			$this->assertStringContainsString( "Could not get donation", $client->getResponse()->getContent() );
+		} );
+	}
+
+	public function testOnInternalError_applicationLogsError(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$logger = new LoggerSpy();
+			$factory->setLogger( $logger );
+
+			$repository = new ThrowingDonationRepository();
+			$repository->throwOnGetDonationById();
+			$factory->setDonationRepository( $repository );
+
+			$client->request(
+				Request::METHOD_GET,
+				self::PATH,
+				$this->newRequest()
+			);
+
+			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$firstCallContext = $logger->getFirstLogCall()->getContext();
+			$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
+			$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()->getMessage() );
 		} );
 	}
 
@@ -135,24 +204,26 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, array $request ): void {
+	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, PaymentRepository $paymentRepository, array $request ): void {
 		$donation = $donationRepo->getDonationById( self::DONATION_ID );
+		$ccData = $paymentRepository->getPaymentById( $donation->getPaymentId() )->getLegacyData();
 
-		/** @var \WMDE\Fundraising\PaymentContext\Domain\Model\CreditCardPayment $paymentMethod */
-		$paymentMethod = $donation->getPayment()->getPaymentMethod();
-		$ccData = $paymentMethod->getCreditCardData();
+		$this->assertSame( $request['currency'], $ccData->paymentSpecificValues['mcp_currency'] );
+		$this->assertSame( $request['amount'], $ccData->amountInEuroCents );
+		$this->assertSame( $request['country'], $ccData->paymentSpecificValues['mcp_country'] );
+		$this->assertSame( $request['auth'], $ccData->paymentSpecificValues['mcp_auth'] );
+		$this->assertSame( $request['title'], $ccData->paymentSpecificValues['mcp_title'] );
+		$this->assertSame( $request['sessionId'], $ccData->paymentSpecificValues['mcp_sessionid'] );
+		$this->assertSame( $request['transactionId'], $ccData->paymentSpecificValues['ext_payment_id'] );
+		$this->assertSame( self::STATUS, $ccData->paymentSpecificValues['ext_payment_status'] );
+		$this->assertSame( $request['customerId'], $ccData->paymentSpecificValues['ext_payment_account'] );
+		// TODO: Make sure expiryDate is actually needed to be stored or not
+		// $this->assertEquals( $request['expiryDate'], $ccData->paymentSpecificValues['mcp_cc_expiry_date'] );
+		$this->assertNotEmpty( $ccData->paymentSpecificValues['ext_payment_timestamp'] );
+	}
 
-		$this->assertSame( $request['currency'], $ccData->getCurrencyCode() );
-		$this->assertSame( $request['amount'], $ccData->getAmount()->getEuroCents() );
-		$this->assertSame( $request['country'], $ccData->getCountryCode() );
-		$this->assertSame( $request['auth'], $ccData->getAuthId() );
-		$this->assertSame( $request['title'], $ccData->getTitle() );
-		$this->assertSame( $request['sessionId'], $ccData->getSessionId() );
-		$this->assertSame( $request['transactionId'], $ccData->getTransactionId() );
-		$this->assertSame( self::STATUS, $ccData->getTransactionStatus() );
-		$this->assertSame( $request['customerId'], $ccData->getCustomerId() );
-		$this->assertEquals( new CreditCardExpiry( 9, 2038 ), $ccData->getCardExpiry() );
-		$this->assertNotEmpty( $ccData->getTransactionTimestamp() );
+	private function storedDonations(): StoredDonations {
+		return new StoredDonations( $this->getFactory() );
 	}
 
 }

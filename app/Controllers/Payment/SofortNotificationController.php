@@ -5,15 +5,16 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\Controllers\Payment;
 
 use DateTime;
+use DateTimeInterface;
 use Psr\Log\LogLevel;
 use Sofort\SofortLib\Notification;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use UnexpectedValueException;
+use WMDE\Fundraising\DonationContext\UseCases\NotificationRequest;
+use WMDE\Fundraising\DonationContext\UseCases\NotificationResponse;
 use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\PaymentContext\RequestModel\SofortNotificationRequest;
-use WMDE\Fundraising\PaymentContext\ResponseModel\SofortNotificationResponse;
 
 class SofortNotificationController {
 
@@ -26,16 +27,18 @@ class SofortNotificationController {
 
 		try {
 			$useCaseRequest = $this->newUseCaseRequest();
+			$response = $this->newUseCase()->handleNotification( $useCaseRequest );
 		} catch ( UnexpectedValueException $e ) {
-			$this->logWebRequest( [ 'message' => $e->getMessage() ], LogLevel::ERROR );
+			$this->logException( $e );
 			return new Response( 'Bad request', Response::HTTP_BAD_REQUEST );
+		} catch ( \Exception $e ) {
+			$this->logException( $e );
+			return new Response( 'Error', Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
-
-		$response = $this->newUseCase()->handleNotification( $useCaseRequest );
 
 		$this->logResponseIfNeeded( $response );
 
-		if ( $response->hasErrors() ) {
+		if ( $response->donationWasNotFound() ) {
 			return new Response( 'Error', Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
 
@@ -47,59 +50,57 @@ class SofortNotificationController {
 	}
 
 	private function newUseCase(): SofortPaymentNotificationUseCase {
-		return $this->ffFactory->newHandleSofortPaymentNotificationUseCase( $this->request->query->get( 'updateToken', '' ) );
+		return $this->ffFactory->newHandleSofortPaymentNotificationUseCase(
+			$this->request->query->get( 'updateToken', '' )
+		);
 	}
 
-	private function newUseCaseRequest(): SofortNotificationRequest {
-		$useCaseRequest = self::fromUseCaseRequestFromRequestContent( $this->request->getContent() );
+	private function newUseCaseRequest(): NotificationRequest {
+		$vendorNotification = new Notification();
+		$transactionId = $vendorNotification->getNotification( $this->request->getContent() );
+		$time = $vendorNotification->getTime();
+		$timeIsFormattedCorrectly = DateTime::createFromFormat( DateTimeInterface::ATOM, $vendorNotification->getTime() ?? '' ) !== false;
 
-		if ( !( $useCaseRequest instanceof SofortNotificationRequest ) ) {
+		if ( !$transactionId || !$time || !$timeIsFormattedCorrectly ) {
 			throw new UnexpectedValueException( 'Invalid notification request' );
 		}
 
-		$useCaseRequest->setDonationId( $this->request->query->getInt( 'id' ) );
-
-		return $useCaseRequest;
+		return new NotificationRequest(
+			[
+				'transactionId' => $transactionId,
+				'valuationDate' => $time
+			],
+			$this->request->query->getInt( 'id' )
+		);
 	}
 
-	public static function fromUseCaseRequestFromRequestContent( string $content ): ?SofortNotificationRequest {
-		$vendorNotification = new Notification();
-		$result = $vendorNotification->getNotification( $content );
-
-		if ( $result === false ) {
-			return null;
-		}
-
-		$time = DateTime::createFromFormat( DateTime::ATOM, $vendorNotification->getTime() );
-
-		if ( $time === false ) {
-			return null;
-		}
-
-		$notification = new SofortNotificationRequest();
-		$notification->setTime( $time );
-		$notification->setTransactionId( $vendorNotification->getTransactionId() );
-
-		return $notification;
-	}
-
-	private function logResponseIfNeeded( SofortNotificationResponse $response ): void {
+	private function logResponseIfNeeded( NotificationResponse $response ): void {
 		if ( $response->notificationWasHandled() ) {
 			return;
 		}
 
-		$this->logWebRequest(
-			$response->getContext(),
-			$response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO
+		$this->ffFactory->getSofortLogger()->log(
+			$response->hasErrors() ? LogLevel::ERROR : LogLevel::INFO,
+			$response->getMessage() ?? 'Sofort request not handled',
+			$this->getRequestVars()
 		);
 	}
 
-	private function logWebRequest( array $context, string $logLevel ): void {
-		$message = $context['message'] ?? 'Sofort request not handled';
-		unset( $context['message'] );
+	/**
+	 * @return array<string,mixed>
+	 */
+	private function getRequestVars(): array {
+		return [
+			'request_content' => $this->request->getContent(),
+			'query_vars' => $this->request->query->all()
+		];
+	}
 
-		$context['request_content'] = $this->request->getContent();
-		$context['query_vars'] = $this->request->query->all();
-		$this->ffFactory->getSofortLogger()->log( $logLevel, $message, $context );
+	private function logException( UnexpectedValueException|\Exception $e ): void {
+		$this->ffFactory->getSofortLogger()->log(
+			LogLevel::ERROR,
+			'An Exception happened: ' . $e->getMessage(),
+			array_merge( $this->getRequestVars(), [ 'stacktrace' => $e->getTraceAsString() ] )
+		);
 	}
 }

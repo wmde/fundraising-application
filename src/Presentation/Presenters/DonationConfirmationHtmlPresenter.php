@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
+use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
@@ -29,25 +30,27 @@ class DonationConfirmationHtmlPresenter {
 		$this->validation = $validation;
 	}
 
-	public function present( Donation $donation, string $updateToken, string $accessToken,
+	public function present( Donation $donation, array $paymentData, string $updateToken, string $accessToken,
 							 array $urlEndpoints ): string {
 		return $this->template->render(
-			$this->getConfirmationPageArguments( $donation, $updateToken, $accessToken, $urlEndpoints )
+			$this->getConfirmationPageArguments( $donation, $paymentData, $updateToken, $accessToken, $urlEndpoints )
 		);
 	}
 
-	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken,
+	private function getConfirmationPageArguments( Donation $donation, array $paymentData, string $updateToken, string $accessToken,
 		array $urlEndpoints ): array {
 		$donorDataFormatter = new DonorDataFormatter();
 		return [
 			'donation' => [
 				'id' => $donation->getId(),
-				'amount' => $donation->getAmount()->getEuroFloat(),
-				'interval' => $donation->getPaymentIntervalInMonths(),
-				'paymentType' => $donation->getPaymentMethodId(),
+				// TODO: Adapt the front end to take cents here for currency localisation
+				'amount' => Euro::newFromCents( $paymentData['amount'] )->getEuroFloat(),
+				'amountInCents' => $paymentData['amount'],
+				'interval' => $paymentData['interval'],
+				'paymentType' => $paymentData['paymentType'],
 				'optsIntoDonationReceipt' => $donation->getOptsIntoDonationReceipt(),
 				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
-				'bankTransferCode' => $donorDataFormatter->getBankTransferCode( $donation->getPaymentMethod() ),
+				'bankTransferCode' => $paymentData['paymentReferenceCode'] ?? '',
 				'creationDate' => $donorDataFormatter->getDonationDate(),
 				'cookieDuration' => $donorDataFormatter->getHideBannerCookieDuration(),
 				'updateToken' => $updateToken,
@@ -57,7 +60,11 @@ class DonationConfirmationHtmlPresenter {
 			'addressValidationPatterns' => $this->validation,
 			'addressType' => AddressType::donorToPresentationAddressType( $donation->getDonor() ),
 			'address' => $donorDataFormatter->getAddressArguments( $donation ),
-			'bankData' => $donorDataFormatter->getBankDataArguments( $donation->getPaymentMethod() ),
+			'bankData' => [
+				'iban' => $paymentData['iban'] ?? '',
+				'bic' => $paymentData['bic'] ?? '',
+				'bankname' => $paymentData['bankname'] ?? '',
+			],
 			'urls' => array_merge(
 				$urlEndpoints,
 				[

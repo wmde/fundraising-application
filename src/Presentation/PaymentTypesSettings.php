@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation;
 
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
+
 /**
  * Takes a config like the following and provides read and write interface
  *
@@ -23,7 +25,7 @@ class PaymentTypesSettings {
 	public const ENABLE_DONATIONS = 'donation-enabled';
 	public const ENABLE_MEMBERSHIP_APPLICATIONS = 'membership-enabled';
 
-	private $settings = [];
+	private array $settings;
 
 	public function __construct( array $settings ) {
 		$this->settings = $settings;
@@ -41,6 +43,26 @@ class PaymentTypesSettings {
 	 */
 	public function getEnabledForMembershipApplication(): array {
 		return $this->getPaymentTypesWhereSettingIsTrue( self::ENABLE_MEMBERSHIP_APPLICATIONS );
+	}
+
+	/**
+	 * @return PaymentType[]
+	 */
+	public function getPaymentTypesForDonation(): array {
+		return array_map(
+			fn( string $paymentTypeName ) => PaymentType::from( $paymentTypeName ),
+			$this->getEnabledForDonation()
+		);
+	}
+
+	/**
+	 * @return PaymentType[]
+	 */
+	public function getPaymentTypesForMembershipApplication(): array {
+		return array_map(
+			fn( string $paymentTypeName ) => PaymentType::from( $paymentTypeName ),
+			$this->getEnabledForMembershipApplication()
+		);
 	}
 
 	/**

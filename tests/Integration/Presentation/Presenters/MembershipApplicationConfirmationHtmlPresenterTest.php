@@ -8,54 +8,44 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfi
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter
- *
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framework\TestCase {
 
-	private const STATUS_BOOKED = 'status-booked';
-	private const STATUS_UNCONFIRMED = 'status-unconfirmed';
-
-	/** @dataProvider applicationStatusProvider */
-	public function testWhenPresenterPresents_itPassesParametersToTemplate( bool $isConfirmed, string $expectedMappedStatus ): void {
+	public function testWhenPresenterPresents_itPassesParametersToTemplate(): void {
 		$twig = $this->getMockBuilder( TwigTemplate::class )->disableOriginalConstructor()->getMock();
 		$twig->expects( $this->once() )
 			->method( 'render' )
-			->with( $this->getExpectedRenderParams( $expectedMappedStatus ) );
+			->with( $this->getExpectedRenderParams() );
 
-		$bankDataGeneratorStub = $this->getMockBuilder( BankDataGenerator::class )->getMock();
-		$bankDataGeneratorStub->expects( $this->never() )->method( 'getBankDataFromIban' );
+		$membershipApplication = ValidMembershipApplication::newDomainEntity();
 
-		$payPalData = $isConfirmed ? ValidMembershipApplication::newBookedPayPalData() : ValidMembershipApplication::newPayPalData();
-		$membershipApplication = ValidMembershipApplication::newDomainEntityUsingPayPal( $payPalData );
-
-		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig, $bankDataGeneratorStub, new FakeUrlGenerator() );
+		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig, new FakeUrlGenerator() );
 		$presenter->presentConfirmation(
 			$membershipApplication,
+			[
+				'amount' => 1000,
+				'interval' => 3,
+				'paymentType' => 'BEZ',
+				'iban' => 'I has IBAN',
+				'bic' => 'I has BIC',
+				'bankname' => 'I has BANK',
+			],
 			'update_token'
 		);
 	}
 
-	public function applicationStatusProvider(): array {
-		return [
-			[ true, self::STATUS_BOOKED ],
-			[ false, self::STATUS_UNCONFIRMED ]
-		];
-	}
-
-	private function getExpectedRenderParams( string $mappedStatus ): array {
+	private function getExpectedRenderParams(): array {
 		return [
 			'membershipApplication' => [
 				'id' => null,
 				'membershipType' => 'sustaining',
-				'paymentType' => 'PPL',
-				'status' => $mappedStatus,
-				'membershipFee' => '10.00',
+				'paymentType' => 'BEZ',
+				'status' => 'status-booked',
+				'membershipFee' => 10.00,
+				'membershipFeeInCents' => 1000,
 				'paymentIntervalInMonths' => 3,
 				'updateToken' => 'update_token',
 				'incentives' => []
@@ -71,9 +61,10 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends \PHPUnit\Framew
 				'countryCode' => 'DE',
 				'applicantType' => 'person'
 			],
-			'bankData' => [],
-			'payPalData' => [
-				'firstPaymentDate' => '01.02.2021'
+			'bankData' => [
+				'iban' => 'I has IBAN',
+				'bic' => 'I has BIC',
+				'bankname' => 'I has BANK',
 			],
 			'urls' => [
 				'cancelMembership' => '/such.a.url/cancel_membership_application?updateToken=update_token'

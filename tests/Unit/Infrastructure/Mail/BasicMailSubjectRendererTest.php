@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer
@@ -15,7 +15,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
 class BasicMailSubjectRendererTest extends TestCase {
 
 	public function testGivenDonation_givenSubjectLineIsReturned() {
-		$templateArguments['donation']['paymentType'] = PaymentMethod::PAYPAL;
+		$templateArguments['donation']['paymentType'] = PaymentType::Paypal->value;
 		$this->assertSame(
 			'mail_subject_getintouch',
 			$this->newDonationConfirmationMailSubjectRenderer()->render( $templateArguments )

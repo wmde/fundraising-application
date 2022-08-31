@@ -11,18 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayments;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineEntities\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Incentive;
+use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PayPalData;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 
 /**
@@ -34,6 +34,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	private const FIXED_TOKEN = 'fixed_token';
 	private const FIRST_PAYMENT_DATE = '2017-09-21';
+	private const CORRECT_ACCESS_TOKEN = '4711abc';
 
 	private const APPLY_FOR_MEMBERSHIP_PATH = 'apply-for-membership';
 
@@ -68,15 +69,13 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenRequestWithDonationIdAndCorrespondingAccessCode_successResponseWithInitialFormValuesIsReturned(): void {
-		$this->modifyEnvironment( static function ( FunFunFactory $factory ): void {
-			$factory->setDonationTokenGenerator( new FixedTokenGenerator( '4711abc' ) );
-			$factory->getDonationRepository()
-				->storeDonation( ValidDonation::newDirectDebitDonation() );
+		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
+			$this->givenStoredDirectDebitDonation( $factory );
 		} );
 		$client = $this->createClient();
 		$httpParameters = [
 			'donationId' => 1,
-			'donationAccessToken' => '4711abc'
+			'donationAccessToken' => self::CORRECT_ACCESS_TOKEN
 		];
 
 		$client->request( Request::METHOD_GET, self::APPLY_FOR_MEMBERSHIP_PATH, $httpParameters );
@@ -95,14 +94,30 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				'email' => 'foo@bar.baz',
 				'iban' => 'DE12500105170648489890',
 				'bic' => 'INGDDEFFXXX',
-				'accountNumber' => '0648489890',
-				'bankCode' => '50010517',
 				'bankname' => 'ING-DiBa',
 				'paymentType' => 'BEZ',
 				'incentives' => [ 0 => 'tote_bag' ]
 			],
 			$client
 		);
+	}
+
+	private function givenStoredDirectDebitDonation( FunFunFactory $factory ): void {
+		$this->storePayment( $factory, ValidPayments::newDirectDebitPayment() );
+
+		$factory->setDonationTokenGenerator( new FixedTokenGenerator(
+			self::CORRECT_ACCESS_TOKEN
+		) );
+
+		$factory->getDonationRepository()->storeDonation( ValidDonation::newDirectDebitDonation() );
+	}
+
+	private function storePayment( FunFunFactory $factory, Payment $payment ): void {
+		$factory->setDonationTokenGenerator( new FixedTokenGenerator(
+			self::CORRECT_ACCESS_TOKEN
+		) );
+
+		$factory->getPaymentRepository()->storePayment( $payment );
 	}
 
 	private function newValidHttpParameters(): array {
@@ -125,8 +140,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
 			'dob' => ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH,
 
-			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
-			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
+			'payment_type' => ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT->value,
+			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS->value,
 			'membership_fee' => '1000',
 
 			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
@@ -157,8 +172,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
 			'dob' => 'BLAHBLAH',
 
-			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
-			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
+			'payment_type' => ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT->value,
+			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS->value,
 			'membership_fee' => '1000',
 
 			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
@@ -238,32 +253,11 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$this->assertNotNull( $application );
 
-			$expectedApplication = ValidMembershipApplication::newDomainEntity();
+			$expectedApplication = $this->givenConfirmedMembershipApplication();
 			$expectedApplication->assignId( 1 );
 			$expectedApplication->addIncentive( $incentive );
 
 			$this->assertEquals( $expectedApplication, $application );
-		} );
-	}
-
-	public function testGivenValidRequestWithTracking_trackingIsPersisted(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
-			$incentive = new Incentive( ValidMembershipApplication::INCENTIVE_NAME );
-			$this->insertIncentives( $factory, $incentive );
-
-			$parameters = $this->newValidHttpParameters();
-			$parameters['piwik_campaign'] = 'test';
-			$parameters['piwik_kwd'] = 'blue';
-
-			$client->request(
-				'POST',
-				'apply-for-membership',
-				$parameters
-			);
-
-			$application = $this->getApplicationFromDatabase( $factory );
-			$this->assertSame( 'test/blue', $application->getTracking() );
 		} );
 	}
 
@@ -277,12 +271,11 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				$this->newValidHttpParameters()
 			);
 
-				$responseContent = $client->getResponse()->getContent();
+			$responseContent = $client->getResponse()->getContent();
 
-				$this->assertStringContainsString( 'id=1', $responseContent );
-				$this->assertStringContainsString( 'accessToken=' . self::FIXED_TOKEN, $responseContent );
-		}
-		);
+			$this->assertStringContainsString( 'id=1', $responseContent );
+			$this->assertStringContainsString( 'accessToken=' . self::FIXED_TOKEN, $responseContent );
+		} );
 	}
 
 	public function testGivenValidRequest_requestIsRedirected(): void {
@@ -296,6 +289,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
+
 		$this->assertTrue( $response->isRedirect() );
 		$this->assertStringContainsString( 'show-membership-confirmation', $response->headers->get( 'Location' ) );
 	}
@@ -342,100 +336,10 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertStringNotContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
 	}
 
-	private function getApplicationFromDatabase( FunFunFactory $factory ): MembershipApplication {
-		$repository = $factory->getEntityManager()->getRepository( MembershipApplication::class );
-		$application = $repository->find( 1 );
-		$this->assertInstanceOf( MembershipApplication::class, $application );
+	private function givenConfirmedMembershipApplication(): MembershipApplication {
+		$application = ValidMembershipApplication::newDomainEntity();
+		$application->confirm();
 		return $application;
-	}
-
-	public function testGivenValidRequestUsingPayPal_applicationIsPersisted(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
-
-			$client->request(
-				'POST',
-				'/apply-for-membership',
-				$this->newValidHttpParametersUsingPayPal()
-			);
-
-			$application = $factory->getMembershipApplicationRepository()->getApplicationById( 1 );
-
-			$this->assertNotNull( $application );
-
-			$payPalData = new PayPalData();
-			$payPalData->setFirstPaymentDate( self::FIRST_PAYMENT_DATE );
-			$payPalData->freeze();
-
-			$expectedApplication = ValidMembershipApplication::newDomainEntityUsingPayPal( $payPalData );
-			$expectedApplication->assignId( 1 );
-
-			$this->assertEquals( $expectedApplication, $application );
-		} );
-	}
-
-	private function newValidHttpParametersUsingPayPal(): array {
-		return [
-			'membership_type' => ValidMembershipApplication::MEMBERSHIP_TYPE,
-
-			'adresstyp' => 'person',
-			'anrede' => ValidMembershipApplication::APPLICANT_SALUTATION,
-			'titel' => ValidMembershipApplication::APPLICANT_TITLE,
-			'vorname' => ValidMembershipApplication::APPLICANT_FIRST_NAME,
-			'nachname' => ValidMembershipApplication::APPLICANT_LAST_NAME,
-			'firma' => '',
-
-			'strasse' => ValidMembershipApplication::APPLICANT_STREET_ADDRESS,
-			'postcode' => ValidMembershipApplication::APPLICANT_POSTAL_CODE,
-			'ort' => ValidMembershipApplication::APPLICANT_CITY,
-			'country' => ValidMembershipApplication::APPLICANT_COUNTRY_CODE,
-
-			'email' => ValidMembershipApplication::APPLICANT_EMAIL_ADDRESS,
-			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
-			'dob' => ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH,
-
-			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_PAYPAL,
-			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
-			'membership_fee' => '1000',
-		];
-	}
-
-	public function testGivenValidRequestUsingPayPal_requestIsRedirectedToPayPalUrl(): void {
-		$client = $this->createClient();
-		$client->followRedirects( false );
-
-		$client->request(
-			'POST',
-			'apply-for-membership',
-			$this->newValidHttpParametersUsingPayPal()
-		);
-
-		$response = $client->getResponse();
-		$this->assertTrue( $response->isRedirect() );
-		$this->assertStringContainsString( 'sandbox.paypal.com', $response->headers->get( 'Location' ) );
-	}
-
-	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ) {
-			$translator = $this->createMock( TranslatorInterface::class );
-			$translator->expects( $this->once() )
-				->method( 'trans' )
-				->with( 'paypal_item_name_membership' )
-				->willReturn( 'Ihre Mitgliedschaft bei Wikimedia' );
-			$factory->setPaymentProviderItemsTranslator( $translator );
-		} );
-		$client = $this->createClient();
-		$client->followRedirects( false );
-
-		$client->request(
-			'POST',
-			'/apply-for-membership',
-			$this->newValidHttpParametersUsingPayPal()
-		);
-
-		$response = $client->getResponse();
-		$this->assertSame( 302, $response->getStatusCode() );
-		$this->assertStringContainsString( 'item_name=Ihre+Mitgliedschaft+bei+Wikimedia', $response->getContent() );
 	}
 
 	public function testCommasInStreetNamesAreRemoved(): void {
@@ -452,7 +356,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 			$this->assertNotNull( $application );
 
-			$expectedApplication = ValidMembershipApplication::newDomainEntity();
+			$expectedApplication = $this->givenConfirmedMembershipApplication();
 			$expectedApplication->assignId( 1 );
 
 			$this->assertEquals( $expectedApplication, $application );
@@ -473,6 +377,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->assertNotNull( $application );
 
 			$expectedApplication = ValidMembershipApplication::newCompanyApplication();
+			$expectedApplication->confirm();
 			$expectedApplication->assignId( 1 );
 
 			$this->assertEquals( $expectedApplication, $application );
@@ -495,8 +400,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			'phone' => ValidMembershipApplication::APPLICANT_PHONE_NUMBER,
 			'dob' => ValidMembershipApplication::APPLICANT_DATE_OF_BIRTH,
 
-			'payment_type' => (string)ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT,
-			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS,
+			'payment_type' => ValidMembershipApplication::PAYMENT_TYPE_DIRECT_DEBIT->value,
+			'membership_fee_interval' => (string)ValidMembershipApplication::PAYMENT_PERIOD_IN_MONTHS->value,
 			'membership_fee' => '2500',
 
 			'bank_name' => ValidMembershipApplication::PAYMENT_BANK_NAME,
@@ -524,7 +429,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testGivenValidRequest_andCookieConsentGiven_bucketsAreLogged(): void {
+	public function testGivenValidRequest_bucketsAreLogged(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 			$bucketLogger = new BucketLoggerSpy();
@@ -543,19 +448,18 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	public function testGivenInvalidRequest_errorsAreLogged(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-				$testHandler = new TestHandler();
-				$factory->setLogger( new Logger( 'TestLogger', [ $testHandler ] ) );
-				$client->request(
-					'POST',
-					'apply-for-membership',
-					$this->newInvalidValidHttpParameters()
-				);
-				$this->assertTrue( $testHandler->hasWarningRecords() );
-				foreach ( $testHandler->getRecords() as $record ) {
-					$this->assertEquals( 'Unexpected server-side form validation errors.', $record['message'] );
-				}
-		}
-		);
+			$testHandler = new TestHandler();
+			$factory->setLogger( new Logger( 'TestLogger', [ $testHandler ] ) );
+			$client->request(
+				'POST',
+				'apply-for-membership',
+				$this->newInvalidValidHttpParameters()
+			);
+			$this->assertTrue( $testHandler->hasWarningRecords() );
+			foreach ( $testHandler->getRecords() as $record ) {
+				$this->assertEquals( 'Unexpected server-side form validation errors.', $record['message'] );
+			}
+		} );
 	}
 
 	public function testGivenValidRequest_AddressChangeRecordIsCreated(): void {

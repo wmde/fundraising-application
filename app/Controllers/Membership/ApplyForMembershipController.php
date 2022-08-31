@@ -8,21 +8,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
-use WMDE\Fundraising\PaymentContext\Domain\Model\BankData;
-use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentMethod;
+use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentCreationRequest;
 
 /**
  * @license GPL-2.0-or-later
  */
 class ApplyForMembershipController {
+
+	private const TRANSFER_CODE_PREFIX = 'XM';
 
 	private FunFunFactory $ffFactory;
 
@@ -51,8 +50,6 @@ class ApplyForMembershipController {
 
 	private function callUseCase( Request $httpRequest ): ApplyForMembershipResponse {
 		$applyForMembershipRequest = $this->createMembershipRequest( $httpRequest );
-
-		$this->addFeeToRequestModel( $applyForMembershipRequest, $httpRequest );
 
 		$applyForMembershipRequest->assertNoNullFields()->freeze();
 
@@ -83,8 +80,7 @@ class ApplyForMembershipController {
 		$request->setApplicantPhoneNumber( $httpRequest->request->get( 'phone', '' ) );
 		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
 
-		$request->setPaymentType( $httpRequest->request->get( 'payment_type', '' ) );
-		$request->setPaymentIntervalInMonths( $httpRequest->request->getInt( 'membership_fee_interval', 0 ) );
+		$request->setPaymentCreationRequest( $this->newPaymentCreationRequest( $httpRequest ) );
 
 		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
 			$httpRequest->request->get( 'templateCampaign', '' ),
@@ -97,23 +93,18 @@ class ApplyForMembershipController {
 
 		$request->setIncentives( array_filter( $httpRequest->request->all( 'incentives' ) ) );
 
-		$request->setBankData( $this->createBakData( $httpRequest ) );
-
 		return $request;
 	}
 
-	private function createBakData( Request $httpRequest ): BankData {
-		$bankData = new BankData();
-
-		$bankData->setBankName( trim( $httpRequest->request->get( 'bank_name', '' ) ) );
-		$bankData->setIban( new Iban( trim( $httpRequest->request->get( 'iban', '' ) ) ) );
-		$bankData->setBic( trim( $httpRequest->request->get( 'bic', '' ) ) );
-		$bankData->setAccount( trim( $httpRequest->request->get( 'account_number', '' ) ) );
-		$bankData->setBankCode( trim( $httpRequest->request->get( 'bank_code', '' ) ) );
-
-		$bankData->assertNoNullFields()->freeze();
-
-		return $bankData;
+	private function newPaymentCreationRequest( Request $httpRequest ): PaymentCreationRequest {
+		return new PaymentCreationRequest(
+			$httpRequest->request->getInt( 'membership_fee', 0 ),
+			$httpRequest->request->getInt( 'membership_fee_interval', 0 ),
+			$httpRequest->request->get( 'payment_type', '' ),
+			trim( $httpRequest->request->get( 'iban', '' ) ),
+			trim( $httpRequest->request->get( 'bic', '' ) ),
+			self::TRANSFER_CODE_PREFIX
+		);
 	}
 
 	private function newFailureResponse( Request $httpRequest ): Response {
@@ -125,26 +116,14 @@ class ApplyForMembershipController {
 		);
 	}
 
-	private function addFeeToRequestModel( ApplyForMembershipRequest $requestModel, Request $httpRequest ) {
-		$requestModel->setPaymentAmountInEuros( Euro::newFromCents(
-			intval( $httpRequest->request->get( 'membership_fee', '' ) )
-		) );
-	}
-
 	private function newHttpResponse( SessionInterface $session, ApplyForMembershipResponse $responseModel ): Response {
 		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $session );
-		$paymentMethodId = $responseModel->getMembershipApplication()->getPayment()->getPaymentMethod()->getId();
-		switch ( $paymentMethodId ) {
-			case PaymentMethod::DIRECT_DEBIT:
-				return $this->newDirectDebitResponse( $responseModel );
-			case PaymentMethod::PAYPAL:
-				return $this->newPayPalResponse( $responseModel );
-			default:
-				throw new \LogicException( 'Unknown payment method when generating membership response: ' . $paymentMethodId );
-		}
-	}
+		$redirectUrl = $responseModel->getPaymentProviderRedirectUrl();
 
-	private function newDirectDebitResponse( ApplyForMembershipResponse $responseModel ): Response {
+		if ( $redirectUrl !== '' ) {
+			return new RedirectResponse( $redirectUrl );
+		}
+
 		return new RedirectResponse(
 			$this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
 				Routes::SHOW_MEMBERSHIP_CONFIRMATION,
@@ -152,19 +131,6 @@ class ApplyForMembershipController {
 					'id' => $responseModel->getMembershipApplication()->getId(),
 					'accessToken' => $responseModel->getAccessToken()
 				]
-			)
-		);
-	}
-
-	private function newPayPalResponse( ApplyForMembershipResponse $responseModel ): Response {
-		return new RedirectResponse(
-			$this->ffFactory->newPayPalUrlGeneratorForMembershipApplications()->generateUrl(
-				$responseModel->getMembershipApplication()->getId(),
-				$this->generatePayPalInvoiceId( $responseModel->getMembershipApplication()->getId() ),
-				$responseModel->getMembershipApplication()->getPayment()->getAmount(),
-				$responseModel->getMembershipApplication()->getPayment()->getIntervalInMonths(),
-				$responseModel->getUpdateToken(),
-				$responseModel->getAccessToken()
 			)
 		);
 	}
@@ -196,16 +162,5 @@ class ApplyForMembershipController {
 			array_keys( $violations ),
 			$formattedConstraintViolations
 		);
-	}
-
-	/**
-	 * We use the membership primary key as the InvoiceId because they're unique
-	 * But we prepend a letter to make sure they don't clash with donations
-	 *
-	 * @param int $id
-	 * @return string
-	 */
-	private function generatePayPalInvoiceId( int $id ): string {
-		return 'M' . $id;
 	}
 }

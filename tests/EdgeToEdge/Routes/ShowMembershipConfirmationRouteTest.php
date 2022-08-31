@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tests\Data\ValidPayments;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FakeApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
@@ -25,6 +26,8 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	private const UNKNOWN_APPLICATION_ID = 9998;
 
 	private function newStoredMembershipApplication( FunFunFactory $factory ): MembershipApplication {
+		$factory->getPaymentRepository()->storePayment( ValidPayments::newDirectDebitPayment() );
+
 		$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
 			self::CORRECT_ACCESS_TOKEN
 		) );

@@ -8,9 +8,8 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects
@@ -175,19 +174,8 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	private function makeStoredDonation(): void {
-		$factory = $this->getFactory();
-
-		$factory->setDonationTokenGenerator(
-			new FixedTokenGenerator(
-				self::CORRECT_ACCESS_TOKEN
-			)
-		);
-
-		$donation = ValidDonation::newDirectDebitDonation();
-
-		$factory->getDonationRepository()->storeDonation( $donation );
-
-		$this->donation = $donation;
+		$storedDonations = new StoredDonations( $this->getFactory() );
+		$this->donation = $storedDonations->newStoredDirectDebitDonation();
 	}
 
 	private static function newUrlForNamedRoute( string $routeName ): string {

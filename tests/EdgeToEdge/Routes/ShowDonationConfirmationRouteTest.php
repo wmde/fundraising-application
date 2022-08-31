@@ -8,10 +8,11 @@ use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
+use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayments;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\Model\DirectDebitPayment;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController
@@ -23,21 +24,22 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	private const ACCESS_DENIED_TEXT = 'access_denied_donation_confirmation';
 
 	private Donation $donation;
+	private Payment $payment;
 
 	public function testGivenValidRequest_confirmationPageContainsDonationData(): void {
 		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$this->donation = $this->newStoredDonation( $factory );
+			$this->givenStoredDirectDebitDonation( $factory );
 		} );
 		$client = $this->createClient();
 
 		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
 
-		$this->assertDonationDataInResponse( $this->donation, $responseContent );
+		$this->assertDonationDataInResponse( $this->donation, $this->payment, $responseContent );
 	}
 
 	public function testGivenAnonymousDonation_confirmationPageReflectsThat(): void {
 		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$this->donation = $this->newBookedAnonymousPayPalDonation( $factory );
+			$this->givenStoredBookedAnonymousPayPalDonation( $factory );
 		} );
 		$client = $this->createClient();
 
@@ -59,38 +61,48 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		return $client->getResponse()->getContent();
 	}
 
-	private function newStoredDonation( FunFunFactory $factory ): Donation {
+	private function givenStoredDirectDebitDonation( FunFunFactory $factory ): void {
+		$this->storePayment( $factory, ValidPayments::newDirectDebitPayment() );
+
 		$factory->setDonationTokenGenerator( new FixedTokenGenerator(
 			self::CORRECT_ACCESS_TOKEN
 		) );
 
-		$donation = ValidDonation::newDirectDebitDonation();
+		$this->donation = ValidDonation::newDirectDebitDonation();
 
-		$factory->getDonationRepository()->storeDonation( $donation );
-
-		return $donation;
+		$factory->getDonationRepository()->storeDonation( $this->donation );
 	}
 
-	private function newBookedAnonymousPayPalDonation( FunFunFactory $factory ): Donation {
+	private function givenStoredBookedAnonymousPayPalDonation( FunFunFactory $factory ): void {
+		$this->storePayment( $factory, ValidPayments::newBookedPayPalPayment() );
+
 		$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::CORRECT_ACCESS_TOKEN ) );
-		$donation = ValidDonation::newBookedAnonymousPayPalDonation();
-		$factory->getDonationRepository()->storeDonation( $donation );
-
-		return $donation;
+		$this->donation = ValidDonation::newBookedAnonymousPayPalDonation();
+		$factory->getDonationRepository()->storeDonation( $this->donation );
 	}
 
-	private function assertDonationDataInResponse( Donation $donation, string $responseContent ): void {
+	private function storePayment( FunFunFactory $factory, Payment $payment ): void {
+		$factory->setDonationTokenGenerator( new FixedTokenGenerator(
+			self::CORRECT_ACCESS_TOKEN
+		) );
+
+		$factory->getPaymentRepository()->storePayment( $payment );
+
+		$this->payment = $payment;
+	}
+
+	private function assertDonationDataInResponse( Donation $donation, Payment $payment, string $responseContent ): void {
 		$donor = $donation->getDonor();
 		$personName = $donor->getName();
 		$personNameValues = $personName->toArray();
 		$physicalAddress = $donor->getPhysicalAddress();
-		/** @var DirectDebitPayment $paymentMethod */
-		$paymentMethod = $donation->getPaymentMethod();
+
+		$paymentData = $payment->getDisplayValues();
 
 		$this->assertStringContainsString( 'donation.id: ' . $donation->getId(), $responseContent );
-		$this->assertStringContainsString( 'donation.amount: ' . $donation->getAmount()->getEuroString(), $responseContent );
-		$this->assertStringContainsString( 'donation.interval: ' . $donation->getPaymentIntervalInMonths(), $responseContent );
-		$this->assertStringContainsString( 'donation.paymentType: ' . $donation->getPaymentMethodId(), $responseContent );
+		$this->assertStringContainsString( 'donation.amount: ' . $payment->getAmount()->getEuroFloat(), $responseContent );
+		$this->assertStringContainsString( 'donation.interval: ' . $paymentData['interval'], $responseContent );
+		$this->assertStringContainsString( 'donation.paymentType: ' . $paymentData['paymentType'], $responseContent );
 		$this->assertStringContainsString( 'donation.optsIntoNewsletter: ' . $donation->getOptsIntoNewsletter(), $responseContent );
 		$this->assertStringContainsString( 'donation.updateToken: ' . self::CORRECT_ACCESS_TOKEN, $responseContent );
 
@@ -103,25 +115,25 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( 'address.city: ' . $physicalAddress->getCity(), $responseContent );
 		$this->assertStringContainsString( 'address.email: ' . $donor->getEmailAddress(), $responseContent );
 
-		$this->assertStringContainsString( 'bankData.iban: ' . $paymentMethod->getBankData()->getIban()->toString(), $responseContent );
-		$this->assertStringContainsString( 'bankData.bic: ' . $paymentMethod->getBankData()->getBic(), $responseContent );
-		$this->assertStringContainsString( 'bankData.bankname: ' . $paymentMethod->getBankData()->getBankName(), $responseContent );
+		$this->assertStringContainsString( 'bankData.iban: ' . $paymentData['iban'], $responseContent );
+		$this->assertStringContainsString( 'bankData.bic: ' . $paymentData['bic'], $responseContent );
+		$this->assertStringContainsString( 'bankData.bankname: ' . ( $paymentData['bankname'] ?? '' ), $responseContent );
 	}
 
 	public function testGivenWrongToken_accessIsDenied(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->newStoredDonation( $factory );
+			$this->givenStoredDirectDebitDonation( $factory );
 
 			$client->request(
 				'GET',
 				'show-donation-confirmation',
 				[
-					'donationId' => $donation->getId(),
+					'donationId' => $this->donation->getId(),
 					'accessToken' => 'WrongAccessToken'
 				]
 			);
 
-			$this->assertDonationIsNotShown( $donation, $client->getResponse()->getContent() );
+			$this->assertDonationIsNotShown( $this->donation, $client->getResponse()->getContent() );
 		} );
 	}
 
@@ -133,7 +145,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testGivenWrongId_accessIsDenied(): void {
 		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$this->donation = $this->newStoredDonation( $factory );
+			$this->givenStoredDirectDebitDonation( $factory );
 		} );
 		$client = $this->createClient();
 
@@ -151,7 +163,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testRateLimitTimestampIsStoredInSession(): void {
 		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$this->donation = $this->newStoredDonation( $factory );
+			$this->givenStoredDirectDebitDonation( $factory );
 		} );
 		$client = $this->createClient();
 

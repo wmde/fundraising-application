@@ -4,23 +4,27 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDoctrineDonation;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
+use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\UpdateDonorController
  */
 class UpdateDonorRouteTest extends WebRouteTestCase {
+
+	use RebuildDatabaseSchemaTrait;
 
 	private const PATH = 'donation/update';
 	private const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
@@ -28,60 +32,61 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	public function testWhenCorrectPrivatePersonDataIsPosted_addressIsChanged(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment(
-			function ( Client $client, FunFunFactory $factory ): void {
-				$donation = $this->newStoredDonation( $factory );
-				$this->performRequest(
-					$client,
-					$this->newPrivateDonorData(),
-					$donation->getId(),
-					self::CORRECT_UPDATE_TOKEN,
-					self::CORRECT_UPDATE_TOKEN
-				);
-				$response = $client->getResponse();
-				$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$donation = $this->newStoredDonation( $factory );
 
-				$crawler = $client->followRedirect();
-				$dataVars = $this->getDataApplicationVars( $crawler );
-				$this->assertEquals( $this->newPrivateDonorData()['addressType'], $dataVars->addressType );
-				$this->assertEquals( $this->newPrivateDonorData()['salutation'], $dataVars->address->salutation );
-				$this->assertEquals( $this->newPrivateDonorData()['firstName'], $dataVars->address->firstName );
-				$this->assertEquals( $this->newPrivateDonorData()['lastName'], $dataVars->address->lastName );
-				$this->assertEquals( $this->newPrivateDonorData()['street'], $dataVars->address->streetAddress );
-				$this->assertEquals( $this->newPrivateDonorData()['postcode'], $dataVars->address->postalCode );
-				$this->assertEquals( $this->newPrivateDonorData()['city'], $dataVars->address->city );
-				$this->assertEquals( $this->newPrivateDonorData()['country'], $dataVars->address->countryCode );
-				$this->assertEquals( $this->newPrivateDonorData()['email'], $dataVars->address->email );
-			}
+		$this->performRequest(
+			$client,
+			$this->newPrivateDonorData(),
+			$donation->getId(),
+			self::CORRECT_UPDATE_TOKEN,
+			self::CORRECT_UPDATE_TOKEN
 		);
+		$response = $client->getResponse();
+		$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
+
+		$crawler = $client->followRedirect();
+		$dataVars = $this->getDataApplicationVars( $crawler );
+		$expectedDonor = $this->newPrivateDonorData();
+		$this->assertEquals( $expectedDonor['addressType'], $dataVars->addressType );
+		$this->assertEquals( $expectedDonor['salutation'], $dataVars->address->salutation );
+		$this->assertEquals( $expectedDonor['firstName'], $dataVars->address->firstName );
+		$this->assertEquals( $expectedDonor['lastName'], $dataVars->address->lastName );
+		$this->assertEquals( $expectedDonor['street'], $dataVars->address->streetAddress );
+		$this->assertEquals( $expectedDonor['postcode'], $dataVars->address->postalCode );
+		$this->assertEquals( $expectedDonor['city'], $dataVars->address->city );
+		$this->assertEquals( $expectedDonor['country'], $dataVars->address->countryCode );
+		$this->assertEquals( $expectedDonor['email'], $dataVars->address->email );
 	}
 
 	public function testWhenCorrectCompanyDataIsPosted_addressIsChanged(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment(
-			function ( Client $client, FunFunFactory $factory ): void {
-				$donation = $this->newStoredDonation( $factory );
-				$this->performRequest(
-					$client,
-					$this->newCompanyDonorData(),
-					$donation->getId(),
-					self::CORRECT_UPDATE_TOKEN,
-					self::CORRECT_UPDATE_TOKEN
-				);
-				$response = $client->getResponse();
-				$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$donation = $this->newStoredDonation( $factory );
 
-				$crawler = $client->followRedirect();
-				$dataVars = $this->getDataApplicationVars( $crawler );
-				$this->assertEquals( $this->newCompanyDonorData()['addressType'], $dataVars->addressType );
-				$this->assertEquals( $this->newCompanyDonorData()['companyName'], $dataVars->address->fullName );
-				$this->assertEquals( $this->newCompanyDonorData()['street'], $dataVars->address->streetAddress );
-				$this->assertEquals( $this->newCompanyDonorData()['postcode'], $dataVars->address->postalCode );
-				$this->assertEquals( $this->newCompanyDonorData()['city'], $dataVars->address->city );
-				$this->assertEquals( $this->newCompanyDonorData()['country'], $dataVars->address->countryCode );
-				$this->assertEquals( $this->newCompanyDonorData()['email'], $dataVars->address->email );
-			}
+		$this->performRequest(
+			$client,
+			$this->newCompanyDonorData(),
+			$donation->getId(),
+			self::CORRECT_UPDATE_TOKEN,
+			self::CORRECT_UPDATE_TOKEN
 		);
+
+		$response = $client->getResponse();
+		$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
+
+		$crawler = $client->followRedirect();
+		$dataVars = $this->getDataApplicationVars( $crawler );
+		$expectedDonorData = $this->newCompanyDonorData();
+		$this->assertEquals( $expectedDonorData['addressType'], $dataVars->addressType );
+		$this->assertEquals( $expectedDonorData['companyName'], $dataVars->address->fullName );
+		$this->assertEquals( $expectedDonorData['street'], $dataVars->address->streetAddress );
+		$this->assertEquals( $expectedDonorData['postcode'], $dataVars->address->postalCode );
+		$this->assertEquals( $expectedDonorData['city'], $dataVars->address->city );
+		$this->assertEquals( $expectedDonorData['country'], $dataVars->address->countryCode );
+		$this->assertEquals( $expectedDonorData['email'], $dataVars->address->email );
 	}
 
 	public function testGivenRequestWithoutParameters_resultIsError(): void {
@@ -98,102 +103,104 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	}
 
 	public function testWhenInvalidUpdateTokenIsSupplied_requestIsDenied(): void {
-		$this->createEnvironment(
-			function ( Client $client, FunFunFactory $factory ): void {
-				$donation = $this->newStoredDonation( $factory );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$donation = $this->newStoredDonation( $factory );
 
-				$this->performRequest(
-					$client,
-					$this->newPrivateDonorData(),
-					$donation->getId(),
-					self::CORRECT_UPDATE_TOKEN,
-					self::INVALID_UPDATE_TOKEN
-				);
-
-				$response = $client->getResponse();
-				$this->assertTrue( $response->isForbidden() );
-			}
+		$this->performRequest(
+			$client,
+			$this->newPrivateDonorData(),
+			$donation->getId(),
+			self::CORRECT_UPDATE_TOKEN,
+			self::INVALID_UPDATE_TOKEN
 		);
+
+		$response = $client->getResponse();
+		$this->assertTrue( $response->isForbidden() );
 	}
 
 	public function testWhenDonationIsExported_requestIsDenied(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment(
-			function ( Client $client, FunFunFactory $factory ): void {
-				$donation = ValidDoctrineDonation::newExportedirectDebitDoctrineDonation();
-				$donation->modifyDataObject(
-					static function ( DonationData $data ) {
-						$data->setAccessToken( self::CORRECT_UPDATE_TOKEN );
-						$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
-					}
-				);
-				$factory->getEntityManager()->persist( $donation );
-				$factory->getEntityManager()->flush();
-
-				$this->performRequest(
-					$client,
-					$this->newPrivateDonorData(),
-					$donation->getId(),
-					self::CORRECT_UPDATE_TOKEN,
-					self::CORRECT_UPDATE_TOKEN
-				);
-
-				$response = $client->getResponse();
-				$this->assertTrue( $response->isForbidden() );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$donation = ValidDoctrineDonation::newExportedirectDebitDoctrineDonation();
+		$donation->modifyDataObject(
+			static function ( DonationData $data ) {
+				$data->setAccessToken( self::CORRECT_UPDATE_TOKEN );
+				$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
 			}
 		);
+		$factory->getEntityManager()->persist( $donation );
+		$factory->getEntityManager()->flush();
+
+		$this->performRequest(
+			$client,
+			$this->newPrivateDonorData(),
+			$donation->getId(),
+			self::CORRECT_UPDATE_TOKEN,
+			self::CORRECT_UPDATE_TOKEN
+		);
+
+		$response = $client->getResponse();
+		$this->assertTrue( $response->isForbidden() );
 	}
 
 	public function testWhenDonationDataIsInvalid_requestIsDenied(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment(
-			function ( Client $client, FunFunFactory $factory ): void {
-				$donation = $this->newStoredDonation( $factory );
-				$donorData = $this->newPrivateDonorData();
-				$donorData['email'] = 'this_is_not_a_valid_email_address.de';
-				$crawler = $this->performRequest(
-					$client,
-					$donorData,
-					$donation->getId(),
-					self::CORRECT_UPDATE_TOKEN,
-					self::CORRECT_UPDATE_TOKEN
-				);
-				$dataVars = $this->getDataApplicationVars( $crawler );
-				$response = $client->getResponse();
-				$this->assertTrue( $response->isSuccessful() );
-				$this->assertStringContainsString(
-					'donor_change_failure_validation_error',
-					$dataVars->updateData->message
-				);
-			}
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$donation = $this->newStoredDonation( $factory );
+		$donorData = $this->newPrivateDonorData();
+		$donorData['email'] = 'this_is_not_a_valid_email_address.de';
+		$crawler = $this->performRequest(
+			$client,
+			$donorData,
+			$donation->getId(),
+			self::CORRECT_UPDATE_TOKEN,
+			self::CORRECT_UPDATE_TOKEN
+		);
+		$dataVars = $this->getDataApplicationVars( $crawler );
+		$response = $client->getResponse();
+		$this->assertTrue( $response->isSuccessful() );
+		$this->assertStringContainsString(
+			'donor_change_failure_validation_error',
+			$dataVars->updateData->message
 		);
 	}
 
 	public function testWhenDonationAlreadyHasAddress_requestIsDenied(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment(
-			function ( Client $client, FunFunFactory $factory ): void {
-				$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
-				$donation->modifyDataObject(
-					static function ( DonationData $data ) {
-						$data->setAccessToken( self::CORRECT_UPDATE_TOKEN );
-						$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
-					}
-				);
-				$factory->getEntityManager()->persist( $donation );
-				$factory->getEntityManager()->flush();
-
-				$this->performRequest(
-					$client,
-					$this->newPrivateDonorData(),
-					$donation->getId(),
-					self::CORRECT_UPDATE_TOKEN,
-					self::CORRECT_UPDATE_TOKEN
-				);
-				$response = $client->getResponse();
-				$this->assertTrue( $response->isForbidden() );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
+		$donation->modifyDataObject(
+			static function ( DonationData $data ) {
+				$data->setAccessToken( self::CORRECT_UPDATE_TOKEN );
+				$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
 			}
 		);
+		$factory->getEntityManager()->persist( $donation );
+		$factory->getEntityManager()->flush();
+
+		$this->performRequest(
+			$client,
+			$this->newPrivateDonorData(),
+			$donation->getId(),
+			self::CORRECT_UPDATE_TOKEN,
+			self::CORRECT_UPDATE_TOKEN
+		);
+		$response = $client->getResponse();
+		$this->assertTrue( $response->isForbidden() );
+	}
+
+	protected static function createClient(): KernelBrowser {
+		$client = parent::createClient();
+		// Don't drop database and other services after redirect
+		if ( $client instanceof KernelBrowser ) {
+			$client->disableReboot();
+			return $client;
+		}
+		throw new \LogicException( 'Unexpected client: ' . get_class( $client ) );
 	}
 
 	private function performRequest( Client $client, array $data, int $donationId, string $accessToken, string $updateToken ): Crawler {
@@ -218,11 +225,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 			)
 		);
 
-		$donation = ValidDonation::newIncompleteAnonymousPayPalDonation();
-
-		$factory->getDonationRepository()->storeDonation( $donation );
-
-		return $donation;
+		return ( new StoredDonations( $factory ) )->newStoredIncompleteAnonymousPayPalDonation();
 	}
 
 	private function newPrivateDonorData(): array {

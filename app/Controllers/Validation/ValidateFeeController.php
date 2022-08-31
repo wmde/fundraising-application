@@ -9,19 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use UnexpectedValueException;
 use WMDE\Euro\Euro;
-use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateFeeRequest;
-use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateFeeResult;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\UseCases\ValidateMembershipFee\ValidateMembershipFeeUseCase;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
 class ValidateFeeController {
 
-	private const ERROR_RESPONSE_MAP = [
-		ValidateFeeResult::ERROR_TOO_LOW => 'too-low',
-		ValidateFeeResult::ERROR_INTERVAL_INVALID => 'interval-invalid',
-		'not-money' => 'not-money'
-	];
-
-	public function index( Request $httpRequest ): Response {
+	public function index( Request $httpRequest, FunFunFactory $factory ): Response {
 		try {
 			$fee = $this->euroFromRequest( $httpRequest );
 		}
@@ -29,18 +23,20 @@ class ValidateFeeController {
 			return $this->newJsonErrorResponse( 'not-money' );
 		}
 
-		$request = ValidateFeeRequest::newInstance()
-			->withFee( $fee )
-			->withInterval( (int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ) )
-			->withApplicantType( $httpRequest->request->get( 'addressType', '' ) );
-
-		$response = ( new ValidateMembershipFeeUseCase() )->validate( $request );
+		$response = ( new ValidateMembershipFeeUseCase( $factory->newPaymentServiceFactory() ) )->validate(
+			$fee->getEuros(),
+			(int)$httpRequest->request->get( 'paymentIntervalInMonths', '0' ),
+			$httpRequest->request->get( 'addressType', '' ),
+			// Until we implement a choice in the frontend, we default to the only payment we support
+			// See https://phabricator.wikimedia.org/T312071
+			$httpRequest->request->get( 'paymentType', PaymentType::DirectDebit->value )
+		);
 
 		if ( $response->isSuccessful() ) {
 			return new JsonResponse( [ 'status' => 'OK' ] );
 		}
 
-		return $this->newJsonErrorResponse( $response->getErrorCode() );
+		return $this->newJsonErrorResponse( $response->getValidationErrors()[0]->getMessageIdentifier() );
 	}
 
 	private function euroFromRequest( Request $httpRequest ): Euro {
@@ -54,13 +50,10 @@ class ValidateFeeController {
 	}
 
 	private function newJsonErrorResponse( string $errorCode ): Response {
-		if ( empty( self::ERROR_RESPONSE_MAP[$errorCode] ) ) {
-			throw new \OutOfRangeException( 'Validation error code not found' );
-		}
 		return new JsonResponse( [
 			'status' => 'ERR',
 			'messages' => [
-				'membershipFee' => self::ERROR_RESPONSE_MAP[$errorCode]
+				'membershipFee' => $errorCode
 			]
 		] );
 	}

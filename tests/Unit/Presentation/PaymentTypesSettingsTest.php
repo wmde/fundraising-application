@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings
@@ -78,6 +79,48 @@ class PaymentTypesSettingsTest extends TestCase {
 		] );
 		$this->assertSame( [], $settings->getEnabledForDonation() );
 		$this->assertSame( [], $settings->getEnabledForMembershipApplication() );
+	}
+
+	public function testGetAllowedPaymentTypesForDonation(): void {
+		$settings = new PaymentTypesSettings( [
+			'BEZ' => [
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
+			],
+			'UEB' => [
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
+			],
+			'PPL' => [
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => false
+			],
+		] );
+
+		$paymentTypes = $settings->getPaymentTypesForDonation();
+
+		$this->assertSame( [ PaymentType::DirectDebit, PaymentType::BankTransfer, PaymentType::Paypal ], $paymentTypes );
+	}
+
+	public function testGetAllowedPaymentTypesForMembership(): void {
+		$settings = new PaymentTypesSettings( [
+			'BEZ' => [
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
+			],
+			'UEB' => [
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
+			],
+			'PPL' => [
+				PaymentTypesSettings::ENABLE_DONATIONS => true,
+				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => false
+			],
+		] );
+
+		$paymentTypes = $settings->getPaymentTypesForMembershipApplication();
+
+		$this->assertSame( [ PaymentType::DirectDebit, PaymentType::BankTransfer ], $paymentTypes );
 	}
 
 }

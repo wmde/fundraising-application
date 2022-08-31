@@ -35,8 +35,18 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 		$donation = ValidDonation::newBookedAnonymousPayPalDonation();
 		$donation->assignId( self::DONATION_ID );
 
+		$paymentData = [
+			'amount' => 1337,
+			'interval' => 3,
+			'paymentType' => 'PPL',
+			'iban' => 'I BAN',
+			'bic' => 'I BIC',
+			'bankname' => 'I BANK',
+		];
+
 		$presenter->present(
 			$donation,
+			$paymentData,
 			self::UPDATE_TOKEN,
 			self::ACCESS_TOKEN,
 			$this->newUrls()
@@ -48,6 +58,7 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			'donation' => [
 				'id' => self::DONATION_ID,
 				'amount' => 13.37,
+				'amountInCents' => 1337,
 				'interval' => 3,
 				'paymentType' => 'PPL',
 				'optsIntoNewsletter' => false,
@@ -61,7 +72,11 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			'address' => [
 				'isAnonymous' => true
 			],
-			'bankData' => [],
+			'bankData' => [
+				'iban' => 'I BAN',
+				'bic' => 'I BIC',
+				'bankname' => 'I BANK',
+			],
 			'urls' => [
 				'testUrl' => 'https://example.com/',
 				'addComment' => '/such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'

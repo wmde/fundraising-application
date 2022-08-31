@@ -4,12 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\MembershipContext\DataAccess\MembershipApplicationData;
-use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredMemberships;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\CancelMembershipApplicationController
@@ -19,8 +16,8 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 	private const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
 
 	public function testGivenValidUpdateToken_confirmationPageIsShown(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$applicationId = $this->storeApplication( $factory->getEntityManager() );
+		$this->createEnvironment( function ( Client $client ): void {
+			$applicationId = $this->storeApplication();
 
 			$client->request(
 				'GET',
@@ -36,8 +33,8 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidUpdateToken_resultIsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$applicationId = $this->storeApplication( $factory->getEntityManager() );
+		$this->createEnvironment( function ( Client $client ): void {
+			$applicationId = $this->storeApplication();
 
 			$client->request(
 				'GET',
@@ -52,16 +49,8 @@ class CancelMembershipApplicationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function storeApplication( EntityManager $entityManager ): int {
-		$application = ValidMembershipApplication::newDoctrineEntity();
-
-		$application->modifyDataObject( static function ( MembershipApplicationData $data ): void {
-			$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
-		} );
-
-		$entityManager->persist( $application );
-		$entityManager->flush();
-
+	private function storeApplication(): int {
+		$application = ( new StoredMemberships( $this->getFactory() ) )->storeValidMembershipApplication( self::CORRECT_UPDATE_TOKEN );
 		return $application->getId();
 	}
 

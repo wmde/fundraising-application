@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateFeeController
@@ -17,7 +18,12 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 		$client->request(
 			'POST',
 			'/validate-fee',
-			[ 'membershipFee' => '1234', 'paymentIntervalInMonths' => '6', 'addressType' => 'person' ]
+			[
+				'membershipFee' => '1234',
+				'paymentIntervalInMonths' => '6',
+				'addressType' => 'person',
+				'paymentType' => PaymentType::DirectDebit->value
+			]
 		);
 
 		$this->assertJsonSuccessResponse(
@@ -32,7 +38,12 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 		$client->request(
 			'POST',
 			'/validate-fee',
-			[ 'membershipFee' => '1234', 'paymentIntervalInMonths' => '6', 'addressType' => 'firma' ]
+			[
+				'membershipFee' => '1234',
+				'paymentIntervalInMonths' => '6',
+				'addressType' => 'firma',
+				'paymentType' => PaymentType::DirectDebit->value
+			]
 		);
 
 		$response = $client->getResponse();
@@ -44,7 +55,7 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 		return [
 			'status' => 'ERR',
 			'messages' => [
-				'membershipFee' => 'too-low'
+				'membershipFee' => 'error_too_low'
 			]
 		];
 	}
