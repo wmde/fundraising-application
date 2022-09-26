@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/wmde/FundraisingFrontend.svg?branch=master)](https://travis-ci.org/wmde/FundraisingFrontend)
-[![Code Coverage](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/?branch=master)
+[![Build Status](https://travis-ci.org/wmde/fundraising-application.svg?branch=main)](https://travis-ci.org/wmde/fundraising-application)
+[![Code Coverage](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/?branch=main)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/?branch=main)
 
 User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
 
@@ -28,6 +28,8 @@ markdown-toc --maxdepth 2 --bullets '*' -i README.md
 
 ## Installation
 
+### First setup
+
 For development, you need to have Docker and docker-compose installed. You need at least Docker Version >= 17.09.0 and docker-compose version >= 1.17.0. If your OS does not come with the right version, please use the official installation instructions for [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/). You don't need to install other dependencies (PHP, Node.js, MariaDB) on your machine.
 
 Get a clone of our git repository and then run:
@@ -42,11 +44,33 @@ This will
 - Download and install the frontend assets from
     [fundraising-app-frontend](https://gitlab.com/fun-tech/fundraising-app-frontend)
 
+### Installing the current dependencies
+
+	make install-php
+
+Will install the dependencies currently specified in `composer.lock`. Use
+this command whenever you check out a branch that has changes to
+`composer.lock`.
+
 ## Running the application
 
     docker-compose up
 
-You can now access the application at [http://localhost:8082/](http://localhost:8082/).
+You can now access the application at [http://localhost:8082/](http://localhost:8082/). Hit Ctrl-C to stop the server.
+
+If you want to run the application in the background, use the commands
+
+	make up-app
+
+to start it and
+
+	make down-app
+
+to stop it.
+
+To start the application with a debug port open, (see ["How to use XDebug and PHPStorm"](doc/HOWTO_Use_Xdebug_and_PHPStorm.md)) run,
+
+	make up-debug
 
 ## Configuration
 
@@ -155,18 +179,29 @@ Valid environment names are
 
     make ci
 
+This will run the tests, check the code style, do the static analysis and
+check the configuration files.
 
-### For tests only
+### Run only tests only
 
     make test
 
-### For style checks only
+If you want to run a specific folder with tests or just one file, use the `TEST_DIR` parameter. Examples:
+
+	# Run the unit tests
+    make phpunit TEST_DIR=tests/Unit
+
+	# Run a specific test file
+    make phpunit TEST_DIR=tests/EdgeToEdge/Routes/AddDonationRouteTest.php
+
+
+### Run only code style checks
 
     make cs
 
-For one context only
+If you want to fix the code style violations, run
 
-    make phpunit TEST_DIR=contexts/PaymentContext
+	make fix-cs
 
 ### phpstan
 
