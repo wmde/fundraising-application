@@ -35,6 +35,10 @@ class ShowMembershipApplicationFormController {
 			$initialDonationValidationResult = $adapter->getInitialValidationState( $donation, $payment );
 		}
 
+		$ffFactory->getTranslationCollector()->addTranslationFile(
+			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
+		);
+
 		return new Response( $ffFactory->newMembershipApplicationFormPresenter()->present(
 			$urls,
 			$showMembershipTypeOption,
