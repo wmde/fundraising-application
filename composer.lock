@@ -7315,16 +7315,16 @@
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "5.1.0",
+            "version": "5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "41ec21eda7beedc0d9d43e42161e5066783ca538"
+                "reference": "2b867c28eec12b5813ec71a1a6a1a43087886b39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/41ec21eda7beedc0d9d43e42161e5066783ca538",
-                "reference": "41ec21eda7beedc0d9d43e42161e5066783ca538",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/2b867c28eec12b5813ec71a1a6a1a43087886b39",
+                "reference": "2b867c28eec12b5813ec71a1a6a1a43087886b39",
                 "shasum": ""
             },
             "require": {
@@ -7366,7 +7366,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2022-09-27T12:47:02+00:00"
+            "time": "2022-10-05T07:56:48+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -10177,5 +10177,5 @@
     "platform-dev": {
         "ext-pdo_sqlite": "*"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
