@@ -31,7 +31,10 @@ class PaypalNotificationController {
 		try {
 			$useCase = $ffFactory->newBookDonationUseCase( $this->getUpdateToken( $post ) );
 			$response = $useCase->handleNotification( new NotificationRequest(
-				$post->all(),
+				array_map(
+					fn( $value ) => iconv( 'ISO-8859-1', 'UTF-8', $value ),
+					$post->all()
+				),
 				$this->getDonationId( $post )
 			) );
 			if ( $response->donationWasNotFound() ) {
