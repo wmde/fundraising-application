@@ -9,6 +9,6 @@ class ParameterBagEncodingConverter
 {
 	public static function convert(ParameterBag $input, string $fromEncoding, string $toEncoding = 'UTF-8' ): ParameterBag
 	{
-
+		return $input;
 	}
 }
