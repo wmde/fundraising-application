@@ -17,6 +17,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingVerificationServiceFactor
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\PayPal\PayPalVerificationService;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\SucceedingVerificationService;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
+use function iconv;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationController
@@ -49,6 +50,30 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 			$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
+		} );
+	}
+
+	public function testGivenValidRequestWithISOEncodedData_applicationIndicatesSuccess(): void {
+		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
+			$this->setSucceedingDonationTokenGenerator( $factory );
+			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+
+			$this->storedDonations()->newStoredIncompletePayPalDonation();
+
+			$utfEncodedParams = $isoLatinEncodedParams = $this->newHttpParamsForPayment();
+			$utfEncodedParams['payment_type'] = 'änstant';
+			// personal fields like name or address will be ignored by the payment domain,
+			// so we change a field that we know will be stored, but not checked in controller or use case
+			$isoLatinEncodedParams['payment_type'] = iconv( 'UTF-8', 'ISO-8859-1', $utfEncodedParams['payment_type'] );
+
+			$client->request(
+				Request::METHOD_POST,
+				self::PATH,
+				$isoLatinEncodedParams
+			);
+
+			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+			$this->assertPayPalDataGotPersisted( $utfEncodedParams );
 		} );
 	}
 
