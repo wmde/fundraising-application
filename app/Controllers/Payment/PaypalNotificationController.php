@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\Controllers\Payment;
 
 use Psr\Log\LogLevel;
-use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +12,7 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\UseCases\NotificationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\NotificationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\ParameterBagEncodingConverter;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\PayPal\PayPalVerificationService;
 
 class PaypalNotificationController {
@@ -21,7 +21,7 @@ class PaypalNotificationController {
 	private const PAYPAL_LOG_FILTER = [ 'payer_email', 'payer_id' ];
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
-		$post = $request->request;
+		$post =ParameterBagEncodingConverter::convert($request->request,'ISO-8859-1');
 
 		if ( !$this->requestIsForPaymentCompletion( $post ) ) {
 			$ffFactory->getPaypalLogger()->log( LogLevel::INFO, self::MSG_NOT_HANDLED, [ 'post_vars' => $post->all() ] );
@@ -31,10 +31,7 @@ class PaypalNotificationController {
 		try {
 			$useCase = $ffFactory->newBookDonationUseCase( $this->getUpdateToken( $post ) );
 			$response = $useCase->handleNotification( new NotificationRequest(
-				array_map(
-					fn( $value ) => iconv( 'ISO-8859-1', 'UTF-8', $value ),
-					$post->all()
-				),
+				$post->all(),
 				$this->getDonationId( $post )
 			) );
 			if ( $response->donationWasNotFound() ) {
@@ -65,7 +62,7 @@ class PaypalNotificationController {
 		return $useCase->handleNotification( $amount->getEuroCents(), $request->request->all() );
 	}
 
-	private function logError( $ffFactory, InputBag $post, string $message, array $additionalContext = [] ): void {
+	private function logError( $ffFactory, ParameterBag $post, string $message, array $additionalContext = [] ): void {
 		$parametersToLog = $post->all();
 		foreach ( self::PAYPAL_LOG_FILTER as $remove ) {
 			unset( $parametersToLog[$remove] );

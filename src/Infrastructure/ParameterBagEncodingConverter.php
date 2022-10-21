@@ -9,7 +9,7 @@ class ParameterBagEncodingConverter {
 	public static function convert( ParameterBag $input, string $fromEncoding, string $toEncoding = 'UTF-8' ): ParameterBag {
 		return new ParameterBag(
 			array_map(
-				fn( $value ) => iconv( $fromEncoding, $toEncoding, $value ),
+				fn( $value ) => is_string($value) ? iconv( $fromEncoding, $toEncoding, $value ) : $value,
 				$input->all()
 			),
 		);
