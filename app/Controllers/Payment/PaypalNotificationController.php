@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\Controllers\Payment;
 
 use Psr\Log\LogLevel;
-use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,7 +61,7 @@ class PaypalNotificationController {
 		return $useCase->handleNotification( $amount->getEuroCents(), $request->request->all() );
 	}
 
-	private function logError( $ffFactory, InputBag $post, string $message, array $additionalContext = [] ): void {
+	private function logError( FunFunFactory $ffFactory, ParameterBag $post, string $message, array $additionalContext = [] ): void {
 		$parametersToLog = $post->all();
 		foreach ( self::PAYPAL_LOG_FILTER as $remove ) {
 			unset( $parametersToLog[$remove] );
@@ -71,6 +70,7 @@ class PaypalNotificationController {
 			'post_vars' => $parametersToLog,
 			...$additionalContext
 		] );
+		$ffFactory->getLogger()->log( LogLevel::ERROR, $message );
 	}
 
 	private function getUpdateToken( ParameterBag $postRequest ): string {
