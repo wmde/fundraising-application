@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Symfony\Component\DomCrawler\Crawler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
@@ -55,7 +54,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'testCampaign', $subscription->getSource() );
 	}
 
-	public function testGivenValidDataAndNoContentType_routeReturnsRedirectToSucccessPage(): void {
+	public function testGivenValidDataAndNoContentType_routeRedirectsToSuccessPage(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 
@@ -68,7 +67,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertResponseRedirects( '/page/Subscription_Success' );
 	}
 
-	public function testGivenInvalidDataAndNoContentType_routeDisplaysFormPage(): void {
+	public function testGivenInvalidDataAndNoContentType_routeRedirectsToSuccessPage(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 
@@ -78,11 +77,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			$this->invalidFormInput
 		);
 
-		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
-
-		$applicationVars = $this->getDataApplicationVars( $crawler );
-		$this->assertSame( 'email_address_wrong_format', $applicationVars->errors->email );
-		$this->assertSame( 'not an email', $applicationVars->email );
+		$this->assertResponseRedirects( '/page/Subscription_Success' );
 	}
 
 	public function testGivenInvalidDataAndJSONContentType_routeReturnsSuccessResult(): void {
@@ -143,10 +138,17 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function getDataApplicationVars( Crawler $crawler ): object {
-		/** @var \DOMElement $appElement */
-		$appElement = $crawler->filter( '#appdata' )->getNode( 0 );
-		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
-	}
+	public function testGivenValidDataAndGetRequestWithoutJsonpIdentifier_routeReturnsBadRequest(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
+		$client->request(
+			'GET',
+			'/contact/subscribe',
+				$this->validFormInput
+		);
 
+		$response = $client->getResponse();
+		$this->assertFalse( $response->isSuccessful() );
+		$this->assertSame( 400, $response->getStatusCode(), 'Should return bad request' );
+	}
 }

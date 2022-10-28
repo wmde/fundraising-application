@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest;
 use WMDE\FunValidators\ValidationResponse;
@@ -27,14 +26,13 @@ class AddSubscriptionController {
 				$ffFactory->newAddSubscriptionJsonPresenter(),
 				$request->query->get( 'callback', '' ),
 			);
+		} elseif ( $request->getMethod() === 'GET' ) {
+			return new Response( 'Bad request - method GET only allowed with JSONP callback.', Response::HTTP_BAD_REQUEST );
 		}
 
-		return $this->createHtmlResponse(
-			$request,
-			$responseModel,
-			$ffFactory->newAddSubscriptionHtmlPresenter(),
-			$ffFactory->getUrlGenerator()->generateRelativeUrl( 'page', [ 'pageName' => 'Subscription_Success' ] )
-		);
+		// We don't check the $responseModel further because we don't want to bother users too much.
+		// We only validate the email address and if it does not validate, we still return success.
+		return new RedirectResponse( $ffFactory->getUrlGenerator()->generateRelativeUrl( 'page', [ 'pageName' => 'Subscription_Success' ] ) );
 	}
 
 	private function createSubscriptionRequest( Request $request ): SubscriptionRequest {
@@ -45,23 +43,6 @@ class AddSubscriptionController {
 		$subscriptionRequest->setTrackingString( $request->attributes->get( 'trackingCode', '' ) );
 
 		return $subscriptionRequest;
-	}
-
-	private function createHtmlResponse( Request $request, ValidationResponse $responseModel, AddSubscriptionHtmlPresenter $presenter, string $successUrl ): Response {
-		// GET request will display the form, we don't care about the $responseModel in this case
-		if ( $request->isMethod( Request::METHOD_GET ) ) {
-			return new Response( $presenter->present( ValidationResponse::newSuccessResponse(), [] ) );
-		}
-
-		// Redirect to success page
-		if ( $responseModel->isSuccessful() ) {
-			return new RedirectResponse( $successUrl );
-		}
-
-		// Re-display the form with errors
-		return new Response(
-			$presenter->present( $responseModel, $request->request->all() )
-		);
 	}
 
 	private function createJsonResponse( ValidationResponse $responseModel, AddSubscriptionJsonPresenter $presenter, ?string $callback = '' ): Response {
