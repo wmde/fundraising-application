@@ -133,6 +133,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
@@ -387,7 +388,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function getSubscriptionValidator(): SubscriptionValidator {
 		return $this->createSharedObject( SubscriptionValidator::class, function (): SubscriptionValidator {
 			return new SubscriptionValidator(
-				$this->getEmailValidator(),
+				new EmailValidator( new NullDomainNameValidator() ),
 				$this->newSubscriptionDuplicateValidator(),
 			);
 		} );
