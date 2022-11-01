@@ -95,11 +95,5 @@
 			"campaigns.yml",
 			"campaigns.test.yml"
 		]
-	},
-	"smtp": {
-		"host": "localhost",
-		"username": "NOT A USERNAME",
-		"password": "NOT A PASSWORD",
-		"port": 25
 	}
 }

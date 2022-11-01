@@ -39,7 +39,6 @@ use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport\NullTransport;
-use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Twig\Environment;
 use WMDE\Clock\SystemClock;
 use WMDE\EmailAddress\EmailAddress;
@@ -777,15 +776,13 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	private function getMailer(): MailerInterface {
-		return $this->createSharedObject( MailerInterface::class, function (): MailerInterface {
-			$transport = new EsmtpTransport(
-				$this->config['smtp']['host'],
-				$this->config['smtp']['port'],
-			);
-			$transport->setUsername( $this->config['smtp']['username'] )
-				->setPassword( $this->config['smtp']['password'] );
-			return new Mailer( $transport );
+		return $this->createSharedObject( MailerInterface::class, static function (): MailerInterface {
+			return new Mailer( new NullTransport() );
 		} );
+	}
+
+	public function setMailer( MailerInterface $mailer ): void {
+		$this->sharedObjects[ MailerInterface::class ] = $mailer;
 	}
 
 	public function setNullMessenger(): void {

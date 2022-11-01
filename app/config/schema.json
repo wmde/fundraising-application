@@ -778,38 +778,6 @@
       },
       "additionalProperties": false,
       "required": [ "donations", "membership" ]
-    },
-    "smtp": {
-      "type": "object",
-      "title": "SMTP configuration",
-      "properties": {
-        "host": {
-          "type": "string",
-          "title": "SMTP host",
-          "default": "localhost"
-        },
-        "username": {
-          "type": "string",
-          "title": "SMTP username",
-          "minLength": 8
-        },
-        "password": {
-          "type": "string",
-          "title": "SMTP password",
-          "minLength": 8
-        },
-        "port": {
-          "type": "integer",
-          "title": "SMTP port",
-          "default": 25
-        },
-        "encryption": {
-          "type": "string",
-          "title": "'tls' or empty string"
-        }
-      },
-      "additionalProperties": false,
-      "required": [ "host", "username", "password", "port", "encryption" ]
     }
   },
   "additionalProperties": false,
@@ -834,7 +802,6 @@
     "piwik",
     "payment-types",
     "cookie",
-    "preset-amounts",
-    "smtp"
+    "preset-amounts"
   ]
 }

@@ -109,11 +109,5 @@
   "user-data-key": "q+57eBH3k9alQE4k45PMXpuTRKj+/n+woQvD7AXQMps=",
   "campaigns": {
     "configurations": [ "campaigns.yml", "campaigns.dev.yml" ]
-  },
-  "smtp": {
-    "host": "mailhog",
-    "username": "NOT A USERNAME",
-    "password": "NOT A PASSWORD",
-    "port": 1025
   }
 }

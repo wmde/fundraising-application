@@ -81,6 +81,7 @@ services:
         public: true
         calls:
             - setUrlGenerator: ["@app.url_generator"]
+            - setMailer: ["@mailer"]
 
     WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter:
         class: WMDE\Fundraising\Frontend\App\UrlGeneratorAdapter
