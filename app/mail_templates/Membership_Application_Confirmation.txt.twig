@@ -10,7 +10,10 @@
 {% endif %}
 
 {% if moderationFlags is not defined or moderationFlags is empty %}
-	{$ mail_content('membership_application_confirmation/intro_start') $}
+	{$ mail_content('membership_application_confirmation/intro_start', {
+			'membership_type': membershipType|membership_type,
+			'incentive': incentiveText
+		}) $}
 
 	{% if paymentType == 'UEB' %}
 		{$ mail_content('membership_application_confirmation/intro_ueb', {
