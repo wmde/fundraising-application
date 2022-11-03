@@ -37,6 +37,10 @@ install-php:
 update-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update $(COMPOSER_FLAGS)
 
+update-content:
+	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update wmde/fundraising-frontend-content
+
+
 generate-database-schema:
 	$(DOCTRINE_SCHEMA_COMMAND) > ./.docker/database/01.Database_Schema.sql
 

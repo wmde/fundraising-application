@@ -347,13 +347,18 @@ JavaScript) reference with the value of `assets-path`.
 
 ## Updating the dependencies
 
-To update all the PHP dependencies, run
+To update *all* the PHP dependencies, run
 
     make update-php
 
-For updating an individual package, use the command line
+To update only the messages in the application and emails, update the
+[fundraising-frontend-content dependency](https://github.com/wmde/fundraising-frontend-content) with the command
 
-    docker run --rm -it -v $(pwd):/app -v ~/.composer:/composer -u $(id -u):$(id -g) composer update --ignore-platform-reqs PACKAGE_NAME
+	make update-content
+
+For updating an individual PHP dependency, use the command line
+
+    docker run --rm -it -v $(pwd):/app -u $(id -u):$(id -g) registry.gitlab.com/fun-tech/fundraising-frontend-docker:composer composer update PACKAGE_NAME
 
 and replace the `PACKAGE_NAME` placeholder with the name of your package.
 
