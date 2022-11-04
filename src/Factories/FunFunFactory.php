@@ -424,7 +424,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
 		return new ConfirmSubscriptionHtmlPresenter(
-			$this->getLayoutTemplate( 'Confirm_Subscription.twig' )
+			$this->getLayoutTemplate( 'Subscription_Confirmation.twig' )
 		);
 	}
 
