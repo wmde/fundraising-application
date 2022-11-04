@@ -16,6 +16,8 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  */
 class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 
+	use GetApplicationVarsTrait;
+
 	private const PATH = 'update-address';
 	private const DUMMY_DONATION_ID = 0;
 
@@ -36,11 +38,8 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 				);
 
 				$response = $client->getResponse();
-				/** @var \DOMElement $appElement */
-				$appElement = $client->getCrawler()->filter( '#appdata' )->getNode( 0 );
-				$dataVars = json_decode(
-					$appElement->getAttribute( 'data-application-vars' )
-				);
+
+				$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 				$this->assertTrue( $response->isOk() );
 				$this->assertSame( $addressChange->getCurrentIdentifier()->__toString(), $dataVars->addressToken );
 			}

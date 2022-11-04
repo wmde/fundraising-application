@@ -25,6 +25,7 @@ use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 class UpdateDonorRouteTest extends WebRouteTestCase {
 
 	use RebuildDatabaseSchemaTrait;
+	use GetApplicationVarsTrait;
 
 	private const PATH = 'donation/update';
 	private const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
@@ -263,11 +264,5 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 				'accessToken' => self::CORRECT_UPDATE_TOKEN
 			]
 		);
-	}
-
-	private function getDataApplicationVars( Crawler $crawler ): object {
-		/** @var \DOMElement $appElement */
-		$appElement = $crawler->filter( '#appdata' )->getNode( 0 );
-		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
 	}
 }
