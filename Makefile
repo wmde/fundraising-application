@@ -11,7 +11,7 @@ APP_ENV       := dev
 ASSET_BRANCH  := main
 DOCTRINE_SCHEMA_COMMAND := docker-compose run --rm app ./bin/doctrine orm:schema-tool:create --dump-sql | sed 's/The following SQL statements will be executed://; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/'
 
-DOCKER_IMAGE  := registry.gitlab.com/fun-tech/fundraising-frontend-docker/php-8.1
+DOCKER_IMAGE  := registry.gitlab.com/fun-tech/fundraising-frontend-docker
 
 .DEFAULT_GOAL := ci
 

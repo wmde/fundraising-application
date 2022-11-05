@@ -10,7 +10,7 @@ services:
         - app_debug
 
   app_debug:
-    image: "registry.gitlab.com/fun-tech/fundraising-frontend-docker/php-8.1:xdebug"
+    image: "registry.gitlab.com/fun-tech/fundraising-frontend-docker:xdebug"
     environment:
       - XDEBUG_CONFIG=remote_host=${LOCAL_IP} # This won't work for PHPStorm CLI runs until https://youtrack.jetbrains.com/issue/WI-41043 is fixed
       - PHP_IDE_CONFIG=serverName=spenden.wikimedia.de
