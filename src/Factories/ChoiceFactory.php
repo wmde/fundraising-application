@@ -13,18 +13,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
  */
 class ChoiceFactory {
 
-	private $featureToggle;
+	private FeatureToggle $featureToggle;
 
 	public function __construct( FeatureToggle $featureToggle ) {
 		$this->featureToggle = $featureToggle;
-	}
-
-	public function getAddressType(): ?string {
-		if ( $this->featureToggle->featureIsActive( 'campaigns.address_type.no_preselection' ) ) {
-			return null;
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.address_type.preselection' ) ) {
-			return 'person';
-		}
-		throw new UnknownChoiceDefinition( 'Address type configuration failure.' );
 	}
 }

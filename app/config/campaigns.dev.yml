@@ -1,21 +1,7 @@
 # This file is used in the "dev" and "uat" environments to be able to test future and past campaigns
 campaigns:
 
-  address_type:
-    active: false
-    start: "2020-09-15"
-
-  address_provision_options:
-    active: true
-    start: "2020-09-20"
-    default_bucket: "provisional_address_options"
-
   address_type_steps:
     active: true
-    start: "2021-09-01"
+    start: "2022-11-01"
     default_bucket: "direct"
-
-  optional_cookie_notice:
-    active: true
-    start: "2021-01-01"
-    default_bucket: "show"
