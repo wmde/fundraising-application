@@ -30,7 +30,7 @@ class ValidationErrorLoggerTest extends TestCase {
 	/**
 	 * @param string[] $fieldNames
 	 *
-	 * @return string[]
+	 * @return array<string, array<int, string>>
 	 */
 	private function createViolationErrors( array $fieldNames ): array {
 		$violations = [];
