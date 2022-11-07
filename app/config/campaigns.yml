@@ -22,57 +22,17 @@ campaigns:
     # url_key: URL parameter key used for assigning buckets to people
     # param_only: (Optional) Set to true if the campaign should return the default bucket when the url key is not in a request. This is for A/B tests triggered by banners
 
-    address_type:
-      description: Test if the address type not being preselected changes the user behaviour of entering nonsense address data.
-      reference: "https://phabricator.wikimedia.org/T247228"
-      start: "2020-09-15"
-      end: "2020-11-02"
-      buckets:
-        - "preselection"
-        - "no_preselection"
-      default_bucket: "no_preselection"
-      url_key: addrpre
-      active: false
-      param_only: false
-
-    address_provision_options:
-      description: Test adding provisional address type options before choosing a donor type. (Adds "e-mail only" option)
-      reference: "https://phabricator.wikimedia.org/T260023"
-      start: "2020-10-01"
-      end: "2020-12-31"
-      buckets:
-        - "old_address_type_options"
-        - "provisional_address_options"
-      default_bucket: "old_address_type_options"
-      url_key: provadd
-      active: true
-      param_only: true
 
     address_type_steps:
-      description: Test different texts for the multistep address type
-      reference: "https://phabricator.wikimedia.org/T291362"
-      start: "2021-10-07"
-      end: "2021-12-31"
+      description: Test Donating with E-Mail only
+      reference: "https://phabricator.wikimedia.org/T322415"
+      start: "2022-11-07"
+      end: "2022-12-31"
       buckets:
         - "direct"
-        - "multistep"
-        - "multistep_var"
-        - "multistep_checkmarks"
         - "require_address"
       default_bucket: "direct"
       url_key: ast
       active: true
       param_only: true
 
-    optional_cookie_notice:
-      description: Test what effect the cookie notice has on donations
-      reference: "https://phabricator.wikimedia.org/T295869"
-      start: "2021-11-18"
-      end: "2021-12-31"
-      buckets:
-        - "show"
-        - "hide"
-      default_bucket: "show"
-      url_key: ocn
-      active: true
-      param_only: true

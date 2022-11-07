@@ -1678,10 +1678,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	public function getAddressType(): ?string {
-		return $this->getChoiceFactory()->getAddressType();
-	}
-
 	public function getBucketSelector(): BucketSelector {
 		return $this->createSharedObject( BucketSelector::class, function (): BucketSelector {
 			return new BucketSelector( $this->getCampaignCollection(), new RandomBucketSelection() );

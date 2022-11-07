@@ -13,18 +13,16 @@ use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
  */
 class ChoiceFactory {
 
-	private $featureToggle;
+	/**
+	 * @var FeatureToggle
+	 *
+	 * To save us having to delete and recreate this class, this is ignored
+	 * until the next time we need to A/B test a feature in the application.
+	 * @phpstan-ignore-next-line
+	 */
+	private FeatureToggle $featureToggle;
 
 	public function __construct( FeatureToggle $featureToggle ) {
 		$this->featureToggle = $featureToggle;
-	}
-
-	public function getAddressType(): ?string {
-		if ( $this->featureToggle->featureIsActive( 'campaigns.address_type.no_preselection' ) ) {
-			return null;
-		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.address_type.preselection' ) ) {
-			return 'person';
-		}
-		throw new UnknownChoiceDefinition( 'Address type configuration failure.' );
 	}
 }
