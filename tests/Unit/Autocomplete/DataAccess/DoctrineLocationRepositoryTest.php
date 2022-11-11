@@ -43,4 +43,29 @@ class DoctrineLocationRepositoryTest extends KernelTestCase {
 
 		$this->assertSame( [ 'Waterford', 'Wexford', 'Wicklow' ], $cities );
 	}
+
+	public function testVeryMaliciousSQLInjectionInPostCodeDoesNothing(): void {
+		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wexford' ) );
+		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Waterford' ) );
+		$this->entityManager->flush();
+
+		$locationRepository = new DoctrineLocationRepository( $this->entityManager );
+
+		$locationRepository->getCitiesForPostcode( '0; DELETE FROM geodaten_artikelnr_1001; --' );
+
+		$remainingRows = $this->entityManager->getConnection()->executeQuery( "SELECT COUNT(*) FROM geodaten_artikelnr_1001" )->fetchOne();
+		$this->assertEquals( 2, $remainingRows );
+	}
+
+	public function testMalformedSQLInjectionInPostCodeDoesNothing(): void {
+		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wexford' ) );
+		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Waterford' ) );
+		$this->entityManager->flush();
+
+		$locationRepository = new DoctrineLocationRepository( $this->entityManager );
+
+		$cities = $locationRepository->getCitiesForPostcode( '666 OR 1' );
+
+		$this->assertSame( [], $cities );
+	}
 }
