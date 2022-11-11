@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidLocation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
@@ -40,4 +38,26 @@ class FindCitiesRouteTest extends WebRouteTestCase {
 
 		$this->assertJsonSuccessResponse( [ 'Großröhrsdorf', 'Waterford', 'Wexford', 'Wicklow' ], $response );
 	}
+
+	public function testGivenPostcodeWithNonNumericCharacters_theyGetSanitized(): void {
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$client->followRedirects( false );
+
+		$entityManager = $factory->getEntityManager();
+		$entityManager->persist( ValidLocation::validLocationForCommunity( '54321', 'Wexford' ) );
+		$entityManager->flush();
+
+		$client->request(
+			'POST',
+			'/api/v1/cities.json',
+			[ 'postcode' => ' 54 Haha alle Zeichen weg!!! 321 '
+			]
+		);
+
+		$response = $client->getResponse();
+
+		$this->assertJsonSuccessResponse( [ 'Wexford' ], $response );
+	}
+
 }
