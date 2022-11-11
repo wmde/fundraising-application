@@ -25,9 +25,10 @@ class DoctrineLocationRepository implements LocationRepository {
 
 		$query = $queryBuilder->select( "DISTINCT $communityField" )
 			->from( $metaData->getTableName() )
-			->where( $queryBuilder->expr()->eq( $postcodeField, $postcode ) )
+			->where( $queryBuilder->expr()->eq( $postcodeField, ':postcode' ) )
 			->orderBy( $communityField )
-			->execute();
+			->setParameter( 'postcode', $postcode )
+			->executeQuery();
 
 		return $query->fetchFirstColumn();
 	}
