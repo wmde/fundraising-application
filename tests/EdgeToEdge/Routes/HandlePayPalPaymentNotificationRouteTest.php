@@ -462,8 +462,11 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$repository->throwOnGetDonationById();
 			$factory->setDonationRepository( $repository );
 
-			$logger = new LoggerSpy();
-			$factory->setPaypalLogger( $logger );
+			$paypalLogger = new LoggerSpy();
+			$mainErrorLogger = new LoggerSpy();
+
+			$factory->setPaypalLogger( $paypalLogger );
+			$factory->setLogger( $mainErrorLogger );
 
 			$this->storedDonations()->newStoredIncompletePayPalDonation();
 
@@ -473,11 +476,14 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 				$this->newHttpParamsForPayment()
 			);
 
-			$this->assertSame( 1, $logger->getLogCalls()->count() );
-			$firstCallContext = $logger->getFirstLogCall()->getContext();
+			$this->assertSame( 1, $paypalLogger->getLogCalls()->count() );
+			$firstCallContext = $paypalLogger->getFirstLogCall()->getContext();
 			$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
 			$this->assertArrayHasKey( 'post_vars', $firstCallContext );
-			$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()->getMessage() );
+			$this->assertSame( 'An Exception happened: Could not get donation', $paypalLogger->getFirstLogCall()->getMessage() );
+
+			$this->assertSame( 1, $mainErrorLogger->getLogCalls()->count() );
+			$this->assertSame( 'An Exception happened: Could not get donation', $mainErrorLogger->getFirstLogCall()->getMessage() );
 		} );
 	}
 
