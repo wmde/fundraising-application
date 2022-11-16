@@ -38,8 +38,8 @@ class AddSubscriptionController {
 	private function createSubscriptionRequest( Request $request ): SubscriptionRequest {
 		$subscriptionRequest = new SubscriptionRequest();
 
-		$subscriptionRequest->setEmail( $request->get( 'email', '' ) );
-		$subscriptionRequest->setSource( $request->get( 'source', '' ) );
+		$subscriptionRequest->setEmail( trim( $request->get( 'email', '' ) ) );
+		$subscriptionRequest->setSource( trim( $request->get( 'source', '' ) ) );
 		$subscriptionRequest->setTrackingString( $request->attributes->get( 'trackingCode', '' ) );
 
 		return $subscriptionRequest;

@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
 
@@ -25,24 +24,52 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		'source' => 'testCampaign',
 	];
 
+	private array $validFormInputWithSpaces = [
+		'email' => "\tjeroendedauw@gmail.com   ",
+		'wikilogin' => true,
+		'source' => "\ntestCampaign\r\n",
+	];
+
 	private array $invalidFormInput = [
 		'email' => 'not an email',
 		'wikilogin' => true
 	];
 
 	public function testValidSubscriptionRequestGetsPersisted(): void {
-		$subscriptionRepository = new SubscriptionRepositorySpy();
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->modifyEnvironment( static function ( FunFunFactory $factory ) use ( $subscriptionRepository ): void {
-			$factory->setSubscriptionRepository( $subscriptionRepository );
-		} );
 		$client = $this->createClient();
+		$subscriptionRepository = new SubscriptionRepositorySpy();
+		$factory = $this->getFactory();
+		$factory->setSubscriptionRepository( $subscriptionRepository );
 		$client->followRedirects( false );
 
 		$client->request(
 			'POST',
 			'/contact/subscribe?piwik_campaign=test&piwik_kwd=blue',
 			$this->validFormInput
+		);
+
+		$this->assertCount( 1, $subscriptionRepository->getSubscriptions() );
+
+		$subscription = $subscriptionRepository->getSubscriptions()[0];
+
+		$this->assertSame( 'jeroendedauw@gmail.com', $subscription->getEmail() );
+		$this->assertSame( 'test/blue', $subscription->getTracking() );
+		$this->assertSame( 'testCampaign', $subscription->getSource() );
+	}
+
+	public function testLeadingAndTrailingWhitespaceGetsTrimmed(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
+		$subscriptionRepository = new SubscriptionRepositorySpy();
+		$factory = $this->getFactory();
+		$factory->setSubscriptionRepository( $subscriptionRepository );
+		$client->followRedirects( false );
+
+		$client->request(
+			'POST',
+			'/contact/subscribe?piwik_campaign=test&piwik_kwd=blue',
+			$this->validFormInputWithSpaces
 		);
 
 		$this->assertCount( 1, $subscriptionRepository->getSubscriptions() );
