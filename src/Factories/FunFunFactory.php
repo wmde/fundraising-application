@@ -133,13 +133,13 @@ use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\InternetDomainNameValidator;
+use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelDonationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelMembershipApplicationHtmlPresenter;
@@ -388,7 +388,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function getSubscriptionValidator(): SubscriptionValidator {
 		return $this->createSharedObject( SubscriptionValidator::class, function (): SubscriptionValidator {
 			return new SubscriptionValidator(
-				$this->getEmailValidator(),
+				new EmailValidator( new NullDomainNameValidator() ),
 				$this->newSubscriptionDuplicateValidator(),
 			);
 		} );
@@ -422,13 +422,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		$this->sharedObjects[DomainNameValidator::class] = $validator;
 	}
 
-	public function newAddSubscriptionHtmlPresenter(): AddSubscriptionHtmlPresenter {
-		return new AddSubscriptionHtmlPresenter( $this->getLayoutTemplate( 'Subscription_Form.html.twig' ) );
-	}
-
 	public function newConfirmSubscriptionHtmlPresenter(): ConfirmSubscriptionHtmlPresenter {
 		return new ConfirmSubscriptionHtmlPresenter(
-			$this->getLayoutTemplate( 'Confirm_Subscription.twig' )
+			$this->getLayoutTemplate( 'Subscription_Confirmation.twig' )
 		);
 	}
 

@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
-use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
@@ -16,6 +15,8 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\AddressChange\UpdateAddressController
  */
 class UpdateAddressRouteTest extends WebRouteTestCase {
+
+	use GetApplicationVarsTrait;
 
 	private const PATH = 'update-address';
 	private const DUMMY_DONATION_ID = 0;
@@ -140,11 +141,5 @@ class UpdateAddressRouteTest extends WebRouteTestCase {
 				$this->assertNotTrue( isset( $dataVars->message ), 'No error message is sent.' );
 			}
 		);
-	}
-
-	private function getDataApplicationVars( Crawler $crawler ): object {
-		/** @var \DOMElement $appElement */
-		$appElement = $crawler->filter( '#appdata' )->getNode( 0 );
-		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
 	}
 }

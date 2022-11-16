@@ -4,34 +4,35 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Domain\Model\Subscription;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\StaticContent\PageDisplayController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\Subscription\ConfirmSubscriptionController
  */
 class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
+	use GetApplicationVarsTrait;
+
 	public function testGivenAnUnconfirmedSubscriptionRequest_successPageIsDisplayed(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$subscription = new Subscription();
-			$subscription->setConfirmationCode( 'deadbeef' );
-			$subscription->setEmail( 'tester@example.com' );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$subscription = new Subscription();
+		$subscription->setConfirmationCode( 'deadbeef' );
+		$subscription->setEmail( 'tester@example.com' );
 
-			$factory->getSubscriptionRepository()->storeSubscription( $subscription );
+		$factory->getSubscriptionRepository()->storeSubscription( $subscription );
 
-			$client->request(
-				'GET',
-				'/contact/confirm-subscription/deadbeef'
-			);
-			$response = $client->getResponse();
+		$client->request(
+			'GET',
+			'/contact/confirm-subscription/deadbeef'
+		);
+		$response = $client->getResponse();
 
-			$this->assertSame( 200, $response->getStatusCode() );
-			$this->assertStringContainsString( 'Vielen Dank für die Verifizierung Ihrer E-Mailadresse', $response->getContent() );
-		} );
+		$this->assertTrue( $response->isOk() );
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
+		$this->assertObjectNotHasAttribute( 'error_message', $dataVars );
 	}
 
 	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound(): void {
@@ -47,6 +48,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenNoSubscription_anErrorIsDisplayed(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 
 		$client->request(
@@ -56,27 +58,30 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 
 		$this->assertSame( 200, $response->getStatusCode() );
-		$this->assertStringContainsString( 'subscription_confirmation_code_not_found', $response->getContent() );
+
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
+		$this->assertSame( 'subscription_confirmation_code_not_found', $dataVars->error_message );
 	}
 
 	public function testGivenAConfirmedSubscriptionRequest_successPageIsDisplayed(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$subscription = new Subscription();
-			$subscription->setConfirmationCode( 'deadbeef' );
-			$subscription->setEmail( 'tester@example.com' );
-			$subscription->markAsConfirmed();
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$subscription = new Subscription();
+		$subscription->setConfirmationCode( 'deadbeef' );
+		$subscription->setEmail( 'tester@example.com' );
+		$subscription->markAsConfirmed();
 
-			$factory->getSubscriptionRepository()->storeSubscription( $subscription );
+		$factory->getSubscriptionRepository()->storeSubscription( $subscription );
 
-			$client->request(
-				'GET',
-				'/contact/confirm-subscription/deadbeef'
-			);
-			$response = $client->getResponse();
+		$client->request(
+			'GET',
+			'/contact/confirm-subscription/deadbeef'
+		);
+		$response = $client->getResponse();
 
-			$this->assertSame( 200, $response->getStatusCode() );
-			$this->assertStringContainsString( 'subscription_already_confirmed', $response->getContent() );
-		} );
+		$this->assertSame( 200, $response->getStatusCode() );
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
+		$this->assertSame( 'subscription_already_confirmed', $dataVars->error_message );
 	}
 }

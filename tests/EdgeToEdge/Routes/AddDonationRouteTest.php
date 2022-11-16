@@ -9,7 +9,6 @@ use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\AbstractBrowser as Client;
-use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
@@ -31,6 +30,8 @@ use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
  * @requires extension konto_check
  */
 class AddDonationRouteTest extends WebRouteTestCase {
+
+	use GetApplicationVarsTrait;
 
 	private const SOME_TOKEN = 'SomeToken';
 
@@ -585,14 +586,5 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertSame( 1, $bucketLogger->getEventCount() );
 			$this->assertInstanceOf( DonationCreated::class, $bucketLogger->getFirstEvent() );
 		} );
-	}
-
-	private function getDataApplicationVars( Crawler $crawler ): object {
-		/** @var \DOMElement|null $appElement */
-		$appElement = $crawler->filter( '#appdata' )->getNode( 0 );
-		if ( $appElement === null ) {
-			$this->fail( 'Response did not contain an element with id "#appdata". Please check if you need to follow a redirect.' );
-		}
-		return json_decode( $appElement->getAttribute( 'data-application-vars' ) );
 	}
 }
