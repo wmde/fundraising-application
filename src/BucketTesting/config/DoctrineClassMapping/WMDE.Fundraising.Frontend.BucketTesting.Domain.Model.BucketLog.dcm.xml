@@ -9,7 +9,7 @@
             <generator strategy="IDENTITY"/>
         </id>
 
-        <field name="eventName" type="string" column="event_name" length="24" nullable="false"/>
+        <field name="eventName" type="string" column="event_name" length="64" nullable="false"/>
         <field name="externalId" type="integer" column="external_id" nullable="false"/>
         <field name="date" type="datetime" column="date" nullable="true"/>
 
