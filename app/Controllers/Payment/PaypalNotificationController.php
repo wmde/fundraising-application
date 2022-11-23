@@ -47,12 +47,10 @@ class PaypalNotificationController {
 		}
 
 		if ( $response->hasErrors() ) {
-			$this->logError( $ffFactory, $post, $response->getMessage() );
-			return $this->createErrorResponse( $response->getMessage() );
+			return $this->logAndReturnErrorResponse( $response, $ffFactory, $post );
 		}
 
-		// PayPal expects an empty response
-		return new Response( '', Response::HTTP_OK );
+		return $this->createSuccessResponse();
 	}
 
 	private function createAnonymousDonation( FunFunFactory $ffFactory, Request $request ): NotificationResponse {
@@ -61,16 +59,17 @@ class PaypalNotificationController {
 		return $useCase->handleNotification( $amount->getEuroCents(), $request->request->all() );
 	}
 
-	private function logError( FunFunFactory $ffFactory, ParameterBag $post, string $message, array $additionalContext = [] ): void {
+	private function logError( FunFunFactory $ffFactory, ParameterBag $post, string $message, array $additionalContext = [],
+							   string $logLevel = LogLevel::ERROR ): void {
 		$parametersToLog = $post->all();
 		foreach ( self::PAYPAL_LOG_FILTER as $remove ) {
 			unset( $parametersToLog[$remove] );
 		}
-		$ffFactory->getPaypalLogger()->log( LogLevel::ERROR, $message, [
+		$ffFactory->getPaypalLogger()->log( $logLevel, $message, [
 			'post_vars' => $parametersToLog,
 			...$additionalContext
 		] );
-		$ffFactory->getLogger()->log( LogLevel::ERROR, $message );
+		$ffFactory->getLogger()->log( $logLevel, $message );
 	}
 
 	private function getUpdateToken( ParameterBag $postRequest ): string {
@@ -112,6 +111,22 @@ class PaypalNotificationController {
 		}
 
 		return (int)$this->getValueFromCustomVars( $postRequest->get( 'custom', '' ), 'sid' );
+	}
+
+	private function logAndReturnErrorResponse( NotificationResponse $response, FunFunFactory $ffFactory, ParameterBag $post ): Response {
+		// Avoid retries when the payment was already booked
+		if ( $response->paymentWasAlreadyCompleted() ) {
+			$this->logError( $ffFactory, $post, $response->getMessage(), [], LogLevel::WARNING );
+			return $this->createSuccessResponse();
+		}
+
+		$this->logError( $ffFactory, $post, $response->getMessage() );
+		return $this->createErrorResponse( $response->getMessage() );
+	}
+
+	private function createSuccessResponse(): Response {
+		// PayPal expects an empty response body
+		return new Response( '', Response::HTTP_OK );
 	}
 
 	private function createErrorResponse( string $message ): Response {

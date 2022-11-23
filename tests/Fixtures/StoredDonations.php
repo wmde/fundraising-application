@@ -47,6 +47,11 @@ class StoredDonations {
 		return $this->persistDonation( ValidDonation::newIncompletePayPalDonation() );
 	}
 
+	public function newStoredCompletePayPalDonation(): Donation {
+		$this->persistPayment( ValidPayments::newBookedPayPalPayment() );
+		return $this->persistDonation( ValidDonation::newBookedPayPalDonation() );
+	}
+
 	public function newStoredDirectDebitDonation(): Donation {
 		$payment = ValidPayments::newDirectDebitPayment();
 		$this->persistPayment( $payment );

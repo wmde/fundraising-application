@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -48,6 +49,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$this->assertSame( '', $client->getResponse()->getContent(), 'Success response should be empty' );
 		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
 	}
 
@@ -484,6 +486,32 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 		$this->assertSame( 1, $mainErrorLogger->getLogCalls()->count() );
 		$this->assertSame( 'An Exception happened: Could not get donation', $mainErrorLogger->getFirstLogCall()->getMessage() );
+	}
+
+	public function testGivenInternalErrorIsPaymentAlreadyBooked_applicationIndicatesSuccess(): void {
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$paypalLogger = new LoggerSpy();
+		$mainErrorLogger = new LoggerSpy();
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+		$factory->setPaypalLogger( $paypalLogger );
+		$factory->setLogger( $mainErrorLogger );
+
+		// trying to book an already-stored PayPal donation should trigger an error
+		$this->storedDonations()->newStoredCompletePayPalDonation();
+
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$this->newHttpParamsForPayment()
+		);
+
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$this->assertCount( 1, $mainErrorLogger->getLogCalls() );
+		$this->assertCount( 1, $paypalLogger->getLogCalls() );
+		$this->assertSame( LogLevel::WARNING, $mainErrorLogger->getFirstLogCall()->getLevel(), 'Double-booked payment should be warnings, not errors' );
+		$this->assertSame( LogLevel::WARNING, $paypalLogger->getFirstLogCall()->getLevel(), 'Double-booked payment should be warnings, not errors' );
 	}
 
 	private function newValidRequestParametersWithNegativeTransactionFee(): array {
