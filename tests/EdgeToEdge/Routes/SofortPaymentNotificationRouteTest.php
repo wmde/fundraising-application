@@ -204,7 +204,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertIsBadRequestResponse( $client->getResponse() );
-			$this->assertErrorCauseIsLogged( $logger, 'Payment is already completed' );
+			$this->assertErrorCauseIsLogged( $logger, 'Payment was booked before' );
 			$this->assertRequestVarsAreLogged( $logger );
 			$this->assertLogLevel( $logger, LogLevel::ERROR );
 		} );
