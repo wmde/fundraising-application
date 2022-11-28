@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
+use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -35,59 +35,60 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
-			$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$this->newHttpParamsForPayment()
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$this->newHttpParamsForPayment()
+		);
 
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
-		} );
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$this->assertSame( '', $client->getResponse()->getContent(), 'Success response should be empty' );
+		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
 	}
 
 	public function testGivenRequestWithMissingItemId_getsIdFromCustomArray(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
-			$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
 
-			$request = $this->newHttpParamsForPayment();
-			$request['item_number'] = '';
+		$request = $this->newHttpParamsForPayment();
+		$request['item_number'] = '';
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$request
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$request
+		);
 
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
-		} );
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
 	}
 
 	public function testGivenValidRequestToLegacyPath_applicationIndicatesSuccess(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$this->storedDonations()->newStoredIncompletePayPalDonation();
-			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
-			$client->request(
-				Request::METHOD_POST,
-				self::LEGACY_PATH,
-				$this->newHttpParamsForPayment()
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::LEGACY_PATH,
+			$this->newHttpParamsForPayment()
+		);
 
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
-		} );
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
 	}
 
 	private function assertPayPalDataGotPersisted( array $request ): void {
@@ -134,71 +135,71 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidReceiverEmail_applicationReturnsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$this->storedDonations()->newStoredIncompletePayPalDonation();
-			$factory->setVerificationServiceFactory(
-				new FailingVerificationServiceFactory( PayPalVerificationService::ERROR_WRONG_RECEIVER )
-			);
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$factory->setVerificationServiceFactory(
+			new FailingVerificationServiceFactory( PayPalVerificationService::ERROR_WRONG_RECEIVER )
+		);
 
-			$request = $this->newHttpParamsForPayment();
-			$request['receiver_email'] = 'mr.robot@evilcorp.com';
+		$request = $this->newHttpParamsForPayment();
+		$request['receiver_email'] = 'mr.robot@evilcorp.com';
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$request
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$request
+		);
 
-			$this->assertSame( 'Payment receiver address does not match', $client->getResponse()->getContent() );
-			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
-		} );
+		$this->assertSame( 'Payment receiver address does not match', $client->getResponse()->getContent() );
+		$this->assertSame( 403, $client->getResponse()->getStatusCode() );
 	}
 
 	/**
 	 * @dataProvider unsupportedPaymentStatusProvider
 	 */
 	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK( array $params ): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ) use ( $params ): void {
-			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$params
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$params
+		);
 
-			$this->assertSame( '', $client->getResponse()->getContent() );
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-		} );
+		$this->assertSame( '', $client->getResponse()->getContent() );
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 	}
 
 	/**
 	 * @dataProvider unsupportedPaymentStatusProvider
 	 */
 	public function testGivenUnsupportedPaymentStatus_requestDataIsLogged( array $params, string $paymentStatus ): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ) use ( $params, $paymentStatus ): void {
-			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
-			$logger = new LoggerSpy();
-			$factory->setPaypalLogger( $logger );
+		$logger = new LoggerSpy();
+		$factory->setPaypalLogger( $logger );
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$params
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$params
+		);
 
-			$this->assertSame(
-				[ 'PayPal request not handled' ],
-				$logger->getLogCalls()->getMessages()
-			);
+		$this->assertSame(
+			[ 'PayPal request not handled' ],
+			$logger->getLogCalls()->getMessages()
+		);
 
-			$this->assertSame(
-				$paymentStatus,
-				$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['payment_status']
-			);
-		} );
+		$this->assertSame(
+			$paymentStatus,
+			$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['payment_status']
+		);
 	}
 
 	public function unsupportedPaymentStatusProvider(): \Iterator {
@@ -208,109 +209,109 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenPersonalPaypalInfosOnError_PrivateInfoIsExcludedFromGettingLogged(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$factory->setVerificationServiceFactory(
-				new FailingVerificationServiceFactory( PayPalVerificationService::ERROR_UNSUPPORTED_CURRENCY )
-			);
-			$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$factory->setVerificationServiceFactory(
+			new FailingVerificationServiceFactory( PayPalVerificationService::ERROR_UNSUPPORTED_CURRENCY )
+		);
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
 
-			$logger = new LoggerSpy();
-			$factory->setPaypalLogger( $logger );
+		$logger = new LoggerSpy();
+		$factory->setPaypalLogger( $logger );
 
-			$requestData = $this->newHttpParamsForPayment();
-			$requestData['mc_currency'] = 'unsupportedCurrencyTM';
-			$requestData['payer_email'] = 'IshouldNotGetLogged@privatestuff.de';
-			$requestData['payer_id'] = '123456personalID';
+		$requestData = $this->newHttpParamsForPayment();
+		$requestData['mc_currency'] = 'unsupportedCurrencyTM';
+		$requestData['payer_email'] = 'IshouldNotGetLogged@privatestuff.de';
+		$requestData['payer_id'] = '123456personalID';
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$requestData
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$requestData
+		);
 
-			$this->assertSame( 'Unsupported currency', $client->getResponse()->getContent() );
+		$this->assertSame( 'Unsupported currency', $client->getResponse()->getContent() );
 
-			$this->assertSame(
-				[ 'Unsupported currency' ],
-				$logger->getLogCalls()->getMessages()
-			);
+		$this->assertSame(
+			[ 'Unsupported currency' ],
+			$logger->getLogCalls()->getMessages()
+		);
 
-			$loggedDataAsString = implode( $logger->getLogCalls()->getFirstCall()->getContext()['post_vars'] );
+		$loggedDataAsString = implode( $logger->getLogCalls()->getFirstCall()->getContext()['post_vars'] );
 
-			$this->assertStringNotContainsString( 'IshouldNotGetLogged@privatestuff.de', $loggedDataAsString );
-			$this->assertStringNotContainsString( '123456personalID', $loggedDataAsString );
-			$this->assertStringContainsString( 'unsupportedCurrencyTM', $loggedDataAsString );
-		} );
+		$this->assertStringNotContainsString( 'IshouldNotGetLogged@privatestuff.de', $loggedDataAsString );
+		$this->assertStringNotContainsString( '123456personalID', $loggedDataAsString );
+		$this->assertStringContainsString( 'unsupportedCurrencyTM', $loggedDataAsString );
 	}
 
 	public function testGivenFailingVerification_applicationReturnsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$factory->setVerificationServiceFactory(
-				new FailingVerificationServiceFactory( sprintf( PayPalVerificationService::ERROR_UNKNOWN, 'FAIL' ) )
-			);
-			$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$factory->setVerificationServiceFactory(
+			new FailingVerificationServiceFactory( sprintf( PayPalVerificationService::ERROR_UNKNOWN, 'FAIL' ) )
+		);
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$this->newHttpParamsForPayment()
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$this->newHttpParamsForPayment()
+		);
 
-			$this->assertSame( 'An error occurred while trying to confirm the sent data. PayPal response: FAIL', $client->getResponse()->getContent() );
-			$this->assertSame( 403, $client->getResponse()->getStatusCode() );
-		} );
+		$this->assertSame( 'An error occurred while trying to confirm the sent data. PayPal response: FAIL', $client->getResponse()->getContent() );
+		$this->assertSame( 403, $client->getResponse()->getStatusCode() );
 	}
 
 	public function testGivenUnsupportedCurrency_applicationReturnsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$factory->setVerificationServiceFactory(
-				new FailingVerificationServiceFactory( PayPalVerificationService::ERROR_UNSUPPORTED_CURRENCY )
-			);
-			$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$factory->setVerificationServiceFactory(
+			new FailingVerificationServiceFactory( PayPalVerificationService::ERROR_UNSUPPORTED_CURRENCY )
+		);
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
 
-			$requestData = $this->newHttpParamsForPayment();
-			$requestData['mc_currency'] = 'DOGE';
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$requestData
-			);
+		$requestData = $this->newHttpParamsForPayment();
+		$requestData['mc_currency'] = 'DOGE';
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$requestData
+		);
 
-			$this->assertSame( 'Unsupported currency', $client->getResponse()->getContent() );
-			$this->assertSame( 406, $client->getResponse()->getStatusCode() );
-		} );
+		$this->assertSame( 'Unsupported currency', $client->getResponse()->getContent() );
+		$this->assertSame( 406, $client->getResponse()->getStatusCode() );
 	}
 
 	public function testGivenTransactionTypeForSubscriptionChanges_requestDataIsLogged(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
-			$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
 
-			$logger = new LoggerSpy();
-			$factory->setPaypalLogger( $logger );
+		$logger = new LoggerSpy();
+		$factory->setPaypalLogger( $logger );
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$this->newSubscriptionModificationParams()
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$this->newSubscriptionModificationParams()
+		);
 
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 
-			$this->assertSame(
-				[ 'PayPal request not handled' ],
-				$logger->getLogCalls()->getMessages()
-			);
+		$this->assertSame(
+			[ 'PayPal request not handled' ],
+			$logger->getLogCalls()->getMessages()
+		);
 
-			$this->assertSame(
-				'subscr_modify',
-				$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['txn_type']
-			);
-		} );
+		$this->assertSame(
+			'subscr_modify',
+			$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['txn_type']
+		);
 	}
 
 	private function newSubscriptionModificationParams(): array {
@@ -389,102 +390,128 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testDonationIsNotFound_createsNewAnonymousDonation(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$factory->setVerificationServiceFactory(
-				new FailingVerificationServiceFactory( 'Donation not found' )
-			);
-			$factory->setPayPalVerificationService( new SucceedingVerificationService() );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$factory->setVerificationServiceFactory(
+			new FailingVerificationServiceFactory( 'Donation not found' )
+		);
+		$factory->setPayPalVerificationService( new SucceedingVerificationService() );
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$this->newHttpParamsForPayment()
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$this->newHttpParamsForPayment()
+		);
 
-			$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
-			$this->assertSame( '', $client->getResponse()->getContent() );
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-		} );
+		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
+		$this->assertSame( '', $client->getResponse()->getContent() );
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 	}
 
 	public function testDonationIsNotFound_andCreationFails_logsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$factory->setVerificationServiceFactory(
-				new FailingVerificationServiceFactory( 'Donation not found' )
-			);
-			$factory->setPayPalVerificationService( new FailingPayPalVerificationService( 'Awoo! Nyaa!' ) );
-			$logger = new LoggerSpy();
-			$factory->setPaypalLogger( $logger );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$factory->setVerificationServiceFactory(
+			new FailingVerificationServiceFactory( 'Donation not found' )
+		);
+		$factory->setPayPalVerificationService( new FailingPayPalVerificationService( 'Awoo! Nyaa!' ) );
+		$logger = new LoggerSpy();
+		$factory->setPaypalLogger( $logger );
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$this->newHttpParamsForPayment()
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$this->newHttpParamsForPayment()
+		);
 
-			$this->assertSame(
-				[ 'Awoo! Nyaa!' ],
-				$logger->getLogCalls()->getMessages()
-			);
-		} );
+		$this->assertSame(
+			[ 'Awoo! Nyaa!' ],
+			$logger->getLogCalls()->getMessages()
+		);
 	}
 
 	public function testOnInternalError_applicationIndicatesError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
-			$repository = new ThrowingDonationRepository();
-			$repository->throwOnGetDonationById();
-			$factory->setDonationRepository( $repository );
+		$repository = new ThrowingDonationRepository();
+		$repository->throwOnGetDonationById();
+		$factory->setDonationRepository( $repository );
 
-			$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$this->newHttpParamsForPayment()
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$this->newHttpParamsForPayment()
+		);
 
-			$this->assertSame( 500, $client->getResponse()->getStatusCode() );
-			$this->assertStringContainsString( "Could not get donation", $client->getResponse()->getContent() );
-		} );
+		$this->assertSame( 500, $client->getResponse()->getStatusCode() );
+		$this->assertStringContainsString( "Could not get donation", $client->getResponse()->getContent() );
 	}
 
 	public function testOnInternalError_applicationLogsError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$this->setSucceedingDonationTokenGenerator( $factory );
-			$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
-			$repository = new ThrowingDonationRepository();
-			$repository->throwOnGetDonationById();
-			$factory->setDonationRepository( $repository );
+		$repository = new ThrowingDonationRepository();
+		$repository->throwOnGetDonationById();
+		$factory->setDonationRepository( $repository );
 
-			$paypalLogger = new LoggerSpy();
-			$mainErrorLogger = new LoggerSpy();
+		$paypalLogger = new LoggerSpy();
+		$mainErrorLogger = new LoggerSpy();
 
-			$factory->setPaypalLogger( $paypalLogger );
-			$factory->setLogger( $mainErrorLogger );
+		$factory->setPaypalLogger( $paypalLogger );
+		$factory->setLogger( $mainErrorLogger );
 
-			$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				self::PATH,
-				$this->newHttpParamsForPayment()
-			);
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$this->newHttpParamsForPayment()
+		);
 
-			$this->assertSame( 1, $paypalLogger->getLogCalls()->count() );
-			$firstCallContext = $paypalLogger->getFirstLogCall()->getContext();
-			$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
-			$this->assertArrayHasKey( 'post_vars', $firstCallContext );
-			$this->assertSame( 'An Exception happened: Could not get donation', $paypalLogger->getFirstLogCall()->getMessage() );
+		$this->assertSame( 1, $paypalLogger->getLogCalls()->count() );
+		$firstCallContext = $paypalLogger->getFirstLogCall()->getContext();
+		$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
+		$this->assertArrayHasKey( 'post_vars', $firstCallContext );
+		$this->assertSame( 'An Exception happened: Could not get donation', $paypalLogger->getFirstLogCall()->getMessage() );
 
-			$this->assertSame( 1, $mainErrorLogger->getLogCalls()->count() );
-			$this->assertSame( 'An Exception happened: Could not get donation', $mainErrorLogger->getFirstLogCall()->getMessage() );
-		} );
+		$this->assertSame( 1, $mainErrorLogger->getLogCalls()->count() );
+		$this->assertSame( 'An Exception happened: Could not get donation', $mainErrorLogger->getFirstLogCall()->getMessage() );
+	}
+
+	public function testGivenInternalErrorIsPaymentAlreadyBooked_applicationIndicatesSuccess(): void {
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->setSucceedingDonationTokenGenerator( $factory );
+		$paypalLogger = new LoggerSpy();
+		$mainErrorLogger = new LoggerSpy();
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+		$factory->setPaypalLogger( $paypalLogger );
+		$factory->setLogger( $mainErrorLogger );
+
+		// trying to book an already-stored PayPal donation should trigger an error
+		$this->storedDonations()->newStoredCompletePayPalDonation();
+
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$this->newHttpParamsForPayment()
+		);
+
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$this->assertCount( 1, $mainErrorLogger->getLogCalls() );
+		$this->assertCount( 1, $paypalLogger->getLogCalls() );
+		$this->assertSame( LogLevel::WARNING, $mainErrorLogger->getFirstLogCall()->getLevel(), 'Double-booked payment should be warnings, not errors' );
+		$this->assertSame( LogLevel::WARNING, $paypalLogger->getFirstLogCall()->getLevel(), 'Double-booked payment should be warnings, not errors' );
 	}
 
 	private function newValidRequestParametersWithNegativeTransactionFee(): array {
