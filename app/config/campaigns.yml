@@ -24,13 +24,13 @@ campaigns:
 
 
     address_type_steps:
-      description: Test Donating with E-Mail only
-      reference: "https://phabricator.wikimedia.org/T322415"
-      start: "2022-11-07"
+      description: Test Donating with address preselection, allowing for E-Mail only and anonymous
+      reference: "https://phabricator.wikimedia.org/T323931"
+      start: "2022-12-07"
       end: "2022-12-31"
       buckets:
         - "direct"
-        - "require_address"
+        - "preselect"
       default_bucket: "direct"
       url_key: ast
       active: true
