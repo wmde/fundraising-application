@@ -587,4 +587,34 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->assertInstanceOf( DonationCreated::class, $bucketLogger->getFirstEvent() );
 		} );
 	}
+
+	public function testGivenAnonymousDonorWithBankTransfer_genericErrorMessageIsDisplayed(): void {
+		$client = $this->createClient();
+
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newFormInputAnonymousDonorWithBankTransfer()
+		);
+
+		$response = $client->getResponse();
+		$this->assertFalse( $response->isRedirect(), 'Response should not redirect to success page' );
+		$this->assertStringContainsString( 'Internal Error: Creating a donation was not successful.', $response->getContent() );
+	}
+
+	private function newFormInputAnonymousDonorWithBankTransfer(): array {
+		return [
+			'amount' => '551',
+			'paymentType' => 'BEZ',
+			'interval' => 0,
+			'iban' => 'DE12500105170648489890',
+			'bic' => 'INGDDEFFXXX',
+			'addressType' => 'anonym',
+			'piwik_campaign' => 'test',
+			'piwik_kwd' => 'gelb',
+			'impCount' => '3',
+			'bImpCount' => '1',
+		];
+	}
+
 }

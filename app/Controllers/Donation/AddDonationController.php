@@ -76,7 +76,7 @@ class AddDonationController {
 		$donationRequest->setDonorEmailAddress( $request->get( 'email', '' ) );
 
 		$donationRequest->setTracking( $request->attributes->get( 'trackingCode', '' ) );
-		$donationRequest->setOptIn( $request->get( 'info', '' ) );
+		$donationRequest->setOptsIntoNewsletter( (bool)$request->get( 'info', '' ) );
 		$donationRequest->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
 		$donationRequest->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
 		$donationRequest->setOptsIntoDonationReceipt( $request->request->getBoolean( 'donationReceipt', true ) );
@@ -90,14 +90,15 @@ class AddDonationController {
 		$amount = $this->getEuroAmount( $this->getAmountFromRequest( $request ) );
 		$interval = intval( $request->get( 'interval', 0 ) );
 		$paymentType = $request->get( 'paymentType', '' );
-
-		$paymentCreationRequest = new PaymentCreationRequest( $amount->getEuroCents(), $interval, $paymentType );
+		$iban = '';
+		$bic = '';
 
 		if ( $paymentType === PaymentType::DirectDebit->value ) {
-			$iban = new Iban( trim( $request->get( 'iban', '' ) ) );
+			$iban = ( new Iban( trim( $request->get( 'iban', '' ) ) ) )->toString();
 			$bic = trim( $request->get( 'bic', '' ) );
-			$paymentCreationRequest = new PaymentCreationRequest( $amount->getEuroCents(), $interval, $paymentType, $iban->toString(), $bic );
 		}
+
+		$paymentCreationRequest = new PaymentCreationRequest( $amount->getEuroCents(), $interval, $paymentType, $iban, $bic );
 		$paymentCreationRequest->setDomainSpecificPaymentValidator( $this->ffFactory->newDonationPaymentValidator() );
 		return $paymentCreationRequest;
 	}
