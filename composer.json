@@ -57,11 +57,11 @@
 			"type": "package",
 			"package": {
 				"name": "micropayment-de/service-client",
-				"version": "1.25.0",
+				"version": "1.26.0",
 				"dist": {
 					"type": "zip",
-					"url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_25.zip",
-					"reference": "1.25.0"
+					"url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_26.zip",
+					"reference": "1.26.0"
 				},
 				"autoload": {
 					"classmap": [

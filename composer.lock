@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "625f20992b1388c7eabd7cf6e86b192b",
+    "content-hash": "d956eaf58b0d0f39d251f2df778bf608",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -2201,11 +2201,11 @@
         },
         {
             "name": "micropayment-de/service-client",
-            "version": "1.25.0",
+            "version": "1.26.0",
             "dist": {
                 "type": "zip",
-                "url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_25.zip",
-                "reference": "1.25.0"
+                "url": "https://techdoc.micropayment.de/payment/serviceclient/download/mcp-serviceclient_1_26.zip",
+                "reference": "1.26.0"
             },
             "type": "library",
             "autoload": {
