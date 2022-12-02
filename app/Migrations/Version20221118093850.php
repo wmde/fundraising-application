@@ -15,13 +15,15 @@ final class Version20221118093850 extends AbstractMigration {
 
 	public function up( Schema $schema ): void {
 		$table = $schema->getTable( 'bucket_log' );
-		$table->changeColumn( 'event_name', [ 'length' => 64 ] );
+		$table->modifyColumn( 'event_name', [ 'length' => 64 ] );
+	}
 
-		$this->addSql( 'UPDATE bucket_log SET event_name = "membershipApplicationCreated" WHERE event_name = "membershipApplicationCre"' );
+	public function postUp( Schema $schema ): void {
+		$this->connection->executeStatement( 'UPDATE bucket_log SET event_name = "membershipApplicationCreated" WHERE event_name = "membershipApplicationCre"' );
 	}
 
 	public function down( Schema $schema ): void {
 		$table = $schema->getTable( 'bucket_log' );
-		$table->changeColumn( 'event_name', [ 'length' => 24 ] );
+		$table->modifyColumn( 'event_name', [ 'length' => 24 ] );
 	}
 }
