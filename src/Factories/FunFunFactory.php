@@ -107,11 +107,13 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
+use WMDE\Fundraising\Frontend\FeatureToggle\FeatureReader;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\CreateAddressChangeHandler;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
+use WMDE\Fundraising\Frontend\Infrastructure\FileFeatureReader;
 use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\AdminModerationMailRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
@@ -136,6 +138,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Validation\InternetDomainNameValida
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
+use WMDE\Fundraising\Frontend\Presentation\ActiveFeatureRenderer;
 use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
@@ -550,6 +553,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			'piwik' => $this->config['piwik'],
 			'site_metadata' => $this->getSiteMetaData(),
 			'selectedBuckets' => BucketRenderer::renderBuckets( ...$this->getSelectedBuckets() ),
+			'activeFeatures' => ActiveFeatureRenderer::renderActiveFeatureIds( $this->getFeatureReader()->getFeatures() )
 		];
 	}
 
@@ -719,6 +723,20 @@ class FunFunFactory implements LoggerAwareInterface {
 			new KontoCheckBankDataGenerator( $this->newIbanValidator() ),
 			$this->newDoctrineTransactionIdFinder()
 		);
+	}
+
+	public function setFeatureReader( FeatureReader $featureReader ) {
+		$this->sharedObjects[FeatureReader::class] = $featureReader;
+	}
+
+	public function getFeatureReader(): FeatureReader {
+		return $this->createSharedObject( FeatureReader::class, function (): FeatureReader {
+			return new FileFeatureReader(
+				new SimpleFileFetcher(),
+				$this->getContentPath() . '/data/features.json',
+				$this->getLogger()
+			);
+		} );
 	}
 
 	private function newHonorificValidator(): AllowedValuesValidator {
@@ -1517,6 +1535,15 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function getI18nDirectory(): string {
 		return $this->getAbsolutePath( $this->config['i18n-base-path'] ) . '/' . $this->getLocale();
+	}
+
+	/**
+	 * Return the "root" path of the content repository
+	 *
+	 * @return string
+	 */
+	public function getContentPath(): string {
+		return dirname( $this->getAbsolutePath( $this->config['i18n-base-path'] ) );
 	}
 
 	/**

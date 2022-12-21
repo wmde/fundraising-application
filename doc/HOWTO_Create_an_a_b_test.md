@@ -187,7 +187,7 @@ interface MyApplicationDataModel {
 
 const pageData = new PageDataInitializer<MyApplicationDataModel>( '#appdata' );
 
-Vue.use( FeatureTogglePlugin, { activeFeatures: pageData.selectedBuckets } );
+Vue.use( FeatureTogglePlugin, { activeFeatures: [ ...pageData.selectedBuckets, ...pageData.activeFeatures ] } );
 
 ```
 
