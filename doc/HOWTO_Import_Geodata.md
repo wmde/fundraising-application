@@ -9,4 +9,4 @@ The Geodata zip contains 2 sql files, a small one with community names, and a la
    ```$ docker volume rm APP_DIRECTORY_db-storage```
    
    APP_DIRECTORY is the directory name where you have checked out the `fundraising-application` code. You can check for the volume name by listing all docker volumes with the command `$ docker volume ls`.
-4. Run `$ docker-compose up`. When importing the Geotata this might take several minutes as it imports.
+4. Run `$ docker compose up`. When importing the Geotata this might take several minutes as it imports.

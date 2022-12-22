@@ -30,7 +30,7 @@ markdown-toc --maxdepth 2 --bullets '*' -i README.md
 
 ### First setup
 
-For development, you need to have Docker and docker-compose installed. You need at least Docker Version >= 17.09.0 and docker-compose version >= 1.17.0. If your OS does not come with the right version, please use the official installation instructions for [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/). You don't need to install other dependencies (PHP, Node.js, MariaDB) on your machine.
+For development, you need to have Docker installed. You need at least Docker Version >= 20.10.0. If your OS does not come with the right version, please use the official installation instructions for [Docker](https://docs.docker.com/install/). You don't need to install other dependencies (PHP, Node.js, MariaDB) on your machine.
 
 Get a clone of our git repository and then run:
 
@@ -54,7 +54,7 @@ this command whenever you check out a branch that has changes to
 
 ## Running the application
 
-    docker-compose up
+    docker compose up
 
 You can now access the application at [http://localhost:8082/](http://localhost:8082/). Hit Ctrl-C to stop the server.
 
@@ -148,11 +148,11 @@ top of each other.
 
 ### Running in different environments
 By default, the configuration environment is `dev` and the configuration file is `config.dev.json`. If you want to
-change that, you have to pass the environment variable to `make`, `docker` and `docker-compose` commands.
+change that, you have to pass the environment variable to `make`, `docker` and `docker compose` commands.
 
     make ci APP_ENV=prod
 
-For `docker-compose` you can either put create a file called `.env` in the application directory and, with the contents of
+For `docker compose` you can either put create a file called `.env` in the application directory and, with the contents of
 
     APP_ENV=prod
 
@@ -227,17 +227,17 @@ To drop the database and rebuild it from scratch the database, you need to stop 
 
 You can shut down all containers and delete all volumes with the command
 
-    docker-compose down -v
+    docker compose down -v
 
-The next time you run `docker-compose up`, the database container will
+The next time you run `docker compose up`, the database container will
 process all SQL files in [.docker/database](.docker/database).
 
 ### Accessing the database with the command line client
 
 To start the command line client, use the following commands:
 
-	docker-compose up -d database
-	docker-compose exec database mysql -u fundraising -p"INSECURE PASSWORD" fundraising
+	docker compose up -d database
+	docker compose exec database mysql -u fundraising -p"INSECURE PASSWORD" fundraising
 
 ### Accessing the database from your host machine
 
@@ -273,11 +273,11 @@ documentation mentions running the command
 E.g. `bin/doctrine migrations:status`.
 
 In your Docker-based development environment, run the command in the `app`
-container, using `docker-compose exec`. The container environment must be
+container, using `docker compose exec`. The container environment must be
 running for this to work. Example:
 
 ```
-docker-compose exec app bin/doctrine migrations:status
+docker compose exec app bin/doctrine migrations:status
 ```
 
 #### Running migrations on the server
@@ -318,7 +318,7 @@ Copy the full network name and container name and use them instead of the placeh
 To import the German postcode database, you need to place it in
 `.docker/database/00.postcodes.sql`. The database container will pick it up
 when running for the first time (when it creates the volume `db-storage`).
-This happens when you run `docker-compose up` for the first time or when
+This happens when you run `docker compose up` for the first time or when
 you reset the database (see above). Depending on the speed of you machine,
 the import will take up to 10 minutes. Watch the output of the
 `database` container so see when the database has finished importing.
