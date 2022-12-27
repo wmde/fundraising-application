@@ -129,7 +129,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			'custom' => '{"sid": 1, "utoken": "my_secret_token"}',
 			'txn_id' => '61E67681CH3238416',
 			'payment_type' => 'instant',
-			'txn_type' => 'express_checkout',
+			'txn_type' => 'web_accept',
 			'payment_date' => '20:12:59 Jan 13, 2009 PST',
 		];
 	}

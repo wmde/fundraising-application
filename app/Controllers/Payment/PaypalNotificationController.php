@@ -19,6 +19,15 @@ class PaypalNotificationController {
 	private const MSG_NOT_HANDLED = 'PayPal request not handled';
 	private const PAYPAL_LOG_FILTER = [ 'payer_email', 'payer_id' ];
 
+	private const ALLOWED_TRANSACTION_TYPES = [
+		// Regular one-time payment
+		'web_accept',
+		// Recurring payment ("subscription")
+		'subscr_payment',
+		// money sent directly via email
+		'send_money',
+	];
+
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$post = $request->request;
 
@@ -82,26 +91,12 @@ class PaypalNotificationController {
 	}
 
 	private function requestIsForPaymentCompletion( ParameterBag $post ): bool {
-		if ( !$this->isSuccessfulPaymentNotification( $post ) ) {
+		$transactionType = $post->get( 'txn_type', '' );
+		$paymentStatus = $post->get( 'payment_status', '' );
+		if ( !in_array( $transactionType, self::ALLOWED_TRANSACTION_TYPES ) ) {
 			return false;
 		}
-		if ( $this->isForRecurringPayment( $post ) && !$this->isRecurringPaymentCompletion( $post ) ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	private function isSuccessfulPaymentNotification( ParameterBag $post ): bool {
-		return $post->get( 'payment_status', '' ) === 'Completed' || $post->get( 'payment_status' ) === 'Processed';
-	}
-
-	private function isRecurringPaymentCompletion( ParameterBag $post ): bool {
-		return $post->get( 'txn_type', '' ) === 'subscr_payment';
-	}
-
-	private function isForRecurringPayment( ParameterBag $post ): bool {
-		return str_starts_with( $post->get( 'txn_type', '' ), 'subscr_' );
+		return $paymentStatus === 'Completed';
 	}
 
 	private function getDonationId( ParameterBag $postRequest ): int {
