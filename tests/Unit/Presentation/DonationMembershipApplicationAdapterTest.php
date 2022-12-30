@@ -251,7 +251,6 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 			null,
 			$donor,
 			1,
-			false,
 			DonationTrackingInfo::newBlankTrackingInfo(),
 			null
 		);
