@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use WMDE\Fundraising\Frontend\App\CookieNames;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
 
@@ -56,6 +57,22 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'jeroendedauw@gmail.com', $subscription->getEmail() );
 		$this->assertSame( 'test/blue', $subscription->getTracking() );
 		$this->assertSame( 'testCampaign', $subscription->getSource() );
+	}
+
+	public function testSubscriptionRequestWithLocaleSetsLocaleCookie(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
+		$subscriptionRepository = new SubscriptionRepositorySpy();
+		$factory = $this->getFactory();
+		$factory->setSubscriptionRepository( $subscriptionRepository );
+
+		$client->request(
+			'POST',
+			'/contact/subscribe?piwik_campaign=test&piwik_kwd=blue&locale=en_GB',
+			$this->validFormInput
+		);
+
+		$this->assertSame( 'en_GB', $client->getCookieJar()->get( CookieNames::LOCALE )->getValue() );
 	}
 
 	public function testLeadingAndTrailingWhitespaceGetsTrimmed(): void {
