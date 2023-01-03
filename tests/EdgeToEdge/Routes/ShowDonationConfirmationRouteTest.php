@@ -30,6 +30,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$this->givenStoredDirectDebitDonation( $factory );
 		} );
+
 		$client = $this->createClient();
 
 		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
@@ -103,7 +104,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( 'donation.amount: ' . $payment->getAmount()->getEuroFloat(), $responseContent );
 		$this->assertStringContainsString( 'donation.interval: ' . $paymentData['interval'], $responseContent );
 		$this->assertStringContainsString( 'donation.paymentType: ' . $paymentData['paymentType'], $responseContent );
-		$this->assertStringContainsString( 'donation.optsIntoNewsletter: ' . $donation->getOptsIntoNewsletter(), $responseContent );
+		$this->assertStringContainsString( 'donation.newsletter: ' . $donation->getDonor()->wantsNewsletter(), $responseContent );
 		$this->assertStringContainsString( 'donation.updateToken: ' . self::CORRECT_ACCESS_TOKEN, $responseContent );
 
 		$this->assertStringContainsString( 'address.salutation: ' . $personNameValues['salutation'], $responseContent );
