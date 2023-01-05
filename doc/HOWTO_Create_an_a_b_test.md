@@ -45,8 +45,8 @@ header_template:
 
 ## 2. Create a factory method for the campaign
 
-Edit the file `src/Factories/ChoiceFactory.php` and add a factory method. Inside the method you must call `$this->featureToggle->isFeatureActive`
-for each bucket in the campaign. The parameter for `isFeatureActive` must follow the pattern `campaigns.<CAMPAIGN_NAME>.<GROUP_NAME>`.
+Edit the file `src/Factories/ChoiceFactory.php` and add a factory method. Inside the method you must call `$this->featureToggle->featureIsActive`
+for each bucket in the campaign. The parameter for `featureIsActive` must follow the pattern `campaigns.<CAMPAIGN_NAME>.<GROUP_NAME>`.
 
 The factory method should get all its dependencies via parameter. It must have a defined return type. You may return 
 
@@ -55,7 +55,7 @@ The factory method should get all its dependencies via parameter. It must have a
 * scalar values (use with caution, returning a class is preferable almost always)   
 
 Please check that:
-* `isFeatureActive` is called for *every* bucket of the campaign.
+* `featureIsActive` is called for *every* bucket of the campaign.
 * Throw `UnknownChoiceDefinition` with a proper error message after checking all buckets. This is an additional safeguard 
 against changed or misspelled campaign and bucket names. It is a case of "this should never happen" if the campaign 
 file is validated by the CI.
@@ -66,9 +66,9 @@ If you want to have optimum performance, check the default bucket *first*, then 
 
 ```php
 public function getHeaderTemplate( Twig_Environment $twig ): TwigTemplate {
-	if ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.default_header' ) {
+	if ( $this->featureToggle->featureIsActive( 'campaigns.header_template.default_header' ) {
 		return new TwigTemplate( $twig, 'Header.html.twig' );
-	} elseif ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.fancy_header' ) {
+	} elseif ( $this->featureToggle->featureIsActive( 'campaigns.header_template.fancy_header' ) {
 		return new TwigTemplate( $twig, 'Fancy_Header.html.twig' );
 	}
 	throw new UnknownChoiceDefinition( 'Failed to determine header template' );
@@ -79,9 +79,9 @@ public function getHeaderTemplate( Twig_Environment $twig ): TwigTemplate {
 
 ```php
 public function getHeaderTemplate( Twig_Environment $twig ): HeaderTemplateInterface {
-	if ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.default_header' ) {
+	if ( $this->featureToggle->featureIsActive( 'campaigns.header_template.default_header' ) {
 		return new HeaderTemplate( $twig );
-	} elseif ( $this->featureToggle->isFeatureActive( 'campaigns.header_template.fancy_header' ) {
+	} elseif ( $this->featureToggle->featureIsActive( 'campaigns.header_template.fancy_header' ) {
 		return new FancyHeaderTemplate( $twig );
 	}
 	throw new UnknownChoiceDefinition( 'Failed to determine header template' );

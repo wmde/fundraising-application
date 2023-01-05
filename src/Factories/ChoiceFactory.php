@@ -13,26 +13,18 @@ use WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle;
  */
 class ChoiceFactory {
 
-	/**
-	 * @var FeatureToggle
-	 *
-	 * To save us having to delete and recreate this class, this is ignored
-	 * until the next time we need to A/B test a feature in the application.
-	 * @phpstan-ignore-next-line
-	 */
 	private FeatureToggle $featureToggle;
 
 	public function __construct( FeatureToggle $featureToggle ) {
 		$this->featureToggle = $featureToggle;
 	}
 
-	public function getMembershipPaymentIntervals( ): array {
-		if( $this->featureToggle->featureIsActive( 'campaigns.membership_intervals.all_intervals' ) ) {
+	public function getMembershipPaymentIntervals(): array {
+		if ( $this->featureToggle->featureIsActive( 'campaigns.membership_intervals.all_intervals' ) ) {
 			return [ 1, 3, 6, 12 ];
-		}
-		elseif ( $this->featureToggle->featureIsActive( 'campaigns.membership_intervals.some_intervals' ) ) {
+		} elseif ( $this->featureToggle->featureIsActive( 'campaigns.membership_intervals.some_intervals' ) ) {
 			return [ 1, 12 ];
 		}
 		throw new UnknownChoiceDefinition( 'Failed to determine header template' );
-}
+	}
 }
