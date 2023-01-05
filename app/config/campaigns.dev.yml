@@ -5,3 +5,8 @@ campaigns:
     active: true
     start: "2022-11-01"
     default_bucket: "direct"
+
+  membership_intervals:
+    start: "2023-01-05"
+    default_bucket: "all_intervals"
+    active: true
