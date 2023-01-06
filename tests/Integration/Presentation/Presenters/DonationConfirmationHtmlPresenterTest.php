@@ -67,7 +67,8 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				'cookieDuration' => '15552000',
 				'updateToken' => self::UPDATE_TOKEN,
-				'accessToken' => self::ACCESS_TOKEN
+				'accessToken' => self::ACCESS_TOKEN,
+				'isExported' => false
 			],
 			'address' => [
 				'isAnonymous' => true

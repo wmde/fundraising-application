@@ -54,7 +54,8 @@ class DonationConfirmationHtmlPresenter {
 				'creationDate' => $donorDataFormatter->getDonationDate(),
 				'cookieDuration' => $donorDataFormatter->getHideBannerCookieDuration(),
 				'updateToken' => $updateToken,
-				'accessToken' => $accessToken
+				'accessToken' => $accessToken,
+				'isExported' => $donation->isExported()
 			],
 			'countries' => $this->countries,
 			'addressValidationPatterns' => $this->validation,
