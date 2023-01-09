@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5f2b4720f9311bb117bb32f8bf6f7f4",
+    "content-hash": "5e26b4f529e13b4487055b39de0235c4",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -4341,16 +4341,16 @@
         },
         {
             "name": "symfony/http-client-contracts",
-            "version": "v3.1.1",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client-contracts.git",
-                "reference": "fd038f08c623ab5d22b26e9ba35afe8c79071800"
+                "reference": "c5f587eb445224ddfeb05b5ee703476742d730bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/fd038f08c623ab5d22b26e9ba35afe8c79071800",
-                "reference": "fd038f08c623ab5d22b26e9ba35afe8c79071800",
+                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/c5f587eb445224ddfeb05b5ee703476742d730bf",
+                "reference": "c5f587eb445224ddfeb05b5ee703476742d730bf",
                 "shasum": ""
             },
             "require": {
@@ -4362,7 +4362,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "3.1-dev"
+                    "dev-main": "3.3-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -4402,7 +4402,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client-contracts/tree/v3.1.1"
+                "source": "https://github.com/symfony/http-client-contracts/tree/v3.2.0"
             },
             "funding": [
                 {
@@ -4418,7 +4418,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-22T07:30:54+00:00"
+            "time": "2022-11-25T10:21:52+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -7113,16 +7113,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "dev-update-address",
+            "version": "v11.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "abae5d1b098c8bb6452936f10cf1f206b47bb8d0"
+                "reference": "7765096f0dce529d21cf403f19828ee3d3dc57a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/abae5d1b098c8bb6452936f10cf1f206b47bb8d0",
-                "reference": "abae5d1b098c8bb6452936f10cf1f206b47bb8d0",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/7765096f0dce529d21cf403f19828ee3d3dc57a3",
+                "reference": "7765096f0dce529d21cf403f19828ee3d3dc57a3",
                 "shasum": ""
             },
             "require": {
@@ -7170,7 +7170,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2023-01-03T12:33:09+00:00"
+            "time": "2023-01-06T16:17:10+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -8179,16 +8179,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.9.5",
+            "version": "1.9.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "4d18c5d98965029c2aa1ccbd91dc22e7ba8c5034"
+                "reference": "45411d15bf85a33b4a8ee9b75a6e82998c9adb97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4d18c5d98965029c2aa1ccbd91dc22e7ba8c5034",
-                "reference": "4d18c5d98965029c2aa1ccbd91dc22e7ba8c5034",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/45411d15bf85a33b4a8ee9b75a6e82998c9adb97",
+                "reference": "45411d15bf85a33b4a8ee9b75a6e82998c9adb97",
                 "shasum": ""
             },
             "require": {
@@ -8218,7 +8218,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.9.5"
+                "source": "https://github.com/phpstan/phpstan/tree/1.9.8"
             },
             "funding": [
                 {
@@ -8234,7 +8234,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-02T21:35:42+00:00"
+            "time": "2023-01-08T21:26:18+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -9938,12 +9938,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "356d5808442a4b248cf0d1d7d0603b6a7ad5a205"
+                "reference": "d1fecf64ea2554bb13469bc0e187eabf9ed3f3b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/356d5808442a4b248cf0d1d7d0603b6a7ad5a205",
-                "reference": "356d5808442a4b248cf0d1d7d0603b6a7ad5a205",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/d1fecf64ea2554bb13469bc0e187eabf9ed3f3b3",
+                "reference": "d1fecf64ea2554bb13469bc0e187eabf9ed3f3b3",
                 "shasum": ""
             },
             "require": {
@@ -9987,7 +9987,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2023-01-02T12:01:08+00:00"
+            "time": "2023-01-09T06:30:18+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
@@ -10081,7 +10081,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "wmde/fundraising-donations": 20,
         "remotelyliving/doorkeeper": 20,
         "wmde/fundraising-frontend-content": 20
     },
