@@ -9,5 +9,3 @@ updates:
       interval: "daily"
     reviewers:
       - "wmde/funtech-core"
-    # Temporarily disable automated update PRs for this repository
-    open-pull-requests-limit: 0
