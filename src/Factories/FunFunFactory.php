@@ -1335,11 +1335,12 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getMembershipApplicationFormTemplate(): TwigTemplate {
 		$validation = $this->getValidationRules();
+		$paymentIntervals = $this->getChoiceFactory()->getMembershipPaymentIntervals();
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
 			// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
-			'paymentIntervals' => [ 1, 3, 6, 12 ],
+			'paymentIntervals' => $paymentIntervals,
 			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 			'countries' => $this->getCountries(),
 			'addressValidationPatterns' => $validation->address,

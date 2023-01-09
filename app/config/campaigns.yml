@@ -37,3 +37,15 @@ campaigns:
       active: true
       param_only: true
 
+    membership_intervals:
+      description: Test offering only monthly and yearly payments in the membership form
+      reference: "https://phabricator.wikimedia.org/T326300"
+      start: "2023-01-05"
+      end: "2023-12-31"
+      buckets:
+        - "all_intervals"
+        - "some_intervals"
+      default_bucket: "all_intervals"
+      url_key: mbi
+      active: true
+      param_only: true
