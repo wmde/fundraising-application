@@ -124,6 +124,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailSubjectRendererInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailTemplateFilenameTraversable;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\NullMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
@@ -950,6 +951,15 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	private function newDonationUpdatedMailer(): DonationMailer {
+		return new DonationMailer(
+			$this->newDonationUpdatedTemplateMailer(),
+			new NullMailer(),
+			$this->newGetPaymentUseCase(),
+			adminEmailAddress: $this->config['contact-info']['suborganization']['email']
+		);
+	}
+
 	private function newDonationValidator(): AddDonationValidator {
 		return new AddDonationValidator(
 			$this->getEmailValidator(),
@@ -983,7 +993,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newDonationAuthorizer( $updateToken, $accessToken ),
 			$this->newUpdateDonorValidator(),
 			$this->getDonationRepository(),
-			$this->newDonationMailer(),
+			$this->newDonationUpdatedMailer(),
 			$this->getDonationEventEmitter()
 		);
 	}
@@ -1004,6 +1014,21 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getMailTranslator(),
 				'mail_subject_confirm_donation',
 				'mail_subject_confirm_donation_promise'
+			)
+		);
+	}
+
+	private function newDonationUpdatedTemplateMailer(): DonationTemplateMailerInterface {
+		return $this->newErrorHandlingTemplateMailer(
+			$this->getSubOrganizationMessenger(),
+			new TwigTemplate(
+				$this->getMailerTwig(),
+				'Donation_Confirmation.txt.twig',
+				[ 'greeting_generator' => $this->getGreetingGenerator() ]
+			),
+			new BasicMailSubjectRenderer(
+				$this->getMailTranslator(),
+				'mail_subject_update_donation'
 			)
 		);
 	}
@@ -1180,7 +1205,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newAdminMailer( string $itemType, string $focURL, Messenger $messenger ) {
+	private function newAdminMailer( string $itemType, string $focURL, Messenger $messenger ): TemplateBasedMailer {
 		return new TemplateBasedMailer(
 			$messenger,
 			new TwigTemplate(
