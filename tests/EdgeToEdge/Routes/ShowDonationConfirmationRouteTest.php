@@ -19,6 +19,8 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
  */
 class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
+	use GetApplicationVarsTrait;
+
 	private const CORRECT_ACCESS_TOKEN = 'KindlyAllowMeAccess';
 
 	private const ACCESS_DENIED_TEXT = 'access_denied_donation_confirmation';
@@ -27,26 +29,66 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 	private Payment $payment;
 
 	public function testGivenValidRequest_confirmationPageContainsDonationData(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$this->givenStoredDirectDebitDonation( $factory );
 		} );
 
 		$client = $this->createClient();
+		$client->request(
+			'GET',
+			'show-donation-confirmation',
+			[
+				'id' => $this->donation->getId(),
+				'accessToken' => self::CORRECT_ACCESS_TOKEN
+			]
+		);
 
-		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-		$this->assertDonationDataInResponse( $this->donation, $this->payment, $responseContent );
+		$paymentData = $this->payment->getDisplayValues();
+		$personNameValues = $this->donation->getDonor()->getName()->toArray();
+		$physicalAddress = $this->donation->getDonor()->getPhysicalAddress();
+
+		$this->assertEquals( $this->donation->getId(), $dataVars->donation->id );
+		$this->assertEquals( $this->payment->getAmount()->getEuroFloat(), $dataVars->donation->amount );
+		$this->assertEquals( $paymentData['interval'], $dataVars->donation->interval );
+		$this->assertEquals( $paymentData['paymentType'], $dataVars->donation->paymentType );
+		$this->assertEquals( $this->donation->getDonor()->wantsNewsletter(), $dataVars->donation->newsletter );
+		$this->assertEquals( self::CORRECT_ACCESS_TOKEN, $dataVars->donation->accessToken );
+
+		$this->assertEquals( $personNameValues['salutation'], $dataVars->address->salutation );
+		$this->assertEquals( $this->donation->getDonor()->getName()->getFullName(), $dataVars->address->fullName );
+		$this->assertEquals( $personNameValues['firstName'], $dataVars->address->firstName );
+		$this->assertEquals( $personNameValues['lastName'], $dataVars->address->lastName );
+		$this->assertEquals( $physicalAddress->getStreetAddress(), $dataVars->address->streetAddress );
+		$this->assertEquals( $physicalAddress->getPostalCode(), $dataVars->address->postalCode );
+		$this->assertEquals( $physicalAddress->getCity(), $dataVars->address->city );
+		$this->assertEquals( $this->donation->getDonor()->getEmailAddress(), $dataVars->address->email );
+
+		$this->assertEquals( $paymentData['iban'], $dataVars->bankData->iban );
+		$this->assertEquals( $paymentData['bic'], $dataVars->bankData->bic );
+		$this->assertEquals( ValidPayments::PAYMENT_BANK_NAME, $dataVars->bankData->bankname );
 	}
 
 	public function testGivenAnonymousDonation_confirmationPageReflectsThat(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
 			$this->givenStoredBookedAnonymousPayPalDonation( $factory );
 		} );
 		$client = $this->createClient();
+		$client->request(
+			'GET',
+			'show-donation-confirmation',
+			[
+				'id' => $this->donation->getId(),
+				'accessToken' => self::CORRECT_ACCESS_TOKEN
+			]
+		);
 
-		$responseContent = $this->retrieveDonationConfirmation( $client, $this->donation->getId() );
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-		$this->assertStringContainsString( 'Anonym', $responseContent );
+		$this->assertStringContainsString( 'anonym', $dataVars->addressType );
 	}
 
 	private function retrieveDonationConfirmation( Client $client, int $donationId ): string {
@@ -90,35 +132,6 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$factory->getPaymentRepository()->storePayment( $payment );
 
 		$this->payment = $payment;
-	}
-
-	private function assertDonationDataInResponse( Donation $donation, Payment $payment, string $responseContent ): void {
-		$donor = $donation->getDonor();
-		$personName = $donor->getName();
-		$personNameValues = $personName->toArray();
-		$physicalAddress = $donor->getPhysicalAddress();
-
-		$paymentData = $payment->getDisplayValues();
-
-		$this->assertStringContainsString( 'donation.id: ' . $donation->getId(), $responseContent );
-		$this->assertStringContainsString( 'donation.amount: ' . $payment->getAmount()->getEuroFloat(), $responseContent );
-		$this->assertStringContainsString( 'donation.interval: ' . $paymentData['interval'], $responseContent );
-		$this->assertStringContainsString( 'donation.paymentType: ' . $paymentData['paymentType'], $responseContent );
-		$this->assertStringContainsString( 'donation.newsletter: ' . $donation->getDonor()->wantsNewsletter(), $responseContent );
-		$this->assertStringContainsString( 'donation.updateToken: ' . self::CORRECT_ACCESS_TOKEN, $responseContent );
-
-		$this->assertStringContainsString( 'address.salutation: ' . $personNameValues['salutation'], $responseContent );
-		$this->assertStringContainsString( 'address.fullName: ' . $personName->getFullName(), $responseContent );
-		$this->assertStringContainsString( 'address.firstName: ' . $personNameValues['firstName'], $responseContent );
-		$this->assertStringContainsString( 'address.lastName: ' . $personNameValues['lastName'], $responseContent );
-		$this->assertStringContainsString( 'address.streetAddress: ' . $physicalAddress->getStreetAddress(), $responseContent );
-		$this->assertStringContainsString( 'address.postalCode: ' . $physicalAddress->getPostalCode(), $responseContent );
-		$this->assertStringContainsString( 'address.city: ' . $physicalAddress->getCity(), $responseContent );
-		$this->assertStringContainsString( 'address.email: ' . $donor->getEmailAddress(), $responseContent );
-
-		$this->assertStringContainsString( 'bankData.iban: ' . $paymentData['iban'], $responseContent );
-		$this->assertStringContainsString( 'bankData.bic: ' . $paymentData['bic'], $responseContent );
-		$this->assertStringContainsString( 'bankData.bankname: ' . ( $paymentData['bankname'] ?? '' ), $responseContent );
 	}
 
 	public function testGivenWrongToken_accessIsDenied(): void {
