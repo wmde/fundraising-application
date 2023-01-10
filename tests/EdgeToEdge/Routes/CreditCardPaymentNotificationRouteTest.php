@@ -217,8 +217,6 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertSame( $request['transactionId'], $ccData->paymentSpecificValues['ext_payment_id'] );
 		$this->assertSame( self::STATUS, $ccData->paymentSpecificValues['ext_payment_status'] );
 		$this->assertSame( $request['customerId'], $ccData->paymentSpecificValues['ext_payment_account'] );
-		// TODO: Make sure expiryDate is actually needed to be stored or not
-		// $this->assertEquals( $request['expiryDate'], $ccData->paymentSpecificValues['mcp_cc_expiry_date'] );
 		$this->assertNotEmpty( $ccData->paymentSpecificValues['ext_payment_timestamp'] );
 	}
 
