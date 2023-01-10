@@ -103,11 +103,6 @@ use-of-funds:
     methods: [GET]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowUseOfFundsController::index'
 
-cancel-donation:
-    path: /donation/cancel
-    methods: [POST]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\CancelDonationController::index'
-
 add_donation:
     path: /donation/add
     methods: [POST]
