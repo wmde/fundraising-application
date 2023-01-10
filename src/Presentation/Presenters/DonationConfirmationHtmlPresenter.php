@@ -48,13 +48,14 @@ class DonationConfirmationHtmlPresenter {
 				'amountInCents' => $paymentData['amount'],
 				'interval' => $paymentData['interval'],
 				'paymentType' => $paymentData['paymentType'],
-				'optsIntoDonationReceipt' => $donation->getOptsIntoDonationReceipt(),
-				'optsIntoNewsletter' => $donation->getOptsIntoNewsletter(),
+				'receipt' => $donation->getDonor()->wantsReceipt(),
+				'newsletter' => $donation->getDonor()->wantsNewsletter(),
 				'bankTransferCode' => $paymentData['paymentReferenceCode'] ?? '',
 				'creationDate' => $donorDataFormatter->getDonationDate(),
 				'cookieDuration' => $donorDataFormatter->getHideBannerCookieDuration(),
 				'updateToken' => $updateToken,
-				'accessToken' => $accessToken
+				'accessToken' => $accessToken,
+				'isExported' => $donation->isExported()
 			],
 			'countries' => $this->countries,
 			'addressValidationPatterns' => $this->validation,

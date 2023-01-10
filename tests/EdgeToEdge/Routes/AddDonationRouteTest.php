@@ -164,8 +164,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 5.51, $applicationVars->donation->amount );
 		$this->assertSame( 0, $applicationVars->donation->interval );
 		$this->assertSame( 'BEZ', $applicationVars->donation->paymentType );
-		$this->assertTrue( $applicationVars->donation->optsIntoNewsletter );
-		$this->assertTrue( $applicationVars->donation->optsIntoDonationReceipt );
+		$this->assertTrue( $applicationVars->donation->newsletter );
+		$this->assertTrue( $applicationVars->donation->receipt );
 
 		$this->assertObjectHasAttribute( 'bankData', $applicationVars );
 		$this->assertSame( 'DE12500105170648489890', $applicationVars->bankData->iban );

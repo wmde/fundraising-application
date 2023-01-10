@@ -61,13 +61,14 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 				'amountInCents' => 1337,
 				'interval' => 3,
 				'paymentType' => 'PPL',
-				'optsIntoNewsletter' => false,
-				'optsIntoDonationReceipt' => null,
+				'newsletter' => false,
+				'receipt' => null,
 				'bankTransferCode' => '',
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),
 				'cookieDuration' => '15552000',
 				'updateToken' => self::UPDATE_TOKEN,
-				'accessToken' => self::ACCESS_TOKEN
+				'accessToken' => self::ACCESS_TOKEN,
+				'isExported' => false
 			],
 			'address' => [
 				'isAnonymous' => true

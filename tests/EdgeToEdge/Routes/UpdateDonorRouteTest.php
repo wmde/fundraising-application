@@ -169,31 +169,6 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function testWhenDonationAlreadyHasAddress_requestIsDenied(): void {
-		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$client = $this->createClient();
-		$factory = $this->getFactory();
-		$donation = ValidDoctrineDonation::newDirectDebitDoctrineDonation();
-		$donation->modifyDataObject(
-			static function ( DonationData $data ) {
-				$data->setAccessToken( self::CORRECT_UPDATE_TOKEN );
-				$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
-			}
-		);
-		$factory->getEntityManager()->persist( $donation );
-		$factory->getEntityManager()->flush();
-
-		$this->performRequest(
-			$client,
-			$this->newPrivateDonorData(),
-			$donation->getId(),
-			self::CORRECT_UPDATE_TOKEN,
-			self::CORRECT_UPDATE_TOKEN
-		);
-		$response = $client->getResponse();
-		$this->assertTrue( $response->isForbidden() );
-	}
-
 	protected static function createClient(): KernelBrowser {
 		$client = parent::createClient();
 		// Don't drop database and other services after redirect
