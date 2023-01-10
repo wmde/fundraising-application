@@ -11,20 +11,10 @@ use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as
 
 class ErrorHandlingTemplateBasedMailer implements DonationTemplateMailerInterface, MembershipTemplateMailerInterface {
 
-	/**
-	 * TODO: Use proper union type when we get to php8
-	 * @var DonationTemplateMailerInterface|MembershipTemplateMailerInterface
-	 */
-	private $templateBasedMailer;
-	private LoggerInterface $logger;
-
-	/**
-	 * @param DonationTemplateMailerInterface|MembershipTemplateMailerInterface $templateBasedMailer
-	 * @param LoggerInterface $logger
-	 */
-	public function __construct( $templateBasedMailer, LoggerInterface $logger ) {
-		$this->templateBasedMailer = $templateBasedMailer;
-		$this->logger = $logger;
+	public function __construct(
+		private readonly DonationTemplateMailerInterface|MembershipTemplateMailerInterface $templateBasedMailer,
+		private readonly LoggerInterface $logger
+	) {
 	}
 
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
