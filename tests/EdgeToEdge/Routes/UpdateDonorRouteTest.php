@@ -54,10 +54,10 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		$this->assertEquals( $expectedDonor['salutation'], $dataVars->address->salutation );
 		$this->assertEquals( $expectedDonor['firstName'], $dataVars->address->firstName );
 		$this->assertEquals( $expectedDonor['lastName'], $dataVars->address->lastName );
-		$this->assertEquals( $expectedDonor['street'], $dataVars->address->streetAddress );
-		$this->assertEquals( $expectedDonor['postcode'], $dataVars->address->postalCode );
+		$this->assertEquals( $expectedDonor['street'], $dataVars->address->street );
+		$this->assertEquals( $expectedDonor['postcode'], $dataVars->address->postcode );
 		$this->assertEquals( $expectedDonor['city'], $dataVars->address->city );
-		$this->assertEquals( $expectedDonor['country'], $dataVars->address->countryCode );
+		$this->assertEquals( $expectedDonor['country'], $dataVars->address->country );
 		$this->assertEquals( $expectedDonor['email'], $dataVars->address->email );
 	}
 
@@ -83,10 +83,10 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		$expectedDonorData = $this->newCompanyDonorData();
 		$this->assertEquals( $expectedDonorData['addressType'], $dataVars->addressType );
 		$this->assertEquals( $expectedDonorData['companyName'], $dataVars->address->fullName );
-		$this->assertEquals( $expectedDonorData['street'], $dataVars->address->streetAddress );
-		$this->assertEquals( $expectedDonorData['postcode'], $dataVars->address->postalCode );
+		$this->assertEquals( $expectedDonorData['street'], $dataVars->address->street );
+		$this->assertEquals( $expectedDonorData['postcode'], $dataVars->address->postcode );
 		$this->assertEquals( $expectedDonorData['city'], $dataVars->address->city );
-		$this->assertEquals( $expectedDonorData['country'], $dataVars->address->countryCode );
+		$this->assertEquals( $expectedDonorData['country'], $dataVars->address->country );
 		$this->assertEquals( $expectedDonorData['email'], $dataVars->address->email );
 	}
 

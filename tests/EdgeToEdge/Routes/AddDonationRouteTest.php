@@ -174,10 +174,10 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$this->assertObjectHasAttribute( 'address', $applicationVars );
 		$this->assertSame( 'Prof. Dr. Karla Kennichnich', $applicationVars->address->fullName );
-		$this->assertSame( 'Lehmgasse 12', $applicationVars->address->streetAddress );
-		$this->assertSame( '12345', $applicationVars->address->postalCode );
+		$this->assertSame( 'Lehmgasse 12', $applicationVars->address->street );
+		$this->assertSame( '12345', $applicationVars->address->postcode );
 		$this->assertSame( 'Einort', $applicationVars->address->city );
-		$this->assertSame( 'DE', $applicationVars->address->countryCode );
+		$this->assertSame( 'DE', $applicationVars->address->country );
 		$this->assertSame( 'karla@kennichnich.de', $applicationVars->address->email );
 	}
 
