@@ -239,7 +239,6 @@ use WMDE\Fundraising\SubscriptionContext\Validation\SubscriptionDuplicateValidat
 use WMDE\Fundraising\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\FunValidators\DomainNameValidator;
 use WMDE\FunValidators\Validators\AddressValidator;
-use WMDE\FunValidators\Validators\AllowedValuesValidator;
 use WMDE\FunValidators\Validators\AmountPolicyValidator;
 use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\FunValidators\Validators\TextPolicyValidator;
@@ -478,10 +477,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		) )->readAndValidateJson();
 	}
 
-	public function setSkinTwigEnvironment( Environment $twig ): void {
-		$this->sharedObjects[Environment::class . '::Skin'] = $twig;
-	}
-
 	public function getSkinTwig(): Environment {
 		return $this->createSharedObject( Environment::class . '::Skin', function (): Environment {
 			$config = $this->config['twig'];
@@ -671,10 +666,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new KontoCheckBankDataGenerator( $this->newIbanValidator() );
 	}
 
-	public function setSubscriptionValidator( SubscriptionValidator $subscriptionValidator ): void {
-		$this->sharedObjects[SubscriptionValidator::class] = $subscriptionValidator;
-	}
-
 	public function newGetInTouchUseCase(): GetInTouchUseCase {
 		return new GetInTouchUseCase(
 			$this->getContactValidator(),
@@ -739,10 +730,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	private function newHonorificValidator(): AllowedValuesValidator {
-		return new AllowedValuesValidator( $this->getHonorifics()->getKeys() );
-	}
-
 	private function getHonorifics(): Honorifics {
 		return $this->createSharedObject( Honorifics::class,
 			function () {
@@ -795,6 +782,14 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
+	/**
+	 * Mailer is set by Symfony dependency injection defined in services.yaml
+	 *
+	 * @noinspection PhpUnused
+	 *
+	 * @param MailerInterface $mailer
+	 * @return void
+	 */
 	public function setMailer( MailerInterface $mailer ): void {
 		$this->sharedObjects[ MailerInterface::class ] = $mailer;
 	}
@@ -1558,10 +1553,6 @@ class FunFunFactory implements LoggerAwareInterface {
 			return $path;
 		}
 		return __DIR__ . '/../../' . $path;
-	}
-
-	public function setContentPagePageSelector( PageSelector $pageSelector ): void {
-		$this->sharedObjects[PageSelector::class] = $pageSelector;
 	}
 
 	public function getContentPagePageSelector(): PageSelector {
