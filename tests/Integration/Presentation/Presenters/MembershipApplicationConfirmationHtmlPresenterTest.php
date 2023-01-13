@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
-use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter

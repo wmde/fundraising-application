@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
-use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
-use WMDE\Fundraising\MembershipContext\Tests\Data\ValidPayments;
-use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FakeApplicationRepository;
-use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FixedMembershipTokenGenerator;
-use WMDE\Fundraising\MembershipContext\Tests\Fixtures\SucceedingAuthorizer;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidPayments;
+use WMDE\Fundraising\MembershipContext\Tests\TestDoubles\FakeApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Tests\TestDoubles\FixedMembershipTokenGenerator;
+use WMDE\Fundraising\MembershipContext\Tests\TestDoubles\SucceedingAuthorizer;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipConfirmationController

@@ -5,7 +5,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation\Presenters;
 
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\BankDataPresenter;
-use WMDE\Fundraising\MembershipContext\Tests\Data\ValidPayments;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidPayments;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\BankDataPresenter

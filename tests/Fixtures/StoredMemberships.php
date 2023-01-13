@@ -8,7 +8,7 @@ use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayments;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineEntities\MembershipApplication as DoctrineMembershipApplication;
 use WMDE\Fundraising\MembershipContext\DataAccess\MembershipApplicationData;
-use WMDE\Fundraising\MembershipContext\Tests\Data\ValidMembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 
 class StoredMemberships {
