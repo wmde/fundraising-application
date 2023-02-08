@@ -32,7 +32,6 @@ class FeatureToggleTest extends WebRouteTestCase {
 		$client->request( 'GET', '/' );
 
 		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
-		$this->assertObjectHasAttribute( 'activeFeatures', $applicationVars );
 		$this->assertSame( [ 'features.feature_a' ], $applicationVars->activeFeatures );
 	}
 

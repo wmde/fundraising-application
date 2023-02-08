@@ -22,15 +22,9 @@ class JsonBucketLoggerTest extends TestCase {
 
 	private const STUB_TIME_VALUE = '2018-01-01T00:00:42.000+00:00';
 
-	/**
-	 * @var LogWriterSpy
-	 */
-	private $logWriter;
+	private LogWriterSpy $logWriter;
 
-	/**
-	 * @var Clock
-	 */
-	private $clock;
+	private Clock $clock;
 
 	public function setUp(): void {
 		$this->logWriter = new LogWriterSpy();
@@ -97,7 +91,6 @@ class JsonBucketLoggerTest extends TestCase {
 
 		$event = json_decode( $logCalls[0], false );
 		$this->assertTrue( is_object( $event ), 'Logs should be encoded as object' );
-		$this->assertObjectHasAttribute( $key, $event, 'Event should have property' );
 		$this->assertEquals( $expectedValue, $event->{$key} );
 	}
 
