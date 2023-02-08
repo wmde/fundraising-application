@@ -109,7 +109,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertSame( $request['payment_date'], $paymentData->paymentSpecificValues['ext_payment_timestamp'] );
 	}
 
-	private function newHttpParamsForPayment(): array {
+	private static function newHttpParamsForPayment(): array {
 		return [
 			'receiver_email' => self::EMAIL_ADDRESS,
 			'payment_status' => 'Completed',
@@ -202,10 +202,10 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function unsupportedPaymentStatusProvider(): \Iterator {
-		yield [ $this->newPendingPaymentParams(), 'Pending' ];
-		yield [ $this->newCancelPaymentParams(), 'Cancel' ];
-		yield [ $this->newValidRequestParametersWithNegativeTransactionFee(), 'Refunded' ];
+	public static function unsupportedPaymentStatusProvider(): \Iterator {
+		yield [ self::newPendingPaymentParams(), 'Pending' ];
+		yield [ self::newCancelPaymentParams(), 'Cancel' ];
+		yield [ self::newValidRequestParametersWithNegativeTransactionFee(), 'Refunded' ];
 	}
 
 	public function testGivenPersonalPaypalInfosOnError_PrivateInfoIsExcludedFromGettingLogged(): void {
@@ -339,7 +339,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function newPendingPaymentParams(): array {
+	private static function newPendingPaymentParams(): array {
 		return [
 			'receiver_email' => self::EMAIL_ADDRESS,
 			'payment_status' => 'Pending',
@@ -364,7 +364,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function newCancelPaymentParams(): array {
+	private static function newCancelPaymentParams(): array {
 		return [
 			'receiver_email' => self::EMAIL_ADDRESS,
 			'payment_status' => 'Cancel',
@@ -514,8 +514,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertSame( LogLevel::WARNING, $paypalLogger->getFirstLogCall()->getLevel(), 'Double-booked payment should be warnings, not errors' );
 	}
 
-	private function newValidRequestParametersWithNegativeTransactionFee(): array {
-		$parameters = $this->newHttpParamsForPayment();
+	private static function newValidRequestParametersWithNegativeTransactionFee(): array {
+		$parameters = self::newHttpParamsForPayment();
 		$parameters['mc_fee'] = '-12.34';
 		$parameters['payment_status'] = 'Refunded';
 		return $parameters;

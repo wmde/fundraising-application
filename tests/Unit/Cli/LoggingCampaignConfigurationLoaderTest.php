@@ -24,7 +24,7 @@ class LoggingCampaignConfigurationLoaderTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals( [ $expectedMessage ], $errorLogger->getErrors() );
 	}
 
-	public function throwablesDataProvider(): array {
+	public static function throwablesDataProvider(): array {
 		return [
 			[
 				new ParseException( 'Test Message' ),

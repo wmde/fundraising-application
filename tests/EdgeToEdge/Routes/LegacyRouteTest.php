@@ -29,7 +29,7 @@ class LegacyRouteTest extends WebTestCase {
 		$this->assertSame( '/', $path );
 	}
 
-	public function legacyRouteProvider(): iterable {
+	public static function legacyRouteProvider(): iterable {
 		yield [ '/spenden' ];
 		yield [ '/spenden/' ];
 		yield [ '/spenden/jetzt-spenden' ];

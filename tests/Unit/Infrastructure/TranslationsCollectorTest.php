@@ -59,7 +59,7 @@ class TranslationsCollectorTest extends TestCase {
 		$translationsCollector->collectTranslations();
 	}
 
-	public function invalidJSONProvider(): array {
+	public static function invalidJSONProvider(): array {
 		return [
 			[ '"i will not work"' ],
 			[ '{' ],
