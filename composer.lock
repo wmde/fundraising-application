@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22e50be65a121516489bcc15dbf4f0ed",
+    "content-hash": "f6b330e70473eddcd4a4669689ad029a",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7074,28 +7074,28 @@
         },
         {
             "name": "wmde/fundraising-content-provider",
-            "version": "v5.1.0",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-content-provider",
-                "reference": "1992c89f3d698cb57029efede658cd44cc9befed"
+                "reference": "03931a2c2b16503360efa319d4bc1193abf67a30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/1992c89f3d698cb57029efede658cd44cc9befed",
-                "reference": "1992c89f3d698cb57029efede658cd44cc9befed",
+                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/03931a2c2b16503360efa319d4bc1193abf67a30",
+                "reference": "03931a2c2b16503360efa319d4bc1193abf67a30",
                 "shasum": ""
             },
             "require": {
                 "ezyang/htmlpurifier": "^4.9",
-                "php": ">=8.0",
+                "php": ">=8.1",
                 "symfony/console": "^5.4 || ^6.0",
-                "twig/twig": "~3.0"
+                "twig/twig": "~3.4"
             },
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "~9.5",
-                "wmde/fundraising-phpcs": "~5.0"
+                "phpunit/phpunit": "~10.0",
+                "wmde/fundraising-phpcs": "~7.0"
             },
             "bin": [
                 "bin/lint_content"
@@ -7131,10 +7131,10 @@
                 ]
             },
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "description": "WMDE fundraising application content provider and filter",
-            "time": "2022-01-18T12:35:57+00:00"
+            "time": "2023-02-10T10:42:55+00:00"
         },
         {
             "name": "wmde/fundraising-donations",
@@ -8199,16 +8199,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.9.16",
+            "version": "1.9.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "922e2689bb180575d0f57de0443c431a5a698e8f"
+                "reference": "204e459e7822f2c586463029f5ecec31bb45a1f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/922e2689bb180575d0f57de0443c431a5a698e8f",
-                "reference": "922e2689bb180575d0f57de0443c431a5a698e8f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/204e459e7822f2c586463029f5ecec31bb45a1f2",
+                "reference": "204e459e7822f2c586463029f5ecec31bb45a1f2",
                 "shasum": ""
             },
             "require": {
@@ -8238,7 +8238,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.9.16"
+                "source": "https://github.com/phpstan/phpstan/tree/1.9.17"
             },
             "funding": [
                 {
@@ -8254,7 +8254,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-07T10:42:21+00:00"
+            "time": "2023-02-08T12:25:00+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -8335,16 +8335,16 @@
         },
         {
             "name": "phpunit/php-file-iterator",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
-                "reference": "7d66d4e816d34e90acec9db9d8d94b5cfbfe926f"
+                "reference": "fd9329ab3368f59fe1fe808a189c51086bd4b6bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/7d66d4e816d34e90acec9db9d8d94b5cfbfe926f",
-                "reference": "7d66d4e816d34e90acec9db9d8d94b5cfbfe926f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/fd9329ab3368f59fe1fe808a189c51086bd4b6bd",
+                "reference": "fd9329ab3368f59fe1fe808a189c51086bd4b6bd",
                 "shasum": ""
             },
             "require": {
@@ -8383,7 +8383,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-file-iterator/issues",
-                "source": "https://github.com/sebastianbergmann/php-file-iterator/tree/4.0.0"
+                "source": "https://github.com/sebastianbergmann/php-file-iterator/tree/4.0.1"
             },
             "funding": [
                 {
@@ -8391,7 +8391,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-02-03T06:55:11+00:00"
+            "time": "2023-02-10T16:53:14+00:00"
         },
         {
             "name": "phpunit/php-invoker",
@@ -8576,16 +8576,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.0.6",
+            "version": "10.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "45ffd21476bd7b65a055d504f1cce287d3cd0a3a"
+                "reference": "a6f61c5629dd95db79af72f1e94d56702187479a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/45ffd21476bd7b65a055d504f1cce287d3cd0a3a",
-                "reference": "45ffd21476bd7b65a055d504f1cce287d3cd0a3a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a6f61c5629dd95db79af72f1e94d56702187479a",
+                "reference": "a6f61c5629dd95db79af72f1e94d56702187479a",
                 "shasum": ""
             },
             "require": {
@@ -8656,7 +8656,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.0.6"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.0.7"
             },
             "funding": [
                 {
@@ -8672,7 +8672,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-08T07:00:51+00:00"
+            "time": "2023-02-08T15:16:31+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -9900,12 +9900,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "d2825b35dcc166c7e512483f740b09d7edad9294"
+                "reference": "aa631441eedf670ee30bd35a3dd7b2c8515f0a2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/d2825b35dcc166c7e512483f740b09d7edad9294",
-                "reference": "d2825b35dcc166c7e512483f740b09d7edad9294",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/aa631441eedf670ee30bd35a3dd7b2c8515f0a2c",
+                "reference": "aa631441eedf670ee30bd35a3dd7b2c8515f0a2c",
                 "shasum": ""
             },
             "require": {
@@ -9949,7 +9949,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2023-01-18T14:42:40+00:00"
+            "time": "2023-02-13T06:38:36+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
