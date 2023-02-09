@@ -18,28 +18,24 @@ use WMDE\Fundraising\SubscriptionContext\SubscriptionContextFactory;
  */
 class ContextFactoryCollectionTest extends TestCase {
 	public function testGetDoctrineXMLMappingPathsCollectsPathsFromFactories(): void {
-		// Avoid showing deprecation notice when we test only with non-legacy factories
-		// PHPUnit does not catch the triggered deprecation warning for some unknown reason
-		// remove following line (and last line in this test) when https://phabricator.wikimedia.org/T312080 is done
-		$oldErrorLevel = error_reporting( E_ALL & ~E_USER_DEPRECATED );
+		// This class is only here to suppress the PHPUnit deprecation warning in this test.
+		// When *all* contexts support the `getDoctrineMappingPaths` method, remove this and adapt the assertions
+		// When AddressChangeContextFactory supports it but others don't, switch the class
+		$legacyFactory = new AddressChangeContextFactory();
+
 		$contextFactory1 = $this->createStub( BucketTestingContextFactory::class );
 		$contextFactory1->method( 'getDoctrineMappingPaths' )->willReturn( [ '/path/to/bucket_mapping' ] );
 		$contextFactory2 = $this->createStub( AutocompleteContextFactory::class );
 		$contextFactory2->method( 'getDoctrineMappingPaths' )->willReturn( [ '/path/to/autocomplete_mapping' ] );
 		// We're not testing factories that don't support getDoctrineMappingPaths,
 		// since each modernization in a context would make the test fail
-		$collection = new ContextFactoryCollection( $contextFactory1, $contextFactory2 );
+		$collection = new ContextFactoryCollection( $contextFactory1, $contextFactory2, $legacyFactory );
 
 		$paths = $collection->getDoctrineXMLMappingPaths();
 
-		$this->assertSame(
-			[
-				'/path/to/bucket_mapping',
-				'/path/to/autocomplete_mapping',
-			],
-			$paths
-		);
-		error_reporting( $oldErrorLevel );
+		$this->assertCount( 3, $paths );
+		$this->assertSame( '/path/to/bucket_mapping', $paths[0] );
+		$this->assertSame( '/path/to/autocomplete_mapping', $paths[1] );
 	}
 
 	public function testNewEventSubscribersCollectsEventSubscribersFromFactories(): void {
@@ -67,7 +63,8 @@ class ContextFactoryCollectionTest extends TestCase {
 	/**
 	 * This is canary test to check if all context factories have been migrated to the new getDoctrineMappingPaths method
 	 *
-	 * If they are, this test should trigger a deprecation warning and the test will fail. You can then safely delete it
+	 * If they are, this test should trigger a deprecation warning and the test will fail.
+	 * You should then follow the refactoring instructions in the comments of ContextFactoryCollection and delete this test.
 	 *
 	 * See https://phabricator.wikimedia.org/T312080
 	 *
