@@ -5,8 +5,6 @@ namespace WMDE\Fundraising\Frontend\Factories;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\Mapping\Driver\XmlDriver;
-use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use WMDE\Fundraising\AddressChangeContext\AddressChangeContextFactory;
 use WMDE\Fundraising\DonationContext\DonationContextFactory;
 use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
@@ -14,6 +12,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\PaymentContext\PaymentContextFactory;
 use WMDE\Fundraising\SubscriptionContext\SubscriptionContextFactory;
+use function array_push;
+use function array_unique;
+use function method_exists;
 
 /**
  * This is a collection of context factories of bounded contexts.
@@ -36,80 +37,13 @@ class ContextFactoryCollection {
 	 * @return string[]
 	 */
 	public function getDoctrineXMLMappingPaths(): array {
+		$paths = [];
+		foreach ( $this->contextFactories as $contextFactory ) {
+			array_push( $paths, ...$contextFactory->getDoctrineMappingPaths() );
+		}
 		return [
-			...$this->getDoctrineXMLMappingPathsFromSupportedFactories(),
-			...$this->getDoctrineXMLMappingPathsFromLegacyFactories()
+			...array_unique( $paths ),
 			];
-	}
-
-	/**
-	 * Paths that can be used for {@see ORMSetup::createXMLMetadataConfiguration()}
-	 *
-	 * When https://phabricator.wikimedia.org/T312080 is done, you can inline this method
-	 *
-	 * @return string[]
-	 */
-	private function getDoctrineXMLMappingPathsFromSupportedFactories(): array {
-		$paths = [];
-		foreach ( $this->contextFactories as $contextFactory ) {
-			if ( method_exists( $contextFactory, 'getDoctrineMappingPaths' ) ) {
-				array_push( $paths, ...$contextFactory->getDoctrineMappingPaths() );
-			}
-		}
-		return array_unique( $paths );
-	}
-
-	/**
-	 * This method is for backwards compatibility, until all context factories expose their
-	 * Doctrine XML mapping paths via the "getDoctrineMappingPaths" method.
-	 * When all classes support it, you can remove this method
-	 *
-	 * See https://phabricator.wikimedia.org/T312080
-	 *
-	 * @codeCoverageIgnore
-	 * @return string[]
-	 */
-	private function getDoctrineXMLMappingPathsFromLegacyFactories(): array {
-		$paths = [];
-		$driverChain = $this->addLegacyMappingDrivers( new MappingDriverChain() );
-		foreach ( $driverChain->getDrivers() as $driver ) {
-			if ( !( $driver instanceof XmlDriver ) ) {
-				throw new \InvalidArgumentException( 'Bounded contexts must use XML mapping drivers!' );
-			}
-			array_push( $paths, ...$driver->getLocator()->getPaths() );
-		}
-		return $paths;
-	}
-
-	/**
-	 * This method is for backwards compatibility, until all context factories expose their
-	 * Doctrine XML mapping paths via the "getDoctrineMappingPaths" method.
-	 * When all classes support it, you can remove this method
-	 *
-	 * See https://phabricator.wikimedia.org/T312080
-	 *
-	 * @codeCoverageIgnore
-	 * @param MappingDriverChain $driverChain
-	 * @return MappingDriverChain
-	 */
-	private function addLegacyMappingDrivers( MappingDriverChain $driverChain ): MappingDriverChain {
-		$skippedFactories = 0;
-		foreach ( $this->contextFactories as $contextFactory ) {
-			if ( method_exists( $contextFactory, 'getDoctrineMappingPaths' ) ) {
-				$skippedFactories++;
-			} elseif ( method_exists( $contextFactory, 'visitMappingDriver' ) ) {
-				$contextFactory->visitMappingDriver( $driverChain );
-			} else {
-				$driverChain->addDriver( $contextFactory->newMappingDriver(), $contextFactory::ENTITY_NAMESPACE );
-			}
-		}
-		if ( $skippedFactories === count( $this->contextFactories ) ) {
-			\trigger_error(
-				'All Context Factories are now refactored - you can remove legacy code from ' . __CLASS__,
-				\E_USER_DEPRECATED
-			);
-		}
-		return $driverChain;
 	}
 
 	/**
