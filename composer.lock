@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "acc1263e5e71142eacc14f4f3af30c98",
+    "content-hash": "7960328c33ee43e4fc20bf54ee651b7c",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7073,28 +7073,28 @@
         },
         {
             "name": "wmde/fundraising-content-provider",
-            "version": "v5.1.0",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-content-provider",
-                "reference": "1992c89f3d698cb57029efede658cd44cc9befed"
+                "reference": "03931a2c2b16503360efa319d4bc1193abf67a30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/1992c89f3d698cb57029efede658cd44cc9befed",
-                "reference": "1992c89f3d698cb57029efede658cd44cc9befed",
+                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/03931a2c2b16503360efa319d4bc1193abf67a30",
+                "reference": "03931a2c2b16503360efa319d4bc1193abf67a30",
                 "shasum": ""
             },
             "require": {
                 "ezyang/htmlpurifier": "^4.9",
-                "php": ">=8.0",
+                "php": ">=8.1",
                 "symfony/console": "^5.4 || ^6.0",
-                "twig/twig": "~3.0"
+                "twig/twig": "~3.4"
             },
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "~9.5",
-                "wmde/fundraising-phpcs": "~5.0"
+                "phpunit/phpunit": "~10.0",
+                "wmde/fundraising-phpcs": "~7.0"
             },
             "bin": [
                 "bin/lint_content"
@@ -7130,10 +7130,10 @@
                 ]
             },
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "description": "WMDE fundraising application content provider and filter",
-            "time": "2022-01-18T12:35:57+00:00"
+            "time": "2023-02-10T10:42:55+00:00"
         },
         {
             "name": "wmde/fundraising-donations",
