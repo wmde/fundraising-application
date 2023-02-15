@@ -18,13 +18,13 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
 		$this->setCampaignCache( $factory );
 		$this->initializeLoggers( $factory );
+		$this->setDoctrineConfiguration( $factory );
 	}
 
 	private function initializeLoggers( FunFunFactory $factory ) {
 		$this->setPaypalLogger( $factory );
 		$this->setSofortLogger( $factory );
 		$this->setCreditCardLogger( $factory );
-		$this->setDoctrineConfiguration( $factory );
 	}
 
 	private function setCampaignCache( FunFunFactory $factory ) {
