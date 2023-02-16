@@ -86,7 +86,7 @@ class GreetingGeneratorTest extends TestCase {
 		);
 	}
 
-	public function formalGreetingProvider(): array {
+	public static function formalGreetingProvider(): array {
 		return [
 			[ 'Herr', 'formalHerr' ],
 			[ 'Frau', 'formalFrau' ],
@@ -94,7 +94,7 @@ class GreetingGeneratorTest extends TestCase {
 		];
 	}
 
-	public function informalGreetingProvider(): array {
+	public static function informalGreetingProvider(): array {
 		return [
 			[ 'Herr', 'informalHerr' ],
 			[ 'Frau', 'informalFrau' ],
@@ -102,7 +102,7 @@ class GreetingGeneratorTest extends TestCase {
 		];
 	}
 
-	public function informalLastnameGreetingProvider(): array {
+	public static function informalLastnameGreetingProvider(): array {
 		return [
 			[ 'Herr', 'lastNameInformalHerr' ],
 			[ 'Frau', 'lastNameInformalFrau' ],

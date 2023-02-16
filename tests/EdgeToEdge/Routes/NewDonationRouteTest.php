@@ -36,7 +36,7 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	public function paymentInputProvider(): array {
+	public static function paymentInputProvider(): array {
 		return [
 			[
 				[

@@ -50,7 +50,7 @@ class PageSelectorTest extends TestCase {
 		$this->sut->getPageId( $slug );
 	}
 
-	public function slugsProducingException(): array {
+	public static function slugsProducingException(): array {
 		return [
 				[ 'PAGE1' ],
 				[ 'page3' ],

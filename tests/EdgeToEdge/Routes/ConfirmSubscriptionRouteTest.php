@@ -32,7 +32,7 @@ class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
 		$this->assertTrue( $response->isOk() );
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
-		$this->assertObjectNotHasAttribute( 'error_message', $dataVars );
+		$this->assertFalse( property_exists( $dataVars, 'error_message' ), 'JSON result should not contain an error message' );
 	}
 
 	public function testGivenANonHexadecimalConfirmationCode_confirmationPageIsNotFound(): void {

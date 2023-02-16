@@ -20,7 +20,7 @@
 		"wmde/fundraising-memberships": "~11.1",
 		"wmde/fundraising-payments": "~5.0",
 		"wmde/fundraising-subscriptions": "~3.1",
-		"wmde/fundraising-content-provider": "~5.1",
+		"wmde/fundraising-content-provider": "~6.0",
 		"wmde/fundraising-address-change": "~1.3",
 		"wmde/freezable-value-object": "~2.0",
 		"wmde/fun-validators": "~4.0.0",
@@ -101,16 +101,21 @@
 			"type": "vcs",
 			"url": "https://github.com/wmde/fundraising-phpcs",
 			"no-api": true
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/mbabker/SymfonyConfigTest",
+			"no-api": true
 		}
 	],
 	"require-dev": {
 		"ext-pdo_sqlite": "*",
 
-		"matthiasnoback/symfony-config-test": "^4.0",
+		"matthiasnoback/symfony-config-test": "dev-phpunit-10",
 		"mikey179/vfsstream": "~1.6",
 		"phpmd/phpmd": "~2.10",
 		"phpstan/phpstan": "^1.8",
-		"phpunit/phpunit": "~9.5.0",
+		"phpunit/phpunit": "~10.0.4",
 
 		"wmde/psr-log-test-doubles": "~3.0",
 		"wmde/fundraising-phpcs": "~7.0",

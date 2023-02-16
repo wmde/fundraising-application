@@ -5,12 +5,14 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use WMDE\Fundraising\ContentProvider\ContentProvider;
-use WMDE\Fundraising\Frontend\App\MailTemplates;
+use Twig\Environment;
+use WMDE\Fundraising\Frontend\App\MailTemplateFixtures\MailTemplateFixtures;
+use WMDE\Fundraising\Frontend\App\MailTemplateFixtures\TemplateSettings;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\MailContentProviderStub;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**
@@ -20,29 +22,27 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
  */
 class MailTemplatesTest extends KernelTestCase {
 
-	private FunFunFactory $factory;
-
-	public function setUp(): void {
-		$this->createMissingTestFiles();
+	public static function setUpBeforeClass(): void {
+		parent::setUpBeforeClass();
+		self::createMissingTestFiles();
 	}
 
-	private function createMissingTestFiles(): void {
-		foreach ( $this->getFreshlyRenderedContent() as $testFilePath => $testFileContent ) {
-			if ( !file_exists( $testFilePath ) ) {
-				file_put_contents( $testFilePath, $testFileContent );
+	private static function createMissingTestFiles(): void {
+		$mailerTwig = self::newFactory()->getMailerTwig();
+		foreach ( self::getOutputTemplateAndContext() as $outputFile => $templateTestData ) {
+			if ( !file_exists( $outputFile ) ) {
+				file_put_contents( $outputFile, self::getFreshlyRenderedContentForOneTemplate( $templateTestData, $mailerTwig ) );
 			}
 		}
 	}
 
-	private function getFreshlyRenderedContent(): \Iterator {
-		$this->factory = $this->newFactory();
-
-		foreach ( $this->getTestData() as $templateFileName => $templateTestData ) {
-			yield from $this->getFreshlyRenderedContentForTemplate( $templateFileName, $templateTestData );
+	private static function getOutputTemplateAndContext(): iterable {
+		foreach ( MailTemplateFixtures::getTemplates() as $templateTestData ) {
+				yield self::getTestFilePath( $templateTestData->id ) => $templateTestData;
 		}
 	}
 
-	private function newFactory(): FunFunFactory {
+	private static function newFactory(): FunFunFactory {
 		static::bootKernel();
 		$bootstrapper = static::getContainer()->get( EnvironmentBootstrapper::class );
 
@@ -50,21 +50,17 @@ class MailTemplatesTest extends KernelTestCase {
 			throw new \LogicException( 'We need to use TestEnvironmentBootstrapper to be able to override the configuration' );
 		}
 
-		$bootstrapper->overrideConfiguration( $this->getConfig() );
+		$bootstrapper->overrideConfiguration( self::getConfigOverrides() );
 
 		$ffFactory = static::getContainer()->get( FunFunFactory::class );
-
-		$contentProvider = $this->createMock( ContentProvider::class );
-		$contentProvider->method( 'getMail' )->willReturnArgument( 0 );
-
-		$ffFactory->setContentProvider( $contentProvider );
+		$ffFactory->setContentProvider( new MailContentProviderStub() );
 		$ffFactory->setMailTranslator( new FakeTranslator() );
 		$ffFactory->setLocale( 'de_DE' );
 
 		return $ffFactory;
 	}
 
-	private function getConfig(): array {
+	private static function getConfigOverrides(): array {
 		return [
 			'twig' => [
 				'strict-variables' => true
@@ -72,51 +68,37 @@ class MailTemplatesTest extends KernelTestCase {
 		];
 	}
 
-	private function getTestData(): array {
-		$mailTemplates = new MailTemplates( $this->factory );
-		return $mailTemplates->get();
+	private static function getFreshlyRenderedContentForOneTemplate( TemplateSettings $templateData, Environment $mailerTwig ): string {
+		return MailFormatter::format( $mailerTwig->render( $templateData->templateName, $templateData->templateData ) );
 	}
 
-	private function getFreshlyRenderedContentForTemplate( string $templateFileName, array $templateTestData ): \Iterator {
-		if ( empty( $templateTestData['variants'] ) ) {
-			$templateTestData['variants'] = [ '' => [] ];
-		}
-
-		foreach ( $templateTestData['variants'] as $variantName => $additionalContext ) {
-			$filePath = $this->createTestFilePath( $templateFileName, $variantName );
-
-			$content = MailFormatter::format( $this->factory->getMailerTwig()->render(
-				$templateFileName,
-				array_merge_recursive(
-					$templateTestData['context'],
-					$additionalContext
-				)
-			) );
-
-			yield $filePath => $content;
-		}
-	}
-
-	private function createTestFilePath( string $templateFileName, string $variantName ): string {
-		return __DIR__ . '/../Data/GeneratedMailTemplates/'
-			. basename( $templateFileName, '.txt.twig' )
-			. ( $variantName === '' ? '' : ".$variantName" )
-			. '.txt';
+	private static function getTestFilePath( string $id ): string {
+		return __DIR__ . '/../Data/GeneratedMailTemplates/' . $id . '.txt';
 	}
 
 	/**
 	 * @dataProvider storedRenderedContentProvider
 	 */
-	public function testCurrentRenderingMatchesStoredRendering( string $testFilePath, string $testFileContent ): void {
+	public function testCurrentRenderingMatchesStoredRendering( string $testFilePath, TemplateSettings $templateData ): void {
+		$mailerTwig = self::newFactory()->getMailerTwig();
+		$expectedContent = file_get_contents( $testFilePath );
+
+		$actualContent = self::getFreshlyRenderedContentForOneTemplate( $templateData, $mailerTwig );
+
 		$this->assertSame(
-			file_get_contents( $testFilePath ),
-			$testFileContent
+			$expectedContent,
+			$actualContent,
+			sprintf(
+				'Template %s did not render the same output as expected, see reference file for expected output. Template Variables: %s',
+				$templateData->templateName,
+				var_export( $templateData->templateData, true )
+			)
 		);
 	}
 
-	public function storedRenderedContentProvider(): \Iterator {
-		foreach ( $this->getFreshlyRenderedContent() as $testFilePath => $testFileContent ) {
-			yield $testFilePath => [ $testFilePath, $testFileContent ];
+	public static function storedRenderedContentProvider(): \Iterator {
+		foreach ( self::getOutputTemplateAndContext() as $testFile => $templateData ) {
+			yield $testFile => [ $testFile, $templateData ];
 		}
 	}
 

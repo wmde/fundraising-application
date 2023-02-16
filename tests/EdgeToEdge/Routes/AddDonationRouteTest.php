@@ -160,19 +160,19 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-		$this->assertObjectHasAttribute( 'donation', $applicationVars );
+		$this->assertTrue( property_exists( $applicationVars, 'donation' ), 'applicationVars should have a "donation" property' );
 		$this->assertSame( 5.51, $applicationVars->donation->amount );
 		$this->assertSame( 0, $applicationVars->donation->interval );
 		$this->assertSame( 'BEZ', $applicationVars->donation->paymentType );
 		$this->assertTrue( $applicationVars->donation->newsletter );
 		$this->assertTrue( $applicationVars->donation->receipt );
 
-		$this->assertObjectHasAttribute( 'bankData', $applicationVars );
+		$this->assertTrue( property_exists( $applicationVars, 'bankData' ), 'applicationVars should have a "bankData" property' );
 		$this->assertSame( 'DE12500105170648489890', $applicationVars->bankData->iban );
 		$this->assertSame( 'INGDDEFFXXX', $applicationVars->bankData->bic );
 		$this->assertSame( 'ING-DiBa', $applicationVars->bankData->bankname );
 
-		$this->assertObjectHasAttribute( 'address', $applicationVars );
+		$this->assertTrue( property_exists( $applicationVars, 'address' ), 'applicationVars should have a "address" property' );
 		$this->assertSame( 'Prof. Dr. Karla Kennichnich', $applicationVars->address->fullName );
 		$this->assertSame( 'Lehmgasse 12', $applicationVars->address->streetAddress );
 		$this->assertSame( '12345', $applicationVars->address->postalCode );

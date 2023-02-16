@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Twig\Environment;
 use Twig\Error\Error;
-use WMDE\Fundraising\Frontend\App\MailTemplates;
+use WMDE\Fundraising\Frontend\App\MailTemplateFixtures\MailTemplateFixtures;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
 
@@ -50,26 +50,24 @@ class RenderMailTemplatesCommand extends Command {
 					),
 				] )
 			);
+			// TODO: Add locale option
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
-		$mailTemplates = new MailTemplates( $this->ffFactory );
-		$testData = $mailTemplates->get();
-
 		$hasErrors = $this->validateTemplateFixtures(
-			$testData,
+			$this->getConfiguredTemplates(),
 			iterator_to_array( $this->ffFactory->newMailTemplateFilenameTraversable() ),
 			$output
 		);
 
 		$outputPath = $input->getOption( 'output-path' ) ?? '';
-		if ( $outputPath && substr( $outputPath, -1 ) !== '/' ) {
+		if ( $outputPath && !str_ends_with( $outputPath, '/' ) ) {
 			$outputPath .= '/';
 		}
 
 		$twig = $this->ffFactory->getMailerTwig();
 		$twig->enableStrictVariables();
-		$hasErrors = $this->renderTemplates( $testData, $twig, $outputPath, $output ) || $hasErrors;
+		$hasErrors = $this->renderTemplates( $twig, $outputPath, $output ) || $hasErrors;
 
 		return $hasErrors ? 1 : 0;
 	}
@@ -77,14 +75,13 @@ class RenderMailTemplatesCommand extends Command {
 	/**
 	 * Check that there are templates for all fixtures and (even more important) vice-versa
 	 *
-	 * @param array $testData Template names and fixture information to render these templates
+	 * @param array $testTemplateNames Template names from fixture
 	 * @param array $mailTemplatePaths
 	 * @param OutputInterface $output Command output
 	 * @return bool
 	 */
-	private function validateTemplateFixtures( array $testData, array $mailTemplatePaths, OutputInterface $output ): bool {
+	private function validateTemplateFixtures( array $testTemplateNames, array $mailTemplatePaths, OutputInterface $output ): bool {
 		$hasErrors = false;
-		$testTemplateNames = array_keys( $testData );
 
 		$untestedTemplates = array_diff( $mailTemplatePaths, $testTemplateNames );
 
@@ -109,55 +106,54 @@ class RenderMailTemplatesCommand extends Command {
 	/**
 	 * Render all templates and write them to disk to allow a comparison with an alternative data set
 	 *
-	 * @param array $testData Template names and fixture information to render these templates
-	 * @param Environment $twig The templating engine to render the templates
+	 * @param Environment $twig T
+	 * he templating engine to render the templates
 	 * @param string $outputPath Path where rendered templates will be written to
 	 * @param OutputInterface $output Command output
 	 * @return bool
 	 */
-	private function renderTemplates( array $testData, Environment $twig, string $outputPath, OutputInterface $output ): bool {
+	private function renderTemplates( Environment $twig, string $outputPath, OutputInterface $output ): bool {
 		$hasErrors = false;
-		foreach ( $testData as $templateFileName => $templateSettings ) {
+		foreach ( MailTemplateFixtures::getTemplates() as $templateSettings ) {
 
-			if ( empty( $templateSettings['variants'] ) ) {
-				$templateSettings['variants'] = [ '' => [] ];
+			$outputName = $outputPath . $templateSettings->id . '.txt';
+			$output->write( "$outputName" );
+			if ( file_exists( $outputName ) ) {
+				$output->writeln( "$outputName already exists, skipping ..." );
+				continue;
 			}
 
-			foreach ( $templateSettings['variants'] as $variantName => $additionalContext ) {
-				$outputName =
-					$outputPath .
-					basename( $templateFileName, '.txt.twig' ) .
-					( $variantName ? ".$variantName" : '' ) .
-					'.txt';
-
-				$output->write( "$outputName" );
-				if ( file_exists( $outputName ) ) {
-					$output->writeln( "$outputName already exists, skipping ..." );
-					continue;
-				}
-
-				try {
-					file_put_contents(
-						$outputName,
-						MailFormatter::format(
-							$twig->render(
-								$templateFileName,
-								array_merge_recursive(
-									$templateSettings['context'],
-									$additionalContext
-								)
-							)
+			try {
+				file_put_contents(
+					$outputName,
+					MailFormatter::format(
+						$twig->render(
+							$templateSettings->templateName,
+							$templateSettings->templateData
 						)
-					);
-				} catch ( Error $e ) {
-					$hasErrors = true;
-					$output->writeln( '' );
-					$output->writeln( '<error>' . $e->getMessage() . '</error>' );
-					$output->writeln( var_export( $e->getSourceContext(), true ) );
-				}
+					)
+				);
+			} catch ( Error $e ) {
+				$hasErrors = true;
 				$output->writeln( '' );
+				$output->writeln( '<error>' . $e->getMessage() . '</error>' );
+				$output->writeln( var_export( $e->getSourceContext(), true ) );
 			}
+			$output->writeln( '' );
 		}
 		return $hasErrors;
+	}
+
+	/**
+	 * Get all template names configured in fixtures
+	 *
+	 * @return string[]
+	 */
+	private function getConfiguredTemplates(): array {
+		$templates = [];
+		foreach ( MailTemplateFixtures::getTemplateProviders() as $templateProvider ) {
+			$templates[] = $templateProvider->getTemplateName();
+		}
+		return $templates;
 	}
 }

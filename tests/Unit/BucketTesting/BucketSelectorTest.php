@@ -168,7 +168,7 @@ class BucketSelectorTest extends TestCase {
 		);
 	}
 
-	public function invalidParametersProvider(): iterable {
+	public static function invalidParametersProvider(): iterable {
 		yield [ 'unknown key in url', [ 't2' => 0 ] ];
 		yield [ 'out of bounds index in url', [ 't1' => 2 ] ];
 		yield [ 'non-numeric index in url', [ 't1' => 'lol' ] ];

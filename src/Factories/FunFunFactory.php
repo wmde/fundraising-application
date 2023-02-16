@@ -49,6 +49,8 @@ use WMDE\Fundraising\AddressChangeContext\Domain\AddressChangeRepository;
 use WMDE\Fundraising\AddressChangeContext\UseCases\ChangeAddress\ChangeAddressUseCase;
 use WMDE\Fundraising\AddressChangeContext\UseCases\ReadAddressChange\ReadAddressChangeUseCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
+use WMDE\Fundraising\ContentProvider\TwigContentProviderConfig;
+use WMDE\Fundraising\ContentProvider\TwigContentProviderFactory;
 use WMDE\Fundraising\DonationContext\Authorization\DonationAuthorizer;
 use WMDE\Fundraising\DonationContext\Authorization\DonationTokenFetcher;
 use WMDE\Fundraising\DonationContext\Authorization\TokenGenerator;
@@ -510,6 +512,7 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getMailTranslator(),
 				$this->getContentProvider(),
 				$this->getUrlGenerator(),
+				$this->getGreetingGenerator(),
 			);
 			$locale = Locale::parseLocale( $this->getLocale() );
 			return $factory->newTemplatingEnvironment(
@@ -1595,13 +1598,13 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getContentProvider(): ContentProvider {
 		return $this->createSharedObject( ContentProvider::class, function () {
-			return new ContentProvider( [
-				'content_path' => $this->getI18nDirectory(),
-				'cache' => $this->config['twig']['enable-cache'] ? $this->getCachePath() . '/content' : false,
-				'globals' => [
+			return TwigContentProviderFactory::createContentProvider( new TwigContentProviderConfig(
+				$this->getI18nDirectory(),
+				$this->config['twig']['enable-cache'] ? $this->getCachePath() . '/content' : null,
+				[
 					'basepath' => $this->config['web-basepath']
 				]
-			] );
+			) );
 		} );
 	}
 

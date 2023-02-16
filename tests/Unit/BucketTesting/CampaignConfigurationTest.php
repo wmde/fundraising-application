@@ -60,7 +60,7 @@ class CampaignConfigurationTest extends TestCase {
 		);
 	}
 
-	public function invalidConfigurationProvider(): iterable {
+	public static function invalidConfigurationProvider(): iterable {
 		yield [
 			[
 				'missing_start' => [
