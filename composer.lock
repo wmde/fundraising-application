@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6b330e70473eddcd4a4669689ad029a",
+    "content-hash": "3b052b5c82086dd0a40bc4ce54b7b8e3",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6883,16 +6883,16 @@
         },
         {
             "name": "wmde/fundraising-address-change",
-            "version": "v1.3.0",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-address-change",
-                "reference": "4e2d07f92207f21994b90748fe3da914f6c93e1f"
+                "reference": "27489ab347df1f28a4c37f02e6f86886d5f976a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/4e2d07f92207f21994b90748fe3da914f6c93e1f",
-                "reference": "4e2d07f92207f21994b90748fe3da914f6c93e1f",
+                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/27489ab347df1f28a4c37f02e6f86886d5f976a7",
+                "reference": "27489ab347df1f28a4c37f02e6f86886d5f976a7",
                 "shasum": ""
             },
             "require": {
@@ -6925,7 +6925,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Address change use case for fundraising application",
-            "time": "2022-06-21T10:02:12+00:00"
+            "time": "2023-02-16T16:46:38+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
