@@ -19,10 +19,10 @@ class DonorDataFormatter {
 			$donation->getDonor()->getName()->toArray(),
 			[
 				'fullName' => $donation->getDonor()->getName()->getFullName(),
-				'streetAddress' => $donation->getDonor()->getPhysicalAddress()->getStreetAddress(),
-				'postalCode' => $donation->getDonor()->getPhysicalAddress()->getPostalCode(),
+				'street' => $donation->getDonor()->getPhysicalAddress()->getStreetAddress(),
+				'postcode' => $donation->getDonor()->getPhysicalAddress()->getPostalCode(),
 				'city' => $donation->getDonor()->getPhysicalAddress()->getCity(),
-				'countryCode' => $donation->getDonor()->getPhysicalAddress()->getCountryCode(),
+				'country' => $donation->getDonor()->getPhysicalAddress()->getCountryCode(),
 				'email' => $donation->getDonor()->getEmailAddress()
 			] );
 	}

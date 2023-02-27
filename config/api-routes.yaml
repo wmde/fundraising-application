@@ -14,3 +14,8 @@ api_address_change_put:
     path: /api/v1/address_change/{identifier}
     methods: [PUT]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\API\Donation\AddressChangeController::update'
+
+api_update_donor_put:
+    path: /api/v1/donation/update/{accessToken}
+    methods: [PUT]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\API\Donation\UpdateDonorController::index'

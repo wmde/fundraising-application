@@ -2,37 +2,36 @@
 
 declare( strict_types = 1 );
 
-namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
+namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\APIRoutes;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
+use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDoctrineDonation;
-use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes\GetApplicationVarsTrait;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\UpdateDonorController
+ * @covers \WMDE\Fundraising\Frontend\App\Controllers\API\Donation\UpdateDonorController
  */
-class UpdateDonorRouteTest extends WebRouteTestCase {
+class UpdateDonorControllerTest extends WebRouteTestCase {
 
 	use RebuildDatabaseSchemaTrait;
 	use GetApplicationVarsTrait;
 
-	private const PATH = 'donation/update';
+	private const PATH = 'api/v1/donation/update';
 	private const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
 	private const INVALID_UPDATE_TOKEN = '2ba905fe68e61f3a681d8faf689bfeeb8c942b5b';
 
 	public function testWhenCorrectPrivatePersonDataIsPosted_addressIsChanged(): void {
-		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 		$factory = $this->getFactory();
 		$donation = $this->newStoredDonation( $factory );
@@ -45,24 +44,14 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 			self::CORRECT_UPDATE_TOKEN
 		);
 		$response = $client->getResponse();
-		$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
 
-		$crawler = $client->followRedirect();
-		$dataVars = $this->getDataApplicationVars( $crawler );
-		$expectedDonor = $this->newPrivateDonorData();
-		$this->assertEquals( $expectedDonor['addressType'], $dataVars->addressType );
-		$this->assertEquals( $expectedDonor['salutation'], $dataVars->address->salutation );
-		$this->assertEquals( $expectedDonor['firstName'], $dataVars->address->firstName );
-		$this->assertEquals( $expectedDonor['lastName'], $dataVars->address->lastName );
-		$this->assertEquals( $expectedDonor['street'], $dataVars->address->street );
-		$this->assertEquals( $expectedDonor['postcode'], $dataVars->address->postcode );
-		$this->assertEquals( $expectedDonor['city'], $dataVars->address->city );
-		$this->assertEquals( $expectedDonor['country'], $dataVars->address->country );
-		$this->assertEquals( $expectedDonor['email'], $dataVars->address->email );
+		$expectedDonorData = $this->newPrivateDonorData();
+
+		$this->assertSame( Response::HTTP_OK, $response->getStatusCode() );
+		$this->assertJsonResponse( $expectedDonorData, $response );
 	}
 
 	public function testWhenCorrectCompanyDataIsPosted_addressIsChanged(): void {
-		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 		$factory = $this->getFactory();
 		$donation = $this->newStoredDonation( $factory );
@@ -76,31 +65,28 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
 
-		$crawler = $client->followRedirect();
-		$dataVars = $this->getDataApplicationVars( $crawler );
 		$expectedDonorData = $this->newCompanyDonorData();
-		$this->assertEquals( $expectedDonorData['addressType'], $dataVars->addressType );
-		$this->assertEquals( $expectedDonorData['companyName'], $dataVars->address->fullName );
-		$this->assertEquals( $expectedDonorData['street'], $dataVars->address->street );
-		$this->assertEquals( $expectedDonorData['postcode'], $dataVars->address->postcode );
-		$this->assertEquals( $expectedDonorData['city'], $dataVars->address->city );
-		$this->assertEquals( $expectedDonorData['country'], $dataVars->address->country );
-		$this->assertEquals( $expectedDonorData['email'], $dataVars->address->email );
+
+		$this->assertSame( Response::HTTP_OK, $response->getStatusCode() );
+		$this->assertJsonResponse( $expectedDonorData, $response );
 	}
 
-	public function testGivenRequestWithoutParameters_resultIsError(): void {
+	public function testGivenRequestWithoutParameters_resultIsNotFound(): void {
 		$client = $this->createClient();
 
-		$client->request(
-			Request::METHOD_POST,
+		$client->jsonRequest(
+			Request::METHOD_PUT,
 			self::PATH,
 			[]
 		);
 
 		$response = $client->getResponse();
-		$this->assertTrue( $response->isForbidden(), 'Request is forbidden' );
+
+		$this->assertSame( Response::HTTP_NOT_FOUND, $response->getStatusCode() );
+		$this->assertJsonResponse( [
+			'ERR' => 'No route found for "PUT http://localhost/api/v1/donation/update"'
+		], $response );
 	}
 
 	public function testWhenInvalidUpdateTokenIsSupplied_requestIsDenied(): void {
@@ -117,11 +103,15 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		$this->assertTrue( $response->isForbidden() );
+
+		$this->assertSame( Response::HTTP_BAD_REQUEST, $response->getStatusCode() );
+		$this->assertJsonResponse( [
+			'ERR' => 'update_donor_failed',
+			'errors' => [ 'donor_change_failure_access_denied' ]
+		], $response );
 	}
 
 	public function testWhenDonationIsExported_requestIsDenied(): void {
-		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 		$factory = $this->getFactory();
 		$donation = ValidDoctrineDonation::newExportedirectDebitDoctrineDonation();
@@ -143,53 +133,46 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		$this->assertTrue( $response->isForbidden() );
+
+		$this->assertSame( Response::HTTP_BAD_REQUEST, $response->getStatusCode() );
+		$this->assertJsonResponse( [
+			'ERR' => 'update_donor_failed',
+			'errors' => [ 'donor_change_failure_exported' ]
+		], $response );
 	}
 
 	public function testWhenDonationDataIsInvalid_requestIsDenied(): void {
-		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 		$factory = $this->getFactory();
 		$donation = $this->newStoredDonation( $factory );
 		$donorData = $this->newPrivateDonorData();
 		$donorData['email'] = 'this_is_not_a_valid_email_address.de';
-		$crawler = $this->performRequest(
+
+		$this->performRequest(
 			$client,
 			$donorData,
 			$donation->getId(),
 			self::CORRECT_UPDATE_TOKEN,
 			self::CORRECT_UPDATE_TOKEN
 		);
-		$dataVars = $this->getDataApplicationVars( $crawler );
-		$response = $client->getResponse();
-		$this->assertTrue( $response->isSuccessful() );
-		$this->assertStringContainsString(
-			'donor_change_failure_validation_error',
-			$dataVars->updateData->message
-		);
-	}
 
-	protected static function createClient(): KernelBrowser {
-		$client = parent::createClient();
-		// Don't drop database and other services after redirect
-		if ( $client instanceof KernelBrowser ) {
-			$client->disableReboot();
-			return $client;
-		}
-		throw new \LogicException( 'Unexpected client: ' . get_class( $client ) );
+		$response = $client->getResponse();
+
+		$this->assertSame( Response::HTTP_BAD_REQUEST, $response->getStatusCode() );
+		$this->assertJsonResponse( [
+			'ERR' => 'update_donor_failed',
+			'errors' => [ 'donor_change_failure_validation_error' ]
+		], $response );
 	}
 
 	private function performRequest( Client $client, array $data, int $donationId, string $accessToken, string $updateToken ): Crawler {
-		return $client->request(
-			Request::METHOD_POST,
-			self::PATH . '?accessToken=' . $accessToken,
-			array_merge(
-				[
-					'donation_id' => $donationId,
-					'updateToken' => $updateToken
-				],
-				$data
-			)
+		return $client->jsonRequest(
+			Request::METHOD_PUT,
+			self::PATH . '/' . $accessToken,
+			array_merge( [
+				'donationId' => $donationId,
+				'updateToken' => $updateToken
+			], $data )
 		);
 	}
 
@@ -207,37 +190,29 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	private function newPrivateDonorData(): array {
 		return [
 			'addressType' => AddressType::LEGACY_PERSON,
+			'salutation' => 'Herr',
+			'title' => '',
+			'firstName' => 'Hans',
+			'lastName' => 'Wurst',
+			'fullName' => 'Hans Wurst',
+			'street' => 'Teststraße 123',
+			'postcode' => '12345',
 			'city' => 'Mönchengladbach',
 			'country' => 'DE',
 			'email' => 'test@test.de',
-			'firstName' => 'Hans',
-			'lastName' => 'Wurst',
-			'postcode' => '12345',
-			'salutation' => 'Herr',
-			'street' => 'Teststraße 123',
 		];
 	}
 
 	private function newCompanyDonorData(): array {
 		return [
 			'addressType' => AddressType::LEGACY_COMPANY,
-			'city' => 'Mönchengladbach',
 			'companyName' => 'Wikimedia Deutschland Money Makers GmbH',
+			'fullName' => 'Wikimedia Deutschland Money Makers GmbH',
+			'street' => 'Teststraße 123',
+			'postcode' => '12345',
+			'city' => 'Mönchengladbach',
 			'country' => 'DE',
 			'email' => 'test@test.de',
-			'postcode' => '12345',
-			'street' => 'Teststraße 123',
-
 		];
-	}
-
-	private function newValidSuccessRedirectUrl( Donation $donation, FunFunFactory $ffFactory ): string {
-		return $ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-			Routes::SHOW_DONATION_CONFIRMATION,
-			[
-				'id' => $donation->getId(),
-				'accessToken' => self::CORRECT_UPDATE_TOKEN
-			]
-		);
 	}
 }

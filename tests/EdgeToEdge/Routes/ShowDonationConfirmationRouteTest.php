@@ -61,9 +61,10 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertEquals( $this->donation->getDonor()->getName()->getFullName(), $dataVars->address->fullName );
 		$this->assertEquals( $personNameValues['firstName'], $dataVars->address->firstName );
 		$this->assertEquals( $personNameValues['lastName'], $dataVars->address->lastName );
-		$this->assertEquals( $physicalAddress->getStreetAddress(), $dataVars->address->streetAddress );
-		$this->assertEquals( $physicalAddress->getPostalCode(), $dataVars->address->postalCode );
+		$this->assertEquals( $physicalAddress->getStreetAddress(), $dataVars->address->street );
+		$this->assertEquals( $physicalAddress->getPostalCode(), $dataVars->address->postcode );
 		$this->assertEquals( $physicalAddress->getCity(), $dataVars->address->city );
+		$this->assertEquals( $physicalAddress->getCountryCode(), $dataVars->address->country );
 		$this->assertEquals( $this->donation->getDonor()->getEmailAddress(), $dataVars->address->email );
 
 		$this->assertEquals( $paymentData['iban'], $dataVars->bankData->iban );
