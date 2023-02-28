@@ -12,14 +12,11 @@ use Twig\Environment;
  */
 class TwigTemplate {
 
-	private $twig;
-	private $templatePath;
-	private $context;
-
-	public function __construct( Environment $twig, string $templatePath, array $context = [] ) {
-		$this->twig = $twig;
-		$this->templatePath = $templatePath;
-		$this->context = $context;
+	public function __construct(
+		private readonly Environment $twig,
+		private readonly string $templatePath,
+		private readonly array $context = []
+	) {
 	}
 
 	public function render( array $arguments ): string {

@@ -55,7 +55,7 @@ class BucketLog {
 		return $this->buckets;
 	}
 
-	public function addBucket( string $bucketName, string $campaign ) {
+	public function addBucket( string $bucketName, string $campaign ): void {
 		$this->buckets->add( new BucketLogBucket( $this, $bucketName, $campaign ) );
 	}
 

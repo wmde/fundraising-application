@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface
  */
 class ThrowingCampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 
-	private $exception;
+	private \Throwable $exception;
 
 	public function __construct(
 		\Throwable $exception

@@ -16,7 +16,6 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 /**
  * Generate different error responses for the different exceptions.
- *
  */
 class HandleExceptions implements EventSubscriberInterface {
 
@@ -28,6 +27,9 @@ class HandleExceptions implements EventSubscriberInterface {
 		$this->presenterFactory = $presenterFactory;
 	}
 
+	/**
+	 * @return array<string, array{string, int}>
+	 */
 	public static function getSubscribedEvents(): array {
 		return [
 			KernelEvents::EXCEPTION => [ 'onKernelException', self::PRIORITY ]
@@ -75,7 +77,7 @@ class HandleExceptions implements EventSubscriberInterface {
 		) );
 	}
 
-	private function createInternalErrorResponse( ExceptionEvent $event ) {
+	private function createInternalErrorResponse( ExceptionEvent $event ): void {
 		$exception = $event->getThrowable();
 		if ( $this->isJsonRequest( $event ) ) {
 			$event->setResponse( new JsonResponse(

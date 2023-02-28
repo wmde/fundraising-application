@@ -39,14 +39,14 @@ class CampaignFeatureBuilder {
 		return $featureSet;
 	}
 
-	private function addActiveCampaignFeatures( Campaign $campaign, Set $featureSet ) {
+	private function addActiveCampaignFeatures( Campaign $campaign, Set $featureSet ): void {
 		foreach ( $campaign->getBuckets() as $bucket ) {
 			$feature = new Feature( $bucket->getId(), true, $this->getRules( $bucket ) );
 			$featureSet->pushFeature( $feature );
 		}
 	}
 
-	private function addDefaultCampaignFeatures( Campaign $campaign, Set $featureSet ) {
+	private function addDefaultCampaignFeatures( Campaign $campaign, Set $featureSet ): void {
 		foreach ( $campaign->getBuckets() as $bucket ) {
 			$feature = new Feature( $bucket->getId(), $bucket->isDefaultBucket() );
 			$featureSet->pushFeature( $feature );

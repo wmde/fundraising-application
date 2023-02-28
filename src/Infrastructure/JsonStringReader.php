@@ -11,13 +11,12 @@ use FileFetcher\FileFetcher;
  */
 class JsonStringReader {
 
-	private $file;
-	private $fileFetcher;
-	private $json;
+	private string $json = '';
 
-	public function __construct( string $file, FileFetcher $fileFetcher ) {
-		$this->file = $file;
-		$this->fileFetcher = $fileFetcher;
+	public function __construct(
+		private readonly string $file,
+		private readonly FileFetcher $fileFetcher
+	) {
 	}
 
 	private function getJsonFile(): string {

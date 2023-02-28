@@ -10,12 +10,10 @@ use WMDE\FunValidators\StringList;
 
 class WordListFileReader implements StringList {
 
-	private $fileFetcher;
-	private $fileName;
-
-	public function __construct( ErrorLoggingFileFetcher $fileFetcher, string $fileName ) {
-		$this->fileFetcher = $fileFetcher;
-		$this->fileName = $fileName;
+	public function __construct(
+		private readonly ErrorLoggingFileFetcher $fileFetcher,
+		private readonly string $fileName
+	) {
 	}
 
 	public function toArray(): array {

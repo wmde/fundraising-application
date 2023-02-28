@@ -35,8 +35,7 @@ class ApplyForMembershipController {
 
 		try {
 			$responseModel = $this->callUseCase( $httpRequest );
-		}
-		catch ( \InvalidArgumentException $ex ) {
+		} catch ( \InvalidArgumentException $ex ) {
 			return $this->newFailureResponse( $httpRequest );
 		}
 

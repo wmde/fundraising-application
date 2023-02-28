@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  * @license GPL-2.0-or-later
  */
 class FakeEnvironmentSetup implements EnvironmentSetup {
-	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
+	public function setEnvironmentDependentInstances( FunFunFactory $factory ): void {
 		// nothing to do here
 	}
 

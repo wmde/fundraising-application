@@ -14,8 +14,11 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
  */
 class TemplateBasedMailerSpy implements GetInTouchMailerInterface, DonationTemplateMailerInterface {
 
-	private $testCase;
-	private $sendMailCalls = [];
+	private TestCase $testCase;
+	/**
+	 * @var array<int, array{EmailAddress, array}>
+	 */
+	private array $sendMailCalls = [];
 
 	public function __construct( TestCase $testCase ) {
 		$this->testCase = $testCase;

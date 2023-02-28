@@ -8,7 +8,10 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 
 class CampaignErrorCollection {
 
-	private $errors = [];
+	/**
+	 * @var string[]
+	 */
+	private array $errors = [];
 
 	public function addError( string $error, Campaign $campaign = null ): void {
 		if ( $campaign ) {
@@ -17,6 +20,9 @@ class CampaignErrorCollection {
 		$this->errors[] = $error;
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getErrors(): array {
 		return $this->errors;
 	}

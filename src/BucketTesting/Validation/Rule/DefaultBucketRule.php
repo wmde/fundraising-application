@@ -15,8 +15,7 @@ class DefaultBucketRule implements CampaignValidationRuleInterface {
 	public function validate( Campaign $campaign, CampaignErrorCollection $errorLogger ): bool {
 		try {
 			$campaign->getDefaultBucket();
-		}
-		catch ( \LogicException $e ) {
+		} catch ( \LogicException $e ) {
 			$errorLogger->addError( 'Must have a valid default bucket.', $campaign );
 			return false;
 		}

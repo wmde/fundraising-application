@@ -26,7 +26,10 @@ class StoreLocale implements EventSubscriberInterface {
 		$this->allowedLocales = $allowedLocales;
 	}
 
-	public static function getSubscribedEvents() {
+	/**
+	 * @return array<string, array{string, int}>
+	 */
+	public static function getSubscribedEvents(): array {
 		return [
 			KernelEvents::REQUEST => [ 'setLocale', self::PRIORITY ],
 			KernelEvents::RESPONSE => [ 'storeLocaleCookie', self::PRIORITY ],

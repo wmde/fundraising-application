@@ -14,16 +14,11 @@ use WMDE\FunValidators\ValidationResponse;
  * @license GPL-2.0-or-later
  */
 class GetInTouchUseCase {
-
-	private $validator;
-	private $operatorMailer;
-	private $userMailer;
-
-	public function __construct( GetInTouchValidator $validator, OperatorMailer $operatorMailer,
-		GetInTouchMailerInterface $userMailer ) {
-		$this->validator = $validator;
-		$this->operatorMailer = $operatorMailer;
-		$this->userMailer = $userMailer;
+	public function __construct(
+		private readonly GetInTouchValidator $validator,
+		private readonly OperatorMailer $operatorMailer,
+		private readonly GetInTouchMailerInterface $userMailer
+	) {
 	}
 
 	public function processContactRequest( GetInTouchRequest $request ): ValidationResponse {

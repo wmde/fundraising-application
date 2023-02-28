@@ -11,17 +11,16 @@ use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface
  */
 class OverridingCampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 
-	private $additionalCampaignConfiguration;
-	private $originalLoader;
+	/**
+	 * @var callable|\Closure
+	 */
 	private $modifyConfiguration;
 
 	public function __construct(
-		CampaignConfigurationLoaderInterface $originalLoader,
-		array $additionalCampaignConfiguration,
+		private readonly CampaignConfigurationLoaderInterface $originalLoader,
+		private readonly array $additionalCampaignConfiguration,
 		?callable $modifyConfiguration = null
 	) {
-		$this->additionalCampaignConfiguration = $additionalCampaignConfiguration;
-		$this->originalLoader = $originalLoader;
 		$this->modifyConfiguration = $modifyConfiguration ?: static function ( $config ): array {
 			return $config;
 		};

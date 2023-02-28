@@ -13,12 +13,10 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
  */
 class JsonBucketLogger implements BucketLogger {
 
-	private $logWriter;
-	private $clock;
-
-	public function __construct( LogWriter $logWriter, Clock $clock ) {
-		$this->logWriter = $logWriter;
-		$this->clock = $clock;
+	public function __construct(
+		private readonly LogWriter $logWriter,
+		private readonly Clock $clock
+	) {
 	}
 
 	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void {

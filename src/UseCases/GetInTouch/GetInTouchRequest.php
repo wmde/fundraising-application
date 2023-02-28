@@ -4,29 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\UseCases\GetInTouch;
 
-/**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
- */
 class GetInTouchRequest {
 
-	private $firstName;
-	private $lastName;
-	private $emailAddress;
-	private $donationNumber;
-	private $subject;
-	private $category;
-	private $messageBody;
-
-	public function __construct( string $firstName, string $lastName, string $emailAddress,
-								 string $donationNumber, string $subject, string $category, string $messageBody ) {
-		$this->firstName = $firstName;
-		$this->lastName = $lastName;
-		$this->emailAddress = $emailAddress;
-		$this->donationNumber = $donationNumber;
-		$this->subject = $subject;
-		$this->category = $category;
-		$this->messageBody = $messageBody;
+	public function __construct(
+		private readonly string $firstName,
+		private readonly string $lastName,
+		private readonly string $emailAddress,
+		private readonly string $donationNumber,
+		private readonly string $subject,
+		private readonly string $category,
+		private readonly string $messageBody
+	) {
 	}
 
 	public function getFirstName(): string {

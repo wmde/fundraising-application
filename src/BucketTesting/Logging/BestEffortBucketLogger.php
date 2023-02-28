@@ -14,7 +14,7 @@ class BestEffortBucketLogger implements BucketLogger {
 
 	private BucketLogger $bucketLogger;
 	private LoggerInterface $errorLogging;
-	private $caughtException;
+	private ?LoggingError $caughtException = null;
 
 	public function __construct( BucketLogger $bucketLogger, LoggerInterface $errorLogging ) {
 		$this->bucketLogger = $bucketLogger;

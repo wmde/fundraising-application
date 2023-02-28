@@ -19,7 +19,10 @@ class StoreBucketSelection implements EventSubscriberInterface {
 		$this->factory = $factory;
 	}
 
-	public static function getSubscribedEvents() {
+	/**
+	 * @return array<string, array{string, int}>
+	 */
+	public static function getSubscribedEvents(): array {
 		return [
 			KernelEvents::REQUEST => [ 'setSelectedBuckets', self::PRIORITY ],
 		];

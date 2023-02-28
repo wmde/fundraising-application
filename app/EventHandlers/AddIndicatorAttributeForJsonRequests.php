@@ -18,7 +18,10 @@ class AddIndicatorAttributeForJsonRequests implements EventSubscriberInterface {
 	private const PRIORITY = 64;
 	public const REQUEST_IS_JSON_ATTRIBUTE = 'request_stack.is_json';
 
-	public static function getSubscribedEvents() {
+	/**
+	 * @return array<string, array{string, int}>
+	 */
+	public static function getSubscribedEvents(): array {
 		return [
 			// Priority needs to be higher than the one for error handling interception,
 			// to be able to recognize JSON requests when creating an error handling response

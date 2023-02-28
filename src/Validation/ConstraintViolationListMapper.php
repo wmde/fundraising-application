@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  */
 class ConstraintViolationListMapper {
 
-	private $propertyAccessor;
+	private PropertyAccessor $propertyAccessor;
 
 	public function __construct() {
 		$this->propertyAccessor = PropertyAccess::createPropertyAccessor();

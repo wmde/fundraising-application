@@ -15,19 +15,19 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class ProductionEnvironmentSetup implements EnvironmentSetup {
 
-	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
+	public function setEnvironmentDependentInstances( FunFunFactory $factory ): void {
 		$this->setCampaignCache( $factory );
 		$this->initializeLoggers( $factory );
 		$this->setDoctrineConfiguration( $factory );
 	}
 
-	private function initializeLoggers( FunFunFactory $factory ) {
+	private function initializeLoggers( FunFunFactory $factory ): void {
 		$this->setPaypalLogger( $factory );
 		$this->setSofortLogger( $factory );
 		$this->setCreditCardLogger( $factory );
 	}
 
-	private function setCampaignCache( FunFunFactory $factory ) {
+	private function setCampaignCache( FunFunFactory $factory ): void {
 		$factory->setCampaignCache(
 			new Psr16Cache(
 				new FilesystemAdapter( 'campaigns', 60 * 60 * 24 * 7, $factory->getCachePath() . '/campaigns' )
@@ -35,15 +35,15 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 		);
 	}
 
-	private function setPaypalLogger( FunFunFactory $factory ) {
+	private function setPaypalLogger( FunFunFactory $factory ): void {
 		$factory->setPaypalLogger( $this->createStreamLoggerForPayment( 'paypal', $factory->getLoggingPath() ) );
 	}
 
-	private function setSofortLogger( FunFunFactory $factory ) {
+	private function setSofortLogger( FunFunFactory $factory ): void {
 		$factory->setSofortLogger( $this->createStreamLoggerForPayment( 'sofort', $factory->getLoggingPath() ) );
 	}
 
-	private function setDoctrineConfiguration( FunFunFactory $factory ) {
+	private function setDoctrineConfiguration( FunFunFactory $factory ): void {
 		$factory->setDoctrineConfiguration( ORMSetup::createXMLMetadataConfiguration(
 			$factory->getDoctrineXMLMappingPaths(),
 			false,
@@ -51,7 +51,7 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 		);
 	}
 
-	private function setCreditCardLogger( FunFunFactory $factory ) {
+	private function setCreditCardLogger( FunFunFactory $factory ): void {
 		$factory->setCreditCardLogger( $this->createStreamLoggerForPayment( 'creditcard', $factory->getLoggingPath() ) );
 	}
 

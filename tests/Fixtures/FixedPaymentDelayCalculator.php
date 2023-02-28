@@ -12,10 +12,7 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
  */
 class FixedPaymentDelayCalculator implements PaymentDelayCalculator {
 
-	private $fixedDate;
-
-	public function __construct( \DateTime $fixedDate ) {
-		$this->fixedDate = $fixedDate;
+	public function __construct( private readonly \DateTime $fixedDate ) {
 	}
 
 	public function calculateFirstPaymentDate(): \DateTime {

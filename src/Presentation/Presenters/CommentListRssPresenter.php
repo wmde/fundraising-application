@@ -8,16 +8,9 @@ use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentWithAmount;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentList;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
-/**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
- */
 class CommentListRssPresenter {
 
-	private $template;
-
-	public function __construct( TwigTemplate $template ) {
-		$this->template = $template;
+	public function __construct( private readonly TwigTemplate $template ) {
 	}
 
 	public function present( CommentList $commentList ): string {

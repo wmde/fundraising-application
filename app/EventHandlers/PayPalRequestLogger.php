@@ -40,8 +40,7 @@ class PayPalRequestLogger implements EventSubscriberInterface {
 		$filesystem = new Filesystem();
 		try {
 			$filesystem->appendToFile( $this->logFilePath, $this->getLogLine( $request ) );
-		}
-		catch ( IOException $e ) {
+		} catch ( IOException $e ) {
 			$this->errorLog->error( $e->getMessage() );
 		}
 	}

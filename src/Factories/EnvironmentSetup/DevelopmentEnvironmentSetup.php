@@ -14,7 +14,7 @@ class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 
 	private ErrorLogHandler $logHandler;
 
-	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
+	public function setEnvironmentDependentInstances( FunFunFactory $factory ): void {
 		$this->logHandler = new ErrorLogHandler();
 		$this->setPaypalLogger( $factory );
 		$this->setSofortLogger( $factory );
@@ -22,23 +22,23 @@ class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 		$this->setErrorPageHtmlPresenter( $factory );
 	}
 
-	private function setErrorPageHtmlPresenter( FunFunFactory $factory ) {
+	private function setErrorPageHtmlPresenter( FunFunFactory $factory ): void {
 		$factory->setInternalErrorHtmlPresenter(
 			new DevelopmentInternalErrorHtmlPresenter()
 		);
 	}
 
-	private function setPaypalLogger( FunFunFactory $factory ) {
+	private function setPaypalLogger( FunFunFactory $factory ): void {
 		$logger = new Logger( 'paypal', [ $this->logHandler ] );
 		$factory->setPaypalLogger( $logger );
 	}
 
-	private function setSofortLogger( FunFunFactory $factory ) {
+	private function setSofortLogger( FunFunFactory $factory ): void {
 		$logger = new Logger( 'sofort', [ $this->logHandler ] );
 		$factory->setSofortLogger( $logger );
 	}
 
-	private function setDoctrineConfiguration( FunFunFactory $factory ) {
+	private function setDoctrineConfiguration( FunFunFactory $factory ): void {
 		// Setup will use /tmp for proxies and ArrayCache for caching
 		$factory->setDoctrineConfiguration( ORMSetup::createXMLMetadataConfiguration( $factory->getDoctrineXMLMappingPaths(), true ) );
 	}

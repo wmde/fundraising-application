@@ -10,10 +10,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
  */
 class MailTemplateFilenameTraversable implements \IteratorAggregate {
 
-	private $mailTemplatePath;
-
-	public function __construct( string $mailTemplatePath ) {
-		$this->mailTemplatePath = $mailTemplatePath;
+	public function __construct( private readonly string $mailTemplatePath ) {
 	}
 
 	public function getIterator(): \Iterator {

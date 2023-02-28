@@ -6,19 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\DonationContext\Authorization\TokenGenerator;
 
-/**
- * TODO: move into Donation BC
- *
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
- */
 class FixedTokenGenerator implements TokenGenerator {
+	private \DateTime $expiry;
 
-	private $token;
-	private $expiry;
-
-	public function __construct( string $token, \DateTime $expiry = null ) {
-		$this->token = $token;
+	public function __construct( private readonly string $token, ?\DateTime $expiry = null ) {
 		$this->expiry = $expiry === null ? new \DateTime() : $expiry;
 	}
 
@@ -29,5 +20,4 @@ class FixedTokenGenerator implements TokenGenerator {
 	public function generateTokenExpiry(): \DateTime {
 		return $this->expiry;
 	}
-
 }

@@ -8,7 +8,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingEvent;
 
 class MembershipApplicationCreated implements LoggingEvent {
 
-	private $metadata;
+	private array $metadata;
 
 	public function __construct( int $membershipApplicationId ) {
 		$this->metadata = [

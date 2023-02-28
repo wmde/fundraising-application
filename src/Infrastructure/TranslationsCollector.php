@@ -9,14 +9,12 @@ use RuntimeException;
 
 class TranslationsCollector {
 
-	private $fileFetcher;
-	private $translationFiles = [];
+	private array $translationFiles = [];
 
-	public function __construct( FileFetcher $fileFetcher ) {
-		$this->fileFetcher = $fileFetcher;
+	public function __construct( private readonly FileFetcher $fileFetcher ) {
 	}
 
-	public function addTranslationFile( string $transFile ) {
+	public function addTranslationFile( string $transFile ): void {
 		$this->translationFiles[] = $transFile;
 	}
 
