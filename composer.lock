@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e268985fcdd01e806f40dbaa24bce28b",
+    "content-hash": "d965387ec8fe24b58b0a5766e364509d",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6995,16 +6995,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v12.0.0",
+            "version": "v13.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "7765096f0dce529d21cf403f19828ee3d3dc57a3"
+                "reference": "4113473c5c75caeb30e4ffd1d7d7b85897db4152"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/7765096f0dce529d21cf403f19828ee3d3dc57a3",
-                "reference": "7765096f0dce529d21cf403f19828ee3d3dc57a3",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/4113473c5c75caeb30e4ffd1d7d7b85897db4152",
+                "reference": "4113473c5c75caeb30e4ffd1d7d7b85897db4152",
                 "shasum": ""
             },
             "require": {
@@ -7026,7 +7026,7 @@
                 "mikey179/vfsstream": "~1.6",
                 "phpmd/phpmd": "~2.6",
                 "phpstan/phpstan": "^1.7",
-                "phpunit/phpunit": "~9.5.1",
+                "phpunit/phpunit": "~10.0.1",
                 "symfony/cache": "^6.1",
                 "wmde/fundraising-phpcs": "~7.0.0",
                 "wmde/psr-log-test-doubles": "~3.0"
@@ -7052,7 +7052,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2023-01-06T16:17:10+00:00"
+            "time": "2023-03-06T08:53:15+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
