@@ -19,7 +19,7 @@ class SubmissionRateLimit {
 
 	public function isSubmissionAllowed( SessionInterface $session ): bool {
 		$lastSubmission = $session->get( $this->sessionKey, null );
-		if ( $lastSubmission === null || !( $lastSubmission instanceof \DateTimeImmutable ) ) {
+		if ( !( $lastSubmission instanceof \DateTimeImmutable ) ) {
 			return true;
 		}
 
@@ -31,9 +31,9 @@ class SubmissionRateLimit {
 		return true;
 	}
 
-	public function setRateLimitCookie( SessionInterface $session ) {
+	public function setRateLimitCookie( SessionInterface $session ): void {
 		$lastSubmission = $session->get( $this->sessionKey, null );
-		if ( $lastSubmission === null || !( $lastSubmission instanceof \DateTimeImmutable ) ) {
+		if ( !( $lastSubmission instanceof \DateTimeImmutable ) ) {
 			$session->set( $this->sessionKey, new \DateTimeImmutable() );
 		}
 	}

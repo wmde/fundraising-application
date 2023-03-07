@@ -9,12 +9,12 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 
 class BucketSelectionSpy implements BucketSelectionStrategy {
+	/**
+	 * @var Bucket[]
+	 */
+	private array $bucketSelections = [];
 
-	private $bucketSelector;
-	private $bucketSelections;
-
-	public function __construct( BucketSelectionStrategy $bucketSelector ) {
-		$this->bucketSelector = $bucketSelector;
+	public function __construct( private readonly BucketSelectionStrategy $bucketSelector ) {
 		$this->bucketSelections = [];
 	}
 

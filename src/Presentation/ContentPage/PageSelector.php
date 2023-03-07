@@ -6,10 +6,10 @@ namespace WMDE\Fundraising\Frontend\Presentation\ContentPage;
 
 class PageSelector {
 
-	private $config;
-
-	public function __construct( array $config ) {
-		$this->config = $config;
+	/**
+	 * @param array<string,string> $config pageId => slug
+	 */
+	public function __construct( private readonly array $config ) {
 	}
 
 	public function getPageId( string $slug ): string {

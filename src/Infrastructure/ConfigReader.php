@@ -15,19 +15,15 @@ use stdClass;
  */
 class ConfigReader {
 
-	private $fileFetcher;
-
 	/**
 	 * @var string[]
 	 */
 	private $configPaths;
 
-	public function __construct( FileFetcher $fileFetcher, string ...$configPaths ) {
+	public function __construct( private readonly FileFetcher $fileFetcher, string ...$configPaths ) {
 		if ( empty( $configPaths ) ) {
 			throw new \InvalidArgumentException( 'Need at least one config path' );
 		}
-
-		$this->fileFetcher = $fileFetcher;
 		$this->configPaths = $configPaths;
 	}
 
@@ -67,8 +63,7 @@ class ConfigReader {
 	private function getFileContents( string $filePath ): string {
 		try {
 			return $this->fileFetcher->fetchFile( $filePath );
-		}
-		catch ( FileFetchingException $ex ) {
+		} catch ( FileFetchingException $ex ) {
 			throw new RuntimeException( 'Cannot read config file at path "' . $filePath . '"', 0, $ex );
 		}
 	}

@@ -11,17 +11,10 @@ use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\FunValidators\Validators\IntegerValueValidator;
 use WMDE\FunValidators\Validators\RequiredFieldValidator;
 
-/**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
- */
 class GetInTouchValidator {
 	use CanValidateField;
 
-	private $mailValidator;
-
-	public function __construct( EmailValidator $mailValidator ) {
-		$this->mailValidator = $mailValidator;
+	public function __construct( private readonly EmailValidator $mailValidator ) {
 	}
 
 	public function validate( GetInTouchRequest $instance ): ValidationResult {

@@ -17,10 +17,7 @@ use WMDE\Fundraising\Frontend\Tests\Unit\Cli\CampaignUtilizationValidatorTest;
  */
 class FakeInconsistentChoiceFactory {
 
-	private $featureToggle;
-
-	public function __construct( FeatureToggle $featureToggle ) {
-		$this->featureToggle = $featureToggle;
+	public function __construct( private readonly FeatureToggle $featureToggle ) {
 	}
 
 	public function someFakeBucketSelection(): string {

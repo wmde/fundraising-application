@@ -7,7 +7,10 @@ use Doctrine\Common\EventArgs;
 use Doctrine\Common\EventSubscriber;
 
 class FakeEventSubscriber implements EventSubscriber {
-	public function getSubscribedEvents() {
+	/**
+	 * @return string[]
+	 */
+	public function getSubscribedEvents(): array {
 		return [
 			'onFlush'
 		];

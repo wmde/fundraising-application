@@ -22,10 +22,10 @@ class ConfigReaderTest extends TestCase {
 	/**
 	 * @var vfsStreamDirectory
 	 */
-	private $dir;
+	private vfsStreamDirectory $dir;
 
-	private $distPath;
-	private $emptyPath;
+	private string $distPath;
+	private string $emptyPath;
 
 	public function setUp(): void {
 		$this->dir = vfsStream::setup( 'ConfigReaderTest' );

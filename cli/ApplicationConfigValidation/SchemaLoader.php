@@ -13,7 +13,7 @@ use FileFetcher\FileFetchingException;
  */
 class SchemaLoader {
 
-	private $fileFetcher;
+	private FileFetcher $fileFetcher;
 
 	public function __construct( FileFetcher $fileFetcher ) {
 		$this->fileFetcher = $fileFetcher;

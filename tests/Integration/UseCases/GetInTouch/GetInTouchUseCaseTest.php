@@ -30,13 +30,12 @@ class GetInTouchUseCaseTest extends TestCase {
 	private const INQUIRY_CATEGORY = 'Other';
 	private const INQUIRY_MESSAGE = 'What is it you do?';
 
-	private $validator;
+	private GetInTouchValidator $validator;
 
 	/** @var OperatorMailer&MockObject */
-	private $operatorMailer;
+	private OperatorMailer $operatorMailer;
 
-	/** @var TemplateBasedMailerSpy */
-	private $userMailer;
+	private TemplateBasedMailerSpy $userMailer;
 
 	public function setUp(): void {
 		$this->validator = $this->newSucceedingValidator();

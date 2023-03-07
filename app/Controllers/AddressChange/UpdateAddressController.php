@@ -77,7 +77,7 @@ class UpdateAddressController {
 			->setCountry( $params->get( 'country', 'DE' ) );
 	}
 
-	private function addReceiptParams( ChangeAddressRequest $request, ParameterBag $params ) {
+	private function addReceiptParams( ChangeAddressRequest $request, ParameterBag $params ): void {
 		if ( $params->get( 'receiptOptOut', '' ) ) {
 			$request->setDonationReceipt( false );
 			$request->setIsOptOutOnly( $this->isOptOutOnly( $params ) );

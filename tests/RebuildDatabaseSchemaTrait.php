@@ -13,8 +13,7 @@ trait RebuildDatabaseSchemaTrait {
 
 		try {
 			$schemaCreator->dropSchema();
-		}
-		catch ( \Exception $ex ) {
+		} catch ( \Exception $ex ) {
 		}
 
 		$schemaCreator->createSchema();

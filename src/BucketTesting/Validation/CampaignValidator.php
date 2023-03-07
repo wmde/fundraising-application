@@ -21,15 +21,15 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\UniqueBucketRule;
  */
 class CampaignValidator {
 
-	private $campaignCollection;
-	private $hasValidated = false;
-	private $errorLogger;
-	/** @var CampaignValidationRuleInterface[] */
-	private $rules = [];
+	private bool $hasValidated = false;
 
-	public function __construct( CampaignCollection $campaignCollection, CampaignErrorCollection $errorLogger ) {
-		$this->campaignCollection = $campaignCollection;
-		$this->errorLogger = $errorLogger;
+	/** @var CampaignValidationRuleInterface[] */
+	private array $rules = [];
+
+	public function __construct(
+		private readonly CampaignCollection $campaignCollection,
+		private readonly CampaignErrorCollection $errorLogger
+	) {
 		$this->rules = [ new DefaultBucketRule(), new StartAndEndTimeRule(), new UniqueBucketRule(), new MinBucketCountRule() ];
 	}
 
@@ -43,7 +43,7 @@ class CampaignValidator {
 		return $this->errorLogger->getErrors();
 	}
 
-	private function validate() {
+	private function validate(): void {
 		if ( $this->hasValidated ) {
 			return;
 		}

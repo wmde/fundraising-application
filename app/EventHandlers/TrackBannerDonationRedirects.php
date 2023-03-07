@@ -29,7 +29,10 @@ class TrackBannerDonationRedirects implements EventSubscriberInterface {
 	private string $confirmationRoute;
 	private string $bannerSubmissionUrlParameter;
 
-	public static function getSubscribedEvents() {
+	/**
+	 * @return array<string, string>
+	 */
+	public static function getSubscribedEvents(): array {
 		return [
 			KernelEvents::REQUEST => 'onKernelRequest',
 			KernelEvents::RESPONSE => 'onKernelResponse'

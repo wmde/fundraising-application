@@ -147,7 +147,6 @@ use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelDonationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelMembershipApplicationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
@@ -720,7 +719,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	public function setFeatureReader( FeatureReader $featureReader ) {
+	public function setFeatureReader( FeatureReader $featureReader ): void {
 		$this->sharedObjects[FeatureReader::class] = $featureReader;
 	}
 
@@ -1175,12 +1174,6 @@ class FunFunFactory implements LoggerAwareInterface {
 			),
 			$this->getUrlGenerator(),
 			$this->newGetPaymentUseCase()
-		);
-	}
-
-	public function newCancelDonationHtmlPresenter(): CancelDonationHtmlPresenter {
-		return new CancelDonationHtmlPresenter(
-			$this->getLayoutTemplate( 'Donation_Cancellation_Confirmation.html.twig' )
 		);
 	}
 
@@ -1928,7 +1921,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	private function getMailTemplateDirectory() {
+	private function getMailTemplateDirectory(): string {
 		return $this->createSharedObject( 'MAIL_TEMPLATE_DIRECTORY', function (): string {
 			return $this->getAbsolutePath( $this->config['mailer-twig']['loaders']['filesystem']['template-dir'] );
 		} );

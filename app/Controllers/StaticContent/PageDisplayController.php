@@ -23,15 +23,13 @@ class PageDisplayController {
 
 		try {
 			$pageId = $pageSelector->getPageId( $pageName );
-		}
-		catch ( PageNotFoundException $exception ) {
+		} catch ( PageNotFoundException $exception ) {
 			throw new NotFoundHttpException( "Page page name '$pageName' not found." );
 		}
 
 		try {
 			return new Response( $this->getPageTemplate( $pageId )->render( [ 'page_id' => $pageId ] ) );
-		}
-		catch ( RuntimeError $exception ) {
+		} catch ( RuntimeError $exception ) {
 			if ( $exception->getPrevious() instanceof ContentNotFoundException ) {
 				throw new NotFoundHttpException( "Content for page id '$pageId' not found." );
 			}

@@ -14,8 +14,8 @@ use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
  * @covers \WMDE\Fundraising\Frontend\Presentation\BucketRenderer
  */
 class BucketRendererTest extends TestCase {
-	private $campaign1;
-	private $campaign2;
+	private Campaign $campaign1;
+	private Campaign $campaign2;
 
 	protected function setUp(): void {
 		$now = new CampaignDate();

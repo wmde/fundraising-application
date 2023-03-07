@@ -81,7 +81,7 @@ class CreateAddressChangeHandler {
 		] );
 	}
 
-	private function persistIfNeeded( AddressChange $addressChange ) {
+	private function persistIfNeeded( AddressChange $addressChange ): void {
 		$countCriteria = [ 'externalId' => $addressChange->getExternalId(), 'externalIdType' => $addressChange->getExternalIdType() ];
 		if ( $this->entityManager->getRepository( AddressChange::class )->count( $countCriteria ) > 0 ) {
 			// New donations/memberships should never have address change records, but if they do, let's do nothing

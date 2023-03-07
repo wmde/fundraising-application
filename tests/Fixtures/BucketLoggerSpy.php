@@ -9,7 +9,11 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingEvent;
 
 class BucketLoggerSpy implements BucketLogger {
-	private $events = [];
+
+	/**
+	 * @var LoggingEvent[]
+	 */
+	private array $events = [];
 
 	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void {
 		$this->events[] = [

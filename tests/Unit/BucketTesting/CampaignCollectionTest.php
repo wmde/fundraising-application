@@ -14,14 +14,8 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection
  */
 class CampaignCollectionTest extends TestCase {
-	/** @var Campaign */
-	private $firstCampaign;
-	private $defaultBucketOfFirstCampaign;
-	private $alternativeBucketOfFirstCampaign;
-	/** @var Campaign */
-	private $secondCampaign;
-	private $defaultBucketOfSecondCampaign;
-	private $alternativeBucketOfSecondCampaign;
+	private Campaign $firstCampaign;
+	private Campaign $secondCampaign;
 
 	protected function setUp(): void {
 		$this->firstCampaign = new Campaign(
@@ -31,11 +25,11 @@ class CampaignCollectionTest extends TestCase {
 			( new CampaignDate() )->add( new \DateInterval( 'P3M' ) ),
 			Campaign::ACTIVE
 		);
-		$this->defaultBucketOfFirstCampaign = new Bucket( 'a', $this->firstCampaign, Bucket::DEFAULT );
-		$this->alternativeBucketOfFirstCampaign = new Bucket( 'b', $this->firstCampaign, Bucket::NON_DEFAULT );
+		$defaultBucketOfFirstCampaign = new Bucket( 'a', $this->firstCampaign, Bucket::DEFAULT );
+		$alternativeBucketOfFirstCampaign = new Bucket( 'b', $this->firstCampaign, Bucket::NON_DEFAULT );
 		$this->firstCampaign
-			->addBucket( $this->defaultBucketOfFirstCampaign )
-			->addBucket( $this->alternativeBucketOfFirstCampaign );
+			->addBucket( $defaultBucketOfFirstCampaign )
+			->addBucket( $alternativeBucketOfFirstCampaign );
 
 		$this->secondCampaign = new Campaign(
 			'five_year_plan',
@@ -44,11 +38,11 @@ class CampaignCollectionTest extends TestCase {
 			( new CampaignDate() )->add( new \DateInterval( 'P5Y' ) ),
 			Campaign::ACTIVE
 		);
-		$this->defaultBucketOfSecondCampaign = new Bucket( 'a', $this->secondCampaign, Bucket::DEFAULT );
-		$this->alternativeBucketOfSecondCampaign = new Bucket( 'b', $this->secondCampaign, Bucket::NON_DEFAULT );
+		$defaultBucketOfSecondCampaign = new Bucket( 'a', $this->secondCampaign, Bucket::DEFAULT );
+		$alternativeBucketOfSecondCampaign = new Bucket( 'b', $this->secondCampaign, Bucket::NON_DEFAULT );
 		$this->secondCampaign
-			->addBucket( $this->defaultBucketOfSecondCampaign )
-			->addBucket( $this->alternativeBucketOfSecondCampaign );
+			->addBucket( $defaultBucketOfSecondCampaign )
+			->addBucket( $alternativeBucketOfSecondCampaign );
 	}
 
 	public function testGivenCampaigns_itCanIterateOverThem() {

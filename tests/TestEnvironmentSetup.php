@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FeatureReaderStub;
  * @license GPL-2.0-or-later
  */
 class TestEnvironmentSetup implements EnvironmentSetup {
-	public function setEnvironmentDependentInstances( FunFunFactory $factory ) {
+	public function setEnvironmentDependentInstances( FunFunFactory $factory ): void {
 		$factory->setNullMessenger();
 		$factory->setDomainNameValidator( new NullDomainNameValidator() );
 		$factory->setDoctrineConfiguration( ORMSetup::createXMLMetadataConfiguration( $factory->getDoctrineXMLMappingPaths(), true ) );

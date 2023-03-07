@@ -39,7 +39,10 @@ class BucketLoggingHandler {
 		);
 	}
 
-	public static function getSubscribedEvents() {
+	/**
+	 * @return array<class-string,string>
+	 */
+	public static function getSubscribedEvents(): array {
 		return [
 			DonationCreatedEvent::class => 'onDonationCreated',
 			MembershipCreatedEvent::class => 'onMembershipCreated',

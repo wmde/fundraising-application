@@ -20,8 +20,7 @@ class ErrorHandlingTemplateBasedMailer implements DonationTemplateMailerInterfac
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
 		try {
 			$this->templateBasedMailer->sendMail( $recipient, $templateArguments );
-		}
-		catch ( \RuntimeException $e ) {
+		} catch ( \RuntimeException $e ) {
 			$message = $e->getMessage();
 			$exception = $e;
 			$previous = $e->getPrevious();

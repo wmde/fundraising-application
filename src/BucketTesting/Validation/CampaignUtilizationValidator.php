@@ -12,22 +12,14 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
  */
 class CampaignUtilizationValidator {
 
-	private $hasValidated = false;
-	private $campaignCollection;
-	private $ignoredBuckets;
-	private $featureToggles;
-	private $errorLogger;
+	private bool $hasValidated = false;
 
 	public function __construct(
-		CampaignCollection $campaignCollection,
-		array $ignoredBuckets,
-		array $featureToggles,
-		CampaignErrorCollection $errorLogger
+		private readonly CampaignCollection $campaignCollection,
+		private readonly array $ignoredBuckets,
+		private readonly array $featureToggles,
+		private readonly CampaignErrorCollection $errorLogger
 	) {
-		$this->campaignCollection = $campaignCollection;
-		$this->errorLogger = $errorLogger;
-		$this->ignoredBuckets = $ignoredBuckets;
-		$this->featureToggles = $featureToggles;
 	}
 
 	public function isPassing(): bool {

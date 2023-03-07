@@ -32,8 +32,7 @@ class SkinCacheWarmer implements CacheWarmerInterface {
 		foreach ( $templates as $template ) {
 			try {
 				$this->funFunFactory->getSkinTwig()->load( $template );
-			}
-			catch ( Error $e ) {
+			} catch ( Error $e ) {
 				// problem during compilation, give up
 				// might be a syntax error or a non-Twig template
 			}
