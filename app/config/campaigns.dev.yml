@@ -4,6 +4,7 @@ campaigns:
   address_type_steps:
     active: true
     start: "2022-11-01"
+    end: "2023-12-31"
     default_bucket: "direct"
 
   membership_intervals:
