@@ -5,13 +5,13 @@ name_head_of_fundraising
 donation_hint
 
 -------------------------------------
-address_of_suborganization
+address_of_organization
 
 phone
 email
 
 bank_account
 
-tax_id_suborganization
+tax_id_organization
 
 unsubscribe_hint
