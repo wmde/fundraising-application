@@ -602,7 +602,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newAddSubscriptionMailer(): SubscriptionTemplateMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getSubOrganizationMessenger(),
+			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Subscription_Request.txt.twig',
@@ -616,7 +616,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newConfirmSubscriptionMailer(): SubscriptionTemplateMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getSubOrganizationMessenger(),
+			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 					$this->getMailerTwig(),
 					'Subscription_Confirmation.txt.twig',
@@ -679,7 +679,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newContactUserMailer(): GetInTouchMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getSubOrganizationMessenger(),
+			$this->getOrganizationMessenger(),
 			new TwigTemplate( $this->getMailerTwig(), 'Contact_Confirm_to_User.txt.twig' ),
 			new BasicMailSubjectRenderer( $this->getMailTranslator(), 'mail_subject_getintouch' )
 		);
@@ -687,7 +687,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newContactOperatorMailer(): OperatorMailer {
 		return new OperatorMailer(
-			$this->getSubOrganizationMessenger(),
+			$this->getOrganizationMessenger(),
 			new TwigTemplate( $this->getMailerTwig(), 'Contact_Forward_to_Operator.txt.twig' )
 		);
 	}
@@ -751,20 +751,6 @@ class FunFunFactory implements LoggerAwareInterface {
 			} );
 	}
 
-	private function getSubOrganizationMessenger(): Messenger {
-		return $this->createSharedObject( Messenger::class . 'suborganization', function (): Messenger {
-			return new Messenger(
-				$this->getMailer(),
-				$this->getSubOrganizationEmailAddress(),
-				$this->config['contact-info']['suborganization']['name']
-			);
-		} );
-	}
-
-	public function setSubOrganizationMessenger( Messenger $messenger ): void {
-		$this->sharedObjects[Messenger::class . 'suborganization'] = $messenger;
-	}
-
 	private function getOrganizationMessenger(): Messenger {
 		return $this->createSharedObject( Messenger::class . 'organization', function (): Messenger {
 			return new Messenger(
@@ -798,18 +784,10 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function setNullMessenger(): void {
-		$this->setSubOrganizationMessenger( new Messenger(
-			new Mailer( new NullTransport() ),
-			$this->getSubOrganizationEmailAddress()
-		) );
 		$this->setOrganizationMessenger( new Messenger(
 			new Mailer( new NullTransport() ),
 			$this->getOrganizationEmailAddress()
 		) );
-	}
-
-	public function getSubOrganizationEmailAddress(): EmailAddress {
-		return new EmailAddress( $this->config['contact-info']['suborganization']['email'] );
 	}
 
 	public function getOrganizationEmailAddress(): EmailAddress {
@@ -892,7 +870,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newCancelDonationMailer(): DonationTemplateMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getSubOrganizationMessenger(),
+			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Donation_Cancellation_Confirmation.txt.twig',
@@ -946,7 +924,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newAdminMailer(
 				'eine Spende',
 				'https://backend.wikimedia.de/backend/donation/list',
-				$this->getSuborganizationMessenger()
+				$this->getOrganizationMessenger()
 			),
 			$this->newGetPaymentUseCase(),
 			adminEmailAddress: $this->config['contact-info']['suborganization']['email']
@@ -1006,7 +984,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newDonationConfirmationMailer(): DonationTemplateMailerInterface {
 		return $this->newErrorHandlingTemplateMailer(
-			$this->getSubOrganizationMessenger(),
+			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Donation_Confirmation.txt.twig',
@@ -1022,7 +1000,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newDonationUpdatedTemplateMailer(): DonationTemplateMailerInterface {
 		return $this->newErrorHandlingTemplateMailer(
-			$this->getSubOrganizationMessenger(),
+			$this->getOrganizationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Donation_Confirmation.txt.twig',

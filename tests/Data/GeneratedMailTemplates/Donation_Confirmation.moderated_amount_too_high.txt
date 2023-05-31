@@ -3,16 +3,16 @@ mail_introduction_female_lastname_informal
 donation_confirmation/moderation_amount_too_high
 donation_confirmation/greetings
 
-name_head_of_suborganization
-title_head_of_suborganization
+name_head_of_organization
+title_head_of_organization
 
 ---------------------------------------------------------------------------
 wikimedia_vision
 <https://spenden.wikimedia.de/>
 ---------------------------------------------------------------------------
 
-address_of_suborganization
+address_of_organization
 
-tax_id_suborganization_verbose
+tax_id_organization_verbose
 
 donation_confirmation/number
