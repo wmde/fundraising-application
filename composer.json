@@ -34,7 +34,7 @@
 		"symfony/http-foundation": "~6.2.0",
 		"symfony/mailer": "~6.2.0",
 		"symfony/monolog-bundle": "^3.8",
-		"symfony/property-access": "~6.2.0",
+		"symfony/property-access": "~6.3.0",
 		"symfony/twig-bridge": "~6.3.0",
 		"symfony/validator": "~6.2.0",
 		"symfony/yaml": "~6.2.0",
