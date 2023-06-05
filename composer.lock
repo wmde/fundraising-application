@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c16149f0268a84ae133c5efb2661f953",
+    "content-hash": "bcdd1ccf6fe1b16f36b9d7609d0048cc",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -4269,37 +4269,36 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v6.2.11",
+            "version": "v6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "df27f4191a4292d01fd062296e09cbc8b657cb57"
+                "reference": "718a97ed430d34e5c568ea2c44eab708c6efbefb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/df27f4191a4292d01fd062296e09cbc8b657cb57",
-                "reference": "df27f4191a4292d01fd062296e09cbc8b657cb57",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/718a97ed430d34e5c568ea2c44eab708c6efbefb",
+                "reference": "718a97ed430d34e5c568ea2c44eab708c6efbefb",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
-                "symfony/deprecation-contracts": "^2.1|^3",
-                "symfony/polyfill-mbstring": "~1.1"
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/polyfill-mbstring": "~1.1",
+                "symfony/polyfill-php83": "^1.27"
             },
             "conflict": {
                 "symfony/cache": "<6.2"
             },
             "require-dev": {
-                "predis/predis": "~1.0",
+                "doctrine/dbal": "^2.13.1|^3.0",
+                "predis/predis": "^1.1|^2.0",
                 "symfony/cache": "^5.4|^6.0",
                 "symfony/dependency-injection": "^5.4|^6.0",
                 "symfony/expression-language": "^5.4|^6.0",
                 "symfony/http-kernel": "^5.4.12|^6.0.12|^6.1.4",
                 "symfony/mime": "^5.4|^6.0",
                 "symfony/rate-limiter": "^5.2|^6.0"
-            },
-            "suggest": {
-                "symfony/mime": "To use the file extension guesser"
             },
             "type": "library",
             "autoload": {
@@ -4327,7 +4326,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v6.2.11"
+                "source": "https://github.com/symfony/http-foundation/tree/v6.3.0"
             },
             "funding": [
                 {
@@ -4343,7 +4342,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-19T12:39:53+00:00"
+            "time": "2023-05-19T12:46:45+00:00"
         },
         {
             "name": "symfony/http-kernel",
