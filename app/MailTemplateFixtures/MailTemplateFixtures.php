@@ -42,10 +42,6 @@ class MailTemplateFixtures {
 
 		yield new VariantSettingsGenerator( 'Donation_Confirmation.txt.twig',
 			[
-				'donation' => [
-					'id' => 42,
-					'receiptOptIn' => false,
-				],
 				'recipient' => [
 					'lastName' => '姜',
 					'firstName' => '留美子',
@@ -55,6 +51,7 @@ class MailTemplateFixtures {
 			],
 			new TemplateVariant( 'deposit_unmoderated_non_recurring', [
 				'donation' => [
+					'id' => 42,
 					'amount' => 12.34,
 					'paymentType' => 'UEB',
 					'interval' => 0,
@@ -64,14 +61,17 @@ class MailTemplateFixtures {
 			] ),
 			new TemplateVariant( 'deposit_unmoderated_recurring', [
 				'donation' => [
+					'id' => 42,
 					'amount' => 12.34,
 					'paymentType' => 'UEB',
 					'interval' => 6,
 					'bankTransferCode' => 'WZF3984Y',
+					'receiptOptIn' => false,
 				]
 			] ),
 			new TemplateVariant( 'direct_debit_unmoderated_non_recurring', [
 				'donation' => [
+					'id' => 42,
 					'amount' => 12.34,
 					'paymentType' => 'BEZ',
 					'interval' => 0,
@@ -80,6 +80,7 @@ class MailTemplateFixtures {
 			] ),
 			new TemplateVariant( 'direct_debit_unmoderated_recurring', [
 				'donation' => [
+					'id' => 42,
 					'amount' => 12.34,
 					'paymentType' => 'BEZ',
 					'interval' => 3,
@@ -88,58 +89,72 @@ class MailTemplateFixtures {
 			] ),
 			new TemplateVariant( 'paypal_unmoderated_non_recurring', [
 				'donation' => [
+					'id' => 42,
 					'amount' => 12.34,
 					'paymentType' => 'PPL',
 					'interval' => 0,
+					'receiptOptIn' => false,
 				]
 			] ),
 			new TemplateVariant( 'sofort_unmoderated_non_recurring', [
 				'donation' => [
+					'id' => 42,
 					'amount' => 12.34,
 					'paymentType' => 'SUB',
 					'interval' => 0,
-					'status' => 'Z'
+					'status' => 'Z',
+					'receiptOptIn' => false,
 				]
 			] ),
 			new TemplateVariant( 'credit_card_unmoderated_recurring', [
 				'donation' => [
+					'id' => 42,
 					'amount' => 12.34,
 					'paymentType' => 'MCP',
-					'interval' => 1
+					'interval' => 1,
+					'receiptOptIn' => false,
 				]
 			] ),
 			new TemplateVariant( 'paypal_unmoderated_recurring', [
 				'donation' => [
+					'id' => 42,
 					'amount' => 12.34,
 					'paymentType' => 'PPL',
 					'interval' => 6,
+					'receiptOptIn' => false,
 				]
 			] ),
 			new TemplateVariant( 'micropayment_unmoderated_recurring', [
 				'donation' => [
+					'id' => 42,
 					'amount' => 12.34,
 					'paymentType' => 'MCP',
-					'interval' => 6
+					'interval' => 6,
+					'receiptOptIn' => false,
 				],
 			] ),
 			new TemplateVariant( 'moderated_amount_too_high', [
 				'donation' => [
+					'id' => 42,
 					'paymentType' => 'UEB',
 					'amount' => 99999.99,
 					'interval' => 1,
 					'moderationFlags' => [
 						DonationModerationIdentifier::AMOUNT_TOO_HIGH->name => true
-					]
+					],
+					'receiptOptIn' => false,
 				]
 			] ),
 			new TemplateVariant( 'moderated_other_reason', [
 				'donation' => [
+					'id' => 42,
 					'amount' => 12.34,
 					'paymentType' => 'PPL',
 					'interval' => 1,
 					'moderationFlags' => [
 						DonationModerationIdentifier::MANUALLY_FLAGGED_BY_ADMIN->name => true
-					]
+					],
+					'receiptOptIn' => false,
 				]
 
 			] )

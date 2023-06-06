@@ -15,6 +15,7 @@ class TemplateSettings {
 	public function __construct(
 		public readonly string $templateName,
 		public readonly string $id,
-		public readonly array $templateData = [] ) {
+		public readonly array $templateData = []
+	) {
 	}
 }
