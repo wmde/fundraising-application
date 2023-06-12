@@ -1,6 +1,6 @@
 mail_introduction_male_lastname_informal
 
-membership_application_confirmation/moderation_other_reason
+membership_application_confirmation_sustaining/moderation_other_reason
 
 name_head_of_organization
 title_head_of_organization
