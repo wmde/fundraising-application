@@ -22,7 +22,7 @@ class FeatureToggleParser {
 
 	/**
 	 * @param string $choiceFactoryLocation
-	 * @return string[]
+	 * @return array<int, Node\Expr>
 	 */
 	public static function getFeatureToggleChecks( string $choiceFactoryLocation ): array {
 		$featureToggleChecks = [];
