@@ -40,7 +40,13 @@ class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 
 	private function setDoctrineConfiguration( FunFunFactory $factory ): void {
 		// Setup will use /tmp for proxies and ArrayCache for caching
-		$factory->setDoctrineConfiguration( ORMSetup::createXMLMetadataConfiguration( $factory->getDoctrineXMLMappingPaths(), true ) );
+		$factory->setDoctrineConfiguration( ORMSetup::createXMLMetadataConfiguration(
+			$factory->getDoctrineXMLMappingPaths(),
+			true,
+			null,
+			null,
+			true
+		) );
 	}
 
 }
