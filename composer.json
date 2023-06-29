@@ -42,6 +42,7 @@
 
 		"airbrake/phpbrake": "~0.7",
 		"doctrine/migrations": "~3.0",
+		"doctrine/orm": "2.14.1",
 		"guzzlehttp/guzzle": "^7.5",
 		"jeroen/file-fetcher": "~6.0",
 		"justinrainbow/json-schema": "^5.2",
