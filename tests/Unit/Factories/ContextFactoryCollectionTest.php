@@ -9,7 +9,6 @@ use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\Frontend\Factories\ContextFactoryCollection;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeEventSubscriber;
-use WMDE\Fundraising\SubscriptionContext\SubscriptionContextFactory;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Factories\ContextFactoryCollection
@@ -33,10 +32,8 @@ class ContextFactoryCollectionTest extends TestCase {
 		$eventSubscribers = $this->givenEventSubscribers();
 		$contextFactory1 = $this->createStub( AddressChangeContextFactory::class );
 		$contextFactory1->method( 'newEventSubscribers' )->willReturn( [ $eventSubscribers[0] ] );
-		$contextFactory2 = $this->createStub( SubscriptionContextFactory::class );
-		$contextFactory2->method( 'newEventSubscribers' )->willReturn( [ $eventSubscribers[1], $eventSubscribers[2] ] );
-		$contextFactory3 = $this->createStub( AutocompleteContextFactory::class );
-		$collection = new ContextFactoryCollection( $contextFactory1, $contextFactory2, $contextFactory3 );
+		$contextFactory2 = $this->createStub( AutocompleteContextFactory::class );
+		$collection = new ContextFactoryCollection( $contextFactory1, $contextFactory2 );
 
 		$collectedEventSubscribers = $collection->newEventSubscribers();
 
@@ -48,9 +45,7 @@ class ContextFactoryCollectionTest extends TestCase {
 	 */
 	private function givenEventSubscribers(): array {
 		return [
-			new FakeEventSubscriber(),
-			new FakeEventSubscriber(),
-			new FakeEventSubscriber(),
+			new FakeEventSubscriber()
 		];
 	}
 }

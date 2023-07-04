@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b33044c20a20261e03eadaa8bf970f9a",
+    "content-hash": "c804737abce0a44ed137c19228bad68e",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -63,55 +63,6 @@
                 "source": "https://github.com/airbrake/phpbrake/tree/v0.8.0"
             },
             "time": "2021-04-06T01:29:47+00:00"
-        },
-        {
-            "name": "behat/transliterator",
-            "version": "v1.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Behat/Transliterator.git",
-                "reference": "baac5873bac3749887d28ab68e2f74db3a4408af"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Transliterator/zipball/baac5873bac3749887d28ab68e2f74db3a4408af",
-                "reference": "baac5873bac3749887d28ab68e2f74db3a4408af",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "require-dev": {
-                "chuyskywalker/rolling-curl": "^3.1",
-                "php-yaoi/php-yaoi": "^1.0",
-                "phpunit/phpunit": "^8.5.25 || ^9.5.19"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Behat\\Transliterator\\": "src/Behat/Transliterator"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Artistic-1.0"
-            ],
-            "description": "String transliterator",
-            "keywords": [
-                "i18n",
-                "slug",
-                "transliterator"
-            ],
-            "support": {
-                "issues": "https://github.com/Behat/Transliterator/issues",
-                "source": "https://github.com/Behat/Transliterator/tree/v1.5.0"
-            },
-            "time": "2022-03-30T09:27:43+00:00"
         },
         {
             "name": "brick/math",
@@ -212,82 +163,6 @@
                 "source": "https://github.com/cash/LRUCache/tree/1.0.0"
             },
             "time": "2013-09-20T18:59:12+00:00"
-        },
-        {
-            "name": "doctrine/annotations",
-            "version": "2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/annotations.git",
-                "reference": "e157ef3f3124bbf6fe7ce0ffd109e8a8ef284e7f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/e157ef3f3124bbf6fe7ce0ffd109e8a8ef284e7f",
-                "reference": "e157ef3f3124bbf6fe7ce0ffd109e8a8ef284e7f",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/lexer": "^2 || ^3",
-                "ext-tokenizer": "*",
-                "php": "^7.2 || ^8.0",
-                "psr/cache": "^1 || ^2 || ^3"
-            },
-            "require-dev": {
-                "doctrine/cache": "^2.0",
-                "doctrine/coding-standard": "^10",
-                "phpstan/phpstan": "^1.8.0",
-                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
-                "symfony/cache": "^5.4 || ^6",
-                "vimeo/psalm": "^4.10"
-            },
-            "suggest": {
-                "php": "PHP 8.0 or higher comes with attributes, a native replacement for annotations"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
-                },
-                {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
-                },
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com"
-                },
-                {
-                    "name": "Johannes Schmitt",
-                    "email": "schmittjoh@gmail.com"
-                }
-            ],
-            "description": "Docblock Annotations Parser",
-            "homepage": "https://www.doctrine-project.org/projects/annotations.html",
-            "keywords": [
-                "annotations",
-                "docblock",
-                "parser"
-            ],
-            "support": {
-                "issues": "https://github.com/doctrine/annotations/issues",
-                "source": "https://github.com/doctrine/annotations/tree/2.0.1"
-            },
-            "time": "2023-02-02T22:02:53+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -1476,116 +1351,6 @@
                 "source": "https://github.com/ezyang/htmlpurifier/tree/v4.16.0"
             },
             "time": "2022-09-18T07:06:19+00:00"
-        },
-        {
-            "name": "gedmo/doctrine-extensions",
-            "version": "v3.11.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine-extensions/DoctrineExtensions.git",
-                "reference": "ae4bdf0d567e06b6bb1902a560ee78961b230953"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine-extensions/DoctrineExtensions/zipball/ae4bdf0d567e06b6bb1902a560ee78961b230953",
-                "reference": "ae4bdf0d567e06b6bb1902a560ee78961b230953",
-                "shasum": ""
-            },
-            "require": {
-                "behat/transliterator": "~1.2",
-                "doctrine/annotations": "^1.13 || ^2.0",
-                "doctrine/collections": "^1.2 || ^2.0",
-                "doctrine/common": "^2.13 || ^3.0",
-                "doctrine/event-manager": "^1.2 || ^2.0",
-                "doctrine/persistence": "^2.2 || ^3.0",
-                "php": "^7.2 || ^8.0",
-                "psr/cache": "^1 || ^2 || ^3",
-                "symfony/cache": "^4.4 || ^5.3 || ^6.0",
-                "symfony/deprecation-contracts": "^2.1 || ^3.0"
-            },
-            "conflict": {
-                "doctrine/cache": "<1.11",
-                "doctrine/dbal": "<2.13.1 || ^3.0 <3.2",
-                "doctrine/mongodb-odm": "<2.3",
-                "doctrine/orm": "<2.10.2",
-                "sebastian/comparator": "<2.0"
-            },
-            "require-dev": {
-                "doctrine/cache": "^1.11 || ^2.0",
-                "doctrine/dbal": "^2.13.1 || ^3.2",
-                "doctrine/doctrine-bundle": "^2.3",
-                "doctrine/mongodb-odm": "^2.3",
-                "doctrine/orm": "^2.10.2",
-                "friendsofphp/php-cs-fixer": "^3.4.0,<3.10",
-                "nesbot/carbon": "^2.55",
-                "phpstan/phpstan": "^1.9",
-                "phpstan/phpstan-doctrine": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^8.5 || ^9.5",
-                "symfony/console": "^4.4 || ^5.3 || ^6.0",
-                "symfony/phpunit-bridge": "^6.0",
-                "symfony/yaml": "^4.4 || ^5.3 || ^6.0"
-            },
-            "suggest": {
-                "doctrine/mongodb-odm": "to use the extensions with the MongoDB ODM",
-                "doctrine/orm": "to use the extensions with the ORM",
-                "symfony/cache": "to cache parsed annotations"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "3.12-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Gedmo\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Gediminas Morkevicius",
-                    "email": "gediminas.morkevicius@gmail.com"
-                },
-                {
-                    "name": "Gustavo Falco",
-                    "email": "comfortablynumb84@gmail.com"
-                },
-                {
-                    "name": "David Buchmann",
-                    "email": "david@liip.ch"
-                }
-            ],
-            "description": "Doctrine behavioral extensions",
-            "homepage": "http://gediminasm.org/",
-            "keywords": [
-                "Blameable",
-                "behaviors",
-                "doctrine",
-                "extensions",
-                "gedmo",
-                "loggable",
-                "nestedset",
-                "odm",
-                "orm",
-                "sluggable",
-                "sortable",
-                "timestampable",
-                "translatable",
-                "tree",
-                "uploadable"
-            ],
-            "support": {
-                "email": "gediminas.morkevicius@gmail.com",
-                "issues": "https://github.com/doctrine-extensions/DoctrineExtensions/issues",
-                "source": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/v3.11.1",
-                "wiki": "https://github.com/Atlantic18/DoctrineExtensions/tree/main/doc"
-            },
-            "time": "2023-02-20T19:24:07+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -6980,23 +6745,22 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v13.0.0",
+            "version": "v13.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "4113473c5c75caeb30e4ffd1d7d7b85897db4152"
+                "reference": "4a38e4e9374311c7b9e4ede998730eb386138b9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/4113473c5c75caeb30e4ffd1d7d7b85897db4152",
-                "reference": "4113473c5c75caeb30e4ffd1d7d7b85897db4152",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/4a38e4e9374311c7b9e4ede998730eb386138b9a",
+                "reference": "4a38e4e9374311c7b9e4ede998730eb386138b9a",
                 "shasum": ""
             },
             "require": {
                 "doctrine/migrations": "^3.5",
                 "doctrine/orm": "~2.9",
                 "ext-curl": "*",
-                "gedmo/doctrine-extensions": "^3.0",
                 "php": ">=8.1",
                 "psr/log": "^3.0",
                 "symfony/http-client": "^6.1",
@@ -7004,16 +6768,17 @@
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~4.0",
-                "wmde/fundraising-payments": "~5.3"
+                "wmde/fundraising-payments": "~6.0"
             },
             "require-dev": {
                 "ext-pdo_sqlite": "*",
                 "mikey179/vfsstream": "~1.6",
                 "phpmd/phpmd": "~2.6",
                 "phpstan/phpstan": "^1.7",
-                "phpunit/phpunit": "~10.0.1",
+                "phpstan/phpstan-phpunit": "^1.3",
+                "phpunit/phpunit": "~10.2.0",
                 "symfony/cache": "^6.1",
-                "wmde/fundraising-phpcs": "~7.0.0",
+                "wmde/fundraising-phpcs": "~8.0.0",
                 "wmde/psr-log-test-doubles": "~3.0"
             },
             "bin": [
@@ -7037,40 +6802,39 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2023-03-06T08:53:15+00:00"
+            "time": "2023-07-04T08:01:04+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v11.1.0",
+            "version": "v11.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "30c1af04e7c637be272e92d03c3959768225d8e5"
+                "reference": "76a42effe53934ae8bd0a4da3dece9e900de06c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/30c1af04e7c637be272e92d03c3959768225d8e5",
-                "reference": "30c1af04e7c637be272e92d03c3959768225d8e5",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/76a42effe53934ae8bd0a4da3dece9e900de06c2",
+                "reference": "76a42effe53934ae8bd0a4da3dece9e900de06c2",
                 "shasum": ""
             },
             "require": {
                 "doctrine/migrations": "^3.5",
                 "doctrine/orm": "~2.7",
-                "gedmo/doctrine-extensions": "^3.0",
                 "php": ">=8.1",
                 "psr/log": "~3.0",
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~4.0.0",
-                "wmde/fundraising-payments": "~5.2"
+                "wmde/fundraising-payments": "~6.0"
             },
             "require-dev": {
                 "phpstan/phpstan": "~1.2",
                 "phpstan/phpstan-phpunit": "~1.0",
-                "phpunit/phpunit": "~9.5.0",
+                "phpunit/phpunit": "~10.2.0",
                 "symfony/cache": "^6.1",
-                "wmde/fundraising-phpcs": "~7.0.0",
+                "wmde/fundraising-phpcs": "~8.0.0",
                 "wmde/psr-log-test-doubles": "~3.0"
             },
             "bin": [
@@ -7097,20 +6861,20 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2022-12-30T08:50:55+00:00"
+            "time": "2023-07-04T08:04:51+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v5.3.1",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "99fad973337027f74c52aaad51a6e5a391650541"
+                "reference": "b9705e1cc161bf26416f6c2b32b4067fac30bf0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/99fad973337027f74c52aaad51a6e5a391650541",
-                "reference": "99fad973337027f74c52aaad51a6e5a391650541",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/b9705e1cc161bf26416f6c2b32b4067fac30bf0b",
+                "reference": "b9705e1cc161bf26416f6c2b32b4067fac30bf0b",
                 "shasum": ""
             },
             "require": {
@@ -7128,8 +6892,8 @@
             "require-dev": {
                 "phpstan/phpstan": "~1.3",
                 "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "~9.4",
-                "wmde/fundraising-phpcs": "~7.0",
+                "phpunit/phpunit": "~10.1",
+                "wmde/fundraising-phpcs": "~8.0",
                 "wmde/inspector-generator": "dev-main"
             },
             "type": "library",
@@ -7152,25 +6916,24 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2022-12-01T12:57:04+00:00"
+            "time": "2023-06-09T11:41:30+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "v4.0.0",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "2d82508efa0c26cd3f0c3c381cbd143c1bc09c60"
+                "reference": "1890a366cc07fb4979615e8862480079d820707c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/2d82508efa0c26cd3f0c3c381cbd143c1bc09c60",
-                "reference": "2d82508efa0c26cd3f0c3c381cbd143c1bc09c60",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/1890a366cc07fb4979615e8862480079d820707c",
+                "reference": "1890a366cc07fb4979615e8862480079d820707c",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.7",
-                "gedmo/doctrine-extensions": "^3.0",
                 "php": ">=8.1",
                 "psr/log": "^1.0|^2.0|^3.0",
                 "wmde/email-address": "~1.0",
@@ -7178,9 +6941,9 @@
             },
             "require-dev": {
                 "phpstan/phpstan": "~1.7",
-                "phpunit/phpunit": "~10.0.7",
-                "symfony/cache": "^5.3",
-                "wmde/fundraising-phpcs": "~7.0"
+                "phpunit/phpunit": "~10.1.1",
+                "symfony/cache": "^6.1",
+                "wmde/fundraising-phpcs": "~8.0"
             },
             "type": "library",
             "extra": {
@@ -7202,7 +6965,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for fundraising subcriptions",
-            "time": "2023-02-14T16:01:41+00:00"
+            "time": "2023-07-04T08:17:06+00:00"
         }
     ],
     "packages-dev": [
@@ -8046,16 +7809,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.21",
+            "version": "1.10.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "b2a30186be2e4d97dce754ae4e65eb0ec2f04eb5"
+                "reference": "97d694dfd4ceb57bcce4e3b38548f13ea62e4287"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b2a30186be2e4d97dce754ae4e65eb0ec2f04eb5",
-                "reference": "b2a30186be2e4d97dce754ae4e65eb0ec2f04eb5",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/97d694dfd4ceb57bcce4e3b38548f13ea62e4287",
+                "reference": "97d694dfd4ceb57bcce4e3b38548f13ea62e4287",
                 "shasum": ""
             },
             "require": {
@@ -8104,7 +7867,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-21T20:07:58+00:00"
+            "time": "2023-06-30T20:04:11+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -8428,16 +8191,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.2.2",
+            "version": "10.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "1ab521b24b88b88310c40c26c0cc4a94ba40ff95"
+                "reference": "35c8cac1734ede2ae354a6644f7088356ff5b08e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1ab521b24b88b88310c40c26c0cc4a94ba40ff95",
-                "reference": "1ab521b24b88b88310c40c26c0cc4a94ba40ff95",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/35c8cac1734ede2ae354a6644f7088356ff5b08e",
+                "reference": "35c8cac1734ede2ae354a6644f7088356ff5b08e",
                 "shasum": ""
             },
             "require": {
@@ -8509,7 +8272,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.2.2"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.2.3"
             },
             "funding": [
                 {
@@ -8525,7 +8288,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-11T06:15:20+00:00"
+            "time": "2023-06-30T06:17:38+00:00"
         },
         {
             "name": "sebastian/cli-parser",
