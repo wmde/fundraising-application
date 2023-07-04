@@ -4,10 +4,7 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\App\MailTemplateFixtures;
 
 class SimpleSettingsGenerator implements TemplateSettingsGenerator {
-	public function __construct(
-		private readonly string $templateName,
-		private readonly array $templateData = []
-	) {
+	public function __construct( private readonly string $templateName, private readonly array $templateData = [] ) {
 	}
 
 	/**

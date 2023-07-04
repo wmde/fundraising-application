@@ -2,7 +2,6 @@
 
 {# TODO improve incentive handling  #}
 {% set incentiveText = ( incentives|length > 0 ) ? 'mit dem Wikipedia-Stoffbeutel ' : '' %}
-{% set mailFolder = membershipType == 'sustaining' ? 'membership_application_confirmation_sustaining' : 'membership_application_confirmation_active' %}
 
 {% if membershipType == 'sustaining' %}
 {$- greeting_generator.createInformalLastnameGreeting( salutation, firstName, lastName, title )|raw $}
@@ -11,13 +10,13 @@
 {% endif %}
 
 {% if moderationFlags is not defined or moderationFlags is empty %}
-	{$ mail_content(mailFolder ~ '/intro_start', {
+	{$ mail_content('membership_application_confirmation/intro_start', {
 			'membership_type': membershipType|membership_type,
 			'incentive': incentiveText
 		}) $}
 
 	{% if paymentType == 'UEB' %}
-		{$ mail_content(mailFolder ~ '/intro_ueb', {
+		{$ mail_content('membership_application_confirmation/intro_ueb', {
 			'formatted_amount': formattedAmount,
 			'donation_interval': paymentIntervalInMonths|payment_interval,
 			'interval': paymentIntervalInMonths|payment_interval,
@@ -26,7 +25,7 @@
 			'payment_type': paymentType
 		}) $}
 	{% else %}
-		{$ mail_content(mailFolder ~ '/intro_bez', {
+		{$ mail_content('membership_application_confirmation/intro_bez', {
 			'formatted_amount': formattedAmount,
 			'donation_interval': paymentIntervalInMonths|payment_interval,
 			'interval': paymentIntervalInMonths|payment_interval,
@@ -36,23 +35,23 @@
 		}) $}
 	{% endif %}
 
-	{$ mail_content(mailFolder ~ '/intro_end') $}
+	{$ mail_content('membership_application_confirmation/intro_end') $}
 
-	{$ mail_content(mailFolder ~ '/contact', {
+	{$ mail_content('membership_application_confirmation/contact', {
 		'membership_type': membershipType|membership_type,
-	}) $} {% if hasReceiptEnabled == false %} {$- mail_content(mailFolder ~ '/receipt') $} {% endif %}
+	}) $} {% if hasReceiptEnabled == false %} {$- mail_content('membership_application_confirmation/receipt') $} {% endif %}
 
 
-	{$ mail_content(mailFolder ~ '/outro', { 'day_of_the_week': day_of_the_week } ) $}
+	{$ mail_content('membership_application_confirmation/outro', { 'day_of_the_week': day_of_the_week } ) $}
 {% else %}
 	{%  if moderationFlags.MEMBERSHIP_FEE_TOO_HIGH is defined %}
-		{$ mail_content(mailFolder ~ '/moderation_amount_too_high', {
+		{$ mail_content('membership_application_confirmation/moderation_amount_too_high', {
 		'formatted_amount': formattedAmount,
 		'interval': paymentIntervalInMonths|payment_interval,
 		'membership_type': membershipType|membership_type
 		}) $}
 	{% else %}
-		{$ mail_content(mailFolder ~ '/moderation_other_reason', {
+		{$ mail_content('membership_application_confirmation/moderation_other_reason', {
 		'formatted_amount': formattedAmount,
 		'interval': paymentIntervalInMonths|payment_interval,
 		'membership_type': membershipType|membership_type
