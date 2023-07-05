@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.2/phpunit.xsd"
     backupGlobals="false"
     bootstrap="tests/bootstrap.php"
     colors="true"
@@ -10,17 +10,12 @@
     stopOnSkipped="false"
     cacheDirectory=".phpunit.cache"
     backupStaticProperties="false"
-    >
+>
   <php>
     <server name="APP_ENV" value="test" force="true"/>
     <env name="APP_ENV" value="test" force="true"/>
   </php>
-  <coverage>
-    <include>
-      <directory suffix=".php">src</directory>
-      <directory suffix=".php">app</directory>
-    </include>
-  </coverage>
+  <coverage/>
   <testsuites>
     <testsuite name="unit">
       <directory>tests/Unit</directory>
@@ -32,4 +27,10 @@
       <directory>tests/EdgeToEdge</directory>
     </testsuite>
   </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">src</directory>
+      <directory suffix=".php">app</directory>
+    </include>
+  </source>
 </phpunit>

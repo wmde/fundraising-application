@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c804737abce0a44ed137c19228bad68e",
+    "content-hash": "2d30fb65f2f6223d9f81989d49443f62",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7336,39 +7336,43 @@
         },
         {
             "name": "matthiasnoback/symfony-config-test",
-            "version": "4.3.0",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mbabker/SymfonyConfigTest",
-                "reference": "e7db0f5ea98817c7ba1b9266f8039c085e673db4"
+                "url": "https://github.com/SymfonyTest/SymfonyConfigTest.git",
+                "reference": "049e519ae61535e5a31f53add0beec43b2ae9cd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mbabker/SymfonyConfigTest/zipball/e7db0f5ea98817c7ba1b9266f8039c085e673db4",
-                "reference": "e7db0f5ea98817c7ba1b9266f8039c085e673db4",
+                "url": "https://api.github.com/repos/SymfonyTest/SymfonyConfigTest/zipball/049e519ae61535e5a31f53add0beec43b2ae9cd2",
+                "reference": "049e519ae61535e5a31f53add0beec43b2ae9cd2",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1 || ^8.0",
-                "symfony/config": "^4.4 || ^5.3 || ^6.0"
+                "php": "^8.1",
+                "symfony/config": "^5.4 || ^6.2"
             },
             "conflict": {
-                "phpunit/phpunit": "<7.0"
+                "phpunit/phpunit": "<9.6 || >=11.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
+                "phpunit/phpunit": "^9.6 || ^10.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0.x-dev"
+                    "dev-master": "5.0.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
                     "Matthias\\SymfonyConfigTest\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7386,7 +7390,11 @@
                 "phpunit",
                 "symfony"
             ],
-            "time": "2021-09-15T12:30:20+00:00"
+            "support": {
+                "issues": "https://github.com/SymfonyTest/SymfonyConfigTest/issues",
+                "source": "https://github.com/SymfonyTest/SymfonyConfigTest/tree/v5.0.0"
+            },
+            "time": "2023-05-19T14:37:13+00:00"
         },
         {
             "name": "mediawiki/mediawiki-codesniffer",
@@ -7809,16 +7817,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.23",
+            "version": "1.10.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "65ab678d1248a8bc6fde456f0d7ff3562a61a4cd"
+                "reference": "360ecc90569e9a60c2954ee209ec04fa0d958e14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/65ab678d1248a8bc6fde456f0d7ff3562a61a4cd",
-                "reference": "65ab678d1248a8bc6fde456f0d7ff3562a61a4cd",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/360ecc90569e9a60c2954ee209ec04fa0d958e14",
+                "reference": "360ecc90569e9a60c2954ee209ec04fa0d958e14",
                 "shasum": ""
             },
             "require": {
@@ -7867,7 +7875,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-04T13:32:44+00:00"
+            "time": "2023-07-05T12:32:13+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -9513,12 +9521,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "0c3dde52d69536f0bdb8b48da0d10bce3b8b904c"
+                "reference": "52c4588de247bbe3ccad4203d918f0685d437894"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/0c3dde52d69536f0bdb8b48da0d10bce3b8b904c",
-                "reference": "0c3dde52d69536f0bdb8b48da0d10bce3b8b904c",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/52c4588de247bbe3ccad4203d918f0685d437894",
+                "reference": "52c4588de247bbe3ccad4203d918f0685d437894",
                 "shasum": ""
             },
             "require": {
@@ -9562,7 +9570,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2023-07-05T12:02:30+00:00"
+            "time": "2023-07-05T14:00:21+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
