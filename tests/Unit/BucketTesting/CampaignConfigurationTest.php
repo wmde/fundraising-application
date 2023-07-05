@@ -50,9 +50,6 @@ class CampaignConfigurationTest extends TestCase {
 	 * @dataProvider invalidConfigurationProvider
 	 */
 	public function testGivenMissingConfigurationEntries_ValidationFails( array $invalidConfig, string $expectedReason ) {
-		$this->markTestSkipped( 'TODO Un-skip this test as soon as the dependency https://github.com/SymfonyTest/SymfonyConfigTest got migrated to phpunit10' );
-
-		/*
 		$this->assertConfigurationIsInvalid(
 			[
 				'bucket_tests' => [
@@ -61,7 +58,6 @@ class CampaignConfigurationTest extends TestCase {
 			],
 			$expectedReason
 		);
-		*/
 	}
 
 	public static function invalidConfigurationProvider(): iterable {

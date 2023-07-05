@@ -101,17 +101,12 @@
 			"type": "vcs",
 			"url": "https://github.com/wmde/fundraising-phpcs",
 			"no-api": true
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/mbabker/SymfonyConfigTest",
-			"no-api": true
 		}
 	],
 	"require-dev": {
 		"ext-pdo_sqlite": "*",
 
-		"matthiasnoback/symfony-config-test": "~4.3.0",
+		"matthiasnoback/symfony-config-test": "~5.0",
 		"mikey179/vfsstream": "~1.6",
 		"phpmd/phpmd": "~2.10",
 		"phpstan/phpstan": "^1.8",
