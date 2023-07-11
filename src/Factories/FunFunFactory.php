@@ -57,10 +57,14 @@ use WMDE\Fundraising\DonationContext\Authorization\TokenGenerator;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineCommentFinder;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationAuthorizer;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationEventLogger;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationExistsChecker;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationIdRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationTokenFetcher;
 use WMDE\Fundraising\DonationContext\DataAccess\ModerationReasonRepository as DonationModerationReasonRepository;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
+use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationExistsChecker;
+use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationIdRepository;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\DonationContext\DonationContextFactory;
@@ -882,6 +886,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newAddDonationUseCase(): AddDonationUseCase {
 		return new AddDonationUseCase(
+			$this->getDonationIdRepository(),
 			$this->getDonationRepository(),
 			$this->newDonationValidator(),
 			$this->newDonationModerationService(),
@@ -1057,6 +1062,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			return new LoggingDonationRepository(
 				new DoctrineDonationRepository(
 					$this->getEntityManager(),
+					$this->newDonationExistsChecker(),
 					$this->newGetPaymentUseCase(),
 					$this->getModerationReasonRepositoryForDonation()
 				),
@@ -1375,6 +1381,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newHandleSofortPaymentNotificationUseCase( string $updateToken ): SofortPaymentNotificationUseCase {
 		return new SofortPaymentNotificationUseCase(
+			$this->getDonationIdRepository(),
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->newDonationMailer(),
@@ -1385,6 +1392,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newBookDonationUseCase( string $updateToken ): BookDonationUseCase {
 		return new BookDonationUseCase(
+			$this->getDonationIdRepository(),
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->newDonationMailer(),
@@ -1397,6 +1405,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new HandlePaypalPaymentWithoutDonationUseCase(
 			$this->newPayPalBookingService(),
 			$this->getDonationRepository(),
+			$this->getDonationIdRepository(),
 			$this->newDonationMailer(),
 			$this->newDonationEventLogger()
 		);
@@ -1404,6 +1413,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newCreditCardNotificationUseCase( string $updateToken ): CreditCardNotificationUseCase {
 		return new CreditCardNotificationUseCase(
+			$this->getDonationIdRepository(),
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizer( $updateToken ),
 			$this->newDonationMailer(),
@@ -2038,5 +2048,15 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newCreatePaymentUseCase(),
 			$this->getPaymentTypesSettings()->getPaymentTypesForMembershipApplication()
 		);
+	}
+
+	private function newDonationExistsChecker(): DonationExistsChecker {
+		return new DoctrineDonationExistsChecker( $this->getEntityManager() );
+	}
+
+	private function getDonationIdRepository(): DonationIdRepository {
+		return $this->createSharedObject( DonationIdRepository::class, function (): DonationIdRepository {
+			return new DoctrineDonationIdRepository( $this->getEntityManager() );
+		} );
 	}
 }

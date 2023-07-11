@@ -248,7 +248,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 
 	private function givenDonation( Donor $donor ): Donation {
 		return new Donation(
-			null,
+			1,
 			$donor,
 			1,
 			DonationTrackingInfo::newBlankTrackingInfo(),
