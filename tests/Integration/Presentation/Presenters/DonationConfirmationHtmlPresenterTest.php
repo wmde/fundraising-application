@@ -32,8 +32,7 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			(object)[]
 		);
 
-		$donation = ValidDonation::newBookedAnonymousPayPalDonation();
-		$donation->assignId( self::DONATION_ID );
+		$donation = ValidDonation::newBookedAnonymousPayPalDonation( self::DONATION_ID );
 
 		$paymentData = [
 			'amount' => 1337,
