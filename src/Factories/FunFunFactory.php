@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Factories;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Schema\DefaultSchemaManagerFactory;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
@@ -289,7 +290,9 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function getConnection(): Connection {
 		return $this->createSharedObject( DriverManager::class, function () {
-			return DriverManager::getConnection( $this->config['db'] );
+			$configuration = new Configuration();
+			$configuration->setSchemaManagerFactory( new DefaultSchemaManagerFactory() );
+			return DriverManager::getConnection( $this->config['db'], $configuration );
 		} );
 	}
 
