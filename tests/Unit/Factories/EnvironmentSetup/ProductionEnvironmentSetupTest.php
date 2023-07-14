@@ -21,6 +21,8 @@ class ProductionEnvironmentSetupTest extends TestCase {
 			'setSofortLogger',
 			'setCreditCardLogger',
 			'setDoctrineConfiguration',
+			'setPayPalAPI',
+			'getLogger'
 		];
 		$supportingGetters = [ 'getLoggingPath', 'getWritableApplicationDataPath', 'getDoctrineXMLMappingPaths' ];
 		/** @var FunFunFactory&MockObject $factory */

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46e68791b80caec25206fb8f8241a2c2",
+    "content-hash": "9edcb558b17d3be8208c4e57c74123b4",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6737,16 +6737,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v14.0.1",
+            "version": "dev-payment-with-ppl-api",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "c26a1ba1b6c20efef485dae3f05c345b42a2ec83"
+                "reference": "021c676bf223d734dface192a75baacc0ade2018"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/c26a1ba1b6c20efef485dae3f05c345b42a2ec83",
-                "reference": "c26a1ba1b6c20efef485dae3f05c345b42a2ec83",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/021c676bf223d734dface192a75baacc0ade2018",
+                "reference": "021c676bf223d734dface192a75baacc0ade2018",
                 "shasum": ""
             },
             "require": {
@@ -6760,7 +6760,7 @@
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~4.0",
-                "wmde/fundraising-payments": "~6.0"
+                "wmde/fundraising-payments": "dev-payment-with-ppl-api"
             },
             "require-dev": {
                 "ext-pdo_sqlite": "*",
@@ -6794,20 +6794,20 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2023-07-14T12:43:56+00:00"
+            "time": "2023-07-14T09:43:47+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v11.2.0",
+            "version": "dev-payment-with-ppl-api",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "76a42effe53934ae8bd0a4da3dece9e900de06c2"
+                "reference": "51c3aa8f40678c540933be09a047ca50de7029a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/76a42effe53934ae8bd0a4da3dece9e900de06c2",
-                "reference": "76a42effe53934ae8bd0a4da3dece9e900de06c2",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/51c3aa8f40678c540933be09a047ca50de7029a3",
+                "reference": "51c3aa8f40678c540933be09a047ca50de7029a3",
                 "shasum": ""
             },
             "require": {
@@ -6819,7 +6819,7 @@
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~4.0.0",
-                "wmde/fundraising-payments": "~6.0"
+                "wmde/fundraising-payments": "dev-payment-with-ppl-api"
             },
             "require-dev": {
                 "phpstan/phpstan": "~1.2",
@@ -6853,20 +6853,20 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2023-07-04T08:04:51+00:00"
+            "time": "2023-07-14T09:44:04+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v6.0.1",
+            "version": "dev-payment-with-ppl-api",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "f2cfe68ad566fc215a3b7498cdd3eae6459589e4"
+                "reference": "9b99a908ad9c4214a111ec4e415fb02b23579124"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/f2cfe68ad566fc215a3b7498cdd3eae6459589e4",
-                "reference": "f2cfe68ad566fc215a3b7498cdd3eae6459589e4",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/9b99a908ad9c4214a111ec4e415fb02b23579124",
+                "reference": "9b99a908ad9c4214a111ec4e415fb02b23579124",
                 "shasum": ""
             },
             "require": {
@@ -6876,7 +6876,11 @@
                 "guzzlehttp/guzzle": "^7.4",
                 "php": ">=8.1",
                 "sofort/sofortlib-php": "^3.2",
-                "symfony/cache": "^6.0",
+                "symfony/cache": "^6.3",
+                "symfony/config": "^6.3",
+                "symfony/console": "^6.3",
+                "symfony/dotenv": "^6.3",
+                "symfony/yaml": "^6.3",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~v4.0.0"
@@ -6886,7 +6890,8 @@
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "~10.1",
                 "wmde/fundraising-phpcs": "~8.0",
-                "wmde/inspector-generator": "dev-main"
+                "wmde/inspector-generator": "dev-main",
+                "wmde/psr-log-test-doubles": "~v3.2.0"
             },
             "type": "library",
             "extra": {
@@ -6908,7 +6913,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2023-07-13T16:26:27+00:00"
+            "time": "2023-07-10T15:32:01+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -9656,6 +9661,9 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "wmde/fundraising-donations": 20,
+        "wmde/fundraising-memberships": 20,
+        "wmde/fundraising-payments": 20,
         "remotelyliving/doorkeeper": 20,
         "wmde/fundraising-frontend-content": 20
     },

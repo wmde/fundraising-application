@@ -211,10 +211,10 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentIdRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardURLGeneratorConfig;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\LegacyPayPalURLGeneratorConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PaymentURLFactory;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortURLGeneratorConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentValidator;
 use WMDE\Fundraising\PaymentContext\PaymentContextFactory;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\ExternalVerificationServiceFactory;
@@ -224,6 +224,7 @@ use WMDE\Fundraising\PaymentContext\Services\KontoCheck\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\CharacterPickerPaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\RandomCharacterIndexGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\UniquePaymentReferenceCodeGenerator;
+use WMDE\Fundraising\PaymentContext\Services\PayPal\PaypalAPI;
 use WMDE\Fundraising\PaymentContext\Services\TransactionIdFinder\DoctrineTransactionIdFinder;
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\BookPaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\VerificationService;
@@ -909,7 +910,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newCheckIbanUseCase(),
 			new PaymentURLFactory(
 				$this->newCreditCardUrlConfig(),
-				$this->getPayPalUrlConfigForDonations(),
+				$this->getLegacyPayPalUrlConfigForDonations(),
+				$this->getPayPalApiClient(),
 				$this->getSofortConfigForDonations(),
 				$this->getSofortClient()
 			)
@@ -1018,18 +1020,18 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function getPayPalUrlConfigForDonations(): PayPalConfig {
-		return PayPalConfig::newFromConfig(
+	private function getLegacyPayPalUrlConfigForDonations(): LegacyPayPalURLGeneratorConfig {
+		return LegacyPayPalURLGeneratorConfig::newFromConfig(
 			array_merge( $this->config['paypal-donation'], [ 'locale' => $this->getLocale() ] ),
 			new TranslatablePaymentItemDescription( 'paypal_item_name_donation', $this->getPaymentProviderItemsTranslator() )
 		);
 	}
 
-	private function getSofortConfigForDonations(): SofortConfig {
+	private function getSofortConfigForDonations(): SofortURLGeneratorConfig {
 		$config = $this->config['sofort'];
 		$locale = \Locale::parseLocale( $this->getLocale() );
 		$translator = $this->getPaymentProviderItemsTranslator();
-		return new SofortConfig(
+		return new SofortURLGeneratorConfig(
 			strtoupper( $locale['language'] ),
 			$config['return-url'],
 			$config['cancel-url'],
@@ -1049,9 +1051,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	private function newCreditCardUrlConfig(): CreditCardConfig {
+	private function newCreditCardUrlConfig(): CreditCardURLGeneratorConfig {
 		$locale = \Locale::parseLocale( $this->getLocale() );
-		return CreditCardConfig::newFromConfig(
+		return CreditCardURLGeneratorConfig::newFromConfig(
 			array_merge( $this->config['creditcard'], [ 'locale' => $locale['language'] ] ),
 			new TranslatablePaymentItemDescription( 'credit_card_item_name_donation', $this->getPaymentProviderItemsTranslator() )
 		);
@@ -2059,4 +2061,15 @@ class FunFunFactory implements LoggerAwareInterface {
 			return new DoctrineDonationIdRepository( $this->getEntityManager() );
 		} );
 	}
+
+	public function setPayPalAPI( PaypalAPI $paypalAPI ): void {
+		$this->sharedObjects[PaypalAPI::class] = $paypalAPI;
+	}
+
+	private function getPayPalApiClient(): PaypalAPI {
+		return $this->createSharedObject( PaypalAPI::class, static function (): PaypalAPI {
+			return new PayPalAPIStub();
+		} );
+	}
+
 }
