@@ -13,15 +13,19 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  * @covers \WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup
  */
 class DevelopmentEnvironmentSetupTest extends TestCase {
-	public function testEnvironmentSetsUpLoggingAndDoctrineConfiguration() {
+	public function testEnvironmentSetsUpEnvironmentDependentServices() {
 		$expectedSetters = [
 			'setPaypalLogger',
 			'setSofortLogger',
-			'setSofortLogger',
 			'setDoctrineConfiguration',
 			'setInternalErrorHtmlPresenter',
+			'setPayPalAPI',
 		];
-		$supportingGetters = [ 'getLoggingPath', 'getDoctrineXMLMappingPaths' ];
+		$supportingGetters = [
+			'getLogger',
+			'getLoggingPath',
+			'getDoctrineXMLMappingPaths'
+		];
 		/** @var FunFunFactory&MockObject $factory */
 		$factory = $this->createMock( FunFunFactory::class );
 		foreach ( $expectedSetters as $setterName ) {

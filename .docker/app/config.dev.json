@@ -65,7 +65,8 @@
     "notify-url": "http://localhost:8082/handle-paypal-payment-notification",
     "return-url": "http://localhost:8082/show-donation-confirmation",
     "cancel-url": "http://localhost:8082/",
-    "item-name": "Test-Spende bei Wikimedia"
+    "item-name": "Test-Spende bei Wikimedia",
+    "config-file": "app/config/paypal_api.dev.yml"
   },
   "paypal-membership": {
     "base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
@@ -74,7 +75,7 @@
     "return-url": "http://localhost:8082/show-membership-confirmation",
     "cancel-url": "http://localhost:8082/",
     "item-name": "Test-Mitgliedschaft bei Wikimedia",
-    "delay-in-days": 90
+    "config-file": "app/config/paypal_api.dev.yml"
   },
   "creditcard": {
     "base-url": "https://credit-card.micropayment.de/creditcard/event/index.php?",

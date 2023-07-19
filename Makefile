@@ -56,6 +56,7 @@ drop-db:
 
 default-config:
 	cp -i .docker/app/config.dev.json app/config
+	cp -i tests/Data/files/paypal_api.yml app/config/paypal_api.dev.yml
 
 download-assets:
 	./bin/download_assets.sh $(ASSET_BRANCH)

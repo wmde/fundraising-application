@@ -215,8 +215,9 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PaymentURLFactory;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalConfig;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortConfig;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalAPIURLGeneratorConfig;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalAPIURLGeneratorConfigFactory;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortURLGeneratorConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentValidator;
 use WMDE\Fundraising\PaymentContext\PaymentContextFactory;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\ExternalVerificationServiceFactory;
@@ -226,6 +227,8 @@ use WMDE\Fundraising\PaymentContext\Services\KontoCheck\KontoCheckIbanValidator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\CharacterPickerPaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\RandomCharacterIndexGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\UniquePaymentReferenceCodeGenerator;
+use WMDE\Fundraising\PaymentContext\Services\PayPal\PaypalAPI;
+use WMDE\Fundraising\PaymentContext\Services\PayPal\PayPalURLGeneratorConfigReader;
 use WMDE\Fundraising\PaymentContext\Services\TransactionIdFinder\DoctrineTransactionIdFinder;
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\BookPaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\VerificationService;
@@ -955,7 +958,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newCheckIbanUseCase(),
 			new PaymentURLFactory(
 				$this->newCreditCardUrlConfig(),
-				$this->getPayPalUrlConfigForDonations(),
+				$this->getPayPalUrlGeneratorConfigForDonations(),
+				$this->getPayPalApiClient(),
 				$this->getSofortConfigForDonations(),
 				$this->getSofortClient()
 			)
@@ -1064,8 +1068,25 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function getPayPalUrlConfigForDonations(): PayPalConfig {
-		return PayPalConfig::newFromConfig(
+	private function getPayPalAPIURLGeneratorConfigForDonations(): PayPalAPIURLGeneratorConfig {
+		return $this->createSharedObject( PayPalAPIURLGeneratorConfig::class . '::factory', function () {
+			// TODO store $rawConfig in a cache to avoid repetitive YAML parsing and validation
+			$rawConfig = PayPalURLGeneratorConfigReader::readConfig( $this->getRootPath() . '/' . $this->config[ 'paypal-donation' ][ 'config-path' ] );
+			return PayPalAPIURLGeneratorConfigFactory::createConfig( $rawConfig, "donation", $this->getLocale() );
+		} );
+	}
+
+	public function setPayPalAPIURLGeneratorConfigForDonationsFactory( callable $factoryFunction ): void {
+		$this->sharedObjects[PayPalAPIURLGeneratorConfig::class . '::factory' ] = $factoryFunction;
+	}
+
+	/**
+	 * @return LegacyPayPalURLGeneratorConfig
+	 * @deprecated
+	 * @phpstan-ignore-next-line
+	 */
+	private function getLegacyPayPalUrlConfigForDonations(): LegacyPayPalURLGeneratorConfig {
+		return LegacyPayPalURLGeneratorConfig::newFromConfig(
 			array_merge( $this->config['paypal-donation'], [ 'locale' => $this->getLocale() ] ),
 			new TranslatablePaymentItemDescription( 'paypal_item_name_donation', $this->getPaymentProviderItemsTranslator() )
 		);
@@ -1075,7 +1096,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		$config = $this->config['sofort'];
 		$locale = \Locale::parseLocale( $this->getLocale() );
 		$translator = $this->getPaymentProviderItemsTranslator();
-		return new SofortConfig(
+		return new SofortURLGeneratorConfig(
 			strtoupper( $locale['language'] ),
 			$config['return-url'],
 			$config['cancel-url'],
@@ -2023,7 +2044,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		];
 	}
 
-	private function getLocale(): string {
+	public function getLocale(): string {
 		if ( !isset( $this->sharedObjects[ 'locale' ] ) ) {
 			throw new \LogicException( 'Locale was not selected yet, you must not initialize locale dependant classes before the app processes the request.' );
 		}
@@ -2034,7 +2055,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		$this->sharedObjects[ 'locale' ] = $locale;
 	}
 
-	private function getRootPath(): string {
+	public function getRootPath(): string {
 		return $this->getAbsolutePath( __DIR__ . '/../..' );
 	}
 
@@ -2112,4 +2133,26 @@ class FunFunFactory implements LoggerAwareInterface {
 			return new DoctrineDonationIdRepository( $this->getEntityManager() );
 		} );
 	}
+
+	public function setPayPalAPI( PaypalAPI $paypalAPI ): void {
+		$this->sharedObjects[PaypalAPI::class] = $paypalAPI;
+	}
+
+	private function getPayPalApiClient(): PaypalAPI {
+		return $this->createSharedObject( PaypalAPI::class, static function (): PaypalAPI {
+			return new PayPalAPIStub();
+		} );
+	}
+
+	/**
+	 * https://phabricator.wikimedia.org/T329159
+	 * This is a temporary "feature flag" method until the switch to the new PayPalAPI is complete.
+	 * Use inline comments to return the desired instance
+	 * Be aware that the AddDonationRouteTest uses this to determine, which tests to skip and which ones to run.
+	 */
+	public function getPayPalUrlGeneratorConfigForDonations(): PayPalAPIURLGeneratorConfig|LegacyPayPalURLGeneratorConfig {
+		return $this->getPayPalAPIURLGeneratorConfigForDonations();
+		// return $this->getLegacyPayPalUrlConfigForDonations();
+	}
+
 }

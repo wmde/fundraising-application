@@ -17,8 +17,11 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryTranslator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\PayPalAPISpy;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\LegacyPayPalURLGeneratorConfig;
+use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalAPIURLGeneratorConfig;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\AddDonationController
@@ -354,9 +357,22 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( 'sandbox.paypal.com', $response->getContent() );
 	}
 
+	/**
+	 * @todo Remove this test when PayPal API integration is done
+	 */
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
+		$factory->setLocale( 'de_DE' );
+
+		if ( $factory->getPayPalUrlGeneratorConfigForDonations() instanceof PayPalAPIURLGeneratorConfig ) {
+			// Canary for removing LegacyPayPalURLGeneratorConfig
+			if ( time() > strtotime( '2023-08-30' ) ) {
+				$this->fail();
+			}
+			$this->markTestSkipped();
+		}
+
 		$translator = new InMemoryTranslator( [
 				'paypal_item_name_donation' => 'Ihre Spende',
 				'payment_interval_3' => 'vierteljährlich',
@@ -374,6 +390,43 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 		$this->assertStringContainsString( 'item_name=Ihre+Spende', $response->getContent() );
+	}
+
+	/**
+	 * @dataProvider provideLocaleAndSubscriptionIDForPayPal
+	 */
+	public function testWhenRedirectingToPayPalLocaleDependantSubscriptionIdIsChosen( string $locale, string $expected ): void {
+		$client = $this->createClient();
+		$paypalApiSpy = new PayPalAPISpy();
+		$factory = $this->getFactory();
+		$factory->setPayPalAPI( $paypalApiSpy );
+
+		$client->followRedirects( false );
+		$client->request(
+			'POST',
+			'/donation/add?locale=' . $locale,
+			$this->newValidPayPalInput()
+		);
+
+		// TODO remove if statement when paypal integration is done
+		if ( $factory->getPayPalUrlGeneratorConfigForDonations() instanceof LegacyPayPalURLGeneratorConfig ) {
+			// Canary for removing LegacyPayPalURLGeneratorConfig
+			if ( time() > strtotime( '2023-08-30' ) ) {
+				$this->fail();
+			}
+			$this->markTestSkipped( 'The FunFunFactory uses LegacyPayPalURLGeneratorConfig' );
+		}
+
+		$this->assertSame( $expected, $paypalApiSpy->lastCalledSubscriptionPlanId() );
+	}
+
+	/**
+	 * @return iterable<array{string,string}>
+	 */
+	public static function provideLocaleAndSubscriptionIDForPayPal(): iterable {
+		// subscription plan ids come from the file test/Data/files/paypal_api.yml)
+		yield [ 'en_GB', 'P-4E8195' ];
+		yield [ 'de_DE', 'P-5PB46799' ];
 	}
 
 	private function newValidPayPalInput(): array {

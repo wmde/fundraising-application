@@ -75,7 +75,8 @@
 		"notify-url": "",
 		"return-url": "",
 		"cancel-url": "",
-		"item-name": ""
+		"item-name": "",
+		"config-path": ""
 	},
 	"paypal-membership": {
 		"base-url": "https://www.paypal.com/cgi-bin/webscr?",
@@ -84,7 +85,7 @@
 		"return-url": "",
 		"cancel-url": "",
 		"item-name": "",
-		"delay-in-days": 90
+		"config-path": ""
 	},
 	"creditcard": {
 		"access-key": "",
