@@ -48,7 +48,8 @@
 		"notify-url": "http://my.donation.app/handler/paypal",
 		"return-url": "http://my.donation.app/fr-rewrite/donation/confirm",
 		"cancel-url": "http://my.donation.app/fr-rewrite/donation/cancel",
-		"item-name": "This appears on the invoice"
+		"item-name": "This appears on the invoice",
+		"config-path": "tests/Data/files/paypal_api.yml"
 	},
 	"paypal-membership": {
 		"base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
@@ -57,7 +58,7 @@
 		"return-url": "http://my.donation.app/membership/confirm",
 		"cancel-url": "http://my.donation.app/membership/cancel",
 		"item-name": "Your membership",
-		"delay-in-days": 90
+		"config-path": "tests/Data/files/paypal_api.yml"
 	},
 	"creditcard": {
 		"base-url": "http://thatother.paymentprovider.com?",

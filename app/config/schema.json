@@ -474,6 +474,13 @@
           "title": "Payment item name",
           "description": "The \"item\" that shows up in the payment, i.e. what is paid for",
           "default": ""
+        },
+        "config-path": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Path to Paypal API configuration",
+          "description": "Path to a YAML file that contains the subscription IDs for recurring donations",
+          "default": ""
         }
       },
       "additionalProperties": false,
@@ -535,11 +542,12 @@
           "description": "The \"item\" that shows up in the payment, i.e. what is paid for",
           "default": ""
         },
-        "delay-in-days": {
-          "type": "integer",
-          "title": "Delay in days",
-          "description": "Number of days until the first payment will be made",
-          "default": 90
+        "config-path": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Path to Paypal API configuration",
+          "description": "Path to a YAML file that contains the subscription IDs for recurring donations. The path must be relative to the application root.",
+          "default": ""
         }
       },
       "additionalProperties": false,

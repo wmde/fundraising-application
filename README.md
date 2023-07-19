@@ -9,7 +9,7 @@ User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fu
 * [Installation](#installation)
 * [Running the application](#running-the-application)
 * [Configuration](#configuration)
-* [Running the tests](#running-the-tests)
+* [Running the tests, code style checks and static analysis](#running-the-tests-code-style-checks-and-static-analysis)
 * [Emails](#emails)
 * [Database](#database)
 * [Frontend development](#frontend-development)
@@ -84,6 +84,22 @@ You can add local modifications by adding a file that follows the name pattern o
 The application merges the values from the configuration files with the default values from the file
 `app/config/config.dist.json`.
 
+### .env files
+
+They mostly contain credentials. Symfony requires those files and will pick the file depending on the `APP_ENV` environment variable.
+
+- `.env`: Sets default values for all environments, overwritten by all following files.
+- `.env.dev`: Sets default values for the development environment
+- `.env.test`: Sets default values for unit test environment
+- `.env.dev.local`: Overrides the default values for all environments.
+  See [Payments](#payments) section below.
+
+`.env.dev` and `.env.test` contain defaults and should never contain actual credentials. If you want to override credentials,
+create the file `.env.dev.local`. DO NOT CHECK IT IN!
+
+When we deploy the application with our deployment scripts, the deployment script will create a file called `.env` with
+the configuration data for production.
+
 ### Fronted development
 If you want to work on the client-side code of the application, you need
 to load it from a different source, e.g. the
@@ -121,7 +137,7 @@ instead of MariaDB. To run the tests with the real database, add the file
 ### Payments
 
 For a fully working instance with all payment types and working templates you need to fill out the following
-configuration data:
+configuration data in `app/config/config.dev.json`:
 
     "operator-email"
     "operator-displayname-organization"
@@ -129,6 +145,10 @@ configuration data:
     "paypal-donation"
     "paypal-membership"
     "creditcard"
+
+To be able to go to the PayPal page for payments, you also need to fill the PayPal credentials in the file `.env.dev.local`.
+The `.env.dev.local` file will override the example data given in `.env.dev`.
+See the file `.env.dev` for an explanation of the PayPal configuration entries. 
 
 ### Content
 
@@ -140,7 +160,7 @@ The following example shows the configuration when the content repository is at 
 
 ### A/B test campaigns.
 
-For more information on how to set up the campaigns see "[How to Create an A/B Test](doc/HOWTO_Create_an_a_b_test.md).
+For more information on how to set up the campaigns see "[How to Create an A/B Test](doc/HOWTO_Create_an_a_b_test.md)".
 
 The campaign definitions are in the `app/config` directory. You can tell the application which files to use by editing
 the `campaigns` value in `app/config/config.ENVIRONMENTNAME.json`. The campaign configuration files will be merged on
@@ -152,7 +172,7 @@ change that, you have to pass the environment variable to `make`, `docker` and `
 
     make ci APP_ENV=prod
 
-For `docker-compose` you can either put create a file called `.env` in the application directory and, with the contents of
+For `docker-compose` you can create a file called `.env` in the application directory with the contents of
 
     APP_ENV=prod
 
@@ -173,16 +193,16 @@ Valid environment names are
 
 **Note:** PHPUnit tests are always run in the `test` environment configuration, regardless of `APP_ENV`!
 
-## Running the tests
+## Running the tests, code style checks and static analysis
 
-### Full CI run
+### Running all checks
 
     make ci
 
 This will run the tests, check the code style, do the static analysis and
 check the configuration files.
 
-### Run only tests only
+### Run only tests
 
     make test
 
@@ -203,11 +223,11 @@ If you want to fix the code style violations, run
 
 	make fix-cs
 
-### phpstan
+### Static analysis
 
-We perform static code analysis with [phpstan](https://github.com/phpstan/phpstan/) during runs of `make ci`.
+We perform static code analysis with [PHPStan](https://github.com/phpstan/phpstan/) during runs of `make ci`.
 
-In the absence of dev-dependencies (i.e. to simulate the vendor/ code on production) you can run phpstan with the commands
+In the absence of dev-dependencies (i.e. to simulate the vendor/ code on production) you can run PHPStan with the commands
 
     docker build -t wmde/fundraising-frontend-phpstan build/phpstan
     docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/
