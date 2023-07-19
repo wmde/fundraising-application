@@ -11,6 +11,7 @@ var/
 coverage/
 
 .env
+.env.*.local
 .idea/
 .floo
 .flooignore
