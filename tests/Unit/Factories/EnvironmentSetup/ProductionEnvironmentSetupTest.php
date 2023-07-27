@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 class ProductionEnvironmentSetupTest extends TestCase {
 	public function testEnvironmentSetsUpEnvironmentDependentServices() {
 		$expectedSetters = [
-			'setCampaignCache',
+			'setConfigCache',
 			'setPaypalLogger',
 			'setSofortLogger',
 			'setCreditCardLogger',

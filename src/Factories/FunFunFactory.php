@@ -134,6 +134,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\NullMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\PayPalAPIURLGeneratorConfigLoader;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\JsonTranslator;
@@ -216,7 +217,6 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\CreditCardConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PaymentURLFactory;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalAPIURLGeneratorConfig;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalAPIURLGeneratorConfigFactory;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\SofortURLGeneratorConfig;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentValidator;
 use WMDE\Fundraising\PaymentContext\PaymentContextFactory;
@@ -228,7 +228,6 @@ use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\Chara
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\RandomCharacterIndexGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentReferenceCodeGenerator\UniquePaymentReferenceCodeGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PayPal\PaypalAPI;
-use WMDE\Fundraising\PaymentContext\Services\PayPal\PayPalURLGeneratorConfigReader;
 use WMDE\Fundraising\PaymentContext\Services\TransactionIdFinder\DoctrineTransactionIdFinder;
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\BookPaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\VerificationService;
@@ -1070,9 +1069,12 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getPayPalAPIURLGeneratorConfigForDonations(): PayPalAPIURLGeneratorConfig {
 		return $this->createSharedObject( PayPalAPIURLGeneratorConfig::class . '::factory', function () {
-			// TODO store $rawConfig in a cache to avoid repetitive YAML parsing and validation
-			$rawConfig = PayPalURLGeneratorConfigReader::readConfig( $this->getRootPath() . '/' . $this->config[ 'paypal-donation' ][ 'config-path' ] );
-			return PayPalAPIURLGeneratorConfigFactory::createConfig( $rawConfig, "donation", $this->getLocale() );
+			$configLoader = new PayPalAPIURLGeneratorConfigLoader( $this->getConfigurationCache() );
+			return $configLoader->load(
+				$this->getRootPath() . '/' . $this->config[ 'paypal-donation' ][ 'config-path' ],
+				'donation',
+				$this->getLocale()
+			);
 		} );
 	}
 
@@ -1565,12 +1567,12 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new AddCommentValidator();
 	}
 
-	public function setCampaignCache( CacheInterface $cache ): void {
-		$this->sharedObjects['Cache::Campaign'] = $cache;
+	public function setConfigCache( CacheInterface $cache ): void {
+		$this->sharedObjects['Cache::Config'] = $cache;
 	}
 
-	private function getCampaignCache(): CacheInterface {
-		return $this->createSharedObject( 'Cache::Campaign', static function () {
+	private function getConfigurationCache(): CacheInterface {
+		return $this->createSharedObject( 'Cache::Config', static function () {
 			return new Psr16Cache( new ArrayAdapter() );
 		} );
 	}
@@ -1739,7 +1741,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function getCampaignConfigurationLoader(): CampaignConfigurationLoaderInterface {
 		return $this->createSharedObject( CampaignConfigurationLoaderInterface::class, function (): CampaignConfigurationLoader {
-			return new CampaignConfigurationLoader( new SimpleFileFetcher(), $this->getCampaignCache() );
+			return new CampaignConfigurationLoader( new SimpleFileFetcher(), $this->getConfigurationCache() );
 		} );
 	}
 
