@@ -17,6 +17,11 @@ use WMDE\Fundraising\PaymentContext\Services\PayPal\GuzzlePaypalAPI;
 
 class ProductionEnvironmentSetup implements EnvironmentSetup {
 
+	/**
+	 * 1 week in seconds
+	 */
+	private const CACHE_LIFETIME = 604800;
+
 	public function setEnvironmentDependentInstances( FunFunFactory $factory ): void {
 		$this->setCampaignCache( $factory );
 		$this->initializeLoggers( $factory );
@@ -31,9 +36,9 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 	}
 
 	private function setCampaignCache( FunFunFactory $factory ): void {
-		$factory->setCampaignCache(
+		$factory->setConfigCache(
 			new Psr16Cache(
-				new FilesystemAdapter( 'campaigns', 60 * 60 * 24 * 7, $factory->getCachePath() . '/campaigns' )
+				new FilesystemAdapter( 'configuration_files', self::CACHE_LIFETIME, $factory->getCachePath() . '/configuration_files' )
 			)
 		);
 	}
