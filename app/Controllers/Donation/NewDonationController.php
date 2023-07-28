@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
 
 class NewDonationController {
 
@@ -19,12 +20,14 @@ class NewDonationController {
 
 		$amount = intval( $request->get( 'amount', 0 ) );
 		$paymentType = (string)$request->get( 'paymentType', '' );
-		$interval = $request->get( 'interval', 0 );
-		if ( $interval !== null ) {
-			$interval = intval( $interval );
-		}
+		$interval = $this->getIntervalFromRequest( $request );
 
-		$validationResult = $ffFactory->newPaymentValidator()->validatePaymentData( $amount, $interval, $paymentType, $ffFactory->newDonationPaymentValidator() );
+		$validationResult = $ffFactory->newPaymentValidator()->validatePaymentData(
+			$amount,
+				$interval ?? PaymentInterval::OneTime->value,
+			$paymentType,
+			$ffFactory->newDonationPaymentValidator()
+		);
 
 		$trackingInfo = new ImpressionCounts(
 			intval( $request->get( 'impCount' ) ),
@@ -42,5 +45,15 @@ class NewDonationController {
 				Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
 			)
 		);
+	}
+
+	private function getIntervalFromRequest( Request $request ): ?int {
+		$interval = $request->get( 'interval', null );
+
+		if ( is_string( $interval ) ) {
+			return intval( $interval );
+		}
+
+		return $interval;
 	}
 }
