@@ -5825,16 +5825,16 @@
         },
         {
             "name": "symfony/twig-bridge",
-            "version": "v6.3.0",
+            "version": "v6.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/twig-bridge.git",
-                "reference": "67a33c71062d7d931fe9a8cb7be79cca986a6c09"
+                "reference": "6f8435db76a2d79917489a19a82679276c1b4e32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/67a33c71062d7d931fe9a8cb7be79cca986a6c09",
-                "reference": "67a33c71062d7d931fe9a8cb7be79cca986a6c09",
+                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/6f8435db76a2d79917489a19a82679276c1b4e32",
+                "reference": "6f8435db76a2d79917489a19a82679276c1b4e32",
                 "shasum": ""
             },
             "require": {
@@ -5913,7 +5913,7 @@
             "description": "Provides integration for Twig with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/twig-bridge/tree/v6.3.0"
+                "source": "https://github.com/symfony/twig-bridge/tree/v6.3.2"
             },
             "funding": [
                 {
@@ -5929,7 +5929,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-29T13:12:36+00:00"
+            "time": "2023-07-20T16:42:33+00:00"
         },
         {
             "name": "symfony/validator",
