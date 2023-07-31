@@ -2088,7 +2088,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		$this->sharedObjects[PaypalAPI::class] = $paypalAPI;
 	}
 
-	private function getPayPalApiClient(): PaypalAPI {
+	public function getPayPalApiClient(): PaypalAPI {
 		return $this->createSharedObject( PaypalAPI::class, static function (): PaypalAPI {
 			return new PayPalAPIStub();
 		} );
