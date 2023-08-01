@@ -609,7 +609,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newAddSubscriptionMailer(): SubscriptionTemplateMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getOrganizationMessenger(),
+			$this->getSubscriptionMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Subscription_Request.txt.twig',
@@ -623,7 +623,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newConfirmSubscriptionMailer(): SubscriptionTemplateMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getOrganizationMessenger(),
+			$this->getSubscriptionMessenger(),
 			new TwigTemplate(
 					$this->getMailerTwig(),
 					'Subscription_Confirmation.txt.twig',
@@ -686,7 +686,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newContactUserMailer(): GetInTouchMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getOrganizationMessenger(),
+			$this->getContactMessenger(),
 			new TwigTemplate( $this->getMailerTwig(), 'Contact_Confirm_to_User.txt.twig' ),
 			new BasicMailSubjectRenderer( $this->getMailTranslator(), 'mail_subject_getintouch' )
 		);
@@ -694,7 +694,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newContactOperatorMailer(): OperatorMailer {
 		return new OperatorMailer(
-			$this->getOrganizationMessenger(),
+			$this->getContactMessenger(),
 			new TwigTemplate( $this->getMailerTwig(), 'Contact_Forward_to_Operator.txt.twig' )
 		);
 	}
@@ -758,18 +758,58 @@ class FunFunFactory implements LoggerAwareInterface {
 			} );
 	}
 
-	private function getOrganizationMessenger(): Messenger {
-		return $this->createSharedObject( Messenger::class . 'organization', function (): Messenger {
+	private function getDonationMessenger(): Messenger {
+		return $this->createSharedObject( Messenger::class . 'donation', function (): Messenger {
 			return new Messenger(
 				$this->getMailer(),
-				$this->getOrganizationEmailAddress(),
-				$this->config['contact-info']['organization']['name']
+				new EmailAddress( $this->config['contact-info']['donation']['email'] ),
+				$this->config['contact-info']['donation']['name']
 			);
 		} );
 	}
 
-	public function setOrganizationMessenger( Messenger $messenger ): void {
-		$this->sharedObjects[Messenger::class . 'organization'] = $messenger;
+	private function getMembershipMessenger(): Messenger {
+		return $this->createSharedObject( Messenger::class . 'membership', function (): Messenger {
+			return new Messenger(
+				$this->getMailer(),
+				new EmailAddress( $this->config['contact-info']['membership']['email'] ),
+				$this->config['contact-info']['membership']['name']
+			);
+		} );
+	}
+
+	private function getSubscriptionMessenger(): Messenger {
+		return $this->createSharedObject( Messenger::class . 'subscription', function (): Messenger {
+			return new Messenger(
+				$this->getMailer(),
+				new EmailAddress( $this->config['contact-info']['subscription']['email'] ),
+				$this->config['contact-info']['subscription']['name']
+			);
+		} );
+	}
+
+	private function getContactMessenger(): Messenger {
+		return $this->createSharedObject( Messenger::class . 'contact', function (): Messenger {
+			return new Messenger(
+				$this->getMailer(),
+				new EmailAddress( $this->config['contact-info']['contact']['email'] ),
+				$this->config['contact-info']['contact']['name']
+			);
+		} );
+	}
+
+	public function setContactMessenger( Messenger $messenger ): void {
+		$this->sharedObjects[ Messenger::class . 'contact' ] = $messenger;
+	}
+
+	private function getAdminMessenger(): Messenger {
+		return $this->createSharedObject( Messenger::class . 'admin', function (): Messenger {
+			return new Messenger(
+				$this->getMailer(),
+				new EmailAddress( $this->config['contact-info']['admin']['email'] ),
+				$this->config['contact-info']['admin']['name']
+			);
+		} );
 	}
 
 	private function getMailer(): MailerInterface {
@@ -790,15 +830,17 @@ class FunFunFactory implements LoggerAwareInterface {
 		$this->sharedObjects[ MailerInterface::class ] = $mailer;
 	}
 
-	public function setNullMessenger(): void {
-		$this->setOrganizationMessenger( new Messenger(
+	public function setNullMessengers(): void {
+		$messenger = new Messenger(
 			new Mailer( new NullTransport() ),
-			$this->getOrganizationEmailAddress()
-		) );
-	}
+			new EmailAddress( $this->config['contact-info']['donation']['email'] )
+		);
 
-	public function getOrganizationEmailAddress(): EmailAddress {
-		return new EmailAddress( $this->config['contact-info']['organization']['email'] );
+		$this->sharedObjects[ Messenger::class . 'donation' ] = $messenger;
+		$this->sharedObjects[ Messenger::class . 'membership' ] = $messenger;
+		$this->sharedObjects[ Messenger::class . 'subscription' ] = $messenger;
+		$this->sharedObjects[ Messenger::class . 'contact' ] = $messenger;
+		$this->sharedObjects[ Messenger::class . 'admin' ] = $messenger;
 	}
 
 	/**
@@ -877,7 +919,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newCancelDonationMailer(): DonationTemplateMailerInterface {
 		return $this->newTemplateMailer(
-			$this->getOrganizationMessenger(),
+			$this->getDonationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Donation_Cancellation_Confirmation.txt.twig',
@@ -932,10 +974,10 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newAdminMailer(
 				'eine Spende',
 				'https://backend.wikimedia.de/backend/donation/list',
-				$this->getOrganizationMessenger()
+				$this->getAdminMessenger()
 			),
 			$this->newGetPaymentUseCase(),
-			adminEmailAddress: $this->config['contact-info']['suborganization']['email']
+			adminEmailAddress: $this->config['contact-info']['admin']['email']
 		);
 	}
 
@@ -944,7 +986,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newDonationUpdatedTemplateMailer(),
 			new NullMailer(),
 			$this->newGetPaymentUseCase(),
-			adminEmailAddress: $this->config['contact-info']['suborganization']['email']
+			adminEmailAddress: $this->config['contact-info']['admin']['email']
 		);
 	}
 
@@ -992,7 +1034,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newDonationConfirmationMailer(): DonationTemplateMailerInterface {
 		return $this->newErrorHandlingTemplateMailer(
-			$this->getOrganizationMessenger(),
+			$this->getDonationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Donation_Confirmation.txt.twig',
@@ -1008,7 +1050,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newDonationUpdatedTemplateMailer(): DonationTemplateMailerInterface {
 		return $this->newErrorHandlingTemplateMailer(
-			$this->getOrganizationMessenger(),
+			$this->getDonationMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Donation_Confirmation.txt.twig',
@@ -1173,10 +1215,10 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->newAdminMailer(
 					'ein Mitgliedschaftsantrag',
 					'https://backend.wikimedia.de/backend/member/list',
-					$this->getOrganizationMessenger()
+					$this->getAdminMessenger()
 				),
 				$this->newGetPaymentUseCase(),
-				adminEmailAddress: $this->config['contact-info']['organization']['email']
+				adminEmailAddress: $this->config['contact-info']['admin']['email']
 			),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
@@ -1205,7 +1247,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newApplyForMembershipMailer(): MembershipTemplateMailerInterface {
 		return $this->newErrorHandlingTemplateMailer(
-			$this->getOrganizationMessenger(),
+			$this->getMembershipMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Membership_Application_Confirmation.txt.twig',
@@ -1286,7 +1328,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function newCancelMembershipApplicationMailer(): MembershipTemplateMailerInterface {
 		return new TemplateBasedMailer(
-			$this->getOrganizationMessenger(),
+			$this->getMembershipMessenger(),
 			new TwigTemplate(
 				$this->getMailerTwig(),
 				'Membership_Application_Cancellation_Confirmation.txt.twig',

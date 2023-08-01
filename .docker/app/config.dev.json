@@ -35,13 +35,25 @@
   },
   "i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n",
   "contact-info": {
-    "organization": {
+    "donation": {
+      "email": "spenden@wikimedia.de",
+      "name": "Wikimedia Deutschland e. V."
+    },
+    "membership": {
       "email": "mitglieder@wikimedia.de",
       "name": "Wikimedia Deutschland e. V."
     },
-    "suborganization": {
+    "subscription": {
       "email": "spenden@wikimedia.de",
-      "name": "Wikimedia Fördergesellschaft mbH"
+      "name": "Wikimedia Deutschland e. V."
+    },
+    "contact": {
+      "email": "spenden@wikimedia.de",
+      "name": "Wikimedia Deutschland e. V."
+    },
+    "admin": {
+      "email": "spenden@wikimedia.de",
+      "name": "Wikimedia Deutschland e. V."
     }
   },
   "donation-timeframe-limit": "PT1S",

@@ -184,10 +184,10 @@
       "title": "Contact information",
       "description": "Names and email addresses for creating email recipients and senders",
       "properties": {
-        "organization": {
+        "donation": {
           "type": "object",
-          "title": "Main Organization",
-          "description": "Main sender of email address. In case of WikiMedia Germany, this is mostly for memberships",
+          "title": "Donation Emails",
+          "description": "Emails to donors are sent from this address",
           "properties": {
             "email": {
               "type": "string",
@@ -203,10 +203,67 @@
           },
           "required": [ "name", "email" ]
         },
-        "suborganization": {
+        "membership": {
           "type": "object",
-          "title": "Sub-Organization",
-          "description": "Sender of email address. In case of WikiMedia Germany, this is for donations and subscriptions'",
+          "title": "Membership Emails",
+          "description": "Emails to members are sent from this address",
+          "properties": {
+            "email": {
+              "type": "string",
+              "minLength": 1,
+              "default": "",
+              "format": "email"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "default": ""
+            }
+          },
+          "required": [ "name", "email" ]
+        },
+        "subscription": {
+          "type": "object",
+          "title": "Subscription Validation and Confirmation Emails",
+          "description": "Emails to mail subscribers are sent from here",
+          "properties": {
+            "email": {
+              "type": "string",
+              "minLength": 1,
+              "default": "",
+              "format": "email"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "default": ""
+            }
+          },
+          "required": [ "name", "email" ]
+        },
+        "contact": {
+          "type": "object",
+          "title": "Contact Emails",
+          "description": "Emails to people who fill out the contact form are sent from here",
+          "properties": {
+            "email": {
+              "type": "string",
+              "minLength": 1,
+              "default": "",
+              "format": "email"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "default": ""
+            }
+          },
+          "required": [ "name", "email" ]
+        },
+        "admin": {
+          "type": "object",
+          "title": "The Admin email address",
+          "description": "Admin emails are sent to this address",
           "properties": {
             "email": {
               "type": "string",
