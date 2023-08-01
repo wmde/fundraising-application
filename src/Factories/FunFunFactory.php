@@ -208,6 +208,7 @@ use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortLibClient;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\IbanBlockList;
+use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentIdRepository;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentReferenceCodeGenerator;
@@ -1327,8 +1328,13 @@ class FunFunFactory implements LoggerAwareInterface {
 			[
 				'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForDonation(),
 				'presetAmounts' => $this->getPresetAmountsSettings( 'donations' ),
-				// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
-				'paymentIntervals' => [ 0, 1, 3, 6, 12 ],
+				'paymentIntervals' => [
+					PaymentInterval::OneTime->value,
+					PaymentInterval::Monthly->value,
+					PaymentInterval::Quarterly->value,
+					PaymentInterval::HalfYearly->value,
+					PaymentInterval::Yearly->value,
+				],
 				'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 				'countries' => $this->getCountries(),
 				'addressValidationPatterns' => $this->getValidationRules()->address,
@@ -1342,7 +1348,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
-			// TODO use Interval class (does not exist yet) when https://phabricator.wikimedia.org/T222636 is done
 			'paymentIntervals' => $paymentIntervals,
 			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 			'countries' => $this->getCountries(),
@@ -1682,7 +1687,6 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	private function newCampaignFeatures(): Set {
-		// TODO Cache features so we don't have to parse the campaign config on every request
 		$factory = new CampaignFeatureBuilder( ...$this->getCampaigns() );
 		return $factory->getFeatures();
 	}
