@@ -15,8 +15,8 @@ donation:
       - id: 'P-3XP13806'
         name: 'Jährliche Spende'
         interval: 'Yearly'
-    return_url: 'https://test-spenden.wikimedia.de/show-donation-confirmation?id={{id}}&utoken={{updateToken}}&token={{accessToken}}'
-    cancel_url: 'https://test-spenden.wikimedia.de/new?id={{id}}&utoken={{updateToken}}&token={{accessToken}}'
+    return_url: 'https://test-spenden-2.wikimedia.de/show-donation-confirmation?id={{id}}&utoken={{updateToken}}&accessToken={{accessToken}}'
+    cancel_url: 'https://test-spenden-2.wikimedia.de/new?id={{id}}&utoken={{updateToken}}&accessToken={{accessToken}}'
   en_GB:
     product_id: 'paypal_product_id_2'
     product_name: 'Donation'
@@ -33,8 +33,8 @@ donation:
       - id: 'P-842158'
         name: 'Yearly donation'
         interval: 'Yearly'
-    return_url: 'https://test-spenden.wikimedia.de/show-donation-confirmation?id={{id}}&utoken={{updateToken}}&token={{accessToken}}&locale=en_GB'
-    cancel_url: 'https://test-spenden.wikimedia.de/new?id={{id}}&utoken={{updateToken}}&token={{accessToken}}&locale=en_GB'
+    return_url: 'https://test-spenden-2.wikimedia.de/show-donation-confirmation?id={{id}}&utoken={{updateToken}}&accessToken={{accessToken}}&locale=en_GB'
+    cancel_url: 'https://test-spenden-2.wikimedia.de/new?id={{id}}&utoken={{updateToken}}&accessToken={{accessToken}}&locale=en_GB'
 membership:
   de_DE:
     product_id: 'paypal_product_id_3'
@@ -52,8 +52,8 @@ membership:
       - id: 'P-2P1354'
         name: 'Jährlicher Mitgliedschaftsbeitrag'
         interval: 'Yearly'
-    return_url: 'https://test-spenden.wikimedia.de/show-donation-confirmation?id={{id}}&utoken={{updateToken}}&token={{accessToken}}'
-    cancel_url: 'https://test-spenden.wikimedia.de/new?id={{id}}&utoken={{updateToken}}&token={{accessToken}}'
+    return_url: 'https://test-spenden-2.wikimedia.de/show-donation-confirmation?id={{id}}&utoken={{updateToken}}&accessToken={{accessToken}}'
+    cancel_url: 'https://test-spenden-2.wikimedia.de/new?id={{id}}&utoken={{updateToken}}&accessToken={{accessToken}}'
   en_GB:
     product_id: 'paypal_product_id_4'
     product_name: 'Membership'
@@ -70,5 +70,5 @@ membership:
       - id: 'P-1MK753'
         name: 'Yearly membership fee'
         interval: 'Yearly'
-    return_url: 'https://test-spenden.wikimedia.de/show-membership-confirmation?id={{id}}&utoken={{updateToken}}&token={{accessToken}}&locale=en_GB'
-    cancel_url: 'https://test-spenden.wikimedia.de/apply-for-membership?id={{id}}&utoken={{updateToken}}&token={{accessToken}}&locale=en_GB'
+    return_url: 'https://test-spenden-2.wikimedia.de/show-membership-confirmation?id={{id}}&utoken={{updateToken}}&accessToken={{accessToken}}&locale=en_GB'
+    cancel_url: 'https://test-spenden-2.wikimedia.de/apply-for-membership?id={{id}}&utoken={{updateToken}}&accessToken={{accessToken}}&locale=en_GB'

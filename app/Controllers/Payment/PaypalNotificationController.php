@@ -19,11 +19,14 @@ class PaypalNotificationController {
 	private const MSG_NOT_HANDLED = 'PayPal request not handled';
 	private const PAYPAL_LOG_FILTER = [ 'payer_email', 'payer_id' ];
 
+	// See https://developer.paypal.com/api/nvp-soap/ipn/IPNandPDTVariables/
 	private const ALLOWED_TRANSACTION_TYPES = [
 		// Regular one-time payment
 		'web_accept',
-		// Recurring payment ("subscription")
+		// Recurring payment ("subscription"), made though the legacy PPL interface (passing parameters via URL)
 		'subscr_payment',
+		// Recurring payment, made through the PPL API
+		'recurring_payment',
 		// money sent directly via email
 		'send_money',
 	];
@@ -37,6 +40,7 @@ class PaypalNotificationController {
 		}
 
 		try {
+			// TODO: Find out the parameters to trigger different booking use case (membership)
 			$useCase = $ffFactory->newBookDonationUseCase( $this->getUpdateToken( $post ) );
 			$response = $useCase->handleNotification( new NotificationRequest(
 				$post->all(),
