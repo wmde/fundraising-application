@@ -50,6 +50,30 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
 	}
 
+	public function testGivenValidRequestForRecurringDonation_applicationIndicatesSuccess(): void {
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+
+		// TODO Change stored donations/payments for paypal to include Order/Subscription IDs
+		$this->storedDonations()->newStoredIncompletePayPalDonation();
+
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$this->newHttpParamsForRecurringDonationPayment()
+		);
+
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$this->assertSame( '', $client->getResponse()->getContent(), 'Success response should be empty' );
+		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
+	}
+
+	// TODO testGivenValidRequestForRecurringDonationWithMissingSubscriptionId_applicationIndicatesFailure(): void
+
+	// TODO testGivenValidRequestForOneTimeDonation_applicationIndicatesSuccess(): void
+	// TODO testGivenValidRequestForOneTimeDonationWithMissingSubscriptionId_applicationIndicatesFailure(): void
+
 	public function testGivenRequestWithMissingItemId_getsIdFromCustomArray(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
@@ -126,6 +150,49 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			'payment_type' => 'instant',
 			'txn_type' => 'web_accept',
 			'payment_date' => '20:12:59 Jan 13, 2009 PST',
+		];
+	}
+
+	private static function newHttpParamsForRecurringDonationPayment(): array {
+		return [
+			"mc_gross" => "5.00",
+			"outstanding_balance" => "0.00",
+			"period_type" => " Regular",
+			"next_payment_date" => "02:00:00 Feb 04, 2024 PST",
+			"protection_eligibility" => "Eligible",
+			"payment_cycle" => "every 6 Months",
+			"tax" => "0.00",
+			"payment_date" => "00:59:58 Aug 04, 2023 PDT",
+			"payment_status" => "Completed",
+			"product_name" => "Halbjährliche Spende an Wikimedia",
+			"charset" => "UTF-8",
+			"recurring_payment_id" => "I-GLDWYUKDXAVE",
+			"first_name" => "Donny",
+			"mc_fee" => "0.45",
+			"notify_version" => "3.9",
+			"amount_per_cycle" => "5.00",
+			"payer_status" => "verified",
+			"currency_code" => "EUR",
+			"business" => self::EMAIL_ADDRESS,
+			"verify_sign" => "AAXUDeWm6RGbJ0GeUjbjQLb8U6hmApvZpWfSinHyAtPQf-gajnSWjpoh",
+			"initial_payment_amount" => "0.00",
+			"profile_status" => "Active",
+			"amount" => "1.23",
+			"txn_id" => "61E67681CH3238416",
+			"payment_type" => "instant",
+			"last_name" => "Donut",
+			"receiver_email" => "paypal-test-merchant@wikimedia.de",
+			"payment_fee" => "",
+			"receiver_id" => "MDBLBA6HBUV58",
+			"txn_type" => "recurring_payment",
+			"mc_currency" => "EUR",
+			"residence_country" => "DE",
+			"transaction_subject" => "Halbjährliche Spende an Wikimedia",
+			"payment_gross" => "",
+			"shipping" => "0.00",
+			"product_type" => "1",
+			"time_created" => "00:59:57 Aug 04, 2023 PDT",
+			"ipn_track_id" => "f370317d5076d"
 		];
 	}
 

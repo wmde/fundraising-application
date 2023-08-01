@@ -1201,7 +1201,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newDonationAuthorizationChecker( string $updateToken = '', string $accessToken = '' ): DonationAuthorizationChecker {
+	public function newDonationAuthorizationChecker( string $updateToken = '', string $accessToken = '' ): DonationAuthorizationChecker {
 		return new AuthorizationChecker( $this->getTokenRepositoryWithLegacyFallback(), $updateToken, $accessToken );
 	}
 
@@ -1455,6 +1455,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		return json_decode( $json );
 	}
 
+	/**
+	 * @deprecated use newBookDonationUseCase instead
+	 */
 	public function newHandleSofortPaymentNotificationUseCase( string $updateToken ): SofortPaymentNotificationUseCase {
 		return new SofortPaymentNotificationUseCase(
 			$this->getDonationIdRepository(),
@@ -1466,11 +1469,11 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	public function newBookDonationUseCase( string $updateToken ): BookDonationUseCase {
+	public function newBookDonationUseCase( DonationAuthorizationChecker $authChecker ): BookDonationUseCase {
 		return new BookDonationUseCase(
 			$this->getDonationIdRepository(),
 			$this->getDonationRepository(),
-			$this->newDonationAuthorizationChecker( $updateToken ),
+			$authChecker,
 			$this->newDonationMailer(),
 			$this->newPaymentBookingService(),
 			$this->newDonationEventLogger()
@@ -1487,6 +1490,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	/**
+	 * @deprecated use newBookDonationUseCase instead
+	 */
 	public function newCreditCardNotificationUseCase( string $updateToken ): CreditCardNotificationUseCase {
 		return new CreditCardNotificationUseCase(
 			$this->getDonationIdRepository(),

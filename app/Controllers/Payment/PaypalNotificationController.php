@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\DonationContext\Infrastructure\DonationAuthorizationChecker;
 use WMDE\Fundraising\DonationContext\UseCases\NotificationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\NotificationResponse;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -19,11 +20,14 @@ class PaypalNotificationController {
 	private const MSG_NOT_HANDLED = 'PayPal request not handled';
 	private const PAYPAL_LOG_FILTER = [ 'payer_email', 'payer_id' ];
 
+	// See https://developer.paypal.com/api/nvp-soap/ipn/IPNandPDTVariables/
 	private const ALLOWED_TRANSACTION_TYPES = [
 		// Regular one-time payment
 		'web_accept',
-		// Recurring payment ("subscription")
+		// Recurring payment ("subscription"), made though the legacy PPL interface (passing parameters via URL)
 		'subscr_payment',
+		// Recurring payment, made through the PPL API
+		'recurring_payment',
 		// money sent directly via email
 		'send_money',
 	];
@@ -36,8 +40,13 @@ class PaypalNotificationController {
 			return new Response( '', Response::HTTP_OK );
 		}
 
+		// TODO create a dispatcher class that checks for txn types `recurring_payment` and `cart`,
+		//      loads the payment ID from the payment_paypal_identifier table (using `recurring_payment_id`/`txn_id`),
+		//      checks for the payment id in the donation and membership tables and dispatches to the correct use case
+		//      dispatch the other txn types with the existing logic
+
 		try {
-			$useCase = $ffFactory->newBookDonationUseCase( $this->getUpdateToken( $post ) );
+			$useCase = $ffFactory->newBookDonationUseCase( $this->getAuthorizationChecker( $ffFactory, $post ) );
 			$response = $useCase->handleNotification( new NotificationRequest(
 				$post->all(),
 				$this->getDonationId( $post )
@@ -156,5 +165,15 @@ class PaypalNotificationController {
 		);
 
 		return str_contains( $message, $unknownMessageSubstring );
+	}
+
+	private function getAuthorizationChecker( FunFunFactory $factory, ParameterBag $postVars ): DonationAuthorizationChecker {
+		// TODO remove this when we have a proper authorizer, we won't check the token for legacy payments
+		if ( $postVars->has( 'custom', '' ) ) {
+			return $factory->newDonationAuthorizationChecker( $this->getUpdateToken( $postVars ) );
+		}
+		// TODO Create an AuthorizationChecker that only checks if the record exists, don't bother with tokens
+		//      (they're not sent in the IPNs initiated through the API)
+		throw new \LogicException( 'Not implemented yet' );
 	}
 }
