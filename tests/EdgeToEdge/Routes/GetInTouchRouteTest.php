@@ -90,7 +90,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 				->method( 'sendMessageToUser' )
 				->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
 
-			$factory->setOrganizationMessenger( $messenger );
+			$factory->setContactMessenger( $messenger );
 		} );
 		$client = $this->createClient();
 

@@ -22,11 +22,23 @@
 	},
 	"i18n-base-path": "",
 	"contact-info": {
-		"organization": {
+		"donation": {
 			"email": "",
 			"name": ""
 		},
-		"suborganization": {
+		"membership": {
+			"email": "",
+			"name": ""
+		},
+		"subscription": {
+			"email": "",
+			"name": ""
+		},
+		"contact": {
+			"email": "",
+			"name": ""
+		},
+		"admin": {
 			"email": "",
 			"name": ""
 		}

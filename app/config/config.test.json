@@ -21,13 +21,25 @@
 	"donation-timeframe-limit": "PT30M",
 	"membership-application-timeframe-limit": "PT10M",
 	"contact-info": {
-		"organization": {
-			"email": "email@operatorsownmailserver.com",
-			"name": "Friendly Operator"
+		"donation": {
+			"email": "donation@operatorsownmailserver.com",
+			"name": "Donation Operator"
 		},
-		"suborganization": {
-			"email": "sub.email@operatorsownmailserver.com",
-			"name": "Alternative Operator"
+		"membership": {
+			"email": "membership@operatorsownmailserver.com",
+			"name": "Membership Operator"
+		},
+		"subscription": {
+			"email": "subscription@operatorsownmailserver.com",
+			"name": "Subscription Operator"
+		},
+		"contact": {
+			"email": "contact@operatorsownmailserver.com",
+			"name": "Contact Operator"
+		},
+		"admin": {
+			"email": "admin@operatorsownmailserver.com",
+			"name": "Admin Operator"
 		}
 	},
 	"paypal-donation": {
