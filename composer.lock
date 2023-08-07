@@ -6441,33 +6441,30 @@
         },
         {
             "name": "wmde/email-address",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/email-address.git",
-                "reference": "2a92cc86b9b338c08aa115cfe7624bfb7846d613"
+                "reference": "9c19879e09f5844e383fac7fe172976bf64740fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/email-address/zipball/2a92cc86b9b338c08aa115cfe7624bfb7846d613",
-                "reference": "2a92cc86b9b338c08aa115cfe7624bfb7846d613",
+                "url": "https://api.github.com/repos/wmde/email-address/zipball/9c19879e09f5844e383fac7fe172976bf64740fc",
+                "reference": "9c19879e09f5844e383fac7fe172976bf64740fc",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0"
+                "php": ">=8.1"
             },
             "require-dev": {
-                "mediawiki/mediawiki-codesniffer": "~13.0",
-                "ockcyp/covers-validator": "~0.6",
-                "phpstan/phpstan": "~0.8.0",
-                "phpunit/phpunit": "~6.2",
-                "slevomat/coding-standard": "~4.0",
-                "squizlabs/php_codesniffer": "~3.0"
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "~10.0",
+                "wmde/fundraising-phpcs": "~8.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -6482,9 +6479,9 @@
             "description": "Email Address value object written in PHP 7",
             "support": {
                 "issues": "https://github.com/wmde/email-address/issues",
-                "source": "https://github.com/wmde/email-address/tree/1.0.1"
+                "source": "https://github.com/wmde/email-address/tree/1.0.2"
             },
-            "time": "2018-02-07T16:29:45+00:00"
+            "time": "2023-08-04T04:23:15+00:00"
         },
         {
             "name": "wmde/euro",
