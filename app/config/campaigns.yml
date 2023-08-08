@@ -26,7 +26,7 @@ campaigns:
     address_type_steps:
       description: Test different kinds of address options, ask user whether they want receipt or just confirmation
       reference: "https://phabricator.wikimedia.org/T342206"
-      start: "2023-08-10"
+      start: "2023-08-08" # Banners start at 2023-08-10, earlier date is for testing the banners
       end: "2023-12-31"
       buckets:
         - "direct"
