@@ -6861,12 +6861,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "db72bfe8a60927a2c67c049c844d35165b0a7beb"
+                "reference": "cfd95ca23133115a98d7ae9df08140abd5f64919"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/db72bfe8a60927a2c67c049c844d35165b0a7beb",
-                "reference": "db72bfe8a60927a2c67c049c844d35165b0a7beb",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/cfd95ca23133115a98d7ae9df08140abd5f64919",
+                "reference": "cfd95ca23133115a98d7ae9df08140abd5f64919",
                 "shasum": ""
             },
             "require": {
@@ -6913,7 +6913,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2023-07-19T16:27:37+00:00"
+            "time": "2023-08-09T15:02:02+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
