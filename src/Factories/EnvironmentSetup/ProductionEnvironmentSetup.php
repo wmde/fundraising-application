@@ -85,7 +85,7 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 			new Client( [ 'base_uri' => $baseUri ] ),
 			$clientId,
 			$secret,
-			$factory->getLogger()
+			$this->createStreamLoggerForPayment( 'paypal_api_errors', $factory->getLoggingPath() )
 		) );
 	}
 
