@@ -185,10 +185,10 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTokenFetche
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationEventLogger;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipIdGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository as MembershipModerationReasonRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
-use WMDE\Fundraising\MembershipContext\Infrastructure\LoggingApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipApplicationEventLogger;
 use WMDE\Fundraising\MembershipContext\Infrastructure\PaymentServiceFactory;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
@@ -1210,6 +1210,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function newApplyForMembershipUseCase(): ApplyForMembershipUseCase {
 		return new ApplyForMembershipUseCase(
 			$this->getMembershipApplicationRepository(),
+			new DoctrineMembershipIdGenerator( $this->getEntityManager() ),
 			$this->newMembershipApplicationTokenFetcher(),
 			new MailMembershipApplicationNotifier(
 				$this->newApplyForMembershipMailer(),
@@ -1312,13 +1313,10 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function getMembershipApplicationRepository(): ApplicationRepository {
 		return $this->createSharedObject( ApplicationRepository::class, function () {
-			return new LoggingApplicationRepository(
-				new DoctrineApplicationRepository(
-					$this->getEntityManager(),
-					$this->newGetPaymentUseCase(),
-					$this->getModerationReasonRepositoryForMembership()
-				),
-				$this->getLogger()
+			return new DoctrineApplicationRepository(
+				$this->getEntityManager(),
+				$this->newGetPaymentUseCase(),
+				$this->getModerationReasonRepositoryForMembership()
 			);
 		} );
 	}
