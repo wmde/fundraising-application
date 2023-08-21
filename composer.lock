@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6af2141fd07d08d2c73ea08aa736c97",
+    "content-hash": "e2c57df2bcb5e27ffd8351e677a709c2",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -436,16 +436,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.6.5",
+            "version": "3.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "96d5a70fd91efdcec81fc46316efc5bf3da17ddf"
+                "reference": "63646ffd71d1676d2f747f871be31b7e921c7864"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/96d5a70fd91efdcec81fc46316efc5bf3da17ddf",
-                "reference": "96d5a70fd91efdcec81fc46316efc5bf3da17ddf",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/63646ffd71d1676d2f747f871be31b7e921c7864",
+                "reference": "63646ffd71d1676d2f747f871be31b7e921c7864",
                 "shasum": ""
             },
             "require": {
@@ -461,10 +461,11 @@
                 "doctrine/coding-standard": "12.0.0",
                 "fig/log-test": "^1",
                 "jetbrains/phpstorm-stubs": "2023.1",
-                "phpstan/phpstan": "1.10.21",
+                "phpstan/phpstan": "1.10.29",
                 "phpstan/phpstan-strict-rules": "^1.5",
                 "phpunit/phpunit": "9.6.9",
                 "psalm/plugin-phpunit": "0.18.4",
+                "slevomat/coding-standard": "8.13.1",
                 "squizlabs/php_codesniffer": "3.7.2",
                 "symfony/cache": "^5.4|^6.0",
                 "symfony/console": "^4.4|^5.4|^6.0",
@@ -528,7 +529,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.6.5"
+                "source": "https://github.com/doctrine/dbal/tree/3.6.6"
             },
             "funding": [
                 {
@@ -544,7 +545,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-17T09:15:50+00:00"
+            "time": "2023-08-17T05:38:17+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1027,16 +1028,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.16.0",
+            "version": "2.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "495cd06b9a630f9c38a21ceb249ed008edbe8414"
+                "reference": "597a63a86ca8c5f9d1ec2dc74fe3d1269d43434a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/495cd06b9a630f9c38a21ceb249ed008edbe8414",
-                "reference": "495cd06b9a630f9c38a21ceb249ed008edbe8414",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/597a63a86ca8c5f9d1ec2dc74fe3d1269d43434a",
+                "reference": "597a63a86ca8c5f9d1ec2dc74fe3d1269d43434a",
                 "shasum": ""
             },
             "require": {
@@ -1065,14 +1066,14 @@
                 "doctrine/annotations": "^1.13 || ^2",
                 "doctrine/coding-standard": "^9.0.2 || ^12.0",
                 "phpbench/phpbench": "^0.16.10 || ^1.0",
-                "phpstan/phpstan": "~1.4.10 || 1.10.25",
+                "phpstan/phpstan": "~1.4.10 || 1.10.28",
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6",
                 "psr/log": "^1 || ^2 || ^3",
                 "squizlabs/php_codesniffer": "3.7.2",
                 "symfony/cache": "^4.4 || ^5.4 || ^6.0",
                 "symfony/var-exporter": "^4.4 || ^5.4 || ^6.2",
                 "symfony/yaml": "^3.4 || ^4.0 || ^5.0 || ^6.0",
-                "vimeo/psalm": "4.30.0 || 5.13.1"
+                "vimeo/psalm": "4.30.0 || 5.14.1"
             },
             "suggest": {
                 "ext-dom": "Provides support for XSD validation for XML mapping files",
@@ -1122,9 +1123,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.16.0"
+                "source": "https://github.com/doctrine/orm/tree/2.16.1"
             },
-            "time": "2023-08-01T12:07:04+00:00"
+            "time": "2023-08-09T13:05:08+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -6801,16 +6802,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v11.2.0",
+            "version": "v12.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "76a42effe53934ae8bd0a4da3dece9e900de06c2"
+                "reference": "5e091374dd4246904477720e32ccc4e5ebef8a2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/76a42effe53934ae8bd0a4da3dece9e900de06c2",
-                "reference": "76a42effe53934ae8bd0a4da3dece9e900de06c2",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/5e091374dd4246904477720e32ccc4e5ebef8a2e",
+                "reference": "5e091374dd4246904477720e32ccc4e5ebef8a2e",
                 "shasum": ""
             },
             "require": {
@@ -6827,7 +6828,7 @@
             "require-dev": {
                 "phpstan/phpstan": "~1.2",
                 "phpstan/phpstan-phpunit": "~1.0",
-                "phpunit/phpunit": "~10.2.0",
+                "phpunit/phpunit": "~10.3.1",
                 "symfony/cache": "^6.1",
                 "wmde/fundraising-phpcs": "~8.0.0",
                 "wmde/psr-log-test-doubles": "~3.0"
@@ -6856,7 +6857,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2023-07-04T08:04:51+00:00"
+            "time": "2023-08-21T09:17:57+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -9518,12 +9519,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "10cc002b2a9e446a128aca99c06458242801a4ec"
+                "reference": "d60285bd21017094ca03059293ba0c50cefdac67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/10cc002b2a9e446a128aca99c06458242801a4ec",
-                "reference": "10cc002b2a9e446a128aca99c06458242801a4ec",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/d60285bd21017094ca03059293ba0c50cefdac67",
+                "reference": "d60285bd21017094ca03059293ba0c50cefdac67",
                 "shasum": ""
             },
             "require": {
@@ -9567,7 +9568,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2023-07-25T16:57:50+00:00"
+            "time": "2023-08-17T12:04:00+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
