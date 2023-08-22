@@ -11,13 +11,13 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\Cache\Psr16Cache;
-use WMDE\Fundraising\Frontend\Infrastructure\PayPalAPIURLGeneratorConfigLoader;
-use WMDE\Fundraising\PaymentContext\Services\PayPal\PayPalURLGeneratorConfigReader;
+use WMDE\Fundraising\Frontend\Infrastructure\PayPalAdapterConfigLoader;
+use WMDE\Fundraising\PaymentContext\Services\PayPal\PayPalPaymentProviderAdapterConfigReader;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\PayPalAPIURLGeneratorConfigLoader
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\PayPalAdapterConfigLoader
  */
-class PayPalAPIURLGeneratorConfigLoaderTest extends TestCase {
+class PayPalAdapterConfigLoaderTest extends TestCase {
 	private const TEST_CONFIG_FILE = __DIR__ . '/../../Data/files/paypal_api.yml';
 	private const CACHE_KEY = "3a0212de40bd87d9c89b2e515af46836";
 	private vfsStreamDirectory $filesystem;
@@ -32,7 +32,7 @@ class PayPalAPIURLGeneratorConfigLoaderTest extends TestCase {
 	public function testWritesCacheIfEmpty(): void {
 		$configFile = $this->givenConfigFile();
 		$configCache = new Psr16Cache( new ArrayAdapter() );
-		$loader = new PayPalAPIURLGeneratorConfigLoader( $configCache );
+		$loader = new PayPalAdapterConfigLoader( $configCache );
 
 		$loader->load(
 			$configFile->url(),
@@ -41,7 +41,7 @@ class PayPalAPIURLGeneratorConfigLoaderTest extends TestCase {
 		);
 
 		$this->assertTrue( $configCache->has( self::CACHE_KEY ) );
-		$this->assertSame( PayPalURLGeneratorConfigReader::readConfig( self::TEST_CONFIG_FILE ), $configCache->get( self::CACHE_KEY ) );
+		$this->assertSame( PayPalPaymentProviderAdapterConfigReader::readConfig( self::TEST_CONFIG_FILE ), $configCache->get( self::CACHE_KEY ) );
 	}
 
 	#[DoesNotPerformAssertions]
@@ -51,8 +51,8 @@ class PayPalAPIURLGeneratorConfigLoaderTest extends TestCase {
 		$configFile->setContent( "" );
 
 		$filledConfigCache = new Psr16Cache( new ArrayAdapter() );
-		$filledConfigCache->set( self::CACHE_KEY, PayPalURLGeneratorConfigReader::readConfig( self::TEST_CONFIG_FILE ) );
-		$loader = new PayPalAPIURLGeneratorConfigLoader( $filledConfigCache );
+		$filledConfigCache->set( self::CACHE_KEY, PayPalPaymentProviderAdapterConfigReader::readConfig( self::TEST_CONFIG_FILE ) );
+		$loader = new PayPalAdapterConfigLoader( $filledConfigCache );
 
 		try {
 			$loader->load(
@@ -66,7 +66,7 @@ class PayPalAPIURLGeneratorConfigLoaderTest extends TestCase {
 	}
 
 	public function testUsesSpecificSectionOfTheConfigFile(): void {
-		$loader = new PayPalAPIURLGeneratorConfigLoader( new Psr16Cache( new NullAdapter() ) );
+		$loader = new PayPalAdapterConfigLoader( new Psr16Cache( new NullAdapter() ) );
 		$result = $loader->load(
 			self::TEST_CONFIG_FILE,
 			'membership',

@@ -15,7 +15,6 @@ use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 
@@ -194,14 +193,7 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 	}
 
 	private function newStoredDonation( FunFunFactory $factory ): Donation {
-		$factory->setDonationTokenGenerator(
-			new FixedTokenGenerator(
-				self::CORRECT_UPDATE_TOKEN,
-				new \DateTime( '9001-01-01' )
-			)
-		);
-
-		return ( new StoredDonations( $factory ) )->newStoredIncompleteAnonymousPayPalDonation();
+		return ( new StoredDonations( $factory ) )->newStoredIncompleteAnonymousPayPalDonation( self::CORRECT_UPDATE_TOKEN );
 	}
 
 	private function newPrivateDonorData(): array {

@@ -7,7 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use WMDE\Fundraising\PaymentContext\Services\PayPal\PayPalURLGeneratorConfigReader;
+use WMDE\Fundraising\PaymentContext\Services\PayPal\PayPalPaymentProviderAdapterConfigReader;
 
 class PaypalAPIConfigValidation extends Command {
 	private const NAME = 'app:validate:paypal-config';
@@ -25,7 +25,7 @@ class PaypalAPIConfigValidation extends Command {
 			return Command::FAILURE;
 		}
 		try {
-			PayPalURLGeneratorConfigReader::readConfig( $configPath );
+			PayPalPaymentProviderAdapterConfigReader::readConfig( $configPath );
 		} catch ( \Exception $e ) {
 			$output->writeln( $e->getMessage() );
 			return Command::FAILURE;

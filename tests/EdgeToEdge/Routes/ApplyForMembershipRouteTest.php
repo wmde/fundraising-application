@@ -9,19 +9,15 @@ use Monolog\Logger;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
-use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayments;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Incentive;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
-use WMDE\Fundraising\MembershipContext\Tests\TestDoubles\FixedMembershipTokenGenerator;
-use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 
 /**
@@ -33,7 +29,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	private const MEMBERSHIP_APPLICATION_ID = 4789;
 
-	private const FIXED_TOKEN = 'fixed_token';
 	private const FIRST_PAYMENT_DATE = '2017-09-21';
 	private const CORRECT_ACCESS_TOKEN = '4711abc';
 
@@ -104,21 +99,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	private function givenStoredDirectDebitDonation( FunFunFactory $factory ): void {
-		$this->storePayment( $factory, ValidPayments::newDirectDebitPayment() );
-
-		$factory->setDonationTokenGenerator( new FixedTokenGenerator(
-			self::CORRECT_ACCESS_TOKEN
-		) );
-
-		$factory->getDonationRepository()->storeDonation( ValidDonation::newDirectDebitDonation() );
-	}
-
-	private function storePayment( FunFunFactory $factory, Payment $payment ): void {
-		$factory->setDonationTokenGenerator( new FixedTokenGenerator(
-			self::CORRECT_ACCESS_TOKEN
-		) );
-
-		$factory->getPaymentRepository()->storePayment( $payment );
+		$storedDonations = new StoredDonations( $factory );
+		$storedDonations->newStoredDirectDebitDonation( self::CORRECT_ACCESS_TOKEN );
 	}
 
 	private function newValidHttpParameters(): array {
@@ -259,7 +241,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertEquals( $expectedApplication, $application );
 	}
 
-	public function testGivenValidRequest_confirmationPageContainsCancellationParameters(): void {
+	public function testGivenValidRequest_redirectionUrlContainsAccessTokens(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
 		$this->prepareEnvironment( $factory );
@@ -270,10 +252,10 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->newValidHttpParameters()
 		);
 
-		$responseContent = $client->getResponse()->getContent();
+		$location = $client->getResponse()->headers->get( 'Location' );
 
-		$this->assertStringContainsString( 'id=' . self::MEMBERSHIP_APPLICATION_ID, $responseContent );
-		$this->assertStringContainsString( 'accessToken=' . self::FIXED_TOKEN, $responseContent );
+		$this->assertStringContainsString( 'id=' . self::MEMBERSHIP_APPLICATION_ID, $location );
+		$this->assertMatchesRegularExpression( '/accessToken=[0-9a-f]+/', $location );
 	}
 
 	public function testGivenValidRequest_requestIsRedirected(): void {
@@ -478,7 +460,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	private function prepareEnvironment( FunFunFactory $factory ): Incentive {
-		$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator( self::FIXED_TOKEN ) );
 		$factory->setPaymentDelayCalculator( $this->newFixedPaymentDelayCalculator() );
 		$incentive = new Incentive( ValidMembershipApplication::INCENTIVE_NAME );
 		$this->insertIncentives( $factory, $incentive );

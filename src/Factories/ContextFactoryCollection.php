@@ -3,10 +3,10 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
-use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Connection;
 use WMDE\Fundraising\AddressChangeContext\AddressChangeContextFactory;
 use WMDE\Fundraising\DonationContext\DonationContextFactory;
+use WMDE\Fundraising\Frontend\Authentication\AuthenticationContextFactory;
 use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
@@ -23,11 +23,11 @@ use function method_exists;
  */
 class ContextFactoryCollection {
 	/**
-	 * @var AddressChangeContextFactory[]|DonationContextFactory[]|AutocompleteContextFactory[]|BucketTestingContextFactory[]|MembershipContextFactory[]|SubscriptionContextFactory[]|PaymentContextFactory[]
+	 * @var AddressChangeContextFactory[]|DonationContextFactory[]|AutocompleteContextFactory[]|BucketTestingContextFactory[]|MembershipContextFactory[]|SubscriptionContextFactory[]|PaymentContextFactory[]|AuthenticationContextFactory[]
 	 */
 	private array $contextFactories;
 
-	public function __construct( DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory|BucketTestingContextFactory|AutocompleteContextFactory|PaymentContextFactory ...$contextFactories ) {
+	public function __construct( DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory|BucketTestingContextFactory|AutocompleteContextFactory|PaymentContextFactory|AuthenticationContextFactory ...$contextFactories ) {
 		$this->contextFactories = $contextFactories;
 	}
 
@@ -44,20 +44,6 @@ class ContextFactoryCollection {
 		return [
 			...array_unique( $paths ),
 			];
-	}
-
-	/**
-	 * @return EventSubscriber[]
-	 */
-	public function newEventSubscribers(): array {
-		$eventSubscribers = [];
-		foreach ( $this->contextFactories as $contextFactory ) {
-			if ( !method_exists( $contextFactory, 'newEventSubscribers' ) ) {
-				continue;
-			}
-			array_push( $eventSubscribers, ...array_values( $contextFactory->newEventSubscribers() ) );
-		}
-		return $eventSubscribers;
 	}
 
 	public function registerCustomTypes( Connection $connection ): void {

@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\MembershipUrlAuthenticationLoaderStub;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
 
 /**
@@ -23,7 +24,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 
 		$membershipApplication = ValidMembershipApplication::newDomainEntity();
 
-		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig, new FakeUrlGenerator() );
+		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig, new FakeUrlGenerator(), new MembershipUrlAuthenticationLoaderStub() );
 		$presenter->presentConfirmation(
 			$membershipApplication,
 			[
@@ -34,7 +35,6 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 				'bic' => 'I has BIC',
 				'bankname' => 'I has BANK',
 			],
-			'update_token'
 		);
 	}
 
@@ -48,7 +48,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 				'membershipFee' => 10.00,
 				'membershipFeeInCents' => 1000,
 				'paymentIntervalInMonths' => 3,
-				'updateToken' => 'update_token',
+				'updateToken' => '',
 				'incentives' => []
 			],
 			'address' => [
@@ -68,7 +68,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 				'bankname' => 'I has BANK',
 			],
 			'urls' => [
-				'cancelMembership' => '/such.a.url/cancel_membership_application?id=1&updateToken=update_token'
+				'cancelMembership' => 'https://such.a.url/cancel_membership_application?id=1'
 			]
 		];
 	}

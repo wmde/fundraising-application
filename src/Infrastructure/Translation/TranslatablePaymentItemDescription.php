@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Translation;
 
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\TranslatableDescription;
+use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\TranslatableDescription;
 
 class TranslatablePaymentItemDescription implements TranslatableDescription {
 

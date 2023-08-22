@@ -123,15 +123,11 @@ class ApplyForMembershipController {
 			return new RedirectResponse( $redirectUrl );
 		}
 
-		return new RedirectResponse(
-			$this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-				Routes::SHOW_MEMBERSHIP_CONFIRMATION,
-				[
-					'id' => $responseModel->getMembershipApplication()->getId(),
-					'accessToken' => $responseModel->getAccessToken()
-				]
-			)
-		);
+		$url = $this->ffFactory->getUrlGenerator()->generateAbsoluteUrl( Routes::SHOW_MEMBERSHIP_CONFIRMATION );
+		$url = $this->ffFactory->getUrlAuthenticationLoader()
+			->getMembershipUrlAuthenticator( $responseModel->getMembershipApplication()->getId() )
+			->addAuthenticationTokensToApplicationUrl( $url );
+		return new RedirectResponse( $url );
 	}
 
 	/**
