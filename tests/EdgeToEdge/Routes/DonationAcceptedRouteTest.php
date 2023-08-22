@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
 /**
@@ -39,10 +38,7 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 	}
 
 	private function storeDonation( FunFunFactory $factory ): int {
-		$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::CORRECT_UPDATE_TOKEN ) );
-
-		$donation = ( new StoredDonations( $factory ) )->newStoredDirectDebitDonation();
-
+		$donation = ( new StoredDonations( $factory ) )->newStoredDirectDebitDonation( self::CORRECT_UPDATE_TOKEN );
 		return $donation->getId();
 	}
 

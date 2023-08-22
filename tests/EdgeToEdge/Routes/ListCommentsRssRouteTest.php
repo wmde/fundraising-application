@@ -43,7 +43,6 @@ class ListCommentsRssRouteTest extends WebRouteTestCase {
 
 	private function givenThreeComments(): void {
 		$factory = $this->getFactory();
-		$factory->disableDoctrineSubscribers();
 		$em = $factory->getEntityManager();
 		CommentsForTesting::persistFirstComment( $em );
 		CommentsForTesting::persistSecondComment( $em );

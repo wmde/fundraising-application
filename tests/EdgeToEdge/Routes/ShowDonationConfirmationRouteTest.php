@@ -9,9 +9,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayments;
+use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
+use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 
 /**
@@ -107,31 +108,27 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	private function givenStoredDirectDebitDonation( FunFunFactory $factory ): void {
 		$this->storePayment( $factory, ValidPayments::newDirectDebitPayment() );
-
-		$factory->setDonationTokenGenerator( new FixedTokenGenerator(
-			self::CORRECT_ACCESS_TOKEN
-		) );
-
 		$this->donation = ValidDonation::newDirectDebitDonation();
-
 		$factory->getDonationRepository()->storeDonation( $this->donation );
+		$this->createTokenForDonation( $factory );
+	}
+
+	private function createTokenForDonation( FunFunFactory $factory ): void {
+		$em = $factory->getEntityManager();
+		$em->persist( new AuthenticationToken( $this->donation->getId(), AuthenticationBoundedContext::Donation, self::CORRECT_ACCESS_TOKEN, self::CORRECT_ACCESS_TOKEN ) );
+		$em->flush();
 	}
 
 	private function givenStoredBookedAnonymousPayPalDonation( FunFunFactory $factory ): void {
 		$this->storePayment( $factory, ValidPayments::newBookedPayPalPayment() );
 
-		$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::CORRECT_ACCESS_TOKEN ) );
 		$this->donation = ValidDonation::newBookedAnonymousPayPalDonation();
 		$factory->getDonationRepository()->storeDonation( $this->donation );
+		$this->createTokenForDonation( $factory );
 	}
 
 	private function storePayment( FunFunFactory $factory, Payment $payment ): void {
-		$factory->setDonationTokenGenerator( new FixedTokenGenerator(
-			self::CORRECT_ACCESS_TOKEN
-		) );
-
 		$factory->getPaymentRepository()->storePayment( $payment );
-
 		$this->payment = $payment;
 	}
 

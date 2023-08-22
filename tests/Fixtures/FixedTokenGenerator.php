@@ -1,23 +1,21 @@
 <?php
-
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
-use WMDE\Fundraising\DonationContext\Authorization\TokenGenerator;
+use WMDE\Fundraising\Frontend\Authentication\Token;
+use WMDE\Fundraising\Frontend\Authentication\TokenGenerator;
 
 class FixedTokenGenerator implements TokenGenerator {
-	private \DateTime $expiry;
+	public const DEFAULT_TOKEN = '1337c0ffee';
 
-	public function __construct( private readonly string $token, ?\DateTime $expiry = null ) {
-		$this->expiry = $expiry === null ? new \DateTime() : $expiry;
+	private Token $token;
+
+	public function __construct( ?Token $token = null ) {
+		$this->token = $token ?? Token::fromHex( self::DEFAULT_TOKEN );
 	}
 
-	public function generateToken(): string {
+	public function generateToken(): Token {
 		return $this->token;
-	}
-
-	public function generateTokenExpiry(): \DateTime {
-		return $this->expiry;
 	}
 }

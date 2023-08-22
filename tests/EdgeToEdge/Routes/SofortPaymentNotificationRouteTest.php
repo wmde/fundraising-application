@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use DateTime;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
@@ -72,16 +70,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	private function newEnvironment( callable $onEnvironmentCreated ): void {
-		$this->createEnvironment(
-			static function ( Client $client, FunFunFactory $factory ) use ( $onEnvironmentCreated ): void {
-				$factory->setDonationTokenGenerator( new FixedTokenGenerator(
-					self::VALID_TOKEN,
-					new DateTime( '2039-12-31 23:59:59Z' )
-				) );
-
-				$onEnvironmentCreated( $client, $factory );
-			}
-		);
+		$this->createEnvironment( $onEnvironmentCreated );
 	}
 
 	private function assertIsBadRequestResponse( Response $response ): void {
@@ -146,7 +135,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
 		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
+			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation( self::VALID_TOKEN );
 
 			$client->request(
 				Request::METHOD_POST,
@@ -171,7 +160,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidRequest_donationStateIsChangedToBooked(): void {
 		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
+			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation( self::VALID_TOKEN );
 
 			$client->request(
 				Request::METHOD_POST,
@@ -192,7 +181,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$logger = $this->getLogger( $factory );
 
-			$donation = $this->storedDonations()->newStoredCompleteSofortDonation();
+			$donation = $this->storedDonations()->newStoredCompleteSofortDonation( self::VALID_TOKEN );
 
 			$client->request(
 				Request::METHOD_POST,

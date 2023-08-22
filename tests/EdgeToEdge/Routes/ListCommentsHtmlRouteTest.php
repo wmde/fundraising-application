@@ -39,7 +39,6 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 	private function createThreeComments(): void {
 		$factory = $this->getFactory();
-		$factory->disableDoctrineSubscribers();
 		$em = $factory->getEntityManager();
 		CommentsForTesting::persistFirstComment( $em );
 		CommentsForTesting::persistSecondComment( $em );
