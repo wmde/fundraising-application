@@ -26,8 +26,8 @@ class MembershipFormViolationPresenter {
 	}
 
 	private function getMembershipFormArguments( ApplyForMembershipRequest $request ): array {
-		$paymentRequest = $request->getPaymentCreationRequest();
-		$bankData = $this->bankDataGenerator->getBankDataFromIban( new Iban( $paymentRequest->iban ) );
+		$paymentParameters = $request->getPaymentParameters();
+		$bankData = $this->bankDataGenerator->getBankDataFromIban( new Iban( $paymentParameters->iban ) );
 
 		return [
 			'addressType' => $request->isCompanyApplication() ? 'firma' : 'person',
@@ -41,8 +41,8 @@ class MembershipFormViolationPresenter {
 			'city' => $request->getApplicantCity(),
 			'country' => $request->getApplicantCountryCode(),
 			'email' => $request->getApplicantEmailAddress(),
-			'iban' => $request->getPaymentCreationRequest()->iban,
-			'bic' => $request->getPaymentCreationRequest()->bic,
+			'iban' => $paymentParameters->iban,
+			'bic' => $paymentParameters->bic,
 			'accountNumber' => $bankData->account,
 			'bankCode' => $bankData->bankCode,
 			'bankname' => $bankData->bankName

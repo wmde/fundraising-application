@@ -14,7 +14,7 @@ use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInf
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
-use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentCreationRequest;
+use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentParameters;
 
 /**
  * @license GPL-2.0-or-later
@@ -79,7 +79,7 @@ class ApplyForMembershipController {
 		$request->setApplicantPhoneNumber( $httpRequest->request->get( 'phone', '' ) );
 		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
 
-		$request->setPaymentCreationRequest( $this->newPaymentCreationRequest( $httpRequest ) );
+		$request->setPaymentParameters( $this->newPaymentParameters( $httpRequest ) );
 
 		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
 			$httpRequest->request->get( 'templateCampaign', '' ),
@@ -95,8 +95,8 @@ class ApplyForMembershipController {
 		return $request;
 	}
 
-	private function newPaymentCreationRequest( Request $httpRequest ): PaymentCreationRequest {
-		return new PaymentCreationRequest(
+	private function newPaymentParameters( Request $httpRequest ): PaymentParameters {
+		return new PaymentParameters(
 			$httpRequest->request->getInt( 'membership_fee', 0 ),
 			$httpRequest->request->getInt( 'membership_fee_interval', 0 ),
 			$httpRequest->request->get( 'payment_type', '' ),
@@ -123,15 +123,11 @@ class ApplyForMembershipController {
 			return new RedirectResponse( $redirectUrl );
 		}
 
-		return new RedirectResponse(
-			$this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-				Routes::SHOW_MEMBERSHIP_CONFIRMATION,
-				[
-					'id' => $responseModel->getMembershipApplication()->getId(),
-					'accessToken' => $responseModel->getAccessToken()
-				]
-			)
-		);
+		$url = $this->ffFactory->getUrlGenerator()->generateAbsoluteUrl( Routes::SHOW_MEMBERSHIP_CONFIRMATION );
+		$url = $this->ffFactory->getUrlAuthenticationLoader()
+			->getMembershipUrlAuthenticator( $responseModel->getMembershipApplication()->getId() )
+			->addAuthenticationTokensToApplicationUrl( $url );
+		return new RedirectResponse( $url );
 	}
 
 	/**

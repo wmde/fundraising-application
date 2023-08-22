@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\App\Routes;
+use WMDE\Fundraising\Frontend\Authentication\MembershipUrlAuthenticationLoader;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
@@ -19,23 +20,22 @@ use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\Show
  */
 class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationConfirmationPresenter {
 
-	private TwigTemplate $template;
 	private string $html = '';
-	private UrlGenerator $urlGenerator;
 
 	private ?\Exception $exception = null;
 
-	public function __construct( TwigTemplate $template, UrlGenerator $urlGenerator ) {
-		$this->template = $template;
-		$this->urlGenerator = $urlGenerator;
+	public function __construct(
+		private readonly TwigTemplate $template,
+		private readonly UrlGenerator $urlGenerator,
+		private readonly MembershipUrlAuthenticationLoader $urlAuthenticationLoader
+	) {
 	}
 
-	public function presentConfirmation( MembershipApplication $application, array $paymentData, string $updateToken ): void {
+	public function presentConfirmation( MembershipApplication $application, array $paymentData ): void {
 		$this->html = $this->template->render(
 			$this->getConfirmationPageArguments(
 				$application,
 				$paymentData,
-				$updateToken
 			)
 		);
 	}
@@ -52,9 +52,15 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		return $this->html;
 	}
 
-	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData, string $updateToken ): array {
+	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData ): array {
+		$cancelMembershipUrl = $this->urlGenerator->generateAbsoluteUrl(
+			Routes::CANCEL_MEMBERSHIP,
+			[ 'id' => $membershipApplication->getId() ]
+		);
+		$authenticator = $this->urlAuthenticationLoader->getMembershipUrlAuthenticator( $membershipApplication->getId() );
+
 		return [
-			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $paymentData, $updateToken ),
+			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $paymentData ),
 			'address' => $this->getAddressArguments( $membershipApplication->getApplicant() ),
 			'bankData' => [
 				'iban' => $paymentData['iban'] ?? '',
@@ -62,18 +68,13 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 				'bankname' => $paymentData['bankname'] ?? '',
 			],
 			'urls' => [
-				'cancelMembership'  => $this->urlGenerator->generateRelativeUrl(
-					Routes::CANCEL_MEMBERSHIP,
-					[
-						'id' => $membershipApplication->getId(),
-						'updateToken' => $updateToken,
-					]
-				)
+				// This is deprecated, we can't cancel memberships in the frontend any more
+				'cancelMembership'  => $authenticator->addAuthenticationTokensToApplicationUrl( $cancelMembershipUrl )
 			]
 		];
 	}
 
-	private function getApplicationArguments( MembershipApplication $membershipApplication, array $paymentData, string $updateToken ): array {
+	private function getApplicationArguments( MembershipApplication $membershipApplication, array $paymentData ): array {
 		return [
 			'id' => $membershipApplication->getId(),
 			'membershipType' => $membershipApplication->getType(),
@@ -83,7 +84,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'membershipFee' => Euro::newFromCents( $paymentData['amount'] )->getEuroFloat(),
 			'membershipFeeInCents' => $paymentData['amount'],
 			'paymentIntervalInMonths' => $paymentData['interval'],
-			'updateToken' => $updateToken,
+			// TODO - this is deprecated, the template should not use the updateToken on its own and instead should use the provided URLs
+			'updateToken' => '',
 			'incentives' => iterator_to_array( $membershipApplication->getIncentives() )
 		];
 	}
