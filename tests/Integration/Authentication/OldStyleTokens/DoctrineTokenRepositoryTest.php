@@ -11,7 +11,8 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\SchemaCreator;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\DoctrineTokenRepository
+ * @covers \WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\DoctrineTokenReposi
+ * @covers \WMDE\Fundraising\Frontend\Authentication\DataAccess\DoctrineTokenRepository
  */
 class DoctrineTokenRepositoryTest extends KernelTestCase {
 	private \Doctrine\ORM\EntityManager $entityManager;
