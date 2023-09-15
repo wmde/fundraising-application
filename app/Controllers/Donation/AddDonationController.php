@@ -63,6 +63,10 @@ class AddDonationController {
 	private function createDonationRequest( Request $request ): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 
+		if ( $request->get( 'addressType', '' ) === 'company_with_contact' ) {
+			$request->query->set( 'addressType', AddressType::LEGACY_COMPANY );
+		}
+
 		$donationRequest->setDonorType( $this->getSafeDonorType( $request ) );
 		$donationRequest->setDonorSalutation( $request->get( 'salutation', '' ) );
 		$donationRequest->setDonorTitle( $request->get( 'title', '' ) );

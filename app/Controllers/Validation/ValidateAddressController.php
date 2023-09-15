@@ -24,11 +24,16 @@ class ValidateAddressController {
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$this->addressValidator = $ffFactory->newAddressValidator();
 
+		$isCompanyWithContact = $this->handleCompanyWithContact( $request );
+
 		$addressType = $this->getAddressType( $request );
 		if ( $addressType === AddressType::PERSON ) {
 			$nameViolations = $this->getPersonViolations( $request );
 		} elseif ( $addressType === AddressType::COMPANY ) {
 			$nameViolations = $this->getCompanyViolations( $request );
+			if ( $isCompanyWithContact ) {
+				$nameViolations = array_merge( $nameViolations, $this->getPersonViolations( $request ) );
+			}
 		} elseif ( $addressType === AddressType::EMAIL ) {
 			$nameViolations = $this->getPersonViolations( $request );
 		} elseif ( $addressType === AddressType::ANONYMOUS ) {
@@ -53,6 +58,15 @@ class ValidateAddressController {
 		}
 
 		return $this->newErrorResponse( ...$violations );
+	}
+
+	private function handleCompanyWithContact( Request $request ): bool {
+		if ( $request->get( 'addressType', '' ) !== 'company_with_contact' ) {
+			return false;
+		}
+
+		$request->query->set( 'addressType', AddressType::LEGACY_COMPANY );
+		return true;
 	}
 
 	private function getPersonViolations( Request $request ): array {
