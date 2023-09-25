@@ -49,3 +49,16 @@ campaigns:
       url_key: mbi
       active: true
       param_only: true
+
+    address_pages:
+      description: Test different iterations of address pages
+      reference: "https://phabricator.wikimedia.org/T345528"
+      start: "2023-09-12"
+      end: "2023-12-31"
+      buckets:
+        - "legacy"
+        - "test_01"
+      default_bucket: "legacy"
+      url_key: ap
+      active: true
+      param_only: true
