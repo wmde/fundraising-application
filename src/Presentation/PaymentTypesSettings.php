@@ -50,7 +50,7 @@ class PaymentTypesSettings {
 	 */
 	public function getPaymentTypesForDonation(): array {
 		return array_map(
-			fn( string $paymentTypeName ) => PaymentType::from( $paymentTypeName ),
+			fn ( string $paymentTypeName ) => PaymentType::from( $paymentTypeName ),
 			$this->getEnabledForDonation()
 		);
 	}
@@ -60,7 +60,7 @@ class PaymentTypesSettings {
 	 */
 	public function getPaymentTypesForMembershipApplication(): array {
 		return array_map(
-			fn( string $paymentTypeName ) => PaymentType::from( $paymentTypeName ),
+			fn ( string $paymentTypeName ) => PaymentType::from( $paymentTypeName ),
 			$this->getEnabledForMembershipApplication()
 		);
 	}

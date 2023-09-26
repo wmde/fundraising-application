@@ -20,7 +20,7 @@ class Salutations {
 	}
 
 	public function getSalutation( string $value ): ?array {
-		$data = array_filter( $this->salutations, fn( $salutation ) => $salutation['value'] == $value );
+		$data = array_filter( $this->salutations, fn ( $salutation ) => $salutation['value'] == $value );
 
 		if ( count( $data ) === 0 ) {
 			return null;

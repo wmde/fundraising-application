@@ -55,8 +55,8 @@ class GetInTouchUseCaseTest extends TestCase {
 		$this->operatorMailer->expects( $this->once() )
 			->method( 'sendMailToOperator' )
 			->with(
-				$this->equalTo( new EmailAddress( self::INQUIRER_EMAIL_ADDRESS ) ),
-				$this->equalTo( self::INQUIRY_SUBJECT ),
+				new EmailAddress( self::INQUIRER_EMAIL_ADDRESS ),
+				self::INQUIRY_SUBJECT,
 				$this->equalTo( [
 					'firstName' => self::INQUIRER_FIRST_NAME,
 					'lastName' => self::INQUIRER_LAST_NAME,
