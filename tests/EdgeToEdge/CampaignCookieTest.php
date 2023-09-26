@@ -40,7 +40,7 @@ class CampaignCookieTest extends WebRouteTestCase {
 
 		$buckets = array_filter(
 			$this->getFactory()->getSelectedBuckets(),
-			fn( Bucket $bucket ) => $bucket->getCampaign()->getName() === 'awesome_feature'
+			fn ( Bucket $bucket ) => $bucket->getCampaign()->getName() === 'awesome_feature'
 		);
 		$buckets = array_values( $buckets );
 

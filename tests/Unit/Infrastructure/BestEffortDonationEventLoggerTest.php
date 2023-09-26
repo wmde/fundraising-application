@@ -45,7 +45,7 @@ class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 	public function testWhenEventLoggerThrows_itIsLogged(): void {
 		/** @var DonationEventLogger&MockObject $eventLogger */
 		$eventLogger = $this->createMock( DonationEventLogger::class );
-		$eventLogger->method( 'log' )->will( $this->throwException( new DonationEventLogException( 'Fire Alarm!' ) ) );
+		$eventLogger->method( 'log' )->willThrowException( new DonationEventLogException( 'Fire Alarm!' ) );
 		$logger = $this->getLogger();
 		$logger->expects( $this->once() )->method( 'error' );
 		$bestEffortLogger = new BestEffortDonationEventLogger(

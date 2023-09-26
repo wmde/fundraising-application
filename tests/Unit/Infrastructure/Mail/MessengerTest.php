@@ -27,7 +27,7 @@ class MessengerTest extends TestCase {
 			->method( 'send' )
 			->willThrowException( $transportException );
 
-		try{
+		try {
 			( new Messenger( new Mailer( $mailTransport ), new EmailAddress( 'hostmaster@thatoperator.com' ) ) )
 				->sendMessageToUser(
 					new Message( 'Test message', 'This is just a test' ),

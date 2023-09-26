@@ -27,6 +27,6 @@ class EventDispatcher {
 		if ( empty( $this->listeners[$eventName] ) ) {
 			return;
 		}
-		array_map( fn( $handler ) => \call_user_func( $handler, $event ), $this->listeners[$eventName] );
+		array_map( fn ( $handler ) => \call_user_func( $handler, $event ), $this->listeners[$eventName] );
 	}
 }

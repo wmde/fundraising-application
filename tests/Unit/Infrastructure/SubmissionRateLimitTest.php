@@ -63,7 +63,7 @@ class SubmissionRateLimitTest extends TestCase {
 		$session->expects( $this->once() )
 			->method( 'set' )
 			->with(
-				$this->equalTo( 'donation_timestamp' ),
+				'donation_timestamp',
 				$this->callback( static function ( \DateTimeImmutable $date ) {
 					$now = time();
 					// use delta of 5 seconds to make this immune against slow tests
