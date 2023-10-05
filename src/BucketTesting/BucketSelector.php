@@ -29,6 +29,10 @@ class BucketSelector {
 		return $sanitized;
 	}
 
+	/**
+	 * @param array $urlParameters
+	 * @return Bucket[]
+	 */
 	public function selectBuckets( array $urlParameters = [] ): array {
 		$possibleParameters = $this->sanitizeParameters( $urlParameters );
 

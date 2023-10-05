@@ -8,7 +8,6 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
@@ -22,10 +21,6 @@ use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as Sofor
 use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
 
 /**
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
- *
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\AddDonationController
  * @requires extension konto_check
  */
@@ -429,7 +424,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'X', $donation->getStatus() );
 		$this->assertMatchesRegularExpression( '/^(XR)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
 
-		$this->assertTrue( $client->getResponse()->isRedirect( 'https://bankingpin.please' ) );
+		$response = $client->getResponse();
+		$this->assertTrue( $response->isRedirect() );
+		$this->assertSame( 'https://bankingpin.please', $response->headers->get( 'Location' ) );
 	}
 
 	private function newValidCreditCardInput(): array {
@@ -572,20 +569,36 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenValidRequest_bucketsAreLogged(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$bucketLogger = new BucketLoggerSpy();
-			$factory->setBucketLogger( $bucketLogger );
-			$client->followRedirects( false );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$bucketLogger = new BucketLoggerSpy();
+		$factory->setBucketLogger( $bucketLogger );
+		$client->followRedirects( false );
 
-			$client->request(
-				'POST',
-				'/donation/add',
-				$this->newValidFormInput()
-			);
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidFormInput()
+		);
 
-			$this->assertSame( 1, $bucketLogger->getEventCount() );
-			$this->assertInstanceOf( DonationCreated::class, $bucketLogger->getFirstEvent() );
-		} );
+		$this->assertSame( 1, $bucketLogger->getEventCount() );
+		$this->assertInstanceOf( DonationCreated::class, $bucketLogger->getFirstEvent() );
+	}
+
+	public function testGivenRequestForBankDataPayment_redirectUrlHasBucketParameters(): void {
+		$client = $this->createClient();
+		$client->followRedirects( false );
+
+		$client->request(
+			'POST',
+			// see campaigns.test.yml for URL parameters
+			'/donation/add?pfu=1',
+			$this->newValidBankTransferInput()
+		);
+
+		$response = $client->getResponse();
+		$this->assertTrue( $response->isRedirect() );
+		$this->assertStringContainsString( 'pfu=1', $response->headers->get( 'Location' ) );
 	}
 
 	public function testGivenAnonymousDonorWithBankTransfer_genericErrorMessageIsDisplayed(): void {

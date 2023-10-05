@@ -1,0 +1,24 @@
+# Configuration file for the test environment
+# Defines a fictional A/B test
+
+# You can also override start and end date of the regular campaigns here,
+# to test them before they go live
+
+campaigns:
+
+  show_unicorns:
+    description: >
+      Show pink fluffy unicorns dancing on rainbows to select donors.
+      
+      This campaign is used for testing the parameter passing on redirects
+      See AddDonationRouteTest.
+    start: "2023-08-08"
+    end: "2038-01-18"
+    buckets:
+      - "default"
+      - "fluffy"
+      - "pink"
+    default_bucket: "default"
+    url_key: pfu
+    active: true
+    param_only: true

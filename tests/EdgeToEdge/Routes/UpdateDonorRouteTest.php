@@ -45,7 +45,11 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 			self::CORRECT_UPDATE_TOKEN
 		);
 		$response = $client->getResponse();
-		$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
+		$this->assertTrue( $response->isRedirect() );
+		$this->assertStringStartsWith(
+			$this->newValidSuccessRedirectUrl( $donation, $factory ),
+			$response->headers->get( 'Location' )
+		);
 
 		$crawler = $client->followRedirect();
 		$dataVars = $this->getDataApplicationVars( $crawler );
@@ -76,7 +80,11 @@ class UpdateDonorRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
-		$this->assertTrue( $response->isRedirect( $this->newValidSuccessRedirectUrl( $donation, $factory ) ) );
+		$this->assertTrue( $response->isRedirect() );
+		$this->assertStringStartsWith(
+			$this->newValidSuccessRedirectUrl( $donation, $factory ),
+			$response->headers->get( 'Location' )
+		);
 
 		$crawler = $client->followRedirect();
 		$dataVars = $this->getDataApplicationVars( $crawler );
