@@ -1770,6 +1770,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		$this->sharedObjects['bucketLogger'] = $logger;
 	}
 
+	/**
+	 * @return Bucket[]
+	 */
 	public function getSelectedBuckets(): array {
 		// when in the web environment, selected buckets will be set by BucketSelectionServiceProvider during request processing
 		// other environments (testing/cli) may set this during setup
@@ -1779,6 +1782,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->sharedObjects['selectedBuckets'];
 	}
 
+	/**
+	 * @param Bucket[] $selectedBuckets
+	 */
 	public function setSelectedBuckets( array $selectedBuckets ): void {
 		$this->sharedObjects['selectedBuckets'] = $selectedBuckets;
 	}
