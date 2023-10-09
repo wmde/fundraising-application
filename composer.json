@@ -110,7 +110,7 @@
 		"mikey179/vfsstream": "~1.6",
 		"phpmd/phpmd": "~2.10",
 		"phpstan/phpstan": "^1.8",
-		"phpunit/phpunit": "~10.3.2",
+		"phpunit/phpunit": "~10.4.1",
 
 		"wmde/psr-log-test-doubles": "~3.0",
 		"wmde/fundraising-phpcs": "~9.0",
