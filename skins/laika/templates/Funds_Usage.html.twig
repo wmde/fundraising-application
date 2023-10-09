@@ -1,20 +1,5 @@
 {% extends 'Base_Layout.html.twig' %}
 
-{% block main %}
-    <div id="app">
-        <noscript>
-            <h2>{$ site_metadata.page_not_found_header $}</h2>
-            <p>{$ site_metadata.page_not_found | raw $}<p>
-        </noscript>
-    </div>
-    <div id="appdata"
-         class="is-hidden"
-         data-application-vars="{$ use_of_funds_content|e('html_attr') $}"
-         data-application-messages="{$ translations()|e('html_attr') $}"
-         data-assets-path="{$ asset( '', 'skin') $}">
-    </div>
-{% endblock %}
-
 {% block scripts %}
     {$ parent() $}
     <script src="{$ asset( 'js/funds_usage.js', 'skin' ) $}"></script>
