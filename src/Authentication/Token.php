@@ -10,7 +10,10 @@ class Token {
 	}
 
 	public static function fromHex( string $token ): self {
-		$bytes = hex2bin( $token );
+		// We need to suppress the PHPCS warning for ignoring PHP warnings,
+		// because we are using a PHP internal function that may emit a warning
+		// We are checking the return type, so we can safely ignore the warning
+		$bytes = @hex2bin( $token ); // @codingStandardsIgnoreLine
 		if ( $bytes === false ) {
 			throw new \InvalidArgumentException( 'Invalid token, was not a hexadecimal value' );
 		}

@@ -27,7 +27,7 @@ class PersistentAuthorizer implements DonationAuthorizer, MembershipAuthorizer {
 
 	public function authorizeDonationAccess( int $donationId ): URLAuthenticator {
 		$token = $this->repository->getTokenById( $donationId, AuthenticationBoundedContext::Donation );
-		if ( $token === null ) {
+		if ( $token instanceof NullToken ) {
 			$token = $this->createNewToken( $donationId, AuthenticationBoundedContext::Donation );
 		}
 
@@ -36,7 +36,7 @@ class PersistentAuthorizer implements DonationAuthorizer, MembershipAuthorizer {
 
 	public function authorizeMembershipAccess( int $membershipId ): URLAuthenticator {
 		$token = $this->repository->getTokenById( $membershipId, AuthenticationBoundedContext::Membership );
-		if ( $token === null ) {
+		if ( $token instanceof NullToken ) {
 			$token = $this->createNewToken( $membershipId, AuthenticationBoundedContext::Membership );
 		}
 

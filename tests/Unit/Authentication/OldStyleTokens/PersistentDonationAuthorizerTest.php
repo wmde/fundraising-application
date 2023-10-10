@@ -17,6 +17,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryTokenRepository;
  */
 class PersistentDonationAuthorizerTest extends TestCase {
 	private const DONATION_ID = 7;
+	private const MEMBERSHIP_ID = 9;
 
 	public function testGivenEmptyPersistenceAuthorizeDonationAccessWillCreateNewToken(): void {
 		$repo = new InMemoryTokenRepository();
@@ -27,9 +28,8 @@ class PersistentDonationAuthorizerTest extends TestCase {
 		$authorizer->authorizeDonationAccess( self::DONATION_ID );
 
 		$token = $repo->getTokenById( self::DONATION_ID, AuthenticationBoundedContext::Donation );
-		$this->assertNotNull( $token );
-		$this->assertSame( FixedTokenGenerator::DEFAULT_TOKEN, $token->accessToken );
-		$this->assertSame( FixedTokenGenerator::DEFAULT_TOKEN, $token->updateToken );
+		$this->assertSame( FixedTokenGenerator::DEFAULT_TOKEN, $token->getAccessToken() );
+		$this->assertSame( FixedTokenGenerator::DEFAULT_TOKEN, $token->getAccessToken() );
 	}
 
 	public function testExistingTokenAuthorizeDonationAccessWillReadExistingToken(): void {
@@ -46,6 +46,35 @@ class PersistentDonationAuthorizerTest extends TestCase {
 		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, $updateTokenExpiry );
 
 		$authorizer->authorizeDonationAccess( self::DONATION_ID );
+	}
+
+	public function testGivenEmptyPersistenceAuthorizeMembershipAccessWillCreateNewToken(): void {
+		$repo = new InMemoryTokenRepository();
+		$tokenGenerator = new FixedTokenGenerator( Token::fromHex( FixedTokenGenerator::DEFAULT_TOKEN ) );
+		$updateTokenExpiry = new \DateInterval( 'PT1H' );
+		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, $updateTokenExpiry );
+
+		$authorizer->authorizeMembershipAccess( self::MEMBERSHIP_ID );
+
+		$token = $repo->getTokenById( self::MEMBERSHIP_ID, AuthenticationBoundedContext::Membership );
+		$this->assertSame( FixedTokenGenerator::DEFAULT_TOKEN, $token->getAccessToken() );
+		$this->assertSame( FixedTokenGenerator::DEFAULT_TOKEN, $token->getUpdateToken() );
+	}
+
+	public function testExistingTokenAuthorizeMembershipAccessWillReadExistingToken(): void {
+		$repo = new InMemoryTokenRepository( new AuthenticationToken(
+			self::MEMBERSHIP_ID,
+			AuthenticationBoundedContext::Membership,
+			'existing-access-token',
+			'existing-update-token',
+			new \DateTimeImmutable( '2020-01-01' )
+		) );
+		$tokenGenerator = $this->createMock( TokenGenerator::class );
+		$tokenGenerator->expects( $this->never() )->method( 'generateToken' );
+		$updateTokenExpiry = new \DateInterval( 'PT1H' );
+		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, $updateTokenExpiry );
+
+		$authorizer->authorizeMembershipAccess( self::MEMBERSHIP_ID );
 	}
 
 }

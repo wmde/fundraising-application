@@ -20,9 +20,9 @@ class FallbackTokenRepository implements TokenRepository {
 		$this->primaryRepository->storeToken( $token );
 	}
 
-	public function getTokenById( int $id, AuthenticationBoundedContext $authenticationDomain ): ?AuthenticationToken {
+	public function getTokenById( int $id, AuthenticationBoundedContext $authenticationDomain ): AuthenticationToken {
 		$token = $this->primaryRepository->getTokenById( $id, $authenticationDomain );
-		if ( $token !== null ) {
+		if ( !( $token instanceof NullToken ) ) {
 			return $token;
 		}
 		return match ( $authenticationDomain ) {
@@ -31,17 +31,25 @@ class FallbackTokenRepository implements TokenRepository {
 		};
 	}
 
-	private function findLegacyDonationToken( int $donationId ): ?AuthenticationToken {
+	private function findLegacyDonationToken( int $donationId ): AuthenticationToken {
 		$donation = $this->entityManager->getRepository( Donation::class )->find( $donationId );
 		if ( $donation === null ) {
-			return null;
+			return new NullToken(
+				$donationId,
+				AuthenticationBoundedContext::Donation,
+				'Donation with id ' . $donationId . ' not found'
+			);
 		}
 		$dataObject = $donation->getDataObject();
 		$updateToken = $dataObject->getUpdateToken();
 		$accessToken = $dataObject->getAccessToken();
 		$updateTokenExpiry = $dataObject->getUpdateTokenExpiry();
 		if ( !$updateToken || !$accessToken || !$updateTokenExpiry ) {
-			return null;
+			return new NullToken(
+				$donationId,
+				AuthenticationBoundedContext::Donation,
+				'Incomplete token information in legacy data of donation ' . $donationId
+			);
 		}
 		return new AuthenticationToken(
 			$donationId,
@@ -52,16 +60,24 @@ class FallbackTokenRepository implements TokenRepository {
 		);
 	}
 
-	private function findLegacyMembershipToken( int $membershipId ): ?AuthenticationToken {
+	private function findLegacyMembershipToken( int $membershipId ): AuthenticationToken {
 		$membership = $this->entityManager->getRepository( MembershipApplication::class )->find( $membershipId );
 		if ( $membership === null ) {
-			return null;
+			return new NullToken(
+				$membershipId,
+				AuthenticationBoundedContext::Membership,
+				'Membership with id ' . $membershipId . ' not found'
+			);
 		}
 		$dataObject = $membership->getDataObject();
 		$updateToken = $dataObject->getUpdateToken();
 		$accessToken = $dataObject->getAccessToken();
 		if ( !$updateToken || !$accessToken ) {
-			return null;
+			return new NullToken(
+				$membershipId,
+				AuthenticationBoundedContext::Membership,
+				'Incomplete token information in legacy data of membership ' . $membershipId
+			);
 		}
 		return new AuthenticationToken(
 			$membershipId,

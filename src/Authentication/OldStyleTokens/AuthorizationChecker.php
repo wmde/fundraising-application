@@ -22,10 +22,7 @@ class AuthorizationChecker implements DonationAuthorizationChecker, MembershipAu
 
 	public function userCanModifyDonation( int $donationId ): bool {
 		$token = $this->repository->getTokenById( $donationId, AuthenticationBoundedContext::Donation );
-		if ( $token === null ) {
-			return false;
-		}
-		if ( !hash_equals( $token->updateToken, $this->updateToken ) ) {
+		if ( !$token->updateTokenMatches( $this->updateToken ) ) {
 			return false;
 		}
 		return !$token->updateTokenHasExpired( $this->clock->now() );
@@ -33,33 +30,21 @@ class AuthorizationChecker implements DonationAuthorizationChecker, MembershipAu
 
 	public function systemCanModifyDonation( int $donationId ): bool {
 		$token = $this->repository->getTokenById( $donationId, AuthenticationBoundedContext::Donation );
-		if ( $token === null ) {
-			return false;
-		}
-		return hash_equals( $token->updateToken, $this->updateToken );
+		return $token->updateTokenMatches( $this->updateToken );
 	}
 
 	public function canAccessDonation( int $donationId ): bool {
 		$token = $this->repository->getTokenById( $donationId, AuthenticationBoundedContext::Donation );
-		if ( $token === null ) {
-			return false;
-		}
-		return hash_equals( $token->accessToken, $this->accessToken );
+		return $token->accessTokenMatches( $this->accessToken );
 	}
 
 	public function canModifyMembership( int $membershipId ): bool {
 		$token = $this->repository->getTokenById( $membershipId, AuthenticationBoundedContext::Membership );
-		if ( $token === null ) {
-			return false;
-		}
-		return hash_equals( $token->updateToken, $this->updateToken );
+		return $token->updateTokenMatches( $this->updateToken );
 	}
 
 	public function canAccessMembership( int $membershipId ): bool {
 		$token = $this->repository->getTokenById( $membershipId, AuthenticationBoundedContext::Membership );
-		if ( $token === null ) {
-			return false;
-		}
-		return hash_equals( $token->accessToken, $this->accessToken );
+		return $token->accessTokenMatches( $this->accessToken );
 	}
 }

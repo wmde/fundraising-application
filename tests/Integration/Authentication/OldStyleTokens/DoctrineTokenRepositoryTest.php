@@ -3,19 +3,20 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Authentication\OldStyleTokens;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\DoctrineTokenRepository;
+use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\NullToken;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\SchemaCreator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\DoctrineTokenRepository
- * @covers \WMDE\Fundraising\Frontend\Authentication\DataAccess\DoctrineTokenRepository
  */
 class DoctrineTokenRepositoryTest extends KernelTestCase {
-	private \Doctrine\ORM\EntityManager $entityManager;
+	private EntityManager $entityManager;
 	private SchemaCreator $schemaCreator;
 
 	protected function setUp(): void {
@@ -53,12 +54,21 @@ class DoctrineTokenRepositoryTest extends KernelTestCase {
 
 		$retrievedToken = $repository->getTokenById( 1, AuthenticationBoundedContext::Donation );
 
-		$this->assertSame( $token->accessToken, $retrievedToken->accessToken );
-		$this->assertSame( $token->updateToken, $retrievedToken->updateToken );
+		$this->assertSame( $token->getAccessToken(), $retrievedToken->getAccessToken() );
+		$this->assertSame( $token->getUpdateToken(), $retrievedToken->getUpdateToken() );
 		$this->assertSame( $token->authenticationBoundedContext, $retrievedToken->authenticationBoundedContext );
 		$this->assertSame( $token->id, $retrievedToken->id );
 		$this->assertFalse( $retrievedToken->updateTokenHasExpired( $expiry ) );
 		$this->assertTrue( $retrievedToken->updateTokenHasExpired( $expiry->add( new \DateInterval( 'PT1S' ) ) ) );
+	}
+
+	public function testGetTokenByIdReturnsNullTokenWhenTokenWasNotFound(): void {
+		$repository = new DoctrineTokenRepository( $this->entityManager );
+
+		$this->assertInstanceOf(
+			NullToken::class,
+			$repository->getTokenById( 1, AuthenticationBoundedContext::Donation )
+		);
 	}
 
 }

@@ -15,7 +15,7 @@ class AccessTokenUrlAuthenticator implements URLAuthenticator {
 	public function addAuthenticationTokensToApplicationUrl( string $url ): string {
 		$params = [
 			'id' => $this->token->id,
-			'accessToken' => $this->token->accessToken,
+			'accessToken' => $this->token->getAccessToken(),
 		];
 		return str_contains( $url, '?' )
 			? $url . '&' . http_build_query( $params )
@@ -32,16 +32,16 @@ class AccessTokenUrlAuthenticator implements URLAuthenticator {
 			LegacyPayPalURLGenerator::class => [
 				'custom' => json_encode( [
 					'sid' => $this->token->id,
-					'utoken' => $this->token->updateToken
+					'utoken' => $this->token->getUpdateToken()
 				] )
 			],
 			CreditCardURLGenerator::class => [
-				'utoken' => $this->token->updateToken,
-				'token' => $this->token->accessToken
+				'utoken' => $this->token->getUpdateToken(),
+				'token' => $this->token->getAccessToken()
 			],
 			SofortURLGenerator::class =>  [
 				'id' => $this->token->id,
-				'accessToken' => $this->token->accessToken,
+				'accessToken' => $this->token->getAccessToken(),
 			],
 			default => throw new \InvalidArgumentException( 'Unsupported URL generator class: ' . $urlGeneratorClass ),
 		};

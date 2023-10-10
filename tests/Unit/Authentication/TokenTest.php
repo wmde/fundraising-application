@@ -29,4 +29,11 @@ class TokenTest extends TestCase {
 		$this->assertSame( 'nOtSeCrEt', $token->getRawBytes() );
 	}
 
+	public function testFromHexFailsWhenGivenNonHexadecimalString(): void {
+		$this->expectException( \InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Invalid token, was not a hexadecimal value' );
+
+		Token::fromHex( 'not hexadecimal' );
+	}
+
 }

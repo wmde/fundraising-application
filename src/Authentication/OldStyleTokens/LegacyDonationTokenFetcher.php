@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 
 /**
  * @deprecated The use case should not use this. Instead, the Controller/presenter should get the UpdateTokens
+ * @codeCoverageIgnore
  */
 class LegacyDonationTokenFetcher implements DonationTokenFetcher {
 	private TokenRepository $repository;
@@ -20,14 +21,11 @@ class LegacyDonationTokenFetcher implements DonationTokenFetcher {
 
 	public function getTokens( int $donationId ): DonationTokens {
 		$token = $this->repository->getTokenById( $donationId, AuthenticationBoundedContext::Donation );
-		if ( $token === null ) {
-			throw new DonationTokenFetchingException( sprintf( 'Could not find donation with ID "%d"', $donationId ) );
-		}
 
 		try {
 			return new DonationTokens(
-				(string)$token->accessToken,
-				(string)$token->updateToken
+				$token->getAccessToken(),
+				$token->getUpdateToken()
 			);
 		} catch ( \UnexpectedValueException $e ) {
 			throw new DonationTokenFetchingException( $e->getMessage(), $e );

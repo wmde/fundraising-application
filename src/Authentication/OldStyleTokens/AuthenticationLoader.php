@@ -28,8 +28,8 @@ class AuthenticationLoader implements DonationUrlAuthenticationLoader, Membershi
 		$token = $this->getTokenOrFail( $donationId, AuthenticationBoundedContext::Donation );
 		return [
 			...$parameters,
-			'accessToken' => $token->accessToken,
-			'updateToken' => $token->updateToken,
+			'accessToken' => $token->getAccessToken(),
+			'updateToken' => $token->getUpdateToken()
 		];
 	}
 
@@ -37,14 +37,14 @@ class AuthenticationLoader implements DonationUrlAuthenticationLoader, Membershi
 		$token = $this->getTokenOrFail( $membershipId, AuthenticationBoundedContext::Membership );
 		return [
 			...$parameters,
-			'accessToken' => $token->accessToken,
-			'updateToken' => $token->updateToken,
+			'accessToken' => $token->getAccessToken(),
+			'updateToken' => $token->getUpdateToken()
 		];
 	}
 
 	private function getTokenOrFail( int $id, AuthenticationBoundedContext $context ): AuthenticationToken {
 		$token = $this->repository->getTokenById( $id, $context );
-		if ( $token === null ) {
+		if ( $token instanceof NullToken ) {
 			return throw new \LogicException(
 				'No token found for ID ' . $id . ' and context ' . $context->name .
 				' This should never happen, you forgot to call authorizeDonationAccess or authorizeMembershipAccess somewhere'

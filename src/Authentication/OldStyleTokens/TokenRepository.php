@@ -8,5 +8,5 @@ use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 interface TokenRepository {
 	public function storeToken( AuthenticationToken $token ): void;
 
-	public function getTokenById( int $id, AuthenticationBoundedContext $authenticationDomain ): ?AuthenticationToken;
+	public function getTokenById( int $id, AuthenticationBoundedContext $authenticationDomain ): AuthenticationToken;
 }

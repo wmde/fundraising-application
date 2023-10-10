@@ -15,15 +15,17 @@ class DoctrineTokenRepository implements TokenRepository {
 		$this->entityManager->flush();
 	}
 
-	public function getTokenById( int $id, AuthenticationBoundedContext $authenticationDomain ): ?AuthenticationToken {
+	public function getTokenById( int $id, AuthenticationBoundedContext $authenticationDomain ): AuthenticationToken {
 		$conn = $this->entityManager->getConnection();
 		$result = $conn->executeQuery( 'SELECT * FROM legacy_auth_tokens WHERE id=:id AND authentication_context=:context LIMIT 1', [
 			'id' => $id,
 			'context' => $authenticationDomain->value
 		] )->fetchAllAssociative();
+
 		if ( count( $result ) === 0 ) {
-			return null;
+			return new NullToken( $id, $authenticationDomain );
 		}
+
 		return new AuthenticationToken(
 			(int)$result[0]['id'],
 			AuthenticationBoundedContext::from( $result[0]['authentication_context'] ),
