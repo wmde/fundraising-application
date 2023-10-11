@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d7b8c2f2d6e0cfef20b1abfcc7907bfa",
+    "content-hash": "7404e1826a1104abfa7638e1004da431",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6748,12 +6748,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "9aa9023e2e845de00b620a682dc92fd94d5f6cfc"
+                "reference": "3c5e03fc1d2fd8be14ee1bdf61ff227affed9c14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/9aa9023e2e845de00b620a682dc92fd94d5f6cfc",
-                "reference": "9aa9023e2e845de00b620a682dc92fd94d5f6cfc",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/3c5e03fc1d2fd8be14ee1bdf61ff227affed9c14",
+                "reference": "3c5e03fc1d2fd8be14ee1bdf61ff227affed9c14",
                 "shasum": ""
             },
             "require": {
@@ -6767,7 +6767,7 @@
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~4.0",
-                "wmde/fundraising-payments": "dev-url-generation-refactor"
+                "wmde/fundraising-payments": "dev-payment-with-ppl-api"
             },
             "require-dev": {
                 "ext-pdo_sqlite": "*",
@@ -6801,7 +6801,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2023-10-09T16:12:47+00:00"
+            "time": "2023-10-11T10:09:34+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -6809,12 +6809,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "d3ca1b9bfbcda262c06a9797c48b45b776e85546"
+                "reference": "c9314b419e163fc742afa2a2217c743239f4cd89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/d3ca1b9bfbcda262c06a9797c48b45b776e85546",
-                "reference": "d3ca1b9bfbcda262c06a9797c48b45b776e85546",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/c9314b419e163fc742afa2a2217c743239f4cd89",
+                "reference": "c9314b419e163fc742afa2a2217c743239f4cd89",
                 "shasum": ""
             },
             "require": {
@@ -6826,7 +6826,7 @@
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
                 "wmde/fun-validators": "~4.0.0",
-                "wmde/fundraising-payments": "dev-url-generation-refactor"
+                "wmde/fundraising-payments": "dev-payment-with-ppl-api"
             },
             "require-dev": {
                 "phpstan/phpstan": "~1.2",
@@ -6860,20 +6860,20 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2023-10-09T16:24:38+00:00"
+            "time": "2023-10-11T10:11:10+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "dev-url-generation-refactor",
+            "version": "dev-payment-with-ppl-api",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "481caa9d5b1ce4a40ad211414e1dc8c43da5b31c"
+                "reference": "d40c976ed2101188e5739a90dd6b6257ca5bfed2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/481caa9d5b1ce4a40ad211414e1dc8c43da5b31c",
-                "reference": "481caa9d5b1ce4a40ad211414e1dc8c43da5b31c",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/d40c976ed2101188e5739a90dd6b6257ca5bfed2",
+                "reference": "d40c976ed2101188e5739a90dd6b6257ca5bfed2",
                 "shasum": ""
             },
             "require": {
@@ -6976,16 +6976,16 @@
     "packages-dev": [
         {
             "name": "composer/pcre",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/pcre.git",
-                "reference": "4bff79ddd77851fe3cdd11616ed3f92841ba5bd2"
+                "reference": "00104306927c7a0919b4ced2aaa6782c1e61a3c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/pcre/zipball/4bff79ddd77851fe3cdd11616ed3f92841ba5bd2",
-                "reference": "4bff79ddd77851fe3cdd11616ed3f92841ba5bd2",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/00104306927c7a0919b4ced2aaa6782c1e61a3c9",
+                "reference": "00104306927c7a0919b4ced2aaa6782c1e61a3c9",
                 "shasum": ""
             },
             "require": {
@@ -7027,7 +7027,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/pcre/issues",
-                "source": "https://github.com/composer/pcre/tree/3.1.0"
+                "source": "https://github.com/composer/pcre/tree/3.1.1"
             },
             "funding": [
                 {
@@ -7043,7 +7043,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-11-17T09:50:14+00:00"
+            "time": "2023-10-11T07:11:09+00:00"
         },
         {
             "name": "composer/semver",

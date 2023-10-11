@@ -18,7 +18,7 @@
 		"wmde/clock": "~1.0",
 		"wmde/fundraising-donations": "dev-payment-with-ppl-api",
 		"wmde/fundraising-memberships": "dev-payment-with-ppl-api",
-		"wmde/fundraising-payments": "dev-url-generation-refactor",
+		"wmde/fundraising-payments": "dev-payment-with-ppl-api",
 		"wmde/fundraising-subscriptions": "~4.1",
 		"wmde/fundraising-content-provider": "~6.0",
 		"wmde/fundraising-address-change": "~2.0",
