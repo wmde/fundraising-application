@@ -325,10 +325,10 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function getBoundedContextFactoryCollection(): ContextFactoryCollection {
-		return $this->createSharedObject( ContextFactoryCollection::class, function () {
+		return $this->createSharedObject( ContextFactoryCollection::class, static function () {
 			return new ContextFactoryCollection(
-				$this->getDonationContextFactory(),
-				$this->getMembershipContextFactory(),
+				new DonationContextFactory(),
+				new MembershipContextFactory(),
 				new PaymentContextFactory(),
 				new SubscriptionContextFactory(),
 				new AddressChangeContextFactory(),
@@ -1836,28 +1836,6 @@ class FunFunFactory implements LoggerAwareInterface {
 			throw new \LogicException( 'Environment-specific Doctrine configuration was not initialized!' );
 		}
 		return $this->sharedObjects[Configuration::class];
-	}
-
-	private function getDonationContextFactory(): DonationContextFactory {
-		return $this->createSharedObject( DonationContextFactory::class, function (): DonationContextFactory {
-			return new DonationContextFactory(
-				[
-					'token-length' => $this->config['token-length'],
-					'token-validity-timestamp' => $this->config['token-validity-timestamp']
-				]
-			);
-		} );
-	}
-
-	private function getMembershipContextFactory(): MembershipContextFactory {
-		return $this->createSharedObject( MembershipContextFactory::class, function (): MembershipContextFactory {
-			return new MembershipContextFactory(
-				[
-					'token-length' => $this->config['token-length'],
-					'token-validity-timestamp' => $this->config['token-validity-timestamp']
-				]
-			);
-		} );
 	}
 
 	private function getUserDataKeyGenerator(): UserDataKeyGenerator {
