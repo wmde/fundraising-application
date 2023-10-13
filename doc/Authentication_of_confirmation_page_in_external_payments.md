@@ -15,6 +15,9 @@ two tokens (update and access token) to a single token.
 This is a high-level description of the steps the application and different bounded contexts interact, using donations 
 as an example. The membership bounded context works in the same way.
 
+![Class diagram of Authentication related classes and interfaces](images/Authentication_of_confirmation_page_in_external_payments.svg)
+
+
 1. The application implements the `DonationAuthorizer` interface (with the `PersistentAuthorizer` class). 
    The class has two dependencies:
    - a `TokenRepository` implementation for storage of the association between donation/membership and tokens
