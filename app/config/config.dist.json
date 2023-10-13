@@ -106,8 +106,7 @@
 		"baseUrl": "//tracking.wikimedia.de/",
 		"siteId": 5,
 		"donationConfirmationGoalId": 1,
-		"membershipApplicationConfirmationGoalId": 2,
-		"siteUrlBase": ""
+		"membershipApplicationConfirmationGoalId": 2
 	},
 	"payment-types": {
 		"BEZ": {

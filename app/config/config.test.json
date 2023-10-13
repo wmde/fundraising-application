@@ -79,8 +79,7 @@
 		"baseUrl": "//tracking.wikimedia.de/",
 		"siteId": 1234,
 		"donationConfirmationGoalId": 1,
-		"membershipApplicationConfirmationGoalId": 2,
-		"siteUrlBase": "http://test-spenden.wikimedia.local"
+		"membershipApplicationConfirmationGoalId": 2
 	},
 	"purging-secret": "Not so secret, testing",
 	"i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n",

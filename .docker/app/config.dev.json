@@ -61,7 +61,7 @@
   "purging-secret": "purgeme",
   "paypal-donation": {
     "base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
-    "account-address": "PAYPAL_USERNAME_IS_MISSING",
+    "account-address": "INSERT_CORRECT_USERNAME_HERE@wikimedia.de",
     "notify-url": "http://localhost:8082/handle-paypal-payment-notification",
     "return-url": "http://localhost:8082/show-donation-confirmation",
     "cancel-url": "http://localhost:8082/",
@@ -69,7 +69,7 @@
   },
   "paypal-membership": {
     "base-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?",
-    "account-address": "PAYPAL_USERNAME_IS_MISSING",
+    "account-address": "INSERT_CORRECT_USERNAME_HERE@wikimedia.de",
     "notify-url": "http://localhost:8082/handle-paypal-membership-fee-notification",
     "return-url": "http://localhost:8082/show-membership-confirmation",
     "cancel-url": "http://localhost:8082/",

@@ -681,12 +681,12 @@
     },
     "piwik": {
       "type": "object",
-      "title": "Piwik settings",
+      "title": "Matomo (formerly Piwik) settings",
       "properties": {
         "baseUrl": {
           "type": "string",
           "title": "Tracker URL",
-          "description": "Base URL for the Piwik installation. Make sure it starts with //, not with http:// or https://, that way the browser will automatically select the right transport when the URL is printed in a template",
+          "description": "Base URL for the Matomo installation. Make sure it starts with //, not with http:// or https://, that way the browser will automatically select the right transport when the URL is printed in a template",
           "format": "url",
           "default": "//tracking.wikimedia.de/",
           "pattern": "^(\\/){2}[a-zA-Z0-9.\\/]+$"
@@ -694,27 +694,20 @@
         "siteId": {
           "type": "integer",
           "title": "Site ID",
-          "description": "Unique site id (configured in Piwik)",
+          "description": "Unique site id (configured in Matomo)",
           "default": 1
         },
         "donationConfirmationGoalId": {
           "type": "integer",
           "title": "Donation Confirmation Goal ID",
-          "description": "Unique id (configured in Piwik)",
+          "description": "Unique id (configured in Matomo)",
           "default": 1
         },
         "membershipApplicationConfirmationGoalId": {
           "type": "integer",
           "title": "Membership Application Confirmation Goal ID",
-          "description": "Unique id (configured in Piwik)",
+          "description": "Unique id (configured in Matomo)",
           "default": 2
-        },
-        "siteUrlBase": {
-          "type": "string",
-          "title": "Site url",
-          "description": "Base URL for server-side piwik tracking. It must *not* have a slash at the end",
-          "format": "url",
-          "minLength": 1
         }
       },
       "additionalProperties": false,
@@ -722,8 +715,7 @@
         "baseUrl",
         "siteId",
         "donationConfirmationGoalId",
-        "membershipApplicationConfirmationGoalId",
-        "siteUrlBase"
+        "membershipApplicationConfirmationGoalId"
       ]
     },
     "payment-types": {
