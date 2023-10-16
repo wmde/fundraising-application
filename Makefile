@@ -84,6 +84,7 @@ lint-container:
 
 validate-app-config:
 	docker-compose run --rm --no-deps app ./bin/console app:validate:config app/config/config.dist.json app/config/config.test.json
+	docker-compose run --rm --no-deps app ./bin/console app:validate:config app/config/config.dist.json .docker/app/config.dev.json
 
 validate-campaign-config:
 	docker-compose run --rm --no-deps app ./bin/console app:validate:campaigns $(APP_ENV)
