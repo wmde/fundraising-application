@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AccessTokenUrlAuthenticator;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
-use WMDE\Fundraising\PaymentContext\Domain\UrlGenerator\PaymentProviderURLGenerator;
+use WMDE\Fundraising\PaymentContext\Domain\UrlGenerator\PaymentCompletionURLGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\CreditCardURLGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\LegacyPayPalURLGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\SofortURLGenerator;
@@ -78,7 +78,7 @@ class AccessTokenUrlAuthenticatorTest extends TestCase {
 
 		$this->expectException( \InvalidArgumentException::class );
 		$this->expectExceptionMessageMatches( '/Unsupported URL generator class/' );
-		$authenticator->getAuthenticationTokensForPaymentProviderUrl( PaymentProviderURLGenerator::class, [] );
+		$authenticator->getAuthenticationTokensForPaymentProviderUrl( PaymentCompletionURLGenerator::class, [] );
 	}
 
 	public function testGetAuthenticationTokenForPaymentProviderUrlWillThrowExceptionIfExpectedParametersMismatch(): void {

@@ -28,7 +28,7 @@ class PersistentAuthorizer implements DonationAuthorizer, MembershipAuthorizer {
 	public function authorizeDonationAccess( int $donationId ): URLAuthenticator {
 		$token = $this->repository->getTokenById( $donationId, AuthenticationBoundedContext::Donation );
 		if ( $token instanceof NullToken ) {
-			$token = $this->createNewToken( $donationId, AuthenticationBoundedContext::Donation );
+			$token = $this->createAndStoreNewToken( $donationId, AuthenticationBoundedContext::Donation );
 		}
 
 		return new AccessTokenUrlAuthenticator( $token );
@@ -37,13 +37,13 @@ class PersistentAuthorizer implements DonationAuthorizer, MembershipAuthorizer {
 	public function authorizeMembershipAccess( int $membershipId ): URLAuthenticator {
 		$token = $this->repository->getTokenById( $membershipId, AuthenticationBoundedContext::Membership );
 		if ( $token instanceof NullToken ) {
-			$token = $this->createNewToken( $membershipId, AuthenticationBoundedContext::Membership );
+			$token = $this->createAndStoreNewToken( $membershipId, AuthenticationBoundedContext::Membership );
 		}
 
 		return new AccessTokenUrlAuthenticator( $token );
 	}
 
-	private function createNewToken( int $id, AuthenticationBoundedContext $context ): AuthenticationToken {
+	private function createAndStoreNewToken( int $id, AuthenticationBoundedContext $context ): AuthenticationToken {
 		$accessToken = $this->tokenGenerator->generateToken();
 		$updateToken = $this->tokenGenerator->generateToken();
 		$updateTokenExpiry = $this->clock->now()->add( $this->updateTokenExpiry );

@@ -92,6 +92,7 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
+use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationContextFactory;
 use WMDE\Fundraising\Frontend\Authentication\DonationUrlAuthenticationLoader;
 use WMDE\Fundraising\Frontend\Authentication\MembershipUrlAuthenticationLoader;
@@ -948,6 +949,7 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getLegacyPayPalUrlConfigForDonations(),
 				$this->getSofortUrlGeneratorConfigForDonations(),
 				$this->getSofortClient(),
+				$this->getUrlGenerator()->generateAbsoluteUrl( Routes::SHOW_DONATION_CONFIRMATION ),
 				useLegacyPayPalUrlGenerator: $this->useLegacyPayPalUrlGenerator()
 			),
 			new PaymentProviderAdapterFactoryImplementation(
@@ -978,6 +980,7 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getLegacyPayPalUrlConfigForDonations(),
 				$this->getSofortUrlGeneratorConfigForDonations(),
 				$this->getSofortClient(),
+				$this->getUrlGenerator()->generateAbsoluteUrl( Routes::SHOW_MEMBERSHIP_CONFIRMATION ),
 				useLegacyPayPalUrlGenerator: false
 			),
 			new PaymentProviderAdapterFactoryImplementation(

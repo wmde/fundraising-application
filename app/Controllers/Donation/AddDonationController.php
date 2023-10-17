@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
-use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
-use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
@@ -40,19 +38,7 @@ class AddDonationController {
 			throw new \RuntimeException( "Creating a donation was not successful." );
 		}
 
-		return $this->newHttpResponse( $responseModel );
-	}
-
-	private function newHttpResponse( AddDonationResponse $responseModel ): Response {
-		// for immediately completed payments like Direct Debit / Banktransfer there is no redirect URL
-		if ( $responseModel->getPaymentProviderRedirectUrl() === '' ) {
-			$authenticationLoader = $this->ffFactory->getUrlAuthenticationLoader();
-			$authenticator = $authenticationLoader->getDonationUrlAuthenticator( $responseModel->getDonation()->getId() );
-			$url = $this->ffFactory->getUrlGenerator()->generateAbsoluteUrl( Routes::SHOW_DONATION_CONFIRMATION );
-			$url = $authenticator->addAuthenticationTokensToApplicationUrl( $url );
-			return new RedirectResponse( $url );
-		}
-		return new RedirectResponse( $responseModel->getPaymentProviderRedirectUrl() );
+		return new RedirectResponse( $responseModel->getPaymentCompletionUrl() );
 	}
 
 	private function createDonationRequest( Request $request ): AddDonationRequest {

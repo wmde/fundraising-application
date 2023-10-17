@@ -7,8 +7,6 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Membership;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
@@ -44,7 +42,8 @@ class ApplyForMembershipController {
 			return $this->newFailureResponse( $httpRequest );
 		}
 
-		return $this->newHttpResponse( $session, $responseModel );
+		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $session );
+		return new RedirectResponse( $responseModel->getPaymentCompletionUrl() );
 	}
 
 	private function callUseCase( Request $httpRequest ): ApplyForMembershipResponse {
@@ -113,21 +112,6 @@ class ApplyForMembershipController {
 				$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
 			)
 		);
-	}
-
-	private function newHttpResponse( SessionInterface $session, ApplyForMembershipResponse $responseModel ): Response {
-		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $session );
-		$redirectUrl = $responseModel->getPaymentProviderRedirectUrl();
-
-		if ( $redirectUrl !== '' ) {
-			return new RedirectResponse( $redirectUrl );
-		}
-
-		$url = $this->ffFactory->getUrlGenerator()->generateAbsoluteUrl( Routes::SHOW_MEMBERSHIP_CONFIRMATION );
-		$url = $this->ffFactory->getUrlAuthenticationLoader()
-			->getMembershipUrlAuthenticator( $responseModel->getMembershipApplication()->getId() )
-			->addAuthenticationTokensToApplicationUrl( $url );
-		return new RedirectResponse( $url );
 	}
 
 	/**
