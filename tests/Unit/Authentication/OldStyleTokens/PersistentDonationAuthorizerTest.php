@@ -4,6 +4,8 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Authentication\OldStyleTokens;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\PersistentAuthorizer;
@@ -23,7 +25,7 @@ class PersistentDonationAuthorizerTest extends TestCase {
 		$repo = new InMemoryTokenRepository();
 		$tokenGenerator = new FixedTokenGenerator( Token::fromHex( FixedTokenGenerator::DEFAULT_TOKEN ) );
 		$updateTokenExpiry = new \DateInterval( 'PT1H' );
-		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, $updateTokenExpiry );
+		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, new NullLogger(), $updateTokenExpiry );
 
 		$authorizer->authorizeDonationAccess( self::DONATION_ID );
 
@@ -43,7 +45,7 @@ class PersistentDonationAuthorizerTest extends TestCase {
 		$tokenGenerator = $this->createMock( TokenGenerator::class );
 		$tokenGenerator->expects( $this->never() )->method( 'generateToken' );
 		$updateTokenExpiry = new \DateInterval( 'PT1H' );
-		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, $updateTokenExpiry );
+		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, $this->givenLoggerThatExpectsWarning(), $updateTokenExpiry );
 
 		$authorizer->authorizeDonationAccess( self::DONATION_ID );
 	}
@@ -52,7 +54,7 @@ class PersistentDonationAuthorizerTest extends TestCase {
 		$repo = new InMemoryTokenRepository();
 		$tokenGenerator = new FixedTokenGenerator( Token::fromHex( FixedTokenGenerator::DEFAULT_TOKEN ) );
 		$updateTokenExpiry = new \DateInterval( 'PT1H' );
-		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, $updateTokenExpiry );
+		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, new NullLogger(), $updateTokenExpiry );
 
 		$authorizer->authorizeMembershipAccess( self::MEMBERSHIP_ID );
 
@@ -72,9 +74,17 @@ class PersistentDonationAuthorizerTest extends TestCase {
 		$tokenGenerator = $this->createMock( TokenGenerator::class );
 		$tokenGenerator->expects( $this->never() )->method( 'generateToken' );
 		$updateTokenExpiry = new \DateInterval( 'PT1H' );
-		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, $updateTokenExpiry );
+		$authorizer = new PersistentAuthorizer( $repo, $tokenGenerator, $this->givenLoggerThatExpectsWarning(), $updateTokenExpiry );
 
 		$authorizer->authorizeMembershipAccess( self::MEMBERSHIP_ID );
+	}
+
+	public function givenLoggerThatExpectsWarning(): LoggerInterface {
+		$logger = $this->createMock( LoggerInterface::class );
+		$logger->expects( $this->once() )
+			->method( 'warning' )
+			->with( $this->matchesRegularExpression( '/Found existing token/' ) );
+		return $logger;
 	}
 
 }

@@ -2113,6 +2113,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			return new PersistentAuthorizer(
 				$this->getTokenRepository(),
 				new RandomTokenGenerator( $this->config['token-length'] ),
+				$this->getLogger(),
 				new \DateInterval( $this->config['token-validity-timestamp'] )
 			);
 		} );
@@ -2164,6 +2165,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new PersistentAuthorizer(
 			$this->getTokenRepository(),
 			new RandomTokenGenerator( $this->config['token-length'] ),
+			$this->getLogger(),
 			new \DateInterval( $this->config['token-validity-timestamp'] )
 		);
 	}
