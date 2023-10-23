@@ -6,14 +6,15 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
+use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\SuccessfulMembershipAuthorizer;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidPayments;
 use WMDE\Fundraising\MembershipContext\Tests\TestDoubles\FakeApplicationRepository;
-use WMDE\Fundraising\MembershipContext\Tests\TestDoubles\FixedMembershipTokenGenerator;
-use WMDE\Fundraising\MembershipContext\Tests\TestDoubles\SucceedingAuthorizer;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipConfirmationController
@@ -28,13 +29,17 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	private function newStoredMembershipApplication( FunFunFactory $factory ): MembershipApplication {
 		$factory->getPaymentRepository()->storePayment( ValidPayments::newDirectDebitPayment() );
 
-		$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
-			self::CORRECT_ACCESS_TOKEN
-		) );
-
 		$membershipApplication = ValidMembershipApplication::newDomainEntity();
 
 		$factory->getMembershipApplicationRepository()->storeApplication( $membershipApplication );
+		$factory->getTokenRepository()->storeToken(
+			new AuthenticationToken(
+				$membershipApplication->getId(),
+				AuthenticationBoundedContext::Membership,
+				self::CORRECT_ACCESS_TOKEN,
+				self::CORRECT_ACCESS_TOKEN
+			)
+		);
 
 		return $membershipApplication;
 	}
@@ -58,14 +63,13 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 	public function testCallOnAnonymizedRecord_deniedPageIsShown(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$factory->setMembershipTokenGenerator( new FixedMembershipTokenGenerator(
-				self::CORRECT_ACCESS_TOKEN
-			) );
-
 			$doctrineApplication = ValidMembershipApplication::newAnonymizedDoctrineEntity();
+			$token = new AuthenticationToken( $doctrineApplication->getId(), AuthenticationBoundedContext::Membership, self::CORRECT_ACCESS_TOKEN, self::CORRECT_ACCESS_TOKEN );
 
-			$factory->getEntityManager()->persist( $doctrineApplication );
-			$factory->getEntityManager()->flush();
+			$entityManager = $factory->getEntityManager();
+			$entityManager->persist( $doctrineApplication );
+			$entityManager->persist( $token );
+			$entityManager->flush();
 
 			$client->request(
 				Request::METHOD_GET,
@@ -98,7 +102,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	public function testOnDatabaseError_errorPageIsShown(): void {
 		$membershipApplication = ValidMembershipApplication::newDomainEntity();
 		$this->modifyEnvironment( static function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
-			$factory->setMembershipApplicationAuthorizer( new SucceedingAuthorizer() );
+			$factory->setMembershipApplicationAuthorizationChecker( new SuccessfulMembershipAuthorizer() );
 
 			$applicationRepository = new FakeApplicationRepository( $membershipApplication );
 			$applicationRepository->throwOnRead();

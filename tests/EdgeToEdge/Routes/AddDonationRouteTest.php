@@ -15,13 +15,10 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryTranslator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\PayPalAPISpy;
-use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
-use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\LegacyPayPalURLGeneratorConfig;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalAPIURLGeneratorConfig;
+use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\Sofort\Response as SofortResponse;
+use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\Sofort\SofortClient;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\AddDonationController
@@ -30,8 +27,6 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentUrlGenerator\PayPalAPIURLGener
 class AddDonationRouteTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;
-
-	private const SOME_TOKEN = 'SomeToken';
 
 	private const ADD_DONATION_PATH = '/donation/add';
 
@@ -158,6 +153,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
 
+		$this->assertTrue( $client->getResponse()->isOk() );
 		$this->assertTrue( property_exists( $applicationVars, 'donation' ), 'applicationVars should have a "donation" property' );
 		$this->assertSame( 5.51, $applicationVars->donation->amount );
 		$this->assertSame( 0, $applicationVars->donation->interval );
@@ -353,6 +349,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
+
 		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 		$this->assertStringContainsString( 'sandbox.paypal.com', $response->getContent() );
 	}
@@ -365,9 +362,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$factory = $this->getFactory();
 		$factory->setLocale( 'de_DE' );
 
-		if ( $factory->getPayPalUrlGeneratorConfigForDonations() instanceof PayPalAPIURLGeneratorConfig ) {
+		if ( $factory->useLegacyPayPalUrlGenerator() ) {
 			// Canary for removing LegacyPayPalURLGeneratorConfig
-			if ( time() > strtotime( '2023-08-30' ) ) {
+			if ( time() > strtotime( '2024-08-30' ) ) {
 				$this->fail();
 			}
 			$this->markTestSkipped();
@@ -409,12 +406,12 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		// TODO remove if statement when paypal integration is done
-		if ( $factory->getPayPalUrlGeneratorConfigForDonations() instanceof LegacyPayPalURLGeneratorConfig ) {
+		if ( !$factory->useLegacyPayPalUrlGenerator() ) {
 			// Canary for removing LegacyPayPalURLGeneratorConfig
 			if ( time() > strtotime( '2023-08-30' ) ) {
 				$this->fail();
 			}
-			$this->markTestSkipped( 'The FunFunFactory uses LegacyPayPalURLGeneratorConfig' );
+			$this->markTestSkipped( 'The FunFunFactory uses Legacy Paypal connection' );
 		}
 
 		$this->assertSame( $expected, $paypalApiSpy->lastCalledSubscriptionPlanId() );
@@ -562,36 +559,32 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenValidRequest_tokensAreReturned(): void {
-		$client = $this->createClient();
-		$this->getFactory()->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
-
-		$client->followRedirects( false );
-
-		$client->request(
-			'POST',
-			'/donation/add',
-			$this->newValidCreditCardInput()
-		);
-
-		$response = $client->getResponse()->getContent();
-
-		$this->assertStringContainsString( self::SOME_TOKEN, $response );
-	}
-
 	public function testGivenValidRequest_clientIsRedirected(): void {
 		$client = $this->createClient();
-		$factory = $this->getFactory();
-		$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 		$client->followRedirects( false );
 
 		$client->request(
 			'POST',
 			'/donation/add',
-			$this->newValidFormInput()
+			$this->newValidBankTransferInput()
 		);
 
 		$this->assertTrue( $client->getResponse()->isRedirect() );
+	}
+
+	public function testGivenValidRequest_redirectionUrlContainsAuthenticationTokens(): void {
+		$client = $this->createClient();
+		$client->followRedirects( false );
+
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidBankTransferInput()
+		);
+
+		$response = $client->getResponse();
+		$redirectUrl = $response->headers->get( 'Location' );
+		$this->assertMatchesRegularExpression( '/accessToken=[0-9a-f]+/i', $redirectUrl );
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {

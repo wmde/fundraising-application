@@ -10,7 +10,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentId;
 
 trait RebuildDatabaseSchemaTrait {
 	public static function rebuildDatabaseSchema( FunFunFactory $factory ): void {
-		$entityManager = $factory->getPlainEntityManager();
+		$entityManager = $factory->getEntityManager();
 		$schemaCreator = new SchemaCreator( $entityManager );
 
 		try {

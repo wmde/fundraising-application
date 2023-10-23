@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+>
+    <entity name="WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken" table="legacy_auth_tokens">
+        <id name="id" type="integer" column="id" />
+        <id name="authenticationBoundedContext" column="authentication_context" type="AuthenticationBoundedContext" />
+
+        <field name="accessToken" column="access_token" type="string" length="64" />
+        <field name="updateToken" column="update_token" type="string" length="64" />
+        <field name="updateTokenTokenExpiry" column="update_token_expiry" type="datetime_immutable" nullable="true" />
+
+        <indexes>
+            <index name="access_token_idx" columns="access_token"/>
+            <index name="update_token_idx" columns="update_token"/>
+        </indexes>
+    </entity>
+</doctrine-mapping>

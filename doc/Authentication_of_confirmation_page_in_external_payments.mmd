@@ -1,0 +1,82 @@
+classDiagram
+
+  AddDonationController *-- CreateDonationUseCase
+  AddDonationController ..> DonationResponse
+  AccessTokenUrlAuthenticator ..|> URLAuthenticator
+  PersistentAuthorizer ..|> DonationAuthorizer
+
+  CreateDonationUseCase *-- CreatePaymentUseCase
+  CreateDonationUseCase *-- DonationAuthorizer
+  DonationAuthorizer ..> URLAuthenticator
+  PersistentAuthorizer *-- TokenRepository
+
+  PaymentCreationRequest ..> URLAuthenticator
+
+  namespace Application {
+    class AddDonationController {
+      
+    }
+
+    class AccessTokenUrlAuthenticator {
+      authenticationToken AuthenticationToken
+      addAuthenticationTokensToApplicationUrl(url) string
+      getAuthenticationTokensForPaymentProviderUrl(generatorClass, expectedParameters) array
+    }
+
+    class PersistentAuthorizer {
+      tokenGenerator TokenGenerator
+      authorizeDonation(donation) UrlAuthenticator
+    }
+
+    class TokenRepository {
+      <<Interface>>
+      getTokenById(id) AuthenticationToken
+      storeToken(authenticationToken) void
+    }
+
+    class AuthenticationToken {
+      id int
+      accessToken string
+      updateToken string
+    }
+
+  }
+  
+  namespace Donations {
+
+    class DonationAuthorizer {
+      <<Interface>>
+      authorizeDonation(donation) UrlAuthenticator
+    }
+
+    class DonationResponse {
+      externalPaymentProviderUrl string|null
+    }
+
+    class CreateDonationUseCase {
+      createDonation(createDonationRequest) DonationResponse
+    }
+  }
+  namespace Payments {
+
+    class URLAuthenticator {
+      <<Interface>>
+      addAuthenticationTokensToApplicationUrl(url) string
+      getAuthenticationTokensForPaymentProviderUrl(generatorClass, expectedParameters) array
+    }
+    class PaymentCreationRequest {
+      URLAuthenticator urlAuthenticator
+    }
+
+    class PaymentResponse {
+      externalPaymentProviderUrl string|null
+    }
+
+    class CreatePaymentUseCase {
+      createPayment(paymentCreationRequest) PaymentResponse
+    }
+
+  }
+
+
+  

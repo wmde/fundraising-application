@@ -7,17 +7,14 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Donation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
-use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationResponse;
-use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
-use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentCreationRequest;
+use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentParameters;
 use WMDE\FunValidators\ConstraintViolation;
 
 /**
@@ -25,13 +22,11 @@ use WMDE\FunValidators\ConstraintViolation;
  */
 class AddDonationController {
 
-	private SessionInterface $session;
 	private FunFunFactory $ffFactory;
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
-		$this->session = $session = $request->getSession();
 		$this->ffFactory = $ffFactory;
-		if ( !$ffFactory->getDonationSubmissionRateLimiter()->isSubmissionAllowed( $session ) ) {
+		if ( !$ffFactory->getDonationSubmissionRateLimiter()->isSubmissionAllowed( $request->getSession() ) ) {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'donation_rejected_limit' ) );
 		}
 
@@ -43,21 +38,7 @@ class AddDonationController {
 			throw new \RuntimeException( "Creating a donation was not successful." );
 		}
 
-		return $this->newHttpResponse( $responseModel );
-	}
-
-	private function newHttpResponse( AddDonationResponse $responseModel ): Response {
-		// for immediately completed payments like Direct Debit / Banktransfer there is no redirect URL
-		if ( $responseModel->getPaymentProviderRedirectUrl() === '' ) {
-			return new RedirectResponse( $this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-				Routes::SHOW_DONATION_CONFIRMATION,
-				[
-					'id' => $responseModel->getDonation()->getId(),
-					'accessToken' => $responseModel->getAccessToken()
-				]
-			) );
-		}
-		return new RedirectResponse( $responseModel->getPaymentProviderRedirectUrl() );
+		return new RedirectResponse( $responseModel->getPaymentCompletionUrl() );
 	}
 
 	private function createDonationRequest( Request $request ): AddDonationRequest {
@@ -85,12 +66,12 @@ class AddDonationController {
 		$donationRequest->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
 		$donationRequest->setOptsIntoDonationReceipt( $request->request->getBoolean( 'donationReceipt', true ) );
 
-		$donationRequest->setPaymentCreationRequest( $this->createPaymentCreationRequest( $request ) );
+		$donationRequest->setPaymentParameters( $this->createPaymentParameters( $request ) );
 
 		return $donationRequest;
 	}
 
-	private function createPaymentCreationRequest( Request $request ): PaymentCreationRequest {
+	private function createPaymentParameters( Request $request ): PaymentParameters {
 		$amount = $this->getEuroAmount( $this->getAmountFromRequest( $request ) );
 		$interval = intval( $request->get( 'interval', 0 ) );
 		$paymentType = $request->get( 'paymentType', '' );
@@ -102,9 +83,7 @@ class AddDonationController {
 			$bic = trim( $request->get( 'bic', '' ) );
 		}
 
-		$paymentCreationRequest = new PaymentCreationRequest( $amount->getEuroCents(), $interval, $paymentType, $iban, $bic );
-		$paymentCreationRequest->setDomainSpecificPaymentValidator( $this->ffFactory->newDonationPaymentValidator() );
-		return $paymentCreationRequest;
+		return new PaymentParameters( $amount->getEuroCents(), $interval, $paymentType, $iban, $bic );
 	}
 
 	private function getEuroAmount( int $amount ): Euro {
@@ -141,11 +120,15 @@ class AddDonationController {
 		$formattedConstraintViolations = [];
 		foreach ( $constraintViolations as $constraintViolation ) {
 			$source = $constraintViolation->getSource();
+			$value = $constraintViolation->getValue();
+			if ( !is_string( $value ) ) {
+				$value = json_encode( $value );
+			}
 			$fields[] = $source;
 			$formattedConstraintViolations['validation_errors'][] = sprintf(
 				'Validation field "%s" with value "%s" failed with: %s',
 				$source,
-				$constraintViolation->getValue(),
+				$value,
 				$constraintViolation->getMessageIdentifier()
 			);
 		}

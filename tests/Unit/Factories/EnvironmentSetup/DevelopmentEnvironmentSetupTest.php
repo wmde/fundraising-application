@@ -34,6 +34,10 @@ class DevelopmentEnvironmentSetupTest extends TestCase {
 		$methodNameMatcher = '/^(?:' . implode( '|', array_merge( $expectedSetters, $supportingGetters ) ) . ')$/';
 		$factory->expects( $this->never() )->method( $this->logicalNot( $this->matchesRegularExpression( $methodNameMatcher ) ) );
 
+		$_ENV['PAYPAL_API_CLIENT_ID'] = 'not_a_real_client_id';
+		$_ENV['PAYPAL_API_URL'] = 'https://example.com';
+		$_ENV['PAYPAL_API_CLIENT_SECRET'] = 'not_a_real_client_secret';
+
 		$setup = new DevelopmentEnvironmentSetup();
 		$setup->setEnvironmentDependentInstances( $factory );
 	}

@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Factories\EnvironmentSetup;
 
 use Doctrine\ORM\ORMSetup;
+use GuzzleHttp\Client;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -12,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Psr16Cache;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\PaymentContext\Services\PayPal\GuzzlePaypalAPI;
 
 class ProductionEnvironmentSetup implements EnvironmentSetup {
 
@@ -24,6 +26,7 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 		$this->setCampaignCache( $factory );
 		$this->initializeLoggers( $factory );
 		$this->setDoctrineConfiguration( $factory );
+		$this->setPayPalAPIClient( $factory );
 	}
 
 	private function initializeLoggers( FunFunFactory $factory ): void {
@@ -68,5 +71,21 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 		$streamHandler->setFormatter( new JsonFormatter() );
 		$logger->pushHandler( $streamHandler );
 		return $logger;
+	}
+
+	private function setPayPalAPIClient( FunFunFactory $factory ): void {
+		$clientId = $_ENV['PAYPAL_API_CLIENT_ID'] ?? '';
+		$secret = $_ENV['PAYPAL_API_CLIENT_SECRET'] ?? '';
+		$baseUri = $_ENV['PAYPAL_API_URL'] ?? '';
+		if ( !$clientId || !$secret || !$baseUri ) {
+			throw new \LogicException( "You must put PAYPAL_API_URL, PAYPAL_API_CLIENT_ID and " .
+				"PAYPAL_API_CLIENT_SECRET in the .env.* file" );
+		}
+		$factory->setPayPalAPI( new GuzzlePaypalAPI(
+			new Client( [ 'base_uri' => $baseUri ] ),
+			$clientId,
+			$secret,
+			$this->createStreamLoggerForPayment( 'paypal_api_errors', $factory->getLoggingPath() )
+		) );
 	}
 }
