@@ -44,8 +44,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			self::PATH,
 			[
 				'comment' => 'Take my money!',
-				'public' => '1',
-				'isAnonymous' => '0',
+				'isPublic' => '1',
+				'withName' => '1',
 				'donationId' => (string)$donation->getId(),
 			]
 		);
@@ -64,8 +64,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			self::PATH,
 			[
 				'comment' => 'Take my money!',
-				'public' => '1',
-				'isAnonymous' => '0',
+				'isPublic' => '1',
+				'withName' => '1',
 				'donationId' => (string)$donation->getId(),
 				'updateToken' => self::CORRECT_UPDATE_TOKEN,
 			]
@@ -84,8 +84,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			self::PATH,
 			[
 				'comment' => 'Take my money!',
-				'public' => '1',
-				'isAnonymous' => '0',
+				'isPublic' => '1',
+				'withName' => '1',
 				'donationId' => self::NON_EXISTING_DONATION_ID,
 				'updateToken' => self::CORRECT_UPDATE_TOKEN,
 			]
@@ -105,8 +105,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			self::PATH,
 			[
 				'comment' => 'Take my money!',
-				'public' => '1',
-				'isAnonymous' => '0',
+				'isPublic' => '1',
+				'withName' => '1',
 				'donationId' => (string)$donation->getId(),
 				'updateToken' => 'Not the correct token',
 			]
@@ -126,8 +126,8 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 			self::PATH,
 			[
 				'comment' => 'Gotta make dat 💲',
-				'public' => '1',
-				'isAnonymous' => '0',
+				'isPublic' => '1',
+				'withName' => '1',
 				'donationId' => (string)$donation->getId(),
 				'updateToken' => self::CORRECT_UPDATE_TOKEN,
 			]
