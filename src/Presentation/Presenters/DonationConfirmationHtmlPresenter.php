@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\Authentication\DonationUrlAuthenticationLoader;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\DonorDataFormatter;
@@ -13,52 +14,48 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
  * Render the confirmation pages for donations
- *
- * @license GPL-2.0-or-later
  */
 class DonationConfirmationHtmlPresenter {
 
-	private TwigTemplate $template;
-	private UrlGenerator $urlGenerator;
-	private array $countries;
-	private object $validation;
+	private object $addressValidationPatterns;
 
-	public function __construct( TwigTemplate $template, UrlGenerator $urlGenerator, array $countries, object $validation ) {
-		$this->template = $template;
-		$this->urlGenerator = $urlGenerator;
-		$this->countries = $countries;
-		$this->validation = $validation;
+	public function __construct(
+		private readonly TwigTemplate $template,
+		private readonly UrlGenerator $urlGenerator,
+		private readonly DonationUrlAuthenticationLoader $authenticationLoader,
+		private readonly array $countries,
+		object $validation
+	) {
+		$this->addressValidationPatterns = $validation;
 	}
 
-	public function present( Donation $donation, array $paymentData, string $updateToken, string $accessToken,
-							 array $urlEndpoints ): string {
+	public function present( Donation $donation, array $paymentData, array $urlEndpoints ): string {
 		return $this->template->render(
-			$this->getConfirmationPageArguments( $donation, $paymentData, $updateToken, $accessToken, $urlEndpoints )
+			$this->getConfirmationPageArguments( $donation, $paymentData, $urlEndpoints )
 		);
 	}
 
-	private function getConfirmationPageArguments( Donation $donation, array $paymentData, string $updateToken, string $accessToken,
-		array $urlEndpoints ): array {
+	private function getConfirmationPageArguments( Donation $donation, array $paymentData, array $urlEndpoints ): array {
 		$donorDataFormatter = new DonorDataFormatter();
+		$donationParameters = [
+			'id' => $donation->getId(),
+			// TODO: Adapt the front end to take cents here for currency localisation
+			'amount' => Euro::newFromCents( $paymentData['amount'] )->getEuroFloat(),
+			'amountInCents' => $paymentData['amount'],
+			'interval' => $paymentData['interval'],
+			'paymentType' => $paymentData['paymentType'],
+			'receipt' => $donation->getDonor()->wantsReceipt(),
+			'newsletter' => $donation->getDonor()->wantsNewsletter(),
+			'bankTransferCode' => $paymentData['paymentReferenceCode'] ?? '',
+			'creationDate' => $donorDataFormatter->getDonationDate(),
+			'cookieDuration' => $donorDataFormatter->getHideBannerCookieDuration(),
+			'isExported' => $donation->isExported()
+		];
+		$donationParameters = $this->authenticationLoader->addDonationAuthorizationParameters( $donation->getId(), $donationParameters );
 		return [
-			'donation' => [
-				'id' => $donation->getId(),
-				// TODO: Adapt the front end to take cents here for currency localisation
-				'amount' => Euro::newFromCents( $paymentData['amount'] )->getEuroFloat(),
-				'amountInCents' => $paymentData['amount'],
-				'interval' => $paymentData['interval'],
-				'paymentType' => $paymentData['paymentType'],
-				'receipt' => $donation->getDonor()->wantsReceipt(),
-				'newsletter' => $donation->getDonor()->wantsNewsletter(),
-				'bankTransferCode' => $paymentData['paymentReferenceCode'] ?? '',
-				'creationDate' => $donorDataFormatter->getDonationDate(),
-				'cookieDuration' => $donorDataFormatter->getHideBannerCookieDuration(),
-				'updateToken' => $updateToken,
-				'accessToken' => $accessToken,
-				'isExported' => $donation->isExported()
-			],
+			'donation' => $donationParameters,
 			'countries' => $this->countries,
-			'addressValidationPatterns' => $this->validation,
+			'addressValidationPatterns' => $this->addressValidationPatterns,
 			'addressType' => AddressType::donorToPresentationAddressType( $donation->getDonor() ),
 			'address' => $donorDataFormatter->getAddressArguments( $donation ),
 			'bankData' => [
@@ -66,19 +63,22 @@ class DonationConfirmationHtmlPresenter {
 				'bic' => $paymentData['bic'] ?? '',
 				'bankname' => $paymentData['bankname'] ?? '',
 			],
-			'urls' => array_merge(
-				$urlEndpoints,
+			'urls' => [
+				...$urlEndpoints,
+				'addComment'  => $this->createUrlForAddingComment( $donation->getId() ),
+			]
+		];
+	}
+
+	private function createUrlForAddingComment( int $donationId ): string {
+		return $this->urlGenerator->generateRelativeUrl(
+			'AddCommentPage',
+			$this->authenticationLoader->addDonationAuthorizationParameters(
+				$donationId,
 				[
-					'addComment'  => $this->urlGenerator->generateRelativeUrl(
-						'AddCommentPage',
-						[
-							'donationId' => $donation->getId(),
-							'updateToken' => $updateToken,
-							'accessToken' => $accessToken
-						]
-					)
+					'donationId' => $donationId,
 				]
 			)
-		];
+		);
 	}
 }

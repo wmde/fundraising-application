@@ -30,6 +30,9 @@ services:
     WMDE\Fundraising\Frontend\Cli\:
         resource: '../cli/*'
 
+    WMDE\Fundraising\PaymentContext\Commands\:
+        resource: '../vendor/wmde/fundraising-payments/src/Commands/*'
+
     # In the future, me might get less and less reliant on FunFunFactory and make
     #    classes in src/ available to be used as services
     # The following configuration creates a service per class whose id is the fully-qualified class name
@@ -109,3 +112,10 @@ services:
             - "%env(resolve:APP_ENV)%"
             # We can't define the log level in the monolog configuration, see https://github.com/symfony/monolog-bundle/issues/322
             - notice
+
+    WMDE\Fundraising\PaymentContext\Services\PayPal\GuzzlePaypalAPI:
+        class: WMDE\Fundraising\PaymentContext\Services\PayPal\GuzzlePaypalAPI
+        factory: ['@WMDE\Fundraising\Frontend\Factories\FunFunFactory', 'getPayPalApiClient']
+
+    WMDE\Fundraising\PaymentContext\Services\PayPal\PaypalAPI: '@WMDE\Fundraising\PaymentContext\Services\PayPal\GuzzlePaypalAPI'
+

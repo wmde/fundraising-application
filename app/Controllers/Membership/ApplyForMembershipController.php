@@ -7,14 +7,12 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Membership;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
-use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentCreationRequest;
+use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentParameters;
 
 /**
  * @license GPL-2.0-or-later
@@ -44,7 +42,8 @@ class ApplyForMembershipController {
 			return $this->newFailureResponse( $httpRequest );
 		}
 
-		return $this->newHttpResponse( $session, $responseModel );
+		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $session );
+		return new RedirectResponse( $responseModel->getPaymentCompletionUrl() );
 	}
 
 	private function callUseCase( Request $httpRequest ): ApplyForMembershipResponse {
@@ -79,7 +78,7 @@ class ApplyForMembershipController {
 		$request->setApplicantPhoneNumber( $httpRequest->request->get( 'phone', '' ) );
 		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
 
-		$request->setPaymentCreationRequest( $this->newPaymentCreationRequest( $httpRequest ) );
+		$request->setPaymentParameters( $this->newPaymentParameters( $httpRequest ) );
 
 		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
 			$httpRequest->request->get( 'templateCampaign', '' ),
@@ -95,8 +94,8 @@ class ApplyForMembershipController {
 		return $request;
 	}
 
-	private function newPaymentCreationRequest( Request $httpRequest ): PaymentCreationRequest {
-		return new PaymentCreationRequest(
+	private function newPaymentParameters( Request $httpRequest ): PaymentParameters {
+		return new PaymentParameters(
 			$httpRequest->request->getInt( 'membership_fee', 0 ),
 			$httpRequest->request->getInt( 'membership_fee_interval', 0 ),
 			$httpRequest->request->get( 'payment_type', '' ),
@@ -111,25 +110,6 @@ class ApplyForMembershipController {
 			$this->ffFactory->newMembershipFormViolationPresenter()->present(
 				$this->createMembershipRequest( $httpRequest ),
 				$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
-			)
-		);
-	}
-
-	private function newHttpResponse( SessionInterface $session, ApplyForMembershipResponse $responseModel ): Response {
-		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $session );
-		$redirectUrl = $responseModel->getPaymentProviderRedirectUrl();
-
-		if ( $redirectUrl !== '' ) {
-			return new RedirectResponse( $redirectUrl );
-		}
-
-		return new RedirectResponse(
-			$this->ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-				Routes::SHOW_MEMBERSHIP_CONFIRMATION,
-				[
-					'id' => $responseModel->getMembershipApplication()->getId(),
-					'accessToken' => $responseModel->getAccessToken()
-				]
 			)
 		);
 	}

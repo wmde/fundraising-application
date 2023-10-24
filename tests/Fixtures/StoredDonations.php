@@ -7,6 +7,8 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayments;
+use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
+use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
@@ -18,55 +20,69 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
  */
 class StoredDonations {
 
+	public const DEFAULT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
+
 	public function __construct( private FunFunFactory $factory ) {
 	}
 
 	public function newStoredIncompleteCreditCardDonation( string $updateToken ): Donation {
-		$this->setDonationTokenGenerator( $updateToken );
 		$this->persistPayment( ValidPayments::newCreditCardPayment() );
-		return $this->persistDonation( ValidDonation::newIncompleteCreditCardDonation() );
+		$donation = $this->persistDonation( ValidDonation::newIncompleteCreditCardDonation() );
+		$this->persistToken( $donation->getId(), $updateToken );
+		return $donation;
 	}
 
-	public function newStoredIncompleteSofortDonation(): Donation {
+	public function newStoredIncompleteSofortDonation( string $updateToken = self::DEFAULT_UPDATE_TOKEN ): Donation {
 		$this->persistPayment( SofortPayment::create(
 			5,
 			Euro::newFromFloat( 100 ),
 			PaymentInterval::OneTime,
 			PaymentReferenceCode::newFromString( ValidPayments::PAYMENT_BANK_TRANSFER_CODE )
 		) );
-		return $this->persistDonation( ValidDonation::newIncompleteSofortDonation() );
+		$donation = $this->persistDonation( ValidDonation::newIncompleteSofortDonation() );
+		$this->persistToken( $donation->getId(), $updateToken );
+		return $donation;
 	}
 
-	public function newStoredCompleteSofortDonation(): Donation {
+	public function newStoredCompleteSofortDonation( string $updateToken = self::DEFAULT_UPDATE_TOKEN ): Donation {
 		$this->persistPayment( ValidPayments::newCompletedSofortPayment() );
-		return $this->persistDonation( ValidDonation::newIncompleteSofortDonation() );
+		$donation = $this->persistDonation( ValidDonation::newIncompleteSofortDonation() );
+		$this->persistToken( $donation->getId(), $updateToken, $updateToken );
+		return $donation;
 	}
 
-	public function newStoredIncompletePayPalDonation(): Donation {
+	public function newStoredIncompletePayPalDonation( string $updateToken = self::DEFAULT_UPDATE_TOKEN ): Donation {
 		$this->persistPayment( ValidPayments::newPayPalPayment() );
-		return $this->persistDonation( ValidDonation::newIncompletePayPalDonation() );
+		$donation = $this->persistDonation( ValidDonation::newIncompletePayPalDonation() );
+		$this->persistToken( $donation->getId(), $updateToken, $updateToken );
+		return $donation;
 	}
 
-	public function newStoredCompletePayPalDonation(): Donation {
+	public function newStoredCompletePayPalDonation( string $updateToken = self::DEFAULT_UPDATE_TOKEN ): Donation {
 		$this->persistPayment( ValidPayments::newBookedPayPalPayment() );
-		return $this->persistDonation( ValidDonation::newBookedPayPalDonation() );
+		$donation = $this->persistDonation( ValidDonation::newBookedPayPalDonation() );
+		$this->persistToken( $donation->getId(), $updateToken, $updateToken );
+		return $donation;
 	}
 
-	public function newStoredDirectDebitDonation(): Donation {
+	public function newStoredDirectDebitDonation( string $updateToken = self::DEFAULT_UPDATE_TOKEN ): Donation {
 		$payment = ValidPayments::newDirectDebitPayment();
 		$this->persistPayment( $payment );
-		return $this->persistDonation( ValidDonation::newDirectDebitDonation() );
+		$donation = $this->persistDonation( ValidDonation::newDirectDebitDonation() );
+		$this->persistToken( $donation->getId(), $updateToken, $updateToken );
+		return $donation;
 	}
 
-	public function newStoredIncompleteAnonymousPayPalDonation(): Donation {
+	public function newStoredIncompleteAnonymousPayPalDonation( string $updateToken ): Donation {
 		$payment = ValidPayments::newPayPalPayment();
 		$this->persistPayment( $payment );
-		return $this->persistDonation( ValidDonation::newIncompleteAnonymousPayPalDonation() );
+		$donation = $this->persistDonation( ValidDonation::newIncompleteAnonymousPayPalDonation() );
+		$this->persistToken( $donation->getId(), $updateToken, $updateToken );
+		return $donation;
 	}
 
 	public function newUpdatableDirectDebitDonation( string $updateToken ): Donation {
-		$this->setDonationTokenGenerator( $updateToken );
-		return $this->newStoredDirectDebitDonation();
+		return $this->newStoredDirectDebitDonation( $updateToken );
 	}
 
 	private function persistDonation( Donation $donation ): Donation {
@@ -80,11 +96,16 @@ class StoredDonations {
 		$em->flush();
 	}
 
-	private function setDonationTokenGenerator( string $updateToken ): void {
-		$this->factory->setDonationTokenGenerator( new FixedTokenGenerator(
+	private function persistToken( int $donationId, string $updateToken = '', string $accessToken = '' ): void {
+		$em = $this->factory->getEntityManager();
+		$em->persist( new AuthenticationToken(
+			$donationId,
+			AuthenticationBoundedContext::Donation,
+			$accessToken,
 			$updateToken,
-			\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
+			null
 		) );
+		$em->flush();
 	}
 
 }

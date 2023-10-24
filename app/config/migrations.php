@@ -11,6 +11,7 @@ return [
 	],
 
 	'migrations_paths' => [
+		'WMDE\Fundraising\Frontend\App\Migrations' => './app/Migrations',
 		'WMDE\Fundraising\DonationContext\DataAccess\Migrations' => './vendor/wmde/fundraising-donations/src/DataAccess/Migrations',
 		'WMDE\Fundraising\MembershipContext\DataAccess\Migrations' => './vendor/wmde/fundraising-memberships/src/DataAccess/Migrations',
 		'WMDE\Fundraising\PaymentContext\DataAccess\Migrations' => './vendor/wmde/fundraising-payments/src/DataAccess/Migrations',

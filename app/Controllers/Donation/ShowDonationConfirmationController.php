@@ -18,8 +18,8 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 class ShowDonationConfirmationController {
 
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
-		$useCase = $ffFactory->newGetDonationUseCase( $request->get( 'accessToken', '' ) );
-
+		$accessToken = $request->get( 'accessToken', '' );
+		$useCase = $ffFactory->newGetDonationUseCase( $accessToken );
 		$responseModel = $useCase->showConfirmation( new GetDonationRequest(
 			(int)$request->get( 'id', '' )
 		) );
@@ -38,15 +38,13 @@ class ShowDonationConfirmationController {
 			$ffFactory->newDonationConfirmationPresenter()->present(
 				$donation,
 				$paymentData,
-				$responseModel->getUpdateToken(),
-				$request->get( 'accessToken', '' ),
 				array_merge(
 					Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() ),
 					[
 						'updateDonor' => $ffFactory->getUrlGenerator()->generateAbsoluteUrl(
 							Routes::UPDATE_DONOR,
 							[
-								'accessToken' => $request->get( 'accessToken', '' )
+								'accessToken' => $accessToken
 							]
 						)
 					]

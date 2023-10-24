@@ -15,10 +15,10 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryTranslator;
-use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\Response as SofortResponse;
-use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\PayPalAPISpy;
+use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\Sofort\Response as SofortResponse;
+use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\Sofort\SofortClient;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\AddDonationController
@@ -27,8 +27,6 @@ use WMDE\Fundraising\PaymentContext\DataAccess\Sofort\Transfer\SofortClient;
 class AddDonationRouteTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;
-
-	private const SOME_TOKEN = 'SomeToken';
 
 	private const ADD_DONATION_PATH = '/donation/add';
 
@@ -155,6 +153,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
 
+		$this->assertTrue( $client->getResponse()->isOk() );
 		$this->assertTrue( property_exists( $applicationVars, 'donation' ), 'applicationVars should have a "donation" property' );
 		$this->assertSame( 5.51, $applicationVars->donation->amount );
 		$this->assertSame( 0, $applicationVars->donation->interval );
@@ -350,13 +349,27 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
+
 		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 		$this->assertStringContainsString( 'sandbox.paypal.com', $response->getContent() );
 	}
 
+	/**
+	 * @todo Remove this test when PayPal API integration is done
+	 */
 	public function testWhenRedirectingToPayPal_translatedItemNameIsPassed(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
+		$factory->setLocale( 'de_DE' );
+
+		if ( $factory->useLegacyPayPalUrlGenerator() ) {
+			// Canary for removing LegacyPayPalURLGeneratorConfig
+			if ( time() > strtotime( '2024-08-30' ) ) {
+				$this->fail();
+			}
+			$this->markTestSkipped();
+		}
+
 		$translator = new InMemoryTranslator( [
 				'paypal_item_name_donation' => 'Ihre Spende',
 				'payment_interval_3' => 'vierteljährlich',
@@ -374,6 +387,43 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 		$this->assertStringContainsString( 'item_name=Ihre+Spende', $response->getContent() );
+	}
+
+	/**
+	 * @dataProvider provideLocaleAndSubscriptionIDForPayPal
+	 */
+	public function testWhenRedirectingToPayPalLocaleDependantSubscriptionIdIsChosen( string $locale, string $expected ): void {
+		$client = $this->createClient();
+		$paypalApiSpy = new PayPalAPISpy();
+		$factory = $this->getFactory();
+		$factory->setPayPalAPI( $paypalApiSpy );
+
+		$client->followRedirects( false );
+		$client->request(
+			'POST',
+			'/donation/add?locale=' . $locale,
+			$this->newValidPayPalInput()
+		);
+
+		// TODO remove if statement when paypal integration is done
+		if ( !$factory->useLegacyPayPalUrlGenerator() ) {
+			// Canary for removing LegacyPayPalURLGeneratorConfig
+			if ( time() > strtotime( '2023-08-30' ) ) {
+				$this->fail();
+			}
+			$this->markTestSkipped( 'The FunFunFactory uses Legacy Paypal connection' );
+		}
+
+		$this->assertSame( $expected, $paypalApiSpy->lastCalledSubscriptionPlanId() );
+	}
+
+	/**
+	 * @return iterable<array{string,string}>
+	 */
+	public static function provideLocaleAndSubscriptionIDForPayPal(): iterable {
+		// subscription plan ids come from the file test/Data/files/paypal_api.yml)
+		yield [ 'en_GB', 'P-4E8195' ];
+		yield [ 'de_DE', 'P-5PB46799' ];
 	}
 
 	private function newValidPayPalInput(): array {
@@ -509,36 +559,32 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	public function testGivenValidRequest_tokensAreReturned(): void {
-		$client = $this->createClient();
-		$this->getFactory()->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
-
-		$client->followRedirects( false );
-
-		$client->request(
-			'POST',
-			'/donation/add',
-			$this->newValidCreditCardInput()
-		);
-
-		$response = $client->getResponse()->getContent();
-
-		$this->assertStringContainsString( self::SOME_TOKEN, $response );
-	}
-
 	public function testGivenValidRequest_clientIsRedirected(): void {
 		$client = $this->createClient();
-		$factory = $this->getFactory();
-		$factory->setDonationTokenGenerator( new FixedTokenGenerator( self::SOME_TOKEN ) );
 		$client->followRedirects( false );
 
 		$client->request(
 			'POST',
 			'/donation/add',
-			$this->newValidFormInput()
+			$this->newValidBankTransferInput()
 		);
 
 		$this->assertTrue( $client->getResponse()->isRedirect() );
+	}
+
+	public function testGivenValidRequest_redirectionUrlContainsAuthenticationTokens(): void {
+		$client = $this->createClient();
+		$client->followRedirects( false );
+
+		$client->request(
+			'POST',
+			'/donation/add',
+			$this->newValidBankTransferInput()
+		);
+
+		$response = $client->getResponse();
+		$redirectUrl = $response->headers->get( 'Location' );
+		$this->assertMatchesRegularExpression( '/accessToken=[0-9a-f]+/i', $redirectUrl );
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {

@@ -8,14 +8,15 @@ use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
+use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation as DoctrineDonation;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDoctrineDonation;
+use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
+use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes\GetApplicationVarsTrait;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 
@@ -113,16 +114,7 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 
 	public function testWhenDonationIsExported_requestIsDenied(): void {
 		$client = $this->createClient();
-		$factory = $this->getFactory();
-		$donation = ValidDoctrineDonation::newExportedirectDebitDoctrineDonation();
-		$donation->modifyDataObject(
-			static function ( DonationData $data ) {
-				$data->setAccessToken( self::CORRECT_UPDATE_TOKEN );
-				$data->setUpdateToken( self::CORRECT_UPDATE_TOKEN );
-			}
-		);
-		$factory->getEntityManager()->persist( $donation );
-		$factory->getEntityManager()->flush();
+		$donation = $this->newExportedDebitDoctrineDonation();
 
 		$this->performRequest(
 			$client,
@@ -177,14 +169,7 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 	}
 
 	private function newStoredDonation( FunFunFactory $factory ): Donation {
-		$factory->setDonationTokenGenerator(
-			new FixedTokenGenerator(
-				self::CORRECT_UPDATE_TOKEN,
-				new \DateTime( '9001-01-01' )
-			)
-		);
-
-		return ( new StoredDonations( $factory ) )->newStoredIncompleteAnonymousPayPalDonation();
+		return ( new StoredDonations( $factory ) )->newStoredIncompleteAnonymousPayPalDonation( self::CORRECT_UPDATE_TOKEN );
 	}
 
 	private function newPrivateDonorData(): array {
@@ -214,5 +199,22 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 			'country' => 'DE',
 			'email' => 'test@test.de',
 		];
+	}
+
+	private function newExportedDebitDoctrineDonation(): DoctrineDonation {
+		$factory = $this->getFactory();
+		$donation = ValidDoctrineDonation::newExportedirectDebitDoctrineDonation();
+		$accessToken = new AuthenticationToken(
+			$donation->getId(),
+			AuthenticationBoundedContext::Donation,
+			self::CORRECT_UPDATE_TOKEN,
+			self::CORRECT_UPDATE_TOKEN
+		);
+
+		$entityManager = $factory->getEntityManager();
+		$entityManager->persist( $accessToken );
+		$entityManager->persist( $donation );
+		$entityManager->flush();
+		return $donation;
 	}
 }

@@ -7,11 +7,9 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingPayPalVerificationService;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingVerificationServiceFactory;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingVerificationServiceFactory;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\PayPal\PayPalVerificationService;
@@ -37,10 +35,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
-		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
 
 		$client->request(
 			Request::METHOD_POST,
@@ -56,10 +53,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenRequestWithMissingItemId_getsIdFromCustomArray(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
-		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
 
 		$request = $this->newHttpParamsForPayment();
 		$request['item_number'] = '';
@@ -77,8 +73,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequestToLegacyPath_applicationIndicatesSuccess(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
-		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
 		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
 		$client->request(
@@ -137,8 +132,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenInvalidReceiverEmail_applicationReturnsError(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
-		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
 		$factory->setVerificationServiceFactory(
 			new FailingVerificationServiceFactory( PayPalVerificationService::ERROR_WRONG_RECEIVER )
 		);
@@ -211,11 +205,10 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenPersonalPaypalInfosOnError_PrivateInfoIsExcludedFromGettingLogged(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$factory->setVerificationServiceFactory(
 			new FailingVerificationServiceFactory( PayPalVerificationService::ERROR_UNSUPPORTED_CURRENCY )
 		);
-		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
 
 		$logger = new LoggerSpy();
 		$factory->setPaypalLogger( $logger );
@@ -248,11 +241,10 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenFailingVerification_applicationReturnsError(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$factory->setVerificationServiceFactory(
 			new FailingVerificationServiceFactory( sprintf( PayPalVerificationService::ERROR_UNKNOWN, 'FAIL' ) )
 		);
-		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
 
 		$client->request(
 			Request::METHOD_POST,
@@ -267,11 +259,10 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenUnsupportedCurrency_applicationReturnsError(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$factory->setVerificationServiceFactory(
 			new FailingVerificationServiceFactory( PayPalVerificationService::ERROR_UNSUPPORTED_CURRENCY )
 		);
-		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
 
 		$requestData = $this->newHttpParamsForPayment();
 		$requestData['mc_currency'] = 'DOGE';
@@ -288,9 +279,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenTransactionTypeForSubscriptionChanges_requestDataIsLogged(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
-		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
 
 		$logger = new LoggerSpy();
 		$factory->setPaypalLogger( $logger );
@@ -392,7 +382,6 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testDonationIsNotFound_createsNewAnonymousDonation(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$factory->setVerificationServiceFactory(
 			new FailingVerificationServiceFactory( 'Donation not found' )
 		);
@@ -412,7 +401,6 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testDonationIsNotFound_andCreationFails_logsError(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$factory->setVerificationServiceFactory(
 			new FailingVerificationServiceFactory( 'Donation not found' )
 		);
@@ -435,14 +423,13 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testOnInternalError_applicationIndicatesError(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
 		$repository = new ThrowingDonationRepository();
 		$repository->throwOnGetDonationById();
 		$factory->setDonationRepository( $repository );
 
-		$this->storedDonations()->newStoredIncompletePayPalDonation();
+		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
 
 		$client->request(
 			Request::METHOD_POST,
@@ -457,7 +444,6 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testOnInternalError_applicationLogsError(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
 
 		$repository = new ThrowingDonationRepository();
@@ -469,8 +455,6 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 		$factory->setPaypalLogger( $paypalLogger );
 		$factory->setLogger( $mainErrorLogger );
-
-		$this->storedDonations()->newStoredIncompletePayPalDonation();
 
 		$client->request(
 			Request::METHOD_POST,
@@ -491,7 +475,6 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenInternalErrorIsPaymentAlreadyBooked_applicationIndicatesSuccess(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
-		$this->setSucceedingDonationTokenGenerator( $factory );
 		$paypalLogger = new LoggerSpy();
 		$mainErrorLogger = new LoggerSpy();
 		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
@@ -499,7 +482,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$factory->setLogger( $mainErrorLogger );
 
 		// trying to book an already-stored PayPal donation should trigger an error
-		$this->storedDonations()->newStoredCompletePayPalDonation();
+		$this->storedDonations()->newStoredCompletePayPalDonation( self::UPDATE_TOKEN );
 
 		$client->request(
 			Request::METHOD_POST,
@@ -520,14 +503,4 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$parameters['payment_status'] = 'Refunded';
 		return $parameters;
 	}
-
-	private function setSucceedingDonationTokenGenerator( FunFunFactory $factory ): void {
-		$factory->setDonationTokenGenerator(
-			new FixedTokenGenerator(
-				self::UPDATE_TOKEN,
-				\DateTime::createFromFormat( 'Y-m-d H:i:s', '2039-12-31 23:59:59' )
-			)
-		);
-	}
-
 }

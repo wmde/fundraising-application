@@ -8,11 +8,14 @@ use FileFetcher\FileFetcher;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Yaml;
+use WMDE\Fundraising\Frontend\Infrastructure\GetConfigCacheKey;
 
 /**
  * @license GPL-2.0-or-later
  */
 class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
+
+	use GetConfigCacheKey;
 
 	private FileFetcher $fileFetcher;
 	private CacheInterface $cache;
@@ -46,22 +49,6 @@ class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterfac
 			}
 		}
 		return $configs;
-	}
-
-	/**
-	 * Build a hash of file names and their last modification dates
-	 *
-	 * @param string ...$configFiles
-	 * @return string
-	 */
-	protected function getCacheKey( string ...$configFiles ): string {
-		$fileStats = '';
-		foreach ( $configFiles as $file ) {
-			if ( file_exists( $file ) ) {
-				$fileStats .= sprintf( ",%s.%d", $file, filemtime( $file ) );
-			}
-		}
-		return strlen( $fileStats ) > 0 ? md5( $fileStats ) : '';
 	}
 
 }

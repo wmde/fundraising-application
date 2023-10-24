@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Factories;
 
-use Doctrine\Common\EventManager;
-use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
@@ -35,16 +33,5 @@ class DoctrineFactory {
 			$this->contextFactories->registerCustomTypes( $connection );
 		}
 		return $this->entityManager;
-	}
-
-	public function setupEventSubscribers( EventManager $eventManager, EventSubscriber ...$additionalEventSubscribers ): void {
-		$this->setupEventSubscriber( $eventManager, ...$this->contextFactories->newEventSubscribers() );
-		$this->setupEventSubscriber( $eventManager, ...$additionalEventSubscribers );
-	}
-
-	private function setupEventSubscriber( EventManager $eventManager, EventSubscriber ...$eventSubscribers ): void {
-		foreach ( $eventSubscribers as $subscriber ) {
-			$eventManager->addEventSubscriber( $subscriber );
-		}
 	}
 }
