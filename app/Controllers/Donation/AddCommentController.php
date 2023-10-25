@@ -44,13 +44,13 @@ class AddCommentController {
 	private function buildAddCommentRequest( ParameterBag $postVars ): AddCommentRequest {
 		$addCommentRequest = new AddCommentRequest();
 		$addCommentRequest->setCommentText( trim( $postVars->get( 'comment', '' ) ) );
-		$addCommentRequest->setIsPublic( $postVars->getBoolean( 'public' ) );
+		$addCommentRequest->setIsPublic( $postVars->getBoolean( 'isPublic' ) );
 		$addCommentRequest->setDonationId( (int)$postVars->get( 'donationId', '' ) );
 
-		if ( $postVars->getBoolean( 'isAnonymous' ) ) {
-			$addCommentRequest->setIsAnonymous();
-		} else {
+		if ( $postVars->getBoolean( 'withName' ) ) {
 			$addCommentRequest->setIsNamed();
+		} else {
+			$addCommentRequest->setIsAnonymous();
 		}
 
 		$addCommentRequest->freeze()->assertNoNullFields();
