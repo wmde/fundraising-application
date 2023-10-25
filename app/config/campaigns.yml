@@ -71,7 +71,7 @@ campaigns:
       buckets:
         - "legacy"
         - "new"
-      default_bucket: "legacy"
+      default_bucket: "new"
       url_key: des
       active: true
       param_only: true
