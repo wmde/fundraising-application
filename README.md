@@ -53,31 +53,34 @@ this command whenever you check out a branch that has changes to
 `composer.lock`.
 
 ## Running the application
-
-    docker-compose up
-
-You can now access the application at [http://localhost:8082/](http://localhost:8082/). Hit Ctrl-C to stop the server.
-
-If you want to run the application in the background, use the commands
+The command
 
 	make up-app
 
-to start it and
+will run the application in Docker containers. You can access it at [http://localhost:8082/](http://localhost:8082/).
+
+To stop the application, run
 
 	make down-app
-
-to stop it.
 
 To start the application with a debug port open, (see ["How to use XDebug and PHPStorm"](doc/HOWTO_Use_Xdebug_and_PHPStorm.md)) run,
 
 	make up-debug
+
+### Running without the Makefile
+
+The `up-app` task will also make sure that your local configuration is correct and that previous instances of the application are stopped.
+You can run the application without the Makefile, in the foreground, with the command
+
+    docker-compose up
 
 ## Configuration
 
 The web and CLI entry points of the application check for the `APP_ENV` environment variable.
 If it not set, the application assumes the value `dev`. Each environment must have a corresponding configuration
 file in `app/config`, following the name pattern of `config.ENVIRONMENTNAME.json`. See the section "Running in different
-environments" below to see how to set `APP_ENV`.
+environments" below to see how to set `APP_ENV`. Running the command `make default-config` will automatically set 
+up the configuration file.
 
 You can add local modifications by adding a file that follows the name pattern of `config.ENVIRONMENTNAME.local.json`.
 
@@ -249,7 +252,7 @@ You can shut down all containers and delete all volumes with the command
 
     docker-compose down -v
 
-The next time you run `docker-compose up`, the database container will
+The next time you run `make up-app`, the database container will
 process all SQL files in [.docker/database](.docker/database).
 
 ### Accessing the database with the command line client
@@ -280,7 +283,7 @@ If you make changes to the database schema, you have to do two things:
    definitions with the `make generate-database-schema` command. This will
    refresh the file `./docker/database/01_Database_Schema.sql`. Then 
    restart the container environment while dropping the database volume.
-   See section "Resetting the database in your local environment" below.
+   See section "Resetting the database in your local environment" above.
 
 #### Migrations CLI and configuration
 
@@ -304,7 +307,7 @@ docker-compose exec app bin/doctrine migrations:status
 
 Have a look the [deployment documentation](https://github.com/wmde/fundraising-infrastructure/blob/master/docs/deployment/Fundraising_Application.md) on how to run the migrations on the server.
 
-**Note:** If you're getting errors that the configuration file was nor found, make sure to set `APP_ENV` to the right value.
+**Note:** If you're getting errors that the configuration file was not found, make sure to set `APP_ENV` to the right value.
 See section "Running in different environments" in this document.
 
 

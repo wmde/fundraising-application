@@ -15,10 +15,12 @@ class PayPalAdapterConfigLoader {
 	}
 
 	public function load( string $configFile, string $productKey, string $locale ): PayPalPaymentProviderAdapterConfig {
+		if ( !file_exists( $configFile ) ) {
+			throw new \RuntimeException( "PayPal API configuration file $configFile does not exist." );
+		}
 		$cacheKey = $this->getCacheKey( $configFile );
-		if ( $this->cache->has( $cacheKey ) ) {
-			$configContents = $this->cache->get( $cacheKey );
-		} else {
+		$configContents = $this->cache->get( $cacheKey, null );
+		if ( $configContents === null ) {
 			$configContents = PayPalPaymentProviderAdapterConfigReader::readConfig( $configFile );
 			$this->cache->set( $cacheKey, $configContents );
 		}

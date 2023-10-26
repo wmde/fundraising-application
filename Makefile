@@ -15,14 +15,23 @@ DOCKER_IMAGE  := registry.gitlab.com/fun-tech/fundraising-frontend-docker
 
 .DEFAULT_GOAL := ci
 
-up-app: down-app
+up-app: down-app validate-dev-config
 	docker-compose -f docker-compose.yml up -d
 
-up-debug: down-app
+up-debug: down-app validate-dev-config
 	docker-compose -f docker-compose.yml -f docker-compose.debug.yml up -d
 
 down-app:
 	docker-compose -f docker-compose.yml -f docker-compose.debug.yml down > /dev/null 2>&1
+
+validate-dev-config:
+ifeq ($(wildcard app/config/config.dev.json),)
+	$(error File 'app/config/config.dev.json' does not exist. Please run 'make default-config')
+endif
+ifeq ($(wildcard app/config/paypal_api.dev.yml),)
+	$(error File 'app/config/paypal_api.dev.yml' does not exist. Please run 'make default-config')
+endif
+	docker-compose run --rm --no-deps app ./bin/console app:validate:config app/config/config.dist.json app/config/config.dev.json
 
 # Installation
 
@@ -55,8 +64,8 @@ drop-db:
 	docker-compose run --rm app ./bin/doctrine orm:schema-tool:drop --force
 
 default-config:
-	cp -i .docker/app/config.dev.json app/config
-	cp -i tests/Data/files/paypal_api.yml app/config/paypal_api.dev.yml
+	-cp -i .docker/app/config.dev.json app/config || true
+	-cp -i tests/Data/files/paypal_api.yml app/config/paypal_api.dev.yml || true
 
 download-assets:
 	./bin/download_assets.sh $(ASSET_BRANCH)

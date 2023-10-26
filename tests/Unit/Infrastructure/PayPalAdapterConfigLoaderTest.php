@@ -76,6 +76,20 @@ class PayPalAdapterConfigLoaderTest extends TestCase {
 		$this->assertSame( "Membership", $result->productName );
 	}
 
+	public function testFailsToLoadWhenConfigFileDoesNotExist(): void {
+		$configCache = new Psr16Cache( new ArrayAdapter() );
+		$loader = new PayPalAdapterConfigLoader( $configCache );
+
+		$this->expectException( \RuntimeException::class );
+		$this->expectExceptionMessageMatches( '/paypal_api.yml.*does not exist/' );
+
+		$loader->load(
+			vfsStream::url( 'paypal_api.yml' ),
+			'donation',
+			'de_DE'
+		);
+	}
+
 	private function givenConfigFile(): vfsStreamFile {
 		return vfsStream::newFile( 'paypal_api.yml' )
 			->at( $this->filesystem )
