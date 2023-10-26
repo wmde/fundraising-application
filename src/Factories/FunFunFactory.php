@@ -950,20 +950,23 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getSofortUrlGeneratorConfigForDonations(),
 				$this->getSofortClient(),
 				$this->getUrlGenerator()->generateAbsoluteUrl( Routes::SHOW_DONATION_CONFIRMATION ),
-				useLegacyPayPalUrlGenerator: $this->useLegacyPayPalUrlGenerator()
+				useLegacyPayPalUrlGenerator: $this->useLegacyPaypalAPI()
 			),
 			new PaymentProviderAdapterFactoryImplementation(
 				$this->getPayPalApiClient(),
 				$this->getPayPalAdapterConfigForDonations(),
-				$this->getPaymentRepository()
+				$this->getPaymentRepository(),
+				useLegacyPaypalPaymentAdapter: $this->useLegacyPaypalAPI()
 			)
 		);
 	}
 
 	/**
-	 * Temporary feature flag to turn PayPal API on and off
+	 * Temporary feature flag to switch between "Legacy" PayPal API (where we pass all payment data via URL)
+	 * and "Modern" PayPal API (where we contact PayPal on their API to "announce" payments and get a redirect URL back)
+	 * See https://phabricator.wikimedia.org/T329159 for the ticket for fully migrating to the modern API
 	 */
-	public function useLegacyPayPalUrlGenerator(): bool {
+	public function useLegacyPaypalAPI(): bool {
 		return true;
 	}
 
@@ -1095,7 +1098,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	/**
 	 * @return LegacyPayPalURLGeneratorConfig
-	 * @deprecated
+	 * @deprecated See https://phabricator.wikimedia.org/T329159
 	 */
 	private function getLegacyPayPalUrlConfigForDonations(): LegacyPayPalURLGeneratorConfig {
 		return LegacyPayPalURLGeneratorConfig::newFromConfig(

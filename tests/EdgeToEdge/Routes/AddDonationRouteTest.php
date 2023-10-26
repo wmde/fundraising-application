@@ -362,11 +362,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$factory = $this->getFactory();
 		$factory->setLocale( 'de_DE' );
 
-		if ( $factory->useLegacyPayPalUrlGenerator() ) {
-			// Canary for removing LegacyPayPalURLGeneratorConfig
-			if ( time() > strtotime( '2024-08-30' ) ) {
-				$this->fail();
-			}
+		if ( $factory->useLegacyPaypalAPI() ) {
+			$this->canaryForRemovingLegacyPayPalURLGeneratorConfig();
 			$this->markTestSkipped();
 		}
 
@@ -394,8 +391,13 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	 */
 	public function testWhenRedirectingToPayPalLocaleDependantSubscriptionIdIsChosen( string $locale, string $expected ): void {
 		$client = $this->createClient();
-		$paypalApiSpy = new PayPalAPISpy();
 		$factory = $this->getFactory();
+		// TODO remove if statement when paypal integration is done
+		if ( $factory->useLegacyPaypalAPI() ) {
+			$this->canaryForRemovingLegacyPayPalURLGeneratorConfig();
+			$this->markTestSkipped();
+		}
+		$paypalApiSpy = new PayPalAPISpy();
 		$factory->setPayPalAPI( $paypalApiSpy );
 
 		$client->followRedirects( false );
@@ -404,15 +406,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			'/donation/add?locale=' . $locale,
 			$this->newValidPayPalInput()
 		);
-
-		// TODO remove if statement when paypal integration is done
-		if ( !$factory->useLegacyPayPalUrlGenerator() ) {
-			// Canary for removing LegacyPayPalURLGeneratorConfig
-			if ( time() > strtotime( '2023-08-30' ) ) {
-				$this->fail();
-			}
-			$this->markTestSkipped( 'The FunFunFactory uses Legacy Paypal connection' );
-		}
 
 		$this->assertSame( $expected, $paypalApiSpy->lastCalledSubscriptionPlanId() );
 	}
@@ -674,6 +667,18 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			'impCount' => '3',
 			'bImpCount' => '1',
 		];
+	}
+
+	/**
+	 * We expect the transition to teh PayPal API to be done in mid-2024
+	 * Ticket: https://phabricator.wikimedia.org/T329159
+	 *
+	 * @todo remove when ticket is done
+	 */
+	public function canaryForRemovingLegacyPayPalURLGeneratorConfig(): void {
+		if ( time() > strtotime( '2024-08-30' ) ) {
+			$this->fail();
+		}
 	}
 
 }

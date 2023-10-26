@@ -6864,16 +6864,16 @@
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v7.0.0",
+            "version": "v7.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "f05fbe30a464744af912f67b8d9060320a02a446"
+                "reference": "c86f4af48923708c3a4d264c9da2e9e9e32b7981"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/f05fbe30a464744af912f67b8d9060320a02a446",
-                "reference": "f05fbe30a464744af912f67b8d9060320a02a446",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/c86f4af48923708c3a4d264c9da2e9e9e32b7981",
+                "reference": "c86f4af48923708c3a4d264c9da2e9e9e32b7981",
                 "shasum": ""
             },
             "require": {
@@ -6921,7 +6921,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2023-10-23T13:27:43+00:00"
+            "time": "2023-10-26T15:59:47+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -8206,16 +8206,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.4.1",
+            "version": "10.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "62bd7af13d282deeb95650077d28ba3600ca321c"
+                "reference": "cacd8b9dd224efa8eb28beb69004126c7ca1a1a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/62bd7af13d282deeb95650077d28ba3600ca321c",
-                "reference": "62bd7af13d282deeb95650077d28ba3600ca321c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/cacd8b9dd224efa8eb28beb69004126c7ca1a1a1",
+                "reference": "cacd8b9dd224efa8eb28beb69004126c7ca1a1a1",
                 "shasum": ""
             },
             "require": {
@@ -8287,7 +8287,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.4.1"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.4.2"
             },
             "funding": [
                 {
@@ -8303,7 +8303,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-08T05:01:11+00:00"
+            "time": "2023-10-26T07:21:45+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -9533,12 +9533,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "f443ddf3673209236ec641d6589fd8eb1111cc53"
+                "reference": "ce6853350efa212e3f2f55811de774c64e7e8ef8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f443ddf3673209236ec641d6589fd8eb1111cc53",
-                "reference": "f443ddf3673209236ec641d6589fd8eb1111cc53",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/ce6853350efa212e3f2f55811de774c64e7e8ef8",
+                "reference": "ce6853350efa212e3f2f55811de774c64e7e8ef8",
                 "shasum": ""
             },
             "require": {
@@ -9582,7 +9582,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2023-10-23T09:20:45+00:00"
+            "time": "2023-10-26T14:51:18+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
