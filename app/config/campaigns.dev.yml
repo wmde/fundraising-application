@@ -19,5 +19,5 @@ campaigns:
 
   new_design:
     start: "2023-01-01"
-    default_bucket: "legacy"
+    default_bucket: "new"
     active: true
