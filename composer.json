@@ -40,7 +40,7 @@
 		"symfony/yaml": "~6.3",
 		"symfony/cache": "^6.0",
 
-		"airbrake/phpbrake": "~0.7",
+		"airbrake/phpbrake": "dev-main",
 		"doctrine/migrations": "~3.0",
 		"guzzlehttp/guzzle": "^7.5",
 		"jeroen/file-fetcher": "~6.0",
@@ -94,12 +94,17 @@
 		},
 		{
 			"type": "vcs",
+			"url": "https://github.com/wmde/fundraising-phpcs",
+			"no-api": true
+		},
+		{
+			"type": "vcs",
 			"url": "https://github.com/wmde/doorkeeper",
 			"no-api": true
 		},
 		{
 			"type": "vcs",
-			"url": "https://github.com/wmde/fundraising-phpcs",
+			"url": "https://github.com/wmde/phpbrake",
 			"no-api": true
 		}
 	],
