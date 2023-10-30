@@ -85,11 +85,9 @@ use WMDE\Fundraising\DonationContext\UseCases\AddDonation\DonationPaymentValidat
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\Moderation\ModerationService as DonationModerationService;
 use WMDE\Fundraising\DonationContext\UseCases\BookDonationUseCase\BookDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
-use WMDE\Fundraising\DonationContext\UseCases\CreditCardPaymentNotification\CreditCardNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\HandlePaypalPaymentWithoutDonation\HandlePaypalPaymentWithoutDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
-use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
 use WMDE\Fundraising\Frontend\App\Routes;
@@ -1462,8 +1460,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		return json_decode( $json );
 	}
 
-	public function newHandleSofortPaymentNotificationUseCase( string $updateToken ): SofortPaymentNotificationUseCase {
-		return new SofortPaymentNotificationUseCase(
+	public function newBookDonationUseCase( string $updateToken ): BookDonationUseCase {
+		return new BookDonationUseCase(
 			$this->getDonationIdRepository(),
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizationChecker( $updateToken ),
@@ -1490,17 +1488,6 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getDonationRepository(),
 			$this->getDonationIdRepository(),
 			$this->newDonationMailer(),
-			$this->newDonationEventLogger()
-		);
-	}
-
-	public function newCreditCardNotificationUseCase( string $updateToken ): CreditCardNotificationUseCase {
-		return new CreditCardNotificationUseCase(
-			$this->getDonationIdRepository(),
-			$this->getDonationRepository(),
-			$this->newDonationAuthorizationChecker( $updateToken ),
-			$this->newDonationMailer(),
-			$this->newPaymentBookingService(),
 			$this->newDonationEventLogger()
 		);
 	}

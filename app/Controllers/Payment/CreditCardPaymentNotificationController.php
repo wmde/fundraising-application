@@ -52,7 +52,7 @@ class CreditCardPaymentNotificationController {
 
 	private function handleBillingNotification( FunFunFactory $ffFactory, ParameterBag $queryParams, string $donationId, string $clientIp ): Response {
 		try {
-			$response = $ffFactory->newCreditCardNotificationUseCase( $queryParams->get( 'utoken', '' ) )
+			$response = $ffFactory->newBookDonationUseCase( $queryParams->get( 'utoken', '' ) )
 				->handleNotification( new NotificationRequest( $queryParams->all(), intval( $donationId ) ) );
 		} catch ( \Exception $e ) {
 			$ffFactory->getLogger()->critical(

@@ -11,9 +11,9 @@ use Sofort\SofortLib\Notification;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use UnexpectedValueException;
+use WMDE\Fundraising\DonationContext\UseCases\BookDonationUseCase\BookDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\NotificationRequest;
 use WMDE\Fundraising\DonationContext\UseCases\NotificationResponse;
-use WMDE\Fundraising\DonationContext\UseCases\SofortPaymentNotification\SofortPaymentNotificationUseCase;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class SofortNotificationController {
@@ -49,8 +49,8 @@ class SofortNotificationController {
 		return new Response( 'Bad request', Response::HTTP_BAD_REQUEST );
 	}
 
-	private function newUseCase(): SofortPaymentNotificationUseCase {
-		return $this->ffFactory->newHandleSofortPaymentNotificationUseCase(
+	private function newUseCase(): BookDonationUseCase {
+		return $this->ffFactory->newBookDonationUseCase(
 			$this->request->query->get( 'updateToken', '' )
 		);
 	}
