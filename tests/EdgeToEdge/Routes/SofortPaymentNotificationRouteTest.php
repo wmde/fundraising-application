@@ -24,8 +24,16 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	private const INVALID_TOKEN = 'fffffggggg';
 
 	private const VALID_TRANSACTION_ID = '99999-53245-5483-4891';
+
+	/**
+	 * Time string that comes from Sofort's API
+	 */
 	private const VALID_TRANSACTION_TIME = '2010-04-14T19:01:08+02:00';
-	private const VALID_TRANSACTION_DATETIME = '2010-04-14 19:01:08';
+
+	/**
+	 * Time string expected to be in the database. Implied timezone is UTC
+	 */
+	private const VALID_TRANSACTION_VALUATION_DATE = '2010-04-14 17:01:08';
 
 	public function storedDonations(): StoredDonations {
 		return new StoredDonations( $this->getFactory() );
@@ -152,7 +160,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			/** @var SofortPayment $paymentMethod */
 			$paymentMethod = $factory->getPaymentRepository()->getPaymentById( $donation->getPaymentId() );
 			$this->assertEquals(
-				self::VALID_TRANSACTION_DATETIME,
+				self::VALID_TRANSACTION_VALUATION_DATE,
 				$paymentMethod->getDisplayValues()['valuationDate']
 			);
 		} );
