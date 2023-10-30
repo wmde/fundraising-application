@@ -37,7 +37,7 @@ class PaypalNotificationController {
 		}
 
 		try {
-			$useCase = $ffFactory->newBookDonationUseCase( $this->getUpdateToken( $post ) );
+			$useCase = $ffFactory->newBookDonationUseCaseForPayPal();
 			$response = $useCase->handleNotification( new NotificationRequest(
 				$post->all(),
 				$this->getDonationId( $post )
@@ -79,10 +79,6 @@ class PaypalNotificationController {
 			...$additionalContext
 		] );
 		$ffFactory->getLogger()->log( $logLevel, $message );
-	}
-
-	private function getUpdateToken( ParameterBag $postRequest ): string {
-		return $this->getValueFromCustomVars( $postRequest->get( 'custom', '' ), 'utoken' );
 	}
 
 	private function getValueFromCustomVars( string $customVars, string $key ): string {

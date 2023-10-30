@@ -100,6 +100,7 @@ use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationLoader
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthorizationChecker;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\DoctrineTokenRepository;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\FallbackTokenRepository;
+use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\LenientAuthorizationChecker;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\PersistentAuthorizer;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\TokenRepository;
 use WMDE\Fundraising\Frontend\Authentication\RandomTokenGenerator;
@@ -1472,11 +1473,11 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	public function newBookDonationUseCase( string $updateToken ): BookDonationUseCase {
+	public function newBookDonationUseCaseForPayPal(): BookDonationUseCase {
 		return new BookDonationUseCase(
 			$this->getDonationIdRepository(),
 			$this->getDonationRepository(),
-			$this->newDonationAuthorizationChecker( $updateToken ),
+			new LenientAuthorizationChecker(),
 			$this->newDonationMailer(),
 			$this->newPaymentBookingService(),
 			$this->newDonationEventLogger()
