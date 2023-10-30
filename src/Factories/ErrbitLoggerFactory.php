@@ -40,7 +40,8 @@ class ErrbitLoggerFactory {
 			'projectId' => $projectId,
 			'projectKey' => $projectKey,
 			'host' => $host,
-			'environment' => $environment
+			'environment' => $environment,
+			'remoteConfig' => false
 		] );
 
 		$notifier->addFilter( static function ( $notice ) {
