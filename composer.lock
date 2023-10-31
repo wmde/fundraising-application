@@ -6868,16 +6868,16 @@
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v7.0.2",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "a1cbb1dbbe286d6e2cd78a4b7fc8ebeb3efdeeb7"
+                "reference": "33ade57c2e924a17d07d263ca8a63a9cc76b6b86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/a1cbb1dbbe286d6e2cd78a4b7fc8ebeb3efdeeb7",
-                "reference": "a1cbb1dbbe286d6e2cd78a4b7fc8ebeb3efdeeb7",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/33ade57c2e924a17d07d263ca8a63a9cc76b6b86",
+                "reference": "33ade57c2e924a17d07d263ca8a63a9cc76b6b86",
                 "shasum": ""
             },
             "require": {
@@ -6908,7 +6908,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-main": "7.0.x-dev"
                 }
             },
             "autoload": {
@@ -6925,7 +6925,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2023-10-30T13:05:02+00:00"
+            "time": "2023-11-01T10:26:14+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -7827,16 +7827,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.39",
+            "version": "1.10.40",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "d9dedb0413f678b4d03cbc2279a48f91592c97c4"
+                "reference": "93c84b5bf7669920d823631e39904d69b9c7dc5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d9dedb0413f678b4d03cbc2279a48f91592c97c4",
-                "reference": "d9dedb0413f678b4d03cbc2279a48f91592c97c4",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/93c84b5bf7669920d823631e39904d69b9c7dc5d",
+                "reference": "93c84b5bf7669920d823631e39904d69b9c7dc5d",
                 "shasum": ""
             },
             "require": {
@@ -7885,7 +7885,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-17T15:46:26+00:00"
+            "time": "2023-10-30T14:48:31+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -9537,12 +9537,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "d22551c46f8d9536d43f7135138ed71a42f4a1ae"
+                "reference": "f7ffc15e66b50357b8e2dfe9fb8488090625c498"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/d22551c46f8d9536d43f7135138ed71a42f4a1ae",
-                "reference": "d22551c46f8d9536d43f7135138ed71a42f4a1ae",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f7ffc15e66b50357b8e2dfe9fb8488090625c498",
+                "reference": "f7ffc15e66b50357b8e2dfe9fb8488090625c498",
                 "shasum": ""
             },
             "require": {
@@ -9586,7 +9586,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2023-10-30T13:16:58+00:00"
+            "time": "2023-10-31T11:45:15+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",

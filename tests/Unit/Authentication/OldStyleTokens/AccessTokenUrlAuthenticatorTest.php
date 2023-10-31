@@ -63,11 +63,14 @@ class AccessTokenUrlAuthenticatorTest extends TestCase {
 		$token = $this->makeToken();
 		$authenticator = new AccessTokenUrlAuthenticator( $token );
 
-		$returnedParameters = $authenticator->getAuthenticationTokensForPaymentProviderUrl( SofortURLGenerator::class, [ 'id', 'accessToken' ] );
+		$returnedParameters = $authenticator->getAuthenticationTokensForPaymentProviderUrl(
+			SofortURLGenerator::class,
+			[ 'id', 'updateToken' ]
+		);
 
 		$expectedParameters = [
 			'id' => 1,
-			'accessToken' => '4cc35570k3n'
+			'updateToken' => 'vpd47370k3n'
 		];
 		$this->assertSame( $expectedParameters, $returnedParameters );
 	}

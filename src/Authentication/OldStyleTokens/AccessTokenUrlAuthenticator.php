@@ -41,7 +41,7 @@ class AccessTokenUrlAuthenticator implements URLAuthenticator {
 			],
 			SofortURLGenerator::class =>  [
 				'id' => $this->token->id,
-				'accessToken' => $this->token->getAccessToken(),
+				'updateToken' => $this->token->getUpdateToken(),
 			],
 			default => throw new \InvalidArgumentException( 'Unsupported URL generator class: ' . $urlGeneratorClass ),
 		};
