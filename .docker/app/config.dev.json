@@ -100,7 +100,7 @@
     },
     "UEB": {
       "donation-enabled": true,
-      "membership-enabled": true
+      "membership-enabled": false
     },
     "MCP": {
       "donation-enabled": true,
