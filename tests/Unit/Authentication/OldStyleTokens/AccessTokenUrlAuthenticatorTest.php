@@ -63,11 +63,14 @@ class AccessTokenUrlAuthenticatorTest extends TestCase {
 		$token = $this->makeToken();
 		$authenticator = new AccessTokenUrlAuthenticator( $token );
 
-		$returnedParameters = $authenticator->getAuthenticationTokensForPaymentProviderUrl( SofortURLGenerator::class, [ 'id', 'accessToken' ] );
+		$returnedParameters = $authenticator->getAuthenticationTokensForPaymentProviderUrl(
+			SofortURLGenerator::class,
+			[ 'id', 'updateToken' ]
+		);
 
 		$expectedParameters = [
 			'id' => 1,
-			'accessToken' => '4cc35570k3n'
+			'updateToken' => 'vpd47370k3n'
 		];
 		$this->assertSame( $expectedParameters, $returnedParameters );
 	}
@@ -81,7 +84,7 @@ class AccessTokenUrlAuthenticatorTest extends TestCase {
 		$authenticator->getAuthenticationTokensForPaymentProviderUrl( PaymentCompletionURLGenerator::class, [] );
 	}
 
-	public function testGetAuthenticationTokenForPaymentProviderUrlWillThrowExceptionIfExpectedParametersMismatch(): void {
+	public function testGetAuthenticationTokenForPaymentProviderUrlWillThrowExceptionIfExpectedParametersAreMissing(): void {
 		$token = $this->makeToken();
 		$authenticator = new AccessTokenUrlAuthenticator( $token );
 
@@ -89,6 +92,16 @@ class AccessTokenUrlAuthenticatorTest extends TestCase {
 		$this->expectExceptionMessageMatches( "/'custom'/" );
 		$this->expectExceptionMessageMatches( "/'customary'/" );
 		$authenticator->getAuthenticationTokensForPaymentProviderUrl( LegacyPayPalURLGenerator::class, [ 'customary' ] );
+	}
+
+	/**
+	 * @doesNotPerformAssertions (We're testing that no exception is thrown)
+	 */
+	public function testGetAuthenticationTokenForPaymentProviderUrlWillPassWhenUrlGeneratorCreatesMoreParametersThanExpected(): void {
+		$token = $this->makeToken();
+		$authenticator = new AccessTokenUrlAuthenticator( $token );
+
+		$authenticator->getAuthenticationTokensForPaymentProviderUrl( LegacyPayPalURLGenerator::class, [] );
 	}
 
 	private function makeToken(): AuthenticationToken {
