@@ -53,7 +53,7 @@ class AccessTokenUrlAuthenticator implements URLAuthenticator {
 
 	private function checkIfRequestedParametersMatchGeneratedParameters( array $params, array $requestedParameters ): void {
 		$paramNames = array_keys( $params );
-		if ( array_diff( $paramNames, $requestedParameters ) !== [] ) {
+		if ( array_diff( $requestedParameters, $paramNames ) !== [] ) {
 			throw new \DomainException( sprintf(
 				'Requested parameters (%s) do not match generated parameters (%s)',
 				implode( ', ', array_map( fn ( $p ) => "'$p'", $requestedParameters ) ),
