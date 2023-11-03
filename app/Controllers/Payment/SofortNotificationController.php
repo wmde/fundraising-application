@@ -46,6 +46,10 @@ class SofortNotificationController {
 			return new Response( 'Ok', Response::HTTP_OK );
 		}
 
+		if ( $response->paymentWasAlreadyCompleted() ) {
+			return new Response( 'Ok', Response::HTTP_OK );
+		}
+
 		return new Response( 'Bad request', Response::HTTP_BAD_REQUEST );
 	}
 
