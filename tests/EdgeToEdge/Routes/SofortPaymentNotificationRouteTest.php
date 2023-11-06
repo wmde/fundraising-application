@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Psr\Log\LogLevel;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
@@ -40,45 +39,40 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenWrongBookingData_applicationRefuses(): void {
-		$this->newEnvironment( function ( Client $client ): void {
-			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
+		$client = $this->createClient();
+		$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[],
-				[],
-				[],
-				'{"not":"real","proper":"data"}'
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
+			[],
+			[],
+			[],
+			'{"not":"real","proper":"data"}'
+		);
 
-			$this->assertIsBadRequestResponse( $client->getResponse() );
-		} );
+		$this->assertIsBadRequestResponse( $client->getResponse() );
 	}
 
 	public function testGivenWrongBookingData_applicationLogs(): void {
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$logger = $this->getLogger( $factory );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$logger = $this->getLogger( $factory );
 
-			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
+		$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[],
-				[],
-				[],
-				'{"not":"real","proper":"data"}'
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
+			[],
+			[],
+			[],
+			'{"not":"real","proper":"data"}'
+		);
 
-			$this->assertErrorCauseIsLogged( $logger, 'An Exception happened: Invalid notification request' );
-			$this->assertRequestVarsAreLogged( $logger, '{"not":"real","proper":"data"}' );
-			$this->assertLogLevel( $logger, LogLevel::ERROR );
-		} );
-	}
-
-	private function newEnvironment( callable $onEnvironmentCreated ): void {
-		$this->createEnvironment( $onEnvironmentCreated );
+		$this->assertErrorCauseIsLogged( $logger, 'An Exception happened: Invalid notification request' );
+		$this->assertRequestVarsAreLogged( $logger, '{"not":"real","proper":"data"}' );
+		$this->assertLogLevel( $logger, LogLevel::ERROR );
 	}
 
 	private function assertIsBadRequestResponse( Response $response ): void {
@@ -87,124 +81,121 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenWrongToken_applicationRefuses(): void {
-		$this->newEnvironment( function ( Client $client ): void {
-			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
+		$client = $this->createClient();
+		$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::INVALID_TOKEN,
-				[],
-				[],
-				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::INVALID_TOKEN,
+			[],
+			[],
+			[],
+			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+		);
 
-			$this->assertIsBadRequestResponse( $client->getResponse() );
-		} );
+		$this->assertIsBadRequestResponse( $client->getResponse() );
 	}
 
 	public function testGivenWrongToken_applicationLogs(): void {
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$logger = $this->getLogger( $factory );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$logger = $this->getLogger( $factory );
 
-			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
+		$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::INVALID_TOKEN,
-				[],
-				[],
-				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::INVALID_TOKEN,
+			[],
+			[],
+			[],
+			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+		);
 
-			$this->assertErrorCauseIsLogged( $logger, 'Wrong access code for donation' );
-			$this->assertRequestVarsAreLogged( logger: $logger, token: self::INVALID_TOKEN );
-			$this->assertLogLevel( $logger, LogLevel::ERROR );
-		} );
+		$this->assertErrorCauseIsLogged( $logger, 'Wrong access code for donation' );
+		$this->assertRequestVarsAreLogged( logger: $logger, token: self::INVALID_TOKEN );
+		$this->assertLogLevel( $logger, LogLevel::ERROR );
 	}
 
 	public function testGivenBadTimeFormat_applicationRefuses(): void {
-		$this->newEnvironment( function ( Client $client ): void {
-			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
+		$client = $this->createClient();
+		$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[],
-				[],
-				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, 'now' )
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
+			[],
+			[],
+			[],
+			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, 'now' )
+		);
 
-			$this->assertIsBadRequestResponse( $client->getResponse() );
-		} );
+		$this->assertIsBadRequestResponse( $client->getResponse() );
 	}
 
 	public function testGivenValidRequest_applicationIndicatesSuccess(): void {
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation( self::VALID_TOKEN );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$donation = $this->storedDonations()->newStoredIncompleteSofortDonation( self::VALID_TOKEN );
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[],
-				[],
-				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
+			[],
+			[],
+			[],
+			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+		);
 
-			$this->assertSame( 'Ok', $client->getResponse()->getContent() );
-			$this->assertSame( Response::HTTP_OK, $client->getResponse()->getStatusCode() );
+		$this->assertSuccessResponse( $client->getResponse() );
 
-			/** @var SofortPayment $paymentMethod */
-			$paymentMethod = $factory->getPaymentRepository()->getPaymentById( $donation->getPaymentId() );
-			$this->assertEquals(
-				self::VALID_TRANSACTION_VALUATION_DATE,
-				$paymentMethod->getDisplayValues()['valuationDate']
-			);
-		} );
+		/** @var SofortPayment $paymentMethod */
+		$paymentMethod = $factory->getPaymentRepository()->getPaymentById( $donation->getPaymentId() );
+		$this->assertEquals(
+			self::VALID_TRANSACTION_VALUATION_DATE,
+			$paymentMethod->getDisplayValues()['valuationDate']
+		);
 	}
 
 	public function testGivenValidRequest_donationStateIsChangedToBooked(): void {
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation( self::VALID_TOKEN );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$donation = $this->storedDonations()->newStoredIncompleteSofortDonation( self::VALID_TOKEN );
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[],
-				[],
-				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
+			[],
+			[],
+			[],
+			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+		);
 
-			$this->assertTrue(
-				$factory->getPaymentRepository()->getPaymentById( $donation->getPaymentId() )->isCompleted()
-			);
-		} );
+		$this->assertTrue(
+			$factory->getPaymentRepository()->getPaymentById( $donation->getPaymentId() )->isCompleted()
+		);
 	}
 
 	public function testGivenAlreadyConfirmedPayment_requestDataIsLogged(): void {
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$logger = $this->getLogger( $factory );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$logger = $this->getLogger( $factory );
 
-			$donation = $this->storedDonations()->newStoredCompleteSofortDonation( self::VALID_TOKEN );
+		$donation = $this->storedDonations()->newStoredCompleteSofortDonation( self::VALID_TOKEN );
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[],
-				[],
-				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
+			[],
+			[],
+			[],
+			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+		);
 
-			$this->assertIsBadRequestResponse( $client->getResponse() );
-			$this->assertErrorCauseIsLogged( $logger, 'Payment was booked before' );
-			$this->assertRequestVarsAreLogged( $logger );
-			$this->assertLogLevel( $logger, LogLevel::ERROR );
-		} );
+		$this->assertSuccessResponse( $client->getResponse() );
+		$this->assertErrorCauseIsLogged( $logger, 'Payment was booked before' );
+		$this->assertRequestVarsAreLogged( $logger );
+		$this->assertLogLevel( $logger, LogLevel::ERROR );
 	}
 
 	private function assertErrorCauseIsLogged( LoggerSpy $logger, string $expectedMessage ): void {
@@ -231,25 +222,25 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenUnknownDonation_requestDataIsLogged(): void {
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$logger = $this->getLogger( $factory );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$logger = $this->getLogger( $factory );
 
-			$donation = $this->storedDonations()->newStoredCompleteSofortDonation();
+		$donation = $this->storedDonations()->newStoredCompleteSofortDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . ( $donation->getId() + 1 ) . '&updateToken=' . self::VALID_TOKEN,
-				[],
-				[],
-				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . ( $donation->getId() + 1 ) . '&updateToken=' . self::VALID_TOKEN,
+			[],
+			[],
+			[],
+			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+		);
 
-			$this->assertIsErrorResponse( $client->getResponse() );
-			$this->assertErrorCauseIsLogged( $logger, 'Donation not found' );
-			$this->assertRequestVarsAreLogged( $logger );
-			$this->assertLogLevel( $logger, LogLevel::ERROR );
-		} );
+		$this->assertIsErrorResponse( $client->getResponse() );
+		$this->assertErrorCauseIsLogged( $logger, 'Donation not found' );
+		$this->assertRequestVarsAreLogged( $logger );
+		$this->assertLogLevel( $logger, LogLevel::ERROR );
 	}
 
 	private function assertIsErrorResponse( Response $response ): void {
@@ -257,73 +248,73 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertSame( Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode() );
 	}
 
-	public function testGivenBadTime_requestDataIsLogged(): void {
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$logger = $this->getLogger( $factory );
+	public function testGivenBadTimeStamp_requestDataIsLoggedAndResponseIsOk(): void {
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$logger = $this->getLogger( $factory );
 
-			$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
+		$donation = $this->storedDonations()->newStoredIncompleteSofortDonation();
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
-				[],
-				[],
-				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, 'now' )
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . $donation->getId() . '&updateToken=' . self::VALID_TOKEN,
+			[],
+			[],
+			[],
+			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, 'not a timestamp' )
+		);
 
-			$this->assertIsBadRequestResponse( $client->getResponse() );
-			$this->assertErrorCauseIsLogged( $logger, 'An Exception happened: Invalid notification request' );
-			$this->assertRequestVarsAreLogged( $logger );
-			$this->assertLogLevel( $logger, LogLevel::ERROR );
-		} );
+		$this->assertIsBadRequestResponse( $client->getResponse() );
+		$this->assertErrorCauseIsLogged( $logger, 'An Exception happened: Invalid notification request' );
+		$this->assertRequestVarsAreLogged( $logger );
+		$this->assertLogLevel( $logger, LogLevel::ERROR );
 	}
 
 	public function testOnInternalError_applicationReturnsErrorResponse(): void {
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$repository = new ThrowingDonationRepository();
-			$repository->throwOnGetDonationById();
-			$factory->setDonationRepository( $repository );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$repository = new ThrowingDonationRepository();
+		$repository->throwOnGetDonationById();
+		$factory->setDonationRepository( $repository );
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . 1 . '&updateToken=' . self::VALID_TOKEN,
-				[],
-				[],
-				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . 1 . '&updateToken=' . self::VALID_TOKEN,
+			[],
+			[],
+			[],
+			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+		);
 
-			$this->assertSame( 500, $client->getResponse()->getStatusCode() );
-			$this->assertStringContainsString( "Error", $client->getResponse()->getContent() );
-		} );
+		$this->assertSame( 500, $client->getResponse()->getStatusCode() );
+		$this->assertStringContainsString( "Error", $client->getResponse()->getContent() );
 	}
 
 	public function testOnInternalError_applicationLogsError(): void {
-		$this->newEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$repository = new ThrowingDonationRepository();
-			$repository->throwOnGetDonationById();
-			$factory->setDonationRepository( $repository );
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$repository = new ThrowingDonationRepository();
+		$repository->throwOnGetDonationById();
+		$factory->setDonationRepository( $repository );
 
-			$logger = new LoggerSpy();
-			$factory->setSofortLogger( $logger );
+		$logger = new LoggerSpy();
+		$factory->setSofortLogger( $logger );
 
-			$client->request(
-				Request::METHOD_POST,
-				'/sofort-payment-notification?id=' . 1 . '&updateToken=' . self::VALID_TOKEN,
-				[],
-				[],
-				[],
-				$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
-			);
+		$client->request(
+			Request::METHOD_POST,
+			'/sofort-payment-notification?id=' . 1 . '&updateToken=' . self::VALID_TOKEN,
+			[],
+			[],
+			[],
+			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
+		);
 
-			$this->assertSame( 1, $logger->getLogCalls()->count() );
-			$firstCallContext = $logger->getFirstLogCall()->getContext();
-			$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
-			$this->assertArrayHasKey( 'request_content', $firstCallContext );
-			$this->assertArrayHasKey( 'query_vars', $firstCallContext );
-			$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()->getMessage() );
-		} );
+		$this->assertSame( 1, $logger->getLogCalls()->count() );
+		$firstCallContext = $logger->getFirstLogCall()->getContext();
+		$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
+		$this->assertArrayHasKey( 'request_content', $firstCallContext );
+		$this->assertArrayHasKey( 'query_vars', $firstCallContext );
+		$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()->getMessage() );
 	}
 
 	private function getLogger( FunFunFactory $factory ): LoggerSpy {
@@ -337,6 +328,11 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			. "<status_notification><transaction>$transactionId</transaction>"
 			. "<time>$time</time>"
 			. '</status_notification>';
+	}
+
+	private function assertSuccessResponse( Response $response ): void {
+		$this->assertSame( 'Ok', $response->getContent() );
+		$this->assertSame( Response::HTTP_OK, $response->getStatusCode() );
 	}
 
 }
