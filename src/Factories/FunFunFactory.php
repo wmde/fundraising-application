@@ -2135,7 +2135,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	private function getTokenRepositoryWithLegacyFallback(): TokenRepository {
+	public function getTokenRepositoryWithLegacyFallback(): TokenRepository {
 		return $this->createSharedObject( TokenRepository::class . '::withLegacyFallback', function (): TokenRepository {
 			return new FallbackTokenRepository( $this->getTokenRepository(), $this->getEntityManager() );
 		} );
