@@ -60,7 +60,7 @@ class GreetingGenerator {
 	}
 
 	private function getSalutationTranslationKey( ?string $salutation, string $greetingType ): string {
-		$salutationConfig = $this->salutations->getSalutation( $salutation );
+		$salutationConfig = $this->salutations->getSalutation( $salutation ?? '' );
 		if ( !$salutation || !$salutationConfig ) {
 			return $this->genericGreeting;
 		}
