@@ -1,4 +1,5 @@
-.navbar::after {
+.navbar::after,
+.navigation::after {
     position: absolute;
     top: 0;
     right: 0;
@@ -9,12 +10,14 @@
     opacity: 0.5;
 }
 
-.external-assets .navbar::after {
+.external-assets .navbar::after,
+.external-assets .navigation::after {
     content: "External assets";
     background: orange;
 }
 
-.no-external-assets .navbar::after {
+.no-external-assets .navbar::after,
+.no-external-assets .navigation::after {
     content: "Builtin assets";
     background: green;
 }
