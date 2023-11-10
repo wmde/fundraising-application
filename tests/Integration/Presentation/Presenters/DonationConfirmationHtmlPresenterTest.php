@@ -86,8 +86,8 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			],
 			'countries' => [],
 			'addressValidationPatterns' => (object)[],
-			'addressType' => 'anonym'
-
+			'addressType' => 'anonym',
+			'tracking' => 'test/gelb'
 		];
 	}
 
