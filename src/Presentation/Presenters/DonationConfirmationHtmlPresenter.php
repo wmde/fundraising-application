@@ -37,6 +37,7 @@ class DonationConfirmationHtmlPresenter {
 
 	private function getConfirmationPageArguments( Donation $donation, array $paymentData, array $urlEndpoints ): array {
 		$donorDataFormatter = new DonorDataFormatter();
+
 		$donationParameters = [
 			'id' => $donation->getId(),
 			// TODO: Adapt the front end to take cents here for currency localisation
@@ -49,7 +50,7 @@ class DonationConfirmationHtmlPresenter {
 			'bankTransferCode' => $paymentData['paymentReferenceCode'] ?? '',
 			'creationDate' => $donorDataFormatter->getDonationDate(),
 			'cookieDuration' => $donorDataFormatter->getHideBannerCookieDuration(),
-			'isExported' => $donation->isExported()
+			'isExported' => $donation->isExported(),
 		];
 		$donationParameters = $this->authenticationLoader->addDonationAuthorizationParameters( $donation->getId(), $donationParameters );
 		return [
@@ -58,6 +59,7 @@ class DonationConfirmationHtmlPresenter {
 			'addressValidationPatterns' => $this->addressValidationPatterns,
 			'addressType' => AddressType::donorToPresentationAddressType( $donation->getDonor() ),
 			'address' => $donorDataFormatter->getAddressArguments( $donation ),
+			'tracking' => $donation->getTrackingInfo()->getTracking(),
 			'bankData' => [
 				'iban' => $paymentData['iban'] ?? '',
 				'bic' => $paymentData['bic'] ?? '',
