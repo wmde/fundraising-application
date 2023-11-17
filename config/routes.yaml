@@ -28,6 +28,11 @@ list-comments.html:
     methods: [GET]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\ListCommentsController::handleHtml'
 
+comment-ticker:
+    path: /comment-ticker
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\CommentTickerController::index'
+
 # Temporary: Remove once hosting provider has set up the 301 redirect
 Unterstützerliste-redirect:
     path: '/page/Unterstützerliste'
