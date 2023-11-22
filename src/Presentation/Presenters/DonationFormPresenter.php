@@ -8,6 +8,8 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
+use WMDE\FunValidators\ConstraintViolation;
+use WMDE\FunValidators\ValidationResponse;
 
 /**
  * @license GPL-2.0-or-later
@@ -25,7 +27,7 @@ class DonationFormPresenter {
 		$this->isCustomDonationAmountValidator = $isCustomDonationAmountValidator;
 	}
 
-	public function present( int $amount, string $paymentType, ?int $paymentInterval, bool $paymentDataIsValid,
+	public function present( int $amount, string $paymentType, ?int $paymentInterval, ValidationResponse $paymentValidationResult,
 							 ImpressionCounts $trackingInfo, ?string $addressType, array $urlEndpoints ): string {
 		try {
 			$euroAmount = Euro::newFromCents( $amount );
@@ -41,7 +43,12 @@ class DonationFormPresenter {
 				'addressType' => $addressType
 			],
 			'validationResult' => [
-				'paymentData' => $paymentDataIsValid
+				'paymentErrorFields' => array_unique( array_map(
+					fn ( ConstraintViolation $violation ) => $violation->getSource(),
+					$paymentValidationResult->getValidationErrors()
+				) ),
+				// deprecated, remove when frontend uses the 'paymentErrorFields' array
+				'paymentData' => $paymentValidationResult->isSuccessful()
 			],
 			'tracking' => [
 				'bannerImpressionCount' => $trackingInfo->getSingleBannerImpressionCount(),

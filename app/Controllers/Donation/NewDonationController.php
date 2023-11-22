@@ -39,7 +39,7 @@ class NewDonationController {
 				$amount,
 				$paymentType,
 				$interval,
-				$validationResult->isSuccessful(),
+				$validationResult,
 				$trackingInfo,
 				$request->get( 'addressType' ),
 				Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
