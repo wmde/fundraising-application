@@ -6868,16 +6868,16 @@
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v7.0.4",
+            "version": "v7.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "7e35f3cfa28a79f266c1df7bf4746e4143936b8e"
+                "reference": "8262c43acb238ed932c67863742e87c728dce24f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/7e35f3cfa28a79f266c1df7bf4746e4143936b8e",
-                "reference": "7e35f3cfa28a79f266c1df7bf4746e4143936b8e",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/8262c43acb238ed932c67863742e87c728dce24f",
+                "reference": "8262c43acb238ed932c67863742e87c728dce24f",
                 "shasum": ""
             },
             "require": {
@@ -6893,8 +6893,7 @@
                 "symfony/dotenv": "^6.3",
                 "symfony/yaml": "^6.3",
                 "wmde/euro": "~1.0",
-                "wmde/freezable-value-object": "~2.0",
-                "wmde/fun-validators": "~v4.0.0"
+                "wmde/fun-validators": "~v4.0"
             },
             "require-dev": {
                 "phpstan/phpstan": "~1.3",
@@ -6925,7 +6924,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2023-11-06T11:31:56+00:00"
+            "time": "2023-11-29T16:55:53+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -9537,12 +9536,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "f7ffc15e66b50357b8e2dfe9fb8488090625c498"
+                "reference": "47363335b9468318ff25a1787cfb0f951c1b7b57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f7ffc15e66b50357b8e2dfe9fb8488090625c498",
-                "reference": "f7ffc15e66b50357b8e2dfe9fb8488090625c498",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/47363335b9468318ff25a1787cfb0f951c1b7b57",
+                "reference": "47363335b9468318ff25a1787cfb0f951c1b7b57",
                 "shasum": ""
             },
             "require": {
@@ -9586,7 +9585,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2023-10-31T11:45:15+00:00"
+            "time": "2023-11-21T16:43:14+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
@@ -9696,5 +9695,5 @@
     "platform-dev": {
         "ext-pdo_sqlite": "*"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
