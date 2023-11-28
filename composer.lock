@@ -6594,7 +6594,7 @@
         },
         {
             "name": "wmde/fun-validators",
-            "version": "v4.0.0",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators",
@@ -6809,7 +6809,7 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v13.0.0",
+            "version": "v13.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
@@ -6829,7 +6829,7 @@
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
-                "wmde/fun-validators": "~4.0.0",
+                "wmde/fun-validators": "~4.1",
                 "wmde/fundraising-payments": "~7.0"
             },
             "require-dev": {
@@ -6868,7 +6868,7 @@
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "v7.0.4",
+            "version": "v7.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
@@ -6894,7 +6894,7 @@
                 "symfony/yaml": "^6.3",
                 "wmde/euro": "~1.0",
                 "wmde/freezable-value-object": "~2.0",
-                "wmde/fun-validators": "~v4.0.0"
+                "wmde/fun-validators": "~v4.1"
             },
             "require-dev": {
                 "phpstan/phpstan": "~1.3",

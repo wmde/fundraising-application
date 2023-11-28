@@ -23,7 +23,7 @@
 		"wmde/fundraising-content-provider": "~6.0",
 		"wmde/fundraising-address-change": "~2.0",
 		"wmde/freezable-value-object": "~2.0",
-		"wmde/fun-validators": "~4.0.0",
+		"wmde/fun-validators": "~4.1",
 
 		"symfony/asset": "~6.0",
 		"symfony/config": "~6.3",
