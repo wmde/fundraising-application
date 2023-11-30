@@ -75,3 +75,16 @@ campaigns:
       url_key: des
       active: true
       param_only: true
+
+    thank_you_for_members:
+      description: Hide fundraising banners for new members during campaign, hide thank you banners for members outside of campaign
+      reference: "https://phabricator.wikimedia.org/T349192"
+      start: "2023-12-01"
+      end: "2024-01-31"
+      buckets:
+        - "campaign"
+        - "thank_you"
+      default_bucket: "campaign"
+      url_key: mty
+      active: true
+      param_only: true
