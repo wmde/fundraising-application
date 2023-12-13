@@ -284,55 +284,79 @@
     "text-policies": {
       "type": "object",
       "title": "Text policy templates",
-      "description": "Page names for black- and whitelists of different parts of the application. The pages must be stored in the content repository. They must contain words, each word in a separate line. Each \"word\" can also be a regular expression pattern.",
+      "description": "Page names for allowing and denying words of different parts of the application. The pages must be stored in the content repository. They must contain words, each word in a separate line. Each \"word\" can also be a regular expression pattern.",
       "properties": {
         "fields": {
           "type": "object",
           "title": "Address fields policy",
-          "description": "Page names for black- and whitelists of form fields (name, street, city, etc.). Blacklisted words lead to moderation of the donation/membership, not to blocking it",
+          "description": "Page names for allowed and denied words in form fields (name, street, city, etc.). Denied words lead to moderation of the donation/membership, not to blocking it",
           "properties": {
             "whitewords": {
+              "deprecated": true,
               "type": "string",
               "minLength": 0,
-              "title": "Whitewords Page Name",
+              "title": "Path to allowed words list",
+              "default": ""
+            },
+            "allowed_words": {
+              "type": "string",
+              "minLength": 0,
+              "title": "Path to allowed words list",
+              "description": "Allowed words allow the words that were previously denied in the denied_words list",
               "default": ""
             },
             "badwords": {
+              "deprecated": true,
               "type": "string",
               "minLength": 0,
               "title": "Badwords Page Name",
               "default": ""
+            },
+            "denied_words": {
+              "type": "string",
+              "minLength": 0,
+              "title": "Path to denied words list",
+              "description": "Denied words can be overridden by the allowed_words list",
+              "default": ""
             }
           },
-          "additionalProperties": false,
-          "required": [
-            "whitewords",
-            "badwords"
-          ]
+          "additionalProperties": false
         },
         "comment": {
           "type": "object",
           "title": "Comment policy.",
-          "description": "Page names for black- and whitelists for comment texts. Blacklisted words lead to the moderation of the comment",
+          "description": "Page names for denied and allowed words in comment texts. Denied words lead to the moderation of the comment",
           "properties": {
             "whitewords": {
+              "deprecated": true,
               "type": "string",
               "minLength": 0,
-              "title": "Whitewords Page Name",
+              "title": "Path to allowed words list",
+              "default": ""
+            },
+            "allowed_words": {
+              "type": "string",
+              "minLength": 0,
+              "title": "Path to allowed words list",
+              "description": "Allowed words allow the words that were previously denied in the denied_words list",
               "default": ""
             },
             "badwords": {
+              "deprecated": true,
               "type": "string",
               "minLength": 0,
               "title": "Badwords Page Name",
               "default": ""
+            },
+            "denied_words": {
+              "type": "string",
+              "minLength": 0,
+              "title": "Path to denied words list",
+              "description": "Denied words can be overridden by the allowed_words list",
+              "default": ""
             }
           },
-          "additionalProperties": false,
-          "required": [
-            "whitewords",
-            "badwords"
-          ]
+          "additionalProperties": false
         }
       },
       "additionalProperties": false,
@@ -342,6 +366,12 @@
       ]
     },
     "email-address-blacklist": {
+      "deprecated": true,
+      "type": "array",
+      "title": "List of blocked e-mail addresses",
+      "description": "List of e-mail addresses that automatically mark data sets as deleted"
+    },
+    "email-address-blocklist": {
       "type": "array",
       "title": "List of blocked e-mail addresses",
       "description": "List of e-mail addresses that automatically mark data sets as deleted"

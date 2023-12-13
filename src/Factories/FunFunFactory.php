@@ -881,17 +881,26 @@ class FunFunFactory implements LoggerAwareInterface {
 			new SimpleFileFetcher(),
 			$this->getLogger()
 		);
-		$textPolicyConfig = $this->config['text-policies'][$policyName];
 		return new TextPolicyValidator(
 			new WordListFileReader(
 				$fetcher,
-				$textPolicyConfig['badwords'] ? $this->getAbsolutePath( $textPolicyConfig['badwords'] ) : ''
+				$this->getTextPolicyPathWithFallback( $policyName, 'denied_words', 'badwords' )
 			),
 			new WordListFileReader(
 				$fetcher,
-				$textPolicyConfig['whitewords'] ? $this->getAbsolutePath( $textPolicyConfig['whitewords'] ) : ''
+				$this->getTextPolicyPathWithFallback( $policyName, 'allowed_words', 'whitewords' )
 			)
 		);
+	}
+
+	private function getTextPolicyPathWithFallback( string $policyName, string $fileNameKey, string $fallbackNameKey = '' ): string {
+		$fileName = $this->config['text-policies'][$policyName][$fileNameKey] ?? '';
+		// Remove this fallback (and the fallback parameter) when we have updated all configuration files
+		// See https://phabricator.wikimedia.org/T352788
+		if ( $fileName === '' && $fallbackNameKey !== '' ) {
+			$fileName = $this->config['text-policies'][$policyName][$fallbackNameKey] ?? '';
+		}
+		return $fileName ? $this->getAbsolutePath( $fileName ) : '';
 	}
 
 	private function newCommentPolicyValidator(): TextPolicyValidator {
@@ -1316,7 +1325,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function newApplyForMembershipPolicyValidator(): MembershipModerationService {
 		return new MembershipModerationService(
 			$this->newTextPolicyValidator( 'fields' ),
-			$this->config['email-address-blacklist']
+			$this->getEmailAddressBlockList()
 		);
 	}
 
@@ -1523,7 +1532,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new DonationModerationService(
 			$this->newDonationAmountPolicyValidator(),
 			$this->newTextPolicyValidator( 'fields' ),
-			$this->config['email-address-blacklist']
+			$this->getEmailAddressBlockList()
 		);
 	}
 
@@ -2159,6 +2168,21 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getLogger(),
 			new \DateInterval( $this->config['token-validity-timestamp'] )
 		);
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getEmailAddressBlockList(): array {
+		$blockList = $this->config['email-address-blocklist'] ?? [];
+		// Backwards compatibility check for legacy config key
+		// Remove this check (and maybe inline this method) once
+		// we have changed all configuration files (also in the infrastructure repo)
+		// see https://phabricator.wikimedia.org/T352788
+		if ( $blockList === [] ) {
+			$blockList = $this->config['email-address-blacklist'] ?? [];
+		}
+		return $blockList;
 	}
 
 }
