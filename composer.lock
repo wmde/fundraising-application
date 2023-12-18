@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "96eae5201bed6e28b510b23633331e85",
+    "content-hash": "cdb6bf45365191bcc4099be2e69e83f3",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6598,21 +6598,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators",
-                "reference": "8fa812eac67d93faf1711b1c3a700736b699329b"
+                "reference": "99fc84bb4716f383a9eebbe693d95da9544bb781"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/8fa812eac67d93faf1711b1c3a700736b699329b",
-                "reference": "8fa812eac67d93faf1711b1c3a700736b699329b",
+                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/99fc84bb4716f383a9eebbe693d95da9544bb781",
+                "reference": "99fc84bb4716f383a9eebbe693d95da9544bb781",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0"
+                "php": ">=8.1"
             },
             "require-dev": {
-                "phpstan/phpstan": "^0.12",
-                "phpunit/phpunit": "~9.5.1",
-                "wmde/fundraising-phpcs": "~3.0"
+                "phpstan/phpstan": "^1.0",
+                "phpunit/phpunit": "~10.0",
+                "wmde/fundraising-phpcs": "~9.0"
             },
             "type": "library",
             "extra": {
@@ -6634,7 +6634,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "General and shared validation services created as part of the WMDE fundraising software",
-            "time": "2021-07-05T14:06:58+00:00"
+            "time": "2023-11-28T09:47:22+00:00"
         },
         {
             "name": "wmde/fundraising-address-change",
@@ -9696,5 +9696,5 @@
     "platform-dev": {
         "ext-pdo_sqlite": "*"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
