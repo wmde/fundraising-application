@@ -36,6 +36,28 @@
             <h2>{$ site_metadata.no_javascript_header $}</h2>
             {$ web_content( 'pages/no_javascript' ) $}
         </noscript>
+        {% if assets_path and application_environment == 'dev' %}
+            <style>
+				@keyframes fade-in {
+					0% {  opacity: 0;  }
+					66% { opacity: 0; }
+					100% { opacity: 1; }
+				}
+				.app-loading {
+					background: white;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					font-size: 1.5em;
+					animation: 2s ease-out 0s 1 fade-in;
+				}
+            </style>
+            <div class="app-loading">
+                <p>Waiting for the external assets to load...</p>
+                <p>If the application doesn't appear here, check if the server for the assets is running at {$ assets_path $}</p>
+            </div>
+        {% endif %}
     </div>
     <div
         id="appdata"
