@@ -6684,16 +6684,16 @@
         },
         {
             "name": "wmde/fundraising-content-provider",
-            "version": "v6.0.0",
+            "version": "v6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-content-provider",
-                "reference": "03931a2c2b16503360efa319d4bc1193abf67a30"
+                "reference": "d360de7857400cbe8741629a4f64007c16432988"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/03931a2c2b16503360efa319d4bc1193abf67a30",
-                "reference": "03931a2c2b16503360efa319d4bc1193abf67a30",
+                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/d360de7857400cbe8741629a4f64007c16432988",
+                "reference": "d360de7857400cbe8741629a4f64007c16432988",
                 "shasum": ""
             },
             "require": {
@@ -6744,7 +6744,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "WMDE fundraising application content provider and filter",
-            "time": "2023-02-10T10:42:55+00:00"
+            "time": "2023-12-18T17:27:14+00:00"
         },
         {
             "name": "wmde/fundraising-donations",
