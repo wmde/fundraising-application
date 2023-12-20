@@ -80,8 +80,13 @@
 	{$ mail_content('donation_confirmation/greetings', { 'day_of_the_week': day_of_the_week } ) $}
 {% endif %}
 
-{$ mail_content('name_head_of_organization') $}
-{$ mail_content('title_head_of_organization') $}
+{% if donation.moderationFlags.AMOUNT_TOO_HIGH is defined %}
+	{$ mail_content('large_account_manager_name') $}
+	{$ mail_content('large_account_manager_department') $}
+{% else %}
+	{$ mail_content('name_head_of_organization') $}
+	{$ mail_content('title_head_of_organization') $}
+{% endif %}
 
 {% if donation.paymentType == 'MCP' and donation.interval > 0 %}
 	{$ mail_content('donation_confirmation/creditcard_interval_notice') $}
