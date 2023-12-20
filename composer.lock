@@ -9536,12 +9536,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "f7ffc15e66b50357b8e2dfe9fb8488090625c498"
+                "reference": "47363335b9468318ff25a1787cfb0f951c1b7b57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f7ffc15e66b50357b8e2dfe9fb8488090625c498",
-                "reference": "f7ffc15e66b50357b8e2dfe9fb8488090625c498",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/47363335b9468318ff25a1787cfb0f951c1b7b57",
+                "reference": "47363335b9468318ff25a1787cfb0f951c1b7b57",
                 "shasum": ""
             },
             "require": {
@@ -9585,7 +9585,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2023-10-31T11:45:15+00:00"
+            "time": "2023-11-21T16:43:14+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",

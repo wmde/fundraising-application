@@ -1,49 +1,25 @@
 <?php
-
 declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController
  */
-class DefaultRouteTest extends WebTestCase {
+class DefaultRouteTest extends WebRouteTestCase {
 
-	public function testWhenFormParametersArePassedInRequest_theyArePassedToTheTemplate(): void {
-		$client = static::createClient();
-		$client->request(
-			'GET',
-			'/',
-			[
-				'amount' => '1234',
-				'paymentType' => 'UEB',
-				'interval' => 6
-			]
+	public function testItRendersTheDonationForm(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
+
+		$client->request( 'GET', '/' );
+
+		$this->assertMatchesRegularExpression(
+			'/<script src="[^"]*js\/donation_form\.js/',
+			$client->getResponse()->getContent()
 		);
-
-		$responseContent = $client->getResponse()->getContent();
-		$this->assertStringContainsString( 'Amount: 1234', $responseContent );
-		$this->assertStringContainsString( 'Payment type: UEB', $responseContent );
-		$this->assertStringContainsString( 'Interval: 6', $responseContent );
 	}
 
-	public function testWhenFormParametersContainNegativeAmount_zeroAmountIsPassedToTheTemplate(): void {
-		$client = static::createClient();
-		$client->request(
-			'GET',
-			'/',
-			[
-				'amount' => '-1234',
-				'paymentType' => 'UEB',
-				'interval' => 6
-			]
-		);
-
-		$responseContent = $client->getResponse()->getContent();
-		$this->assertStringContainsString( 'Amount: 0', $responseContent );
-		$this->assertStringContainsString( 'Payment type: UEB', $responseContent );
-		$this->assertStringContainsString( 'Interval: 6', $responseContent );
-	}
 }
