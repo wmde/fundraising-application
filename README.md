@@ -115,7 +115,7 @@ development server:
 
     "assets-path": "http://localhost:7072"
 
-The application will show a blank white page if the browser can't find the
+The application will show a message if the browser can't find the
 assets.
 
 ### Create a test configuration that uses the MariaDB database
@@ -239,8 +239,11 @@ These tasks are also performed during the [travis](.travis.yml) runs.
 
 ## Emails
 
-You can inspect all emails sent by the application via [mailhog](https://github.com/mailhog/MailHog)
-at [http://localhost:8025/](http://localhost:8025/)
+In the development environment we use [mailhog](https://github.com/mailhog/MailHog) to capture all emails sent by the application. 
+You can access the mailhog web interface at [http://localhost:8025/](http://localhost:8025/)
+
+You can find more information on how we test the email templates and how to render them without using the application 
+in the [Email Templates](doc/Email_Templates.md) document.
 
 ## Database
 
