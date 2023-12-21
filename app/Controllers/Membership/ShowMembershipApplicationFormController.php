@@ -10,6 +10,7 @@ use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
 
 class ShowMembershipApplicationFormController {
 
@@ -39,11 +40,17 @@ class ShowMembershipApplicationFormController {
 			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
 		);
 
+		$trackingInfo = new ImpressionCounts(
+			intval( $httpRequest->get( 'impCount' ) ),
+			intval( $httpRequest->get( 'bImpCount' ) )
+		);
+
 		return new Response( $ffFactory->newMembershipApplicationFormPresenter()->present(
 			$urls,
 			$showMembershipTypeOption,
 			$initialDonationFormValues,
-			$initialDonationValidationResult
+			$initialDonationValidationResult,
+			$trackingInfo
 		) );
 	}
 }

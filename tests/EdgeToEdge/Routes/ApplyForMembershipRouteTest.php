@@ -27,57 +27,86 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
  */
 class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
+	use GetApplicationVarsTrait;
+
 	private const MEMBERSHIP_APPLICATION_ID = 4789;
 
 	private const FIRST_PAYMENT_DATE = '2017-09-21';
 	private const CORRECT_ACCESS_TOKEN = '4711abc';
 
-	private const APPLY_FOR_MEMBERSHIP_PATH = 'apply-for-membership';
+	private const APPLY_FOR_MEMBERSHIP_ROUTE = 'apply-for-membership';
 
+	/**
+	 * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController
+	 * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter
+	 */
 	public function testGivenGetRequestMembership_formIsShown(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 
-		$crawler = $client->request( 'GET', 'apply-for-membership' );
+		$crawler = $client->request( 'GET', self::APPLY_FOR_MEMBERSHIP_ROUTE );
 
-		$this->assertCount(
-			1,
-			$crawler->filter( 'form#memForm[method="POST"][action="/apply-for-membership"]' )
-		);
-		$this->assertCount(
-			1,
-			$crawler->filter( 'input[name="showMembershipTypeOption"][type="hidden"][value="true"]' )
-		);
+		$this->assertResponseShowsForm( $crawler );
+		$applicationVars = $this->getDataApplicationVars( $crawler );
+		$this->assertTrue( $applicationVars->showMembershipTypeOption, 'By default, membership option should be shown' );
 	}
 
+	/**
+	 * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController
+	 * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter
+	 */
 	public function testGivenGetRequestSustainingMembership_formIsShown(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 
-		$crawler = $client->request( 'GET', 'apply-for-membership', [ 'type' => 'sustaining' ] );
+		$crawler = $client->request( 'GET', self::APPLY_FOR_MEMBERSHIP_ROUTE, [ 'type' => 'sustaining' ] );
 
-		$this->assertCount(
-			1,
-			$crawler->filter( 'form#memForm[method="POST"][action="/apply-for-membership"]' )
-		);
-		$this->assertCount(
-			1,
-			$crawler->filter( 'input[name="showMembershipTypeOption"][type="hidden"][value="false"]' )
+		$this->assertResponseShowsForm( $crawler );
+		$applicationVars = $this->getDataApplicationVars( $crawler );
+		$this->assertFalse( $applicationVars->showMembershipTypeOption, 'The "sustaining" parameters should hide the membership type option' );
+	}
+
+	/**
+	 * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController
+	 * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter
+	 */
+	public function testGivenGetRequestWithImpressionCounts_responseContainsImpressionCounts(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
+
+		$crawler = $client->request( 'GET', self::APPLY_FOR_MEMBERSHIP_ROUTE, [ 'impCount' => '20', 'bImpCount' => '5' ] );
+
+		$this->assertResponseShowsForm( $crawler );
+		$applicationVars = $this->getDataApplicationVars( $crawler );
+		$this->assertEquals(
+			(object)[
+				'bannerImpressionCount' => 5,
+				'impressionCount' => 20
+			],
+			$applicationVars->tracking
 		);
 	}
 
+	/**
+	 * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController
+	 * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter
+	 */
 	public function testGivenRequestWithDonationIdAndCorrespondingAccessCode_successResponseWithInitialFormValuesIsReturned(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$this->givenStoredDirectDebitDonation( $factory );
-		} );
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$this->givenStoredDirectDebitDonation( $factory );
 		$httpParameters = [
 			'donationId' => 1,
 			'donationAccessToken' => self::CORRECT_ACCESS_TOKEN
 		];
 
-		$client->request( Request::METHOD_GET, self::APPLY_FOR_MEMBERSHIP_PATH, $httpParameters );
+		$crawler = $client->request( Request::METHOD_GET, self::APPLY_FOR_MEMBERSHIP_ROUTE, $httpParameters );
 
-		$this->assertInitialFormValues(
-			[
+		$this->assertResponseShowsForm( $crawler );
+		$applicationVars = $this->getDataApplicationVars( $crawler );
+		$this->assertEquals(
+			(object)[
 				'addressType' => 'person',
 				'salutation' => 'nyan',
 				'title' => 'nyan',
@@ -94,7 +123,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 				'paymentType' => 'BEZ',
 				'incentives' => [ 0 => 'tote_bag' ]
 			],
-			$client
+			$applicationVars->initialFormValues
 		);
 	}
 
@@ -403,7 +432,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$parameters = $this->newValidHttpParameters();
 		$parameters['donationReceipt'] = '0';
 
-		$client->request( Request::METHOD_POST, self::APPLY_FOR_MEMBERSHIP_PATH, $parameters );
+		$client->request( Request::METHOD_POST, self::APPLY_FOR_MEMBERSHIP_ROUTE, $parameters );
 
 		$this->assertFalse( $factory->getMembershipApplicationRepository()->getUnexportedMembershipApplicationById( 1 )->getDonationReceipt() );
 	}
@@ -474,5 +503,13 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$em->persist( $incentive );
 		}
 		$em->flush();
+	}
+
+	private function assertResponseShowsForm( \Symfony\Component\DomCrawler\Crawler $crawler ): void {
+		$this->assertCount(
+			1,
+			$crawler->filter( 'script[src="/skins/laika/js/membership_application.js"]' ),
+			'Expected JavaScript for showing membership form to be loaded'
+		);
 	}
 }
