@@ -21,6 +21,7 @@ class ProductionEnvironmentSetupTest extends TestCase {
 			'setCreditCardLogger',
 			'setDoctrineConfiguration',
 			'setPayPalAPI',
+			'setMembershipImpressionCounter',
 		];
 		$supportingGetters = [
 			'getCachePath',
@@ -28,6 +29,7 @@ class ProductionEnvironmentSetupTest extends TestCase {
 			'getLoggingPath',
 			'getWritableApplicationDataPath',
 			'getDoctrineXMLMappingPaths',
+			'getConnection'
 		];
 		/** @var FunFunFactory&MockObject $factory */
 		$factory = $this->createMock( FunFunFactory::class );

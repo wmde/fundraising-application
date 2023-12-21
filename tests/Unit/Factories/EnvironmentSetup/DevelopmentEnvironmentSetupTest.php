@@ -20,11 +20,13 @@ class DevelopmentEnvironmentSetupTest extends TestCase {
 			'setDoctrineConfiguration',
 			'setInternalErrorHtmlPresenter',
 			'setPayPalAPI',
+			'setMembershipImpressionCounter',
 		];
 		$supportingGetters = [
 			'getLogger',
 			'getLoggingPath',
-			'getDoctrineXMLMappingPaths'
+			'getDoctrineXMLMappingPaths',
+			'getConnection'
 		];
 		/** @var FunFunFactory&MockObject $factory */
 		$factory = $this->createMock( FunFunFactory::class );

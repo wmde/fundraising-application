@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Logger;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\MembershipBannerCounting\DatabaseMembershipImpressionCounter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DevelopmentInternalErrorHtmlPresenter;
 use WMDE\Fundraising\PaymentContext\Services\PayPal\GuzzlePaypalAPI;
 
@@ -23,6 +24,7 @@ class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 		$this->setDoctrineConfiguration( $factory );
 		$this->setErrorPageHtmlPresenter( $factory );
 		$this->setPayPalAPIClient( $factory );
+		$this->setMembershipImpressionCounter( $factory );
 	}
 
 	private function setErrorPageHtmlPresenter( FunFunFactory $factory ): void {
@@ -66,6 +68,15 @@ class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 			$secret,
 			$factory->getLogger()
 		) );
+	}
+
+	/**
+	 * @deprecated This is temporary for the 2023/2024 thank you banner campaign. It should be removed after the campaign (Feb 2024).
+	 */
+	private function setMembershipImpressionCounter( FunFunFactory $factory ) {
+		$factory->setMembershipImpressionCounter(
+			new DatabaseMembershipImpressionCounter( $factory->getConnection() )
+		);
 	}
 
 }
