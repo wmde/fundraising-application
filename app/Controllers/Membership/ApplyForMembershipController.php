@@ -43,6 +43,7 @@ class ApplyForMembershipController {
 		}
 
 		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $session );
+		$this->recordBannerImpressions( $httpRequest, $ffFactory );
 		return new RedirectResponse( $responseModel->getPaymentCompletionUrl() );
 	}
 
@@ -141,5 +142,18 @@ class ApplyForMembershipController {
 			array_keys( $violations ),
 			$formattedConstraintViolations
 		);
+	}
+
+	/**
+	 * @deprecated Remove after 2023/2024 thank you campaign
+	 */
+	private function recordBannerImpressions( Request $httpRequest, FunFunFactory $ffFactory ): void {
+		$tracking = $httpRequest->attributes->get( 'trackingCode', '' );
+		if ( $tracking === '' ) {
+			return;
+		}
+		$overallImpressionCount = intval( $httpRequest->get( 'impCount' ) );
+		$bannerImpressionCount = intval( $httpRequest->get( 'bImpCount' ) );
+		$ffFactory->getMembershipImpressionCounter()->countImpressions( $bannerImpressionCount, $overallImpressionCount, $tracking );
 	}
 }

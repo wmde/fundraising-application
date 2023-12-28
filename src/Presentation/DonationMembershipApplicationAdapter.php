@@ -56,6 +56,7 @@ class DonationMembershipApplicationAdapter {
 		$bankData = $this->bankDataGenerator->getBankDataFromIban( new Iban( $displayValues['iban'] ) );
 
 		return [
+			'paymentType' => $displayValues['paymentType'],
 			'iban' => $displayValues['iban'],
 			'bic' => $displayValues['bic'],
 			'bankname' => $bankData->bankName
