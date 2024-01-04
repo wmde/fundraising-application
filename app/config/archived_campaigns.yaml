@@ -188,4 +188,15 @@ optional_cookie_notice:
   active: true
   param_only: true
 
-
+new_design:
+  description: Test a new iteration of the Laika skin
+  reference: "https://phabricator.wikimedia.org/T345721"
+  start: "2023-10-04"
+  end: "2023-12-31"
+  buckets:
+    - "legacy"
+    - "new"
+  default_bucket: "new"
+  url_key: des
+  active: true
+  param_only: true
