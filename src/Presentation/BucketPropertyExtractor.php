@@ -8,11 +8,10 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 
 /**
  * Prepares a list of buckets into template variables
- * @license GPL-2.0-or-later
  */
-class BucketRenderer {
+class BucketPropertyExtractor {
 
-	public static function renderBuckets( Bucket ...$buckets ): array {
+	public static function listBucketIds( Bucket ...$buckets ): array {
 		return array_map(
 			static function ( Bucket $b ) {
 				return $b->getId();

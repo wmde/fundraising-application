@@ -8,12 +8,12 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
-use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
+use WMDE\Fundraising\Frontend\Presentation\BucketPropertyExtractor;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Presentation\BucketRenderer
+ * @covers \WMDE\Fundraising\Frontend\Presentation\BucketPropertyExtractor
  */
-class BucketRendererTest extends TestCase {
+class BucketPropertyExtractorTest extends TestCase {
 	private Campaign $campaign1;
 	private Campaign $campaign2;
 
@@ -26,19 +26,19 @@ class BucketRendererTest extends TestCase {
 	}
 
 	public function testGivenNoBuckets_itReturnsEmptyArray() {
-		$this->assertSame( [], BucketRenderer::renderBuckets() );
+		$this->assertSame( [], BucketPropertyExtractor::listBucketIds() );
 	}
 
 	public function testGivenOneBucket_itReturnsItsId() {
-		$templateParams = BucketRenderer::renderBuckets(
+		$templateParams = BucketPropertyExtractor::listBucketIds(
 			new Bucket( 'default', $this->campaign1, true )
 		);
 
 		$this->assertEquals( [ 'campaigns.first_campaign.default' ], $templateParams );
 	}
 
-	public function testMultipleOneBuckets_itReturnsTheirId() {
-		$templateParams = BucketRenderer::renderBuckets(
+	public function testMultipleBuckets_itReturnsTheirId() {
+		$templateParams = BucketPropertyExtractor::listBucketIds(
 			new Bucket( 'default', $this->campaign1, true ),
 			new Bucket( 'default', $this->campaign2, true )
 		);

@@ -157,7 +157,8 @@ use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Infrastructure\WordListFileReader;
 use WMDE\Fundraising\Frontend\Presentation\ActiveFeatureRenderer;
-use WMDE\Fundraising\Frontend\Presentation\BucketRenderer;
+use WMDE\Fundraising\Frontend\Presentation\BucketPropertyExtractor;
+use WMDE\Fundraising\Frontend\Presentation\CampaignPropertyExtractor;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
@@ -550,7 +551,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			'salutations' => $this->getSalutations()->getList(),
 			'piwik' => $this->config['piwik'],
 			'site_metadata' => $this->getSiteMetaData(),
-			'selectedBuckets' => BucketRenderer::renderBuckets( ...$this->getSelectedBuckets() ),
+			'selectedBuckets' => BucketPropertyExtractor::listBucketIds( ...$this->getSelectedBuckets() ),
+			'allowedCampaignParameters' => CampaignPropertyExtractor::listURLKeys( ...$this->getCampaigns() ),
 			'activeFeatures' => ActiveFeatureRenderer::renderActiveFeatureIds( $this->getFeatureReader()->getFeatures() )
 		];
 	}
