@@ -3,11 +3,14 @@ language: php
 php:
     - 8.1
 
+dist: jammy
+
 services:
   - docker
 
 install:
   - travis_retry composer install # This is a crutch to use travis tokens for github API instead of needing our own
+  - docker --version
   # Commented out for efficiency reasons
   # - travis_retry make install-php
 
