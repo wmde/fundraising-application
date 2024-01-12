@@ -11,6 +11,8 @@ services:
 install:
   - travis_retry composer install # This is a crutch to use travis tokens for github API instead of needing our own
   - docker --version
+  - sudo apt-get update
+  - sudo apt-get install -y docker-compose
   # Commented out for efficiency reasons
   # - travis_retry make install-php
 
