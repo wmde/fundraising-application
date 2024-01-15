@@ -1,7 +1,7 @@
 language: php
-
+dist: bionic
 php:
-    - 8.1
+    - '8.3.0'
 
 services:
   - docker
