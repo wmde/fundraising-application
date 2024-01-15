@@ -18,3 +18,8 @@ framework:
 
     mailer:
         dsn: 'native://default'
+
+    handle_all_throwables: true
+
+    validation:
+        email_validation_mode: html5
