@@ -34,7 +34,6 @@ class RenderMailTemplatesCommand extends Command {
 	public function __construct( FunFunFactory $ffFactory ) {
 		parent::__construct( self::NAME );
 		$this->ffFactory = $ffFactory;
-		$this->ffFactory->setLocale( "de_DE" );
 	}
 
 	protected function configure(): void {
@@ -46,11 +45,18 @@ class RenderMailTemplatesCommand extends Command {
 						'output-path',
 						'o',
 						InputOption::VALUE_REQUIRED,
-						'Output path for rendered text'
+						'Output path for rendered text',
+						'rendered-mail-templates'
 					),
+					new InputOption(
+						'locale',
+						'l',
+						InputOption::VALUE_REQUIRED,
+						'Locale to use for rendering',
+						'de_DE'
+					)
 				] )
 			);
-			// TODO: Add locale option
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
@@ -64,6 +70,11 @@ class RenderMailTemplatesCommand extends Command {
 		if ( $outputPath && !str_ends_with( $outputPath, '/' ) ) {
 			$outputPath .= '/';
 		}
+		if ( !file_exists( $outputPath ) ) {
+			mkdir( $outputPath, 0777, true );
+		}
+
+		$this->ffFactory->setLocale( $input->getOption( 'locale' ) );
 
 		$twig = $this->ffFactory->getMailerTwig();
 		$twig->enableStrictVariables();
