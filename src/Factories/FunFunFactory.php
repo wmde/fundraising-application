@@ -84,7 +84,6 @@ use WMDE\Fundraising\DonationContext\UseCases\AddDonation\CreatePaymentWithUseCa
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\DonationPaymentValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\Moderation\ModerationService as DonationModerationService;
 use WMDE\Fundraising\DonationContext\UseCases\BookDonationUseCase\BookDonationUseCase;
-use WMDE\Fundraising\DonationContext\UseCases\CancelDonation\CancelDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\HandlePaypalPaymentWithoutDonation\HandlePaypalPaymentWithoutDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
@@ -162,7 +161,6 @@ use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\CancelMembershipApplicationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListJsonPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\CommentListRssPresenter;
@@ -191,12 +189,10 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracke
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipApplicationEventLogger;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipIdGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository as MembershipModerationReasonRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
-use WMDE\Fundraising\MembershipContext\Infrastructure\MembershipApplicationEventLogger;
 use WMDE\Fundraising\MembershipContext\Infrastructure\PaymentServiceFactory;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
@@ -206,7 +202,6 @@ use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembe
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Moderation\ModerationService as MembershipModerationService;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Notification\MailMembershipApplicationNotifier;
-use WMDE\Fundraising\MembershipContext\UseCases\CancelMembershipApplication\CancelMembershipApplicationUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
 use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentIdRepository;
@@ -241,7 +236,6 @@ use WMDE\Fundraising\PaymentContext\Services\TransactionIdFinder\DoctrineTransac
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\BookPaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\VerificationService;
 use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\VerificationServiceFactory;
-use WMDE\Fundraising\PaymentContext\UseCases\CancelPayment\CancelPaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\CreateBookedPayPalPayment\CreateBookedPayPalPaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\CreatePaymentUseCase;
 use WMDE\Fundraising\PaymentContext\UseCases\GenerateBankData\GenerateBankDataFromGermanLegacyBankDataUseCase;
@@ -909,28 +903,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->newTextPolicyValidator( 'comment' );
 	}
 
-	public function newCancelDonationUseCase( string $updateToken ): CancelDonationUseCase {
-		return new CancelDonationUseCase(
-			$this->getDonationRepository(),
-			$this->newCancelDonationMailer(),
-			$this->newDonationAuthorizationChecker( $updateToken ),
-			$this->newDonationEventLogger(),
-			$this->newCancelPaymentUseCase()
-		);
-	}
-
-	private function newCancelDonationMailer(): DonationTemplateMailerInterface {
-		return $this->newTemplateMailer(
-			$this->getDonationMessenger(),
-			new TwigTemplate(
-				$this->getMailerTwig(),
-				'Donation_Cancellation_Confirmation.txt.twig',
-				[ 'greeting_generator' => $this->getGreetingGenerator() ]
-			),
-			new BasicMailSubjectRenderer( $this->getMailTranslator(), 'mail_subject_confirm_cancellation' )
-		);
-	}
-
 	public function newAddDonationUseCase(): AddDonationUseCase {
 		return new AddDonationUseCase(
 			$this->getDonationIdRepository(),
@@ -1331,19 +1303,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	/**
-	 * @deprecated We no longer allow membership cancellation
-	 */
-	public function newCancelMembershipApplicationUseCase( string $updateToken ): CancelMembershipApplicationUseCase {
-		return new CancelMembershipApplicationUseCase(
-			$this->getMembershipApplicationAuthorizer( $updateToken ),
-			$this->getMembershipApplicationRepository(),
-			$this->newCancelMembershipApplicationMailer(),
-			$this->newMembershipApplicationEventLogger(),
-			$this->newCancelPaymentUseCase()
-		);
-	}
-
 	private function getMembershipApplicationAuthorizer( string $updateToken = '', string $accessToken = '' ): MembershipAuthorizationChecker {
 		return $this->createSharedObject(
 			MembershipAuthorizationChecker::class,
@@ -1369,18 +1328,6 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function setMembershipApplicationAuthorizationChecker( MembershipAuthorizationChecker $authorizer ): void {
 		$this->sharedObjects[MembershipAuthorizationChecker::class] = $authorizer;
-	}
-
-	private function newCancelMembershipApplicationMailer(): MembershipTemplateMailerInterface {
-		return new TemplateBasedMailer(
-			$this->getMembershipMessenger(),
-			new TwigTemplate(
-				$this->getMailerTwig(),
-				'Membership_Application_Cancellation_Confirmation.txt.twig',
-				[ 'greeting_generator' => $this->getGreetingGenerator() ]
-			),
-			new BasicMailSubjectRenderer( $this->getMailTranslator(), 'mail_subject_confirm_membership_application_cancellation' )
-		);
 	}
 
 	public function newMembershipApplicationConfirmationUseCase( ShowApplicationConfirmationPresenter $presenter, string $accessToken ): ShowApplicationConfirmationUseCase {
@@ -1503,17 +1450,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	public function newCancelMembershipApplicationHtmlPresenter(): CancelMembershipApplicationHtmlPresenter {
-		return new CancelMembershipApplicationHtmlPresenter(
-			$this->getLayoutTemplate( 'Membership_Application_Cancellation_Confirmation.html.twig' )
-		);
-	}
-
 	public function newMembershipApplicationConfirmationHtmlPresenter(): MembershipApplicationConfirmationHtmlPresenter {
 		return new MembershipApplicationConfirmationHtmlPresenter(
-			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig' ),
-			$this->getUrlGenerator(),
-			$this->getUrlAuthenticationLoader()
+			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig' )
 		);
 	}
 
@@ -1966,10 +1905,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new DoctrineIncentiveFinder( $this->getEntityManager() );
 	}
 
-	private function newMembershipApplicationEventLogger(): MembershipApplicationEventLogger {
-		return new DoctrineMembershipApplicationEventLogger( $this->getEntityManager() );
-	}
-
 	public function newFindCitiesUseCase(): FindCitiesUseCase {
 		return new FindCitiesUseCase(
 			new DoctrineLocationRepository( $this->getEntityManager() )
@@ -2022,10 +1957,6 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function getRootPath(): string {
 		return $this->getAbsolutePath( __DIR__ . '/../..' );
-	}
-
-	private function newCancelPaymentUseCase(): CancelPaymentUseCase {
-		return new CancelPaymentUseCase( $this->getPaymentRepository() );
 	}
 
 	private function newPaymentBookingService(): PaymentBookingService {

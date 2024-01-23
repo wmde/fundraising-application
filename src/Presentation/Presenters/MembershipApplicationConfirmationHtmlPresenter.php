@@ -6,9 +6,6 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
-use WMDE\Fundraising\Frontend\App\Routes;
-use WMDE\Fundraising\Frontend\Authentication\MembershipUrlAuthenticationLoader;
-use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
@@ -25,9 +22,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	private ?\Exception $exception = null;
 
 	public function __construct(
-		private readonly TwigTemplate $template,
-		private readonly UrlGenerator $urlGenerator,
-		private readonly MembershipUrlAuthenticationLoader $urlAuthenticationLoader
+		private readonly TwigTemplate $template
 	) {
 	}
 
@@ -53,12 +48,6 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	}
 
 	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData ): array {
-		$cancelMembershipUrl = $this->urlGenerator->generateAbsoluteUrl(
-			Routes::CANCEL_MEMBERSHIP,
-			[ 'id' => $membershipApplication->getId() ]
-		);
-		$authenticator = $this->urlAuthenticationLoader->getMembershipUrlAuthenticator( $membershipApplication->getId() );
-
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $paymentData ),
 			'address' => $this->getAddressArguments( $membershipApplication->getApplicant() ),
@@ -66,10 +55,6 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 				'iban' => $paymentData['iban'] ?? '',
 				'bic' => $paymentData['bic'] ?? '',
 				'bankname' => $paymentData['bankname'] ?? '',
-			],
-			'urls' => [
-				// This is deprecated, we can't cancel memberships in the frontend any more
-				'cancelMembership'  => $authenticator->addAuthenticationTokensToApplicationUrl( $cancelMembershipUrl )
 			]
 		];
 	}

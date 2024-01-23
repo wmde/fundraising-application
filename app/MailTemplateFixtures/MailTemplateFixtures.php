@@ -30,16 +30,6 @@ class MailTemplateFixtures {
 			'message' => 'Please advise',
 		] );
 
-		yield new SimpleSettingsGenerator( 'Donation_Cancellation_Confirmation.txt.twig', [
-			'recipient' => [
-				'firstName' => 'Timothy',
-				'lastName' => "O'Reilly",
-				'salutation' => 'Herr',
-				'title' => 'Dr.'
-			],
-			'donationId' => 42
-		] );
-
 		yield new VariantSettingsGenerator( 'Donation_Confirmation.txt.twig',
 			[
 				'recipient' => [
@@ -159,16 +149,6 @@ class MailTemplateFixtures {
 
 			] )
 		);
-
-		yield new SimpleSettingsGenerator( 'Membership_Application_Cancellation_Confirmation.txt.twig', [
-			'membershipApplicant' => [
-				'firstName' => 'Timothy',
-				'lastName' => "O'Reilly",
-				'salutation' => 'Herr',
-				'title' => 'Dr.'
-			],
-			'applicationId' => 23
-		] );
 
 		yield new VariantSettingsGenerator( 'Membership_Application_Confirmation.txt.twig',
 			[

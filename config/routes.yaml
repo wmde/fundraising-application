@@ -138,11 +138,6 @@ show_membership_confirmation:
     methods: [GET]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipConfirmationController::index'
 
-cancel_membership_application:
-    path: /cancel-membership-application
-    methods: [GET]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Membership\CancelMembershipApplicationController::index'
-
 show_donation_confirmation:
     path: /show-donation-confirmation
     methods: [GET, POST]
