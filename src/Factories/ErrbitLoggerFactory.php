@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Factories;
 use Airbrake\MonologHandler as AirbrakeHandler;
 use Airbrake\Notifier;
 use Monolog\Handler\HandlerInterface;
-use Monolog\Logger;
+use Monolog\Level;
 use Psr\Log\LogLevel;
 
 class ErrbitLoggerFactory {
@@ -59,7 +59,7 @@ class ErrbitLoggerFactory {
 			return $notice;
 		} );
 
-		return new AirbrakeHandler( $notifier, Logger::toMonologLevel( $level ?? LogLevel::DEBUG ), $bubble );
+		return new AirbrakeHandler( $notifier, Level::fromName( $level ?? LogLevel::DEBUG )->value, $bubble );
 	}
 
 }
