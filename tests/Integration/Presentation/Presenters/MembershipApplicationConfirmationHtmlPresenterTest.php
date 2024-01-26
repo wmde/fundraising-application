@@ -7,8 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\MembershipUrlAuthenticationLoaderStub;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
 
 /**
@@ -24,7 +22,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 
 		$membershipApplication = ValidMembershipApplication::newDomainEntity();
 
-		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig, new FakeUrlGenerator(), new MembershipUrlAuthenticationLoaderStub() );
+		$presenter = new MembershipApplicationConfirmationHtmlPresenter( $twig );
 		$presenter->presentConfirmation(
 			$membershipApplication,
 			[
@@ -66,9 +64,6 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 				'iban' => 'I has IBAN',
 				'bic' => 'I has BIC',
 				'bankname' => 'I has BANK',
-			],
-			'urls' => [
-				'cancelMembership' => 'https://such.a.url/cancel_membership_application?id=1'
 			]
 		];
 	}

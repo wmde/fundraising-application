@@ -14,7 +14,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
  */
 class Routes {
 
-	public const CANCEL_MEMBERSHIP = 'cancel_membership_application';
 	public const CONVERT_BANKDATA = 'generate_iban';
 	public const INDEX = '/';
 	public const POST_COMMENT = 'PostComment';
@@ -42,7 +41,6 @@ class Routes {
 			'validateIban' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_IBAN ),
 			'validateMembershipFee' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_MEMBERSHIP_FEE ),
 			'convertBankData' => $urlGenerator->generateAbsoluteUrl( self::CONVERT_BANKDATA ),
-			'cancelMembership' => $urlGenerator->generateAbsoluteUrl( self::CANCEL_MEMBERSHIP ),
 			'postComment' => $urlGenerator->generateAbsoluteUrl( self::POST_COMMENT ),
 		];
 	}
