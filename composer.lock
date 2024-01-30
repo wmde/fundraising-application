@@ -9555,12 +9555,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "e003060179d2ffcc2886434ec17f5d16cd166bee"
+                "reference": "6fe312642e37b472f8dcd791a87a2ea870f5d2d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/e003060179d2ffcc2886434ec17f5d16cd166bee",
-                "reference": "e003060179d2ffcc2886434ec17f5d16cd166bee",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/6fe312642e37b472f8dcd791a87a2ea870f5d2d6",
+                "reference": "6fe312642e37b472f8dcd791a87a2ea870f5d2d6",
                 "shasum": ""
             },
             "require": {
@@ -9604,7 +9604,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2024-01-23T07:11:20+00:00"
+            "time": "2024-01-11T17:56:59+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
@@ -9714,5 +9714,5 @@
     "platform-dev": {
         "ext-pdo_sqlite": "*"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
