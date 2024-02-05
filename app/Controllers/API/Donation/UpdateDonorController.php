@@ -40,13 +40,16 @@ class UpdateDonorController extends AbstractApiController {
 		$donation = $donationResponse->getDonation();
 
 		return new JsonResponse( array_merge(
-			[ 'addressType' => AddressType::donorToPresentationAddressType( $donation->getDonor() ) ],
+			[
+				'addressType' => AddressType::donorToPresentationAddressType( $donation->getDonor() ),
+				'mailingList' => $donation->getDonor()->isSubscribedToMailingList()
+			],
 			( new DonorDataFormatter() )->getAddressArguments( $donation )
 		) );
 	}
 
 	private function newRequestModel( ParameterBag $params ): UpdateDonorRequest {
-		return UpdateDonorRequest::newInstance()
+		$request = UpdateDonorRequest::newInstance()
 			->withType(
 				$this->getAddressType( $params )
 			)
@@ -61,6 +64,12 @@ class UpdateDonorController extends AbstractApiController {
 			->withSalutation( $params->get( 'salutation', '' ) )
 			->withStreetAddress( $params->get( 'street', '' ) )
 			->withTitle( $params->get( 'title', '' ) );
+
+		if ( $params->get( 'mailingList', false ) ) {
+			return $request->acceptMailingList();
+		} else {
+			return $request->declineMailingList();
+		}
 	}
 
 	/**

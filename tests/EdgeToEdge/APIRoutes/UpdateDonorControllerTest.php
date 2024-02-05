@@ -175,6 +175,7 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 	private function newPrivateDonorData(): array {
 		return [
 			'addressType' => AddressType::LEGACY_PERSON,
+			'mailingList' => true,
 			'salutation' => 'Herr',
 			'title' => '',
 			'firstName' => 'Hans',
@@ -191,6 +192,7 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 	private function newCompanyDonorData(): array {
 		return [
 			'addressType' => AddressType::LEGACY_COMPANY,
+			'mailingList' => false,
 			'companyName' => 'Wikimedia Deutschland Money Makers GmbH',
 			'fullName' => 'Wikimedia Deutschland Money Makers GmbH',
 			'street' => 'Teststraße 123',

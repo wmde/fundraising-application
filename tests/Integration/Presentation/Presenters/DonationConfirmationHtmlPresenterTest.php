@@ -64,6 +64,7 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 				'interval' => 3,
 				'paymentType' => 'PPL',
 				'newsletter' => false,
+				'mailingList' => false,
 				'receipt' => null,
 				'bankTransferCode' => '',
 				'creationDate' => ( new \DateTime() )->format( 'd.m.Y' ),

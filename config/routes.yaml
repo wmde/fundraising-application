@@ -113,11 +113,6 @@ add_donation:
     methods: [POST]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\AddDonationController::index'
 
-update-donor:
-    path: /donation/update
-    methods: [POST]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\UpdateDonorController::index'
-
 show-donation-form:
     path: /donation/new
     methods: [POST, GET]

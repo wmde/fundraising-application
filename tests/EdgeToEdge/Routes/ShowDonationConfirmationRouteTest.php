@@ -55,7 +55,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertEquals( $this->payment->getAmount()->getEuroFloat(), $dataVars->donation->amount );
 		$this->assertEquals( $paymentData['interval'], $dataVars->donation->interval );
 		$this->assertEquals( $paymentData['paymentType'], $dataVars->donation->paymentType );
-		$this->assertEquals( $this->donation->getDonor()->wantsNewsletter(), $dataVars->donation->newsletter );
+		$this->assertEquals( $this->donation->getDonor()->isSubscribedToMailingList(), $dataVars->donation->newsletter );
 		$this->assertEquals( self::CORRECT_ACCESS_TOKEN, $dataVars->donation->accessToken );
 
 		$this->assertEquals( $personNameValues['salutation'], $dataVars->address->salutation );
