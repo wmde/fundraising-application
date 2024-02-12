@@ -40,6 +40,10 @@ setup: create-env download-assets install-php default-config setup-doctrine
 create-env:
 	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
 
+default-config:
+	-cp -i .docker/app/config.dev.json app/config || true
+	-cp -i tests/Data/files/paypal_api.yml app/config/paypal_api.dev.yml || true
+
 install-php:
 	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume /tmp:/tmp --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer install $(COMPOSER_FLAGS)
 
@@ -62,10 +66,6 @@ setup-doctrine:
 
 drop-db:
 	docker-compose run --rm app ./bin/doctrine orm:schema-tool:drop --force
-
-default-config:
-	-cp -i .docker/app/config.dev.json app/config || true
-	-cp -i tests/Data/files/paypal_api.yml app/config/paypal_api.dev.yml || true
 
 download-assets:
 	./bin/download_assets.sh $(ASSET_BRANCH)
