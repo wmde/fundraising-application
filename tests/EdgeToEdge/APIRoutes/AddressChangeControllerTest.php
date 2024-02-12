@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
+use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressType;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
@@ -140,7 +141,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 
 	public function testPutWithValidCompanyData_successIsReturned(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$addressChange = $this->makeAddressChange( $factory );
+			$addressChange = $this->makeAddressChange( $factory, AddressType::Company );
 			$identifier = $addressChange->getCurrentIdentifier()->__toString();
 
 			$response = $this->whenPutRequestIsSubmitted( $client, $identifier, $this->makeValidCompanySubmitData() );
@@ -177,8 +178,8 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function makeAddressChange( FunFunFactory $factory ): AddressChange {
-		$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->forPerson()->build();
+	private function makeAddressChange( FunFunFactory $factory, AddressType $addressType = AddressType::Person ): AddressChange {
+		$addressChange = AddressChangeBuilder::create()->forDonation( self::DUMMY_DONATION_ID )->setAddressType( $addressType )->build();
 
 		$factory->getEntityManager()->persist( $addressChange );
 		$factory->getEntityManager()->flush();
@@ -289,7 +290,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 	}
 
 	private function verifyUserIsOptedIntoReceiptByDefault( EntityManager $entityManager, AddressChange $addressChange ): void {
-		$entityManager->clear( AddressChange::class );
+		$entityManager->clear();
 		$addressChangeAfterRequest = $entityManager->getRepository( AddressChange::class )->find(
 			$addressChange->getId()
 		);
@@ -300,7 +301,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 	}
 
 	private function verifyUserCanOptOutOfReceiptWhileStillProvidingAnAddress( EntityManager $entityManager, AddressChange $addressChange ): void {
-		$entityManager->clear( AddressChange::class );
+		$entityManager->clear();
 		$addressChangeAfterRequest = $entityManager->getRepository( AddressChange::class )->find(
 			$addressChange->getId()
 		);
