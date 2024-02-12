@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressType;
 use WMDE\Fundraising\AddressChangeContext\UseCases\ChangeAddress\ChangeAddressRequest;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
@@ -56,7 +57,7 @@ class AddressChangeController extends AbstractApiController {
 	}
 
 	private function newAddressChangeRequestFromParams( string $identifier, ParameterBag $params ): ChangeAddressRequest {
-		$addressType = $params->get( 'addressType', '' ) === self::ADDRESS_TYPE_PERSON ? self::ADDRESS_TYPE_PERSON : self::ADDRESS_TYPE_COMPANY;
+		$addressType = $params->get( 'addressType', '' ) === self::ADDRESS_TYPE_PERSON ? AddressType::Person : AddressType::Company;
 		$receiptOptOut = $params->get( 'receiptOptOut', false );
 		$isOptOutOnly = $receiptOptOut && $this->areAllOptOutOnlyFieldsEmpty( $addressType, $params );
 
@@ -78,10 +79,10 @@ class AddressChangeController extends AbstractApiController {
 		return $request;
 	}
 
-	private function areAllOptOutOnlyFieldsEmpty( string $addressType, ParameterBag $params ): bool {
+	private function areAllOptOutOnlyFieldsEmpty( AddressType $addressType, ParameterBag $params ): bool {
 		$requiredFields = array_merge(
 			[ 'street', 'postcode', 'city' ],
-			$addressType === self::ADDRESS_TYPE_PERSON ? [ 'firstName', 'lastName' ] : [ 'company' ]
+			$addressType === AddressType::Person ? [ 'firstName', 'lastName' ] : [ 'company' ]
 		);
 
 		foreach ( $requiredFields as $field ) {
