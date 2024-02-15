@@ -58,7 +58,7 @@ class DonationConfirmationHtmlPresenter {
 			'donation' => $donationParameters,
 			'countries' => $this->countries,
 			'addressValidationPatterns' => $this->addressValidationPatterns,
-			'addressType' => AddressType::donorToPresentationAddressType( $donation->getDonor() ),
+			'addressType' => AddressType::donorTypeToPresentationAddressType( $donation->getDonor()->getDonorType() ),
 			'address' => $donorDataFormatter->getAddressArguments( $donation ),
 			'tracking' => $donation->getTrackingInfo()->getTracking(),
 			'bankData' => [

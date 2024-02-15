@@ -4,42 +4,38 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
-use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 
 /**
- * This class is for generating the expected address type strings for the AddDonationRequest und UpdateDonorRequest.
+ * This class is for converting address type strings from the front end
+ * to DonorType used by the Donation context and vice-versa.
  */
 class AddressType {
 	public const PERSON = 'person';
 	public const COMPANY = 'company';
 	public const EMAIL = 'email';
 	public const ANONYMOUS = 'anonymous';
-
-	public const LEGACY_PERSON = 'person';
 	public const LEGACY_COMPANY = 'firma';
-	public const LEGACY_EMAIL = 'email';
 	public const LEGACY_ANONYMOUS = 'anonym';
 
-	private const PRESENTATION_TO_DOMAIN = [
-		self::LEGACY_PERSON => self::PERSON,
-		self::LEGACY_COMPANY => self::COMPANY,
-		self::LEGACY_EMAIL => self::EMAIL,
-		self::LEGACY_ANONYMOUS => self::ANONYMOUS
-	];
-
-	public static function presentationAddressTypeToDomainAddressType( string $presentationAddressType ): string {
-		if ( !isset( self::PRESENTATION_TO_DOMAIN[$presentationAddressType] ) ) {
-			throw new \UnexpectedValueException( sprintf( 'Unexpected Presentation Address Type: %s', $presentationAddressType, ) );
-		}
-		return self::PRESENTATION_TO_DOMAIN[$presentationAddressType];
+	public static function presentationAddressTypeToDonorType( string $presentationAddressType ): DonorType {
+		return match ( $presentationAddressType ) {
+			self::PERSON => DonorType::PERSON,
+			self::COMPANY, self::LEGACY_COMPANY => DonorType::COMPANY,
+			self::EMAIL => DonorType::EMAIL,
+			self::ANONYMOUS, self::LEGACY_ANONYMOUS => DonorType::ANONYMOUS,
+			default => throw new \UnexpectedValueException(
+				sprintf( 'Unexpected Presentation Address Type: %s', $presentationAddressType, )
+			)
+		};
 	}
 
-	public static function donorToPresentationAddressType( Donor $donor ): string {
-		$invertedMap = array_flip( self::PRESENTATION_TO_DOMAIN );
-		if ( !isset( $invertedMap[$donor->getDonorType()] ) ) {
-			throw new \UnexpectedValueException( sprintf( 'Unexpected Donor Type: %s', $donor->getDonorType(), ) );
-		}
-		return $invertedMap[$donor->getDonorType()];
+	public static function donorTypeToPresentationAddressType( DonorType $donorType ): string {
+		return match ( $donorType ) {
+			DonorType::PERSON => self::PERSON,
+			DonorType::COMPANY => self::LEGACY_COMPANY,
+			DonorType::EMAIL => self::EMAIL,
+			DonorType::ANONYMOUS => self::LEGACY_ANONYMOUS,
+		};
 	}
-
 }

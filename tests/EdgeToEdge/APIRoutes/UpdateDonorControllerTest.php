@@ -174,7 +174,7 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 
 	private function newPrivateDonorData(): array {
 		return [
-			'addressType' => AddressType::LEGACY_PERSON,
+			'addressType' => AddressType::PERSON,
 			'mailingList' => true,
 			'salutation' => 'Herr',
 			'title' => '',

@@ -37,7 +37,7 @@ class DonationMembershipApplicationAdapter {
 		return array_merge(
 			$donor->getName()->toArray(),
 			[
-				'addressType' => AddressType::donorToPresentationAddressType( $donor ),
+				'addressType' => AddressType::donorTypeToPresentationAddressType( $donor->getDonorType() ),
 				'street' => $donor->getPhysicalAddress()->getStreetAddress(),
 				'postcode' => $donor->getPhysicalAddress()->getPostalCode(),
 				'city' => $donor->getPhysicalAddress()->getCity(),
