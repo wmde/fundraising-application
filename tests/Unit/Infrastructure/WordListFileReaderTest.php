@@ -46,6 +46,9 @@ class WordListFileReaderTest extends TestCase {
 		$this->assertEquals( [ 'one', 'two', 'three', 'techno' ], $stringList->toArray() );
 	}
 
+	/**
+	 * @param array<string, string> $content
+	 */
 	private function getFileFetcherWithContent( array $content ): ErrorLoggingFileFetcher {
 		return new ErrorLoggingFileFetcher( new InMemoryFileFetcher( $content ), new NullLogger() );
 	}

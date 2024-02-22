@@ -25,11 +25,11 @@ class BucketPropertyExtractorTest extends TestCase {
 		$this->campaign2 = new Campaign( 'second_campaign', 's', $start, $end, true );
 	}
 
-	public function testGivenNoBuckets_itReturnsEmptyArray() {
+	public function testGivenNoBuckets_itReturnsEmptyArray(): void {
 		$this->assertSame( [], BucketPropertyExtractor::listBucketIds() );
 	}
 
-	public function testGivenOneBucket_itReturnsItsId() {
+	public function testGivenOneBucket_itReturnsItsId(): void {
 		$templateParams = BucketPropertyExtractor::listBucketIds(
 			new Bucket( 'default', $this->campaign1, true )
 		);
@@ -37,7 +37,7 @@ class BucketPropertyExtractorTest extends TestCase {
 		$this->assertEquals( [ 'campaigns.first_campaign.default' ], $templateParams );
 	}
 
-	public function testMultipleBuckets_itReturnsTheirId() {
+	public function testMultipleBuckets_itReturnsTheirId(): void {
 		$templateParams = BucketPropertyExtractor::listBucketIds(
 			new Bucket( 'default', $this->campaign1, true ),
 			new Bucket( 'default', $this->campaign2, true )

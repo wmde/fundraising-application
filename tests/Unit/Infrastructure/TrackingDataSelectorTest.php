@@ -25,6 +25,9 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $expectedResult, $value );
 	}
 
+	/**
+	 * @return array<int, array<int, array<int, string>|string>>
+	 */
 	public static function preferredValueProvider(): array {
 		return [
 			[ 'chocolate', [ 'chocolate', 'hazelnuts', 'campaign/keyword' ] ],
