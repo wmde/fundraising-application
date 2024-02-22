@@ -119,7 +119,7 @@ fix-cs:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpcbf
 
 stan:
-	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):stan analyse --level=5 --no-progress cli/ src/ tests/
+	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):stan analyse --level=max --no-progress cli/ src/ tests/
 
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
