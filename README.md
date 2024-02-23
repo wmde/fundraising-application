@@ -235,7 +235,7 @@ In the absence of dev-dependencies (i.e. to simulate the vendor/ code on product
     docker build -t wmde/fundraising-frontend-phpstan build/phpstan
     docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/
 
-These tasks are also performed during the [travis](.travis.yml) runs.
+These tasks are also performed during the [DroneCI](.drone.yml) runs.
 
 ## Emails
 
