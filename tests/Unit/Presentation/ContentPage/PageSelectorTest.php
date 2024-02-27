@@ -47,6 +47,9 @@ class PageSelectorTest extends TestCase {
 		$this->pageSelector->getPageId( $slug );
 	}
 
+	/**
+	 * @return array<int, array<int, string>>
+	 */
 	public static function slugsProducingException(): array {
 		return [
 				[ 'PAGE1' ],

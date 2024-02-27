@@ -22,6 +22,9 @@ class CampaignPropertyExtractorTest extends TestCase {
 		$this->assertSame( [ 'f', 's', 'i', 'e' ], $urlKeys );
 	}
 
+	/**
+	 * @return array<Campaign>
+	 */
 	private function givenActiveAndInactiveCampaigns(): array {
 		$now = new CampaignDate();
 		$start = $now->modify( '-2 week' );
