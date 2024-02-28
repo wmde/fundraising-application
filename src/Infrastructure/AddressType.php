@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 
 /**
  * This class is for generating the expected address type strings for the AddDonationRequest und UpdateDonorRequest.
@@ -21,13 +22,13 @@ class AddressType {
 	public const LEGACY_ANONYMOUS = 'anonym';
 
 	private const PRESENTATION_TO_DOMAIN = [
-		self::LEGACY_PERSON => self::PERSON,
-		self::LEGACY_COMPANY => self::COMPANY,
-		self::LEGACY_EMAIL => self::EMAIL,
-		self::LEGACY_ANONYMOUS => self::ANONYMOUS
+		self::LEGACY_PERSON => DonorType::PERSON,
+		self::LEGACY_COMPANY => DonorType::COMPANY,
+		self::LEGACY_EMAIL => DonorType::EMAIL,
+		self::LEGACY_ANONYMOUS => DonorType::ANONYMOUS
 	];
 
-	public static function presentationAddressTypeToDomainAddressType( string $presentationAddressType ): string {
+	public static function presentationAddressTypeToDomainAddressType( string $presentationAddressType ): DonorType {
 		if ( !isset( self::PRESENTATION_TO_DOMAIN[$presentationAddressType] ) ) {
 			throw new \UnexpectedValueException( sprintf( 'Unexpected Presentation Address Type: %s', $presentationAddressType, ) );
 		}
@@ -36,10 +37,10 @@ class AddressType {
 
 	public static function donorToPresentationAddressType( Donor $donor ): string {
 		$invertedMap = array_flip( self::PRESENTATION_TO_DOMAIN );
-		if ( !isset( $invertedMap[$donor->getDonorType()] ) ) {
-			throw new \UnexpectedValueException( sprintf( 'Unexpected Donor Type: %s', $donor->getDonorType(), ) );
+		if ( !isset( $invertedMap[$donor->getDonorType()->name] ) ) {
+			throw new \UnexpectedValueException( sprintf( 'Unexpected Donor Type: %s', $donor->getDonorType()->name, ) );
 		}
-		return $invertedMap[$donor->getDonorType()];
+		return $invertedMap[$donor->getDonorType()->name];
 	}
 
 }

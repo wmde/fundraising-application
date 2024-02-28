@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Validation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\FunValidators\ConstraintViolation;
@@ -93,7 +94,7 @@ class ValidateAddressController {
 		)->getViolations();
 	}
 
-	private function getAddressType( Request $request ): string {
+	private function getAddressType( Request $request ): DonorType {
 		$addressType = $request->get( 'addressType', '' );
 		try {
 			return AddressType::presentationAddressTypeToDomainAddressType( $addressType );

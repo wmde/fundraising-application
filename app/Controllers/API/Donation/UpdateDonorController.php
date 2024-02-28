@@ -83,11 +83,11 @@ class UpdateDonorController extends AbstractApiController {
 	 */
 	private function getAddressType( ParameterBag $params ): DonorType {
 		try {
-			return DonorType::make(
-				AddressType::presentationAddressTypeToDomainAddressType( $params->get( 'addressType', '' ) )
-			);
+			return AddressType::presentationAddressTypeToDomainAddressType(
+					$params->get( 'addressType', '' )
+				);
 		} catch ( \UnexpectedValueException $e ) {
-			return DonorType::ANONYMOUS();
+			return DonorType::ANONYMOUS;
 		}
 	}
 }
