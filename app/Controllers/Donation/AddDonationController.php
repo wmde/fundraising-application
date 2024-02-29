@@ -151,11 +151,9 @@ class AddDonationController {
 	 */
 	private function getSafeDonorType( Request $request ): DonorType {
 		try {
-			return DonorType::make(
-				AddressType::presentationAddressTypeToDomainAddressType( $request->get( 'addressType', '' ) )
-			);
+			return AddressType::presentationAddressTypeToDonorType( $request->get( 'addressType', '' ) );
 		} catch ( \UnexpectedValueException $e ) {
-			return DonorType::ANONYMOUS();
+			return DonorType::ANONYMOUS;
 		}
 	}
 }

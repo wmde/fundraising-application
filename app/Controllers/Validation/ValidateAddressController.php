@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Validation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\FunValidators\ConstraintViolation;
@@ -23,29 +24,36 @@ class ValidateAddressController {
 
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$this->addressValidator = $ffFactory->newAddressValidator();
-
 		$isCompanyWithContact = $this->handleCompanyWithContact( $request );
+		$addressType = $request->get( 'addressType', '' );
 
-		$addressType = $this->getAddressType( $request );
-		if ( $addressType === AddressType::PERSON ) {
-			$nameViolations = $this->getPersonViolations( $request );
-		} elseif ( $addressType === AddressType::COMPANY ) {
-			$nameViolations = $this->getCompanyViolations( $request );
-			if ( $isCompanyWithContact ) {
-				$nameViolations = array_merge( $nameViolations, $this->getPersonViolations( $request ) );
-			}
-		} elseif ( $addressType === AddressType::EMAIL ) {
-			$nameViolations = $this->getPersonViolations( $request );
-		} elseif ( $addressType === AddressType::ANONYMOUS ) {
-			return $this->newSuccessResponse();
-		} else {
+		try {
+			$donorType = $this->getAddressType( $addressType );
+		} catch ( \UnexpectedValueException $e ) {
 			return $this->newErrorResponse(
 				new ConstraintViolation(
-					$addressType,
+					$request->get( 'addressType', '' ),
 					self::VIOLATION_UNKNOWN_ADDRESS_TYPE,
 					'addressType'
 				)
 			);
+		}
+
+		$nameViolations = [];
+
+		switch ( $donorType ) {
+			case DonorType::PERSON:
+			case DonorType::EMAIL:
+				$nameViolations = $this->getPersonViolations( $request );
+				break;
+			case DonorType::COMPANY:
+				$nameViolations = $this->getCompanyViolations( $request );
+				if ( $isCompanyWithContact ) {
+					$nameViolations = array_merge( $nameViolations, $this->getPersonViolations( $request ) );
+				}
+				break;
+			case DonorType::ANONYMOUS:
+				return $this->newSuccessResponse();
 		}
 
 		$violations = array_merge(
@@ -93,13 +101,8 @@ class ValidateAddressController {
 		)->getViolations();
 	}
 
-	private function getAddressType( Request $request ): string {
-		$addressType = $request->get( 'addressType', '' );
-		try {
-			return AddressType::presentationAddressTypeToDomainAddressType( $addressType );
-		} catch ( \UnexpectedValueException $ex ) {
-			return $addressType;
-		}
+	private function getAddressType( string $addressType ): DonorType {
+		return AddressType::presentationAddressTypeToDonorType( $addressType );
 	}
 
 	private function newSuccessResponse(): Response {

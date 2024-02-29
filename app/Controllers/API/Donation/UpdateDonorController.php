@@ -41,7 +41,7 @@ class UpdateDonorController extends AbstractApiController {
 
 		return new JsonResponse( array_merge(
 			[
-				'addressType' => AddressType::donorToPresentationAddressType( $donation->getDonor() ),
+				'addressType' => AddressType::donorTypeToPresentationAddressType( $donation->getDonor()->getDonorType() ),
 				'mailingList' => $donation->getDonor()->isSubscribedToMailingList()
 			],
 			( new DonorDataFormatter() )->getAddressArguments( $donation )
@@ -83,11 +83,9 @@ class UpdateDonorController extends AbstractApiController {
 	 */
 	private function getAddressType( ParameterBag $params ): DonorType {
 		try {
-			return DonorType::make(
-				AddressType::presentationAddressTypeToDomainAddressType( $params->get( 'addressType', '' ) )
-			);
+			return AddressType::presentationAddressTypeToDonorType( $params->get( 'addressType', '' ) );
 		} catch ( \UnexpectedValueException $e ) {
-			return DonorType::ANONYMOUS();
+			return DonorType::ANONYMOUS;
 		}
 	}
 }

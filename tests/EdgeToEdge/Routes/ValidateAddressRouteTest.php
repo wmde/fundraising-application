@@ -65,7 +65,7 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 
 	private function newPersonFormInput(): array {
 		return [
-			'addressType' => AddressType::LEGACY_PERSON,
+			'addressType' => AddressType::PERSON,
 			'salutation' => 'Frau',
 			'title' => 'Prof. Dr.',
 			'company' => '',
