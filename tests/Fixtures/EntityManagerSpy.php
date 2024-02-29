@@ -19,21 +19,11 @@ class EntityManagerSpy extends EntityManager {
 	public function __construct() {
 	}
 
-	/**
-	 * @param mixed $entity
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 */
-	public function persist( $entity ): void {
-		$this->entity = $entity;
+	public function persist( mixed $object ): void {
+		$this->entity = $object;
 	}
 
-	/**
-	 * @param null $entity
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 */
-	public function flush( $entity = null ) {
+	public function flush( mixed $entity = null ): void {
 	}
 
 	public function getEntity(): ?object {
