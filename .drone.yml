@@ -26,6 +26,9 @@ steps:
       - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
       - composer config -g github-oauth.github.com "$GITHUB_TOKEN"
       - composer install --prefer-dist --no-progress --no-interaction
+      # Check environment
+      - echo "CACHE_PATH_DEBUG=$DRONE_REPO_OWNER/$DRONE_REPO_NAME/$DRONE_JOB_NUMBER"
+      - echo -e "DRONE_BUILD_ACTION=$DRONE_BUILD_ACTION\n DRONE_BUILD_CREATED=$DRONE_BUILD_CREATED\n DRONE_BUILD_EVENT=$DRONE_BUILD_EVENT\n DRONE_BUILD_FINISHED=$DRONE_BUILD_FINISHED\n DRONE_BUILD_LINK=$DRONE_BUILD_LINK\n DRONE_BUILD_NUMBER=$DRONE_BUILD_NUMBER\n DRONE_BUILD_PARENT=$DRONE_BUILD_PARENT\n DRONE_BUILD_STARTED=$DRONE_BUILD_STARTED\n DRONE_BUILD_STATUS=$DRONE_BUILD_STATUS\n DRONE_BUILD_TRIGGER=$DRONE_BUILD_TRIGGER\n"
       # CI
       - vendor/bin/phpcs
       - php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-clover coverage.xml
