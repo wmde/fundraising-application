@@ -127,7 +127,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\FileFeatureReader;
-use WMDE\Fundraising\Frontend\Infrastructure\JsonStringReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\AdminModerationMailRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
@@ -439,39 +438,24 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function getGetInTouchCategories(): array {
-		$json = ( new JsonStringReader(
-			$this->getI18nDirectory() . '/data/contact_categories.json',
-			new SimpleFileFetcher()
-		) )->readAndValidateJson();
+		$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/contact_categories.json' );
 		return json_decode( $json, true );
 	}
 
 	public function getApplicationOfFundsContent(): string {
-		return ( new JsonStringReader(
-			$this->getI18nDirectory() . '/data/use_of_funds_content.json',
-			new SimpleFileFetcher()
-		) )->readAndValidateJson();
+		return ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/use_of_funds_content.json' );
 	}
 
 	public function getApplicationOfFundsMessages(): string {
-		return ( new JsonStringReader(
-			$this->getI18nDirectory() . '/messages/useOfFundsMessages.json',
-			new SimpleFileFetcher()
-		) )->readAndValidateJson();
+		return ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/messages/useOfFundsMessages.json' );
 	}
 
 	public function getFaqContent(): string {
-		return ( new JsonStringReader(
-			$this->getI18nDirectory() . '/data/faq.json',
-			new SimpleFileFetcher()
-		) )->readAndValidateJson();
+		return ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/faq.json' );
 	}
 
 	public function getSupportersList(): string {
-		return ( new JsonStringReader(
-			$this->getI18nDirectory() . '/data/supporters.json',
-			new SimpleFileFetcher()
-		) )->readAndValidateJson();
+		return ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/supporters.json' );
 	}
 
 	public function getSkinTwig(): Environment {
@@ -1403,20 +1387,12 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function getCountries(): array {
-		$json = ( new JsonStringReader(
-			$this->getI18nDirectory() . '/data/countries.json',
-			new SimpleFileFetcher()
-		) )->readAndValidateJson();
-
+		$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/countries.json' );
 		return ( json_decode( $json ) )->countries;
 	}
 
 	public function getValidationRules(): object {
-		$json = ( new JsonStringReader(
-			$this->getI18nDirectory() . '/data/validation.json',
-			new SimpleFileFetcher()
-		) )->readAndValidateJson();
-
+		$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/validation.json' );
 		return json_decode( $json );
 	}
 
