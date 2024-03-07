@@ -58,22 +58,32 @@ class AddressChangeController extends AbstractApiController {
 		$receiptOptOut = $params->get( 'receiptOptOut', false );
 		$isOptOutOnly = $receiptOptOut && $this->areAllOptOutOnlyFieldsEmpty( $addressType, $params );
 
-		$request = new ChangeAddressRequest();
-		$request->setIdentifier( $identifier )
-			->setAddressType( $addressType )
-			->setFirstName( $params->get( 'firstName', '' ) )
-			->setLastName( $params->get( 'lastName', '' ) )
-			->setSalutation( $params->get( 'salutation', '' ) )
-			->setTitle( $params->get( 'title', '' ) )
-			->setCompany( $params->get( 'company', '' ) )
-			->setAddress( $params->get( 'street', '' ) )
-			->setPostcode( $params->get( 'postcode', '' ) )
-			->setCity( $params->get( 'city', '' ) )
-			->setCountry( $params->get( 'country', 'DE' ) )
-			->setDonationReceipt( !$receiptOptOut )
-			->setIsOptOutOnly( $isOptOutOnly );
-
-		return $request;
+		if ( $addressType == AddressType::Person ) {
+			return ChangeAddressRequest::newPersonalChangeAddressRequest(
+				salutation: $params->get( 'salutation', '' ),
+				title: $params->get( 'title', '' ),
+				firstName: $params->get( 'firstName', '' ),
+				lastName: $params->get( 'lastName', '' ),
+				address: $params->get( 'street', '' ),
+				postcode: $params->get( 'postcode', '' ),
+				city: $params->get( 'city', '' ),
+				country: $params->get( 'country', 'DE' ),
+				identifier: $identifier,
+				donationReceipt: !$receiptOptOut,
+				isOptOutOnly: $isOptOutOnly,
+			);
+		} else {
+			return ChangeAddressRequest::newCompanyChangeAddressRequest(
+				company: $params->get( 'company', '' ),
+				address: $params->get( 'street', '' ),
+				postcode: $params->get( 'postcode', '' ),
+				city: $params->get( 'city', '' ),
+				country: $params->get( 'country', 'DE' ),
+				identifier: $identifier,
+				donationReceipt: !$receiptOptOut,
+				isOptOutOnly: $isOptOutOnly,
+			);
+		}
 	}
 
 	private function areAllOptOutOnlyFieldsEmpty( AddressType $addressType, ParameterBag $params ): bool {
