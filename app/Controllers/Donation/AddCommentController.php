@@ -42,19 +42,12 @@ class AddCommentController {
 	}
 
 	private function buildAddCommentRequest( ParameterBag $postVars ): AddCommentRequest {
-		$addCommentRequest = new AddCommentRequest();
-		$addCommentRequest->setCommentText( trim( $postVars->get( 'comment', '' ) ) );
-		$addCommentRequest->setIsPublic( $postVars->getBoolean( 'isPublic' ) );
-		$addCommentRequest->setDonationId( (int)$postVars->get( 'donationId', '' ) );
-
-		if ( $postVars->getBoolean( 'withName' ) ) {
-			$addCommentRequest->setIsNamed();
-		} else {
-			$addCommentRequest->setIsAnonymous();
-		}
-
-		$addCommentRequest->freeze()->assertNoNullFields();
-		return $addCommentRequest;
+		return new AddCommentRequest(
+			commentText: trim( $postVars->get( 'comment', '' ) ),
+			isPublic: $postVars->getBoolean( 'isPublic' ),
+			isAnonymous: $postVars->getBoolean( 'withName' ),
+			donationId: (int)$postVars->get( 'donationId', '' ),
+		);
 	}
 
 	private function newErrorResponse( string $message ): Response {

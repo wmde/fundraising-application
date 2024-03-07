@@ -60,7 +60,7 @@ class DonationConfirmationHtmlPresenter {
 			'addressValidationPatterns' => $this->addressValidationPatterns,
 			'addressType' => AddressType::donorTypeToPresentationAddressType( $donation->getDonor()->getDonorType() ),
 			'address' => $donorDataFormatter->getAddressArguments( $donation ),
-			'tracking' => $donation->getTrackingInfo()->getTracking(),
+			'tracking' => $donation->getTrackingInfo()->tracking,
 			'bankData' => [
 				'iban' => $paymentData['iban'] ?? '',
 				'bic' => $paymentData['bic'] ?? '',

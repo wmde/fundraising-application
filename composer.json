@@ -16,13 +16,12 @@
 		"wmde/email-address": "~1.0",
 		"wmde/euro": "~1.0",
 		"wmde/clock": "~1.0",
-		"wmde/fundraising-donations": "~17.0",
-		"wmde/fundraising-memberships": "~14.0",
+		"wmde/fundraising-donations": "~18.0",
+		"wmde/fundraising-memberships": "~15.0",
 		"wmde/fundraising-payments": "~7.0",
 		"wmde/fundraising-subscriptions": "~5.0",
 		"wmde/fundraising-content-provider": "~6.0",
-		"wmde/fundraising-address-change": "~3.0",
-		"wmde/freezable-value-object": "~2.0",
+		"wmde/fundraising-address-change": "~4.0",
 		"wmde/fun-validators": "~4.1",
 
 		"symfony/asset": "~6.0",
@@ -148,7 +147,7 @@
 			"composer/package-versions-deprecated": true
 		},
 		"platform": {
-			"php": "8.1"
+			"php": "8.3"
 		}
 	}
 }
