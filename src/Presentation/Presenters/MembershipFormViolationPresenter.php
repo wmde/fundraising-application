@@ -26,21 +26,21 @@ class MembershipFormViolationPresenter {
 	}
 
 	private function getMembershipFormArguments( ApplyForMembershipRequest $request ): array {
-		$paymentParameters = $request->getPaymentParameters();
+		$paymentParameters = $request->paymentParameters;
 		$bankData = $this->bankDataGenerator->getBankDataFromIban( new Iban( $paymentParameters->iban ) );
 
 		return [
 			'addressType' => $request->isCompanyApplication() ? 'firma' : 'person',
-			'salutation' => $request->getApplicantSalutation(),
-			'title' => $request->getApplicantTitle(),
-			'firstName' => $request->getApplicantFirstName(),
-			'lastName' => $request->getApplicantLastName(),
-			'companyName' => $request->getApplicantCompanyName(),
-			'street' => $request->getApplicantStreetAddress(),
-			'postcode' => $request->getApplicantPostalCode(),
-			'city' => $request->getApplicantCity(),
-			'country' => $request->getApplicantCountryCode(),
-			'email' => $request->getApplicantEmailAddress(),
+			'salutation' => $request->applicantSalutation,
+			'title' => $request->applicantTitle,
+			'firstName' => $request->applicantFirstName,
+			'lastName' => $request->applicantLastName,
+			'companyName' => $request->applicantCompanyName,
+			'street' => $request->applicantStreetAddress,
+			'postcode' => $request->applicantPostalCode,
+			'city' => $request->applicantCity,
+			'country' => $request->applicantCountryCode,
+			'email' => $request->applicantEmailAddress,
 			'iban' => $paymentParameters->iban,
 			'bic' => $paymentParameters->bic,
 			'accountNumber' => $bankData->account,

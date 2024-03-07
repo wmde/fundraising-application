@@ -47,49 +47,48 @@ class ApplyForMembershipController {
 	private function callUseCase( Request $httpRequest ): ApplyForMembershipResponse {
 		$applyForMembershipRequest = $this->createMembershipRequest( $httpRequest );
 
-		$applyForMembershipRequest->assertNoNullFields()->freeze();
-
 		return $this->ffFactory->newApplyForMembershipUseCase()->applyForMembership( $applyForMembershipRequest );
 	}
 
 	private function createMembershipRequest( Request $httpRequest ): ApplyForMembershipRequest {
-		$request = new ApplyForMembershipRequest();
-
-		$request->setMembershipType( $httpRequest->request->get( 'membership_type', '' ) );
-
-		if ( $httpRequest->request->get( 'adresstyp', '' ) === 'firma' ) {
-			$request->markApplicantAsCompany();
-		}
-
-		$request->setApplicantSalutation( $httpRequest->request->get( 'anrede', '' ) );
-		$request->setApplicantTitle( $httpRequest->request->get( 'titel', '' ) );
-		$request->setApplicantFirstName( $httpRequest->request->get( 'vorname', '' ) );
-		$request->setApplicantLastName( $httpRequest->request->get( 'nachname', '' ) );
-		$request->setApplicantCompanyName( $httpRequest->request->get( 'firma', '' ) );
-
-		$request->setApplicantStreetAddress( $this->filterAutofillCommas( $httpRequest->request->get( 'strasse', '' ) ) );
-		$request->setApplicantPostalCode( $httpRequest->request->get( 'postcode', '' ) );
-		$request->setApplicantCity( $httpRequest->request->get( 'ort', '' ) );
-		$request->setApplicantCountryCode( $httpRequest->request->get( 'country', '' ) );
-
-		$request->setApplicantEmailAddress( $httpRequest->request->get( 'email', '' ) );
-		$request->setApplicantPhoneNumber( $httpRequest->request->get( 'phone', '' ) );
-		$request->setApplicantDateOfBirth( $httpRequest->request->get( 'dob', '' ) );
-
-		$request->setPaymentParameters( $this->newPaymentParameters( $httpRequest ) );
-
-		$request->setTrackingInfo( new MembershipApplicationTrackingInfo(
+		$trackingInfo = new MembershipApplicationTrackingInfo(
 			$httpRequest->request->get( 'templateCampaign', '' ),
 			$httpRequest->request->get( 'templateName', '' )
-		) );
+		);
 
-		$request->setPiwikTrackingString( $httpRequest->attributes->get( 'trackingCode', '' ) );
-
-		$request->setOptsIntoDonationReceipt( $httpRequest->request->getBoolean( 'donationReceipt', true ) );
-
-		$request->setIncentives( array_filter( $httpRequest->request->all( 'incentives' ) ) );
-
-		return $request;
+		if ( $httpRequest->request->get( 'adresstyp', '' ) === 'firma' ) {
+			return ApplyForMembershipRequest::newCompanyApplyForMembershipRequest(
+				membershipType: $httpRequest->request->get( 'membership_type', '' ),
+				applicantCompanyName: $httpRequest->request->get( 'firma', '' ),
+				applicantStreetAddress: $this->filterAutofillCommas( $httpRequest->request->get( 'strasse', '' ) ),
+				applicantPostalCode: $httpRequest->request->get( 'postcode', '' ),
+				applicantCity: $httpRequest->request->get( 'ort', '' ),
+				applicantCountryCode: $httpRequest->request->get( 'country', '' ),
+				applicantEmailAddress: $httpRequest->request->get( 'email', '' ),
+				optsIntoDonationReceipt: $httpRequest->request->getBoolean( 'donationReceipt', true ),
+				incentives: array_filter( $httpRequest->request->all( 'incentives' ) ),
+				paymentParameters: $this->newPaymentParameters( $httpRequest ),
+				trackingInfo: $trackingInfo,
+			);
+		} else {
+			return ApplyForMembershipRequest::newPrivateApplyForMembershipRequest(
+				membershipType: $httpRequest->request->get( 'membership_type', '' ),
+				applicantSalutation: $httpRequest->request->get( 'anrede', '' ),
+				applicantTitle: $httpRequest->request->get( 'titel', '' ),
+				applicantFirstName: $httpRequest->request->get( 'vorname', '' ),
+				applicantLastName: $httpRequest->request->get( 'nachname', '' ),
+				applicantStreetAddress: $this->filterAutofillCommas( $httpRequest->request->get( 'strasse', '' ) ),
+				applicantPostalCode: $httpRequest->request->get( 'postcode', '' ),
+				applicantCity: $httpRequest->request->get( 'ort', '' ),
+				applicantCountryCode: $httpRequest->request->get( 'country', '' ),
+				applicantEmailAddress: $httpRequest->request->get( 'email', '' ),
+				optsIntoDonationReceipt: $httpRequest->request->getBoolean( 'donationReceipt', true ),
+				incentives: array_filter( $httpRequest->request->all( 'incentives' ) ),
+				paymentParameters: $this->newPaymentParameters( $httpRequest ),
+				trackingInfo: $trackingInfo,
+				applicantDateOfBirth: $httpRequest->request->get( 'dob', '' ),
+			);
+		}
 	}
 
 	private function newPaymentParameters( Request $httpRequest ): PaymentParameters {
