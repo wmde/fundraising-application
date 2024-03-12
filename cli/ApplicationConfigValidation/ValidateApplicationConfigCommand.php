@@ -53,7 +53,12 @@ class ValidateApplicationConfigCommand extends Command {
 		$configObject = $this->loadConfigObjectFromFiles( $input->getArgument( 'config_file' ) );
 
 		if ( $input->getOption( 'dump-config' ) ) {
-			$output->writeln( json_encode( $configObject, JSON_PRETTY_PRINT ) );
+			$result = json_encode( $configObject, JSON_PRETTY_PRINT );
+			if ( $result === false ) {
+				throw new \RuntimeException( sprintf( "Failed to get JSON representation of: %s",
+					var_export( $configObject, true ) ) );
+			}
+			$output->writeln( $result );
 		}
 
 		$schema = ( new SchemaLoader( new SimpleFileFetcher() ) )->loadSchema( $input->getOption( 'schema' ) );

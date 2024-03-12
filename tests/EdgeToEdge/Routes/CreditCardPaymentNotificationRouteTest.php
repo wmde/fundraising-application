@@ -46,8 +46,13 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( 1, $logger->getLogCalls()->count() );
-			$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
-			$this->assertStringContainsString( 'msg=', $client->getResponse()->getContent() );
+			$content = $client->getResponse()->getContent();
+			if ( $content === false ) {
+				throw new \RuntimeException( sprintf( "Failed to get the content of: %s",
+					var_export( $client->getResponse(), true ) ) );
+			}
+			$this->assertStringContainsString( "status=error\n", $content );
+			$this->assertStringContainsString( 'msg=', $content );
 		} );
 	}
 
@@ -63,8 +68,13 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 				]
 			);
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
-			$this->assertStringContainsString( 'msg=Function "error" not supported by this end point', $client->getResponse()->getContent() );
+			$content = $client->getResponse()->getContent();
+			if ( $content === false ) {
+				throw new \RuntimeException( sprintf( "Failed to get the content of: %s",
+					var_export( $client->getResponse(), true ) ) );
+			}
+			$this->assertStringContainsString( "status=error\n", $content );
+			$this->assertStringContainsString( 'msg=Function "error" not supported by this end point', $content );
 		} );
 	}
 
@@ -100,10 +110,15 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertStringContainsString( "status=ok\n", $client->getResponse()->getContent() );
+			$content = $client->getResponse()->getContent();
+			if ( $content === false ) {
+				throw new \RuntimeException( sprintf( "Failed to get the content of: %s",
+					var_export( $client->getResponse(), true ) ) );
+			}
+			$this->assertStringContainsString( "status=ok\n", $content );
 			$this->assertStringContainsString(
 				"url=http://my.donation.app/show-donation-confirmation?id=1&accessToken=my_secret_access_token\n",
-				$client->getResponse()->getContent()
+				$content
 			);
 			$this->assertCreditCardDataGotPersisted(
 				$factory->getDonationRepository(),
@@ -122,8 +137,13 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
-			$this->assertStringContainsString( "msg=Donation not found\n", $client->getResponse()->getContent() );
+			$content = $client->getResponse()->getContent();
+			if ( $content === false ) {
+				throw new \RuntimeException( sprintf( "Failed to get the content of: %s",
+					var_export( $client->getResponse(), true ) ) );
+			}
+			$this->assertStringContainsString( "status=error\n", $content );
+			$this->assertStringContainsString( "msg=Donation not found\n", $content );
 		} );
 	}
 
@@ -160,7 +180,12 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 
 			$this->assertSame( 500, $client->getResponse()->getStatusCode() );
-			$this->assertStringContainsString( "Could not get donation", $client->getResponse()->getContent() );
+			$content = $client->getResponse()->getContent();
+			if ( $content === false ) {
+				throw new \RuntimeException( sprintf( "Failed to get the content of: %s",
+					var_export( $client->getResponse(), true ) ) );
+			}
+			$this->assertStringContainsString( "Could not get donation", $content );
 		} );
 	}
 

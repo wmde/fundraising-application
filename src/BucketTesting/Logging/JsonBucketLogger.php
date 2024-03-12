@@ -20,7 +20,12 @@ class JsonBucketLogger implements BucketLogger {
 	}
 
 	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void {
-		$this->logWriter->write( json_encode( $this->formatData( $event, ...$buckets ) ) );
+		$result = json_encode( $this->formatData( $event, ...$buckets ) );
+		if ( $result === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get JSON representation of: %s",
+				var_export( $this->formatData( $event, ...$buckets ), true ) ) );
+		}
+		$this->logWriter->write( $result );
 	}
 
 	private function formatData( LoggingEvent $event, Bucket ...$buckets ): array {

@@ -177,7 +177,12 @@ abstract class WebRouteTestCase extends KernelTestCase {
 
 	protected function assertJsonSuccessResponse( array $expected, Response $response ): void {
 		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
-		$this->assertJson( $response->getContent(), 'response is json' );
+		$content = $response->getContent();
+		if ( $content === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get the content of: %s",
+				var_export( $response, true ) ) );
+		}
+		$this->assertJson( $content, 'response is json' );
 		$this->assertJsonResponse( $expected, $response );
 	}
 
@@ -195,8 +200,17 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	}
 
 	protected function getJsonFromResponse( Response $response ): array {
-		$this->assertJson( $response->getContent(), 'response is json' );
-		return json_decode( $response->getContent(), true );
+		$content = $response->getContent();
+		if ( $content === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get the content of: %s",
+				var_export( $response, true ) ) );
+		}
+		$this->assertJson( $content, 'response is json' );
+		$result = json_decode( $content, true );
+		if ( $result === false ) {
+			throw new \RuntimeException( 'Failed to get JSON representation of: ' . $content );
+		}
+		return $result;
 	}
 
 	protected function assertSuccessJsonResponse( Response $response ): void {

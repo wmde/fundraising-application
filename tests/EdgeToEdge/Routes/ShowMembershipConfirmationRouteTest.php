@@ -124,7 +124,12 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	}
 
 	private function assertAccessIsDenied( string $expectedMessage, Client $client ): void {
-		$this->assertStringContainsString( $expectedMessage, $client->getResponse()->getContent() );
+		$content = $client->getResponse()->getContent();
+		if ( $content === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get the content of: %s",
+				var_export( $client->getResponse(), true ) ) );
+		}
+		$this->assertStringContainsString( $expectedMessage, $content );
 		$this->assertTrue( $client->getResponse()->isForbidden() );
 	}
 

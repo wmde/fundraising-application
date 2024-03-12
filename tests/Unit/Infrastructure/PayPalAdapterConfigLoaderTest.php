@@ -91,9 +91,13 @@ class PayPalAdapterConfigLoaderTest extends TestCase {
 	}
 
 	private function givenConfigFile(): vfsStreamFile {
+		$content = file_get_contents( self::TEST_CONFIG_FILE );
+		if ( $content === false ) {
+			throw new \RuntimeException( 'Failed to find the file content of: ' . self::TEST_CONFIG_FILE );
+		}
 		return vfsStream::newFile( 'paypal_api.yml' )
 			->at( $this->filesystem )
-			->setContent( file_get_contents( self::TEST_CONFIG_FILE ) )
+			->setContent( $content )
 			->lastModified( 1611619200 );
 	}
 }

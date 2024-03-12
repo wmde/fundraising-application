@@ -39,7 +39,12 @@ class WebTemplatingFactory extends TwigFactory {
 			new TwigFunction(
 				'translations',
 				function (): string {
-					return json_encode( $this->translations );
+					$result = json_encode( $this->translations );
+					if ( $result === false ) {
+						throw new \RuntimeException( sprintf( "Failed to get JSON representation of: %s",
+							var_export( $this->translations, true ) ) );
+					}
+					return $result;
 				},
 				[ 'is_safe' => [ 'html' ] ]
 			),

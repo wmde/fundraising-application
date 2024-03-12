@@ -38,10 +38,15 @@ class ConfigReaderTest extends TestCase {
 	}
 
 	private function getDistConfigContents(): string {
-		return json_encode(
+		$result = json_encode(
 			$this->getDistConfig(),
 			JSON_PRETTY_PRINT
 		);
+		if ( $result === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get JSON representation of: %s",
+				var_export( $this->getDistConfig(), true ) ) );
+		}
+		return $result;
 	}
 
 	private function getDistConfig(): array {
@@ -57,7 +62,7 @@ class ConfigReaderTest extends TestCase {
 	}
 
 	private function getInstanceConfigContents(): string {
-		return json_encode(
+		$result = json_encode(
 			[
 				'db' => [
 					'user' => 'nyan',
@@ -67,6 +72,17 @@ class ConfigReaderTest extends TestCase {
 			],
 			JSON_PRETTY_PRINT
 		);
+		if ( $result === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get JSON representation of: %s", var_export(
+				[
+					'db' => [
+						'user' => 'nyan',
+						'password' => 'cat'
+					],
+					'unicorns' => [ 'foo', 'bar', 'baz' ]
+				], true ) ) );
+		}
+		return $result;
 	}
 
 	public function testReadSingleConfigFile(): void {

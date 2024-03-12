@@ -75,7 +75,12 @@ class ConfigReader {
 		if ( empty( $config['twig']['loaders']['array'] ) ) {
 			$config['twig']['loaders']['array'] = new stdClass();
 		}
-		return json_decode( json_encode( $config ), false );
+		$result = json_encode( $config );
+		if ( $result === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get JSON representation of: %s",
+				var_export( $config, true ) ) );
+		}
+		return json_decode( $result, false );
 	}
 
 }

@@ -105,6 +105,11 @@ class CampaignUtilizationValidator {
 	}
 
 	private function getCampaignNameFromFeatureToggle( string $featureToggle ): string {
-		return substr( $featureToggle, 0, strrpos( $featureToggle, '.' ) );
+		$strpos = strrpos( $featureToggle, '.' );
+		if ( $strpos === false ) {
+			throw new \RuntimeException( 'Failed to find the position of the last occurrence of "." 
+			in the string: ' . $featureToggle );
+		}
+		return substr( $featureToggle, 0, $strpos );
 	}
 }

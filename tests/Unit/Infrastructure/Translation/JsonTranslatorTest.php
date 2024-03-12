@@ -47,16 +47,24 @@ class JsonTranslatorTest extends TestCase {
 	}
 
 	private function newTranslationSource(): InMemoryFileFetcher {
-		$source = new InMemoryFileFetcher(
+		$result = json_encode(
 			[
-				'testytest_messages.json' => json_encode(
-					[
-						'donate_now' => 'Jetzt spenden',
-						'you_will_pay' => 'Sie spenden %amount% %interval%'
-					]
-				) ]
+				'donate_now' => 'Jetzt spenden',
+				'you_will_pay' => 'Sie spenden %amount% %interval%'
+			]
 		);
-		return $source;
+		if ( $result === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get JSON representation of: %s", var_export(
+				[
+					'donate_now' => 'Jetzt spenden',
+					'you_will_pay' => 'Sie spenden %amount% %interval%'
+				], true ) ) );
+		}
+		return new InMemoryFileFetcher(
+			[
+				'testytest_messages.json' => $result
+			]
+		);
 	}
 
 }

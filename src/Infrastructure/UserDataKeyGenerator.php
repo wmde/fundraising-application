@@ -20,7 +20,12 @@ class UserDataKeyGenerator {
 
 	public function getDailyKey(): string {
 		$now = $this->time->now();
-		$daysSince2020 = abs( $now->diff( new \DateTimeImmutable( self::START_TIME ) )->days );
+		$days = $now->diff( new \DateTimeImmutable( self::START_TIME ) )->days;
+		if ( $days === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get the total number of days in the interval span: %s",
+				var_export( $now->diff( new \DateTimeImmutable( self::START_TIME ) ), true ) ) );
+		}
+		$daysSince2020 = abs( $days );
 		return sodium_bin2base64(
 			sodium_crypto_kdf_derive_from_key(
 				32,

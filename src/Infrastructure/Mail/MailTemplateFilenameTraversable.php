@@ -14,7 +14,12 @@ class MailTemplateFilenameTraversable implements \IteratorAggregate {
 	}
 
 	public function getIterator(): \Iterator {
-		foreach ( glob( $this->mailTemplatePath . '/*\.twig' ) as $fileName ) {
+		$glob = glob( $this->mailTemplatePath . '/*\.twig' );
+		if ( $glob === false ) {
+			throw new \RuntimeException( sprintf( "Failed to find path name: %s",
+				var_export( $this->mailTemplatePath . '/*\.twig', true ) ) );
+		}
+		foreach ( $glob as $fileName ) {
 			yield basename( $fileName );
 		}
 	}

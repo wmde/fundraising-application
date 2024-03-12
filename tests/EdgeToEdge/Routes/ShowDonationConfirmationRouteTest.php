@@ -145,7 +145,12 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertDonationIsNotShown( $this->donation, $client->getResponse()->getContent() );
+			$content = $client->getResponse()->getContent();
+			if ( $content === false ) {
+				throw new \RuntimeException( sprintf( "Failed to get the content of: %s",
+					var_export( $client->getResponse(), true ) ) );
+			}
+			$this->assertDonationIsNotShown( $this->donation, $content );
 		} );
 	}
 

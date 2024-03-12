@@ -47,7 +47,11 @@ class FileFeatureReaderTest extends TestCase {
 				'active' => false
 			],
 		];
-		$reader = new FileFeatureReader( new InMemoryFileFetcher( [ 'features.json' => json_encode( $rawFeatures ) ] ), 'features.json', $logger );
+		$result = json_encode( $rawFeatures );
+		if ( $result === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get JSON representation of: %s", var_export( $rawFeatures, true ) ) );
+		}
+		$reader = new FileFeatureReader( new InMemoryFileFetcher( [ 'features.json' => $result ] ), 'features.json', $logger );
 
 		$features = $reader->getFeatures();
 
@@ -70,11 +74,18 @@ class FileFeatureReaderTest extends TestCase {
 
 	public function testGivenFeaturesWithoutNames_willBeSkipped(): void {
 		$logger = new LoggerSpy();
-		$featuresStr = json_encode( [
+		$result = json_encode( [
 			[ 'active' => false ],
 			[ 'name' => 'inactive_feature' ]
 		] );
-		$reader = new FileFeatureReader( new InMemoryFileFetcher( [ 'some_file.json' => $featuresStr ] ), 'some_file.json', $logger );
+		if ( $result === false ) {
+			throw new \RuntimeException( sprintf( "Failed to get JSON representation of: %s", var_export(
+				[
+					[ 'active' => false ],
+					[ 'name' => 'inactive_feature' ]
+				], true ) ) );
+		}
+		$reader = new FileFeatureReader( new InMemoryFileFetcher( [ 'some_file.json' => $result ] ), 'some_file.json', $logger );
 
 		$features = $reader->getFeatures();
 
