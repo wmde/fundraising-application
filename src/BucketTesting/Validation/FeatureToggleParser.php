@@ -22,7 +22,7 @@ class FeatureToggleParser {
 
 	/**
 	 * @param string $choiceFactoryLocation
-	 * @return array<int, Node\Expr>
+	 * @return string[]
 	 */
 	public static function getFeatureToggleChecks( string $choiceFactoryLocation ): array {
 		$featureToggleChecks = [];
@@ -35,8 +35,11 @@ class FeatureToggleParser {
 			if ( ( $argument instanceof VariadicPlaceholder ) ) {
 				throw new \LogicException( self::FEATURE_TOGGLE_METHOD_NAME . ' should have exactly one argument, not a variadic argument.' );
 			}
+
+			// Currently we know that `$argument->value` is a string and not a `Expr` class.
 			$featureToggleChecks[] = $argument->value;
 		}
+		// @phpstan-ignore-next-line
 		return $featureToggleChecks;
 	}
 

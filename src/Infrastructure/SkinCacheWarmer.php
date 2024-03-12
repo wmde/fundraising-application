@@ -44,7 +44,11 @@ class SkinCacheWarmer implements CacheWarmerInterface {
 	private function getTemplates(): array {
 		$cacheDirectory = $this->funFunFactory->getSkinDirectory();
 		$templates = [];
-		foreach ( scandir( $cacheDirectory ) as $file ) {
+		$scandir = scandir( $cacheDirectory );
+		if ( $scandir === false ) {
+			throw new \RuntimeException( 'Failed to list files and directories inside this specified path: ' . $cacheDirectory );
+		}
+		foreach ( $scandir as $file ) {
 			if ( !is_dir( $file ) && str_contains( $file, '.twig' ) ) {
 				$templates[] = $file;
 			}

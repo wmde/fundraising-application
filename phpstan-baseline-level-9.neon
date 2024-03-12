@@ -1,0 +1,51 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#2 \\$haystack of method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, string\\|false given\\.$#"
+			count: 9
+			path: tests/EdgeToEdge/Routes/CreditCardPaymentNotificationRouteTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$responseContent of method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\EdgeToEdge\\\\Routes\\\\ShowDonationConfirmationRouteTest\\:\\:assertDonationIsNotShown\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: tests/EdgeToEdge/Routes/ShowDonationConfirmationRouteTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$haystack of method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: tests/EdgeToEdge/Routes/ShowMembershipConfirmationRouteTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$actual of method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
+			count: 2
+			path: tests/EdgeToEdge/WebRouteTestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
+			count: 1
+			path: tests/EdgeToEdge/WebRouteTestCase.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\Unit\\\\Infrastructure\\\\ConfigReaderTest\\:\\:getDistConfigContents\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: tests/Unit/Infrastructure/ConfigReaderTest.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\Unit\\\\Infrastructure\\\\ConfigReaderTest\\:\\:getInstanceConfigContents\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: tests/Unit/Infrastructure/ConfigReaderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$files of class FileFetcher\\\\InMemoryFileFetcher constructor expects array\\<string, string\\>, array\\<string, string\\|false\\> given\\.$#"
+			count: 2
+			path: tests/Unit/Infrastructure/FileFeatureReaderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$content of method org\\\\bovigo\\\\vfs\\\\vfsStreamFile\\:\\:setContent\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: tests/Unit/Infrastructure/PayPalAdapterConfigLoaderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$files of class FileFetcher\\\\InMemoryFileFetcher constructor expects array\\<string, string\\>, array\\<string, string\\|false\\> given\\.$#"
+			count: 1
+			path: tests/Unit/Infrastructure/Translation/JsonTranslatorTest.php
