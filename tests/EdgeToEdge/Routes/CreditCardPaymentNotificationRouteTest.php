@@ -11,7 +11,6 @@ use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
-use WMDE\Fundraising\PaymentContext\Domain\PaymentRepository;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
@@ -30,7 +29,6 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	private const TITLE = 'Your generous donation';
 	private const COUNTRY_CODE = 'DE';
 	private const CURRENCY_CODE = 'EUR';
-	private const STATUS = 'processed';
 
 	private const PATH = '/handle-creditcard-payment-notification';
 
@@ -52,20 +50,21 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenNonBillingRequest_applicationIndicatesError(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$client->request(
-				Request::METHOD_GET,
-				self::PATH,
-				[
-					'function' => 'error',
-					'errorcode' => 'ipg04',
-					'errormessage' => 'Card used is not permitted',
-				]
-			);
-			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
-			$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
-			$this->assertStringContainsString( 'msg=Function "error" not supported by this end point', $client->getResponse()->getContent() );
-		} );
+		$client = $this->createClient();
+
+		$client->request(
+			Request::METHOD_GET,
+			self::PATH,
+			[
+				'function' => 'error',
+				'errorcode' => 'ipg04',
+				'errormessage' => 'Card used is not permitted',
+			]
+		);
+
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'msg=Function "error" not supported by this end point', $client->getResponse()->getContent() );
 	}
 
 	public function testGivenNonBillingRequest_applicationLogsRequest(): void {
@@ -96,7 +95,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_GET,
 				self::PATH,
-				$this->newRequest()
+				$this->newDefaultRequestParametersFromMCP()
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
@@ -107,8 +106,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			);
 			$this->assertCreditCardDataGotPersisted(
 				$factory->getDonationRepository(),
-				$factory->getPaymentRepository(),
-				$this->newRequest()
+				$this->newDefaultRequestParametersFromMCP()
 			);
 		} );
 	}
@@ -118,7 +116,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_GET,
 				self::PATH,
-				$this->newRequest()
+				$this->newDefaultRequestParametersFromMCP()
 			);
 
 			$this->assertSame( 200, $client->getResponse()->getStatusCode() );
@@ -131,7 +129,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$logger = new LoggerSpy();
 			$factory->setLogger( $logger );
-			$requestData = $this->newRequest();
+			$requestData = $this->newDefaultRequestParametersFromMCP();
 
 			$client->request(
 				Request::METHOD_GET,
@@ -156,7 +154,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_GET,
 				self::PATH,
-				$this->newRequest()
+				$this->newDefaultRequestParametersFromMCP()
 			);
 
 			$this->assertSame( 500, $client->getResponse()->getStatusCode() );
@@ -176,7 +174,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			$client->request(
 				Request::METHOD_GET,
 				self::PATH,
-				$this->newRequest()
+				$this->newDefaultRequestParametersFromMCP()
 			);
 
 			$this->assertSame( 1, $logger->getLogCalls()->count() );
@@ -186,7 +184,10 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	private function newRequest(): array {
+	/**
+	 * @return array<string,scalar>
+	 */
+	private function newDefaultRequestParametersFromMCP(): array {
 		return [
 			'function' => self::FUNCTION,
 			'donation_id' => (string)self::DONATION_ID,
@@ -204,20 +205,26 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
-	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, PaymentRepository $paymentRepository, array $request ): void {
+	/**
+	 * @param DonationRepository $donationRepo
+	 * @param array<string,scalar> $request
+	 * @return void
+	 */
+	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, array $request ): void {
 		$donation = $donationRepo->getDonationById( self::DONATION_ID );
-		$ccData = $paymentRepository->getPaymentById( $donation->getPaymentId() )->getLegacyData();
+		$encodedBookingData = $this->getFactory()->getConnection()
+			->executeQuery( "SELECT booking_data from payment_credit_card WHERE ID=" . $donation->getPaymentId() )
+			->fetchOne();
+		$bookingData = json_decode( $encodedBookingData, true, 512, JSON_THROW_ON_ERROR );
 
-		$this->assertSame( $request['currency'], $ccData->paymentSpecificValues['mcp_currency'] );
-		$this->assertSame( $request['amount'], $ccData->amountInEuroCents );
-		$this->assertSame( $request['country'], $ccData->paymentSpecificValues['mcp_country'] );
-		$this->assertSame( $request['auth'], $ccData->paymentSpecificValues['mcp_auth'] );
-		$this->assertSame( $request['title'], $ccData->paymentSpecificValues['mcp_title'] );
-		$this->assertSame( $request['sessionId'], $ccData->paymentSpecificValues['mcp_sessionid'] );
-		$this->assertSame( $request['transactionId'], $ccData->paymentSpecificValues['ext_payment_id'] );
-		$this->assertSame( self::STATUS, $ccData->paymentSpecificValues['ext_payment_status'] );
-		$this->assertSame( $request['customerId'], $ccData->paymentSpecificValues['ext_payment_account'] );
-		$this->assertNotEmpty( $ccData->paymentSpecificValues['ext_payment_timestamp'] );
+		$this->assertSame( $request['currency'], $bookingData['currency'] );
+		$this->assertEquals( $request['amount'], $bookingData['amount'] );
+		$this->assertSame( $request['country'], $bookingData['country'] );
+		$this->assertSame( $request['auth'], $bookingData['auth'] );
+		$this->assertSame( $request['title'], $bookingData['title'] );
+		$this->assertSame( $request['sessionId'], $bookingData['sessionId'] );
+		$this->assertSame( $request['transactionId'], $bookingData['transactionId'] );
+		$this->assertSame( $request['customerId'], $bookingData['customerId'] );
 	}
 
 	private function storedDonations(): StoredDonations {

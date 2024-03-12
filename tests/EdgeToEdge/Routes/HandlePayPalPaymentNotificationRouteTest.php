@@ -86,24 +86,34 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
 	}
 
+	/**
+	 * @param array<string, scalar> $request
+	 * @return void
+	 */
 	private function assertPayPalDataGotPersisted( array $request ): void {
 		$donation = $this->getFactory()->getDonationRepository()->getDonationById( self::DONATION_ID );
-		$payment = $this->getFactory()->getPaymentRepository()->getPaymentById( $donation->getPaymentId() );
-		$paymentData = $payment->getLegacyData();
+		$encodedBookingData = $this->getFactory()->getConnection()
+			->executeQuery( "SELECT booking_data from payment_paypal WHERE ID=" . $donation->getPaymentId() )
+			->fetchOne();
+		$bookingData = json_decode( $encodedBookingData, true, 512, JSON_THROW_ON_ERROR );
 
-		$this->assertSame( $request['payer_id'], $paymentData->paymentSpecificValues['paypal_payer_id'] );
-		$this->assertSame( $request['subscr_id'], $paymentData->paymentSpecificValues['paypal_subscr_id'] );
-		$this->assertSame( $request['payer_status'], $paymentData->paymentSpecificValues['paypal_payer_status'] );
-		$this->assertSame( $request['mc_currency'], $paymentData->paymentSpecificValues['paypal_mc_currency'] );
-		$this->assertSame( $request['mc_fee'], $paymentData->paymentSpecificValues['paypal_mc_fee'] );
-		$this->assertSame( $request['mc_gross'], $paymentData->paymentSpecificValues['paypal_mc_gross'] );
-		$this->assertSame( $request['settle_amount'], $paymentData->paymentSpecificValues['paypal_settle_amount'] );
-		$this->assertSame( $request['txn_id'], $paymentData->paymentSpecificValues['ext_payment_id'] );
-		$this->assertSame( $request['payment_type'], $paymentData->paymentSpecificValues['ext_payment_type'] );
-		$this->assertSame( $request['payment_status'] . '/' . $request['txn_type'], $paymentData->paymentSpecificValues['ext_payment_status'] );
-		$this->assertSame( $request['payment_date'], $paymentData->paymentSpecificValues['ext_payment_timestamp'] );
+		$this->assertSame( $request['payer_id'], $bookingData['payer_id'] );
+		$this->assertSame( $request['subscr_id'], $bookingData['subscr_id'] );
+		$this->assertSame( $request['payer_status'], $bookingData['payer_status'] );
+		$this->assertSame( $request['mc_currency'], $bookingData['mc_currency'] );
+		$this->assertSame( $request['mc_fee'], $bookingData['mc_fee'] );
+		$this->assertSame( $request['mc_gross'], $bookingData['mc_gross'] );
+		$this->assertSame( $request['settle_amount'], $bookingData['settle_amount'] );
+		$this->assertSame( $request['txn_id'], $bookingData['txn_id'] );
+		$this->assertSame( $request['payment_type'], $bookingData['payment_type'] );
+		$this->assertSame( $request['payment_status'], $bookingData['payment_status'] );
+		$this->assertSame( $request['txn_type'], $bookingData['txn_type'] );
+		$this->assertSame( $request['payment_date'], $bookingData['payment_date'] );
 	}
 
+	/**
+	 * @return array<string, scalar>
+	 */
 	private static function newHttpParamsForPayment(): array {
 		return [
 			'receiver_email' => self::EMAIL_ADDRESS,
