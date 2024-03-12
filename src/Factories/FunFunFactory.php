@@ -1742,8 +1742,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->createSharedObject( TranslationsCollector::class, function (): TranslationsCollector {
 			$translationsCollector = new TranslationsCollector( new SimpleFileFetcher() );
 			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/messages.json' );
-			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/membershipTypes.json' );
-			$translationsCollector->addTranslationFile( $this->getI18nDirectory() . '/messages/validations.json' );
 			return $translationsCollector;
 		} );
 	}
