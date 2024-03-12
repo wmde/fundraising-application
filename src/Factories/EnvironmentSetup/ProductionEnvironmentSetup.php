@@ -94,7 +94,7 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 	/**
 	 * @deprecated This is temporary for the 2023/2024 thank you banner campaign. It should be removed after the campaign (Feb 2024).
 	 */
-	private function setMembershipImpressionCounter( FunFunFactory $factory ) {
+	private function setMembershipImpressionCounter( FunFunFactory $factory ): void {
 		$factory->setMembershipImpressionCounter(
 			new DatabaseMembershipImpressionCounter( $factory->getConnection() )
 		);

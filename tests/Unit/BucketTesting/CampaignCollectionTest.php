@@ -45,7 +45,7 @@ class CampaignCollectionTest extends TestCase {
 			->addBucket( $alternativeBucketOfSecondCampaign );
 	}
 
-	public function testGivenCampaigns_itCanIterateOverThem() {
+	public function testGivenCampaigns_itCanIterateOverThem(): void {
 		$collection = new CampaignCollection( $this->firstCampaign, $this->secondCampaign );
 		$iterator = $collection->getIterator();
 
@@ -56,13 +56,13 @@ class CampaignCollectionTest extends TestCase {
 		$this->assertFalse( $iterator->valid() );
 	}
 
-	public function testGivenActiveCampaigns_itCanSelectTheOneWithTheMostDistantEndDate() {
+	public function testGivenActiveCampaigns_itCanSelectTheOneWithTheMostDistantEndDate(): void {
 		$collection = new CampaignCollection( $this->firstCampaign, $this->secondCampaign );
 
 		$this->assertSame( $this->secondCampaign, $collection->getMostDistantCampaign() );
 	}
 
-	public function testGivenInActiveCampaigns_itCanSelectTheOneWithTheMostDistantEndDate() {
+	public function testGivenInActiveCampaigns_itCanSelectTheOneWithTheMostDistantEndDate(): void {
 		$inactiveSecondCampaign = new Campaign(
 			$this->secondCampaign->getName(),
 			$this->secondCampaign->getUrlKey(),
@@ -75,7 +75,7 @@ class CampaignCollectionTest extends TestCase {
 		$this->assertSame( $this->firstCampaign, $collection->getMostDistantCampaign() );
 	}
 
-	public function testGivenOnlyInactiveCampaigs_itWillSelectNoneAsMostDistant() {
+	public function testGivenOnlyInactiveCampaigs_itWillSelectNoneAsMostDistant(): void {
 		$inactiveFirstCampaign = new Campaign(
 			$this->firstCampaign->getName(),
 			$this->firstCampaign->getUrlKey(),
@@ -88,7 +88,7 @@ class CampaignCollectionTest extends TestCase {
 		$this->assertNull( $collection->getMostDistantCampaign() );
 	}
 
-	public function testGivenOnlyCampaigsInThePast_itWillSelectNoneAsMostDistant() {
+	public function testGivenOnlyCampaigsInThePast_itWillSelectNoneAsMostDistant(): void {
 		$pastFirstCampaign = new Campaign(
 			$this->firstCampaign->getName(),
 			$this->firstCampaign->getUrlKey(),

@@ -31,13 +31,13 @@ class JsonBucketLoggerTest extends TestCase {
 		$this->clock = new StubClock( new \DateTimeImmutable( self::STUB_TIME_VALUE ) );
 	}
 
-	public function testLogWriterAddsDate() {
+	public function testLogWriterAddsDate(): void {
 		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent() );
 
 		$this->assertLogValue( self::STUB_TIME_VALUE, 'date' );
 	}
 
-	public function testGivenEventName_itIsLogged() {
+	public function testGivenEventName_itIsLogged(): void {
 		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent() );
 
 		$this->assertLogValue( 'testEventLogged', 'eventName' );
@@ -47,13 +47,13 @@ class JsonBucketLoggerTest extends TestCase {
 		return new JsonBucketLogger( $this->logWriter, $this->clock );
 	}
 
-	public function testGivenEventMetadata_itIsLogged() {
+	public function testGivenEventMetadata_itIsLogged(): void {
 		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent() );
 
 		$this->assertLogValue( (object)[ 'id' => 123, 'some_fact' => 'water_is_wet' ], 'metadata' );
 	}
 
-	public function testGivenBuckets_theyAreOutputWithTheirCampaigns() {
+	public function testGivenBuckets_theyAreOutputWithTheirCampaigns(): void {
 		$this->newBucketLogger()->writeEvent(
 			new FakeBucketLoggingEvent(),
 			$this->newBucket( 'first', 'test1' ),
@@ -84,7 +84,7 @@ class JsonBucketLoggerTest extends TestCase {
 	 * @param mixed $expectedValue
 	 * @param string $key
 	 */
-	private function assertLogValue( $expectedValue, string $key ) {
+	private function assertLogValue( $expectedValue, string $key ): void {
 		$logCalls = $this->logWriter->getWriteCalls();
 
 		$this->assertNotEmpty( $logCalls, 'Log should contain something' );
@@ -94,7 +94,7 @@ class JsonBucketLoggerTest extends TestCase {
 		$this->assertEquals( $expectedValue, $event->{$key} );
 	}
 
-	public function testGivenMultipleEvents_eachOneIsLoggedAsOneLine() {
+	public function testGivenMultipleEvents_eachOneIsLoggedAsOneLine(): void {
 		$logWriter = $this->newBucketLogger();
 
 		$logWriter->writeEvent( new FakeBucketLoggingEvent() );
@@ -108,7 +108,7 @@ class JsonBucketLoggerTest extends TestCase {
 		);
 	}
 
-	public function testGivenEventWithNewlineInMetadata_newlineIsEscaped() {
+	public function testGivenEventWithNewlineInMetadata_newlineIsEscaped(): void {
 		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent( [ 'text' => "line1\nline2" ] ), ...[] );
 
 		$this->assertSame(
@@ -118,7 +118,7 @@ class JsonBucketLoggerTest extends TestCase {
 		);
 	}
 
-	public function testGivenMultipleEvents_eachOneIsLoggedAsValidJsonObject() {
+	public function testGivenMultipleEvents_eachOneIsLoggedAsValidJsonObject(): void {
 		$logWriter = $this->newBucketLogger();
 
 		$logWriter->writeEvent( new FakeBucketLoggingEvent() );

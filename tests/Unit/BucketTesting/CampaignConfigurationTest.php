@@ -16,7 +16,7 @@ class CampaignConfigurationTest extends TestCase {
 
 	use ConfigurationTestCaseTrait;
 
-	public function testGivenValidConfigurationEntries_ValidationPasses() {
+	public function testGivenValidConfigurationEntries_ValidationPasses(): void {
 		$this->assertConfigurationIsValid(
 			[
 				'bucket_tests' => [
@@ -49,7 +49,7 @@ class CampaignConfigurationTest extends TestCase {
 	/**
 	 * @dataProvider invalidConfigurationProvider
 	 */
-	public function testGivenMissingConfigurationEntries_ValidationFails( array $invalidConfig, string $expectedReason ) {
+	public function testGivenMissingConfigurationEntries_ValidationFails( array $invalidConfig, string $expectedReason ): void {
 		$this->assertConfigurationIsInvalid(
 			[
 				'bucket_tests' => [
@@ -130,7 +130,7 @@ class CampaignConfigurationTest extends TestCase {
 		];
 	}
 
-	public function testGivenMultipleConfigurationEntries_TheyAreMergedAndOverwritten() {
+	public function testGivenMultipleConfigurationEntries_TheyAreMergedAndOverwritten(): void {
 		$this->assertProcessedConfigurationEquals(
 			[
 				// Since the configurations are merged at the root node, we omit the 'bucket_testing' root node

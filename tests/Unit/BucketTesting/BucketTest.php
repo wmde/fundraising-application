@@ -24,7 +24,7 @@ class BucketTest extends TestCase {
 		);
 	}
 
-	public function testGivenBucketForCampaign_itCanReturnCampaignParameters() {
+	public function testGivenBucketForCampaign_itCanReturnCampaignParameters(): void {
 		$campaign = $this->newCampaign();
 		$bucketA = new Bucket( 'a', $campaign, Bucket::DEFAULT );
 		$bucketB = new Bucket( 'b', $campaign, Bucket::NON_DEFAULT );

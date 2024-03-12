@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory;
 class EnvironmentDependentConfigReaderFactoryTest extends TestCase {
 	private const CONFIGDIR = 'config';
 
-	public function testGivenEnvironmentName_filePathsAreReturned() {
+	public function testGivenEnvironmentName_filePathsAreReturned(): void {
 		$path = vfsStream::setup( self::CONFIGDIR, null, [
 			'config.dev.json' => '{}',
 			'config.dist.json' => '{}'
@@ -28,7 +28,7 @@ class EnvironmentDependentConfigReaderFactoryTest extends TestCase {
 		);
 	}
 
-	public function testGivenMissingDistFile_exceptionIsThrown() {
+	public function testGivenMissingDistFile_exceptionIsThrown(): void {
 		$path = vfsStream::setup( self::CONFIGDIR, null, [
 			'config.dev.json' => '{}'
 		] );
@@ -38,7 +38,7 @@ class EnvironmentDependentConfigReaderFactoryTest extends TestCase {
 		( new EnvironmentDependentConfigReaderFactory( 'dev' ) )->getConfigurationPathsForEnvironment( $path->url() );
 	}
 
-	public function testGivenMissingEnvironmentFile_exceptionIsThrown() {
+	public function testGivenMissingEnvironmentFile_exceptionIsThrown(): void {
 		$path = vfsStream::setup( self::CONFIGDIR, null, [
 			'config.dist.json' => '{}'
 		] );

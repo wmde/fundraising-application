@@ -11,28 +11,28 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
  */
 class MailFormatterTest extends \PHPUnit\Framework\TestCase {
 
-	public function testGivenLineWithLeadingSpaces_spacesAreTrimmed() {
+	public function testGivenLineWithLeadingSpaces_spacesAreTrimmed(): void {
 		$this->assertSame(
 			"This is a\ntest!	123 456789\n",
 			MailFormatter::format( ' 		 This is a\ntest!	123 456789 ' )
 		);
 	}
 
-	public function testGivenMultipleNewLines_lineBreaksAreLimitedToTwo() {
+	public function testGivenMultipleNewLines_lineBreaksAreLimitedToTwo(): void {
 		$this->assertSame(
 			"This is a\n\ntest!\n",
 			MailFormatter::format( "This is a\n\n\n\n\n\ntest!" )
 		);
 	}
 
-	public function testGivenBackslashN_charactersAreConvertedToLineBreaks() {
+	public function testGivenBackslashN_charactersAreConvertedToLineBreaks(): void {
 		$this->assertSame(
 			"This\n\nis a\ntest\n",
 			MailFormatter::format( 'This\\n\nis a\ntest' )
 		);
 	}
 
-	public function testGivenMessage_lineBreakIsAppendedAtTheEnd() {
+	public function testGivenMessage_lineBreakIsAppendedAtTheEnd(): void {
 		$this->assertSame(
 			"Line 1\nLine2\nLine3\n",
 			MailFormatter::format( 'Line 1\nLine2\nLine3' )

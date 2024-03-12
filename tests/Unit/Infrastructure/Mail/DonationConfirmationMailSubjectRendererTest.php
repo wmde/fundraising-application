@@ -14,7 +14,7 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
  */
 class DonationConfirmationMailSubjectRendererTest extends TestCase {
 
-	public function testGivenPaypalPayment_defaultSubjectLineIsPrinted() {
+	public function testGivenPaypalPayment_defaultSubjectLineIsPrinted(): void {
 		$templateArguments['donation']['paymentType'] = PaymentType::Paypal->value;
 		$this->assertSame(
 			'mail_subject_confirm_donation',
@@ -22,7 +22,7 @@ class DonationConfirmationMailSubjectRendererTest extends TestCase {
 		);
 	}
 
-	public function testGivenBankTransferPayment_bankTransferSubjectLineIsPrinted() {
+	public function testGivenBankTransferPayment_bankTransferSubjectLineIsPrinted(): void {
 		$templateArguments['donation']['paymentType'] = PaymentType::BankTransfer->value;
 		$this->assertSame(
 			'mail_subject_confirm_donation_promise',

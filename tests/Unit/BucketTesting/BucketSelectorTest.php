@@ -41,13 +41,13 @@ class BucketSelectorTest extends TestCase {
 		$this->bucketSelectionStrategy = new BucketSelectionSpy( new RandomBucketSelection() );
 	}
 
-	public function testGivenNoCampaigns_bucketSelectionIsEmptyArray() {
+	public function testGivenNoCampaigns_bucketSelectionIsEmptyArray(): void {
 		$bucketSelector = new BucketSelector( new CampaignCollection(), new RandomBucketSelection() );
 
 		$this->assertSame( [], $bucketSelector->selectBuckets( [] ) );
 	}
 
-	public function testGivenInactiveCampaign_defaultBucketIsSelected() {
+	public function testGivenInactiveCampaign_defaultBucketIsSelected(): void {
 		$campaign = new Campaign(
 			'test1',
 			't1',
@@ -71,7 +71,7 @@ class BucketSelectorTest extends TestCase {
 		$this->assertFalse( $this->bucketSelectionStrategy->bucketWasSelected(), 'Bucket not should be selected by selection strategy.' );
 	}
 
-	public function testGivenExpiredActiveCampaign_defaultBucketIsSelected() {
+	public function testGivenExpiredActiveCampaign_defaultBucketIsSelected(): void {
 		$campaign = new Campaign(
 			'test1',
 			't1',
@@ -95,7 +95,7 @@ class BucketSelectorTest extends TestCase {
 		$this->assertFalse( $this->bucketSelectionStrategy->bucketWasSelected(), 'Bucket not should be selected by selection strategy.' );
 	}
 
-	public function testGivenMatchingUrlParams_bucketIsSelected() {
+	public function testGivenMatchingUrlParams_bucketIsSelected(): void {
 		$bucketSelector = new BucketSelector( $this->campaignCollection, $this->bucketSelectionStrategy );
 
 		$this->assertSame(
@@ -109,7 +109,7 @@ class BucketSelectorTest extends TestCase {
 		$this->assertFalse( $this->bucketSelectionStrategy->bucketWasSelected(), 'Bucket should be selected by URL parameters' );
 	}
 
-	public function testGivenNoParamsAndActiveCampaign_bucketIsSelectedWithFallbackSelectionStrategy() {
+	public function testGivenNoParamsAndActiveCampaign_bucketIsSelectedWithFallbackSelectionStrategy(): void {
 		$bucketSelector = new BucketSelector( $this->campaignCollection, $this->bucketSelectionStrategy );
 
 		$this->assertThat(
@@ -122,7 +122,7 @@ class BucketSelectorTest extends TestCase {
 		$this->assertTrue( $this->bucketSelectionStrategy->bucketWasSelected(), 'Bucket should be selected by fallback selection strategy' );
 	}
 
-	public function testGivenNoParamsAndUrlActivatedCampaign_defaultBucketIsSelected() {
+	public function testGivenNoParamsAndUrlActivatedCampaign_defaultBucketIsSelected(): void {
 		$campaign = new Campaign(
 			'test1',
 			't1',
@@ -152,7 +152,7 @@ class BucketSelectorTest extends TestCase {
 	/**
 	 * @dataProvider invalidParametersProvider
 	 */
-	public function testGivenInvalidParams_bucketIsSelectedWithFallbackSelectionStrategy( string $description, array $url ) {
+	public function testGivenInvalidParams_bucketIsSelectedWithFallbackSelectionStrategy( string $description, array $url ): void {
 		$bucketSelector = new BucketSelector( $this->campaignCollection, $this->bucketSelectionStrategy );
 
 		$this->assertThat(

@@ -15,7 +15,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
  */
 class CampaignBuilderTest extends TestCase {
 
-	public function testCampaignsAreBuiltFromConfiguration() {
+	public function testCampaignsAreBuiltFromConfiguration(): void {
 		$firstExpectedCampaign = new Campaign(
 			'first',
 			'f',
@@ -67,7 +67,7 @@ class CampaignBuilderTest extends TestCase {
 		$this->assertEquals( [ $firstExpectedCampaign, $secondExpectedCampaign ], $campaigns );
 	}
 
-	public function testTimeRangeIsConvertedToUtcFromTimezone() {
+	public function testTimeRangeIsConvertedToUtcFromTimezone(): void {
 		$firstExpectedCampaign = new Campaign(
 			'first',
 			'f',

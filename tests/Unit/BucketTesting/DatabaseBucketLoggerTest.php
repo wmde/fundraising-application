@@ -67,7 +67,7 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 		return $this->newBucket( 'bucket_1', 'campaign_1', $start, $end, true );
 	}
 
-	public function testWhenBucketLogIsCreatedAddsBucketLog() {
+	public function testWhenBucketLogIsCreatedAddsBucketLog(): void {
 		$databaseBucketLogger = $this->getDatabaseBucketLogger();
 		$event = new FakeBucketLoggingEvent();
 
@@ -81,7 +81,7 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 		$this->assertEquals( $event->getName(), $bucketLogs[0]->getEventName() );
 	}
 
-	public function testWhenBucketLogIsCreatedAddsRelatedBuckets() {
+	public function testWhenBucketLogIsCreatedAddsRelatedBuckets(): void {
 		$databaseBucketLogger = $this->getDatabaseBucketLogger();
 		$start = new CampaignDate();
 		$end = ( new CampaignDate() )->modify( '+1 month' );
@@ -105,7 +105,7 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 		$this->assertEquals( $bucketLog, $bucketLogBucket2->getBucketLog() );
 	}
 
-	public function testInactiveCampaignBucketDoesNotGetAdded() {
+	public function testInactiveCampaignBucketDoesNotGetAdded(): void {
 		$databaseBucketLogger = $this->getDatabaseBucketLogger();
 		$start = new CampaignDate();
 		$end = ( new CampaignDate() )->modify( '+1 month' );
@@ -120,7 +120,7 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 		$this->assertCount( 1, $bucketLog->getBuckets() );
 	}
 
-	public function testExpiredCampaignBucketDoesNotGetAdded() {
+	public function testExpiredCampaignBucketDoesNotGetAdded(): void {
 		$databaseBucketLogger = $this->getDatabaseBucketLogger();
 		$start = new CampaignDate();
 		$end = ( new CampaignDate() )->modify( '+1 month' );
@@ -140,7 +140,7 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 		$this->assertCount( 1, $bucketLog->getBuckets() );
 	}
 
-	public function testGivenAllExpiredBucketsNothingGetsLoggedInDatabase() {
+	public function testGivenAllExpiredBucketsNothingGetsLoggedInDatabase(): void {
 		$databaseBucketLogger = $this->getDatabaseBucketLogger();
 		$start = new CampaignDate();
 		$end = ( new CampaignDate() )->modify( '+1 month' );
@@ -164,7 +164,7 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 		$this->assertCount( 0, $bucketLogs, 'Database should not contain a BucketLog entry' );
 	}
 
-	public function testWhenNotPassedEntityIdThrowsException() {
+	public function testWhenNotPassedEntityIdThrowsException(): void {
 		$databaseBucketLogger = $this->getDatabaseBucketLogger();
 
 		$this->expectException( LoggingError::class );
