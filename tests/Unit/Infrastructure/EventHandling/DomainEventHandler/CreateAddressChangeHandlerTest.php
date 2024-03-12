@@ -145,7 +145,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, ValidDonation::newDonor() ) );
 	}
 
-	public function testUpdateDonor_createsAddressChange() {
+	public function testUpdateDonor_createsAddressChange(): void {
 		$dispatcher = $this->createMock( EventDispatcher::class );
 		$entityManager = $this->newMockEntityManager();
 
@@ -165,7 +165,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 		) );
 	}
 
-	public function testUpdateDonor_andAddressChangeAlreadyExists_noAddressChangeIsCreated() {
+	public function testUpdateDonor_andAddressChangeAlreadyExists_noAddressChangeIsCreated(): void {
 		$dispatcher = $this->createMock( EventDispatcher::class );
 		$addressChangeRepo = $this->createMock( EntityRepository::class );
 		$addressChangeRepo->expects( $this->once() )
@@ -186,7 +186,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 		) );
 	}
 
-	public function testUpdateDonor_andPreviousHasAddress_doesNothing() {
+	public function testUpdateDonor_andPreviousHasAddress_doesNothing(): void {
 		$dispatcher = $this->createMock( EventDispatcher::class );
 		$entityManager = new EntityManagerSpy();
 
@@ -200,7 +200,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 		$this->assertNull( $entityManager->getEntity() );
 	}
 
-	public function testUpdateDonor_andNewDoesNotHaveAddress_doesNothing() {
+	public function testUpdateDonor_andNewDoesNotHaveAddress_doesNothing(): void {
 		$dispatcher = $this->createMock( EventDispatcher::class );
 		$entityManager = new EntityManagerSpy();
 

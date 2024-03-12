@@ -53,7 +53,7 @@ CFG;
 		$this->filesystem = vfsStream::setup();
 	}
 
-	public function testGivenOneConfigurationFile_itIsLoaded() {
+	public function testGivenOneConfigurationFile_itIsLoaded(): void {
 		$campaignFile = vfsStream::newFile( 'campaigns.yml' )
 			->at( $this->filesystem )
 			->setContent( self::VALID_CONFIGURATION );
@@ -62,7 +62,7 @@ CFG;
 		$this->assertArrayHasKey( 'campaign1', $loader->loadCampaignConfiguration( $campaignFile->url() ) );
 	}
 
-	public function testGivenSeveralConfigurationFiles_theyAreLoaded() {
+	public function testGivenSeveralConfigurationFiles_theyAreLoaded(): void {
 		$campaignFile = vfsStream::newFile( 'campaigns.yml' )
 			->at( $this->filesystem )
 			->setContent( self::VALID_CONFIGURATION );
@@ -76,14 +76,14 @@ CFG;
 		$this->assertFalse( $config['campaign1']['active'], 'Second configuration file should override first one' );
 	}
 
-	public function testGivenNonexistentFiles_exceptionIsThrown() {
+	public function testGivenNonexistentFiles_exceptionIsThrown(): void {
 		$loader = new CampaignConfigurationLoader( new SimpleFileFetcher(), new Psr16Cache( new NullAdapter() ) );
 
 		$this->expectExceptionMessageMatches( '/No campaign configuration files found/' );
 		$loader->loadCampaignConfiguration( vfsStream::url( 'campaigns.yml' ) );
 	}
 
-	public function testGivenInvalidYaml_parseExceptionIsThrown() {
+	public function testGivenInvalidYaml_parseExceptionIsThrown(): void {
 		$campaignFile = vfsStream::newFile( 'campaigns.yml' )
 			->at( $this->filesystem )
 			->setContent( ' """ ' );
@@ -93,7 +93,7 @@ CFG;
 		$loader->loadCampaignConfiguration( $campaignFile->url() );
 	}
 
-	public function testGivenInvalidFileStructure_configurationExceptionIsThrown() {
+	public function testGivenInvalidFileStructure_configurationExceptionIsThrown(): void {
 		$campaignFile = vfsStream::newFile( 'campaigns.yml' )
 			->at( $this->filesystem )
 			->setContent( self::INVALID_CONFIGURATION );
@@ -103,7 +103,7 @@ CFG;
 		$loader->loadCampaignConfiguration( $campaignFile->url() );
 	}
 
-	public function testCategoriesAreAlreadyCached_nothingIsProcessed() {
+	public function testCategoriesAreAlreadyCached_nothingIsProcessed(): void {
 		$campaignFile = vfsStream::newFile( 'campaigns.yml' )
 			->at( $this->filesystem )
 			->setContent( self::VALID_CONFIGURATION )
@@ -132,7 +132,7 @@ CFG;
 		$this->assertFalse( $cachedCampaigns['campaign1']['active'], 'We should get the value from the cached campaign' );
 	}
 
-	public function testWhenNoConfigurationFilesExist_cacheWillBeSkipped() {
+	public function testWhenNoConfigurationFilesExist_cacheWillBeSkipped(): void {
 		$forbiddenCache = $this->createMock( Psr16Cache::class );
 		$forbiddenCache->method( 'get' )->willThrowException( new \LogicException( 'Cache access is not allowed' ) );
 		$loader = new CampaignConfigurationLoader( new SimpleFileFetcher(), $forbiddenCache );

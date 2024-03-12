@@ -14,7 +14,7 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
  */
 class BasicMailSubjectRendererTest extends TestCase {
 
-	public function testGivenDonation_givenSubjectLineIsReturned() {
+	public function testGivenDonation_givenSubjectLineIsReturned(): void {
 		$templateArguments['donation']['paymentType'] = PaymentType::Paypal->value;
 		$this->assertSame(
 			'mail_subject_getintouch',

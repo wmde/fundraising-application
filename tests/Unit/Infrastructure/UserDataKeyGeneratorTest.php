@@ -19,20 +19,20 @@ class UserDataKeyGeneratorTest extends TestCase {
 		$this->masterKey = 'DiF8rUjXa2/pePFhQqB5ylDWfH/W5rlEXnrvf5/tNnk=';
 	}
 
-	public function testDailyKeyGeneratesSameKeyOnEachCall() {
+	public function testDailyKeyGeneratesSameKeyOnEachCall(): void {
 		$generator = new UserDataKeyGenerator( $this->masterKey, new StubClock( new \DateTimeImmutable( '2021-02-21' ) ) );
 
 		$this->assertSame( $generator->getDailyKey(), $generator->getDailyKey() );
 	}
 
-	public function testDailyKeyGeneratesSameKeyForEachDay() {
+	public function testDailyKeyGeneratesSameKeyForEachDay(): void {
 		$generator1 = new UserDataKeyGenerator( $this->masterKey, new StubClock( new \DateTimeImmutable( '2021-02-20 12:21:00' ) ) );
 		$generator2 = new UserDataKeyGenerator( $this->masterKey, new StubClock( new \DateTimeImmutable( '2021-02-20 22:11:00' ) ) );
 
 		$this->assertSame( $generator1->getDailyKey(), $generator2->getDailyKey() );
 	}
 
-	public function testDailyKeyGeneratesDifferentKeyForEachDay() {
+	public function testDailyKeyGeneratesDifferentKeyForEachDay(): void {
 		$generator1 = new UserDataKeyGenerator( $this->masterKey, new StubClock( new \DateTimeImmutable( '2021-02-21' ) ) );
 		$generator2 = new UserDataKeyGenerator( $this->masterKey, new StubClock( new \DateTimeImmutable( '2021-02-22' ) ) );
 

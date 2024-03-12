@@ -19,7 +19,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
  */
 class BestEffortBucketLoggerTest extends TestCase {
 
-	public function testGivenASuccessFulLogger_itWillPassOnEvents() {
+	public function testGivenASuccessFulLogger_itWillPassOnEvents(): void {
 		$event = new FakeBucketLoggingEvent();
 		$buckets = [];
 		$bucketLogger = new BucketLoggerSpy();
@@ -35,7 +35,7 @@ class BestEffortBucketLoggerTest extends TestCase {
 		$this->assertSame( $event, $bucketLogger->getFirstEvent() );
 	}
 
-	public function testGivenAFailingLogger_itWillPassOnOnlyFirstEvent() {
+	public function testGivenAFailingLogger_itWillPassOnOnlyFirstEvent(): void {
 		$event = new FakeBucketLoggingEvent();
 		$buckets = [];
 		/** @var BucketLogger&MockObject $bucketLogger */
@@ -51,7 +51,7 @@ class BestEffortBucketLoggerTest extends TestCase {
 		$safeLogger->writeEvent( $event, ...$buckets );
 	}
 
-	public function testGivenAFailingLogger_itWillLogExceptionToLoggerOnce() {
+	public function testGivenAFailingLogger_itWillLogExceptionToLoggerOnce(): void {
 		$event = new FakeBucketLoggingEvent();
 		$buckets = [];
 		$exception = new LoggingError( 'Could not open bucket.log' );

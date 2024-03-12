@@ -12,7 +12,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
  */
 class CampaignDateTest extends TestCase {
 
-	public function testGivenNoTimezone_newInstanceHasUTC() {
+	public function testGivenNoTimezone_newInstanceHasUTC(): void {
 		$systemTimezone = date_default_timezone_get();
 		date_default_timezone_set( 'Asia/Almaty' );
 
@@ -24,13 +24,13 @@ class CampaignDateTest extends TestCase {
 		date_default_timezone_set( $systemTimezone );
 	}
 
-	public function testGivenTimezone_itThrowsExceptionIfNotUTC() {
+	public function testGivenTimezone_itThrowsExceptionIfNotUTC(): void {
 		$this->expectException( \InvalidArgumentException::class );
 
 		new CampaignDate( 'now', new \DateTimeZone( 'Europe/Berlin' ) );
 	}
 
-	public function testCreateFromString() {
+	public function testCreateFromString(): void {
 		$dateStr = '1987-11-23 03:14:00';
 
 		$campaignDate = CampaignDate::createFromString( $dateStr );
@@ -38,7 +38,7 @@ class CampaignDateTest extends TestCase {
 		$this->assertSame( $dateStr, $campaignDate->format( 'Y-m-d H:i:s' ) );
 	}
 
-	public function testCreateFromStringWithTimezoneConvertsToUtc() {
+	public function testCreateFromStringWithTimezoneConvertsToUtc(): void {
 		$dateStr = '1987-11-22 21:14:00';
 
 		$campaignDate = CampaignDate::createFromString( $dateStr, new \DateTimeZone( 'America/Chicago' ) );

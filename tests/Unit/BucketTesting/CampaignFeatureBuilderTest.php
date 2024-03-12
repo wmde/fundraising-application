@@ -19,13 +19,13 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
  */
 class CampaignFeatureBuilderTest extends TestCase {
 
-	public function testWhenNoCampaignsAreDefined_featureSetIsEmpty() {
+	public function testWhenNoCampaignsAreDefined_featureSetIsEmpty(): void {
 		$factory = new CampaignFeatureBuilder();
 		$result = $factory->getFeatures()->jsonSerialize();
 		$this->assertSame( [ 'features' => [] ], $result );
 	}
 
-	public function testCampaignAndBucketNamesAreConvertedIntoFeatureNames() {
+	public function testCampaignAndBucketNamesAreConvertedIntoFeatureNames(): void {
 		$factory = new CampaignFeatureBuilder( $this->newInactiveCampaign(), $this->newActiveCampaign() );
 
 		$features = $factory->getFeatures();
@@ -64,7 +64,7 @@ class CampaignFeatureBuilderTest extends TestCase {
 		return $campaign;
 	}
 
-	public function testWhenCampaignIsInactive_AllFeaturesExceptTheDefaultAreInactive() {
+	public function testWhenCampaignIsInactive_AllFeaturesExceptTheDefaultAreInactive(): void {
 		$factory = new CampaignFeatureBuilder( $this->newInactiveCampaign() );
 
 		$features = $factory->getFeatures();
@@ -73,7 +73,7 @@ class CampaignFeatureBuilderTest extends TestCase {
 		$this->assertFalse( $features->getFeatureByName( 'campaigns.test_inactive.bucket2' )->isEnabled() );
 	}
 
-	public function testWhenCampaignIsActive_AllFeaturesAreEnabled() {
+	public function testWhenCampaignIsActive_AllFeaturesAreEnabled(): void {
 		$factory = new CampaignFeatureBuilder( $this->newActiveCampaign() );
 
 		$features = $factory->getFeatures();
@@ -82,7 +82,7 @@ class CampaignFeatureBuilderTest extends TestCase {
 		$this->assertTrue( $features->getFeatureByName( 'campaigns.test_active.bucket2' )->isEnabled() );
 	}
 
-	public function testWhenCampaignWithTwoBucketsIsActive_AllHaveStringHashRulesBasedOnBucketName() {
+	public function testWhenCampaignWithTwoBucketsIsActive_AllHaveStringHashRulesBasedOnBucketName(): void {
 		$factory = new CampaignFeatureBuilder( $this->newActiveCampaign() );
 
 		$features = $factory->getFeatures();
@@ -91,14 +91,14 @@ class CampaignFeatureBuilderTest extends TestCase {
 		$this->assertStringHashRule( $features->getFeatureByName( 'campaigns.test_active.bucket2' ), 'campaigns.test_active.bucket2' );
 	}
 
-	private function assertStringHashRule( Feature $feature, string $expectedStringHashValue ) {
+	private function assertStringHashRule( Feature $feature, string $expectedStringHashValue ): void {
 		$rules = $feature->getRules();
 		$this->assertCount( 1, $rules, 'Feature should have only one rule' );
 		$this->assertInstanceOf( StringHash::class, $rules[0], 'Rule must be StringHash' );
 		$this->assertEquals( $expectedStringHashValue, $rules[0]->getValue() );
 	}
 
-	public function testWhenCampaignIsActive_AllFeaturesExceptTheDefaultHaveDatePreconditions() {
+	public function testWhenCampaignIsActive_AllFeaturesExceptTheDefaultHaveDatePreconditions(): void {
 		$factory = new CampaignFeatureBuilder( $this->newActiveCampaign() );
 
 		$features = $factory->getFeatures();

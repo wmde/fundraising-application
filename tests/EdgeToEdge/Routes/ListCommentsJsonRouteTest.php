@@ -114,7 +114,7 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	private function givenComments() {
+	private function givenComments(): void {
 		$factory = $this->getFactory();
 		$em = $factory->getEntityManager();
 		CommentsForTesting::persistFirstComment( $em );

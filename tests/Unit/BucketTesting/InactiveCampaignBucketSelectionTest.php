@@ -21,7 +21,7 @@ class InactiveCampaignBucketSelectionTest extends TestCase {
 		$this->now = new CampaignDate();
 	}
 
-	public function testGivenAnInactiveCampaign_itSelectsDefaultBucket() {
+	public function testGivenAnInactiveCampaign_itSelectsDefaultBucket(): void {
 		$campaign = new Campaign(
 			'test1',
 			't1',
@@ -39,7 +39,7 @@ class InactiveCampaignBucketSelectionTest extends TestCase {
 		$this->assertSame( $defaultBucket, $selectionStrategy->selectBucketForCampaign( $campaign ) );
 	}
 
-	public function testGivenAnExpiredCampaign_itSelectsDefaultBucket() {
+	public function testGivenAnExpiredCampaign_itSelectsDefaultBucket(): void {
 		$campaign = new Campaign(
 			'test1',
 			't1',
@@ -57,7 +57,7 @@ class InactiveCampaignBucketSelectionTest extends TestCase {
 		$this->assertSame( $defaultBucket, $selectionStrategy->selectBucketForCampaign( $campaign ) );
 	}
 
-	public function testGivenAnActiveCampaign_itSelectsNoBucket() {
+	public function testGivenAnActiveCampaign_itSelectsNoBucket(): void {
 		$campaign = new Campaign(
 			'test1',
 			't1',

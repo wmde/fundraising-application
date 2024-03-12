@@ -13,7 +13,7 @@ use WMDE\PsrLogTestDoubles\LoggerSpy;
  */
 class ValidationErrorLoggerTest extends TestCase {
 
-	public function testGivenEmptyValues_doesNotLog() {
+	public function testGivenEmptyValues_doesNotLog(): void {
 		$loggerSpy = new LoggerSpy();
 		$fields = [ 'first_name', 'last_name', 'email', 'postcode', 'country' ];
 		$validationErrorLogger = new ValidationErrorLogger( $loggerSpy );
@@ -42,7 +42,7 @@ class ValidationErrorLoggerTest extends TestCase {
 		return $violations;
 	}
 
-	public function testGivenInvalidNonLegacyFields_theyGetLogged() {
+	public function testGivenInvalidNonLegacyFields_theyGetLogged(): void {
 		$loggerSpy = new LoggerSpy();
 		$fields = [ 'first_name', 'last_name' ];
 		$validationErrorLogger = new ValidationErrorLogger( $loggerSpy );

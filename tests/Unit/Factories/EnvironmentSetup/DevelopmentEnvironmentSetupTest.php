@@ -13,7 +13,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  * @covers \WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup
  */
 class DevelopmentEnvironmentSetupTest extends TestCase {
-	public function testEnvironmentSetsUpEnvironmentDependentServices() {
+	public function testEnvironmentSetsUpEnvironmentDependentServices(): void {
 		$expectedSetters = [
 			'setPaypalLogger',
 			'setSofortLogger',

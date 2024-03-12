@@ -45,7 +45,7 @@ class DatabaseMembershipImpressionCounterTest extends KernelTestCase {
 		$this->assertImpressionCount( $db, 1, 1, 'thankyou-2023/desktop-var', 1 );
 	}
 
-	private function assertImpressionCount( Connection $db, int $bannerImpressionCount, int $overallImpressionCount, string $tracking, int $expectedCount ) {
+	private function assertImpressionCount( Connection $db, int $bannerImpressionCount, int $overallImpressionCount, string $tracking, int $expectedCount ): void {
 		$this->assertSame(
 			$expectedCount,
 			$db->fetchOne(
@@ -55,7 +55,7 @@ class DatabaseMembershipImpressionCounterTest extends KernelTestCase {
 		);
 	}
 
-	private function setupTable( Connection $db ) {
+	private function setupTable( Connection $db ): void {
 		$db->executeStatement(
 			'CREATE TABLE IF NOT EXISTS membership_impression_count (
 				id INTEGER UNSIGNED AUTO_INCREMENT,

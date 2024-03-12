@@ -33,7 +33,7 @@ class DoctrineBucketLogRepositoryTest extends KernelTestCase {
 		return $this->entityManager->getRepository( BucketLog::class );
 	}
 
-	public function testWhenGivenBucketLogItIsStored() {
+	public function testWhenGivenBucketLogItIsStored(): void {
 		$doctrineBucketLogRepository = new DoctrineBucketLogRepository( $this->entityManager );
 
 		$bucketLog = new BucketLog( 99999, 'test_event' );
