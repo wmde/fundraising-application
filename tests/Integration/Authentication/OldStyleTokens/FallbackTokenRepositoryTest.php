@@ -65,10 +65,11 @@ class FallbackTokenRepositoryTest extends KernelTestCase {
 		$repository = new FallbackTokenRepository( $primaryRepository, $this->entityManager );
 		$donation = $this->givenDonationWithLegacyData( $this->givenDonationLegacyTokenData() );
 
-		$token = $repository->getTokenById( $donation->getId(), AuthenticationBoundedContext::Donation );
+		$id = $donation->getId() ?? 0;
+		$token = $repository->getTokenById( $id, AuthenticationBoundedContext::Donation );
 
 		$expectedToken = new AuthenticationToken(
-			$donation->getId(),
+			$id,
 			AuthenticationBoundedContext::Donation,
 			'legacy-update',
 			'legacy-access'
@@ -81,7 +82,7 @@ class FallbackTokenRepositoryTest extends KernelTestCase {
 		$repository = new FallbackTokenRepository( $primaryRepository, $this->entityManager );
 		$donation = $this->givenDonationWithLegacyData( $this->givenIncompleteDonationLegacyTokenData() );
 
-		$token = $repository->getTokenById( $donation->getId(), AuthenticationBoundedContext::Donation );
+		$token = $repository->getTokenById( $donation->getId() ?? 0, AuthenticationBoundedContext::Donation );
 
 		$this->assertInstanceOf( NullToken::class, $token );
 	}

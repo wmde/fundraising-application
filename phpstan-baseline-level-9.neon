@@ -26,6 +26,11 @@ parameters:
 			path: tests/EdgeToEdge/WebRouteTestCase.php
 
 		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\EdgeToEdge\\\\WebRouteTestCase\\:\\:createClient\\(\\) should return Symfony\\\\Component\\\\BrowserKit\\\\AbstractBrowser but returns Symfony\\\\Component\\\\BrowserKit\\\\AbstractBrowser\\|null\\.$#"
+			count: 1
+			path: tests/EdgeToEdge/WebRouteTestCase.php
+
+		-
 			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\Unit\\\\Infrastructure\\\\ConfigReaderTest\\:\\:getDistConfigContents\\(\\) should return string but returns string\\|false\\.$#"
 			count: 1
 			path: tests/Unit/Infrastructure/ConfigReaderTest.php

@@ -50,10 +50,10 @@ class ValidationErrorLoggerTest extends TestCase {
 
 		$validationErrorLogger->logViolations( 'Test error.', $fields, $violations );
 
-		$firstCallContext = $loggerSpy->getFirstLogCall()->getContext();
+		$firstCallContext = $loggerSpy->getFirstLogCall()?->getContext();
 
 		$this->assertSame( 1, $loggerSpy->getLogCalls()->count() );
-		$this->assertStringContainsString( 'first_name', $firstCallContext['validation_errors'][0] );
-		$this->assertStringContainsString( 'last_name', $firstCallContext['validation_errors'][1] );
+		$this->assertStringContainsString( 'first_name', $firstCallContext['validation_errors'][0] ?? '' );
+		$this->assertStringContainsString( 'last_name', $firstCallContext['validation_errors'][1] ?? '' );
 	}
 }

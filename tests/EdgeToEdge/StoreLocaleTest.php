@@ -60,7 +60,7 @@ class StoreLocaleTest extends WebRouteTestCase {
 
 		$client->request( 'GET', '/actually-every-route?locale=en_GB' );
 
-		$this->assertSame( 'en_GB', $client->getCookieJar()->get( CookieNames::LOCALE )->getValue() );
+		$this->assertSame( 'en_GB', $client->getCookieJar()->get( CookieNames::LOCALE )?->getValue() );
 	}
 
 	public function testWhenGivenInvalidUrlLocale_andCookieLocaleIsNotSet_doesNotCreateCookie(): void {

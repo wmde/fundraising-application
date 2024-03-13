@@ -9,14 +9,7 @@ namespace WMDE\Fundraising\Frontend\Autocomplete\Domain\Model;
  * It's mostly used in order for Doctrine to create and interact with the database table.
  */
 class Location {
-
-	/**
-	 * ID automagically set by Doctrine ORM if needed
-	 *
-	 * @var int|null
-	 * @phpstan-ignore-next-line
-	 */
-	private ?int $id;
+	private int $id;
 	private string $stateName;
 	private string $stateNutscode;
 	private string $regionName;
@@ -36,7 +29,8 @@ class Location {
 	private float $cityLongitude;
 	private string $postcode;
 
-	public function __construct( string $stateName, string $stateNutscode, string $regionName, string $regionNutscode, string $districtName, string $districtType, string $districtNutscode, string $communityName, string $communityType, string $communityKey, string $regionKey, float $communityLatitude, float $communityLongitude, string $cityId, string $cityName, float $cityLatitude, float $cityLongitude, string $postcode ) {
+	public function __construct( int $id, string $stateName, string $stateNutscode, string $regionName, string $regionNutscode, string $districtName, string $districtType, string $districtNutscode, string $communityName, string $communityType, string $communityKey, string $regionKey, float $communityLatitude, float $communityLongitude, string $cityId, string $cityName, float $cityLatitude, float $cityLongitude, string $postcode ) {
+		$this->id = $id;
 		$this->stateName = $stateName;
 		$this->stateNutscode = $stateNutscode;
 		$this->regionName = $regionName;

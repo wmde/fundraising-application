@@ -206,19 +206,20 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	private function assertRequestVarsAreLogged( LoggerSpy $logger, ?string $logContent = null, ?string $token = null ): void {
+		$context = $logger->getLogCalls()->getFirstCall()?->getContext() ?? [];
 		$this->assertStringContainsString(
 			$logContent ?? '<transaction>' . self::VALID_TRANSACTION_ID . '</transaction>',
-			$logger->getLogCalls()->getFirstCall()->getContext()['request_content']
+			$context['request_content']
 		);
 
 		$this->assertEquals(
 			$token ?? self::VALID_TOKEN,
-			$logger->getLogCalls()->getFirstCall()->getContext()['query_vars']['updateToken']
+			$context['query_vars']['updateToken']
 		);
 	}
 
 	private function assertLogLevel( LoggerSpy $logger, string $expectedLevel ): void {
-		$this->assertSame( $expectedLevel, $logger->getLogCalls()->getFirstCall()->getLevel() );
+		$this->assertSame( $expectedLevel, $logger->getLogCalls()->getFirstCall()?->getLevel() );
 	}
 
 	public function testGivenUnknownDonation_requestDataIsLogged(): void {
@@ -310,11 +311,11 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertSame( 1, $logger->getLogCalls()->count() );
-		$firstCallContext = $logger->getFirstLogCall()->getContext();
+		$firstCallContext = $logger->getFirstLogCall()?->getContext() ?? [];
 		$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
 		$this->assertArrayHasKey( 'request_content', $firstCallContext );
 		$this->assertArrayHasKey( 'query_vars', $firstCallContext );
-		$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()->getMessage() );
+		$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()?->getMessage() );
 	}
 
 	private function getLogger( FunFunFactory $factory ): LoggerSpy {

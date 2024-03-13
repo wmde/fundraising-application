@@ -46,7 +46,7 @@ class ErrorHandlingTemplateBasedMailerTest extends TestCase {
 
 		$this->assertSame( 1, $loggerSpy->getLogCalls()->count() );
 		$this->assertSame( [ ErrorThrowingTemplateBasedMailer::ERROR_MESSAGE ], $loggerSpy->getLogCalls()->getMessages() );
-		$this->assertSame( LogLevel::ERROR, $loggerSpy->getLogCalls()->getFirstCall()->getLevel() );
+		$this->assertSame( LogLevel::ERROR, $loggerSpy->getLogCalls()->getFirstCall()?->getLevel() );
 	}
 
 	public function testItLogsPreviousException(): void {

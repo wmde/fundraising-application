@@ -434,7 +434,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$client->request( Request::METHOD_POST, self::APPLY_FOR_MEMBERSHIP_ROUTE, $parameters );
 
-		$this->assertFalse( $factory->getMembershipApplicationRepository()->getUnexportedMembershipApplicationById( 1 )->getDonationReceipt() );
+		$this->assertFalse( $factory->getMembershipApplicationRepository()->getUnexportedMembershipApplicationById( 1 )?->getDonationReceipt() );
 	}
 
 	public function testGivenValidRequest_bucketsAreLogged(): void {

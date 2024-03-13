@@ -24,7 +24,7 @@ class LegacyRouteTest extends WebTestCase {
 
 		$response = $client->getResponse();
 		$this->assertTrue( $response->isRedirection(), 'Legacy URL should redirect' );
-		$location = $response->headers->get( 'Location', '' );
+		$location = $response->headers->get( 'Location', '' ) ?? '';
 		$path = parse_url( $location, PHP_URL_PATH );
 		$this->assertSame( '/', $path );
 	}

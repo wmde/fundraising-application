@@ -52,6 +52,9 @@ class FeatureToggleParser {
 		$nodeFinder = new NodeFinder();
 		$choiceFactoryCode = ( new SimpleFileFetcher() )->fetchFile( $choiceFactoryLocation );
 		$syntaxTree = $parser->parse( $choiceFactoryCode );
+		if ( $syntaxTree === null ) {
+			throw new \RuntimeException( 'Parser returned null' );
+		}
 		return $nodeFinder->find(
 			$syntaxTree,
 			static function ( Node $node ) {

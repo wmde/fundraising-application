@@ -46,7 +46,7 @@ class PayPalAPISpy implements PaypalAPI {
 		if ( $this->lastSubscriptionParameters === null ) {
 			throw new \LogicException( 'No subscription parameters! Check if "createSubscription" was called' );
 		}
-		return $this->lastSubscriptionParameters->subscriptionPlan->id;
+		return $this->lastSubscriptionParameters->subscriptionPlan->id ?? '';
 	}
 
 	public function createOrder( OrderParameters $orderParameters ): Order {

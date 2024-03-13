@@ -92,6 +92,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	 */
 	private function assertPayPalDataGotPersisted( array $request ): void {
 		$donation = $this->getFactory()->getDonationRepository()->getDonationById( self::DONATION_ID );
+		$this->assertNotNull( $donation );
 		$encodedBookingData = $this->getFactory()->getConnection()
 			->executeQuery( "SELECT booking_data from payment_paypal WHERE ID=" . $donation->getPaymentId() )
 			->fetchOne();
@@ -202,7 +203,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 		$this->assertSame(
 			$paymentStatus,
-			$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['payment_status']
+			$logger->getLogCalls()->getFirstCall()?->getContext()['post_vars']['payment_status']
 		);
 	}
 
@@ -241,7 +242,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$logger->getLogCalls()->getMessages()
 		);
 
-		$loggedDataAsString = implode( $logger->getLogCalls()->getFirstCall()->getContext()['post_vars'] );
+		$loggedDataAsString = implode( $logger->getLogCalls()->getFirstCall()?->getContext()['post_vars'] );
 
 		$this->assertStringNotContainsString( 'IshouldNotGetLogged@privatestuff.de', $loggedDataAsString );
 		$this->assertStringNotContainsString( '123456personalID', $loggedDataAsString );
@@ -310,7 +311,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 		$this->assertSame(
 			'subscr_modify',
-			$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['txn_type']
+			$logger->getLogCalls()->getFirstCall()?->getContext()['post_vars']['txn_type']
 		);
 	}
 
@@ -473,13 +474,13 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertSame( 1, $paypalLogger->getLogCalls()->count() );
-		$firstCallContext = $paypalLogger->getFirstLogCall()->getContext();
+		$firstCallContext = $paypalLogger->getFirstLogCall()?->getContext() ?? [];
 		$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
 		$this->assertArrayHasKey( 'post_vars', $firstCallContext );
-		$this->assertSame( 'An Exception happened: Could not get donation', $paypalLogger->getFirstLogCall()->getMessage() );
+		$this->assertSame( 'An Exception happened: Could not get donation', $paypalLogger->getFirstLogCall()?->getMessage() );
 
 		$this->assertSame( 1, $mainErrorLogger->getLogCalls()->count() );
-		$this->assertSame( 'An Exception happened: Could not get donation', $mainErrorLogger->getFirstLogCall()->getMessage() );
+		$this->assertSame( 'An Exception happened: Could not get donation', $mainErrorLogger->getFirstLogCall()?->getMessage() );
 	}
 
 	public function testGivenInternalErrorIsPaymentAlreadyBooked_applicationIndicatesSuccess(): void {
@@ -503,8 +504,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 		$this->assertCount( 1, $mainErrorLogger->getLogCalls() );
 		$this->assertCount( 1, $paypalLogger->getLogCalls() );
-		$this->assertSame( LogLevel::WARNING, $mainErrorLogger->getFirstLogCall()->getLevel(), 'Double-booked payment should be warnings, not errors' );
-		$this->assertSame( LogLevel::WARNING, $paypalLogger->getFirstLogCall()->getLevel(), 'Double-booked payment should be warnings, not errors' );
+		$this->assertSame( LogLevel::WARNING, $mainErrorLogger->getFirstLogCall()?->getLevel(), 'Double-booked payment should be warnings, not errors' );
+		$this->assertSame( LogLevel::WARNING, $paypalLogger->getFirstLogCall()?->getLevel(), 'Double-booked payment should be warnings, not errors' );
 	}
 
 	private static function newValidRequestParametersWithNegativeTransactionFee(): array {

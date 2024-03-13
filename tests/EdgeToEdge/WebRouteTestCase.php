@@ -212,7 +212,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 			0,
 			$initialFormValues->count()
 		);
-		$json = $initialFormValues->attr( 'data-initial-form-values' );
+		$json = $initialFormValues->attr( 'data-initial-form-values' ) ?? '';
 		$data = json_decode( $json, true );
 		$this->assertEquals( $expected, $data );
 	}
