@@ -8,6 +8,9 @@ use ArrayIterator;
 use IteratorAggregate;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 
+/**
+ * @implements IteratorAggregate<Campaign>
+ */
 class CampaignCollection implements IteratorAggregate {
 
 	/** @var Campaign[] */
@@ -34,6 +37,9 @@ class CampaignCollection implements IteratorAggregate {
 		}, null );
 	}
 
+	/**
+	 * @return ArrayIterator<Campaign>
+	 */
 	public function getIterator(): ArrayIterator {
 		return new ArrayIterator( $this->campaigns );
 	}

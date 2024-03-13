@@ -20,6 +20,9 @@ class BucketSelectionSpy implements BucketSelectionStrategy {
 
 	public function selectBucketForCampaign( Campaign $campaign ): Bucket {
 		$bucket = $this->bucketSelector->selectBucketForCampaign( $campaign );
+		if ( $bucket === null ) {
+			throw new \LogicException( 'Wrapped bucket selector must return a bucket' );
+		}
 		$this->bucketSelections[] = $bucket;
 		return $bucket;
 	}

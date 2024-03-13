@@ -95,10 +95,11 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 		$factory = $this->getFactory();
 		$donation = $this->newStoredDonation( $factory );
 
+		$donationId = $donation->getId();
 		$this->performRequest(
 			$client,
 			$this->newPrivateDonorData(),
-			$donation->getId(),
+			$donationId,
 			self::CORRECT_UPDATE_TOKEN,
 			self::INVALID_UPDATE_TOKEN
 		);
@@ -116,10 +117,11 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 		$client = $this->createClient();
 		$donation = $this->newExportedDebitDoctrineDonation();
 
+		$donationId = $donation->getId() ?? 0;
 		$this->performRequest(
 			$client,
 			$this->newPrivateDonorData(),
-			$donation->getId(),
+			$donationId,
 			self::CORRECT_UPDATE_TOKEN,
 			self::CORRECT_UPDATE_TOKEN
 		);
@@ -206,8 +208,9 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 	private function newExportedDebitDoctrineDonation(): DoctrineDonation {
 		$factory = $this->getFactory();
 		$donation = ValidDoctrineDonation::newExportedirectDebitDoctrineDonation();
+		$donationId = $donation->getId() ?? 0;
 		$accessToken = new AuthenticationToken(
-			$donation->getId(),
+			$donationId,
 			AuthenticationBoundedContext::Donation,
 			self::CORRECT_UPDATE_TOKEN,
 			self::CORRECT_UPDATE_TOKEN

@@ -32,6 +32,7 @@ class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
 		$campaignCollection = $this->newTestCampaignCollection();
 
 		CampaignFixture::createBucket(
+			// @phpstan-ignore-next-line
 			$campaignCollection->getIterator()->offsetGet( 1 ),
 			'test_bucket_f',
 			Bucket::NON_DEFAULT

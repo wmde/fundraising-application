@@ -10,8 +10,8 @@ use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
-use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\CreditCardPaymentNotificationController
@@ -137,10 +137,10 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 				$requestData
 			);
 
-			$this->assertCount( 1, $logger->getLogCalls() );
+			$this->assertSame( 1, $logger->getLogCalls()->count() );
 			$firstCallContext = $logger->getFirstLogCall()->getContext();
 			$requestData['amount'] = (string)$requestData['amount'];
-			$this->assertSame( $requestData, $firstCallContext['queryParams'] );
+			$this->assertSame( $requestData, $firstCallContext['queryParams'] ?? '' );
 			$this->assertSame( 'Credit Card Notification Error: Donation not found', $logger->getFirstLogCall()->getMessage() );
 		} );
 	}
@@ -177,7 +177,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 				$this->newDefaultRequestParametersFromMCP()
 			);
 
-			$this->assertCount( 1, $logger->getLogCalls() );
+			$this->assertSame( 1, $logger->getLogCalls()->count() );
 			$firstCallContext = $logger->getFirstLogCall()->getContext();
 			$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
 			$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()->getMessage() );
@@ -212,6 +212,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	 */
 	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, array $request ): void {
 		$donation = $donationRepo->getDonationById( self::DONATION_ID );
+		$this->assertNotNull( $donation );
 		$encodedBookingData = $this->getFactory()->getConnection()
 			->executeQuery( "SELECT booking_data from payment_credit_card WHERE ID=" . $donation->getPaymentId() )
 			->fetchOne();

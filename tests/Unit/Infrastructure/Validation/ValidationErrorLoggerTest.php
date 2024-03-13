@@ -6,7 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Validation;
 
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger;
-use WMDE\PsrLogTestDoubles\LoggerSpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger

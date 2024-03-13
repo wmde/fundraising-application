@@ -9,8 +9,8 @@ use Psr\Log\LogLevel;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingMailerDecorator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ErrorThrowingTemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
-use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingMailerDecorator
@@ -46,7 +46,7 @@ class ErrorHandlingMailerDecoratorTest extends TestCase {
 
 		$this->assertCount( 1, $loggerSpy->getLogCalls() );
 		$this->assertSame( [ ErrorThrowingTemplateBasedMailer::ERROR_MESSAGE ], $loggerSpy->getLogCalls()->getMessages() );
-		$this->assertSame( LogLevel::ERROR, $loggerSpy->getLogCalls()->getFirstCall()->getLevel() );
+		$this->assertSame( LogLevel::ERROR, $loggerSpy->getFirstLogCall()->getLevel() );
 	}
 
 	public function testItLogsPreviousException(): void {
