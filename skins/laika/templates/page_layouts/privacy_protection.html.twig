@@ -16,7 +16,7 @@
 		data-page-title="{$ title | e('html_attr') $}"
 		data-page-content="{$ content | e('html_attr') | raw $}"
 		data-application-vars="{$ _context|json_encode|e('html_attr') $}"
-		data-application-messages="{$ translations()|e('html_attr') $}"
+		data-application-messages="{$ translations|json_encode|e('html_attr') $}"
 		data-assets-path="{$ asset( '', 'skin') $}"
 		data-tracking-url="{$ piwik.baseUrl | e('html_attr') $}">
 	</div>

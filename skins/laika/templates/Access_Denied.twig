@@ -10,7 +10,7 @@
     <div id="appdata"
          class="is-hidden"
          data-application-vars="{$ _context|json_encode|e('html_attr') $}"
-         data-application-messages="{$ translations()|e('html_attr') $}"
+         data-application-messages="{$ translations|json_encode|e('html_attr') $}"
          data-assets-path="{$ asset( '', 'skin') $}">
     </div>
 {% endblock %}

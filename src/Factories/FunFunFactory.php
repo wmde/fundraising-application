@@ -466,7 +466,6 @@ class FunFunFactory implements LoggerAwareInterface {
 			$factory = new WebTemplatingFactory(
 				$config,
 				$this->getCachePath() . '/twig',
-				$this->getTranslationCollector()->collectTranslations(),
 				$this->getContentProvider(),
 				$packageFactory->newAssetPackages()
 			);
@@ -475,6 +474,7 @@ class FunFunFactory implements LoggerAwareInterface {
 					'basepath' => $this->config['web-basepath'],
 					'assets_path' => $this->config['assets-path'],
 					'application_environment' => $this->getApplicationEnvironment(),
+					'translations' => $this->getTranslationCollector()->collectTranslations()
 				]
 			);
 		} );

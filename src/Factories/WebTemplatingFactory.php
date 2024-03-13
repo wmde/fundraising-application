@@ -12,13 +12,11 @@ use WMDE\Fundraising\ContentProvider\ContentProvider;
 
 class WebTemplatingFactory extends TwigFactory {
 
-	private array $translations;
 	private ContentProvider $contentProvider;
 	private Packages $packages;
 
-	public function __construct( array $config, string $cachePath, array $translations, ContentProvider $contentProvider, Packages $assetPackages ) {
+	public function __construct( array $config, string $cachePath, ContentProvider $contentProvider, Packages $assetPackages ) {
 		parent::__construct( $config, $cachePath );
-		$this->translations = $translations;
 		$this->contentProvider = $contentProvider;
 		$this->packages = $assetPackages;
 	}
@@ -35,19 +33,7 @@ class WebTemplatingFactory extends TwigFactory {
 					return $this->contentProvider->getWeb( $name, $context );
 				},
 				[ 'is_safe' => [ 'html' ] ]
-			),
-			new TwigFunction(
-				'translations',
-				function (): string {
-					$result = json_encode( $this->translations );
-					if ( $result === false ) {
-						throw new \RuntimeException( sprintf( "Failed to get JSON representation of: %s",
-							var_export( $this->translations, true ) ) );
-					}
-					return $result;
-				},
-				[ 'is_safe' => [ 'html' ] ]
-			),
+			)
 		];
 	}
 
