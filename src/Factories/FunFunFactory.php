@@ -130,11 +130,12 @@ use WMDE\Fundraising\Frontend\Infrastructure\FileFeatureReader;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\AdminModerationMailRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
-use WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingTemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingMailerDecorator;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailSubjectRendererInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailTemplateFilenameTraversable;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipMailerAdapter;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\NullMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
@@ -194,7 +195,6 @@ use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository as MembershipModerationReasonRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\PaymentServiceFactory;
-use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
@@ -593,8 +593,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newErrorHandlingTemplateMailer( Messenger $messenger, TwigTemplate $template, MailSubjectRendererInterface $subjectRenderer ): ErrorHandlingTemplateBasedMailer {
-		return new ErrorHandlingTemplateBasedMailer(
+	private function newErrorHandlingTemplateMailer( Messenger $messenger, TwigTemplate $template, MailSubjectRendererInterface $subjectRenderer ): ErrorHandlingMailerDecorator {
+		return new ErrorHandlingMailerDecorator(
 			$this->newTemplateMailer( $messenger, $template, $subjectRenderer ),
 			$this->getLogger()
 		);
@@ -1202,11 +1202,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newMembershipAuthorizer(),
 			new MailMembershipApplicationNotifier(
 				$this->newApplyForMembershipMailer(),
-				$this->newAdminMailer(
-					'ein Mitgliedschaftsantrag',
-					'https://backend.wikimedia.de/backend/member/list',
-					$this->getAdminMessenger()
-				),
+				$this->newApplyForMembershipAdminMailer(),
 				$this->newGetPaymentUseCase(),
 				adminEmailAddress: $this->config['contact-info']['admin']['email']
 			),
@@ -1235,18 +1231,33 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newApplyForMembershipMailer(): MembershipTemplateMailerInterface {
-		return $this->newErrorHandlingTemplateMailer(
-			$this->getMembershipMessenger(),
-			new TwigTemplate(
-				$this->getMailerTwig(),
-				'Membership_Application_Confirmation.txt.twig',
-				[ 'greeting_generator' => $this->getGreetingGenerator() ]
-			),
-			new MembershipConfirmationMailSubjectRenderer(
-				$this->getMailTranslator(),
-				'mail_subject_confirm_membership_application_active',
-				'mail_subject_confirm_membership_application_sustaining'
+	private function newApplyForMembershipMailer(): MembershipMailerAdapter {
+		return new MembershipMailerAdapter(
+			$this->newErrorHandlingTemplateMailer(
+					$this->getMembershipMessenger(),
+					new TwigTemplate(
+						$this->getMailerTwig(),
+						'Membership_Application_Confirmation.txt.twig',
+						[ 'greeting_generator' => $this->getGreetingGenerator() ]
+					),
+					new MembershipConfirmationMailSubjectRenderer(
+						$this->getMailTranslator(),
+						'mail_subject_confirm_membership_application_active',
+						'mail_subject_confirm_membership_application_sustaining'
+					)
+			)
+		);
+	}
+
+	private function newApplyForMembershipAdminMailer(): MembershipMailerAdapter {
+		return new MembershipMailerAdapter(
+			new ErrorHandlingMailerDecorator(
+				$this->newAdminMailer(
+					'ein Mitgliedschaftsantrag',
+					'https://backend.wikimedia.de/backend/member/list',
+					$this->getAdminMessenger()
+				),
+				$this->getLogger()
 			)
 		);
 	}

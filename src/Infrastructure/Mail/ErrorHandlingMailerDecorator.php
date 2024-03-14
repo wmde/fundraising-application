@@ -7,12 +7,11 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 use Psr\Log\LoggerInterface;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
-use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
 
-class ErrorHandlingTemplateBasedMailer implements DonationTemplateMailerInterface, MembershipTemplateMailerInterface {
+class ErrorHandlingMailerDecorator implements DonationTemplateMailerInterface, TemplateMailerInterface {
 
 	public function __construct(
-		private readonly DonationTemplateMailerInterface|MembershipTemplateMailerInterface $templateBasedMailer,
+		private readonly TemplateMailerInterface $templateBasedMailer,
 		private readonly LoggerInterface $logger
 	) {
 	}
