@@ -7,17 +7,16 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
-use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
 
 /**
- * @license GPL-2.0-or-later
+ * This is a class that sends e-mails with contents based on the Twig template passed in the constructor.
  */
 class TemplateBasedMailer implements
 	DonationTemplateMailerInterface,
-	MembershipTemplateMailerInterface,
 	SubscriptionTemplateMailerInterface,
-	GetInTouchMailerInterface
+	GetInTouchMailerInterface,
+	TemplateMailerInterface
 {
 
 	private Messenger $messenger;
@@ -30,10 +29,6 @@ class TemplateBasedMailer implements
 		$this->subjectRenderer = $subjectRenderer;
 	}
 
-	/**
-	 * @inheritDoc
-	 * @throws \RuntimeException
-	 */
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
 		$this->messenger->sendMessageToUser(
 			new Message(

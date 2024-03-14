@@ -6,9 +6,9 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
-use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateMailerInterface;
 
-class ErrorThrowingTemplateBasedMailer implements DonationTemplateMailerInterface, MembershipTemplateMailerInterface {
+class ErrorThrowingTemplateBasedMailer implements DonationTemplateMailerInterface, TemplateMailerInterface {
 
 	private ?\Throwable $previous;
 
