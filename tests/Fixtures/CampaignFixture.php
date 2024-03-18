@@ -8,9 +8,6 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
-/**
- * @license GPL-2.0-or-later
- */
 class CampaignFixture {
 
 	public static function createBucket(

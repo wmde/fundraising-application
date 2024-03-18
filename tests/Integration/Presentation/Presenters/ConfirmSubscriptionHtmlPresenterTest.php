@@ -12,9 +12,6 @@ use WMDE\FunValidators\ValidationResponse;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter
- *
- * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class ConfirmSubscriptionHtmlPresenterTest extends TestCase {
 

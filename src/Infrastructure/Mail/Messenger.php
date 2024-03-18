@@ -10,9 +10,6 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use WMDE\EmailAddress\EmailAddress;
 
-/**
- * @license GPL-2.0-or-later
- */
 class Messenger {
 
 	private MailerInterface $mailer;

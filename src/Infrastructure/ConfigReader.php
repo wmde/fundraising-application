@@ -9,10 +9,6 @@ use FileFetcher\FileFetchingException;
 use RuntimeException;
 use stdClass;
 
-/**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
- */
 class ConfigReader {
 
 	/**

@@ -17,9 +17,6 @@ use WMDE\Fundraising\Frontend\Tests\PrepareSessionValuesTrait;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
-/**
- * @license GPL-2.0-or-later
- */
 abstract class WebRouteTestCase extends KernelTestCase {
 
 	use BrowserKitAssertionsTrait;

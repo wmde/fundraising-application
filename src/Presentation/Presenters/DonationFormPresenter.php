@@ -11,9 +11,6 @@ use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\ValidationResponse;
 
-/**
- * @license GPL-2.0-or-later
- */
 class DonationFormPresenter {
 
 	private TwigTemplate $template;

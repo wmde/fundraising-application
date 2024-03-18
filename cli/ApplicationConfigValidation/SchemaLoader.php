@@ -7,10 +7,6 @@ namespace WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation;
 use FileFetcher\FileFetcher;
 use FileFetcher\FileFetchingException;
 
-/**
- * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
- */
 class SchemaLoader {
 
 	private FileFetcher $fileFetcher;

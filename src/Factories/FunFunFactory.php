@@ -256,9 +256,6 @@ use WMDE\FunValidators\Validators\AmountPolicyValidator;
 use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\FunValidators\Validators\TextPolicyValidator;
 
-/**
- * @license GPL-2.0-or-later
- */
 class FunFunFactory implements LoggerAwareInterface {
 
 	public const DONATION_RATE_LIMIT_SESSION_KEY = 'donation_timestamp';

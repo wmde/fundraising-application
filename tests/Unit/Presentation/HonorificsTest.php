@@ -8,9 +8,6 @@ use WMDE\Fundraising\Frontend\Presentation\Honorifics;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Honorifics
- *
- * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class HonorificsTest extends \PHPUnit\Framework\TestCase {
 

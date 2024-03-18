@@ -7,9 +7,6 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 
-/**
- * @license GPL-2.0-or-later
- */
 class BestEffortBucketLogger implements BucketLogger {
 
 	private BucketLogger $bucketLogger;

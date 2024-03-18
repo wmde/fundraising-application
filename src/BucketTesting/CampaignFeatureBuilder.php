@@ -15,8 +15,6 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 
 /**
  * Build a Doorkeeper feature set from a list of campaigns
- *
- * @license GPL-2.0-or-later
  */
 class CampaignFeatureBuilder {
 

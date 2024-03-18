@@ -22,8 +22,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
  * - run this once before starting the work on a feature that touches emails, dumping the rendered templates
  * - run it again after the changes, dumping to another folder
  * - then diffing the resulting folders
- *
- * @license GPL-2.0-or-later
  */
 class RenderMailTemplatesCommand extends Command {
 

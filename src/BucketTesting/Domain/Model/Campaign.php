@@ -6,8 +6,6 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Domain\Model;
 
 /**
  * Value object for defining campaigns
- *
- * @license GPL-2.0-or-later
  */
 class Campaign {
 

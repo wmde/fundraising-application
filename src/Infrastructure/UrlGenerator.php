@@ -6,8 +6,6 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 /**
  * Convert route names to URLs
- *
- * @license GPL-2.0-or-later
  */
 interface UrlGenerator {
 

@@ -16,7 +16,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger
- * @license GPL-2.0-or-later
  */
 class MessengerTest extends TestCase {
 

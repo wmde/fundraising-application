@@ -8,9 +8,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector
- *
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 

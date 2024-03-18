@@ -8,8 +8,6 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
  * Render an error page
- *
- * @license GPL-2.0-or-later
  */
 class ErrorPageHtmlPresenter {
 

@@ -10,9 +10,6 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as MembershipTemplateMailerInterface;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
 
-/**
- * @license GPL-2.0-or-later
- */
 class TemplateBasedMailer implements
 	DonationTemplateMailerInterface,
 	MembershipTemplateMailerInterface,

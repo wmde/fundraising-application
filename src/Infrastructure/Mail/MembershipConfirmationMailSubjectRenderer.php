@@ -7,9 +7,6 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 
-/**
- * @license GPL-2.0-or-later
- */
 class MembershipConfirmationMailSubjectRenderer implements MailSubjectRendererInterface {
 
 	private TranslatorInterface $translator;

@@ -7,9 +7,6 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Validation;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 
-/**
- * @license GPL-2.0-or-later
- */
 class CampaignUtilizationValidator {
 
 	private bool $hasValidated = false;

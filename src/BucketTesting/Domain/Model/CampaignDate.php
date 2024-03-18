@@ -6,9 +6,6 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Domain\Model;
 
 use DateTimeZone;
 
-/**
- * @license GPL-2.0-or-later
- */
 class CampaignDate extends \DateTimeImmutable {
 
 	private const TIMEZONE = 'UTC';

@@ -13,8 +13,6 @@ use WMDE\Fundraising\DonationContext\Tests\Fixtures\DonationEventLoggerSpy;
 
 /**
  * @covers \WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger
- *
- * @license GPL-2.0-or-later
  */
 class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
 

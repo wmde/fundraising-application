@@ -9,8 +9,6 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
 
 /**
  * Factory for generating classes whose implementations differ due to A/B testing.
- *
- * @license GPL-2.0-or-later
  */
 class ChoiceFactory {
 

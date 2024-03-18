@@ -10,9 +10,6 @@ use WMDE\FunValidators\ValidationResponse;
 
 /**
  * Render the contact form with errors
- *
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class GetInTouchHtmlPresenter {
 

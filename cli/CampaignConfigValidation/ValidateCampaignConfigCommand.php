@@ -14,9 +14,6 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
-/**
- * @license GPL-2.0-or-later
- */
 class ValidateCampaignConfigCommand extends Command {
 
 	private const NAME = 'app:validate:campaigns';

@@ -10,9 +10,6 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Yaml;
 use WMDE\Fundraising\Frontend\Infrastructure\GetConfigCacheKey;
 
-/**
- * @license GPL-2.0-or-later
- */
 class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 
 	use GetConfigCacheKey;

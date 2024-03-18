@@ -22,8 +22,6 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
  * @covers \WMDE\Fundraising\Frontend\Factories\TwigFactory
  * @covers \WMDE\Fundraising\Frontend\Factories\FunFunFactory::getSkinTwig
  * @covers \WMDE\Fundraising\Frontend\Factories\AssetPackageFactory
- *
- * @license GPL-2.0-or-later
  */
 class WebTemplatingFactoryTest extends KernelTestCase {
 

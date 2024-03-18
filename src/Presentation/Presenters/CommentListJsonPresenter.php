@@ -7,9 +7,6 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentWithAmount;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentList;
 
-/**
- * @license GPL-2.0-or-later
- */
 class CommentListJsonPresenter {
 
 	public function present( CommentList $commentList ): array {

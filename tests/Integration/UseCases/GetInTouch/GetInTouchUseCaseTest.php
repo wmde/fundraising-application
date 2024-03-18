@@ -16,9 +16,6 @@ use WMDE\FunValidators\ValidationResult;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase
- *
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class GetInTouchUseCaseTest extends TestCase {
 

@@ -15,9 +15,6 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValida
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\FeatureToggleParser;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
-/**
- * @license GPL-2.0-or-later
- */
 class ValidateCampaignCodeUtilizationCommand extends Command {
 
 	private const NAME = 'app:validate:campaigns:utilization';

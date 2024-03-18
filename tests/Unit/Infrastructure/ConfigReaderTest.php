@@ -13,9 +13,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader
- *
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
  */
 class ConfigReaderTest extends TestCase {
 

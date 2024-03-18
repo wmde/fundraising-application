@@ -17,7 +17,6 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\UniqueBucketRule;
  * YAML validity is checked in during loading of campaign configuration
  *
  * @see \WMDE\Fundraising\Frontend\BucketTesting\CampaignConfiguration
- * @license GPL-2.0-or-later
  */
 class CampaignValidator {
 

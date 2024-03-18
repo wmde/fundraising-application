@@ -7,10 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\ValidationResult;
 
-/**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
- */
 class FailedValidationResult extends ValidationResult {
 
 	public function __construct() {

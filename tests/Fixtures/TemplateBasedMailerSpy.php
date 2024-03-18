@@ -9,9 +9,6 @@ use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
 
-/**
- * @license GPL-2.0-or-later
- */
 class TemplateBasedMailerSpy implements GetInTouchMailerInterface, DonationTemplateMailerInterface {
 
 	private TestCase $testCase;

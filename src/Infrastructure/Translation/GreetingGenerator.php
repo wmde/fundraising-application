@@ -6,9 +6,6 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Translation;
 
 use WMDE\Fundraising\Frontend\Presentation\Salutations;
 
-/**
- * @license GPL-2.0-or-later
- */
 class GreetingGenerator {
 	private TranslatorInterface $translator;
 	private Salutations $salutations;

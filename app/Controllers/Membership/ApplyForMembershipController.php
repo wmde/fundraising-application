@@ -14,9 +14,6 @@ use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembe
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
 use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentParameters;
 
-/**
- * @license GPL-2.0-or-later
- */
 class ApplyForMembershipController {
 
 	private const TRANSFER_CODE_PREFIX = 'XM';
