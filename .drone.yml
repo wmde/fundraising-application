@@ -26,10 +26,16 @@ steps:
       - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
       - composer config -g github-oauth.github.com "$GITHUB_TOKEN"
       - composer install --prefer-dist --no-progress --no-interaction
+      - echo "APP_ENV=dev" > .env
+      - make default-config
       # CI
       - vendor/bin/phpcs
       - php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-clover coverage.xml
       - php -d memory_limit=1G vendor/bin/phpstan analyse --level=5 --no-progress src/ tests/
+      - php bin/console lint:container
+      - php bin/console app:validate:config app/config/config.dist.json app/config/config.test.json
+      - php bin/console app:validate:config app/config/config.dist.json .docker/app/config.dev.json
+      - php bin/console app:validate:campaigns dev
       # Upload coverage to Scrutinizer
       - ocular code-coverage:upload --no-interaction --format=php-clover coverage.xml
 
