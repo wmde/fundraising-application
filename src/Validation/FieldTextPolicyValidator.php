@@ -12,10 +12,7 @@ class FieldTextPolicyValidator {
 
 	private const VIOLATION_MESSAGE = 'This field has unacceptable language or URLs in it';
 
-	private TextPolicyValidator $textPolicyValidator;
-
-	public function __construct( TextPolicyValidator $textPolicyValidator ) {
-		$this->textPolicyValidator = $textPolicyValidator;
+	public function __construct( private readonly TextPolicyValidator $textPolicyValidator ) {
 	}
 
 	public function validate( $value ): ValidationResult {	// @codingStandardsIgnoreLine

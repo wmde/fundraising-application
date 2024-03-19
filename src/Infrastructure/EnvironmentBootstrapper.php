@@ -20,15 +20,15 @@ class EnvironmentBootstrapper {
 		'prod' => ProductionEnvironmentSetup::class
 	];
 
-	private string $environmentName;
-
 	/**
 	 * @var array<string,class-string>
 	 */
 	private array $environmentMap;
 
-	public function __construct( string $environmentName, array $environmentMap = [] ) {
-		$this->environmentName = $environmentName;
+	public function __construct(
+		private readonly string $environmentName,
+		array $environmentMap = []
+	) {
 		$this->environmentMap = array_merge( self::DEFAULT_ENVIRONMENT_SETUP_MAP, $environmentMap );
 	}
 

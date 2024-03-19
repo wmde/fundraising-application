@@ -16,10 +16,10 @@ use WMDE\Fundraising\MembershipContext\Domain\Event\MembershipCreatedEvent;
 
 class CreateAddressChangeHandler {
 
-	private EntityManager $entityManager;
-
-	public function __construct( EntityManager $entityManager, EventDispatcher $dispatcher ) {
-		$this->entityManager = $entityManager;
+	public function __construct(
+		private readonly EntityManager $entityManager,
+		EventDispatcher $dispatcher
+	) {
 		$dispatcher->addEventListener( DonationCreatedEvent::class, [ $this, 'onDonationCreated' ] )
 			->addEventListener( MembershipCreatedEvent::class, [ $this, 'onMembershipCreated' ] )
 			->addEventListener( DonorUpdatedEvent::class, [ $this, 'onDonorUpdated' ] );

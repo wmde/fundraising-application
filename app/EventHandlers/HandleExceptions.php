@@ -21,10 +21,7 @@ class HandleExceptions implements EventSubscriberInterface {
 
 	private const PRIORITY = -8;
 
-	private FunFunFactory $presenterFactory;
-
-	public function __construct( FunFunFactory $presenterFactory ) {
-		$this->presenterFactory = $presenterFactory;
+	public function __construct( private readonly FunFunFactory $presenterFactory ) {
 	}
 
 	/**

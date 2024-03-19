@@ -10,12 +10,10 @@ class UserDataKeyGenerator {
 
 	private const SECONDS_PER_DAY = 86400;
 
-	private string $masterKey;
-	private Clock $time;
-
-	public function __construct( string $masterKey, Clock $time ) {
-		$this->masterKey = $masterKey;
-		$this->time = $time;
+	public function __construct(
+		private readonly string $masterKey,
+		private readonly Clock $time
+	) {
 	}
 
 	public function getDailyKey(): string {

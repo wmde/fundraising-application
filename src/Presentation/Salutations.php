@@ -6,13 +6,7 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 
 class Salutations {
 
-	/**
-	 * @var array
-	 */
-	private array $salutations;
-
-	public function __construct( array $salutations ) {
-		$this->salutations = $salutations;
+	public function __construct( private readonly array $salutations ) {
 	}
 
 	public function getList(): array {

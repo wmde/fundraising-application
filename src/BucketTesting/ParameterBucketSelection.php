@@ -9,10 +9,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 
 class ParameterBucketSelection implements BucketSelectionStrategy {
 
-	private array $parameters;
-
-	public function __construct( array $parameters ) {
-		$this->parameters = $parameters;
+	public function __construct( private readonly array $parameters ) {
 	}
 
 	public function selectBucketForCampaign( Campaign $campaign ): ?Bucket {

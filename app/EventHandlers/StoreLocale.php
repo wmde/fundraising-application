@@ -18,12 +18,10 @@ class StoreLocale implements EventSubscriberInterface {
 	public const SHOULD_STORE_LOCALE_COOKIE = 'shouldStoreLocaleCookie';
 	private const PRIORITY = 512;
 
-	private FunFunFactory $factory;
-	private array $allowedLocales;
-
-	public function __construct( FunFunFactory $factory, array $allowedLocales ) {
-		$this->factory = $factory;
-		$this->allowedLocales = $allowedLocales;
+	public function __construct(
+		private readonly FunFunFactory $factory,
+		private readonly array $allowedLocales
+	) {
 	}
 
 	/**

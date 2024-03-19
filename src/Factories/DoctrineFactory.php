@@ -10,16 +10,14 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 
 class DoctrineFactory {
-	private Connection $connection;
-	private Configuration $config;
-	private ContextFactoryCollection $contextFactories;
 
 	private ?EntityManager $entityManager;
 
-	public function __construct( Connection $connection, Configuration $config, ContextFactoryCollection $contextFactories ) {
-		$this->connection = $connection;
-		$this->config = $config;
-		$this->contextFactories = $contextFactories;
+	public function __construct(
+		private readonly Connection $connection,
+		private readonly Configuration $config,
+		private readonly ContextFactoryCollection $contextFactories
+	) {
 		$this->entityManager = null;
 	}
 

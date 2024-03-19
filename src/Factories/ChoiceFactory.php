@@ -12,10 +12,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
  */
 class ChoiceFactory {
 
-	private FeatureToggle $featureToggle;
-
-	public function __construct( FeatureToggle $featureToggle ) {
-		$this->featureToggle = $featureToggle;
+	public function __construct( private readonly FeatureToggle $featureToggle ) {
 	}
 
 	public function getMembershipPaymentIntervals(): array {

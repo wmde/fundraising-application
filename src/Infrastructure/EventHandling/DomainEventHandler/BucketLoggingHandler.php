@@ -15,13 +15,13 @@ use WMDE\Fundraising\MembershipContext\Domain\Event\MembershipCreatedEvent;
  */
 class BucketLoggingHandler {
 
-	private BucketLogger $bucketLogger;
-
 	/** @var callable */
 	private $getSelectedBuckets;
 
-	public function __construct( BucketLogger $bucketLogger, callable $getSelectedBuckets ) {
-		$this->bucketLogger = $bucketLogger;
+	public function __construct(
+		private readonly BucketLogger $bucketLogger,
+		callable $getSelectedBuckets
+	) {
 		$this->getSelectedBuckets = $getSelectedBuckets;
 	}
 

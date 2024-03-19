@@ -10,10 +10,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
 class InactiveCampaignBucketSelection implements BucketSelectionStrategy {
 
-	private CampaignDate $now;
-
-	public function __construct( CampaignDate $now ) {
-		$this->now = $now;
+	public function __construct( private readonly CampaignDate $now ) {
 	}
 
 	public function selectBucketForCampaign( Campaign $campaign ): ?Bucket {

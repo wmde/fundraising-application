@@ -7,14 +7,12 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Translation;
 use WMDE\Fundraising\Frontend\Presentation\Salutations;
 
 class GreetingGenerator {
-	private TranslatorInterface $translator;
-	private Salutations $salutations;
-	private string $genericGreeting;
 
-	public function __construct( TranslatorInterface $translator, Salutations $salutations, string $genericGreeting ) {
-		$this->translator = $translator;
-		$this->salutations = $salutations;
-		$this->genericGreeting = $genericGreeting;
+	public function __construct(
+		private readonly TranslatorInterface $translator,
+		private readonly Salutations $salutations,
+		private readonly string $genericGreeting
+	) {
 	}
 
 	private static function getSpacedTitle( ?string $title ): string {

@@ -11,10 +11,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
 class CampaignBuilder {
 
-	private DateTimeZone $timezone;
-
-	public function __construct( DateTimeZone $timezone ) {
-		$this->timezone = $timezone;
+	public function __construct( private readonly DateTimeZone $timezone ) {
 	}
 
 	public function getCampaigns( array $campaignConfig ): array {

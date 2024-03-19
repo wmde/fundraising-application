@@ -25,10 +25,7 @@ class PaymentTypesSettings {
 	public const ENABLE_DONATIONS = 'donation-enabled';
 	public const ENABLE_MEMBERSHIP_APPLICATIONS = 'membership-enabled';
 
-	private array $settings;
-
-	public function __construct( array $settings ) {
-		$this->settings = $settings;
+	public function __construct( private readonly array $settings ) {
 	}
 
 	/**

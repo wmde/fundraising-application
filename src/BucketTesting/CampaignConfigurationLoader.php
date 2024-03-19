@@ -14,12 +14,10 @@ class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterfac
 
 	use GetConfigCacheKey;
 
-	private FileFetcher $fileFetcher;
-	private CacheInterface $cache;
-
-	public function __construct( FileFetcher $fileFetcher, CacheInterface $cache ) {
-		$this->fileFetcher = $fileFetcher;
-		$this->cache = $cache;
+	public function __construct(
+		private readonly FileFetcher $fileFetcher,
+		private readonly CacheInterface $cache
+	) {
 	}
 
 	public function loadCampaignConfiguration( string ...$configFiles ): array {

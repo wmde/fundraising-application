@@ -9,10 +9,7 @@ use WMDE\FunValidators\ValidationResponse;
 
 class ConfirmSubscriptionHtmlPresenter {
 
-	private TwigTemplate $template;
-
-	public function __construct( TwigTemplate $template ) {
-		$this->template = $template;
+	public function __construct( private readonly TwigTemplate $template ) {
 	}
 
 	public function present( ValidationResponse $confirmationResponse ): string {

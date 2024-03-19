@@ -18,9 +18,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 
 	private ?\Exception $exception = null;
 
-	public function __construct(
-		private readonly TwigTemplate $template
-	) {
+	public function __construct( private readonly TwigTemplate $template ) {
 	}
 
 	public function presentConfirmation( MembershipApplication $application, array $paymentData ): void {

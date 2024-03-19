@@ -9,13 +9,12 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 
 class BestEffortBucketLogger implements BucketLogger {
 
-	private BucketLogger $bucketLogger;
-	private LoggerInterface $errorLogging;
 	private ?LoggingError $caughtException = null;
 
-	public function __construct( BucketLogger $bucketLogger, LoggerInterface $errorLogging ) {
-		$this->bucketLogger = $bucketLogger;
-		$this->errorLogging = $errorLogging;
+	public function __construct(
+		private readonly BucketLogger $bucketLogger,
+		private readonly LoggerInterface $errorLogging
+	) {
 	}
 
 	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void {

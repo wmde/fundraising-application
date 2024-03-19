@@ -17,14 +17,11 @@ class TemplateBasedMailer implements
 	GetInTouchMailerInterface
 {
 
-	private Messenger $messenger;
-	private TwigTemplate $template;
-	private MailSubjectRendererInterface $subjectRenderer;
-
-	public function __construct( Messenger $messenger, TwigTemplate $template, MailSubjectRendererInterface $subjectRenderer ) {
-		$this->messenger = $messenger;
-		$this->template = $template;
-		$this->subjectRenderer = $subjectRenderer;
+	public function __construct(
+		private readonly Messenger $messenger,
+		private readonly TwigTemplate $template,
+		private readonly MailSubjectRendererInterface $subjectRenderer
+	) {
 	}
 
 	/**

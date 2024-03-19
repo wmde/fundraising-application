@@ -8,12 +8,10 @@ use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 
 class BasicMailSubjectRenderer implements MailSubjectRendererInterface {
 
-	private TranslatorInterface $translator;
-	private string $subjectKey;
-
-	public function __construct( TranslatorInterface $translator, string $subjectKey ) {
-		$this->translator = $translator;
-		$this->subjectKey = $subjectKey;
+	public function __construct(
+		private readonly TranslatorInterface $translator,
+		private readonly string $subjectKey
+	) {
 	}
 
 	public function render( array $templateArguments = [] ): string {

@@ -6,16 +6,14 @@ namespace WMDE\Fundraising\Frontend\Authentication\OldStyleTokens;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 
 class AuthenticationToken {
-	private ?\DateTimeImmutable $updateTokenTokenExpiry;
 
 	public function __construct(
 		public readonly int $id,
 		public readonly AuthenticationBoundedContext $authenticationBoundedContext,
 		private readonly string $accessToken,
 		private readonly string $updateToken,
-		?\DateTimeImmutable $updateTokenTokenExpiry = null
+		private readonly ?\DateTimeImmutable $updateTokenTokenExpiry = null
 	) {
-		$this->updateTokenTokenExpiry = $updateTokenTokenExpiry;
 	}
 
 	public function updateTokenHasExpired( \DateTimeImmutable $now ): bool {

@@ -9,10 +9,8 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\SchemaTool;
 
 class SchemaCreator {
-	private EntityManager $entityManager;
 
-	public function __construct( EntityManager $entityManager ) {
-		$this->entityManager = $entityManager;
+	public function __construct( private readonly EntityManager $entityManager ) {
 	}
 
 	public function createSchema(): void {

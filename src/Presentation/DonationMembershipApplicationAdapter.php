@@ -17,9 +17,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 
 class DonationMembershipApplicationAdapter {
 
-	public function __construct(
-		private readonly BankDataGenerator $bankDataGenerator
-	) {
+	public function __construct( private readonly BankDataGenerator $bankDataGenerator ) {
 	}
 
 	public function getInitialMembershipFormValues( Donation $donation, Payment $payment ): array {

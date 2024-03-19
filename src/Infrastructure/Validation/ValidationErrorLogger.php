@@ -8,10 +8,7 @@ use Psr\Log\LoggerInterface;
 
 class ValidationErrorLogger {
 
-	private LoggerInterface $logger;
-
-	public function __construct( LoggerInterface $logger ) {
-		$this->logger = $logger;
+	public function __construct( private readonly LoggerInterface $logger ) {
 	}
 
 	public function logViolations( string $message, array $fields, array $validationErrors ): void {

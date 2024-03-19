@@ -9,14 +9,11 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
 class DonationConfirmationMailSubjectRenderer implements MailSubjectRendererInterface {
 
-	private TranslatorInterface $translator;
-	private string $defaultSubjectKey;
-	private string $bankTransferSubjectKey;
-
-	public function __construct( TranslatorInterface $translator, string $defaultSubjectKey, string $bankTransferSubjectKey ) {
-		$this->translator = $translator;
-		$this->defaultSubjectKey = $defaultSubjectKey;
-		$this->bankTransferSubjectKey = $bankTransferSubjectKey;
+	public function __construct(
+		private readonly TranslatorInterface $translator,
+		private readonly string $defaultSubjectKey,
+		private readonly string $bankTransferSubjectKey
+	) {
 	}
 
 	public function render( array $templateArguments = [] ): string {

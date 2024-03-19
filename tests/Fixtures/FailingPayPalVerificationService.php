@@ -9,9 +9,7 @@ use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\VerificationService;
 
 class FailingPayPalVerificationService implements VerificationService {
 
-	public function __construct(
-		private readonly string $errorMessage
-	) {
+	public function __construct( private readonly string $errorMessage ) {
 	}
 
 	public function validate( array $transactionData ): VerificationResponse {

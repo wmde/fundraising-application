@@ -22,7 +22,7 @@ class StoredDonations {
 
 	public const DEFAULT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';
 
-	public function __construct( private FunFunFactory $factory ) {
+	public function __construct( private readonly FunFunFactory $factory ) {
 	}
 
 	public function newStoredIncompleteCreditCardDonation( string $updateToken ): Donation {

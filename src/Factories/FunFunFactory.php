@@ -262,15 +262,6 @@ class FunFunFactory implements LoggerAwareInterface {
 	public const MEMBERSHIP_RATE_LIMIT_SESSION_KEY = 'memapp_timestamp';
 
 	/**
-	 * Nested configuration values.
-	 *
-	 * See JSON schema in app/config/schema.json for allowed values
-	 *
-	 * @var array
-	 */
-	private array $config;
-
-	/**
 	 * Holds instances that should only be initialized once.
 	 *
 	 * Type is classname_string => instance
@@ -281,8 +272,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	 */
 	private array $sharedObjects;
 
-	public function __construct( array $config ) {
-		$this->config = $config;
+	public function __construct( private readonly array $config ) {
 		$this->sharedObjects = [];
 	}
 

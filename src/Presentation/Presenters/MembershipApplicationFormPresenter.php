@@ -8,12 +8,11 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\Impr
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 class MembershipApplicationFormPresenter {
-	private TwigTemplate $template;
-	private array $incentives;
 
-	public function __construct( TwigTemplate $template, array $incentives ) {
-		$this->template = $template;
-		$this->incentives = $incentives;
+	public function __construct(
+		private readonly TwigTemplate $template,
+		private readonly array $incentives
+	) {
 	}
 
 	public function present( array $urls,

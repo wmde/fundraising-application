@@ -9,10 +9,7 @@ use FileFetcher\FileFetchingException;
 
 class SchemaLoader {
 
-	private FileFetcher $fileFetcher;
-
-	public function __construct( FileFetcher $fileFetcher ) {
-		$this->fileFetcher = $fileFetcher;
+	public function __construct( private readonly FileFetcher $fileFetcher ) {
 	}
 
 	public function loadSchema( string $schema ): \stdClass {

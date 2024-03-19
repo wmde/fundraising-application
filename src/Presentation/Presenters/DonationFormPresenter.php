@@ -13,15 +13,10 @@ use WMDE\FunValidators\ValidationResponse;
 
 class DonationFormPresenter {
 
-	private TwigTemplate $template;
-	private IsCustomAmountValidator $isCustomDonationAmountValidator;
-
 	public function __construct(
-		TwigTemplate $template,
-		IsCustomAmountValidator $isCustomDonationAmountValidator
+		private readonly TwigTemplate $template,
+		private readonly IsCustomAmountValidator $isCustomDonationAmountValidator
 	) {
-		$this->template = $template;
-		$this->isCustomDonationAmountValidator = $isCustomDonationAmountValidator;
 	}
 
 	public function present( int $amount, string $paymentType, ?int $paymentInterval, ValidationResponse $paymentValidationResult,

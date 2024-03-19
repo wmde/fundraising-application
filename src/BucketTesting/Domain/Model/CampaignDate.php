@@ -10,7 +10,10 @@ class CampaignDate extends \DateTimeImmutable {
 
 	private const TIMEZONE = 'UTC';
 
-	public function __construct( string $time = 'now', ?DateTimeZone $timezone = null ) {
+	public function __construct(
+		string $time = 'now',
+		?DateTimeZone $timezone = null
+	) {
 		if ( $timezone && $timezone->getName() !== self::TIMEZONE ) {
 			throw new \InvalidArgumentException( sprintf( 'CampaignDates must have time zone "%s".', self::TIMEZONE ) );
 		}

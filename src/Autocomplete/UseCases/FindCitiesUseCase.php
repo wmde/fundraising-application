@@ -8,10 +8,7 @@ use WMDE\Fundraising\Frontend\Autocomplete\Domain\LocationRepository;
 
 class FindCitiesUseCase {
 
-	private LocationRepository $locationRepository;
-
-	public function __construct( LocationRepository $locationRepository ) {
-		$this->locationRepository = $locationRepository;
+	public function __construct( private readonly LocationRepository $locationRepository ) {
 	}
 
 	/**

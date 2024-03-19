@@ -8,10 +8,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 
 class UrlGeneratorAdapter implements UrlGenerator {
 
-	private UrlGeneratorInterface $urlGenerator;
-
-	public function __construct( UrlGeneratorInterface $urlGenerator ) {
-		$this->urlGenerator = $urlGenerator;
+	public function __construct( private readonly UrlGeneratorInterface $urlGenerator ) {
 	}
 
 	public function generateAbsoluteUrl( string $routeName, array $parameters = [] ): string {

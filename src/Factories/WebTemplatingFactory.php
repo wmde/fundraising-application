@@ -12,14 +12,16 @@ use WMDE\Fundraising\ContentProvider\ContentProvider;
 
 class WebTemplatingFactory extends TwigFactory {
 
-	private array $translations;
-	private ContentProvider $contentProvider;
 	private Packages $packages;
 
-	public function __construct( array $config, string $cachePath, array $translations, ContentProvider $contentProvider, Packages $assetPackages ) {
+	public function __construct(
+		array $config,
+		string $cachePath,
+		private readonly array $translations,
+		private readonly ContentProvider $contentProvider,
+		Packages $assetPackages
+	) {
 		parent::__construct( $config, $cachePath );
-		$this->translations = $translations;
-		$this->contentProvider = $contentProvider;
 		$this->packages = $assetPackages;
 	}
 

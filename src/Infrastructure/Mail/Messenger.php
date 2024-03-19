@@ -12,16 +12,11 @@ use WMDE\EmailAddress\EmailAddress;
 
 class Messenger {
 
-	private MailerInterface $mailer;
-	private EmailAddress $operatorAddress;
-	private string $operatorName;
-
-	public function __construct( MailerInterface $mailer,
-								 EmailAddress $operatorAddress,
-								 string $operatorName = '' ) {
-		$this->mailer = $mailer;
-		$this->operatorAddress = $operatorAddress;
-		$this->operatorName = $operatorName;
+	public function __construct(
+		private readonly MailerInterface $mailer,
+		private readonly EmailAddress $operatorAddress,
+		private readonly string $operatorName = ''
+	) {
 	}
 
 	public function sendMessageToUser( Message $messageContent, EmailAddress $recipient ): void {

@@ -5,17 +5,15 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\BucketTesting\Domain\Model;
 
 class Bucket {
-	private string $name;
-	private Campaign $campaign;
-	private bool $defaultBucket;
 
 	public const DEFAULT = true;
 	public const NON_DEFAULT = false;
 
-	public function __construct( string $name, Campaign $campaign, bool $defaultBucket ) {
-		$this->name = $name;
-		$this->campaign = $campaign;
-		$this->defaultBucket = $defaultBucket;
+	public function __construct(
+		private readonly string $name,
+		private readonly Campaign $campaign,
+		private readonly bool $defaultBucket
+	) {
 	}
 
 	public function getName(): string {

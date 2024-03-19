@@ -13,10 +13,7 @@ class StoreBucketSelection implements EventSubscriberInterface {
 
 	private const PRIORITY = 256;
 
-	private FunFunFactory $factory;
-
-	public function __construct( FunFunFactory $factory ) {
-		$this->factory = $factory;
+	public function __construct( private readonly FunFunFactory $factory ) {
 	}
 
 	/**

@@ -9,10 +9,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 
 class SelectDefaultWhenParamsAreMissingSelection implements BucketSelectionStrategy {
 
-	private array $params;
-
-	public function __construct( array $params ) {
-		$this->params = $params;
+	public function __construct( private readonly array $params ) {
 	}
 
 	public function selectBucketForCampaign( Campaign $campaign ): ?Bucket {

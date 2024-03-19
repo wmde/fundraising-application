@@ -11,9 +11,7 @@ class CreditCardNotificationPresenter {
 	private const VALUE_ASSIGNMENT = '=';
 	private const ARG_SEPARATOR = "\n";
 
-	public function __construct(
-		private readonly string $returnUrl
-	) {
+	public function __construct( private readonly string $returnUrl ) {
 	}
 
 	public function present( NotificationResponse $response, string $donationId, string $accessToken ): string {

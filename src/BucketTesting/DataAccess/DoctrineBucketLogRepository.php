@@ -10,10 +10,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\BucketLog;
 
 class DoctrineBucketLogRepository implements BucketLoggingRepository {
 
-	private EntityManager $entityManager;
-
-	public function __construct( EntityManager $entityManager ) {
-		$this->entityManager = $entityManager;
+	public function __construct( private readonly EntityManager $entityManager ) {
 	}
 
 	public function storeBucketLog( BucketLog $bucketLog ): void {

@@ -9,14 +9,9 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Domain\Model;
  */
 class Campaign {
 
-	private string $name;
 	private bool $active;
-	private CampaignDate $startTimestamp;
-	private CampaignDate $endTimestamp;
 	private array $buckets;
-	private string $urlKey;
 	private int $defaultBucketIndex;
-	private bool $onlyActiveWithUrlKey;
 
 	public const ACTIVE = true;
 	public const INACTIVE = false;
@@ -24,16 +19,17 @@ class Campaign {
 	public const NEEDS_URL_KEY = true;
 	public const NEEDS_NO_URL_KEY = false;
 
-	public function __construct( string $name, string $urlKey, CampaignDate $startTimestamp, CampaignDate $endTimestamp,
-								 bool $isActive, bool $onlyActiveWithUrlKey = false ) {
-		$this->name = $name;
-		$this->urlKey = $urlKey;
+	public function __construct(
+		private readonly string $name,
+		private readonly string $urlKey,
+		private readonly CampaignDate $startTimestamp,
+		private readonly CampaignDate $endTimestamp,
+		bool $isActive,
+		private readonly bool $onlyActiveWithUrlKey = false
+	) {
 		$this->active = $isActive;
-		$this->startTimestamp = $startTimestamp;
-		$this->endTimestamp = $endTimestamp;
 		$this->buckets = [];
 		$this->defaultBucketIndex = -1;
-		$this->onlyActiveWithUrlKey = $onlyActiveWithUrlKey;
 	}
 
 	public function isActive(): bool {

@@ -16,7 +16,10 @@ class ConfigReader {
 	 */
 	private $configPaths;
 
-	public function __construct( private readonly FileFetcher $fileFetcher, string ...$configPaths ) {
+	public function __construct(
+		private readonly FileFetcher $fileFetcher,
+		string ...$configPaths
+	) {
 		if ( empty( $configPaths ) ) {
 			throw new \InvalidArgumentException( 'Need at least one config path' );
 		}
