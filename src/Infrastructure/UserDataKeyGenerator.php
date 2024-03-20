@@ -8,7 +8,7 @@ use WMDE\Clock\Clock;
 
 class UserDataKeyGenerator {
 
-	private const START_TIME = '2020-01-01 0:00:00Z';
+	private const SECONDS_PER_DAY = 86400;
 
 	private string $masterKey;
 	private Clock $time;
@@ -20,11 +20,11 @@ class UserDataKeyGenerator {
 
 	public function getDailyKey(): string {
 		$now = $this->time->now();
-		$daysSince2020 = abs( $now->diff( new \DateTimeImmutable( self::START_TIME ) )->days );
+		$numberOfDays = intval( $now->getTimestamp() / self::SECONDS_PER_DAY );
 		return sodium_bin2base64(
 			sodium_crypto_kdf_derive_from_key(
 				32,
-				$daysSince2020,
+				$numberOfDays,
 				$now->format( 'Ymd' ),
 				sodium_base642bin( $this->masterKey, SODIUM_BASE64_VARIANT_ORIGINAL, '' )
 			),

@@ -39,7 +39,8 @@ class WebTemplatingFactory extends TwigFactory {
 			new TwigFunction(
 				'translations',
 				function (): string {
-					return json_encode( $this->translations );
+					// "We know the translations come from JSON so we can let the JSON Exception be unchecked because that should never happen
+					return json_encode( $this->translations, JSON_THROW_ON_ERROR );
 				},
 				[ 'is_safe' => [ 'html' ] ]
 			),

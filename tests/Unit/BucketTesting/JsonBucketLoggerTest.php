@@ -10,7 +10,6 @@ use WMDE\Clock\StubClock;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
-use WMDE\Fundraising\Frontend\BucketTesting\Logging\BucketLogger;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LogWriterSpy;
@@ -31,6 +30,14 @@ class JsonBucketLoggerTest extends TestCase {
 		$this->clock = new StubClock( new \DateTimeImmutable( self::STUB_TIME_VALUE ) );
 	}
 
+	public function testGivenInvalidData_writeEventThrowsAnException(): void {
+		$this->expectException( \RuntimeException::class );
+		$this->expectExceptionMessageMatches( '/Failed to get JSON representation/' );
+
+		// Passing a resource to json_encode() will trigger an error
+		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent( [ 'key' => fopen( 'php://memory', 'r' ) ] ) );
+	}
+
 	public function testLogWriterAddsDate(): void {
 		$this->newBucketLogger()->writeEvent( new FakeBucketLoggingEvent() );
 
@@ -43,7 +50,7 @@ class JsonBucketLoggerTest extends TestCase {
 		$this->assertLogValue( 'testEventLogged', 'eventName' );
 	}
 
-	private function newBucketLogger(): BucketLogger {
+	private function newBucketLogger(): JsonBucketLogger {
 		return new JsonBucketLogger( $this->logWriter, $this->clock );
 	}
 

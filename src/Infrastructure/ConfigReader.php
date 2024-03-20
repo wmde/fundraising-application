@@ -75,7 +75,9 @@ class ConfigReader {
 		if ( empty( $config['twig']['loaders']['array'] ) ) {
 			$config['twig']['loaders']['array'] = new stdClass();
 		}
-		return json_decode( json_encode( $config ), false );
+
+		// This should never throw an exception, because we already read the configuration from JSON
+		return json_decode( json_encode( $config, JSON_THROW_ON_ERROR ), false, JSON_THROW_ON_ERROR );
 	}
 
 }

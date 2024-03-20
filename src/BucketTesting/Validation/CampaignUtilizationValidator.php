@@ -94,17 +94,29 @@ class CampaignUtilizationValidator {
 		$campaignBuckets = [];
 		foreach ( array_count_values( $this->featureToggles ) as $featureToggle => $featureToggleCount ) {
 			$campaign = $this->getCampaignNameFromFeatureToggle( $featureToggle );
+			if ( $campaign === '' ) {
+				$this->errorLogger->addError(
+					'Feature toggle name did not contain a campaign name. The campaign name should be the last ' .
+					'item in a dot-separated string (with at least one "." character). Feature toggle name was: ' .
+					$featureToggle
+				);
+				continue;
+			}
 			if ( isset( $campaignBuckets[$campaign] ) && $campaignBuckets[$campaign] !== $featureToggleCount ) {
 				$this->errorLogger->addError(
 					'Campaign buckets for "' . $featureToggle . '" have not been implemented consistently.'
 				);
 				continue;
 			}
-			$campaignBuckets[$this->getCampaignNameFromFeatureToggle( $featureToggle )] = $featureToggleCount;
+			$campaignBuckets[$campaign] = $featureToggleCount;
 		}
 	}
 
 	private function getCampaignNameFromFeatureToggle( string $featureToggle ): string {
-		return substr( $featureToggle, 0, strrpos( $featureToggle, '.' ) );
+		$lastSeparatorPosition = strrpos( $featureToggle, '.' );
+		if ( $lastSeparatorPosition === false ) {
+			return '';
+		}
+		return substr( $featureToggle, 0, $lastSeparatorPosition );
 	}
 }

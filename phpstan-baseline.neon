@@ -9,4 +9,3 @@ parameters:
 			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\Validation\\\\FeatureToggleParser\\:\\:parseMethodCalls\\(\\) should return array\\<PhpParser\\\\Node\\\\Expr\\\\MethodCall\\> but returns array\\<PhpParser\\\\Node\\>\\.$#"
 			count: 1
 			path: src/BucketTesting/Validation/FeatureToggleParser.php
-

@@ -94,6 +94,30 @@ class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
+	public function testWhenFeatureToggleAreMissingCampaignName_validationFails(): void {
+		$errorLogger = new CampaignErrorCollection();
+		$campaignCollection = $this->newTestCampaignCollection();
+
+		$validator = new CampaignUtilizationValidator(
+			$campaignCollection,
+			[ '' ],
+			$this->newBrokenCampaignFeaturesArray(),
+			$errorLogger
+		);
+		$this->assertContains(
+			'Feature toggle name did not contain a campaign name. The campaign name should be the last ' .
+			'item in a dot-separated string (with at least one "." character). Feature toggle name was: ' .
+			'campaigns:test_campaign:test_bucket_a',
+			$validator->getErrors()
+		);
+		$this->assertContains(
+			'Feature toggle name did not contain a campaign name. The campaign name should be the last ' .
+			'item in a dot-separated string (with at least one "." character). Feature toggle name was: ' .
+			'campaigns:test_campaign:test_bucket_b',
+			$validator->getErrors()
+		);
+	}
+
 	public function newTestCampaignCollection(): CampaignCollection {
 		$campaign01 = CampaignFixture::createCampaign();
 		CampaignFixture::createBucket( $campaign01, 'test_bucket_a', Bucket::DEFAULT );
@@ -121,6 +145,18 @@ class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
 		return [
 			'campaigns.test_campaign.test_bucket_a',
 			'campaigns.test_campaign.test_bucket_b',
+			'campaigns.another_test_campaign.test_bucket_c',
+			'campaigns.another_test_campaign.test_bucket_d',
+			'campaigns.another_test_campaign.test_bucket_e',
+			'campaigns.another_test_campaign.test_bucket_c',
+			'campaigns.another_test_campaign.test_bucket_d',
+		];
+	}
+
+	public function newBrokenCampaignFeaturesArray(): array {
+		return [
+			'campaigns:test_campaign:test_bucket_a',
+			'campaigns:test_campaign:test_bucket_b',
 			'campaigns.another_test_campaign.test_bucket_c',
 			'campaigns.another_test_campaign.test_bucket_d',
 			'campaigns.another_test_campaign.test_bucket_e',
