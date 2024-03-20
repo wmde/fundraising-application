@@ -28,6 +28,8 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 	public function setUp(): void {
 		parent::setUp();
 		static::bootKernel();
+
+		/** @var FunFunFactory $factory */
 		$factory = static::getContainer()->get( FunFunFactory::class );
 		static::rebuildDatabaseSchema( $factory );
 		$this->entityManager = $factory->getEntityManager();
