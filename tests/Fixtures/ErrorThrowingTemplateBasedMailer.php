@@ -5,10 +5,9 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateMailerInterface;
 
-class ErrorThrowingTemplateBasedMailer implements DonationTemplateMailerInterface, TemplateMailerInterface {
+class ErrorThrowingTemplateBasedMailer implements TemplateMailerInterface {
 
 	public const ERROR_MESSAGE = "TO ERR IS HUMAN, BUT I IS ROBOT";
 
