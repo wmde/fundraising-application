@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface as SubscriptionTemplateMailerInterface;
 
@@ -13,7 +12,6 @@ use WMDE\Fundraising\SubscriptionContext\Infrastructure\TemplateMailerInterface 
  * This is a class that sends e-mails with contents based on the Twig template passed in the constructor.
  */
 class TemplateBasedMailer implements
-	DonationTemplateMailerInterface,
 	SubscriptionTemplateMailerInterface,
 	GetInTouchMailerInterface,
 	TemplateMailerInterface
