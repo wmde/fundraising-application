@@ -22,7 +22,10 @@ class DoctrineTokenRepositoryTest extends KernelTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		self::bootKernel();
-		$this->entityManager = $this->getContainer()->get( FunFunFactory::class )->getEntityManager();
+
+		/** @var FunFunFactory $factory */
+		$factory = $this->getContainer()->get( FunFunFactory::class );
+		$this->entityManager = $factory->getEntityManager();
 		$this->schemaCreator = new SchemaCreator( $this->entityManager );
 		$this->schemaCreator->createSchema();
 	}
