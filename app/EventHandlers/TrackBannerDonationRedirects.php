@@ -25,10 +25,6 @@ class TrackBannerDonationRedirects implements EventSubscriberInterface {
 	public const PIWIK_CAMPAIGN = 'piwik_campaign';
 	public const PIWIK_KWD = 'piwik_kwd';
 
-	private string $submissionRoute;
-	private string $confirmationRoute;
-	private string $bannerSubmissionUrlParameter;
-
 	/**
 	 * @return array<string, string>
 	 */
@@ -39,10 +35,11 @@ class TrackBannerDonationRedirects implements EventSubscriberInterface {
 		];
 	}
 
-	public function __construct( string $submissionRoute, string $confirmationRoute, string $bannerSubmissionUrlParameter ) {
-		$this->submissionRoute = $submissionRoute;
-		$this->confirmationRoute = $confirmationRoute;
-		$this->bannerSubmissionUrlParameter = $bannerSubmissionUrlParameter;
+	public function __construct(
+		private readonly string $submissionRoute,
+		private readonly string $confirmationRoute,
+		private readonly string $bannerSubmissionUrlParameter
+	) {
 	}
 
 	public function onKernelRequest( RequestEvent $event ): void {

@@ -10,12 +10,9 @@ use WMDE\Fundraising\MembershipContext\Infrastructure\TemplateMailerInterface as
 
 class ErrorThrowingTemplateBasedMailer implements DonationTemplateMailerInterface, MembershipTemplateMailerInterface {
 
-	private ?\Throwable $previous;
-
 	public const ERROR_MESSAGE = "TO ERR IS HUMAN, BUT I IS ROBOT";
 
-	public function __construct( ?\Throwable $previous = null ) {
-		$this->previous = $previous;
+	public function __construct( private readonly ?\Throwable $previous = null ) {
 	}
 
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {

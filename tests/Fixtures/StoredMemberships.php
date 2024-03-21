@@ -12,7 +12,7 @@ use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication
 use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 
 class StoredMemberships {
-	public function __construct( private FunFunFactory $factory ) {
+	public function __construct( private readonly FunFunFactory $factory ) {
 	}
 
 	public function storeValidMembershipApplication( string $updateToken ): DoctrineMembershipApplication {

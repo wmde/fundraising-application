@@ -12,9 +12,6 @@ use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
 
-/**
- * @license GPL-2.0-or-later
- */
 class FeatureToggleParser {
 
 	/** @see \WMDE\Fundraising\Frontend\BucketTesting\FeatureToggle::featureIsActive */

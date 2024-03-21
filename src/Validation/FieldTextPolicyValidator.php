@@ -8,18 +8,11 @@ use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\ValidationResult;
 use WMDE\FunValidators\Validators\TextPolicyValidator;
 
-/**
- * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
- */
 class FieldTextPolicyValidator {
 
 	private const VIOLATION_MESSAGE = 'This field has unacceptable language or URLs in it';
 
-	private TextPolicyValidator $textPolicyValidator;
-
-	public function __construct( TextPolicyValidator $textPolicyValidator ) {
-		$this->textPolicyValidator = $textPolicyValidator;
+	public function __construct( private readonly TextPolicyValidator $textPolicyValidator ) {
 	}
 
 	public function validate( $value ): ValidationResult {	// @codingStandardsIgnoreLine

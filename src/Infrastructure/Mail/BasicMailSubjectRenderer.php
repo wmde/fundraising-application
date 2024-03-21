@@ -6,17 +6,12 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 
-/**
- * @license GPL-2.0-or-later
- */
 class BasicMailSubjectRenderer implements MailSubjectRendererInterface {
 
-	private TranslatorInterface $translator;
-	private string $subjectKey;
-
-	public function __construct( TranslatorInterface $translator, string $subjectKey ) {
-		$this->translator = $translator;
-		$this->subjectKey = $subjectKey;
+	public function __construct(
+		private readonly TranslatorInterface $translator,
+		private readonly string $subjectKey
+	) {
 	}
 
 	public function render( array $templateArguments = [] ): string {

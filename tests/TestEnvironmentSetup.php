@@ -12,9 +12,6 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\DevelopmentInternalErrorHt
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakePayPalAPI;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FeatureReaderStub;
 
-/**
- * @license GPL-2.0-or-later
- */
 class TestEnvironmentSetup implements EnvironmentSetup {
 	public function setEnvironmentDependentInstances( FunFunFactory $factory ): void {
 		$factory->setNullMessengers();

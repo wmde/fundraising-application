@@ -27,7 +27,16 @@ class ContextFactoryCollection {
 	 */
 	private array $contextFactories;
 
-	public function __construct( DonationContextFactory|MembershipContextFactory|SubscriptionContextFactory|AddressChangeContextFactory|BucketTestingContextFactory|AutocompleteContextFactory|PaymentContextFactory|AuthenticationContextFactory ...$contextFactories ) {
+	public function __construct(
+		DonationContextFactory|
+		MembershipContextFactory|
+		SubscriptionContextFactory|
+		AddressChangeContextFactory|
+		BucketTestingContextFactory|
+		AutocompleteContextFactory|
+		PaymentContextFactory|
+		AuthenticationContextFactory ...$contextFactories
+	) {
 		$this->contextFactories = $contextFactories;
 	}
 

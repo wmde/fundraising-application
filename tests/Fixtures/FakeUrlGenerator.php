@@ -6,10 +6,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 
-/**
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
- */
 class FakeUrlGenerator implements UrlGenerator {
 
 	public function generateRelativeUrl( string $routeName, array $parameters = [] ): string {

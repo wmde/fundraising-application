@@ -16,7 +16,11 @@ use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 class NullToken extends AuthenticationToken {
 	private string $errorMessage;
 
-	public function __construct( int $id, AuthenticationBoundedContext $context, ?string $errorMessage = null ) {
+	public function __construct(
+		int $id,
+		AuthenticationBoundedContext $context,
+		?string $errorMessage = null
+	) {
 		parent::__construct( $id, $context, '', '' );
 		$this->errorMessage = $errorMessage ?? self::getErrorMessage( $id, $context );
 	}

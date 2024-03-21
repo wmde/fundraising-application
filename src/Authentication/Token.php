@@ -4,9 +4,7 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\Authentication;
 
 class Token {
-	public function __construct(
-		private readonly string $tokenBytes,
-	) {
+	public function __construct( private readonly string $tokenBytes ) {
 	}
 
 	public static function fromHex( string $token ): self {

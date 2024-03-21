@@ -7,19 +7,13 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatorInterface;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
-/**
- * @license GPL-2.0-or-later
- */
 class DonationConfirmationMailSubjectRenderer implements MailSubjectRendererInterface {
 
-	private TranslatorInterface $translator;
-	private string $defaultSubjectKey;
-	private string $bankTransferSubjectKey;
-
-	public function __construct( TranslatorInterface $translator, string $defaultSubjectKey, string $bankTransferSubjectKey ) {
-		$this->translator = $translator;
-		$this->defaultSubjectKey = $defaultSubjectKey;
-		$this->bankTransferSubjectKey = $bankTransferSubjectKey;
+	public function __construct(
+		private readonly TranslatorInterface $translator,
+		private readonly string $defaultSubjectKey,
+		private readonly string $bankTransferSubjectKey
+	) {
 	}
 
 	public function render( array $templateArguments = [] ): string {

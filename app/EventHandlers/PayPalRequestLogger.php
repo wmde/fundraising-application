@@ -14,14 +14,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class PayPalRequestLogger implements EventSubscriberInterface {
 
-	private string $logFilePath;
-	private array $notificationRoutes;
-	private LoggerInterface $errorLog;
-
-	public function __construct( string $logFilePath, array $notificationRoutes, LoggerInterface $errorLog ) {
-		$this->logFilePath = $logFilePath;
-		$this->notificationRoutes = $notificationRoutes;
-		$this->errorLog = $errorLog;
+	public function __construct(
+		private readonly string $logFilePath,
+		private readonly array $notificationRoutes,
+		private readonly LoggerInterface $errorLog
+	) {
 	}
 
 	public static function getSubscribedEvents(): array {

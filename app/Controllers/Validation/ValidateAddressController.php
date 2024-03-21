@@ -13,9 +13,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\Validators\AddressValidator;
 
-/**
- * @license GPL-2.0-or-later
- */
 class ValidateAddressController {
 
 	private const VIOLATION_UNKNOWN_ADDRESS_TYPE = 'address_form_error';

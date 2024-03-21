@@ -7,16 +7,9 @@ namespace WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation;
 use FileFetcher\FileFetcher;
 use FileFetcher\FileFetchingException;
 
-/**
- * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
- */
 class SchemaLoader {
 
-	private FileFetcher $fileFetcher;
-
-	public function __construct( FileFetcher $fileFetcher ) {
-		$this->fileFetcher = $fileFetcher;
+	public function __construct( private readonly FileFetcher $fileFetcher ) {
 	}
 
 	public function loadSchema( string $schema ): \stdClass {

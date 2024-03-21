@@ -10,13 +10,15 @@ use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizationChecker;
 
 class AuthorizationChecker implements DonationAuthorizationChecker, MembershipAuthorizationChecker {
-	private string $updateToken;
-	private string $accessToken;
+
 	private SystemClock|Clock $clock;
 
-	public function __construct( private readonly TokenRepository $repository, string $updateToken = '', string $accessToken = '', Clock $clock = null ) {
-		$this->updateToken = $updateToken;
-		$this->accessToken = $accessToken;
+	public function __construct(
+		private readonly TokenRepository $repository,
+		private readonly string $updateToken = '',
+		private readonly string $accessToken = '',
+		Clock $clock = null
+	) {
 		$this->clock = $clock ?? new SystemClock();
 	}
 

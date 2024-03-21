@@ -9,9 +9,7 @@ use WMDE\Fundraising\Frontend\Authentication\MembershipUrlAuthenticationLoader;
 use WMDE\Fundraising\PaymentContext\Services\URLAuthenticator;
 
 class AuthenticationLoader implements DonationUrlAuthenticationLoader, MembershipUrlAuthenticationLoader {
-	public function __construct(
-		private readonly TokenRepository $repository
-	) {
+	public function __construct( private readonly TokenRepository $repository ) {
 	}
 
 	public function getDonationUrlAuthenticator( int $donationId ): URLAuthenticator {

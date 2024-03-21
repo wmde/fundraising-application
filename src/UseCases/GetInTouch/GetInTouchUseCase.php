@@ -10,9 +10,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\FunValidators\ValidationResponse;
 
-/**
- * @license GPL-2.0-or-later
- */
 class GetInTouchUseCase {
 	public function __construct(
 		private readonly GetInTouchValidator $validator,

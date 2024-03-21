@@ -10,10 +10,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class SkinCacheWarmer implements CacheWarmerInterface {
 
-	private FunFunFactory $funFunFactory;
-
-	public function __construct( FunFunFactory $funFunFactory ) {
-		$this->funFunFactory = $funFunFactory;
+	public function __construct( private readonly FunFunFactory $funFunFactory ) {
 		$this->funFunFactory->setLocale( 'de_DE' );
 	}
 

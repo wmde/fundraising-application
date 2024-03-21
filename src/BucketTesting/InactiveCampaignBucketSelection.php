@@ -8,15 +8,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
-/**
- * @license GPL-2.0-or-later
- */
 class InactiveCampaignBucketSelection implements BucketSelectionStrategy {
 
-	private CampaignDate $now;
-
-	public function __construct( CampaignDate $now ) {
-		$this->now = $now;
+	public function __construct( private readonly CampaignDate $now ) {
 	}
 
 	public function selectBucketForCampaign( Campaign $campaign ): ?Bucket {

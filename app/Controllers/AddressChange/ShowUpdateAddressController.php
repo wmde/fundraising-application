@@ -10,9 +10,6 @@ use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
-/**
- * @license GPL-2.0-or-later
- */
 class ShowUpdateAddressController {
 
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {

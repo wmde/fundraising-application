@@ -9,12 +9,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SubmissionRateLimit {
 
-	private string $sessionKey;
-	private DateInterval $intervalBetweenSubmissions;
-
-	public function __construct( string $sessionKey, DateInterval $intervalBetweenSubmissions ) {
-		$this->sessionKey = $sessionKey;
-		$this->intervalBetweenSubmissions = $intervalBetweenSubmissions;
+	public function __construct(
+		private readonly string $sessionKey,
+		private readonly DateInterval $intervalBetweenSubmissions
+	) {
 	}
 
 	public function isSubmissionAllowed( SessionInterface $session ): bool {

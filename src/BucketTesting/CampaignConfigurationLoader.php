@@ -10,19 +10,14 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Yaml;
 use WMDE\Fundraising\Frontend\Infrastructure\GetConfigCacheKey;
 
-/**
- * @license GPL-2.0-or-later
- */
 class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 
 	use GetConfigCacheKey;
 
-	private FileFetcher $fileFetcher;
-	private CacheInterface $cache;
-
-	public function __construct( FileFetcher $fileFetcher, CacheInterface $cache ) {
-		$this->fileFetcher = $fileFetcher;
-		$this->cache = $cache;
+	public function __construct(
+		private readonly FileFetcher $fileFetcher,
+		private readonly CacheInterface $cache
+	) {
 	}
 
 	public function loadCampaignConfiguration( string ...$configFiles ): array {

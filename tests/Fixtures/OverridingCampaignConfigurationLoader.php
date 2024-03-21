@@ -6,9 +6,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface;
 
-/**
- * @license GPL-2.0-or-later
- */
 class OverridingCampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
 
 	/**

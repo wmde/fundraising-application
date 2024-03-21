@@ -10,21 +10,13 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use WMDE\EmailAddress\EmailAddress;
 
-/**
- * @license GPL-2.0-or-later
- */
 class Messenger {
 
-	private MailerInterface $mailer;
-	private EmailAddress $operatorAddress;
-	private string $operatorName;
-
-	public function __construct( MailerInterface $mailer,
-								 EmailAddress $operatorAddress,
-								 string $operatorName = '' ) {
-		$this->mailer = $mailer;
-		$this->operatorAddress = $operatorAddress;
-		$this->operatorName = $operatorName;
+	public function __construct(
+		private readonly MailerInterface $mailer,
+		private readonly EmailAddress $operatorAddress,
+		private readonly string $operatorName = ''
+	) {
 	}
 
 	public function sendMessageToUser( Message $messageContent, EmailAddress $recipient ): void {

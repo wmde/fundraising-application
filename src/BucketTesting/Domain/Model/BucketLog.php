@@ -18,14 +18,13 @@ class BucketLog {
 	 * @phpstan-ignore-next-line
 	 */
 	private int $id;
-	private int $externalId;
-	private string $eventName;
 	private Collection $buckets;
 	private DateTimeInterface $date;
 
-	public function __construct( int $externalId, string $eventName ) {
-		$this->externalId = $externalId;
-		$this->eventName = $eventName;
+	public function __construct(
+		private readonly int $externalId,
+		private readonly string $eventName
+	) {
 		$this->buckets = new ArrayCollection();
 		$this->date = new DateTime();
 	}

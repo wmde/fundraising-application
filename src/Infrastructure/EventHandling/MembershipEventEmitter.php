@@ -9,10 +9,7 @@ use WMDE\Fundraising\MembershipContext\EventEmitter;
 
 class MembershipEventEmitter implements EventEmitter {
 
-	private EventDispatcher $dispatcher;
-
-	public function __construct( EventDispatcher $dispatcher ) {
-		$this->dispatcher = $dispatcher;
+	public function __construct( private readonly EventDispatcher $dispatcher ) {
 	}
 
 	public function emit( Event $event ): void {

@@ -10,10 +10,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
 class DatabaseBucketLogger implements BucketLogger {
 
-	private BucketLoggingRepository $bucketLoggingRepository;
-
-	public function __construct( BucketLoggingRepository $bucketLoggingRepository ) {
-		$this->bucketLoggingRepository = $bucketLoggingRepository;
+	public function __construct( private readonly BucketLoggingRepository $bucketLoggingRepository ) {
 	}
 
 	public function writeEvent( LoggingEvent $event, Bucket ...$buckets ): void {

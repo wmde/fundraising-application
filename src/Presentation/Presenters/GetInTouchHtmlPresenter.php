@@ -10,18 +10,13 @@ use WMDE\FunValidators\ValidationResponse;
 
 /**
  * Render the contact form with errors
- *
- * @license GPL-2.0-or-later
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class GetInTouchHtmlPresenter {
 
-	private TwigTemplate $template;
-	private array $categories;
-
-	public function __construct( TwigTemplate $template, array $categories ) {
-		$this->template = $template;
-		$this->categories = $categories;
+	public function __construct(
+		private readonly TwigTemplate $template,
+		private readonly array $categories
+	) {
 	}
 
 	public function present( ValidationResponse $response, array $formData ): string {

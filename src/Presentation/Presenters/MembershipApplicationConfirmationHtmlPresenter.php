@@ -12,18 +12,13 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 
-/**
- * @license GPL-2.0-or-later
- */
 class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationConfirmationPresenter {
 
 	private string $html = '';
 
 	private ?\Exception $exception = null;
 
-	public function __construct(
-		private readonly TwigTemplate $template
-	) {
+	public function __construct( private readonly TwigTemplate $template ) {
 	}
 
 	public function presentConfirmation( MembershipApplication $application, array $paymentData ): void {

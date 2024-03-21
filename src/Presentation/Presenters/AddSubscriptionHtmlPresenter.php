@@ -10,17 +10,10 @@ use WMDE\FunValidators\ValidationResponse;
 
 /**
  * Render the subscription HTML form with errors
- *
- * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
- * @author Kai Nissen < kai.nissen@wikimedia.de >
  */
 class AddSubscriptionHtmlPresenter {
 
-	private TwigTemplate $template;
-
-	public function __construct( TwigTemplate $template ) {
-		$this->template = $template;
+	public function __construct( private readonly TwigTemplate $template ) {
 	}
 
 	public function present( ValidationResponse $subscriptionResponse, array $formData ): string {

@@ -11,9 +11,6 @@ use WMDE\FunValidators\Validators\TextPolicyValidator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Validation\FieldTextPolicyValidator
- *
- * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
  */
 class FieldTextPolicyValidatorTest extends \PHPUnit\Framework\TestCase {
 

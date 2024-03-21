@@ -7,10 +7,8 @@ use FileFetcher\SimpleFileFetcher;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
 class EnvironmentDependentConfigReaderFactory {
-	private string $environmentName;
 
-	public function __construct( string $environmentName ) {
-		$this->environmentName = $environmentName;
+	public function __construct( private readonly string $environmentName ) {
 	}
 
 	public function getConfigReader(): ConfigReader {

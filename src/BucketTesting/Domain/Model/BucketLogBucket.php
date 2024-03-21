@@ -13,14 +13,12 @@ class BucketLogBucket {
 	 * @phpstan-ignore-next-line
 	 */
 	private int $id;
-	private BucketLog $bucketLog;
-	private string $name;
-	private string $campaign;
 
-	public function __construct( BucketLog $bucketLog, string $name, string $campaign ) {
-		$this->bucketLog = $bucketLog;
-		$this->name = $name;
-		$this->campaign = $campaign;
+	public function __construct(
+		private BucketLog $bucketLog,
+		private readonly string $name,
+		private readonly string $campaign
+	) {
 	}
 
 	public function getId(): int {

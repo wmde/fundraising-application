@@ -6,14 +6,14 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Domain\Model;
 
 use DateTimeZone;
 
-/**
- * @license GPL-2.0-or-later
- */
 class CampaignDate extends \DateTimeImmutable {
 
 	private const TIMEZONE = 'UTC';
 
-	public function __construct( string $time = 'now', ?DateTimeZone $timezone = null ) {
+	public function __construct(
+		string $time = 'now',
+		?DateTimeZone $timezone = null
+	) {
 		if ( $timezone && $timezone->getName() !== self::TIMEZONE ) {
 			throw new \InvalidArgumentException( sprintf( 'CampaignDates must have time zone "%s".', self::TIMEZONE ) );
 		}

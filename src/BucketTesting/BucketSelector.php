@@ -11,12 +11,10 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
 class BucketSelector {
 
-	private CampaignCollection $campaigns;
-	private BucketSelectionStrategy $fallbackSelectionStrategy;
-
-	public function __construct( CampaignCollection $campaigns, BucketSelectionStrategy $fallbackSelectionStrategy ) {
-		$this->campaigns = $campaigns;
-		$this->fallbackSelectionStrategy = $fallbackSelectionStrategy;
+	public function __construct(
+		private readonly CampaignCollection $campaigns,
+		private readonly BucketSelectionStrategy $fallbackSelectionStrategy
+	) {
 	}
 
 	private function sanitizeParameters( array $params ): array {

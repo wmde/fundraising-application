@@ -22,18 +22,13 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
  * - run this once before starting the work on a feature that touches emails, dumping the rendered templates
  * - run it again after the changes, dumping to another folder
  * - then diffing the resulting folders
- *
- * @license GPL-2.0-or-later
  */
 class RenderMailTemplatesCommand extends Command {
 
 	private const NAME = 'app:dump-mail-templates';
 
-	private FunFunFactory $ffFactory;
-
-	public function __construct( FunFunFactory $ffFactory ) {
+	public function __construct( private readonly FunFunFactory $ffFactory ) {
 		parent::__construct( self::NAME );
-		$this->ffFactory = $ffFactory;
 	}
 
 	protected function configure(): void {

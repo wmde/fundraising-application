@@ -256,22 +256,10 @@ use WMDE\FunValidators\Validators\AmountPolicyValidator;
 use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\FunValidators\Validators\TextPolicyValidator;
 
-/**
- * @license GPL-2.0-or-later
- */
 class FunFunFactory implements LoggerAwareInterface {
 
 	public const DONATION_RATE_LIMIT_SESSION_KEY = 'donation_timestamp';
 	public const MEMBERSHIP_RATE_LIMIT_SESSION_KEY = 'memapp_timestamp';
-
-	/**
-	 * Nested configuration values.
-	 *
-	 * See JSON schema in app/config/schema.json for allowed values
-	 *
-	 * @var array
-	 */
-	private array $config;
 
 	/**
 	 * Holds instances that should only be initialized once.
@@ -284,8 +272,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	 */
 	private array $sharedObjects;
 
-	public function __construct( array $config ) {
-		$this->config = $config;
+	public function __construct( private readonly array $config ) {
 		$this->sharedObjects = [];
 	}
 

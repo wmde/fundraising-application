@@ -17,9 +17,6 @@ use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentParameters;
 use WMDE\FunValidators\ConstraintViolation;
 
-/**
- * @license GPL-2.0-or-later
- */
 class AddDonationController {
 
 	private FunFunFactory $ffFactory;

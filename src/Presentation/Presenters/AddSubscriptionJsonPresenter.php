@@ -7,11 +7,6 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\ValidationResponse;
 
-/**
- * @license GPL-2.0-or-later
- * @author Gabriel Birke < gabriel.birke@wikimedia.de >
- * @author Kai Nissen < kai.nissen@wikimedia.de >
- */
 class AddSubscriptionJsonPresenter {
 
 	public function present( ValidationResponse $subscriptionResponse ): array {

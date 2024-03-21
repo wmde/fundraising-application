@@ -12,7 +12,11 @@ use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
 
 class AssetPackageFactory {
 
-	public function __construct( private string $applicationEnvironment, private string $externalSkinAssetsUrl, private string $appRoot ) {
+	public function __construct(
+		private readonly string $applicationEnvironment,
+		private readonly string $externalSkinAssetsUrl,
+		private readonly string $appRoot
+	) {
 	}
 
 	public function newAssetPackages(): Packages {

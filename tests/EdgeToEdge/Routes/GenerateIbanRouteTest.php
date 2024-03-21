@@ -9,9 +9,6 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter
  *
- * @license GPL-2.0-or-later
- * @author Jeroen De Dauw < jeroendedauw@gmail.com >
- *
  * @requires extension konto_check
  */
 class GenerateIbanRouteTest extends WebRouteTestCase {

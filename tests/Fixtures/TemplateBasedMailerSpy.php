@@ -9,19 +9,14 @@ use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
 
-/**
- * @license GPL-2.0-or-later
- */
 class TemplateBasedMailerSpy implements GetInTouchMailerInterface, DonationTemplateMailerInterface {
 
-	private TestCase $testCase;
 	/**
 	 * @var array<int, array{EmailAddress, array}>
 	 */
 	private array $sendMailCalls = [];
 
-	public function __construct( TestCase $testCase ) {
-		$this->testCase = $testCase;
+	public function __construct( private readonly TestCase $testCase ) {
 	}
 
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {

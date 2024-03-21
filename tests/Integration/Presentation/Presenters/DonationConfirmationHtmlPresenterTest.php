@@ -14,8 +14,6 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter
- *
- * @license GPL-2.0-or-later
  */
 class DonationConfirmationHtmlPresenterTest extends TestCase {
 

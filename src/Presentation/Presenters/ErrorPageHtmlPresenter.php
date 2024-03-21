@@ -8,15 +8,10 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 /**
  * Render an error page
- *
- * @license GPL-2.0-or-later
  */
 class ErrorPageHtmlPresenter {
 
-	private TwigTemplate $template;
-
-	public function __construct( TwigTemplate $template ) {
-		$this->template = $template;
+	public function __construct( private readonly TwigTemplate $template ) {
 	}
 
 	public function present( string $errorMessage ): string {

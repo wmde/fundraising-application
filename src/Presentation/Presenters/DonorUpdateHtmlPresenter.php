@@ -18,9 +18,9 @@ use WMDE\Fundraising\PaymentContext\UseCases\GetPayment\GetPaymentUseCase;
 class DonorUpdateHtmlPresenter {
 
 	public function __construct(
-		private TwigTemplate $template,
-		private UrlGenerator $urlGenerator,
-		private GetPaymentUseCase $getPaymentUseCase ) {
+		private readonly TwigTemplate $template,
+		private readonly UrlGenerator $urlGenerator,
+		private readonly GetPaymentUseCase $getPaymentUseCase ) {
 	}
 
 	public function present( UpdateDonorResponse $updateDonorResponse, Donation $donation, string $updateToken, string $accessToken ): string {

@@ -15,17 +15,15 @@ use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 
 class MailerTemplatingFactory extends TwigFactory {
 
-	private TranslatorInterface $translator;
-	private ContentProvider $contentProvider;
-	private UrlGenerator $urlGenerator;
-	private GreetingGenerator $greetingGenerator;
-
-	public function __construct( array $config, string $cachePath, TranslatorInterface $translator, ContentProvider $contentProvider, UrlGenerator $urlGenerator, GreetingGenerator $greetingGenerator ) {
+	public function __construct(
+		array $config,
+		string $cachePath,
+		private readonly TranslatorInterface $translator,
+		private readonly ContentProvider $contentProvider,
+		private readonly UrlGenerator $urlGenerator,
+		private readonly GreetingGenerator $greetingGenerator
+	) {
 		parent::__construct( $config, $cachePath );
-		$this->translator = $translator;
-		$this->contentProvider = $contentProvider;
-		$this->urlGenerator = $urlGenerator;
-		$this->greetingGenerator = $greetingGenerator;
 	}
 
 	public function newTemplatingEnvironment( string $dayOfWeek, string $locale ): Environment {

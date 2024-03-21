@@ -10,10 +10,7 @@ use WMDE\Fundraising\Frontend\Autocomplete\Domain\Model\Location;
 
 class DoctrineLocationRepository implements LocationRepository {
 
-	private EntityManager $entityManager;
-
-	public function __construct( EntityManager $entityManager ) {
-		$this->entityManager = $entityManager;
+	public function __construct( private readonly EntityManager $entityManager ) {
 	}
 
 	public function getCitiesForPostcode( string $postcode ): array {

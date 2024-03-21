@@ -9,15 +9,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
-/**
- * @license GPL-2.0-or-later
- */
 class CampaignBuilder {
 
-	private DateTimeZone $timezone;
-
-	public function __construct( DateTimeZone $timezone ) {
-		$this->timezone = $timezone;
+	public function __construct( private readonly DateTimeZone $timezone ) {
 	}
 
 	public function getCampaigns( array $campaignConfig ): array {

@@ -10,9 +10,7 @@ use WMDE\Fundraising\PaymentContext\UseCases\BookPayment\VerificationServiceFact
 
 class FailingVerificationServiceFactory implements VerificationServiceFactory {
 
-	public function __construct(
-		private readonly string $errorMessage
-	) {
+	public function __construct( private readonly string $errorMessage ) {
 	}
 
 	public function create( Payment $payment ): VerificationService {

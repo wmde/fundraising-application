@@ -12,8 +12,6 @@ use WMDE\Fundraising\Frontend\Tests\Unit\Cli\CampaignUtilizationValidatorTest;
 /**
  * @see CampaignUtilizationValidatorTest This class is used to test if bucket testing logic behaves as expected
  * @see ChoiceFactory The actual class used by the application
- *
- * @license GPL-2.0-or-later
  */
 class FakeChoiceFactory {
 

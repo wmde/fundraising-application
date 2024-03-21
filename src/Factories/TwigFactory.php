@@ -17,13 +17,12 @@ use Twig\TwigFunction;
 
 abstract class TwigFactory {
 
-	private array $config;
-	private string $cachePath;
 	private ?CacheInterface $cache;
 
-	public function __construct( array $config, string $cachePath ) {
-		$this->config = $config;
-		$this->cachePath = $cachePath;
+	public function __construct(
+		private readonly array $config,
+		private readonly string $cachePath
+	) {
 		$this->cache = null;
 	}
 
