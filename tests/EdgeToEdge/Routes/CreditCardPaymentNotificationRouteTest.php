@@ -137,7 +137,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 				$requestData
 			);
 
-			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$this->assertCount( 1, $logger->getLogCalls() );
 			$firstCallContext = $logger->getFirstLogCall()->getContext();
 			$requestData['amount'] = (string)$requestData['amount'];
 			$this->assertSame( $requestData, $firstCallContext['queryParams'] ?? '' );
@@ -177,7 +177,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 				$this->newDefaultRequestParametersFromMCP()
 			);
 
-			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$this->assertCount( 1, $logger->getLogCalls() );
 			$firstCallContext = $logger->getFirstLogCall()->getContext();
 			$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
 			$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()->getMessage() );
