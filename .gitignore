@@ -36,3 +36,6 @@ tmp/
 /.docker/database/*
 !/.docker/database/01.Database_Schema.sql
 !/.docker/database/02.Default_Data.sql
+
+# This is a file with lots of errors that we could copy 'ignore' rules from
+phpstan-baseline-source.neon

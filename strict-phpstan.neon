@@ -1,0 +1,12 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-doctrine/rules.neon
+    - phpstan-baseline.neon
+    - phpstan-baseline-level-9.neon
+
+parameters:
+	excludePaths:
+		- src/Presentation/DonationMembershipApplicationAdapter.php
+		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
+		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
