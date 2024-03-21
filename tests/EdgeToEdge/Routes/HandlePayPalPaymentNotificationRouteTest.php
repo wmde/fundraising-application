@@ -472,13 +472,13 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->newHttpParamsForPayment()
 		);
 
-		$this->assertSame( 1, $paypalLogger->getLogCalls()->count() );
+		$this->assertCount( 1, $paypalLogger->getLogCalls() );
 		$firstCallContext = $paypalLogger->getFirstLogCall()->getContext();
 		$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
 		$this->assertArrayHasKey( 'post_vars', $firstCallContext );
 		$this->assertSame( 'An Exception happened: Could not get donation', $paypalLogger->getFirstLogCall()->getMessage() );
 
-		$this->assertSame( 1, $mainErrorLogger->getLogCalls()->count() );
+		$this->assertCount( 1, $mainErrorLogger->getLogCalls() );
 		$this->assertSame( 'An Exception happened: Could not get donation', $mainErrorLogger->getFirstLogCall()->getMessage() );
 	}
 

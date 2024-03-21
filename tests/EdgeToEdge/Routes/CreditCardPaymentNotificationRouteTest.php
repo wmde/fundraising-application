@@ -43,7 +43,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 				[ 'function' => 'BAD FUNCTION' ]
 			);
 
-			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$this->assertCount( 1, $logger->getLogCalls() );
 			$this->assertStringContainsString( "status=error\n", $client->getResponse()->getContent() );
 			$this->assertStringContainsString( 'msg=', $client->getResponse()->getContent() );
 		} );
@@ -81,7 +81,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 				]
 			);
 
-			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$this->assertCount( 1, $logger->getLogCalls() );
 			$firstCallContext = $logger->getFirstLogCall()->getContext();
 			$this->assertSame( 'ipg04', $firstCallContext['errorcode'] );
 			$this->assertSame( 'Card used is not permitted', $firstCallContext['errormessage'] );
@@ -137,7 +137,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 				$requestData
 			);
 
-			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$this->assertCount( 1, $logger->getLogCalls() );
 			$firstCallContext = $logger->getFirstLogCall()->getContext();
 			$requestData['amount'] = (string)$requestData['amount'];
 			$this->assertSame( $requestData, $firstCallContext['queryParams'] );
@@ -177,7 +177,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 				$this->newDefaultRequestParametersFromMCP()
 			);
 
-			$this->assertSame( 1, $logger->getLogCalls()->count() );
+			$this->assertCount( 1, $logger->getLogCalls() );
 			$firstCallContext = $logger->getFirstLogCall()->getContext();
 			$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
 			$this->assertSame( 'An Exception happened: Could not get donation', $logger->getFirstLogCall()->getMessage() );
