@@ -31,7 +31,7 @@ class ErrorHandlingTemplateBasedMailerTest extends TestCase {
 		$errorHandlingMailer->sendMail( $email, $arguments );
 
 		$mailerSpy->assertCalledOnceWith( $email, $arguments );
-		$this->assertSame( 0, $loggerSpy->getLogCalls()->count() );
+		$this->assertCount( 0, $loggerSpy->getLogCalls() );
 	}
 
 	public function testOnSendMailWithError_logsError(): void {
@@ -44,7 +44,7 @@ class ErrorHandlingTemplateBasedMailerTest extends TestCase {
 
 		$errorHandlingMailer->sendMail( new EmailAddress( 'happy@bunny.carrot' ) );
 
-		$this->assertSame( 1, $loggerSpy->getLogCalls()->count() );
+		$this->assertCount( 1, $loggerSpy->getLogCalls() );
 		$this->assertSame( [ ErrorThrowingTemplateBasedMailer::ERROR_MESSAGE ], $loggerSpy->getLogCalls()->getMessages() );
 		$this->assertSame( LogLevel::ERROR, $loggerSpy->getLogCalls()->getFirstCall()->getLevel() );
 	}
@@ -59,7 +59,7 @@ class ErrorHandlingTemplateBasedMailerTest extends TestCase {
 
 		$errorHandlingMailer->sendMail( new EmailAddress( 'happy@bunny.carrot' ) );
 
-		$this->assertSame( 1, $loggerSpy->getLogCalls()->count() );
+		$this->assertCount( 1, $loggerSpy->getLogCalls() );
 		$this->assertStringContainsString( 'Transport error - The mule ran away', $loggerSpy->getLogCalls()->getMessages()[0] );
 		$this->assertStringContainsString( ErrorThrowingTemplateBasedMailer::ERROR_MESSAGE, $loggerSpy->getLogCalls()->getMessages()[0] );
 	}

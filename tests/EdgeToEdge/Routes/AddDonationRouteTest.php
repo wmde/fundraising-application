@@ -212,7 +212,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( '', $data['color'] );
 		$this->assertSame( '', $data['skin'] );
 		$this->assertSame( '', $data['source'] );
-		$this->assertSame( true, $donation->getDonorOptsIntoNewsletter() );
+		$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
 
 		$this->assertSame( 'Z', $donation->getStatus() );
 		$this->assertMatchesRegularExpression( '/^(XW)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );

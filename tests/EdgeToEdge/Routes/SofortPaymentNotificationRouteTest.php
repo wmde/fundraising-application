@@ -309,7 +309,7 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 			$this->buildRawRequestBody( self::VALID_TRANSACTION_ID, self::VALID_TRANSACTION_TIME )
 		);
 
-		$this->assertSame( 1, $logger->getLogCalls()->count() );
+		$this->assertCount( 1, $logger->getLogCalls() );
 		$firstCallContext = $logger->getFirstLogCall()->getContext();
 		$this->assertArrayHasKey( 'stacktrace', $firstCallContext );
 		$this->assertArrayHasKey( 'request_content', $firstCallContext );
