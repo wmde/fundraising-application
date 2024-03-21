@@ -72,14 +72,14 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 
 	private function getAddressArguments( Applicant $applicant ): array {
 		return [
-			'salutation' => $applicant->getName()->getSalutation(),
-			'title' => $applicant->getName()->getTitle(),
+			'salutation' => $applicant->getName()->salutation,
+			'title' => $applicant->getName()->title,
 			'fullName' => $applicant->getName()->getFullName(),
-			'streetAddress' => $applicant->getPhysicalAddress()->getStreetAddress(),
-			'postalCode' => $applicant->getPhysicalAddress()->getPostalCode(),
-			'city' => $applicant->getPhysicalAddress()->getCity(),
+			'streetAddress' => $applicant->getPhysicalAddress()->streetAddress,
+			'postalCode' => $applicant->getPhysicalAddress()->postalCode,
+			'city' => $applicant->getPhysicalAddress()->city,
 			'email' => $applicant->getEmailAddress()->getFullAddress(),
-			'countryCode' => $applicant->getPhysicalAddress()->getCountryCode(),
+			'countryCode' => $applicant->getPhysicalAddress()->countryCode,
 			'applicantType' => $applicant->isPrivatePerson() ? ApplicantName::PERSON_PRIVATE : ApplicantName::PERSON_COMPANY
 		];
 	}

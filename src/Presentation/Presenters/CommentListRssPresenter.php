@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
-use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentWithAmount;
+use WMDE\Fundraising\DonationContext\Domain\ReadModel\Comment;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentList;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
@@ -22,12 +22,12 @@ class CommentListRssPresenter {
 
 	private function getCommentsViewModel( CommentList $commentList ): array {
 		return array_map(
-			static function ( CommentWithAmount $comment ) {
+			static function ( Comment $comment ) {
 				return [
-					'amount' => $comment->getDonationAmount(),
-					'author' => $comment->getAuthorName(),
-					'text' => $comment->getCommentText(),
-					'publicationDate' => $comment->getDonationTime()->format( 'r' ),
+					'amount' => $comment->donationAmount,
+					'author' => $comment->authorName,
+					'text' => $comment->commentText,
+					'publicationDate' => $comment->donationTime->format( 'r' ),
 				];
 			},
 			$commentList->toArray()
@@ -39,7 +39,7 @@ class CommentListRssPresenter {
 			return '';
 		}
 
-		return $commentList->toArray()[0]->getDonationTime()->format( 'r' );
+		return $commentList->toArray()[0]->donationTime->format( 'r' );
 	}
 
 }

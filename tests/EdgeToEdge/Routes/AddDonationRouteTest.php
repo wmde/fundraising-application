@@ -129,10 +129,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'test/gelb', $data['tracking'] );
 		$this->assertSame( 3, $data['impCount'] );
 		$this->assertSame( 1, $data['bImpCount'] );
-		$this->assertSame( '', $data['layout'] );
-		$this->assertSame( '', $data['color'] );
-		$this->assertSame( '', $data['skin'] );
-		$this->assertSame( '', $data['source'] );
 		$this->assertSame( 'N', $donation->getStatus() );
 		$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
 		$this->assertTrue( $donation->getDonationReceipt() );
@@ -208,10 +204,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'test/gelb', $data['tracking'] );
 		$this->assertSame( 3, $data['impCount'] );
 		$this->assertSame( 1, $data['bImpCount'] );
-		$this->assertSame( '', $data['layout'] );
-		$this->assertSame( '', $data['color'] );
-		$this->assertSame( '', $data['skin'] );
-		$this->assertSame( '', $data['source'] );
 		$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
 
 		$this->assertSame( 'Z', $donation->getStatus() );

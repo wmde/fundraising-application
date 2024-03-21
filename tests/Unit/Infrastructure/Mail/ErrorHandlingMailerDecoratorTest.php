@@ -7,15 +7,15 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingTemplateBasedMailer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingMailerDecorator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ErrorThrowingTemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingTemplateBasedMailer
+ * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingMailerDecorator
  */
-class ErrorHandlingTemplateBasedMailerTest extends TestCase {
+class ErrorHandlingMailerDecoratorTest extends TestCase {
 
 	public function testOnSendMail_sendsMail(): void {
 		$mailerSpy = new TemplateBasedMailerSpy( $this );
@@ -23,7 +23,7 @@ class ErrorHandlingTemplateBasedMailerTest extends TestCase {
 		$email = new EmailAddress( 'happy@bunny.carrot' );
 		$arguments = [ 'gotta get up' => 'to get down' ];
 
-		$errorHandlingMailer = new ErrorHandlingTemplateBasedMailer(
+		$errorHandlingMailer = new ErrorHandlingMailerDecorator(
 			$mailerSpy,
 			$loggerSpy
 		);
@@ -37,7 +37,7 @@ class ErrorHandlingTemplateBasedMailerTest extends TestCase {
 	public function testOnSendMailWithError_logsError(): void {
 		$loggerSpy = new LoggerSpy();
 
-		$errorHandlingMailer = new ErrorHandlingTemplateBasedMailer(
+		$errorHandlingMailer = new ErrorHandlingMailerDecorator(
 			new ErrorThrowingTemplateBasedMailer(),
 			$loggerSpy
 		);
@@ -52,7 +52,7 @@ class ErrorHandlingTemplateBasedMailerTest extends TestCase {
 	public function testItLogsPreviousException(): void {
 		$loggerSpy = new LoggerSpy();
 
-		$errorHandlingMailer = new ErrorHandlingTemplateBasedMailer(
+		$errorHandlingMailer = new ErrorHandlingMailerDecorator(
 			new ErrorThrowingTemplateBasedMailer( new \RuntimeException( 'Transport error - The mule ran away' ) ),
 			$loggerSpy
 		);

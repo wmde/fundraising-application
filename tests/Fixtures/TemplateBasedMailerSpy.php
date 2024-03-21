@@ -8,8 +8,9 @@ use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateMailerInterface;
 
-class TemplateBasedMailerSpy implements GetInTouchMailerInterface, DonationTemplateMailerInterface {
+class TemplateBasedMailerSpy implements GetInTouchMailerInterface, DonationTemplateMailerInterface, TemplateMailerInterface {
 
 	/**
 	 * @var array<int, array{EmailAddress, array}>
