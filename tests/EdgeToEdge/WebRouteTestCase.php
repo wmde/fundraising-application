@@ -48,10 +48,8 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	/**
 	 * Initializes a new test environment and returns a HttpKernel client to
 	 * make requests to the application.
-	 *
-	 * @return AbstractBrowser
 	 */
-	protected static function createClient(): AbstractBrowser {
+	protected static function createClient(): KernelBrowser {
 		if ( static::$booted ) {
 			throw new \LogicException( sprintf( 'Booting the kernel before calling "%s()" is not supported, the kernel should only be booted once.', __METHOD__ ) );
 		}
@@ -59,6 +57,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		$kernel = static::bootKernel();
 
 		try {
+			/** @var KernelBrowser $client */
 			$client = $kernel->getContainer()->get( 'test.client' );
 		} catch ( ServiceNotFoundException $e ) {
 			if ( class_exists( KernelBrowser::class ) ) {
@@ -67,7 +66,10 @@ abstract class WebRouteTestCase extends KernelTestCase {
 			throw new \LogicException( 'You cannot create the client used in functional tests if the BrowserKit component is not available. Try running "composer require symfony/browser-kit".' );
 		}
 
-		return self::getClient( $client );
+		// PHPStan workaround for missing Symfony typing (`BrowserKitAssertionsTrait::getClient()` returns `AbstractBrowser`)
+		/** @var KernelBrowser $client */
+		$client = self::getClient( $client );
+		return $client;
 	}
 
 	/**
