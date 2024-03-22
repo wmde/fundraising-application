@@ -12,7 +12,7 @@ class SchemaLoader {
 	public function __construct( private readonly FileFetcher $fileFetcher ) {
 	}
 
-	public function loadSchema( string $schema ): \stdClass {
+	public function loadSchema( string $schema ): object {
 		try {
 			$schemaString = $this->fileFetcher->fetchFile( $schema );
 		} catch ( FileFetchingException $e ) {

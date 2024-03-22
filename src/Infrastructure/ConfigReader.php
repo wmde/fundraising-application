@@ -14,7 +14,7 @@ class ConfigReader {
 	/**
 	 * @var string[]
 	 */
-	private $configPaths;
+	private array $configPaths;
 
 	public function __construct(
 		private readonly FileFetcher $fileFetcher,
@@ -67,7 +67,7 @@ class ConfigReader {
 		}
 	}
 
-	private function convertConfigArrayToConfigObject( array $config ): stdClass {
+	private function convertConfigArrayToConfigObject( array $config ): \stdClass {
 		// Convert arrays that are supposed to be associative to empty objects,
 		// otherwise they will be empty numeric arrays
 		// can't use JSON_FORCE_OBJECT

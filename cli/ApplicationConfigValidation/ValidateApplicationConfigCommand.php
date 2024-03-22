@@ -46,22 +46,9 @@ class ValidateApplicationConfigCommand extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
-		$configObject = $this->loadConfigObjectFromFiles( $input->getArgument( 'config_file' ) );
-
-		if ( $input->getOption( 'dump-config' ) ) {
-			try {
-				$result = json_encode( $configObject, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR );
-			} catch ( \JsonException $e ) {
-				throw new \RuntimeException(
-					sprintf( "Failed to get JSON representation of: %s", var_export( $configObject, true ) ),
-				0,
-					$e
-				);
-			}
-			$output->writeln( $result );
-		}
-
-		$schema = ( new SchemaLoader( new SimpleFileFetcher() ) )->loadSchema( $input->getOption( 'schema' ) );
+		$configObject = $this->loadConfigObjectWithInputArguments( $input );
+		$this->dumpConfigIfRequested( $input, $configObject, $output );
+		$schema = $this->loadSchemaWithInputOptions( $input );
 		$validator = new Validator();
 
 		$validator->validate( $configObject, $schema );
@@ -76,6 +63,18 @@ class ValidateApplicationConfigCommand extends Command {
 		return self::RETURN_CODE_ERROR;
 	}
 
+	private function loadConfigObjectWithInputArguments( InputInterface $input ): \stdClass {
+		$configFileName = $input->getArgument( 'config_file' );
+		if ( !is_array( $configFileName ) ) {
+			throw new \LogicException( "config_file name should be a string array" );
+		}
+		return $this->loadConfigObjectFromFiles( $configFileName );
+	}
+
+	/**
+	 * @param string[] $configFiles
+	 * @return \stdClass
+	 */
 	private function loadConfigObjectFromFiles( array $configFiles ): \stdClass {
 		$configReader = new ConfigReader(
 			new SimpleFileFetcher(),
@@ -83,5 +82,28 @@ class ValidateApplicationConfigCommand extends Command {
 		);
 
 		return $configReader->getConfigObject();
+	}
+
+	private function dumpConfigIfRequested( InputInterface $input, \stdClass $configObject, OutputInterface $output ): void {
+		if ( $input->getOption( 'dump-config' ) ) {
+			try {
+				$result = json_encode( $configObject, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR );
+			} catch ( \JsonException $e ) {
+				throw new \RuntimeException(
+					sprintf( "Failed to get JSON representation of: %s", var_export( $configObject, true ) ),
+					0,
+					$e
+				);
+			}
+			$output->writeln( $result );
+		}
+	}
+
+	private function loadSchemaWithInputOptions( InputInterface $input ): object {
+		$schemaName = $input->getOption( 'schema' );
+		if ( !is_string( $schemaName ) ) {
+			throw new \LogicException( "Schema name should be a string" );
+		}
+		return ( new SchemaLoader( new SimpleFileFetcher() ) )->loadSchema( $schemaName );
 	}
 }
