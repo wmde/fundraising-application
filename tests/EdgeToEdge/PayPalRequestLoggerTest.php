@@ -9,7 +9,7 @@ use org\bovigo\vfs\vfsStreamDirectory;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WMDE\Fundraising\Frontend\App\EventHandlers\PayPalRequestLogger;
-use WMDE\PsrLogTestDoubles\LoggerSpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\PayPalRequestLogger

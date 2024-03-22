@@ -10,6 +10,7 @@ class ValidLocation {
 
 	public static function validLocationForCommunity( string $postcode, string $community ): Location {
 		return new Location(
+			1,
 			'Baden-Württemberg',
 			'DE1',
 			'Freiburg',

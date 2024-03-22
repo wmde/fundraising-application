@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use WMDE\Fundraising\Frontend\FeatureToggle\Feature;
 use WMDE\Fundraising\Frontend\Infrastructure\FileFeatureReader;
-use WMDE\PsrLogTestDoubles\LoggerSpy;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\Infrastructure\FileFeatureReader

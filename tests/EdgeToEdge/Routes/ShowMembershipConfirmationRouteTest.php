@@ -64,7 +64,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 	public function testCallOnAnonymizedRecord_deniedPageIsShown(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$doctrineApplication = ValidMembershipApplication::newAnonymizedDoctrineEntity();
-			$token = new AuthenticationToken( $doctrineApplication->getId(), AuthenticationBoundedContext::Membership, self::CORRECT_ACCESS_TOKEN, self::CORRECT_ACCESS_TOKEN );
+			$token = new AuthenticationToken( $doctrineApplication->getId() ?? 0, AuthenticationBoundedContext::Membership, self::CORRECT_ACCESS_TOKEN, self::CORRECT_ACCESS_TOKEN );
 
 			$entityManager = $factory->getEntityManager();
 			$entityManager->persist( $doctrineApplication );

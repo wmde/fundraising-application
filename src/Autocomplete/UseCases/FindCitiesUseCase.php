@@ -17,7 +17,7 @@ class FindCitiesUseCase {
 	 * @return string[]
 	 */
 	public function getCitiesForPostcode( string $postcode ): array {
-		$alphanumericPostCode = preg_replace( '/[^0-9]/', '', trim( $postcode ) );
+		$alphanumericPostCode = preg_replace( '/[^0-9]/', '', trim( $postcode ) ) ?? '';
 		return $this->locationRepository->getCitiesForPostcode( $alphanumericPostCode );
 	}
 }

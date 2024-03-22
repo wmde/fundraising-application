@@ -4,8 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValidator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
@@ -13,7 +15,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 /**
  * @covers \WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValidator
  */
-class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
+class CampaignUtilizationValidatorTest extends TestCase {
 
 	public function testWhenCampaignConfigurationMatchesChoiceFactory_validationPasses(): void {
 		$errorLogger = new CampaignErrorCollection();
@@ -29,13 +31,13 @@ class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
 
 	public function testWhenCampaignConfigurationHasUnimplementedBuckets_validationFails(): void {
 		$errorLogger = new CampaignErrorCollection();
-		$campaignCollection = $this->newTestCampaignCollection();
-
+		$campaign02 = $this->createCampaign02();
 		CampaignFixture::createBucket(
-			$campaignCollection->getIterator()->offsetGet( 1 ),
+			$campaign02,
 			'test_bucket_f',
 			Bucket::NON_DEFAULT
 		);
+		$campaignCollection = new CampaignCollection( $this->createCampaign01(), $campaign02 );
 
 		$validator = new CampaignUtilizationValidator(
 			$campaignCollection,
@@ -52,9 +54,7 @@ class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
 	public function testWhenCampaignConfigurationIsMissingImplementedBuckets_validationFails(): void {
 		$errorLogger = new CampaignErrorCollection();
 
-		$campaign01 = CampaignFixture::createCampaign();
-		CampaignFixture::createBucket( $campaign01, 'test_bucket_a', Bucket::DEFAULT );
-		CampaignFixture::createBucket( $campaign01, 'test_bucket_b', Bucket::NON_DEFAULT );
+		$campaign01 = $this->createCampaign01();
 
 		$campaign02 = CampaignFixture::createCampaign( 'another_test_campaign' );
 		CampaignFixture::createBucket( $campaign02, 'test_bucket_c', Bucket::DEFAULT );
@@ -119,16 +119,24 @@ class CampaignUtilizationValidatorTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function newTestCampaignCollection(): CampaignCollection {
+		$campaign01 = $this->createCampaign01();
+		$campaign02 = $this->createCampaign02();
+		return new CampaignCollection( $campaign01, $campaign02 );
+	}
+
+	private function createCampaign01(): Campaign {
 		$campaign01 = CampaignFixture::createCampaign();
 		CampaignFixture::createBucket( $campaign01, 'test_bucket_a', Bucket::DEFAULT );
 		CampaignFixture::createBucket( $campaign01, 'test_bucket_b', Bucket::NON_DEFAULT );
+		return $campaign01;
+	}
 
+	private function createCampaign02(): Campaign {
 		$campaign02 = CampaignFixture::createCampaign( 'another_test_campaign' );
 		CampaignFixture::createBucket( $campaign02, 'test_bucket_e', Bucket::NON_DEFAULT );
 		CampaignFixture::createBucket( $campaign02, 'test_bucket_d', Bucket::NON_DEFAULT );
 		CampaignFixture::createBucket( $campaign02, 'test_bucket_c', Bucket::DEFAULT );
-
-		return new CampaignCollection( $campaign01, $campaign02 );
+		return $campaign02;
 	}
 
 	public function newValidCampaignFeaturesArray(): array {

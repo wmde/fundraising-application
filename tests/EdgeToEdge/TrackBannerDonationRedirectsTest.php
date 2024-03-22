@@ -98,7 +98,7 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 			]
 		);
 
-		$location = $response->headers->get( 'Location', '' );
+		$location = $response->headers->get( 'Location', '' ) ?? '';
 		$campaignParameter = '&' . TrackBannerDonationRedirects::PIWIK_CAMPAIGN . '=' . self::TEST_CAMPAIGN;
 		$keywordParameter = '&' . TrackBannerDonationRedirects::PIWIK_KWD . '=' . self::TEST_KEYWORD;
 

@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
@@ -16,10 +16,10 @@ use WMDE\Fundraising\MembershipContext\Domain\Event\MembershipCreatedEvent;
 
 class CreateAddressChangeHandler {
 
-	public function __construct(
-		private readonly EntityManager $entityManager,
-		EventDispatcher $dispatcher
-	) {
+	private EntityManagerInterface $entityManager;
+
+	public function __construct( EntityManagerInterface $entityManager, EventDispatcher $dispatcher ) {
+		$this->entityManager = $entityManager;
 		$dispatcher->addEventListener( DonationCreatedEvent::class, [ $this, 'onDonationCreated' ] )
 			->addEventListener( MembershipCreatedEvent::class, [ $this, 'onMembershipCreated' ] )
 			->addEventListener( DonorUpdatedEvent::class, [ $this, 'onDonorUpdated' ] );

@@ -295,7 +295,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 			$addressChange->getId()
 		);
 		$this->assertTrue(
-			$addressChangeAfterRequest->isOptedIntoDonationReceipt(),
+			$addressChangeAfterRequest?->isOptedIntoDonationReceipt(),
 			'Donor should be opted into donation receipt'
 		);
 	}
@@ -306,7 +306,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 			$addressChange->getId()
 		);
 		$this->assertFalse(
-			$addressChangeAfterRequest->isOptedIntoDonationReceipt(),
+			$addressChangeAfterRequest?->isOptedIntoDonationReceipt(),
 			'Donor should be opted out of donation receipt'
 		);
 	}

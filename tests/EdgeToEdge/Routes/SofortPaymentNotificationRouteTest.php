@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
-use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\SofortNotificationController
@@ -206,19 +206,20 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	private function assertRequestVarsAreLogged( LoggerSpy $logger, ?string $logContent = null, ?string $token = null ): void {
+		$context = $logger->getFirstLogCall()->getContext();
 		$this->assertStringContainsString(
 			$logContent ?? '<transaction>' . self::VALID_TRANSACTION_ID . '</transaction>',
-			$logger->getLogCalls()->getFirstCall()->getContext()['request_content']
+			$context['request_content']
 		);
 
 		$this->assertEquals(
 			$token ?? self::VALID_TOKEN,
-			$logger->getLogCalls()->getFirstCall()->getContext()['query_vars']['updateToken']
+			$context['query_vars']['updateToken']
 		);
 	}
 
 	private function assertLogLevel( LoggerSpy $logger, string $expectedLevel ): void {
-		$this->assertSame( $expectedLevel, $logger->getLogCalls()->getFirstCall()->getLevel() );
+		$this->assertSame( $expectedLevel, $logger->getFirstLogCall()->getLevel() );
 	}
 
 	public function testGivenUnknownDonation_requestDataIsLogged(): void {

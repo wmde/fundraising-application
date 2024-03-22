@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling\DomainEventHandler;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -46,7 +47,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 	public function testAnonymousDonor_doesNothing(): void {
 		$dispatcher = $this->createMock( EventDispatcher::class );
-		$entityManager = new EntityManagerSpy();
+		$entityManager = new EntityManagerSpy( $this->createStub( EntityManagerInterface::class ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
 		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, new AnonymousDonor() ) );
@@ -188,7 +189,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 	public function testUpdateDonor_andPreviousHasAddress_doesNothing(): void {
 		$dispatcher = $this->createMock( EventDispatcher::class );
-		$entityManager = new EntityManagerSpy();
+		$entityManager = new EntityManagerSpy( $this->createStub( EntityManagerInterface::class ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
 		$handler->onDonorUpdated( new DonorUpdatedEvent(
@@ -202,7 +203,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 	public function testUpdateDonor_andNewDoesNotHaveAddress_doesNothing(): void {
 		$dispatcher = $this->createMock( EventDispatcher::class );
-		$entityManager = new EntityManagerSpy();
+		$entityManager = new EntityManagerSpy( $this->createStub( EntityManagerInterface::class ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
 		$handler->onDonorUpdated( new DonorUpdatedEvent(

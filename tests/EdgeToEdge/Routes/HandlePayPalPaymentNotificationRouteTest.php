@@ -10,11 +10,11 @@ use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingPayPalVerificationService;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingVerificationServiceFactory;
+use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingVerificationServiceFactory;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\PayPal\PayPalVerificationService;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\SucceedingVerificationService;
-use WMDE\PsrLogTestDoubles\LoggerSpy;
 
 /**
  * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationController
@@ -92,6 +92,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	 */
 	private function assertPayPalDataGotPersisted( array $request ): void {
 		$donation = $this->getFactory()->getDonationRepository()->getDonationById( self::DONATION_ID );
+		$this->assertNotNull( $donation );
 		$encodedBookingData = $this->getFactory()->getConnection()
 			->executeQuery( "SELECT booking_data from payment_paypal WHERE ID=" . $donation->getPaymentId() )
 			->fetchOne();
@@ -202,7 +203,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 		$this->assertSame(
 			$paymentStatus,
-			$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['payment_status']
+			$logger->getFirstLogCall()->getContext()['post_vars']['payment_status']
 		);
 	}
 
@@ -241,7 +242,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$logger->getLogCalls()->getMessages()
 		);
 
-		$loggedDataAsString = implode( $logger->getLogCalls()->getFirstCall()->getContext()['post_vars'] );
+		$loggedDataAsString = implode( $logger->getFirstLogCall()->getContext()['post_vars'] );
 
 		$this->assertStringNotContainsString( 'IshouldNotGetLogged@privatestuff.de', $loggedDataAsString );
 		$this->assertStringNotContainsString( '123456personalID', $loggedDataAsString );
@@ -310,7 +311,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 		$this->assertSame(
 			'subscr_modify',
-			$logger->getLogCalls()->getFirstCall()->getContext()['post_vars']['txn_type']
+			$logger->getFirstLogCall()->getContext()['post_vars']['txn_type']
 		);
 	}
 

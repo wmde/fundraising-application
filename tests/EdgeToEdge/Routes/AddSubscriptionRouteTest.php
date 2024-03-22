@@ -68,7 +68,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 			$this->validFormInput
 		);
 
-		$this->assertSame( 'en_GB', $client->getCookieJar()->get( CookieNames::LOCALE )->getValue() );
+		$this->assertSame( 'en_GB', $client->getCookieJar()->get( CookieNames::LOCALE )?->getValue() );
 	}
 
 	public function testLeadingAndTrailingWhitespaceGetsTrimmed(): void {
