@@ -9,6 +9,9 @@ use WMDE\Fundraising\DonationContext\Domain\Model\Donor\AnonymousDonor;
 
 class DonorDataFormatter {
 
+	/**
+	 * @return array<string, scalar>
+	 */
 	public function getAddressArguments( Donation $donation ): array {
 		if ( $donation->getDonor() instanceof AnonymousDonor ) {
 			return [

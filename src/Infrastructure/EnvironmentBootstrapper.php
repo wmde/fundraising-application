@@ -25,6 +25,10 @@ class EnvironmentBootstrapper {
 	 */
 	private array $environmentMap;
 
+	/**
+	 * @param string $environmentName
+	 * @param array<string, class-string> $environmentMap
+	 */
 	public function __construct(
 		private readonly string $environmentName,
 		array $environmentMap = []
@@ -50,6 +54,9 @@ class EnvironmentBootstrapper {
 		return $factory;
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	protected function getConfiguration(): array {
 		$configReader = ( new EnvironmentDependentConfigReaderFactory( $this->environmentName ) )->getConfigReader();
 		return $configReader->getConfig();

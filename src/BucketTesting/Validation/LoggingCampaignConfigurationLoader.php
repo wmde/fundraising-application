@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Validation;
 use FileFetcher\FileFetchingException;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Yaml\Exception\ParseException;
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfiguration;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface;
 
 class LoggingCampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
@@ -20,6 +21,9 @@ class LoggingCampaignConfigurationLoader implements CampaignConfigurationLoaderI
 		$this->actualCampaignConfigurationLoader = $campaignConfigurationLoader;
 	}
 
+	/**
+	 * @return CampaignConfiguration[]
+	 */
 	public function loadCampaignConfiguration( string ...$configFiles ): array {
 		try {
 			return $this->actualCampaignConfigurationLoader->loadCampaignConfiguration( ...$configFiles );

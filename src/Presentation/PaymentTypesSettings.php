@@ -25,6 +25,9 @@ class PaymentTypesSettings {
 	public const ENABLE_DONATIONS = 'donation-enabled';
 	public const ENABLE_MEMBERSHIP_APPLICATIONS = 'membership-enabled';
 
+	/**
+	 * @param array<string, array<string, bool>> $settings
+	 */
 	public function __construct( private readonly array $settings ) {
 	}
 
@@ -63,7 +66,6 @@ class PaymentTypesSettings {
 	}
 
 	/**
-	 * @param string $settingName
 	 * @return string[]
 	 */
 	private function getPaymentTypesWhereSettingIsTrue( string $settingName ): array {

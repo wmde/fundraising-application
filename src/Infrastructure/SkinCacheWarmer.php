@@ -39,6 +39,9 @@ class SkinCacheWarmer implements CacheWarmerInterface {
 		return $templates;
 	}
 
+	/**
+	 * @return string[]
+	 */
 	private function getTemplates(): array {
 		$cacheDirectory = $this->funFunFactory->getSkinDirectory();
 		$templates = [];

@@ -9,12 +9,23 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
 class MembershipApplicationFormPresenter {
 
+	/**
+	 * @param TwigTemplate $template
+	 * @param string[] $incentives
+	 */
 	public function __construct(
 		private readonly TwigTemplate $template,
 		private readonly array $incentives
 	) {
 	}
 
+	/**
+	 * @param array<string, string> $urls
+	 * @param bool $showMembershipTypeOption
+	 * @param array<string, scalar> $initialDonationFormValues
+	 * @param array<string, scalar> $initialValidationResult
+	 * @param ImpressionCounts $impressionCounts
+	 */
 	public function present( array $urls,
 							bool $showMembershipTypeOption,
 							array $initialDonationFormValues,

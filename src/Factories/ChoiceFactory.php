@@ -15,6 +15,9 @@ class ChoiceFactory {
 	public function __construct( private readonly FeatureToggle $featureToggle ) {
 	}
 
+	/**
+	 * @return int[]
+	 */
 	public function getMembershipPaymentIntervals(): array {
 		if ( $this->featureToggle->featureIsActive( 'campaigns.membership_intervals.all_intervals' ) ) {
 			return [

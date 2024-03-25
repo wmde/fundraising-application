@@ -74,6 +74,9 @@ class ValidateAddressController {
 		return true;
 	}
 
+	/**
+	 * @return ConstraintViolation[]
+	 */
 	private function getPersonViolations( Request $request ): array {
 		return $this->addressValidator->validatePersonName(
 			$request->get( 'salutation', '' ),
@@ -83,12 +86,18 @@ class ValidateAddressController {
 		)->getViolations();
 	}
 
+	/**
+	 * @return ConstraintViolation[]
+	 */
 	private function getCompanyViolations( Request $request ): array {
 		return $this->addressValidator->validateCompanyName(
 			$request->get( 'companyName', '' )
 		)->getViolations();
 	}
 
+	/**
+	 * @return ConstraintViolation[]
+	 */
 	private function getAddressViolations( Request $request ): array {
 		return $this->addressValidator->validatePostalAddress(
 			$request->get( 'street', '' ),

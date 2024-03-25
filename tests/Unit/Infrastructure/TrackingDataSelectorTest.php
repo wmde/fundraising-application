@@ -22,6 +22,9 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $expectedResult, $value );
 	}
 
+	/**
+	 * @return array<int, string|string[]>[]
+	 */
 	public static function preferredValueProvider(): array {
 		return [
 			[ 'chocolate', [ 'chocolate', 'hazelnuts', 'campaign/keyword' ] ],
@@ -34,7 +37,7 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider trackingVarProvider
 	 */
-	public function testConcatTrackingFromVarCouple( string $expectedResult, string $campaign, string $keyword ): void {
+	public function testConcatTrackingFromVarTuple( string $expectedResult, string $campaign, string $keyword ): void {
 		$value = TrackingDataSelector::getFirstNonEmptyValue( [
 			'',
 			'',
@@ -44,6 +47,9 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $expectedResult, $value );
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public static function trackingVarProvider(): array {
 		return [
 			[ 'campaign/keyword', 'campaign', 'keyword' ],

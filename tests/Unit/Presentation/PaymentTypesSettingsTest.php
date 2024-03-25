@@ -53,34 +53,6 @@ class PaymentTypesSettingsTest extends TestCase {
 		$this->assertSame( [ 'd', 'f' ], $settings->getEnabledForMembershipApplication() );
 	}
 
-	public function testSettingsOnlyTrueWhenStriclySo(): void {
-		$settings = new PaymentTypesSettings( [
-			'a' => [
-				PaymentTypesSettings::ENABLE_DONATIONS => 1,
-				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => 'yes'
-			],
-			'b' => [
-				PaymentTypesSettings::ENABLE_DONATIONS => true,
-				PaymentTypesSettings::ENABLE_MEMBERSHIP_APPLICATIONS => true
-			],
-		] );
-		$this->assertSame( [ 'b' ], $settings->getEnabledForDonation() );
-		$this->assertSame( [ 'b' ], $settings->getEnabledForMembershipApplication() );
-	}
-
-	public function testFunkySettingsNotValidatedButHarmless(): void {
-		$settings = new PaymentTypesSettings( [
-			'ff' => [
-				'gg' => 7
-			],
-			2 => [
-				'thing' => [ 'ignored' ]
-			]
-		] );
-		$this->assertSame( [], $settings->getEnabledForDonation() );
-		$this->assertSame( [], $settings->getEnabledForMembershipApplication() );
-	}
-
 	public function testGetAllowedPaymentTypesForDonation(): void {
 		$settings = new PaymentTypesSettings( [
 			'BEZ' => [

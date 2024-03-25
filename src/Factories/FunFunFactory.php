@@ -11,6 +11,7 @@ use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Tools\Console\Command\CurrentCommand;
+use Doctrine\Migrations\Tools\Console\Command\DoctrineCommand;
 use Doctrine\Migrations\Tools\Console\Command\DumpSchemaCommand;
 use Doctrine\Migrations\Tools\Console\Command\ExecuteCommand;
 use Doctrine\Migrations\Tools\Console\Command\GenerateCommand;
@@ -428,6 +429,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getGetInTouchCategories(): array {
 		$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/contact_categories.json' );
 		return json_decode( $json, true );
@@ -497,8 +501,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	 * Get a template, with the content for the layout areas filled in.
 	 *
 	 * @param string $templateName
-	 * @param array $context Additional variables for the template
-	 * @return TwigTemplate
+	 * @param array<string, mixed> $context Additional variables for the template
 	 */
 	public function getLayoutTemplate( string $templateName, array $context = [] ): TwigTemplate {
 		 return new TwigTemplate(
@@ -508,6 +511,10 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	/**
+	 * @param string $templateName
+	 * @param array<string, mixed> $context
+	 */
 	public function getMailerTemplate( string $templateName, array $context = [] ): TwigTemplate {
 		return new TwigTemplate(
 			$this->getMailerTwig(),
@@ -516,6 +523,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	private function getDefaultTwigVariables(): array {
 		return [
 			'honorifics' => $this->getHonorifics()->getList(),
@@ -524,7 +534,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			'site_metadata' => $this->getSiteMetaData(),
 			'selectedBuckets' => BucketPropertyExtractor::listBucketIds( ...$this->getSelectedBuckets() ),
 			'allowedCampaignParameters' => CampaignPropertyExtractor::listURLKeys( ...$this->getCampaigns() ),
-			'activeFeatures' => ActiveFeatureRenderer::renderActiveFeatureIds( $this->getFeatureReader()->getFeatures() )
+			'activeFeatures' => ActiveFeatureRenderer::renderActiveFeatureIds( ...$this->getFeatureReader()->getFeatures() )
 		];
 	}
 
@@ -718,6 +728,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->createSharedObject( Salutations::class,
 			function () {
 				$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/salutations.json' );
+				/** @var array<'salutations', array<array<string, string|array<string, string>>>> $data */
 				$data = json_decode( $json, true, 16, JSON_THROW_ON_ERROR );
 				return new Salutations( $data[ 'salutations' ] );
 			} );
@@ -1397,11 +1408,17 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	/**
+	 * @return string[]
+	 */
 	private function getIncentives(): array {
 		// TODO hardcoded until the list gets extended in the near future
 		return [ 'tote_bag' ];
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	public function getCountries(): array {
 		$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/countries.json' );
 		return ( json_decode( $json ) )->countries;
@@ -1853,6 +1870,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		$this->sharedObjects[TranslatorInterface::class . '::MailTranslator'] = $translator;
 	}
 
+	/**
+	 * @return array<int|string, mixed>
+	 */
 	private function getSiteMetaData(): array {
 		$fileFetcher = new SimpleFileFetcher();
 		$metadata = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/siteMetadata.json' ), true );
@@ -1916,7 +1936,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	/**
-	 * @return \Doctrine\Migrations\Tools\Console\Command\DoctrineCommand[]
+	 * @return DoctrineCommand[]
 	 */
 	public function newDoctrineMigrationCommands(): array {
 		$dependencyFactory = DependencyFactory::fromEntityManager(

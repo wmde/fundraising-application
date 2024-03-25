@@ -13,12 +13,20 @@ use WMDE\FunValidators\ValidationResponse;
  */
 class GetInTouchHtmlPresenter {
 
+	/**
+	 * @param TwigTemplate $template
+	 * @param string[] $categories
+	 */
 	public function __construct(
 		private readonly TwigTemplate $template,
 		private readonly array $categories
 	) {
 	}
 
+	/**
+	 * @param ValidationResponse $response
+	 * @param array<string, mixed> $formData
+	 */
 	public function present( ValidationResponse $response, array $formData ): string {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */

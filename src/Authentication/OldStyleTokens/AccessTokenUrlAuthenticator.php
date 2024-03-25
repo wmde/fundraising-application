@@ -25,7 +25,8 @@ class AccessTokenUrlAuthenticator implements URLAuthenticator {
 	/**
 	 * @param class-string $urlGeneratorClass
 	 * @param string[] $requestedParameters
-	 * @return array<string,string>
+	 *
+	 * @return array<string, int|string>
 	 */
 	public function getAuthenticationTokensForPaymentProviderUrl( string $urlGeneratorClass, array $requestedParameters ): array {
 		$params = match ( $urlGeneratorClass ) {
@@ -51,6 +52,10 @@ class AccessTokenUrlAuthenticator implements URLAuthenticator {
 		return $params;
 	}
 
+	/**
+	 * @param array<string, mixed> $params
+	 * @param string[] $requestedParameters
+	 */
 	private function checkIfRequestedParametersMatchGeneratedParameters( array $params, array $requestedParameters ): void {
 		$paramNames = array_keys( $params );
 		if ( array_diff( $requestedParameters, $paramNames ) !== [] ) {

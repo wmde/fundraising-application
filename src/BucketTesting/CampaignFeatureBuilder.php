@@ -51,6 +51,11 @@ class CampaignFeatureBuilder {
 		}
 	}
 
+	/**
+	 * @param Bucket $bucket
+	 *
+	 * @return StringHash[]
+	 */
 	private function getRules( Bucket $bucket ): array {
 		$bucketNameMatch = new StringHash( $bucket->getId() );
 

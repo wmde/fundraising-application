@@ -10,6 +10,9 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Domain\Model;
 class Campaign {
 
 	private bool $active;
+	/**
+	 * @var Bucket[]
+	 */
 	private array $buckets;
 	private int $defaultBucketIndex;
 

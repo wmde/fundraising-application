@@ -20,6 +20,9 @@ class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterfac
 	) {
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	public function loadCampaignConfiguration( string ...$configFiles ): array {
 		$cacheKey = $this->getCacheKey( ...$configFiles );
 		if ( $cacheKey !== '' && $this->cache->has( $cacheKey ) ) {
@@ -36,6 +39,9 @@ class CampaignConfigurationLoader implements CampaignConfigurationLoaderInterfac
 		return $processedConfiguration['campaigns'];
 	}
 
+	/**
+	 * @return string[]
+	 */
 	protected function loadFiles( string ...$configFiles ): array {
 		$configs = [];
 		foreach ( $configFiles as $file ) {

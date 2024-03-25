@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
+use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfiguration;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoaderInterface;
 
 class OverridingCampaignConfigurationLoader implements CampaignConfigurationLoaderInterface {
@@ -13,6 +14,11 @@ class OverridingCampaignConfigurationLoader implements CampaignConfigurationLoad
 	 */
 	private $modifyConfiguration;
 
+	/**
+	 * @param CampaignConfigurationLoaderInterface $originalLoader
+	 * @param array<string, array<string, array<int, string>|string|true>> $additionalCampaignConfiguration
+	 * @param callable|null $modifyConfiguration
+	 */
 	public function __construct(
 		private readonly CampaignConfigurationLoaderInterface $originalLoader,
 		private readonly array $additionalCampaignConfiguration,
@@ -23,6 +29,11 @@ class OverridingCampaignConfigurationLoader implements CampaignConfigurationLoad
 		};
 	}
 
+	/**
+	 * @param string ...$configFiles
+	 *
+	 * @return CampaignConfiguration[]
+	 */
 	public function loadCampaignConfiguration( string ...$configFiles ): array {
 		$newConfig = array_replace_recursive(
 			$this->originalLoader->loadCampaignConfiguration( ...$configFiles ),

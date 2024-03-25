@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Factories;
 
 use Twig\Environment;
+use Twig\Extension\AbstractExtension;
 use Twig\Extra\Intl\IntlExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -15,6 +16,14 @@ use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 
 class MailerTemplatingFactory extends TwigFactory {
 
+	/**
+	 * @param array<string, mixed> $config
+	 * @param string $cachePath
+	 * @param TranslatorInterface $translator
+	 * @param ContentProvider $contentProvider
+	 * @param UrlGenerator $urlGenerator
+	 * @param GreetingGenerator $greetingGenerator
+	 */
 	public function __construct(
 		array $config,
 		string $cachePath,
@@ -36,6 +45,9 @@ class MailerTemplatingFactory extends TwigFactory {
 		return $this->newTwigEnvironment( $globals );
 	}
 
+	/**
+	 * @return TwigFilter[]
+	 */
 	protected function getFilters(): array {
 		return [
 			new TwigFilter(
@@ -60,6 +72,9 @@ class MailerTemplatingFactory extends TwigFactory {
 		];
 	}
 
+	/**
+	 * @return TwigFunction[]
+	 */
 	protected function getFunctions(): array {
 		return [
 			new TwigFunction(
@@ -78,6 +93,9 @@ class MailerTemplatingFactory extends TwigFactory {
 		];
 	}
 
+	/**
+	 * @return AbstractExtension[]
+	 */
 	protected function getExtensions(): array {
 		return [
 			new IntlExtension()

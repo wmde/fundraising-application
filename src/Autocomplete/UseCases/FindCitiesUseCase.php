@@ -12,8 +12,6 @@ class FindCitiesUseCase {
 	}
 
 	/**
-	 * @param string $postcode
-	 *
 	 * @return string[]
 	 */
 	public function getCitiesForPostcode( string $postcode ): array {

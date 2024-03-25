@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingEvent;
 class BucketLoggerSpy implements BucketLogger {
 
 	/**
-	 * @var LoggingEvent[]
+	 * @var array<int, array{event: LoggingEvent, buckets: Bucket[]}>
 	 */
 	private array $events = [];
 
@@ -30,6 +30,9 @@ class BucketLoggerSpy implements BucketLogger {
 		return $this->events[0]['event'];
 	}
 
+	/**
+	 * @return Bucket[]
+	 */
 	public function getFirstBuckets(): array {
 		return $this->events[0]['buckets'];
 	}

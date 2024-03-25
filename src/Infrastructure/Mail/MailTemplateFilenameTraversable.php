@@ -9,6 +9,9 @@ class MailTemplateFilenameTraversable implements \IteratorAggregate {
 	public function __construct( private readonly string $mailTemplatePath ) {
 	}
 
+	/**
+	 * @return \Iterator<string>
+	 */
 	public function getIterator(): \Iterator {
 		$glob = glob( $this->mailTemplatePath . '/*\.twig' );
 

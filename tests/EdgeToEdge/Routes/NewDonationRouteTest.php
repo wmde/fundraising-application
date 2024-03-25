@@ -36,7 +36,10 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'person', $applicationVars->initialFormValues->addressType );
 	}
 
-	/** @dataProvider paymentInputProvider */
+	/** @dataProvider paymentInputProvider
+	 * @param array<string, mixed> $validPaymentInput
+	 * @param array<string, mixed> $expected
+	 */
 	public function testGivenPaymentInput_paymentDataIsInitiallyValidated( array $validPaymentInput, array $expected ): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();

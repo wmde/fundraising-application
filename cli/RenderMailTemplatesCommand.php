@@ -81,10 +81,9 @@ class RenderMailTemplatesCommand extends Command {
 	/**
 	 * Check that there are templates for all fixtures and (even more important) vice-versa
 	 *
-	 * @param array $testTemplateNames Template names from fixture
-	 * @param array $mailTemplatePaths
+	 * @param string[] $testTemplateNames Template names from fixture
+	 * @param string[] $mailTemplatePaths
 	 * @param OutputInterface $output Command output
-	 * @return bool
 	 */
 	private function validateTemplateFixtures( array $testTemplateNames, array $mailTemplatePaths, OutputInterface $output ): bool {
 		$hasErrors = false;

@@ -16,6 +16,9 @@ class WordListFileReader implements StringList {
 	) {
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function toArray(): array {
 		if ( $this->fileName === '' ) {
 			return [];

@@ -11,6 +11,10 @@ class UrlGeneratorAdapter implements UrlGenerator {
 	public function __construct( private readonly UrlGeneratorInterface $urlGenerator ) {
 	}
 
+	/**
+	 * @param string $routeName
+	 * @param array<string, string> $parameters
+	 */
 	public function generateAbsoluteUrl( string $routeName, array $parameters = [] ): string {
 		return $this->urlGenerator->generate(
 			$routeName,

@@ -48,6 +48,9 @@ class CampaignConfigurationTest extends TestCase {
 
 	/**
 	 * @dataProvider invalidConfigurationProvider
+	 *
+	 * @param array<string, mixed> $invalidConfig
+	 * @param string $expectedReason
 	 */
 	public function testGivenMissingConfigurationEntries_ValidationFails( array $invalidConfig, string $expectedReason ): void {
 		$this->assertConfigurationIsInvalid(

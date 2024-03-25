@@ -13,6 +13,9 @@ class DoctrineLocationRepository implements LocationRepository {
 	public function __construct( private readonly EntityManager $entityManager ) {
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getCitiesForPostcode( string $postcode ): array {
 		$queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
 		$metaData = $this->entityManager->getClassMetadata( Location::class );

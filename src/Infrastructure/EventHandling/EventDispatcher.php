@@ -10,10 +10,14 @@ use WMDE\Fundraising\MembershipContext\Domain\Event as MembershipEvent;
 class EventDispatcher {
 
 	/**
-	 * @var callable[][]
+	 * @var array<class-string, callable[]>
 	 */
 	protected array $listeners = [];
 
+	/**
+	 * @param class-string $eventClassName
+	 * @param callable $listener
+	 */
 	public function addEventListener( string $eventClassName, callable $listener ): self {
 		if ( empty( $this->listeners[$eventClassName] ) ) {
 			$this->listeners[$eventClassName] = [];

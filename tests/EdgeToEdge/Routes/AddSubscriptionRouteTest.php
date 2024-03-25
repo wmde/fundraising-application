@@ -15,18 +15,27 @@ use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySp
  */
 class AddSubscriptionRouteTest extends WebRouteTestCase {
 
+	/**
+	 * @var array<string, bool|string>
+	 */
 	private array $validFormInput = [
 		'email' => 'jeroendedauw@gmail.com',
 		'wikilogin' => true,
 		'source' => 'testCampaign',
 	];
 
+	/**
+	 * @var array<string, bool|string>
+	 */
 	private array $validFormInputWithSpaces = [
 		'email' => "\tjeroendedauw@gmail.com   ",
 		'wikilogin' => true,
 		'source' => "\ntestCampaign\r\n",
 	];
 
+	/**
+	 * @var array<string, bool|string>
+	 */
 	private array $invalidFormInput = [
 		'email' => 'not an email',
 		'wikilogin' => true
@@ -151,6 +160,7 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
 		$this->assertJson( $response->getContent() ?: '', 'response is json' );
 		$responseData = json_decode( $response->getContent() ?: '', true );
+		$this->assertIsArray( $responseData );
 		$this->assertSame( 'ERR', $responseData['status'] );
 		$this->assertGreaterThan( 0, count( $responseData['errors'] ) );
 		$this->assertSame( 'email_address_wrong_format', $responseData['errors']['email'] );

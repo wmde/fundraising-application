@@ -19,6 +19,15 @@ class DonationFormPresenter {
 	) {
 	}
 
+	/**
+	 * @param int $amount
+	 * @param string $paymentType
+	 * @param int|null $paymentInterval
+	 * @param ValidationResponse $paymentValidationResult
+	 * @param ImpressionCounts $trackingInfo
+	 * @param string|null $addressType
+	 * @param array<string, string> $urlEndpoints
+	 */
 	public function present( int $amount, string $paymentType, ?int $paymentInterval, ValidationResponse $paymentValidationResult,
 							 ImpressionCounts $trackingInfo, ?string $addressType, array $urlEndpoints ): string {
 		try {

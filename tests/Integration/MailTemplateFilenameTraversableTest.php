@@ -14,7 +14,9 @@ class MailTemplateFilenameTraversableTest extends KernelTestCase {
 
 	public function testTraversableContainsSomeEntriesInTheRightFormat(): void {
 		static::bootKernel();
-		$mailTemplatePaths = static::getContainer()->get( FunFunFactory::class )->newMailTemplateFilenameTraversable();
+
+		$funFunFactory = static::getContainer()->get( FunFunFactory::class );
+		$mailTemplatePaths = $funFunFactory->newMailTemplateFilenameTraversable();
 
 		$pathArray = iterator_to_array( $mailTemplatePaths );
 

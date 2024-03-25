@@ -53,6 +53,9 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 		);
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	private function getExpectedRenderParams(): array {
 		return [
 			'donation' => [
@@ -99,6 +102,9 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 		return $twig;
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function newUrls(): array {
 		return [
 			'testUrl' => 'https://example.com/'

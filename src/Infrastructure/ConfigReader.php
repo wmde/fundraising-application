@@ -27,8 +27,7 @@ class ConfigReader {
 	}
 
 	/**
-	 * @return array
-	 * @throws RuntimeException
+	 * @return array<string, mixed>
 	 */
 	public function getConfig(): array {
 		if ( count( $this->configPaths ) === 1 ) {
@@ -49,6 +48,9 @@ class ConfigReader {
 		return $this->convertConfigArrayToConfigObject( $this->getConfig() );
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	private function getFileConfig( string $filePath ): array {
 		$config = json_decode( $this->getFileContents( $filePath ), true );
 

@@ -38,7 +38,7 @@ class CreditCardNotificationPresenter {
 	 *
 	 * @see https://www.micropayment.de/help/documentation/
 	 *
-	 * @param array $result
+	 * @param array<string, string> $result
 	 * @return string
 	 */
 	private function render( array $result ): string {

@@ -42,6 +42,9 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	/**
+	 * @return array<string, int|float|string>
+	 */
 	private function getFirstCommentAsArray(): array {
 		return [
 			'betrag' => 100.42,
@@ -53,6 +56,9 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function getSecondCommentAsArray(): array {
 		return [
 			'betrag' => 9001,
@@ -93,6 +99,11 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	/**
+	 * @param array<string, int|string>[] $expectedJson
+	 * @param string $expectedCallback
+	 * @param Response $response
+	 */
 	private function assertJsonpSuccessResponse( array $expectedJson, string $expectedCallback, Response $response ): void {
 		$this->assertSame(
 			'/**/' . $expectedCallback . '(' . json_encode( $expectedJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . ');',

@@ -14,6 +14,10 @@ class ErrorThrowingTemplateBasedMailer implements TemplateMailerInterface {
 	public function __construct( private readonly ?\Throwable $previous = null ) {
 	}
 
+	/**
+	 * @param EmailAddress $recipient
+	 * @param array<string, mixed> $templateArguments
+	 */
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
 		throw new \RuntimeException( self::ERROR_MESSAGE, 0, $this->previous );
 	}

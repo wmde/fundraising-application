@@ -63,6 +63,9 @@ class MailTemplatesTest extends KernelTestCase {
 		return $ffFactory;
 	}
 
+	/**
+	 * @return array<string, array<string, bool>>
+	 */
 	private static function getConfigOverrides(): array {
 		return [
 			'twig' => [

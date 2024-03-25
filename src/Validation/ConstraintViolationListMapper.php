@@ -20,6 +20,9 @@ class ConstraintViolationListMapper {
 		$this->propertyAccessor = PropertyAccess::createPropertyAccessor();
 	}
 
+	/**
+	 * @return mixed[]
+	 */
 	public function map( ConstraintViolationListInterface $violations ): array {
 		$errors = [];
 

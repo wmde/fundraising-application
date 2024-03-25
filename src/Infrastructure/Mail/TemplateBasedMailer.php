@@ -24,6 +24,10 @@ class TemplateBasedMailer implements
 	) {
 	}
 
+	/**
+	 * @param EmailAddress $recipient
+	 * @param array<string, mixed> $templateArguments
+	 */
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
 		$this->messenger->sendMessageToUser(
 			new Message(

@@ -19,6 +19,10 @@ abstract class TwigFactory {
 
 	private ?CacheInterface $cache;
 
+	/**
+	 * @param array<string, mixed> $config
+	 * @param string $cachePath
+	 */
 	public function __construct(
 		private readonly array $config,
 		private readonly string $cachePath
@@ -33,6 +37,9 @@ abstract class TwigFactory {
 		throw new \UnexpectedValueException( 'Invalid Twig loader configuration - missing filesystem' );
 	}
 
+	/**
+	 * @param array<string, mixed> $globals
+	 */
 	protected function newTwigEnvironment( array $globals = [] ): Environment {
 		$options = [
 			'strict_variables' => isset( $this->config['strict-variables'] ) && $this->config['strict-variables'] === true,

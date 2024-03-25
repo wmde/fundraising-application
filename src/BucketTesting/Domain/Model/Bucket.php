@@ -32,6 +32,9 @@ class Bucket {
 		return $this->defaultBucket;
 	}
 
+	/**
+	 * @return array<string, int>
+	 */
 	public function getParameters(): array {
 		return [ $this->campaign->getUrlKey() => $this->campaign->getIndexByBucket( $this ) ];
 	}

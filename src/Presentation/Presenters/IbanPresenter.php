@@ -10,6 +10,9 @@ use WMDE\Fundraising\PaymentContext\UseCases\BankDataSuccessResponse;
 
 class IbanPresenter {
 
+	/**
+	 * @return array<string, string>
+	 */
 	public function present( BankDataSuccessResponse|BankDataFailureResponse $response ): array {
 		if ( $response instanceof BankDataSuccessResponse ) {
 			return $this->newSuccessResponse( $response->bankData );
@@ -18,6 +21,9 @@ class IbanPresenter {
 		return $this->newErrorResponse();
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function newSuccessResponse( ExtendedBankData $bankData ): array {
 		return array_filter( [
 			'status' => 'OK',
@@ -29,6 +35,9 @@ class IbanPresenter {
 		] );
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function newErrorResponse(): array {
 		return [ 'status' => 'ERR' ];
 	}

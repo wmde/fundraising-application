@@ -59,6 +59,10 @@ class PageDisplayController {
 		return $this->ffFactory->getLayoutTemplate( $template, $context );
 	}
 
+	/**
+	 * @param string $pageId
+	 * @param array<string, mixed> $context
+	 */
 	private function getAdditionalContextForPageId( string $pageId, array $context ): array {
 		if ( $pageId === 'supporters' ) {
 			$context['supporters'] = $this->ffFactory->getSupportersList();

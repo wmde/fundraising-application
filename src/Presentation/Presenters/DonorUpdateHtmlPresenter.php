@@ -38,6 +38,13 @@ class DonorUpdateHtmlPresenter {
 		);
 	}
 
+	/**
+	 * @param Donation $donation
+	 * @param string $updateToken
+	 * @param string $accessToken
+	 *
+	 * @return array<string, array<scalar>|string>
+	 */
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken ): array {
 		$donorDataFormatter = new DonorDataFormatter();
 		$paymentData = $this->getPaymentUseCase->getPaymentDataArray( $donation->getPaymentId() );

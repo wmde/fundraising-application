@@ -20,6 +20,9 @@ class DonationMembershipApplicationAdapter {
 	public function __construct( private readonly BankDataGenerator $bankDataGenerator ) {
 	}
 
+	/**
+	 * @return array<string, scalar>
+	 */
 	public function getInitialMembershipFormValues( Donation $donation, Payment $payment ): array {
 		return array_merge(
 			$this->getMembershipFormPersonValues( $donation->getDonor() ),
@@ -27,6 +30,11 @@ class DonationMembershipApplicationAdapter {
 		);
 	}
 
+	/**
+	 * @param Donor $donor
+	 *
+	 * @return array<string, string>
+	 */
 	private function getMembershipFormPersonValues( Donor $donor ): array {
 		if ( $donor instanceof AnonymousDonor ) {
 			return [];
@@ -45,6 +53,9 @@ class DonationMembershipApplicationAdapter {
 		);
 	}
 
+	/**
+	 * @return array<string, scalar>
+	 */
 	private function getMembershipFormBankDataValues( Payment $payment ): array {
 		if ( !$payment instanceof DirectDebitPayment ) {
 			return [];
@@ -61,6 +72,9 @@ class DonationMembershipApplicationAdapter {
 		];
 	}
 
+	/**
+	 * @return array<string, scalar>
+	 */
 	public function getInitialValidationState( Donation $donation, Payment $payment ): array {
 		$validationState = [];
 		if ( $donation->getDonor() instanceof PersonDonor || $donation->getDonor() instanceof CompanyDonor ) {

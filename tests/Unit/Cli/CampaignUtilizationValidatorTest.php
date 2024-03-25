@@ -139,6 +139,9 @@ class CampaignUtilizationValidatorTest extends TestCase {
 		return $campaign02;
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function newValidCampaignFeaturesArray(): array {
 		return [
 			'campaigns.test_campaign.test_bucket_a',
@@ -149,6 +152,9 @@ class CampaignUtilizationValidatorTest extends TestCase {
 		];
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function newInconsistentCampaignFeaturesArray(): array {
 		return [
 			'campaigns.test_campaign.test_bucket_a',
@@ -161,6 +167,9 @@ class CampaignUtilizationValidatorTest extends TestCase {
 		];
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function newBrokenCampaignFeaturesArray(): array {
 		return [
 			'campaigns:test_campaign:test_bucket_a',
