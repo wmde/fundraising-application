@@ -25,7 +25,6 @@ abstract class WebRouteTestCase extends KernelTestCase {
 
 	protected const DISABLE_DEBUG = false;
 	protected const ENABLE_DEBUG = true;
-
 	protected static array $applicationConfiguration = [];
 
 	/**
@@ -99,8 +98,6 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 *
 	 * Each value provided will be merged into the application configuration,
 	 * overriding the values from the configuration file (app/config/config.test.json).
-	 *
-	 * @param array $config
 	 */
 	protected static function modifyConfiguration( array $config ): void {
 		static::$applicationConfiguration = $config;

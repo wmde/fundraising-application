@@ -6,9 +6,14 @@ namespace WMDE\Fundraising\Frontend\Presentation\Presenters;
 
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
+use WMDE\Fundraising\MembershipContext\Domain\Model\Incentive;
 
 class MembershipApplicationFormPresenter {
 
+	/**
+	 * @param TwigTemplate $template
+	 * @param Incentive[] $incentives
+	 */
 	public function __construct(
 		private readonly TwigTemplate $template,
 		private readonly array $incentives

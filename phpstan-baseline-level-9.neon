@@ -36,6 +36,16 @@ parameters:
 			path: tests/EdgeToEdge/WebRouteTestCase.php
 
 		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\EdgeToEdge\\\\WebRouteTestCase\\:\\:modifyConfiguration\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/EdgeToEdge/WebRouteTestCase.php
+
+		-
+			message: "#^Property WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\EdgeToEdge\\\\WebRouteTestCase\\:\\:\\$applicationConfiguration type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/EdgeToEdge/WebRouteTestCase.php
+
+		-
 			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\Unit\\\\Infrastructure\\\\ConfigReaderTest\\:\\:getDistConfigContents\\(\\) should return string but returns string\\|false\\.$#"
 			count: 1
 			path: tests/Unit/Infrastructure/ConfigReaderTest.php
@@ -59,3 +69,74 @@ parameters:
 			message: "#^Parameter \\#1 \\$files of class FileFetcher\\\\InMemoryFileFetcher constructor expects array\\<string, string\\>, array\\<string, string\\|false\\> given\\.$#"
 			count: 1
 			path: tests/Unit/Infrastructure/Translation/JsonTranslatorTest.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\Integration\\\\Presentation\\\\Presenters\\\\DonationConfirmationHtmlPresenterTest\\:\\:getExpectedRenderParams\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Integration/Presentation/Presenters/DonationConfirmationHtmlPresenterTest.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\Integration\\\\Presentation\\\\Presenters\\\\DonationConfirmationHtmlPresenterTest\\:\\:newTwigTemplateMock\\(\\) has parameter \\$expectedParameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Integration/Presentation/Presenters/DonationConfirmationHtmlPresenterTest.php
+
+		# Campaign configuration is validated by symfony, and is a complex array structure that we don't want to define
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\CampaignConfigurationLoaderInterface\\:\\:loadCampaignConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/BucketTesting/CampaignConfigurationLoaderInterface.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\Validation\\\\LoggingCampaignConfigurationLoader\\:\\:loadCampaignConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/BucketTesting/Validation/LoggingCampaignConfigurationLoader.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\Fixtures\\\\OverridingCampaignConfigurationLoader\\:\\:loadCampaignConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Fixtures/OverridingCampaignConfigurationLoader.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\Fixtures\\\\ThrowingCampaignConfigurationLoader\\:\\:loadCampaignConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Fixtures/ThrowingCampaignConfigurationLoader.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\CampaignConfigurationLoader\\:\\:loadCampaignConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/BucketTesting/CampaignConfigurationLoader.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\CampaignConfigurationLoader\\:\\:loadCampaignConfiguration\\(\\) should return array but returns mixed\\.$#"
+			count: 1
+			path: src/BucketTesting/CampaignConfigurationLoader.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\CampaignConfigurationLoaderInterface\\:\\:loadCampaignConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/BucketTesting/CampaignConfigurationLoaderInterface.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\CampaignBuilder\\:\\:getCampaigns\\(\\) has parameter \\$campaignConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/BucketTesting/CampaignBuilder.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\Integration\\\\Presentation\\\\Presenters\\\\MembershipApplicationConfirmationHtmlPresenterTest\\:\\:getExpectedRenderParams\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Integration/Presentation/Presenters/MembershipApplicationConfirmationHtmlPresenterTest.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\EdgeToEdge\\\\Routes\\\\ValidateAddressRouteTest\\:\\:newPersonFormInput\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/EdgeToEdge/Routes/ValidateAddressRouteTest.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\EdgeToEdge\\\\Routes\\\\ValidateAddressRouteTest\\:\\:newCompanyWithMissingNameFormInput\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/EdgeToEdge/Routes/ValidateAddressRouteTest.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Factories\\\\FunFunFactory\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Factories/FunFunFactory.php

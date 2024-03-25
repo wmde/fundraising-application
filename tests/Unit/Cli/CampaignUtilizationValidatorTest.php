@@ -161,6 +161,9 @@ class CampaignUtilizationValidatorTest extends TestCase {
 		];
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function newBrokenCampaignFeaturesArray(): array {
 		return [
 			'campaigns:test_campaign:test_bucket_a',

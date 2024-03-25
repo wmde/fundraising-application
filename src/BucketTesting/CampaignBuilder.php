@@ -14,6 +14,9 @@ class CampaignBuilder {
 	public function __construct( private readonly DateTimeZone $timezone ) {
 	}
 
+	/**
+	 * @return Campaign[]
+	 */
 	public function getCampaigns( array $campaignConfig ): array {
 		$campaigns = [];
 		foreach ( $campaignConfig as $name => $config ) {

@@ -95,6 +95,9 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function newAnonymousFormInput(): array {
 		return [
 			'addressType' => 'anonymous'

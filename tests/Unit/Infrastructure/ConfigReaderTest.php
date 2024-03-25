@@ -41,6 +41,9 @@ class ConfigReaderTest extends TestCase {
 		);
 	}
 
+	/**
+	 * @return array<string, string|array<string|int, string>>
+	 */
 	private function getDistConfig(): array {
 		return [
 			'db' => [

@@ -6,13 +6,22 @@ namespace WMDE\Fundraising\Frontend\Presentation;
 
 class Salutations {
 
+	/**
+	 * @param array<int, array<string, string|array<string, string>>> $salutations
+	 */
 	public function __construct( private readonly array $salutations ) {
 	}
 
+	/**
+	 * @return array<int, array<string, string|array<string, string>>>
+	 */
 	public function getList(): array {
 		return $this->salutations;
 	}
 
+	/**
+	 * @return array<string, string|array<string, string>>|null
+	 */
 	public function getSalutation( string $value ): ?array {
 		$data = array_filter( $this->salutations, fn ( $salutation ) => $salutation['value'] == $value );
 

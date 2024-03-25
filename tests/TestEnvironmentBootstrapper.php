@@ -6,8 +6,15 @@ namespace WMDE\Fundraising\Frontend\Tests;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 
 class TestEnvironmentBootstrapper extends EnvironmentBootstrapper {
+
+	/**
+	 * @var array<string, array<string, bool>>
+	 */
 	private array $configurationOverride = [];
 
+	/**
+	 * @param array<string, array<string, bool>> $config
+	 */
 	public function overrideConfiguration( array $config ): void {
 		$this->configurationOverride = $config;
 	}

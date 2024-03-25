@@ -42,6 +42,9 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function getFirstCommentAsArray(): array {
 		return [
 			'betrag' => 100.42,
@@ -53,6 +56,9 @@ class ListCommentsJsonRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function getSecondCommentAsArray(): array {
 		return [
 			'betrag' => 9001,

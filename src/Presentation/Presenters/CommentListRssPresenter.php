@@ -20,6 +20,9 @@ class CommentListRssPresenter {
 		] );
 	}
 
+	/**
+	 * @return array<array<string, float|string>>
+	 */
 	private function getCommentsViewModel( CommentList $commentList ): array {
 		return array_map(
 			static function ( Comment $comment ) {
