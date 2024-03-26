@@ -64,14 +64,15 @@ use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationIdRepository;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
 use WMDE\Fundraising\DonationContext\DonationContextFactory;
+use WMDE\Fundraising\DonationContext\Infrastructure\AdminNotificationInterface;
 use WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationAuthorizationChecker;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationAuthorizer;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationEventLogger;
-use WMDE\Fundraising\DonationContext\Infrastructure\DonationMailer;
+use WMDE\Fundraising\DonationContext\Infrastructure\DonorNotificationInterface;
 use WMDE\Fundraising\DonationContext\Infrastructure\LoggingCommentFinder;
 use WMDE\Fundraising\DonationContext\Infrastructure\LoggingDonationRepository;
-use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
+use WMDE\Fundraising\DonationContext\Infrastructure\TemplateDonationNotifier;
 use WMDE\Fundraising\DonationContext\Services\PaymentBookingService;
 use WMDE\Fundraising\DonationContext\Services\PaymentBookingServiceWithUseCase;
 use WMDE\Fundraising\DonationContext\Services\PaypalBookingService;
@@ -84,6 +85,7 @@ use WMDE\Fundraising\DonationContext\UseCases\AddDonation\CreatePaymentWithUseCa
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\DonationPaymentValidator;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\Moderation\ModerationService as DonationModerationService;
 use WMDE\Fundraising\DonationContext\UseCases\BookDonationUseCase\BookDonationUseCase;
+use WMDE\Fundraising\DonationContext\UseCases\DonationNotifier;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\HandlePaypalPaymentWithoutDonation\HandlePaypalPaymentWithoutDonationUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
@@ -127,8 +129,10 @@ use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DonationEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
 use WMDE\Fundraising\Frontend\Infrastructure\FileFeatureReader;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\AdminDonationModerationMailerAdapter;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\AdminModerationMailRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\BasicMailSubjectRenderer;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailerAdapter;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingMailerDecorator;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
@@ -882,7 +886,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getDonationRepository(),
 			$this->newDonationValidator(),
 			$this->newDonationModerationService(),
-			$this->newDonationMailer(),
+			$this->newTemplateDonationNotifier(),
 			$this->getDonationAuthorizer(),
 			$this->getDonationEventEmitter(),
 			new CreatePaymentWithUseCase(
@@ -956,23 +960,19 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newDonationMailer(): DonationMailer {
-		return new DonationMailer(
+	private function newTemplateDonationNotifier(): DonationNotifier {
+		return new TemplateDonationNotifier(
 			$this->newDonationConfirmationMailer(),
-			$this->newAdminMailer(
-				'eine Spende',
-				'https://backend.wikimedia.de/backend/donation/list',
-				$this->getAdminMessenger()
-			),
+			$this->newDonationModerationAdminNotifier(),
 			$this->newGetPaymentUseCase(),
 			adminEmailAddress: $this->config['contact-info']['admin']['email']
 		);
 	}
 
-	private function newDonationUpdatedMailer(): DonationMailer {
-		return new DonationMailer(
+	private function newDonationUpdatedMailer(): TemplateDonationNotifier {
+		return new TemplateDonationNotifier(
 			$this->newDonationUpdatedTemplateMailer(),
-			new NullMailer(),
+			new AdminDonationModerationMailerAdapter( new NullMailer() ),
 			$this->newGetPaymentUseCase(),
 			adminEmailAddress: $this->config['contact-info']['admin']['email']
 		);
@@ -1020,33 +1020,50 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new UpdateDonorValidator( $this->newAddressValidator(), $this->getEmailValidator() );
 	}
 
-	private function newDonationConfirmationMailer(): DonationTemplateMailerInterface {
-		return $this->newErrorHandlingTemplateMailer(
-			$this->getDonationMessenger(),
-			new TwigTemplate(
-				$this->getMailerTwig(),
-				'Donation_Confirmation.txt.twig',
-				[ 'greeting_generator' => $this->getGreetingGenerator() ]
-			),
-			new DonationConfirmationMailSubjectRenderer(
-				$this->getMailTranslator(),
-				'mail_subject_confirm_donation',
-				'mail_subject_confirm_donation_promise'
+	private function newDonationConfirmationMailer(): DonorNotificationInterface {
+		return new DonationConfirmationMailerAdapter(
+			$this->newErrorHandlingTemplateMailer(
+				$this->getDonationMessenger(),
+				new TwigTemplate(
+					$this->getMailerTwig(),
+					'Donation_Confirmation.txt.twig',
+					[ 'greeting_generator' => $this->getGreetingGenerator() ]
+				),
+				new DonationConfirmationMailSubjectRenderer(
+					$this->getMailTranslator(),
+					'mail_subject_confirm_donation',
+					'mail_subject_confirm_donation_promise'
+				)
 			)
 		);
 	}
 
-	private function newDonationUpdatedTemplateMailer(): DonationTemplateMailerInterface {
-		return $this->newErrorHandlingTemplateMailer(
-			$this->getDonationMessenger(),
-			new TwigTemplate(
-				$this->getMailerTwig(),
-				'Donation_Confirmation.txt.twig',
-				[ 'greeting_generator' => $this->getGreetingGenerator() ]
-			),
-			new BasicMailSubjectRenderer(
-				$this->getMailTranslator(),
-				'mail_subject_update_donation'
+	private function newDonationUpdatedTemplateMailer(): DonorNotificationInterface {
+		return new DonationConfirmationMailerAdapter(
+			$this->newErrorHandlingTemplateMailer(
+				$this->getDonationMessenger(),
+				new TwigTemplate(
+					$this->getMailerTwig(),
+					'Donation_Confirmation.txt.twig',
+					[ 'greeting_generator' => $this->getGreetingGenerator() ]
+				),
+				new BasicMailSubjectRenderer(
+					$this->getMailTranslator(),
+					'mail_subject_update_donation'
+				)
+			)
+		);
+	}
+
+	private function newDonationModerationAdminNotifier(): AdminNotificationInterface {
+		return new AdminDonationModerationMailerAdapter(
+			new ErrorHandlingMailerDecorator(
+				$this->newAdminMailer(
+					'eine Spende',
+					'https://backend.wikimedia.de/backend/donation/list',
+					$this->getAdminMessenger()
+				),
+				$this->getLogger()
 			)
 		);
 	}
@@ -1399,7 +1416,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getDonationIdRepository(),
 			$this->getDonationRepository(),
 			$this->newDonationAuthorizationChecker( $updateToken ),
-			$this->newDonationMailer(),
+			$this->newTemplateDonationNotifier(),
 			$this->newPaymentBookingService(),
 			$this->newDonationEventLogger()
 		);
@@ -1410,7 +1427,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getDonationIdRepository(),
 			$this->getDonationRepository(),
 			new LenientAuthorizationChecker(),
-			$this->newDonationMailer(),
+			$this->newTemplateDonationNotifier(),
 			$this->newPaymentBookingService(),
 			$this->newDonationEventLogger()
 		);
@@ -1421,7 +1438,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newPayPalBookingService(),
 			$this->getDonationRepository(),
 			$this->getDonationIdRepository(),
-			$this->newDonationMailer(),
+			$this->newTemplateDonationNotifier(),
 			$this->newDonationEventLogger()
 		);
 	}
@@ -1501,7 +1518,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new DonationAcceptedEventHandler(
 			$this->newDonationAuthorizationChecker( $updateToken ),
 			$this->getDonationRepository(),
-			$this->newDonationMailer()
+			$this->newTemplateDonationNotifier()
 		);
 	}
 

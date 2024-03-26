@@ -6,11 +6,10 @@ namespace WMDE\Fundraising\Frontend\Tests\Fixtures;
 
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\GetInTouchMailerInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateMailerInterface;
 
-class TemplateBasedMailerSpy implements GetInTouchMailerInterface, DonationTemplateMailerInterface, TemplateMailerInterface {
+class TemplateBasedMailerSpy implements GetInTouchMailerInterface, TemplateMailerInterface {
 
 	/**
 	 * @var array<int, array{EmailAddress, array}>

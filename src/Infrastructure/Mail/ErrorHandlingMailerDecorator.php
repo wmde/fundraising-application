@@ -6,9 +6,8 @@ namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
 use Psr\Log\LoggerInterface;
 use WMDE\EmailAddress\EmailAddress;
-use WMDE\Fundraising\DonationContext\Infrastructure\TemplateMailerInterface as DonationTemplateMailerInterface;
 
-class ErrorHandlingMailerDecorator implements DonationTemplateMailerInterface, TemplateMailerInterface {
+class ErrorHandlingMailerDecorator implements TemplateMailerInterface {
 
 	public function __construct(
 		private readonly TemplateMailerInterface $templateBasedMailer,

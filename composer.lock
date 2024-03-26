@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "738fc5fcf2f4a59af841e292bb4ef3f7",
+    "content-hash": "ed9110d2fd9e1e3fc15e2394cc96412e",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -3668,28 +3668,27 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v6.4.5",
+            "version": "v7.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "f3c86a60a3615f466333a11fd42010d4382a82c7"
+                "reference": "425f462a59d8030703ee04a9e1c666575ed5db3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/f3c86a60a3615f466333a11fd42010d4382a82c7",
-                "reference": "f3c86a60a3615f466333a11fd42010d4382a82c7",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/425f462a59d8030703ee04a9e1c666575ed5db3b",
+                "reference": "425f462a59d8030703ee04a9e1c666575ed5db3b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1",
+                "php": ">=8.2",
                 "psr/log": "^1|^2|^3",
-                "symfony/deprecation-contracts": "^2.5|^3",
                 "symfony/http-client-contracts": "^3",
                 "symfony/service-contracts": "^2.5|^3"
             },
             "conflict": {
                 "php-http/discovery": "<1.15",
-                "symfony/http-foundation": "<6.3"
+                "symfony/http-foundation": "<6.4"
             },
             "provide": {
                 "php-http/async-client-implementation": "*",
@@ -3706,11 +3705,11 @@
                 "nyholm/psr7": "^1.0",
                 "php-http/httplug": "^1.0|^2.0",
                 "psr/http-client": "^1.0",
-                "symfony/dependency-injection": "^5.4|^6.0|^7.0",
-                "symfony/http-kernel": "^5.4|^6.0|^7.0",
-                "symfony/messenger": "^5.4|^6.0|^7.0",
-                "symfony/process": "^5.4|^6.0|^7.0",
-                "symfony/stopwatch": "^5.4|^6.0|^7.0"
+                "symfony/dependency-injection": "^6.4|^7.0",
+                "symfony/http-kernel": "^6.4|^7.0",
+                "symfony/messenger": "^6.4|^7.0",
+                "symfony/process": "^6.4|^7.0",
+                "symfony/stopwatch": "^6.4|^7.0"
             },
             "type": "library",
             "autoload": {
@@ -3741,7 +3740,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v6.4.5"
+                "source": "https://github.com/symfony/http-client/tree/v7.0.5"
             },
             "funding": [
                 {
@@ -3757,7 +3756,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-02T12:45:30+00:00"
+            "time": "2024-03-02T12:46:12+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -6474,25 +6473,25 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v18.0.0",
+            "version": "dev-donation-mailer-interface-oop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "b91d23a493bc77d76230cd3870c5e59161a0ad34"
+                "reference": "ea3d64dfaeaf989594fe0242e431a33a73504d77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/b91d23a493bc77d76230cd3870c5e59161a0ad34",
-                "reference": "b91d23a493bc77d76230cd3870c5e59161a0ad34",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/ea3d64dfaeaf989594fe0242e431a33a73504d77",
+                "reference": "ea3d64dfaeaf989594fe0242e431a33a73504d77",
                 "shasum": ""
             },
             "require": {
                 "doctrine/migrations": "^3.5",
-                "doctrine/orm": "~2.18 | ~3.0",
+                "doctrine/orm": "~3.0",
                 "ext-curl": "*",
-                "php": ">=8.1",
+                "php": ">=8.2",
                 "psr/log": "^3.0",
-                "symfony/http-client": "^6.1",
+                "symfony/http-client": "^7.0",
                 "wmde/email-address": "~1.0",
                 "wmde/euro": "~1.0",
                 "wmde/fun-validators": "~4.0",
@@ -6502,10 +6501,11 @@
                 "ext-pdo_sqlite": "*",
                 "mikey179/vfsstream": "~1.6",
                 "phpmd/phpmd": "~2.6",
-                "phpstan/phpstan": "^1.7",
+                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan-doctrine": "~1.3.62",
                 "phpstan/phpstan-phpunit": "^1.3",
                 "phpunit/phpunit": "~10.4.0",
-                "symfony/cache": "^6.1",
+                "symfony/cache": "^6.0|^7.0",
                 "wmde/fundraising-phpcs": "~9.0.0",
                 "wmde/psr-log-test-doubles": "~3.0"
             },
@@ -6530,7 +6530,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2024-03-13T10:16:15+00:00"
+            "time": "2024-03-19T17:41:24+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -9550,6 +9550,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "wmde/fundraising-donations": 20,
         "airbrake/phpbrake": 20,
         "remotelyliving/doorkeeper": 20,
         "wmde/fundraising-frontend-content": 20
