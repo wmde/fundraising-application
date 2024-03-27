@@ -11,6 +11,9 @@ class FakeBucketLoggingEvent implements LoggingEvent {
 	public function __construct( private readonly array $metadata = [ 'id' => 123, 'some_fact' => 'water_is_wet' ] ) {
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	public function getMetaData(): array {
 		return $this->metadata;
 	}

@@ -17,6 +17,11 @@ class BucketSelector {
 	) {
 	}
 
+	/**
+	 * @param array<string, scalar> $params
+	 *
+	 * @return array<string, scalar>
+	 */
 	private function sanitizeParameters( array $params ): array {
 		$sanitized = [];
 		foreach ( $params as $key => $value ) {
@@ -28,7 +33,7 @@ class BucketSelector {
 	}
 
 	/**
-	 * @param array $urlParameters
+	 * @param array<string, scalar> $urlParameters
 	 * @return Bucket[]
 	 */
 	public function selectBuckets( array $urlParameters = [] ): array {

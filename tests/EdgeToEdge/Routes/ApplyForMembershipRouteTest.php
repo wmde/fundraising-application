@@ -132,6 +132,9 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$storedDonations->newStoredDirectDebitDonation( self::CORRECT_ACCESS_TOKEN );
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function newValidHttpParameters(): array {
 		return [
 			'membership_type' => ValidMembershipApplication::MEMBERSHIP_TYPE,
@@ -392,6 +395,9 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertEquals( $expectedApplication, $application );
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function newValidHttpParametersForCompanies(): array {
 		return [
 			'membership_type' => ValidMembershipApplication::MEMBERSHIP_TYPE,

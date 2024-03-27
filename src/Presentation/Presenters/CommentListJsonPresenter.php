@@ -9,6 +9,9 @@ use WMDE\Fundraising\DonationContext\UseCases\ListComments\CommentList;
 
 class CommentListJsonPresenter {
 
+	/**
+	 * @return array<array<string, float|int|string>>
+	 */
 	public function present( CommentList $commentList ): array {
 		// TODO Translate keys into English once old skins are phased out
 		return array_map(

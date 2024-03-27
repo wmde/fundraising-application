@@ -15,18 +15,27 @@ use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySp
  */
 class AddSubscriptionRouteTest extends WebRouteTestCase {
 
+	/**
+	 * @var array<string, bool|string>
+	 */
 	private array $validFormInput = [
 		'email' => 'jeroendedauw@gmail.com',
 		'wikilogin' => true,
 		'source' => 'testCampaign',
 	];
 
+	/**
+	 * @var array<string, bool|string>
+	 */
 	private array $validFormInputWithSpaces = [
 		'email' => "\tjeroendedauw@gmail.com   ",
 		'wikilogin' => true,
 		'source' => "\ntestCampaign\r\n",
 	];
 
+	/**
+	 * @var array<string, bool|string>
+	 */
 	private array $invalidFormInput = [
 		'email' => 'not an email',
 		'wikilogin' => true

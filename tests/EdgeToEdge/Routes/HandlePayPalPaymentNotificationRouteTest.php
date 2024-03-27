@@ -113,7 +113,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	/**
-	 * @return array<string, scalar>
+	 * @return array<string, int|string>
 	 */
 	private static function newHttpParamsForPayment(): array {
 		return [
@@ -315,6 +315,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		);
 	}
 
+	/**
+	 * @return array<string, string|int>
+	 */
 	private function newSubscriptionModificationParams(): array {
 		return [
 			'receiver_email' => self::EMAIL_ADDRESS,
@@ -340,6 +343,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private static function newPendingPaymentParams(): array {
 		return [
 			'receiver_email' => self::EMAIL_ADDRESS,
@@ -365,6 +371,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private static function newCancelPaymentParams(): array {
 		return [
 			'receiver_email' => self::EMAIL_ADDRESS,
@@ -508,6 +517,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertSame( LogLevel::WARNING, $paypalLogger->getFirstLogCall()->getLevel(), 'Double-booked payment should be warnings, not errors' );
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private static function newValidRequestParametersWithNegativeTransactionFee(): array {
 		$parameters = self::newHttpParamsForPayment();
 		$parameters['mc_fee'] = '-12.34';

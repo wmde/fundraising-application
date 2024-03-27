@@ -186,6 +186,9 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		return $addressChange;
 	}
 
+	/**
+	 * @return string[]
+	 */
 	private function makeAddressChangeIdentifiers( AddressChange $addressChange ): array {
 		$identifier = $addressChange->getCurrentIdentifier()->__toString();
 		$previousIdentifier = $addressChange->getCurrentIdentifier()->__toString();
@@ -211,6 +214,12 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		return $client->getResponse();
 	}
 
+	/**
+	 * @param string $identifier
+	 * @param string $previousIdentifier
+	 *
+	 * @return array<string, bool|string>
+	 */
 	private function makeExpectedGetResponse( string $identifier, string $previousIdentifier ): array {
 		return [
 			'identifier' => $identifier,
@@ -221,6 +230,9 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function makeValidPersonSubmitData(): array {
 		return [
 			'addressType' => 'person',
@@ -234,6 +246,9 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function makeValidCompanySubmitData(): array {
 		return [
 			'addressType' => 'company',
@@ -245,6 +260,9 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, bool|string|array<string, bool|string>>
+	 */
 	private function makeExpectedValidPersonPutResponse( string $identifier, string $previousIdentifier ): array {
 		return [
 			'identifier' => $identifier,
@@ -267,6 +285,9 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, bool|string|array<string, bool|string>>
+	 */
 	private function makeExpectedValidCompanyPutResponse( string $identifier, string $previousIdentifier ): array {
 		return [
 			'identifier' => $identifier,

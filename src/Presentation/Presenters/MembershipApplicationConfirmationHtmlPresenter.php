@@ -70,6 +70,11 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		];
 	}
 
+	/**
+	 * @param Applicant $applicant
+	 *
+	 * @return array<string, string>
+	 */
 	private function getAddressArguments( Applicant $applicant ): array {
 		return [
 			'salutation' => $applicant->getName()->salutation,

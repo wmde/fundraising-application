@@ -22,6 +22,9 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $expectedResult, $value );
 	}
 
+	/**
+	 * @return array<int, string|string[]>[]
+	 */
 	public static function preferredValueProvider(): array {
 		return [
 			[ 'chocolate', [ 'chocolate', 'hazelnuts', 'campaign/keyword' ] ],
@@ -44,6 +47,9 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $expectedResult, $value );
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public static function trackingVarProvider(): array {
 		return [
 			[ 'campaign/keyword', 'campaign', 'keyword' ],

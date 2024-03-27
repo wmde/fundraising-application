@@ -99,6 +99,9 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 		return $twig;
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function newUrls(): array {
 		return [
 			'testUrl' => 'https://example.com/'

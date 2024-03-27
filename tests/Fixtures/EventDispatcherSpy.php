@@ -17,6 +17,9 @@ class EventDispatcherSpy extends EventDispatcher {
 		// do nothing, currently this class is just for checking that the right event listeners are initilized
 	}
 
+	/**
+	 * @return int[]|string[]
+	 */
 	public function getObservedEventClassNames(): array {
 		return array_keys( $this->listeners );
 	}
