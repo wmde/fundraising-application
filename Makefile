@@ -116,7 +116,7 @@ cs:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpcs
 
 fix-cs:
-	docker-compose run --rm --no-deps app ./vendor/bin/phpcbf
+	-docker-compose run --rm --no-deps app ./vendor/bin/phpcbf
 
 stan:
 	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):dev php -d memory_limit=1G vendor/bin/phpstan analyse --level=5 --no-progress cli/ src/ tests/
