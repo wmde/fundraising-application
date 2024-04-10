@@ -9410,12 +9410,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "7c9cf56445eaa0cfe84c5d8252f5a16f8d367837"
+                "reference": "16cdad1d5a17785392e10d26cb605cb394b6dfb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/7c9cf56445eaa0cfe84c5d8252f5a16f8d367837",
-                "reference": "7c9cf56445eaa0cfe84c5d8252f5a16f8d367837",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/16cdad1d5a17785392e10d26cb605cb394b6dfb8",
+                "reference": "16cdad1d5a17785392e10d26cb605cb394b6dfb8",
                 "shasum": ""
             },
             "require": {
@@ -9435,17 +9435,20 @@
             },
             "scripts": {
                 "ci": [
+                    "composer validate --no-interaction",
+                    "@lint",
                     "@test"
                 ],
                 "test": [
-                    "composer validate --no-interaction",
-                    "@lint-json",
-                    "@lint-templates",
-                    "@lint-wordlists",
                     "vendor/bin/phpunit"
                 ],
+                "lint": [
+                    "@lint-json",
+                    "@lint-templates",
+                    "@lint-wordlists"
+                ],
                 "lint-json": [
-                    "find i18n/ -type f -name \\*.json -exec echo \"{}\" \\; -exec vendor/bin/jsonlint {} \\;"
+                    "find i18n/ -type f -name \\*.json | xargs vendor/bin/jsonlint "
                 ],
                 "lint-templates": [
                     "find i18n/*/web i18n/*/shared -type f -name '*.twig' | sed -E 's#/web/|/shared/# #' | sed 's|.twig||' | cut -d' ' -f1,2 | xargs -n 2 bash -c './vendor/bin/lint_content --web $0 $1'",
@@ -9459,7 +9462,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2024-04-04T15:59:37+00:00"
+            "time": "2024-04-08T09:41:21+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
