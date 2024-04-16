@@ -461,11 +461,13 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getContentProvider(),
 				$packageFactory->newAssetPackages()
 			);
+			$locale = Locale::parseLocale( $this->getLocale() );
 			return $factory->newTemplatingEnvironment(
 				[
 					'basepath' => $this->config['web-basepath'],
 					'assets_path' => $this->config['assets-path'],
 					'application_environment' => $this->getApplicationEnvironment(),
+					'locale' => $locale['language']
 				]
 			);
 		} );
