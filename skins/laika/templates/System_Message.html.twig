@@ -1,5 +1,7 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% block title %}{$ page_title( 'system_message_page_title' ) $}{% endblock %}
+
 {% block scripts %}
 	{$ parent() $}
 	<script src="{$ asset( 'js/system_message.js', 'skin' ) $}"></script>

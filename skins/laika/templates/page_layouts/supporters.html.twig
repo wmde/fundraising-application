@@ -1,6 +1,8 @@
 {% extends 'Base_Layout.html.twig' %}
 {% set title = site_metadata.page_titles[page_id] %}
 
+{% block title %}{$ page_title( page_id ) $}{% endblock %}
+
 {% block scripts %}
 	{$ parent() $}
 	<script src="{$ asset( 'js/supporters.js', 'skin' ) $}"></script>
