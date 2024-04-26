@@ -3,7 +3,7 @@ type: docker
 name: default
 steps:
   - name: build
-    image: registry.gitlab.com/fun-tech/fundraising-frontend-docker:ci
+    image: registry.gitlab.com/fun-tech/fundraising-frontend-docker:latest
     environment:
       COMPOSER_CACHE_DIR: /composer_cache
       GITHUB_TOKEN:

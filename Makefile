@@ -3,6 +3,7 @@ current_group := $(shell id -g)
 
 COMPOSER_FLAGS :=
 DOCKER_FLAGS  := --interactive --tty
+COVERAGE_FLAGS := --coverage-html coverage
 TEST_DIR      :=
 BUILD_DIR     := $(PWD)
 MIGRATION_VERSION :=
@@ -16,13 +17,10 @@ DOCKER_IMAGE  := registry.gitlab.com/fun-tech/fundraising-frontend-docker
 .DEFAULT_GOAL := ci
 
 up-app: down-app validate-dev-config
-	docker-compose -f docker-compose.yml up -d
-
-up-debug: down-app validate-dev-config
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml up -d
+	docker-compose up -d
 
 down-app:
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml down > /dev/null 2>&1
+	docker-compose down > /dev/null 2>&1
 
 validate-dev-config:
 ifeq ($(wildcard app/config/config.dev.json),)
@@ -45,13 +43,13 @@ default-config:
 	-cp -i tests/Data/files/paypal_api.yml app/config/paypal_api.dev.yml || true
 
 install-php:
-	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume /tmp:/tmp --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer install $(COMPOSER_FLAGS)
+	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume /tmp:/tmp --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):latest composer install $(COMPOSER_FLAGS)
 
 update-php:
-	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update $(COMPOSER_FLAGS)
+	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):latest composer update $(COMPOSER_FLAGS)
 
 update-content:
-	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):composer composer update wmde/fundraising-frontend-content
+	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):latest composer update wmde/fundraising-frontend-content
 
 
 generate-database-schema:
@@ -110,7 +108,10 @@ phpunit:
 	docker-compose run --rm --no-deps app php -d memory_limit=1G vendor/bin/phpunit $(TEST_DIR)
 
 phpunit-with-coverage:
-	docker-compose -f docker-compose.yml -f docker-compose.debug.yml run --rm --no-deps -e XDEBUG_MODE=coverage app_debug php -d memory_limit=1G vendor/bin/phpunit --configuration=phpunit.xml.dist --stop-on-error --coverage-clover coverage.clover
+	docker-compose \
+		run --rm --no-deps app \
+		php -d memory_limit=1G -d xdebug.mode=coverage \
+		vendor/bin/phpunit --configuration=phpunit.xml.dist --stop-on-error $(COVERAGE_FLAGS)
 
 cs:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpcs
@@ -119,12 +120,12 @@ fix-cs:
 	-docker-compose run --rm --no-deps app ./vendor/bin/phpcbf
 
 stan:
-	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):dev php -d memory_limit=1G vendor/bin/phpstan analyse --level=5 --no-progress cli/ src/ tests/
+	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):latest php -d memory_limit=1G vendor/bin/phpstan analyse --level=5 --no-progress cli/ src/ tests/
 
 strict-stan:
-	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):dev php -d memory_limit=1G vendor/bin/phpstan analyse --level=9 --configuration=strict-phpstan.neon cli/ src/ tests/
+	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):latest php -d memory_limit=1G vendor/bin/phpstan analyse --level=9 --configuration=strict-phpstan.neon cli/ src/ tests/
 
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
 
-.PHONY: up-app down-app up-debug setup create-env download-assets install-php update-php generate-database-schema validate-sql setup-doctrine drop-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization lint-container phpmd
+.PHONY: up-app down-app setup create-env download-assets install-php update-php generate-database-schema validate-sql setup-doctrine drop-db default-config clear clean ui test ci ci-with-coverage phpunit phpunit-with-coverage phpunit-system cs fix-cs stan validate-app-config validate-campaign-config validate-campaign-utilization lint-container phpmd

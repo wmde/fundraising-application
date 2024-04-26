@@ -63,13 +63,9 @@ To stop the application, run
 
 	make down-app
 
-To start the application with a debug port open, (see ["How to use XDebug and PHPStorm"](doc/HOWTO_Use_Xdebug_and_PHPStorm.md)) run,
-
-	make up-debug
-
 ### Running without the Makefile
 
-The `up-app` task will also make sure that your local configuration is correct and that previous instances of the application are stopped.
+The `up-app` task will also make sure that your local configuration is correct and will stop previous instances of the application.
 You can run the application without the Makefile, in the foreground, with the command
 
     docker-compose up
