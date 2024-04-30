@@ -26,7 +26,6 @@ services:
       - .docker/app/msmtprc:/etc/msmtprc:ro
       - .docker/app/mailhog.ini:/usr/local/etc/php/conf.d/mailhog.ini
       - .:/usr/share/nginx/www/spenden.wikimedia.de/current
-      - var-data:/usr/share/nginx/www/spenden.wikimedia.de/current/var
     working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
     environment:
       - APP_ENV
@@ -66,7 +65,6 @@ services:
     command: database:3306
 
 volumes:
-  var-data:
   db-storage:
 
 networks:

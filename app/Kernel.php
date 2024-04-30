@@ -27,4 +27,21 @@ class Kernel extends BaseKernel {
 		$routes->import( '../config/routes.yaml' );
 		$routes->import( '../config/api-routes.yaml' );
 	}
+
+	public function getCacheDir(): string {
+		// Use /tmp in Docker images, because it's world-writable
+		if ( $this->environment === 'dev' || $this->environment === 'test' ) {
+			return "/tmp/symfony/cache/{$this->environment}";
+		}
+		return parent::getCacheDir();
+	}
+
+	public function getLogDir(): string {
+		// Use /tmp in Docker images, because it's world-writable
+		if ( $this->environment === 'dev' || $this->environment === 'test' ) {
+			return "/tmp/symfony/log/{$this->environment}";
+		}
+		return parent::getLogDir();
+	}
+
 }

@@ -33,7 +33,7 @@ endif
 
 # Installation
 
-setup: create-env download-assets install-php default-config setup-doctrine
+setup: create-env download-assets install-php default-config setup-doctrine clear
 
 create-env:
 	if [ ! -f .env ]; then echo "APP_ENV=dev">.env; fi
@@ -71,11 +71,10 @@ download-assets:
 # Maintenance
 
 clear:
-	rm -rf var/cache/*
-	docker-compose run --rm --no-deps app sh -c "rm -rf var/cache/*"
-	docker-compose run --rm --no-deps app chown -R www-data:www-data var/cache/
+	docker-compose exec app sh -c "rm -rf /tmp/symfony/cache/*"
+	docker-compose exec app chown -R www-data:www-data /tmp/symfony
 
-# n alias to avoid frequent typo
+# an alias to avoid frequent typo
 clean: clear
 
 # Continuous Integration

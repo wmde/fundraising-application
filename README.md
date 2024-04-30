@@ -46,7 +46,7 @@ This will
 
 ### Installing the current dependencies
 
-	make install-php
+    make install-php
 
 Will install the dependencies currently specified in `composer.lock`. Use
 this command whenever you check out a branch that has changes to
@@ -55,13 +55,13 @@ this command whenever you check out a branch that has changes to
 ## Running the application
 The command
 
-	make up-app
+    make up-app
 
 will run the application in Docker containers. You can access it at [http://localhost:8082/](http://localhost:8082/).
 
 To stop the application, run
 
-	make down-app
+    make down-app
 
 ### Running without the Makefile
 
@@ -75,7 +75,7 @@ You can run the application without the Makefile, in the foreground, with the co
 The web and CLI entry points of the application check for the `APP_ENV` environment variable.
 If it not set, the application assumes the value `dev`. Each environment must have a corresponding configuration
 file in `app/config`, following the name pattern of `config.ENVIRONMENTNAME.json`. See the section "Running in different
-environments" below to see how to set `APP_ENV`. Running the command `make default-config` will automatically set 
+environments" below to see how to set `APP_ENV`. Running the command `make default-config` will automatically set
 up the configuration file.
 
 You can add local modifications by adding a file that follows the name pattern of `config.ENVIRONMENTNAME.local.json`.
@@ -147,7 +147,7 @@ configuration data in `app/config/config.dev.json`:
 
 To be able to go to the PayPal page for payments, you also need to fill the PayPal credentials in the file `.env.dev.local`.
 The `.env.dev.local` file will override the example data given in `.env.dev`.
-See the file `.env.dev` for an explanation of the PayPal configuration entries. 
+See the file `.env.dev` for an explanation of the PayPal configuration entries.
 
 ### Content
 
@@ -161,9 +161,10 @@ The following example shows the configuration when the content repository is at 
 
 For more information on how to set up the campaigns see "[How to Create an A/B Test](doc/HOWTO_Create_an_a_b_test.md)".
 
-The campaign definitions are in the `app/config` directory. You can tell the application which files to use by editing
-the `campaigns` value in `app/config/config.ENVIRONMENTNAME.json`. The campaign configuration files will be merged on
-top of each other.
+The campaign definitions are in the `app/config` directory. You can tell
+the application which files to use by editing the `campaigns` value in
+`app/config/config.ENVIRONMENTNAME.json`. The application will merge the
+campaign configuration files on top of each other.
 
 ### Running in different environments
 By default, the configuration environment is `dev` and the configuration file is `config.dev.json`. If you want to
@@ -207,10 +208,10 @@ check the configuration files.
 
 If you want to run a specific folder with tests or just one file, use the `TEST_DIR` parameter. Examples:
 
-	# Run the unit tests
+    # Run the unit tests
     make phpunit TEST_DIR=tests/Unit
 
-	# Run a specific test file
+    # Run a specific test file
     make phpunit TEST_DIR=tests/EdgeToEdge/Routes/AddDonationRouteTest.php
 
 
@@ -220,7 +221,7 @@ If you want to run a specific folder with tests or just one file, use the `TEST_
 
 If you want to fix the code style violations, run
 
-	make fix-cs
+    make fix-cs
 
 ### Static analysis
 
@@ -235,11 +236,14 @@ These tasks are also performed during the [DroneCI](.drone.yml) runs.
 
 ## Emails
 
-In the development environment we use [mailhog](https://github.com/mailhog/MailHog) to capture all emails sent by the application. 
-You can access the mailhog web interface at [http://localhost:8025/](http://localhost:8025/)
+In the development environment we use
+[mailhog](https://github.com/mailhog/MailHog) to capture all emails sent
+by the application. You can access the mailhog web interface at
+[http://localhost:8025/](http://localhost:8025/)
 
-You can find more information on how we test the email templates and how to render them without using the application 
-in the [Email Templates](doc/Email_Templates.md) document.
+You can find more information on how we test the email templates and how
+to render them without using the application in the [Email
+Templates](doc/Email_Templates.md) document.
 
 ## Database
 
@@ -258,8 +262,8 @@ process all SQL files in [.docker/database](.docker/database).
 
 To start the command line client, use the following commands:
 
-	docker-compose up -d database
-	docker-compose exec database mysql -u fundraising -p"INSECURE PASSWORD" fundraising
+    docker-compose up -d database
+    docker-compose exec database mysql -u fundraising -p"INSECURE PASSWORD" fundraising
 
 ### Accessing the database from your host machine
 
@@ -280,7 +284,7 @@ If you make changes to the database schema, you have to do two things:
    changes.
 2. In your development environment, create the new database schema
    definitions with the `make generate-database-schema` command. This will
-   refresh the file `./docker/database/01_Database_Schema.sql`. Then 
+   refresh the file `./docker/database/01_Database_Schema.sql`. Then
    restart the container environment while dropping the database volume.
    See section "Resetting the database in your local environment" above.
 
@@ -348,7 +352,9 @@ the import will take up to 10 minutes. Watch the output of the
 
 ## Frontend development
 
-By default, the application uses pre-built frontend assets from [fundraising-app-frontend](https://gitlab.com/fun-tech/fundraising-app-frontend). To update the assets to the newest version, run
+### Using compiled assets
+
+By default, the application uses an old version of pre-built frontend assets from [fundraising-app-frontend](https://gitlab.com/fun-tech/fundraising-app-frontend). To download the assets, run
 
     make download-assets
 
@@ -357,6 +363,12 @@ run
 
     make download-assets ASSET_BRANCH=your_branch_name
 
+We have [plans](https://phabricator.wikimedia.org/T350938) to use the most
+recent version of the assets fom the [GitHub
+fundraising-app-frontend](https://github.com/wmde/fundraising-app-frontend),
+but that involves an extension of our infrastructure.
+
+### Development with live assets
 
 If you want to load the assets from a different source, e.g. the
 development server of `fundraising-app-frontend` running on port 7072, you
@@ -376,7 +388,7 @@ To update *all* the PHP dependencies, run
 To update only the messages in the application and emails, update the
 [fundraising-frontend-content dependency](https://github.com/wmde/fundraising-frontend-content) with the command
 
-	make update-content
+    make update-content
 
 For updating an individual PHP dependency, use the command line
 
@@ -389,6 +401,21 @@ and replace the `PACKAGE_NAME` placeholder with the name of your package.
 For an in-depth documentation how to deploy the application on our servers,
 see [the deployment documentation](https://github.com/wmde/fundraising-infrastructure/blob/master/docs/deployment/Fundraising_Application.md).
 
+## Troubleshooting
+
+### Cache
+The CLI commands in the container and the PHP-FPM process both share the
+same cache location inside the container - `/tmp/symfony`. When running
+CLI commands, the owner of the files will be `root:root`. This will
+prevent the PHP-FPM process from writing to the cache. If you get a
+cache-related error in your browser, run the following command while the
+docker-compose environment is running:
+
+    make clear
+
+The command will delete all cache files inside the `app` container. After
+running the command, make sure to access the web site first, before
+running another CLI command.
 
 ## Project structure
 
@@ -422,8 +449,8 @@ Used Bounded Contexts:
     skins
 * `app/`: contains application-specific configuration and all framework (Symfony) dependent code
     * `Controllers/`: Symfony Controllers
-	* `EventHandlers`: "Middleware" code that performs tasks before or
-		after HTTP request handling
+    * `EventHandlers`: "Middleware" code that performs tasks before or
+        after HTTP request handling
     * `config/`: configuration files
         * `config.dist.json`: default configuration
         * `config.test.json`: configuration used by integration and system tests (gets merged into default config)
