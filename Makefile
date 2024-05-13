@@ -15,6 +15,8 @@ DOCKER_IMAGE  := registry.gitlab.com/fun-tech/fundraising-frontend-docker
 
 .DEFAULT_GOAL := ci
 
+# Local Development Environment
+
 up-app: down-app validate-dev-config
 	docker-compose -f docker-compose.yml up -d
 
@@ -32,6 +34,16 @@ ifeq ($(wildcard app/config/paypal_api.dev.yml),)
 	$(error File 'app/config/paypal_api.dev.yml' does not exist. Please run 'make default-config')
 endif
 	docker-compose run --rm --no-deps app ./bin/console app:validate:config app/config/config.dist.json app/config/config.dev.json
+
+# This needs the "drone" and "pass" cli tools to be installed on or local machine
+drone-ci:
+	@echo -n "GITHUB_TOKEN=" > var/.drone-secrets.txt
+	@pass wmde-fun/github-composer-ci-token >> var/.drone-secrets.txt
+	-@drone exec --secret-file var/.drone-secrets.txt --trusted .drone.yml ; \
+	RET=$$?; \
+	rm -f var/.drone-secrets.txt; \
+	if [ $$RET -eq 0 ]; then echo "\n\n\033[0;32mDrone CI passed\033[0m\n\n"; else echo "\n\n\033[0;31mDrone CI failed\033[0m\n\n"; fi; \
+	exit $$RET
 
 # Installation
 

@@ -26,8 +26,17 @@ steps:
       - php bin/console app:validate:config app/config/config.dist.json app/config/config.test.json
       - php bin/console app:validate:config app/config/config.dist.json .docker/app/config.dev.json
       - php bin/console app:validate:campaigns dev
+
+  - name: upload-coverage
+    image: registry.gitlab.com/fun-tech/fundraising-frontend-docker:ci
+    environment:
+    commands:
       # Upload coverage to Scrutinizer
       - ocular code-coverage:upload --no-interaction --format=php-clover coverage.xml
+    when:
+      event:
+        - push
+        - pull_request
 
 volumes:
   - name: cache
