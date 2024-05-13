@@ -42,7 +42,7 @@ drone-ci:
 	-@drone exec --secret-file var/.drone-secrets.txt --trusted .drone.yml ; \
 	RET=$$?; \
 	rm -f var/.drone-secrets.txt; \
-	if [ $$RET -eq 0 ]; then echo -e "\033[0;32mDrone CI passed\033[0m"; else echo -e "\033[0;31mDrone CI failed\033[0m"; fi; \
+	if [ $$RET -eq 0 ]; then echo "\n\n\033[0;32mDrone CI passed\033[0m\n\n"; else echo "\n\n\033[0;31mDrone CI failed\033[0m\n\n"; fi; \
 	exit $$RET
 
 # Installation
