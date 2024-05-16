@@ -19,12 +19,13 @@ services:
     command: /bin/bash -c "envsubst '$$NGINX_HOST $$NGINX_PORT $$PHP_FPM_HOST' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
 
   app:
-    image: "registry.gitlab.com/fun-tech/fundraising-frontend-docker:dev"
+    image: "registry.gitlab.com/fun-tech/fundraising-frontend-docker:latest"
     expose:
       - "9000"
     volumes:
+      - .docker/app/msmtprc:/etc/msmtprc:ro
+      - .docker/app/mailhog.ini:/usr/local/etc/php/conf.d/mailhog.ini
       - .:/usr/share/nginx/www/spenden.wikimedia.de/current
-      - var-data:/usr/share/nginx/www/spenden.wikimedia.de/current/var
     working_dir: /usr/share/nginx/www/spenden.wikimedia.de/current
     environment:
       - APP_ENV
@@ -64,7 +65,6 @@ services:
     command: database:3306
 
 volumes:
-  var-data:
   db-storage:
 
 networks:
