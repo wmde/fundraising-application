@@ -1,10 +1,12 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% block title %}{$ page_title( 'page_not_found_page_title' ) $}{% endblock %}
+
 {% block main %}
 	<div id="app">
 		<noscript>
 			<h2>{$ site_metadata.page_not_found_header $}</h2>
-			<p>{$ site_metadata.page_not_found | raw $}<p>
+			<p>{$ site_metadata.page_not_found | raw $}</p>
 		</noscript>
 	</div>
 	<div id="appdata"

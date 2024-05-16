@@ -3,6 +3,8 @@
 {% set title = site_metadata.page_titles[page_id] %}
 {% set content = web_content("pages/#{page_id}") %}
 
+{% block title %}{$ page_title( page_id ) $}{% endblock %}
+
 {% block main %}
 	<div id="app">
 		<noscript>

@@ -1,5 +1,7 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% block title %}{$ page_title( 'contact_form_page_title' ) $}{% endblock %}
+
 {% block scripts %}
 	{$ parent() $}
 	<script src="{$ asset( 'js/contact_form.js', 'skin' ) $}"></script>

@@ -46,6 +46,14 @@ class WebTemplatingFactory extends TwigFactory {
 				},
 				[ 'is_safe' => [ 'html' ] ]
 			),
+			new TwigFunction(
+				'page_title',
+				function ( string $key ): string {
+					$title = $this->translations[ 'site_name' ] ?? '';
+					return str_replace( '{pageTitle}', $this->translations[ $key ] ?? '', $title );
+				},
+				[ 'is_safe' => [ 'html' ] ]
+			),
 		];
 	}
 

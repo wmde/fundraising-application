@@ -1,5 +1,7 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% block title %}{$ page_title( 'use_of_funds_page_title' ) $}{% endblock %}
+
 {% block scripts %}
     {$ parent() $}
     <script src="{$ asset( 'js/funds_usage.js', 'skin' ) $}"></script>

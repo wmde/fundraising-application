@@ -1,5 +1,7 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% block title %}{$ page_title( 'faq_page_title' ) $}{% endblock %}
+
 {% block scripts %}
 	{$ parent() $}
 	<script src="{$ asset( 'js/frequent_questions.js', 'skin' ) $}"></script>

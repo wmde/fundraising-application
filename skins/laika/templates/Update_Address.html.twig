@@ -1,5 +1,7 @@
 {% extends 'Base_Layout.html.twig' %}
 
+{% block title %}{$ page_title( 'update_address_page_title' ) $}{% endblock %}
+
 {% block scripts %}
 	{$ parent() $}
 	<script src="{$ asset( 'js/update_address.js', 'skin' ) $}"></script>
