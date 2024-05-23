@@ -58,7 +58,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
 
 		$request = $this->newHttpParamsForPayment();
-		$request['item_number'] = '';
+		unset( $request['item_number'] );
 
 		$client->request(
 			Request::METHOD_POST,
