@@ -29,6 +29,9 @@ class LegacyRouteTest extends WebTestCase {
 		$this->assertSame( '/', $path );
 	}
 
+	/**
+	 * @return iterable<array{string}>
+	 */
 	public static function legacyRouteProvider(): iterable {
 		yield [ '/spenden' ];
 		yield [ '/spenden/' ];

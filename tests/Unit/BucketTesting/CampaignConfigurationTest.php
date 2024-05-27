@@ -60,6 +60,9 @@ class CampaignConfigurationTest extends TestCase {
 		);
 	}
 
+	/**
+	 * @return iterable<array{0: array<string, mixed>, 1: string}>
+	 */
 	public static function invalidConfigurationProvider(): iterable {
 		yield [
 			[

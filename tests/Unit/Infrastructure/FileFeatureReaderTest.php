@@ -83,13 +83,16 @@ class FileFeatureReaderTest extends TestCase {
 		$this->assertLogLevel( $logger, LogLevel::WARNING );
 	}
 
+	/**
+	 * @return iterable<string, array{string}>
+	 */
 	public static function invalidJsonProvider(): iterable {
 		yield 'broken JSON' => [ '"String with missing end quote' ];
 		yield 'string' => [ '""' ];
 		yield 'object' => [ '{"foo":"bar"}' ];
 		yield 'boolean' => [ 'true' ];
 		yield 'null' => [ 'null' ];
-		yield 'array with non-objects' => [ json_encode( [ [ 'a' => 'b' ], 1, null ] ) ];
+		yield 'array with non-objects' => [ json_encode( [ [ 'a' => 'b' ], 1, null ], JSON_THROW_ON_ERROR ) ];
 	}
 
 	private function assertLogLevel( LoggerSpy $logger, $expectedLevel ): void {
