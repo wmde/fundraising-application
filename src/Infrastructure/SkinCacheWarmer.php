@@ -20,10 +20,11 @@ class SkinCacheWarmer implements CacheWarmerInterface {
 
 	/**
 	 * @param string $cacheDir
+	 * @param string|null $buildDir
 	 *
 	 * @return string[]
 	 */
-	public function warmUp( string $cacheDir ): array {
+	public function warmUp( string $cacheDir, ?string $buildDir = null ): array {
 		$templates = $this->getTemplates();
 
 		foreach ( $templates as $template ) {
