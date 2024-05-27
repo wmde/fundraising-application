@@ -149,8 +149,8 @@ class AddSubscriptionRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
-		$this->assertJson( $response->getContent(), 'response is json' );
-		$responseData = json_decode( $response->getContent(), true );
+		$this->assertJson( $response->getContent() ?: '', 'response is json' );
+		$responseData = json_decode( $response->getContent() ?: '', true );
 		$this->assertSame( 'ERR', $responseData['status'] );
 		$this->assertGreaterThan( 0, count( $responseData['errors'] ) );
 		$this->assertSame( 'email_address_wrong_format', $responseData['errors']['email'] );

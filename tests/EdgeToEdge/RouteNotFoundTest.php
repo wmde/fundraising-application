@@ -21,15 +21,15 @@ class RouteNotFoundTest extends WebRouteTestCase {
 		$client = $this->createClient();
 		$client->request( 'GET', '/kittens' );
 
-		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
-		$this->assertStringContainsString( '<html', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) ?: '' );
+		$this->assertStringContainsString( '<html', $client->getResponse()->getContent() ?: '' );
 	}
 
 	public function testGivenUnknownRouteAndJsonRequest_responseIsJSON(): void {
 		$client = $this->createClient();
 		$client->request( 'GET', '/kittens', [], [], [ 'HTTP_ACCEPT' => 'application/json' ] );
 
-		$response = json_decode( $client->getResponse()->getContent(), true );
+		$response = json_decode( $client->getResponse()->getContent() ?: '', true );
 		$this->assertIsArray( $response );
 		$this->assertArrayHasKey( 'ERR', $response );
 		$this->assertStringContainsString( '/kittens', $response['ERR'] );

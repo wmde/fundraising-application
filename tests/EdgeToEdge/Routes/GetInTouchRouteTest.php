@@ -49,7 +49,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
+		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) ?: '' );
 
 		$this->assertCount(
 			3,
@@ -73,7 +73,7 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 			'/contact/get-in-touch'
 		);
 
-		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) );
+		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) ?: '' );
 		$this->assertCount(
 			0,
 			$crawler->filter( 'span.form-error' )
@@ -111,6 +111,6 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 		$content = $response->getContent();
 
-		$this->assertStringContainsString( 'Internal Error: Something unexpected happened', $content );
+		$this->assertStringContainsString( 'Internal Error: Something unexpected happened', $content ?: '' );
 	}
 }

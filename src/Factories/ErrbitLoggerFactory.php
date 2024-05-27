@@ -35,6 +35,14 @@ class ErrbitLoggerFactory {
 	 */
 	private const PAYPAL_URL_MATCH = '!/handle-paypal-payment-notification!';
 
+	/**
+	 * @param string $projectId
+	 * @param string $projectKey
+	 * @param string $host
+	 * @param string $environment
+	 * @param 'ALERT'|'Alert'|'alert'|'CRITICAL'|'Critical'|'critical'|'DEBUG'|'Debug'|'debug'|'EMERGENCY'|'Emergency'|'emergency'|'ERROR'|'Error'|'error'|'INFO'|'Info'|'info'|'NOTICE'|'Notice'|'notice'|'WARNING'|'Warning'|'warning' $level
+	 * @param bool $bubble
+	 */
 	public static function createErrbitHandler( string $projectId, string $projectKey, string $host, string $environment = 'dev', ?string $level = LogLevel::DEBUG, bool $bubble = true ): HandlerInterface {
 		$notifier = new Notifier( [
 			'projectId' => $projectId,

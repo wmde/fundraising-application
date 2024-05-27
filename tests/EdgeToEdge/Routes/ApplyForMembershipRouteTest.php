@@ -283,8 +283,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$location = $client->getResponse()->headers->get( 'Location' );
 
-		$this->assertStringContainsString( 'id=' . self::MEMBERSHIP_APPLICATION_ID, $location );
-		$this->assertMatchesRegularExpression( '/accessToken=[0-9a-f]+/', $location );
+		$this->assertStringContainsString( 'id=' . self::MEMBERSHIP_APPLICATION_ID, $location ?: '' );
+		$this->assertMatchesRegularExpression( '/accessToken=[0-9a-f]+/', $location ?: '' );
 	}
 
 	public function testGivenValidRequest_requestIsRedirected(): void {
@@ -300,7 +300,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 
 		$this->assertTrue( $response->isRedirect() );
-		$this->assertStringContainsString( 'show-membership-confirmation', $response->headers->get( 'Location' ) );
+		$this->assertStringContainsString( 'show-membership-confirmation', $response->headers->get( 'Location' ) ?: '' );
 	}
 
 	public function testWhenApplicationGetsPersisted_timestampIsStoredInSession(): void {
@@ -328,7 +328,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->newValidHttpParameters()
 		);
 
-		$this->assertStringContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() ?: '' );
 	}
 
 	public function testWhenMultipleMembershipInAccordanceToTimeLimit_isNotRejected(): void {
@@ -342,7 +342,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->newValidHttpParameters()
 		);
 
-		$this->assertStringNotContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() );
+		$this->assertStringNotContainsString( 'membership_application_rejected_limit', $client->getResponse()->getContent() ?: '' );
 	}
 
 	private function givenConfirmedMembershipApplication( int $id ): MembershipApplication {
