@@ -54,7 +54,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->newValidFormInput()
 		);
 
-		$this->assertStringContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() ?: '' );
 	}
 
 	public function testWhenMultipleDonationsInAccordanceToTimeLimit_requestIsNotRejected(): void {
@@ -68,7 +68,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			$this->newValidFormInput()
 		);
 
-		$this->assertStringNotContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() );
+		$this->assertStringNotContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() ?: '' );
 	}
 
 	private function newValidFormInput(): array {
@@ -343,7 +343,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 
 		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
-		$this->assertStringContainsString( 'sandbox.paypal.com', $response->getContent() );
+		$this->assertStringContainsString( 'sandbox.paypal.com', $response->getContent() ?: '' );
 	}
 
 	/**
@@ -375,7 +375,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
-		$this->assertStringContainsString( 'item_name=Ihre+Spende', $response->getContent() );
+		$this->assertStringContainsString( 'item_name=Ihre+Spende', $response->getContent() ?: '' );
 	}
 
 	/**
@@ -431,8 +431,8 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$response = $client->getResponse();
 		$this->assertSame( Response::HTTP_FOUND, $response->getStatusCode() );
 		$this->assertTrue( $response->isRedirect() );
-		$this->assertStringContainsString( 'amount=1234', $response->headers->get( 'Location' ) );
-		$this->assertStringContainsString( 'thatother.paymentprovider.com', $response->headers->get( 'Location' ) );
+		$this->assertStringContainsString( 'amount=1234', $response->headers->get( 'Location' ) ?: '' );
+		$this->assertStringContainsString( 'thatother.paymentprovider.com', $response->headers->get( 'Location' ) ?: '' );
 	}
 
 	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
@@ -492,7 +492,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse()->getContent();
-		$this->assertStringContainsString( 'Internal Error: Creating a donation was not successful.', $response );
+		$this->assertStringContainsString( 'Internal Error: Creating a donation was not successful.', $response ?: '' );
 	}
 
 	public function testGivenInvalidRequest_errorsAreLogged(): void {
@@ -569,7 +569,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$redirectUrl = $response->headers->get( 'Location' );
-		$this->assertMatchesRegularExpression( '/accessToken=[0-9a-f]+/i', $redirectUrl );
+		$this->assertMatchesRegularExpression( '/accessToken=[0-9a-f]+/i', $redirectUrl ?: '' );
 	}
 
 	public function testGivenCommasInStreetInput_donationGetsPersisted(): void {
@@ -629,7 +629,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertTrue( $response->isRedirect() );
-		$this->assertStringContainsString( 'pfu=1', $response->headers->get( 'Location' ) );
+		$this->assertStringContainsString( 'pfu=1', $response->headers->get( 'Location' ) ?: '' );
 	}
 
 	public function testGivenAnonymousDonorWithBankTransfer_genericErrorMessageIsDisplayed(): void {
@@ -643,7 +643,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertFalse( $response->isRedirect(), 'Response should not redirect to success page' );
-		$this->assertStringContainsString( 'Internal Error: Creating a donation was not successful.', $response->getContent() );
+		$this->assertStringContainsString( 'Internal Error: Creating a donation was not successful.', $response->getContent() ?: '' );
 	}
 
 	private function newFormInputAnonymousDonorWithBankTransfer(): array {

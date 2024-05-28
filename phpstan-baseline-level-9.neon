@@ -11,11 +11,6 @@ parameters:
 			path: tests/EdgeToEdge/Routes/ShowDonationConfirmationRouteTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$haystack of method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/EdgeToEdge/Routes/ShowMembershipConfirmationRouteTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$actual of method PHPUnit\\\\Framework\\\\Assert\\:\\:assertJson\\(\\) expects string, string\\|false given\\.$#"
 			count: 2
 			path: tests/EdgeToEdge/WebRouteTestCase.php

@@ -53,7 +53,7 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 				'status' => 'ERR',
 				'messages' => [ 'fee' => 'error_too_low' ]
 			],
-			json_decode( $response->getContent(), true )
+			json_decode( $response->getContent() ?: '', true )
 		);
 	}
 
@@ -75,7 +75,7 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 					'fee' => 'cannot_parse_fee'
 				]
 			],
-			json_decode( $response->getContent(), true )
+			json_decode( $response->getContent() ?: '', true )
 		);
 	}
 
@@ -100,7 +100,7 @@ class ValidateFeeRouteTest extends WebRouteTestCase {
 				'status' => 'ERR',
 				'messages' => [ 'fee' => 'cannot_parse_fee' ]
 			],
-			json_decode( $response->getContent(), true )
+			json_decode( $response->getContent() ?: '', true )
 		);
 	}
 

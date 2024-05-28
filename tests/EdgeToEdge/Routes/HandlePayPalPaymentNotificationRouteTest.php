@@ -449,7 +449,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertSame( 500, $client->getResponse()->getStatusCode() );
-		$this->assertStringContainsString( "Could not get donation", $client->getResponse()->getContent() );
+		$this->assertStringContainsString( "Could not get donation", $client->getResponse()->getContent() ?: '' );
 	}
 
 	public function testOnInternalError_applicationLogsError(): void {

@@ -18,7 +18,7 @@ class DefaultRouteTest extends WebRouteTestCase {
 
 		$this->assertMatchesRegularExpression(
 			'/<script src="[^"]*js\/donation_form\.js/',
-			$client->getResponse()->getContent()
+			$client->getResponse()->getContent() ?: ''
 		);
 	}
 

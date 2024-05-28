@@ -56,11 +56,11 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 		// Then we can use $crawler instead of searching strings
 
 		$content = $client->getResponse()->getContent();
-		$this->assertStringContainsString( '100,42&euro; von First name am', $content );
-		$this->assertStringContainsString( 'First comment', $content );
-		$this->assertStringContainsString( '9.001,00&euro; von Second name am', $content );
-		$this->assertStringContainsString( 'Second comment', $content );
-		$this->assertStringContainsString( 'name &amp; company', $content );
+		$this->assertStringContainsString( '100,42&euro; von First name am', $content ?: '' );
+		$this->assertStringContainsString( 'First comment', $content ?: '' );
+		$this->assertStringContainsString( '9.001,00&euro; von Second name am', $content ?: '' );
+		$this->assertStringContainsString( 'Second comment', $content ?: '' );
+		$this->assertStringContainsString( 'name &amp; company', $content ?: '' );
 	}
 
 	public function testCommentsGetEscaped(): void {
@@ -71,7 +71,7 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 		$this->assertStringContainsString(
 			'Third &lt;script&gt; comment',
-			$client->getResponse()->getContent()
+			$client->getResponse()->getContent() ?: ''
 		);
 	}
 
@@ -81,9 +81,9 @@ class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 		$client->request( 'GET', '/list-comments.json?n=2&page=2' );
 
-		$this->assertStringContainsString( 'First', $client->getResponse()->getContent() );
-		$this->assertStringNotContainsString( 'Second', $client->getResponse()->getContent() );
-		$this->assertStringNotContainsString( 'Third', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'First', $client->getResponse()->getContent() ?: '' );
+		$this->assertStringNotContainsString( 'Second', $client->getResponse()->getContent() ?: '' );
+		$this->assertStringNotContainsString( 'Third', $client->getResponse()->getContent() ?: '' );
 	}
 
 }
