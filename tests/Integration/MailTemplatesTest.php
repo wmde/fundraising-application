@@ -36,6 +36,9 @@ class MailTemplatesTest extends KernelTestCase {
 		}
 	}
 
+	/**
+	 * @return iterable<string, TemplateSettings>
+	 */
 	private static function getOutputTemplateAndContext(): iterable {
 		foreach ( MailTemplateFixtures::getTemplates() as $templateTestData ) {
 				yield self::getTestFilePath( $templateTestData->id ) => $templateTestData;

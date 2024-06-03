@@ -57,6 +57,12 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( $expected['isCustomAmount'], $applicationVars->initialFormValues->isCustomAmount );
 	}
 
+	/**
+	 * @return iterable<string, array{
+	 *     0: array{amount: string, paymentType: string, interval: string|int},
+	 *     1: array{validity: bool, amount: int, isCustomAmount: bool, paymentErrorFields: string[]}
+	 *	 }>
+	 */
 	public static function paymentInputProvider(): iterable {
 		yield 'valid one-time direct debit' => [
 			[
