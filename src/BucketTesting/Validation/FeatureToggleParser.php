@@ -55,7 +55,9 @@ class FeatureToggleParser {
 		return $nodeFinder->find(
 			$syntaxTree,
 			static function ( Node $node ) {
-				return $node instanceof MethodCall && $node->name->toString() === self::FEATURE_TOGGLE_METHOD_NAME;
+				/** @var string $name */
+				$nodeName = $node->name;
+				return $node instanceof MethodCall && $nodeName->toString() === self::FEATURE_TOGGLE_METHOD_NAME;
 			}
 		);
 	}
