@@ -688,7 +688,6 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new GetPaymentUseCase(
 			new DoctrinePaymentRepository( $this->getEntityManager() ),
 			new KontoCheckBankDataGenerator( $this->newIbanValidator() ),
-			$this->newDoctrineTransactionIdFinder()
 		);
 	}
 
