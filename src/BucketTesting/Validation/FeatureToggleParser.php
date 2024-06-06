@@ -8,6 +8,7 @@ use FileFetcher\SimpleFileFetcher;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
@@ -55,7 +56,9 @@ class FeatureToggleParser {
 		return $nodeFinder->find(
 			$syntaxTree,
 			static function ( Node $node ) {
-				return $node instanceof MethodCall && $node->name->toString() === self::FEATURE_TOGGLE_METHOD_NAME;
+				return $node instanceof MethodCall
+					&& $node->name instanceof Identifier
+					&& $node->name->toString() === self::FEATURE_TOGGLE_METHOD_NAME;
 			}
 		);
 	}

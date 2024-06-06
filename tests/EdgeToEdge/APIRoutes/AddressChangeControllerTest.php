@@ -200,23 +200,27 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 	 * @param string $identifier
 	 * @param array<string, bool|string> $requestBody
 	 */
-	private function whenPutRequestIsSubmitted( Client $client, string $identifier, array $requestBody ): object {
+	private function whenPutRequestIsSubmitted( Client $client, string $identifier, array $requestBody ): Response {
 		$client->jsonRequest(
 			Request::METHOD_PUT,
 			'/api/v1/address_change/' . $identifier,
 			$requestBody
 		);
 
-		return $client->getResponse();
+		/** @var Response $response */
+		$response = $client->getResponse();
+		return $response;
 	}
 
-	private function whenGetRequestIsSubmitted( Client $client, string $identifier, string $previousIdentifier = null ): object {
+	private function whenGetRequestIsSubmitted( Client $client, string $identifier, string $previousIdentifier = null ): Response {
 		$client->jsonRequest(
 			Request::METHOD_GET,
 			'/api/v1/address_change/' . $identifier . ( $previousIdentifier ? "/$previousIdentifier" : '' ),
 		);
 
-		return $client->getResponse();
+		/** @var Response $response */
+		$response = $client->getResponse();
+		return $response;
 	}
 
 	/**

@@ -55,6 +55,7 @@ class MailTemplatesTest extends KernelTestCase {
 
 		$bootstrapper->overrideConfiguration( self::getConfigOverrides() );
 
+		/** @var FunFunFactory $ffFactory */
 		$ffFactory = static::getContainer()->get( FunFunFactory::class );
 		$ffFactory->setContentProvider( new MailContentProviderStub() );
 		$ffFactory->setMailTranslator( new FakeTranslator() );

@@ -67,6 +67,7 @@ class MailerTemplatingFactoryTest extends KernelTestCase {
 
 		$bootstrapper->overrideConfiguration( $configOverrides );
 
+		/** @var FunFunFactory $factory */
 		$factory = static::getContainer()->get( FunFunFactory::class );
 		$factory->setSelectedBuckets( [ CampaignFixture::createBucket() ] );
 		$factory->setLocale( 'de_DE' );

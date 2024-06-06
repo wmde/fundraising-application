@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Symfony\Component\BrowserKit\AbstractBrowser as Client;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
@@ -103,7 +104,13 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		return $client->getResponse()->getContent();
+		/** @var Response $response */
+		$response = $client->getResponse();
+		$content = $response->getContent();
+		if ( $content === false ) {
+			throw new \RuntimeException( 'Failed to get content for : ' . $response );
+		}
+		return $content;
 	}
 
 	private function givenStoredDirectDebitDonation( FunFunFactory $factory ): void {

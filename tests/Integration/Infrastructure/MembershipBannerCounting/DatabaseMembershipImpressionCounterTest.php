@@ -22,6 +22,7 @@ class DatabaseMembershipImpressionCounterTest extends KernelTestCase {
 	}
 
 	public function testItInsertsImpressionsAsIndividualEntries(): void {
+		/** @var FunFunFactory $factory */
 		$factory = self::getContainer()->get( FunFunFactory::class );
 		$db = $factory->getConnection();
 		$counter = new DatabaseMembershipImpressionCounter( $db );
