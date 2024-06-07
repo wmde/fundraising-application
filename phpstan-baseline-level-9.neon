@@ -21,16 +21,6 @@ parameters:
 			path: tests/EdgeToEdge/WebRouteTestCase.php
 
 		-
-			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\EdgeToEdge\\\\WebRouteTestCase\\:\\:createClient\\(\\) should return Symfony\\\\Component\\\\BrowserKit\\\\AbstractBrowser but returns Symfony\\\\Component\\\\BrowserKit\\\\AbstractBrowser\\|null\\.$#"
-			count: 1
-			path: tests/EdgeToEdge/WebRouteTestCase.php
-
-		-
-			message: "#^Parameter \\#1 \\$newClient of static method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\EdgeToEdge\\\\WebRouteTestCase\\:\\:getClient\\(\\) expects Symfony\\\\Component\\\\BrowserKit\\\\AbstractBrowser\\|null, object given\\.$#"
-			count: 1
-			path: tests/EdgeToEdge/WebRouteTestCase.php
-
-		-
 			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\EdgeToEdge\\\\WebRouteTestCase\\:\\:modifyConfiguration\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/EdgeToEdge/WebRouteTestCase.php

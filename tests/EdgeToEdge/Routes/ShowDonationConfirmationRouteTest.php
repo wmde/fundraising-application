@@ -197,6 +197,7 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 		/** @var SessionInterface $session */
 		$session = $client->getRequest()->getSession();
+		/** @var \DateTimeImmutable $donationTimestamp */
 		$donationTimestamp = $session->get( FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY );
 		$this->assertNotNull( $donationTimestamp );
 		$this->assertEqualsWithDelta( time(), $donationTimestamp->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );

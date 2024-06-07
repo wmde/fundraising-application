@@ -18,6 +18,9 @@ class BucketLog {
 	 * @phpstan-ignore-next-line
 	 */
 	private int $id;
+	/**
+	 * @var Collection<int, BucketLogBucket>
+	 */
 	private Collection $buckets;
 	private DateTimeInterface $date;
 
@@ -48,7 +51,7 @@ class BucketLog {
 	/**
 	 * This is only used in tests
 	 *
-	 * @return Collection
+	 * @return Collection<int, BucketLogBucket>
 	 */
 	public function getBuckets(): Collection {
 		return $this->buckets;

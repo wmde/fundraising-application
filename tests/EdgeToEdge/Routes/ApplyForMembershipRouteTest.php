@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -317,8 +316,8 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$this->newValidHttpParameters()
 		);
 
-		/** @var SessionInterface $session */
 		$session = $client->getRequest()->getSession();
+		/** @var \DateTimeImmutable $lastMembership */
 		$lastMembership = $session->get( FunFunFactory::MEMBERSHIP_RATE_LIMIT_SESSION_KEY );
 		$this->assertNotNull( $lastMembership );
 		$this->assertEqualsWithDelta( time(), $lastMembership->getTimestamp(), 5.0, 'Timestamp should be not more than 5 seconds old' );

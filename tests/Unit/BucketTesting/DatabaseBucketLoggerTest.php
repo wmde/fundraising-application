@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\DataAccess\DoctrineBucketLogRepository;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\BucketLog;
+use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\BucketLogBucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger;
@@ -95,7 +96,10 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 		/** @var BucketLog[] $bucketLogs */
 		$bucketLogs = $this->getOrmRepository()->findAll();
 		$bucketLog = $bucketLogs[0];
+
+		/** @var BucketLogBucket $bucketLogBucket1 */
 		$bucketLogBucket1 = $bucketLog->getBuckets()[0];
+		/** @var BucketLogBucket $bucketLogBucket2 */
 		$bucketLogBucket2 = $bucketLog->getBuckets()[1];
 
 		$this->assertCount( 2, $bucketLog->getBuckets() );
