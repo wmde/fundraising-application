@@ -218,6 +218,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 			->fetchOne();
 		$bookingData = json_decode( $encodedBookingData, true, 512, JSON_THROW_ON_ERROR );
 
+		$this->assertIsArray( $bookingData );
 		$this->assertSame( $request['currency'], $bookingData['currency'] );
 		$this->assertEquals( $request['amount'], $bookingData['amount'] );
 		$this->assertSame( $request['country'], $bookingData['country'] );

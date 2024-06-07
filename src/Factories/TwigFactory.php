@@ -31,7 +31,10 @@ abstract class TwigFactory {
 	}
 
 	private function getLoader(): LoaderInterface {
-		if ( !empty( $this->config['loaders']['filesystem'] ) ) {
+		if (
+			is_array( $this->config['loaders'] ) &&
+			isset( $this->config['loaders']['filesystem'] )
+		) {
 			return new FilesystemLoader( $this->config['loaders']['filesystem'] );
 		}
 		throw new \UnexpectedValueException( 'Invalid Twig loader configuration - missing filesystem' );

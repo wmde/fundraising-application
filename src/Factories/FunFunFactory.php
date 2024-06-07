@@ -1875,6 +1875,8 @@ class FunFunFactory implements LoggerAwareInterface {
 	 */
 	private function getSiteMetaData(): array {
 		$fileFetcher = new SimpleFileFetcher();
+
+		/** @var array{page_titles: array} $metadata */
 		$metadata = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/siteMetadata.json' ), true );
 		$metadata['page_titles'] = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/pageTitles.json' ), true );
 		return $metadata;
@@ -1882,6 +1884,8 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getDayOfWeekName(): string {
 		$fileFetcher = new SimpleFileFetcher();
+
+		/** @var array{'1': string, '2': string, '3': string, '4': string, '5': string, '6': string, '7': string} $daysOfWeek */
 		$daysOfWeek = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/daysOfTheWeek.json' ), true );
 		return $daysOfWeek[date( 'N' )];
 	}

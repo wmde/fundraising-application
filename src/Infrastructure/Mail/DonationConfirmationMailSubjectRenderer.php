@@ -20,8 +20,12 @@ class DonationConfirmationMailSubjectRenderer implements MailSubjectRendererInte
 	 * @param array<string, mixed> $templateArguments
 	 */
 	public function render( array $templateArguments = [] ): string {
-		if ( $templateArguments['donation']['paymentType'] === PaymentType::BankTransfer->value ) {
-			return $this->translator->trans( $this->bankTransferSubjectKey );
+		if (
+			is_array( $templateArguments['donation'] ) &&
+			isset( $templateArguments['donation']['paymentType'] ) &&
+			$templateArguments['donation']['paymentType'] === PaymentType::BankTransfer->value
+		) {
+				return $this->translator->trans( $this->bankTransferSubjectKey );
 		}
 		return $this->translator->trans( $this->defaultSubjectKey );
 	}
