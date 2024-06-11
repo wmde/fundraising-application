@@ -52,12 +52,12 @@ campaigns:
 
     address_pages:
       description: Test different iterations of address pages
-      reference: "https://phabricator.wikimedia.org/T345528"
-      start: "2023-09-12"
-      end: "2023-12-31"
+      reference: "https://phabricator.wikimedia.org/T366576"
+      start: "2024-07-01"
+      end: "2024-12-31"
       buckets:
         - "legacy"
-        - "test_01"
+        - "test_02"
       default_bucket: "legacy"
       url_key: ap
       active: true
