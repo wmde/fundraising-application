@@ -29,6 +29,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 			[ $identifier, $previousIdentifier ] = $this->makeAddressChangeIdentifiers( $addressChange );
 			$expectedResponse = $this->makeExpectedGetResponse( $identifier, $previousIdentifier );
 
+			/** @var Response $response */
 			$response = $this->whenGetRequestIsSubmitted( $client, $identifier );
 
 			$this->assertSame( Response::HTTP_OK, $response->getStatusCode() );
@@ -42,6 +43,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 			[ $identifier, $previousIdentifier ] = $this->makeAddressChangeIdentifiers( $addressChange );
 			$expectedResponse = $this->makeExpectedGetResponse( $identifier, $previousIdentifier );
 
+			/** @var Response $response */
 			$response = $this->whenGetRequestIsSubmitted( $client, self::INVALID_IDENTIFIER, $previousIdentifier );
 
 			$this->assertSame( Response::HTTP_OK, $response->getStatusCode() );
@@ -51,6 +53,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 
 	public function testGetWithMissingToken_errorIsReturned(): void {
 		$this->createEnvironment( function ( Client $client ): void {
+			/** @var Response $response */
 			$response = $this->whenGetRequestIsSubmitted( $client, identifier: '' );
 
 			$this->assertSame( Response::HTTP_NOT_FOUND, $response->getStatusCode() );
@@ -62,6 +65,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 
 	public function testGetWithInvalidIdentifier_errorIsReturned(): void {
 		$this->createEnvironment( function ( Client $client ): void {
+			/** @var Response $response */
 			$response = $this->whenGetRequestIsSubmitted( $client, self::INVALID_IDENTIFIER );
 
 			$this->assertSame( Response::HTTP_NOT_FOUND, $response->getStatusCode() );
