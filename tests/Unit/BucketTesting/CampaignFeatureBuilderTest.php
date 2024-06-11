@@ -105,14 +105,24 @@ class CampaignFeatureBuilderTest extends TestCase {
 		$rulesInDefaultBucket  = $features->getFeatureByName( 'campaigns.test_active.bucket1' )->getRules();
 		$rulesInOtherBucket = $features->getFeatureByName( 'campaigns.test_active.bucket2' )->getRules();
 
-		$this->assertCount( 0, $rulesInDefaultBucket[0]->getPrerequisites(), 'Default bucket should not have prerequisites' );
+		$rulesInDefaultBucketPrerequisite = $rulesInDefaultBucket[0]->getPrerequisites();
+		$this->assertIsArray( $rulesInDefaultBucketPrerequisite );
 
-		$timeAfter = $rulesInOtherBucket[0]->getPrerequisites()[0]->getValue();
-		$timeBefore = $rulesInOtherBucket[0]->getPrerequisites()[0]->getPrerequisites()[0]->getValue();
+		$this->assertCount( 0, $rulesInDefaultBucketPrerequisite, 'Default bucket should not have prerequisites' );
+
+		$rulesInOtherBucketPrerequisite = $rulesInOtherBucket[0]->getPrerequisites();
+		$this->assertIsArray( $rulesInOtherBucketPrerequisite );
+
+		$timeAfter = $rulesInOtherBucketPrerequisite[0]->getValue();
+
+		$otherBucketPrerequisite = $rulesInOtherBucketPrerequisite[0]->getPrerequisites();
+		$this->assertIsArray( $otherBucketPrerequisite );
+
+		$timeBefore = $otherBucketPrerequisite[0]->getValue();
 		$this->assertEquals( '2000-01-01 00:00:00', $timeAfter );
 		$this->assertEquals( '2099-01-01 00:00:00', $timeBefore );
-		$this->assertInstanceOf( TimeAfter::class, $rulesInOtherBucket[0]->getPrerequisites()[0] );
-		$this->assertInstanceOf( TimeBefore::class, $rulesInOtherBucket[0]->getPrerequisites()[0]->getPrerequisites()[0] );
+		$this->assertInstanceOf( TimeAfter::class, $rulesInOtherBucketPrerequisite[0] );
+		$this->assertInstanceOf( TimeBefore::class, $otherBucketPrerequisite[0] );
 	}
 
 }
