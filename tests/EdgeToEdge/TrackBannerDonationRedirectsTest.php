@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
@@ -189,7 +190,9 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	}
 
 	private static function newUrlForNamedRoute( string $routeName ): string {
-		return self::getContainer()->get( 'router' )->generate(
+		/** @var Router $router */
+		$router = self::getContainer()->get( 'router' );
+		return $router->generate(
 			$routeName,
 			[],
 			UrlGeneratorInterface::RELATIVE_PATH

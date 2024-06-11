@@ -4,7 +4,8 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\Tests;
 
 use DateTimeImmutable;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Session\SessionFactory;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -29,11 +30,15 @@ trait PrepareSessionValuesTrait {
 		// This priority should be higher than the EventSubscriber priorities that access the session,
 		// e.g. TrackBannerDonationRedirects
 		$eventSetterPriority = 8;
-		static::getContainer()->get( 'event_dispatcher' )->addListener(
+
+		/** @var EventDispatcher $eventDispatcher */
+		$eventDispatcher = static::getContainer()->get( 'event_dispatcher' );
+		$eventDispatcher->addListener(
 			KernelEvents::REQUEST,
 			function ( RequestEvent $event ) use ( $values ) {
-				/** @var Session $session */
-				$session = static::getContainer()->get( 'session.factory' )->createSession();
+				/** @var SessionFactory $sessionFactory */
+				$sessionFactory = static::getContainer()->get( 'session.factory' );
+				$session = $sessionFactory->createSession();
 				foreach ( $values as $k => $v ) {
 					$session->set( $k, $v );
 				}
