@@ -22,6 +22,12 @@ class AuthenticationLoader implements DonationUrlAuthenticationLoader, Membershi
 		return new AccessTokenUrlAuthenticator( $token );
 	}
 
+	/**
+	 * @param int $donationId
+	 * @param array<string, scalar> $parameters
+	 *
+	 * @return array<string, scalar>
+	 */
 	public function addDonationAuthorizationParameters( int $donationId, array $parameters ): array {
 		$token = $this->getTokenOrFail( $donationId, AuthenticationBoundedContext::Donation );
 		return [
@@ -31,6 +37,12 @@ class AuthenticationLoader implements DonationUrlAuthenticationLoader, Membershi
 		];
 	}
 
+	/**
+	 * @param int $membershipId
+	 * @param array<string, int|string> $parameters
+	 *
+	 * @return array<string, int|string>
+	 */
 	public function addMembershipAuthorizationParameters( int $membershipId, array $parameters ): array {
 		$token = $this->getTokenOrFail( $membershipId, AuthenticationBoundedContext::Membership );
 		return [

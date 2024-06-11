@@ -8,6 +8,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingEvent;
 
 class MembershipApplicationCreated implements LoggingEvent {
 
+	/**
+	 * @var array<string, int|string>
+	 */
 	private array $metadata;
 
 	public function __construct( int $membershipApplicationId ) {
@@ -16,6 +19,9 @@ class MembershipApplicationCreated implements LoggingEvent {
 		];
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	public function getMetaData(): array {
 		return $this->metadata;
 	}

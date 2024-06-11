@@ -14,8 +14,8 @@ interface DonationUrlAuthenticationLoader {
 	/**
 	 * This is for adding authorization parameters (e.g. "updateToken") to POST requests or template data, where they must not be in the URL
 	 * @param int $donationId
-	 * @param array<string,mixed> $parameters
-	 * @return array<string,mixed>
+	 * @param array<string, scalar> $parameters
+	 * @return array<string, scalar>
 	 */
 	public function addDonationAuthorizationParameters( int $donationId, array $parameters ): array;
 }

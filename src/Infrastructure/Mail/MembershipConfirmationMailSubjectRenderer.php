@@ -19,6 +19,9 @@ class MembershipConfirmationMailSubjectRenderer implements MailSubjectRendererIn
 		$this->activeMembershipSubject = $activeMembershipSubject;
 	}
 
+	/**
+	 * @param array<string, mixed> $templateArguments
+	 */
 	public function render( array $templateArguments = [] ): string {
 		if ( $templateArguments['membershipType'] === MembershipApplication::ACTIVE_MEMBERSHIP ) {
 			return $this->translator->trans( $this->activeMembershipSubject );

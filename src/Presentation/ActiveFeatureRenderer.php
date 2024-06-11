@@ -8,10 +8,9 @@ use WMDE\Fundraising\Frontend\FeatureToggle\Feature;
 class ActiveFeatureRenderer {
 
 	/**
-	 * @param Feature[] $features
 	 * @return string[]
 	 */
-	public static function renderActiveFeatureIds( array $features ): array {
+	public static function renderActiveFeatureIds( Feature ...$features ): array {
 		$ids = [];
 		foreach ( $features as $feature ) {
 			if ( $feature->active ) {

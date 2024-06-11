@@ -14,6 +14,9 @@ class BasicMailSubjectRenderer implements MailSubjectRendererInterface {
 	) {
 	}
 
+	/**
+	 * @param array<string, mixed> $templateArguments
+	 */
 	public function render( array $templateArguments = [] ): string {
 		return $this->translator->trans( $this->subjectKey );
 	}

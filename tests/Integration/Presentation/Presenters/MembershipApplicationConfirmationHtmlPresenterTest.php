@@ -36,6 +36,9 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 		);
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	private function getExpectedRenderParams(): array {
 		return [
 			'membershipApplication' => [

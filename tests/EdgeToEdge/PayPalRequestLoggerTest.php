@@ -90,6 +90,9 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 		$this->assertFalse( $this->filesystem->hasChild( self::LOG_FILENAME ) );
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	private function validPayPalData(): array {
 		return [
 			'post_vars' => [

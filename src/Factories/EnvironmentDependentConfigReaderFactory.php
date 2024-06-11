@@ -18,6 +18,9 @@ class EnvironmentDependentConfigReaderFactory {
 		);
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getConfigurationPathsForEnvironment( string $configPath ): array {
 		$paths = self::removeNonexistentOptionalPaths( ...[
 			$configPath . '/config.dist.json',
@@ -28,6 +31,9 @@ class EnvironmentDependentConfigReaderFactory {
 		return $paths;
 	}
 
+	/**
+	 * @return string[]
+	 */
 	private static function removeNonexistentOptionalPaths( string ...$paths ): array {
 		if ( !file_exists( $paths[2] ) ) {
 			array_splice( $paths, 2 );

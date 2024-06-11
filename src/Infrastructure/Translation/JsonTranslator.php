@@ -8,6 +8,9 @@ use FileFetcher\FileFetcher;
 
 class JsonTranslator implements TranslatorInterface {
 
+	/**
+	 * @var array<string, string>
+	 */
 	private array $messages;
 
 	public function __construct( private readonly FileFetcher $fileFetcher ) {

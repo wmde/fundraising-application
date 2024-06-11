@@ -159,6 +159,13 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 		], $response );
 	}
 
+	/**
+	 * @param Client $client
+	 * @param array<string, bool|string> $data
+	 * @param int $donationId
+	 * @param string $accessToken
+	 * @param string $updateToken
+	 */
 	private function performRequest( Client $client, array $data, int $donationId, string $accessToken, string $updateToken ): Crawler {
 		return $client->jsonRequest(
 			Request::METHOD_PUT,
@@ -174,6 +181,9 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 		return ( new StoredDonations( $factory ) )->newStoredIncompleteAnonymousPayPalDonation( self::CORRECT_UPDATE_TOKEN );
 	}
 
+	/**
+	 * @return array<string, bool|string>
+	 */
 	private function newPrivateDonorData(): array {
 		return [
 			'addressType' => AddressType::PERSON,
@@ -191,6 +201,9 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, bool|string>
+	 */
 	private function newCompanyDonorData(): array {
 		return [
 			'addressType' => AddressType::LEGACY_COMPANY,

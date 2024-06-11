@@ -9,6 +9,9 @@ use RuntimeException;
 
 class TranslationsCollector {
 
+	/**
+	 * @var string[]
+	 */
 	private array $translationFiles = [];
 
 	public function __construct( private readonly FileFetcher $fileFetcher ) {
@@ -18,6 +21,9 @@ class TranslationsCollector {
 		$this->translationFiles[] = $transFile;
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	public function collectTranslations(): array {
 		$result = [];
 

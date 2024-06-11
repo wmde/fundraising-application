@@ -141,6 +141,12 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 		$this->verifySessionItemsWereRemoved();
 	}
 
+	/**
+	 * @param string $route
+	 * @param array<string, int|string> $data
+	 *
+	 * @return void
+	 */
 	private function whenPostingDataToRoute( string $route, array $data ): void {
 		$this->client->request(
 			'post',
@@ -149,6 +155,10 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 		);
 	}
 
+	/**
+	 * @param string $route
+	 * @param array<int|string, int|string> $parameters
+	 */
 	private function whenRequestingRoute( string $route, array $parameters = [] ): Response {
 		$this->client->request( 'get', self::newUrlForNamedRoute( $route ), $parameters );
 		return $this->client->getResponse();

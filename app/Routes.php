@@ -32,7 +32,7 @@ class Routes {
 	 * Many controllers pass this set of URLs to the client side as part of the "application data".
 	 *
 	 * @param UrlGenerator $urlGenerator
-	 * @return array
+	 * @return array<string, string>
 	 */
 	public static function getNamedRouteUrls( UrlGenerator $urlGenerator ): array {
 		return [

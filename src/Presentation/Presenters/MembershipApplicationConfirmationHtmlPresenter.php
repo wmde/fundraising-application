@@ -21,6 +21,10 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	public function __construct( private readonly TwigTemplate $template ) {
 	}
 
+	/**
+	 * @param MembershipApplication $application
+	 * @param array<string, scalar> $paymentData
+	 */
 	public function presentConfirmation( MembershipApplication $application, array $paymentData ): void {
 		$this->html = $this->template->render(
 			$this->getConfirmationPageArguments(
@@ -42,6 +46,12 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		return $this->html;
 	}
 
+	/**
+	 * @param MembershipApplication $membershipApplication
+	 * @param array<string, scalar> $paymentData
+	 *
+	 * @return array<string, mixed>
+	 */
 	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData ): array {
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $paymentData ),
@@ -54,6 +64,12 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		];
 	}
 
+	/**
+	 * @param MembershipApplication $membershipApplication
+	 * @param array<string, scalar> $paymentData
+	 *
+	 * @return array<string, mixed>
+	 */
 	private function getApplicationArguments( MembershipApplication $membershipApplication, array $paymentData ): array {
 		return [
 			'id' => $membershipApplication->getId(),
@@ -70,6 +86,11 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		];
 	}
 
+	/**
+	 * @param Applicant $applicant
+	 *
+	 * @return array<string, string>
+	 */
 	private function getAddressArguments( Applicant $applicant ): array {
 		return [
 			'salutation' => $applicant->getName()->salutation,

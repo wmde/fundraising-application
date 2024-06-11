@@ -19,22 +19,41 @@ class DonationConfirmationHtmlPresenter {
 
 	private object $addressValidationPatterns;
 
+	/**
+	 * @param TwigTemplate $template
+	 * @param UrlGenerator $urlGenerator
+	 * @param DonationUrlAuthenticationLoader $authenticationLoader
+	 * @param array<string, mixed> $countries
+	 * @param \stdClass $validation
+	 */
 	public function __construct(
 		private readonly TwigTemplate $template,
 		private readonly UrlGenerator $urlGenerator,
 		private readonly DonationUrlAuthenticationLoader $authenticationLoader,
 		private readonly array $countries,
-		object $validation
+		\stdClass $validation
 	) {
 		$this->addressValidationPatterns = $validation;
 	}
 
+	/**
+	 * @param Donation $donation
+	 * @param array<string, scalar> $paymentData
+	 * @param array<string, string> $urlEndpoints
+	 */
 	public function present( Donation $donation, array $paymentData, array $urlEndpoints ): string {
 		return $this->template->render(
 			$this->getConfirmationPageArguments( $donation, $paymentData, $urlEndpoints )
 		);
 	}
 
+	/**
+	 * @param Donation $donation
+	 * @param array<string, scalar> $paymentData
+	 * @param array<string, string> $urlEndpoints
+	 *
+	 * @return array<string, mixed>
+	 */
 	private function getConfirmationPageArguments( Donation $donation, array $paymentData, array $urlEndpoints ): array {
 		$donorDataFormatter = new DonorDataFormatter();
 

@@ -25,6 +25,11 @@ class MembershipFormViolationPresenter {
 		);
 	}
 
+	/**
+	 * @param ApplyForMembershipRequest $request
+	 *
+	 * @return array<string, string>
+	 */
 	private function getMembershipFormArguments( ApplyForMembershipRequest $request ): array {
 		$paymentParameters = $request->paymentParameters;
 		$bankData = $this->bankDataGenerator->getBankDataFromIban( new Iban( $paymentParameters->iban ) );

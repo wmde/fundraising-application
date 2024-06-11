@@ -15,6 +15,11 @@ class OperatorMailer {
 	) {
 	}
 
+	/**
+	 * @param EmailAddress $replyToAddress
+	 * @param string $subject
+	 * @param array<string, mixed> $templateArguments
+	 */
 	public function sendMailToOperator( EmailAddress $replyToAddress, string $subject, array $templateArguments = [] ): void {
 		$this->messenger->sendMessageToOperator(
 			new Message(

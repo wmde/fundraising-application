@@ -17,6 +17,11 @@ class BucketSelector {
 	) {
 	}
 
+	/**
+	 * @param array<string, scalar> $params
+	 *
+	 * @return array<string, scalar>
+	 */
 	private function sanitizeParameters( array $params ): array {
 		$sanitized = [];
 		foreach ( $params as $key => $value ) {
@@ -28,7 +33,7 @@ class BucketSelector {
 	}
 
 	/**
-	 * @param array $urlParameters
+	 * @param array<string, scalar> $urlParameters
 	 * @return Bucket[]
 	 */
 	public function selectBuckets( array $urlParameters = [] ): array {
@@ -48,6 +53,10 @@ class BucketSelector {
 		return $buckets;
 	}
 
+	/**
+	 * @param BucketSelectionStrategy[] $selectionStrategies
+	 * @param Campaign $campaign
+	 */
 	private function selectBucketWithStrategies( array $selectionStrategies, Campaign $campaign ): Bucket {
 		foreach ( $selectionStrategies as $strategy ) {
 			$bucket = $strategy->selectBucketForCampaign( $campaign );

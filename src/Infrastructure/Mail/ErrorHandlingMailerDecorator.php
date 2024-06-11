@@ -15,6 +15,10 @@ class ErrorHandlingMailerDecorator implements TemplateMailerInterface {
 	) {
 	}
 
+	/**
+	 * @param EmailAddress $recipient
+	 * @param array<string, mixed> $templateArguments
+	 */
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
 		try {
 			$this->templateBasedMailer->sendMail( $recipient, $templateArguments );

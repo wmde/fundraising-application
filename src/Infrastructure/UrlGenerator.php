@@ -9,8 +9,16 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
  */
 interface UrlGenerator {
 
+	/**
+	 * @param string $routeName
+	 * @param array<string, string> $parameters
+	 */
 	public function generateAbsoluteUrl( string $routeName, array $parameters = [] ): string;
 
+	/**
+	 * @param string $routeName
+	 * @param array<string, scalar> $parameters
+	 */
 	public function generateRelativeUrl( string $routeName, array $parameters = [] ): string;
 
 }

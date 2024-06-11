@@ -15,6 +15,9 @@ class FakePayPalAPI implements PaypalAPI {
 
 	private const TESTDATE = '2004-04-04';
 
+	/**
+	 * @return Product[]
+	 */
 	public function listProducts(): array {
 		throw new \LogicException( "Not implemented, your test should not use this method!" );
 	}
@@ -23,6 +26,9 @@ class FakePayPalAPI implements PaypalAPI {
 		throw new \LogicException( "Not implemented, your test should not use this method!" );
 	}
 
+	/**
+	 * @return SubscriptionPlan[]
+	 */
 	public function listSubscriptionPlansForProduct( string $productId ): array {
 		throw new \LogicException( "Not implemented, your test should not use this method!" );
 	}

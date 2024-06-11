@@ -151,6 +151,9 @@ class BucketSelectorTest extends TestCase {
 
 	/**
 	 * @dataProvider invalidParametersProvider
+	 *
+	 * @param string $description
+	 * @param array<string, int|string> $url
 	 */
 	public function testGivenInvalidParams_bucketIsSelectedWithFallbackSelectionStrategy( string $description, array $url ): void {
 		$bucketSelector = new BucketSelector( $this->campaignCollection, $this->bucketSelectionStrategy );

@@ -6,6 +6,9 @@ namespace WMDE\Fundraising\Frontend\Infrastructure;
 
 class TrackingDataSelector {
 
+	/**
+	 * @param string[] $values
+	 */
 	public static function getFirstNonEmptyValue( array $values ): string {
 		$nonEmptyValues = array_filter( $values );
 		return count( $nonEmptyValues ) > 0 ? array_shift( $nonEmptyValues ) : '';

@@ -11,6 +11,12 @@ class UrlAuthenticatorStub implements URLAuthenticator {
 		return $url;
 	}
 
+	/**
+	 * @param string $urlGeneratorClass
+	 * @param mixed[] $requestedParameters
+	 *
+	 * @return mixed[]
+	 */
 	public function getAuthenticationTokensForPaymentProviderUrl( string $urlGeneratorClass, array $requestedParameters ): array {
 		return [];
 	}

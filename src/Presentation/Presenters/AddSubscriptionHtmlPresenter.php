@@ -16,6 +16,10 @@ class AddSubscriptionHtmlPresenter {
 	public function __construct( private readonly TwigTemplate $template ) {
 	}
 
+	/**
+	 * @param ValidationResponse $subscriptionResponse
+	 * @param array<string, mixed> $formData
+	 */
 	public function present( ValidationResponse $subscriptionResponse, array $formData ): string {
 		$errors = [];
 		/** @var ConstraintViolation $constraintViolation */

@@ -86,6 +86,9 @@ class GreetingGeneratorTest extends TestCase {
 		);
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public static function formalGreetingProvider(): array {
 		return [
 			[ 'Herr', 'formalHerr' ],
@@ -94,6 +97,9 @@ class GreetingGeneratorTest extends TestCase {
 		];
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public static function informalGreetingProvider(): array {
 		return [
 			[ 'Herr', 'informalHerr' ],
@@ -102,6 +108,9 @@ class GreetingGeneratorTest extends TestCase {
 		];
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public static function informalLastnameGreetingProvider(): array {
 		return [
 			[ 'Herr', 'lastNameInformalHerr' ],

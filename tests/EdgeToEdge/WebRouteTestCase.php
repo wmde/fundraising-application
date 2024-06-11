@@ -25,7 +25,6 @@ abstract class WebRouteTestCase extends KernelTestCase {
 
 	protected const DISABLE_DEBUG = false;
 	protected const ENABLE_DEBUG = true;
-
 	protected static array $applicationConfiguration = [];
 
 	/**
@@ -33,6 +32,9 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 * @var ?callable(FunFunFactory): void $environmentModification
 	 */
 	protected static $environmentModification = null;
+	/**
+	 * @var array<string, scalar>
+	 */
 	protected array $sessionValues = [];
 
 	protected static bool $factoryInitialized = false;
@@ -99,8 +101,6 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 *
 	 * Each value provided will be merged into the application configuration,
 	 * overriding the values from the configuration file (app/config/config.test.json).
-	 *
-	 * @param array $config
 	 */
 	protected static function modifyConfiguration( array $config ): void {
 		static::$applicationConfiguration = $config;
@@ -133,8 +133,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 * This method is needed as long as the FunFunFactory creates most of our services
 	 *
 	 * @override
-	 * @param array $options
-	 * @return KernelInterface
+	 * @param string[] $options
 	 */
 	protected static function bootKernel( array $options = [] ): KernelInterface {
 		$kernel = parent::bootKernel( $options );
@@ -167,6 +166,10 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		$this->assertSame( 404, $response->getStatusCode() );
 	}
 
+	/**
+	 * @param array<int|string, array<int|string,int|float|string>|string|mixed> $expected
+	 * @param Response $response
+	 */
 	protected function assertJsonResponse( array $expected, Response $response ): void {
 		$this->assertSame(
 			json_encode( $expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ),
@@ -174,6 +177,10 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		);
 	}
 
+	/**
+	 * @param array<int|string, string|array<string, int|float|string>> $expected
+	 * @param Response $response
+	 */
 	protected function assertJsonSuccessResponse( array $expected, Response $response ): void {
 		$this->assertTrue( $response->isSuccessful(), 'request is successful' );
 		$this->assertJson( $response->getContent(), 'response is json' );
@@ -195,7 +202,9 @@ abstract class WebRouteTestCase extends KernelTestCase {
 
 	protected function getJsonFromResponse( Response $response ): array {
 		$this->assertJson( $response->getContent(), 'response is json' );
-		return json_decode( $response->getContent(), true );
+		$result = json_decode( $response->getContent(), true );
+		$this->assertIsArray( $result );
+		return $result;
 	}
 
 	protected function assertSuccessJsonResponse( Response $response ): void {
@@ -205,6 +214,10 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		$this->assertArrayHasKey( 'message', $responseData );
 	}
 
+	/**
+	 * @param array<string, string> $expected
+	 * @param AbstractBrowser $client
+	 */
 	protected function assertInitialFormValues( array $expected, AbstractBrowser $client ): void {
 		$initialFormValues = $client->getCrawler()->filter( 'script[data-initial-form-values]' );
 		$this->assertGreaterThan(

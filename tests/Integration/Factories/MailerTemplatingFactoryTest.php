@@ -54,6 +54,9 @@ class MailerTemplatingFactoryTest extends KernelTestCase {
 		$this->assertSame( '[active] | [donation_payment_interval_3] | [UEB]', $output );
 	}
 
+	/**
+	 * @param array<string, mixed> $configOverrides
+	 */
 	private function getFactory( array $configOverrides = [] ): FunFunFactory {
 		static::bootKernel();
 		$bootstrapper = static::getContainer()->get( EnvironmentBootstrapper::class );

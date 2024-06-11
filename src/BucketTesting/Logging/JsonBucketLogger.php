@@ -31,6 +31,9 @@ class JsonBucketLogger implements BucketLogger {
 		$this->logWriter->write( $result );
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	private function formatData( LoggingEvent $event, Bucket ...$buckets ): array {
 		return [
 			'date' => $this->clock->now()->format( DateTime::RFC3339_EXTENDED ),
@@ -40,6 +43,11 @@ class JsonBucketLogger implements BucketLogger {
 		];
 	}
 
+	/**
+	 * @param Bucket[] $buckets
+	 *
+	 * @return Bucket[]
+	 */
 	private function getBucketMap( array $buckets ): array {
 		return array_reduce(
 			$buckets,

@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests;
 
+use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -20,6 +21,10 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  */
 trait PrepareSessionValuesTrait {
+
+	/**
+	 * @param array<string, DateTimeImmutable|string> $values
+	 */
 	public function prepareSessionValues( array $values ): void {
 		// This priority should be higher than the EventSubscriber priorities that access the session,
 		// e.g. TrackBannerDonationRedirects

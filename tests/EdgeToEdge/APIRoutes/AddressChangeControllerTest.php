@@ -186,12 +186,20 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		return $addressChange;
 	}
 
+	/**
+	 * @return array{string,string}
+	 */
 	private function makeAddressChangeIdentifiers( AddressChange $addressChange ): array {
 		$identifier = $addressChange->getCurrentIdentifier()->__toString();
 		$previousIdentifier = $addressChange->getCurrentIdentifier()->__toString();
 		return [ $identifier, $previousIdentifier ];
 	}
 
+	/**
+	 * @param Client $client
+	 * @param string $identifier
+	 * @param array<string, bool|string> $requestBody
+	 */
 	private function whenPutRequestIsSubmitted( Client $client, string $identifier, array $requestBody ): object {
 		$client->jsonRequest(
 			Request::METHOD_PUT,
@@ -211,6 +219,9 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		return $client->getResponse();
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 */
 	private function makeExpectedGetResponse( string $identifier, string $previousIdentifier ): array {
 		return [
 			'identifier' => $identifier,
@@ -221,6 +232,9 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function makeValidPersonSubmitData(): array {
 		return [
 			'addressType' => 'person',
@@ -234,6 +248,9 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function makeValidCompanySubmitData(): array {
 		return [
 			'addressType' => 'company',
@@ -245,6 +262,9 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, bool|string|array<string, bool|string>>
+	 */
 	private function makeExpectedValidPersonPutResponse( string $identifier, string $previousIdentifier ): array {
 		return [
 			'identifier' => $identifier,
@@ -267,6 +287,9 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, bool|string|array<string, bool|string>>
+	 */
 	private function makeExpectedValidCompanyPutResponse( string $identifier, string $previousIdentifier ): array {
 		return [
 			'identifier' => $identifier,

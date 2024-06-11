@@ -63,6 +63,9 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		$this->assertJsonSuccessResponse( [ 'status' => 'OK' ], $response );
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function newPersonFormInput(): array {
 		return [
 			'addressType' => AddressType::PERSON,
@@ -79,6 +82,9 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function newCompanyWithMissingNameFormInput(): array {
 		return [
 			'addressType' => AddressType::LEGACY_COMPANY,
@@ -95,6 +101,9 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	private function newAnonymousFormInput(): array {
 		return [
 			'addressType' => 'anonymous'

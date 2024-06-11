@@ -11,6 +11,12 @@ class CampaignUtilizationValidator {
 
 	private bool $hasValidated = false;
 
+	/**
+	 * @param CampaignCollection $campaignCollection
+	 * @param string[] $ignoredBuckets
+	 * @param string[] $featureToggles
+	 * @param CampaignErrorCollection $errorLogger
+	 */
 	public function __construct(
 		private readonly CampaignCollection $campaignCollection,
 		private readonly array $ignoredBuckets,
@@ -23,6 +29,9 @@ class CampaignUtilizationValidator {
 		return empty( $this->getErrors() );
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getErrors(): array {
 		$this->validate();
 
@@ -67,6 +76,11 @@ class CampaignUtilizationValidator {
 		}
 	}
 
+	/**
+	 * @param CampaignCollection $campaignCollection
+	 *
+	 * @return string[]
+	 */
 	private function buildBucketIdsFromCampaignCollection( CampaignCollection $campaignCollection ): array {
 		$buckets = [];
 		/** @var Campaign $campaign */

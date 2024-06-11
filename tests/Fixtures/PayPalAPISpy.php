@@ -17,6 +17,9 @@ class PayPalAPISpy implements PaypalAPI {
 
 	private ?SubscriptionParameters $lastSubscriptionParameters = null;
 
+	/**
+	 * @return Product[]
+	 */
 	public function listProducts(): array {
 		throw new \LogicException( "Not implemented, your test should not use this method!" );
 	}
@@ -25,6 +28,9 @@ class PayPalAPISpy implements PaypalAPI {
 		throw new \LogicException( "Not implemented, your test should not use this method!" );
 	}
 
+	/**
+	 * @return SubscriptionPlan[]
+	 */
 	public function listSubscriptionPlansForProduct( string $productId ): array {
 		throw new \LogicException( "Not implemented, your test should not use this method!" );
 	}

@@ -11,6 +11,9 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
  */
 class BucketPropertyExtractor {
 
+	/**
+	 * @return string[]
+	 */
 	public static function listBucketIds( Bucket ...$buckets ): array {
 		return array_map(
 			static function ( Bucket $b ) {

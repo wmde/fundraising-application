@@ -8,6 +8,10 @@ use WMDE\EmailAddress\EmailAddress;
 
 class NullMailer implements TemplateMailerInterface {
 
+	/**
+	 * @param EmailAddress $recipient
+	 * @param array<string, mixed> $templateArguments
+	 */
 	public function sendMail( EmailAddress $recipient, array $templateArguments = [] ): void {
 		// Does nothing on purpose
 	}

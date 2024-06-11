@@ -36,6 +36,9 @@ class CampaignValidator {
 		return empty( $this->getErrors() );
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getErrors(): array {
 		$this->validate();
 

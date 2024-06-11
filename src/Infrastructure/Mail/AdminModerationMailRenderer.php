@@ -9,6 +9,9 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\ModerationIdentifier as Memb
 
 class AdminModerationMailRenderer implements MailSubjectRendererInterface {
 
+	/**
+	 * @param array<string, mixed> $templateArguments
+	 */
 	public function render( array $templateArguments = [] ): string {
 		if ( isset( $templateArguments['moderationFlags'][MembershipModerationIdentifier::MEMBERSHIP_FEE_TOO_HIGH->name] ) ) {
 			return "[Mitgliedschaftenmoderation] Ein Mitgliedschaftsantrag hat einen ungewöhnlich hohen Betrag";

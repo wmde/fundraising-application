@@ -7,6 +7,10 @@ use WMDE\Fundraising\Frontend\Authentication\DonationUrlAuthenticationLoader;
 use WMDE\Fundraising\PaymentContext\Services\URLAuthenticator;
 
 class DonationUrlAuthenticationLoaderStub implements DonationUrlAuthenticationLoader {
+
+	/**
+	 * @param array<string, scalar> $authorizationParameters
+	 */
 	public function __construct( private readonly array $authorizationParameters = [] ) {
 	}
 
@@ -14,6 +18,12 @@ class DonationUrlAuthenticationLoaderStub implements DonationUrlAuthenticationLo
 		return new UrlAuthenticatorStub();
 	}
 
+	/**
+	 * @param int $donationId
+	 * @param array<string, scalar> $parameters
+	 *
+	 * @return array<string, scalar>
+	 */
 	public function addDonationAuthorizationParameters( int $donationId, array $parameters ): array {
 		return [
 			...$parameters,

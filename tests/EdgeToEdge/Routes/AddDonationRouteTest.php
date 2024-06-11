@@ -71,6 +71,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertStringNotContainsString( 'donation_rejected_limit', $client->getResponse()->getContent() ?: '' );
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function newValidFormInput(): array {
 		return [
 			'amount' => '551',
@@ -210,6 +213,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertMatchesRegularExpression( '/^(XW)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function newValidBankTransferInput(): array {
 		return [
 			'amount' => '1234',
@@ -256,6 +262,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'ING-DiBa', $data['bankname'] );
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function newComplementableFormInput(): array {
 		return [
 			'amount' => '551',
@@ -304,6 +313,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( '', $data['bankname'] );
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function newFrenchDonorFormInput(): array {
 		return [
 			'amount' => '551',
@@ -411,6 +423,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		yield [ 'de_DE', 'P-5PB46799' ];
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function newValidPayPalInput(): array {
 		return [
 			'amount' => '1234',
@@ -464,6 +479,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'https://bankingpin.please', $response->headers->get( 'Location' ) );
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function newValidCreditCardInput(): array {
 		return [
 			'amount' => '1234',
@@ -473,6 +491,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		];
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function newValidSofortInput(): array {
 		return [
 			'amount' => '10000',
@@ -512,6 +533,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		}
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function newInvalidFormInput(): array {
 		return [
 			'amount' => '0',
@@ -646,6 +670,9 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( 'Internal Error: Creating a donation was not successful.', $response->getContent() ?: '' );
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	private function newFormInputAnonymousDonorWithBankTransfer(): array {
 		return [
 			'amount' => '551',

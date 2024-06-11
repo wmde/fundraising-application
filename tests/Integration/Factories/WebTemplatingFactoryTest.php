@@ -27,6 +27,9 @@ class WebTemplatingFactoryTest extends KernelTestCase {
 
 	private const TEMPLATE_DIR = 'templates';
 
+	/**
+	 * @param array<string, mixed> $configOverrides
+	 */
 	private function getFactory( array $configOverrides = [] ): FunFunFactory {
 		static::bootKernel();
 		$bootstrapper = static::getContainer()->get( EnvironmentBootstrapper::class );
