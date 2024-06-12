@@ -34,7 +34,7 @@ class GetInTouchHtmlPresenter {
 			$errors[$constraintViolation->getSource()] = $constraintViolation->getMessageIdentifier();
 		}
 
-		return $this->template->render( array_merge( $formData, [ 'errors' => $errors ], [ 'contact_categories' => $this->categories ] ) );
+		return $this->template->render( array_merge( [ 'submitted_form_data' => $formData ], [ 'errors' => $errors ], [ 'contact_categories' => $this->categories ] ) );
 	}
 
 }
