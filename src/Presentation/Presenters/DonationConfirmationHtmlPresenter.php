@@ -57,11 +57,13 @@ class DonationConfirmationHtmlPresenter {
 	private function getConfirmationPageArguments( Donation $donation, array $paymentData, array $urlEndpoints ): array {
 		$donorDataFormatter = new DonorDataFormatter();
 
+		/** @var int $amount */
+		$amount = $paymentData['amount'];
 		$donationParameters = [
 			'id' => $donation->getId(),
 			// TODO: Adapt the front end to take cents here for currency localisation
-			'amount' => Euro::newFromCents( $paymentData['amount'] )->getEuroFloat(),
-			'amountInCents' => $paymentData['amount'],
+			'amount' => Euro::newFromCents( $amount )->getEuroFloat(),
+			'amountInCents' => $amount,
 			'interval' => $paymentData['interval'],
 			'paymentType' => $paymentData['paymentType'],
 			'receipt' => $donation->getDonor()->wantsReceipt(),

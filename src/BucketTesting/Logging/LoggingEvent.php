@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Logging;
 interface LoggingEvent {
 
 	/**
-	 * @return array<string, int|string>
+	 * @return array<string, int>
 	 */
 	public function getMetaData(): array;
 

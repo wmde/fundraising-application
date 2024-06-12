@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 class ParameterBucketSelection implements BucketSelectionStrategy {
 
 	/**
-	 * @param array<string, scalar> $parameters
+	 * @param array<string, int> $parameters
 	 */
 	public function __construct( private readonly array $parameters ) {
 	}

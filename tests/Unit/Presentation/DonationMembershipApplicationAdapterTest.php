@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
@@ -205,7 +204,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 		$this->assertEquals( [ 'address' => true ], $adapter->getInitialValidationState( $donation, $payment ) );
 	}
 
-	private function givenBankDataGeneratorForBankName( string $bankname ): MockObject|BankDataGenerator {
+	private function givenBankDataGeneratorForBankName( string $bankname ): BankDataGenerator {
 		$bankDataGenerator = $this->createMock( BankDataGenerator::class );
 		$bankDataGenerator->method( 'getBankDataFromIban' )->willReturn(
 			new ExtendedBankData(

@@ -213,6 +213,8 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	private function assertCreditCardDataGotPersisted( DonationRepository $donationRepo, array $request ): void {
 		$donation = $donationRepo->getDonationById( self::DONATION_ID );
 		$this->assertNotNull( $donation );
+
+		/** @var string $encodedBookingData */
 		$encodedBookingData = $this->getFactory()->getConnection()
 			->executeQuery( "SELECT booking_data from payment_credit_card WHERE ID=" . $donation->getPaymentId() )
 			->fetchOne();

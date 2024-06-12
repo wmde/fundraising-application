@@ -93,6 +93,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	private function assertPayPalDataGotPersisted( array $request ): void {
 		$donation = $this->getFactory()->getDonationRepository()->getDonationById( self::DONATION_ID );
 		$this->assertNotNull( $donation );
+
+		/** @var string $encodedBookingData */
 		$encodedBookingData = $this->getFactory()->getConnection()
 			->executeQuery( "SELECT booking_data from payment_paypal WHERE ID=" . $donation->getPaymentId() )
 			->fetchOne();

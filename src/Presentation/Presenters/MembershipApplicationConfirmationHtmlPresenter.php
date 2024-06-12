@@ -71,14 +71,16 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	 * @return array<string, mixed>
 	 */
 	private function getApplicationArguments( MembershipApplication $membershipApplication, array $paymentData ): array {
+		/** @var int $amount */
+		$amount = $paymentData['amount'];
 		return [
 			'id' => $membershipApplication->getId(),
 			'membershipType' => $membershipApplication->getType(),
 			'paymentType' => $paymentData['paymentType'],
 			'status' => 'status-booked',
 			// TODO: Adapt the front end to take cents here for currency localisation
-			'membershipFee' => Euro::newFromCents( $paymentData['amount'] )->getEuroFloat(),
-			'membershipFeeInCents' => $paymentData['amount'],
+			'membershipFee' => Euro::newFromCents( $amount )->getEuroFloat(),
+			'membershipFeeInCents' => $amount,
 			'paymentIntervalInMonths' => $paymentData['interval'],
 			// TODO - this is deprecated, the template should not use the updateToken on its own and instead should use the provided URLs
 			'updateToken' => '',

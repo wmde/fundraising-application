@@ -13,6 +13,10 @@ class RandomTokenGenerator implements TokenGenerator {
 	}
 
 	public function generateToken(): Token {
+		if ( $this->length < 1 ) {
+			throw new \InvalidArgumentException( 'Token length must be a positive integer' );
+		}
+
 		return new Token( random_bytes( $this->length ) );
 	}
 }

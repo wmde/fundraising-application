@@ -61,6 +61,7 @@ class RenderMailTemplatesCommand extends Command {
 			$output
 		);
 
+		/** @var string $outputPath */
 		$outputPath = $input->getOption( 'output-path' ) ?? '';
 		if ( $outputPath && !str_ends_with( $outputPath, '/' ) ) {
 			$outputPath .= '/';
@@ -69,7 +70,9 @@ class RenderMailTemplatesCommand extends Command {
 			mkdir( $outputPath, 0777, true );
 		}
 
-		$this->ffFactory->setLocale( $input->getOption( 'locale' ) );
+		/** @var string $locale */
+		$locale = $input->getOption( 'locale' );
+		$this->ffFactory->setLocale( $locale );
 
 		$twig = $this->ffFactory->getMailerTwig();
 		$twig->enableStrictVariables();

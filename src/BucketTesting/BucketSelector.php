@@ -20,7 +20,7 @@ class BucketSelector {
 	/**
 	 * @param array<string, scalar> $params
 	 *
-	 * @return array<string, scalar>
+	 * @return array<string, int>
 	 */
 	private function sanitizeParameters( array $params ): array {
 		$sanitized = [];

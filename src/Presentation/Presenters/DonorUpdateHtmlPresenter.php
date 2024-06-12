@@ -48,12 +48,15 @@ class DonorUpdateHtmlPresenter {
 	private function getConfirmationPageArguments( Donation $donation, string $updateToken, string $accessToken ): array {
 		$donorDataFormatter = new DonorDataFormatter();
 		$paymentData = $this->getPaymentUseCase->getPaymentDataArray( $donation->getPaymentId() );
+
+		/** @var int $amount */
+		$amount = $paymentData['amount'];
 		return [
 			'donation' => [
 				'id' => $donation->getId(),
 				// TODO: Adapt the front end to take cents here for currency localisation
-				'amount' => Euro::newFromCents( $paymentData['amount'] )->getEuroFloat(),
-				'amountInCents' => $paymentData['amount'],
+				'amount' => Euro::newFromCents( $amount )->getEuroFloat(),
+				'amountInCents' => $amount,
 				'interval' => $paymentData['interval'],
 				'paymentType' => $paymentData['paymentType'],
 				'optsIntoDonationReceipt' => $donation->getOptsIntoDonationReceipt(),
