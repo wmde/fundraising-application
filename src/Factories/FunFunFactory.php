@@ -1880,7 +1880,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	private function getSiteMetaData(): array {
 		$fileFetcher = new SimpleFileFetcher();
 
-		/** @var array{page_titles: array} $metadata */
+		/** @var array{page_titles: array<mixed>} $metadata */
 		$metadata = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/siteMetadata.json' ), true );
 		$metadata['page_titles'] = json_decode( $fileFetcher->fetchFile( $this->getI18nDirectory() . '/messages/pageTitles.json' ), true );
 		return $metadata;

@@ -179,3 +179,8 @@ parameters:
 			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Autocomplete\\\\Domain\\\\DataAccess\\\\DoctrineLocationRepository\\:\\:getCitiesForPostcode\\(\\) should return array\\<string\\> but returns array\\<int, mixed\\>\\.$#"
 			count: 1
 			path: src/Autocomplete/Domain/DataAccess/DoctrineLocationRepository.php
+
+		-
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Factories\\\\FunFunFactory\\:\\:createSharedObject\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Factories/FunFunFactory.php
