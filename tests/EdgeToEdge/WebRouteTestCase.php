@@ -137,6 +137,11 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	 * @return KernelInterface
 	 */
 	protected static function bootKernel( array $options = [] ): KernelInterface {
+		// `bootKernel` initializes all Symfony dependencies. If any of those depends on the FunFunFactory,
+		// overriding the configuration will break because by the time we call `static::getFactory`,
+		// it will already be initialized (with the unmodified configuration).
+		// A stopgap solution is to move those services into `services_prod.yml`.
+		// A better solution would be to make those services independent of FunFunFactory.
 		$kernel = parent::bootKernel( $options );
 
 		self::modifyBootstrapperConfiguration();

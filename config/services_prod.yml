@@ -1,0 +1,5 @@
+services:
+  WMDE\Fundraising\Frontend\Infrastructure\SkinCacheWarmer:
+    class: WMDE\Fundraising\Frontend\Infrastructure\SkinCacheWarmer
+    tags:
+      - { name: kernel.cache_warmer }

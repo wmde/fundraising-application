@@ -97,10 +97,6 @@ services:
         class: WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler
         factory: ['@WMDE\Fundraising\Frontend\Factories\FunFunFactory', 'getBucketLoggingHandler']
 
-    WMDE\Fundraising\Frontend\Infrastructure\SkinCacheWarmer:
-        class: WMDE\Fundraising\Frontend\Infrastructure\SkinCacheWarmer
-        tags:
-            - { name: kernel.cache_warmer }
 
     app.errbit_logger:
         class: Airbrake\MonologHandler
