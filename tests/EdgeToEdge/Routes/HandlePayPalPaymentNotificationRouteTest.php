@@ -98,6 +98,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			->fetchOne();
 		$bookingData = json_decode( $encodedBookingData, true, 512, JSON_THROW_ON_ERROR );
 
+		$this->assertIsArray( $bookingData );
 		$this->assertSame( $request['payer_id'], $bookingData['payer_id'] );
 		$this->assertSame( $request['subscr_id'], $bookingData['subscr_id'] );
 		$this->assertSame( $request['payer_status'], $bookingData['payer_status'] );

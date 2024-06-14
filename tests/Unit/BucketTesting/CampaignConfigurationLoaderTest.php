@@ -73,6 +73,7 @@ CFG;
 
 		$config = $loader->loadCampaignConfiguration( $campaignFile->url(), $overrideFile->url() );
 		$this->assertArrayHasKey( 'campaign1', $config );
+		$this->assertIsArray( $config['campaign1'] );
 		$this->assertFalse( $config['campaign1']['active'], 'Second configuration file should override first one' );
 	}
 
@@ -129,6 +130,7 @@ CFG;
 
 		$cachedCampaigns = $loader->loadCampaignConfiguration( $campaignFile->url() );
 		$this->assertArrayHasKey( 'campaign1', $cachedCampaigns );
+		$this->assertIsArray( $cachedCampaigns['campaign1'] );
 		$this->assertFalse( $cachedCampaigns['campaign1']['active'], 'We should get the value from the cached campaign' );
 	}
 

@@ -101,11 +101,6 @@ parameters:
 			path: src/Factories/FunFunFactory.php
 
 		-
-			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Infrastructure\\\\ConfigReader\\:\\:convertConfigArrayToConfigObject\\(\\) should return stdClass but returns mixed\\.$#"
-			count: 1
-			path: src/Infrastructure/ConfigReader.php
-
-		-
 			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Tests\\\\EdgeToEdge\\\\WebRouteTestCase\\:\\:getJsonFromResponse\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/EdgeToEdge/WebRouteTestCase.php
@@ -156,16 +151,6 @@ parameters:
 			path: src/Infrastructure/ConfigReader.php
 
 		-
-			message: "#^Parameter \\#1 \\$paths of class Twig\\\\Loader\\\\FilesystemLoader constructor expects array\\|string, mixed given\\.$#"
-			count: 1
-			path: src/Factories/TwigFactory.php
-
-		-
-			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Factories\\\\FunFunFactory\\:\\:getSiteMetaData\\(\\) should return array\\<int\\|string, mixed\\> but returns mixed\\.$#"
-			count: 1
-			path: src/Factories/FunFunFactory.php
-
-		-
 			message: "#^Parameter \\#1 \\$config of class WMDE\\\\Fundraising\\\\Frontend\\\\Presentation\\\\ContentPage\\\\PageSelector constructor expects array\\<string, string\\>, mixed given\\.$#"
 			count: 1
 			path: src/Factories/FunFunFactory.php
@@ -187,11 +172,6 @@ parameters:
 
 		-
 			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\CampaignConfigurationLoader\\:\\:loadFiles\\(\\) should return array\\<string\\> but returns array\\<int\\<0, max\\>, mixed\\>\\.$#"
-			count: 1
-			path: src/BucketTesting/CampaignConfigurationLoader.php
-
-		-
-			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\CampaignConfigurationLoader\\:\\:loadCampaignConfiguration\\(\\) should return array\\<string, mixed\\> but returns mixed\\.$#"
 			count: 1
 			path: src/BucketTesting/CampaignConfigurationLoader.php
 
