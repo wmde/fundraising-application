@@ -123,7 +123,9 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		if ( !static::$booted ) {
 			throw new \LogicException( sprintf( 'Currently, the kernel must be booted before calling "%s()". Try calling "createClient" or "bootKernel"', __METHOD__ ) );
 		}
-		return static::getContainer()->get( FunFunFactory::class );
+		/** @var FunFunFactory $factory */
+		$factory = static::getContainer()->get( FunFunFactory::class );
+		return $factory;
 	}
 
 	/**

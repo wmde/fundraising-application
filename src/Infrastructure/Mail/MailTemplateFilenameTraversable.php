@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Infrastructure\Mail;
 
+/**
+ * @implements \IteratorAggregate<int, string>
+ */
 class MailTemplateFilenameTraversable implements \IteratorAggregate {
 
 	public function __construct( private readonly string $mailTemplatePath ) {

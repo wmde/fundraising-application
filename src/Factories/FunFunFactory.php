@@ -1012,7 +1012,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 		$postcodeValidation = [];
 		foreach ( $countries as $country ) {
-			$postcodeValidation[$country->countryCode] = "/{$country->postCodeValidation}/";
+			$postcodeValidation[$country['countryCode']] = "/{$country['postCodeValidation']}/";
 		}
 
 		$addressValidation = [];
@@ -1421,16 +1421,26 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	/**
-	 * @return array<string, mixed>
+	 * @return array<string, string>[]
 	 */
 	public function getCountries(): array {
 		$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/countries.json' );
-		return ( json_decode( $json ) )->countries;
+		$data = json_decode( $json, true );
+
+		if ( !is_array( $data ) || !isset( $data['countries'] ) || !is_array( $data['countries'] ) ) {
+			throw new \RuntimeException( 'Invalid JSON structure' );
+		}
+
+		return $data['countries'];
 	}
 
-	public function getValidationRules(): object {
+	public function getValidationRules(): \stdClass {
 		$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/validation.json' );
-		return json_decode( $json );
+
+		/** @var \stdClass $decodedJson */
+		$decodedJson = json_decode( $json );
+
+		return $decodedJson;
 	}
 
 	public function newBookDonationUseCase( string $updateToken ): BookDonationUseCase {

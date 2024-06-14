@@ -40,6 +40,8 @@ class EnvironmentBootstrapper {
 		if ( !isset( $this->environmentMap[$this->environmentName] ) ) {
 			throw new EnvironmentSetupException( $this->environmentName );
 		}
+
+		/** @var EnvironmentSetup $class */
 		$class = $this->environmentMap[$this->environmentName];
 		return new $class;
 	}

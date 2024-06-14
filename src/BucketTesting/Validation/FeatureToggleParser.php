@@ -9,7 +9,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
 
@@ -25,19 +24,25 @@ class FeatureToggleParser {
 	public static function getFeatureToggleChecks( string $choiceFactoryLocation ): array {
 		$featureToggleChecks = [];
 		foreach ( self::parseMethodCalls( $choiceFactoryLocation ) as $featureToggleCheck ) {
-			if ( count( $featureToggleCheck->args ) !== 1 ) {
+			$args = $featureToggleCheck->getArgs();
+			if ( count( $args ) !== 1 ) {
 				throw new \LogicException( self::FEATURE_TOGGLE_METHOD_NAME . ' should have exactly one argument.' );
 			}
-			/** @var Arg|VariadicPlaceholder $argument */
-			$argument = $featureToggleCheck->args[0]->value;
-			if ( ( $argument instanceof VariadicPlaceholder ) ) {
-				throw new \LogicException( self::FEATURE_TOGGLE_METHOD_NAME . ' should have exactly one argument, not a variadic argument.' );
+
+			$argument = $args[0];
+
+			if ( !$argument instanceof Arg ) {
+				throw new \LogicException( self::FEATURE_TOGGLE_METHOD_NAME . ' argument should be an instance of Arg.' );
+			}
+			$value = $argument->value;
+
+			if ( !( $value instanceof Node\Scalar\String_ ) ) {
+				throw new \LogicException( self::FEATURE_TOGGLE_METHOD_NAME . ' argument should be a string.' );
 			}
 
-			// Currently we know that `$argument->value` is a string and not a `Expr` class.
-			$featureToggleChecks[] = $argument->value;
+			$featureToggleChecks[] = $value->value;
 		}
-		// @phpstan-ignore-next-line
+
 		return $featureToggleChecks;
 	}
 

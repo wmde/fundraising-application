@@ -31,6 +31,9 @@ class DoctrineBucketLogRepositoryTest extends KernelTestCase {
 		$this->entityManager = $factory->getEntityManager();
 	}
 
+	/**
+	 * @return ObjectRepository<BucketLog>
+	 */
 	private function getOrmRepository(): ObjectRepository {
 		return $this->entityManager->getRepository( BucketLog::class );
 	}
@@ -47,6 +50,7 @@ class DoctrineBucketLogRepositoryTest extends KernelTestCase {
 		$bucketLogs = $this->getOrmRepository()->findAll();
 		$bucketLog = $bucketLogs[0];
 		$bucketLogBucket = $bucketLog->getBuckets()[0];
+		$this->assertNotNull( $bucketLogBucket );
 
 		$this->assertCount( 1, $bucketLogs );
 		$this->assertEquals( 99999, $bucketLog->getExternalId() );
