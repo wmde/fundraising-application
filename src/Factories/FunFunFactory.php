@@ -453,6 +453,11 @@ class FunFunFactory implements LoggerAwareInterface {
 		return ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/supporters.json' );
 	}
 
+	private function getLanguageFromLocale(): string {
+		$locale = Locale::getPrimaryLanguage( $this->getLocale() );
+		return $locale ?? 'de';
+	}
+
 	public function getSkinTwig(): Environment {
 		return $this->createSharedObject( Environment::class . '::Skin', function (): Environment {
 			$config = $this->config['twig'];
@@ -465,13 +470,13 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getContentProvider(),
 				$packageFactory->newAssetPackages()
 			);
-			$locale = Locale::parseLocale( $this->getLocale() );
+
 			return $factory->newTemplatingEnvironment(
 				[
 					'basepath' => $this->config['web-basepath'],
 					'assets_path' => $this->config['assets-path'],
 					'application_environment' => $this->getApplicationEnvironment(),
-					'locale' => $locale['language']
+					'locale' => $this->getLanguageFromLocale()
 				]
 			);
 		} );
@@ -489,10 +494,10 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getUrlGenerator(),
 				$this->getGreetingGenerator(),
 			);
-			$locale = Locale::parseLocale( $this->getLocale() );
+
 			return $factory->newTemplatingEnvironment(
 				$this->getDayOfWeekName(),
-				$locale['language']
+				$this->getLanguageFromLocale()
 			);
 		} );
 	}
@@ -1086,17 +1091,17 @@ class FunFunFactory implements LoggerAwareInterface {
 	 */
 	private function getLegacyPayPalUrlConfigForDonations(): LegacyPayPalURLGeneratorConfig {
 		return LegacyPayPalURLGeneratorConfig::newFromConfig(
-			array_merge( $this->config['paypal-donation'], [ 'locale' => $this->getLocale() ] ),
+			array_merge( $this->config['paypal-donation'], [ 'locale' => $this->getLanguageFromLocale() ] ),
 			new TranslatablePaymentItemDescription( 'paypal_item_name_donation', $this->getPaymentProviderItemsTranslator() )
 		);
 	}
 
 	private function getSofortUrlGeneratorConfigForDonations(): SofortURLGeneratorConfig {
 		$config = $this->config['sofort'];
-		$locale = \Locale::parseLocale( $this->getLocale() );
+
 		$translator = $this->getPaymentProviderItemsTranslator();
 		return new SofortURLGeneratorConfig(
-			strtoupper( $locale['language'] ),
+			strtoupper( $this->getLanguageFromLocale() ),
 			$config['return-url'],
 			$config['cancel-url'],
 			$config['notification-url'],
@@ -1116,9 +1121,8 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	private function newCreditCardUrlGeneratorConfig(): CreditCardURLGeneratorConfig {
-		$locale = \Locale::parseLocale( $this->getLocale() );
 		return CreditCardURLGeneratorConfig::newFromConfig(
-			array_merge( $this->config['creditcard'], [ 'locale' => $locale['language'] ] ),
+			array_merge( $this->config['creditcard'], [ 'locale' => $this->getLanguageFromLocale() ] ),
 			new TranslatablePaymentItemDescription( 'credit_card_item_name_donation', $this->getPaymentProviderItemsTranslator() )
 		);
 	}
