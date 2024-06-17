@@ -131,10 +131,7 @@ fix-cs:
 	-docker-compose run --rm --no-deps app ./vendor/bin/phpcbf
 
 stan:
-	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):latest php -d memory_limit=1G vendor/bin/phpstan analyse --level=5 --no-progress cli/ src/ tests/
-
-strict-stan:
-	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):latest php -d memory_limit=1G vendor/bin/phpstan analyse --level=9 --configuration=strict-phpstan.neon -v cli/ src/ tests/
+	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):latest php -d memory_limit=1G vendor/bin/phpstan analyse --level=9 --no-progress cli/ src/ tests/
 
 phpmd:
 	docker-compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml

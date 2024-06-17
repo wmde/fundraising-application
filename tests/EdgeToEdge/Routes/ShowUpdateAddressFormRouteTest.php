@@ -66,7 +66,10 @@ class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 
 		$response = $client->getResponse();
 		$this->assertTrue( $response->isRedirection(), 'Response should be a redirection' );
-		$this->assertStringStartsWith( $expectedRedirectUrl, $response->headers->get( 'Location' ), "Response should redirect to $expectedRedirectUrl" );
+		$this->assertNotEmpty( $expectedRedirectUrl );
+		$location = $response->headers->get( 'Location' );
+		$this->assertNotNull( $location );
+		$this->assertStringStartsWith( $expectedRedirectUrl, $location, "Response should redirect to $expectedRedirectUrl" );
 	}
 
 	public function testWhenIncorrectUpdateAddressTokenIsSupplied_accessToAddressChangeFormIsDenied(): void {
