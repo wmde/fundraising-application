@@ -45,7 +45,7 @@ class ShowUpdateAddressController {
 					'urls' => array_merge(
 						Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() ),
 						[
-							'updateAddress' => $ffFactory->getUrlGenerator()->generateAbsoluteUrl( Routes::UPDATE_ADDRESS, [ 'addressToken' => $addressToken ] )
+							'updateAddress' => $ffFactory->getUrlGenerator()->generateAbsoluteUrl( Routes::UPDATE_ADDRESS_PUT, [ 'identifier' => $addressToken ] )
 						]
 					)
 				]

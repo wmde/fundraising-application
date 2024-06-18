@@ -19,7 +19,7 @@ class Routes {
 	public const POST_COMMENT = 'PostComment';
 	public const SHOW_DONATION_CONFIRMATION = 'show_donation_confirmation';
 	public const SHOW_MEMBERSHIP_CONFIRMATION = 'show_membership_confirmation';
-	public const UPDATE_ADDRESS = 'update-address';
+	public const UPDATE_ADDRESS_PUT = 'api_address_change_put';
 	public const UPDATE_ADDRESS_ALREADY_UPDATED = 'update-address-already-updated';
 	public const UPDATE_DONOR = 'api_update_donor_put';
 	public const VALIDATE_ADDRESS = 'validate-donor-address';
