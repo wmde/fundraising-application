@@ -103,6 +103,20 @@ update-address:
     methods: [POST]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\AddressChange\UpdateAddressController::index'
 
+update-address-success:
+    path: /update-address/success
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\AddressChange\ShowAddressChangeSuccessController::index'
+    defaults:
+        successMessage: 'success'
+
+update-address-already-updated:
+    path: /update-address/success-already-updated
+    methods: [GET]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\AddressChange\ShowAddressChangeSuccessController::index'
+    defaults:
+        successMessage: 'already-updated'
+
 use-of-funds:
     path: /use-of-funds
     methods: [GET]
