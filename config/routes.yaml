@@ -98,11 +98,6 @@ update-address-show-form:
     methods: [GET]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\AddressChange\ShowUpdateAddressController::index'
 
-update-address:
-    path: /update-address
-    methods: [POST]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\AddressChange\UpdateAddressController::index'
-
 update-address-success:
     path: /update-address/success
     methods: [GET]
