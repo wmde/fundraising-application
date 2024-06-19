@@ -40,6 +40,9 @@ class DatabaseBucketLoggerTest extends KernelTestCase {
 		return new DatabaseBucketLogger( new DoctrineBucketLogRepository( $this->entityManager ) );
 	}
 
+	/**
+	 * @return ObjectRepository<BucketLog>
+	 */
 	private function getOrmRepository(): ObjectRepository {
 		return $this->entityManager->getRepository( BucketLog::class );
 	}

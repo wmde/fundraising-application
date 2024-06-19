@@ -19,6 +19,7 @@ class PaypalAPIConfigValidation extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
+		/** @var string $configPath */
 		$configPath = $input->getArgument( 'config' );
 		if ( !is_readable( $configPath ) ) {
 			$output->writeln( "<error>File '$configPath' not found or not readable.</error>" );

@@ -8,7 +8,7 @@ interface TranslatorInterface {
 
 	/**
 	 * @param string $messageKey
-	 * @param array<string, scalar> $parameters
+	 * @param array<string, scalar|null> $parameters
 	 */
 	public function trans( string $messageKey, array $parameters = [] ): string;
 

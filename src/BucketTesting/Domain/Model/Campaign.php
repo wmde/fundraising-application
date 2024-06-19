@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\BucketTesting\Domain\Model;
 
+use OutOfBoundsException;
+
 /**
  * Value object for defining campaigns
  */
@@ -66,10 +68,10 @@ class Campaign {
 		return $this->getBuckets()[$index] ?? null;
 	}
 
-	public function getIndexByBucket( Bucket $bucket ): int {
+	public function getIndexByBucket( Bucket $bucket ): int|string {
 		$index = array_search( $bucket, $this->getBuckets(), true );
 		if ( $index === false ) {
-			throw new \OutOfBoundsException();
+			throw new OutOfBoundsException( 'Bucket not found in campaign.' );
 		}
 		return $index;
 	}

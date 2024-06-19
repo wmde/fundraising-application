@@ -34,7 +34,7 @@ class AccessTokenUrlAuthenticator implements URLAuthenticator {
 				'custom' => json_encode( [
 					'sid' => $this->token->id,
 					'utoken' => $this->token->getUpdateToken()
-				] )
+				], JSON_THROW_ON_ERROR )
 			],
 			CreditCardURLGenerator::class => [
 				'utoken' => $this->token->getUpdateToken(),

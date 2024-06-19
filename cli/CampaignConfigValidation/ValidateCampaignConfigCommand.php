@@ -41,6 +41,7 @@ class ValidateCampaignConfigCommand extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
+		/** @var string $environment */
 		$environment = $input->getArgument( 'environment' );
 		$errorLogger = new CampaignErrorCollection();
 		$bootstrapper = new EnvironmentBootstrapper( $environment );

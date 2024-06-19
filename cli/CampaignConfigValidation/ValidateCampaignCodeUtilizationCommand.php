@@ -46,8 +46,11 @@ class ValidateCampaignCodeUtilizationCommand extends Command {
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
 		$errorLogger = new CampaignErrorCollection();
+
+		/** @var string $environment */
+		$environment = $input->getArgument( 'environment' );
 		$validator = new CampaignUtilizationValidator(
-			$this->getCampaigns( $input->getArgument( 'environment' ) ),
+			$this->getCampaigns( $environment ),
 			[ 'campaigns.skins.test' ],
 			FeatureToggleParser::getFeatureToggleChecks( self::CHOICE_FACTORY_LOCATION ),
 			$errorLogger

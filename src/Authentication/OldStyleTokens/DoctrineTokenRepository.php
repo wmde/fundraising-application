@@ -17,6 +17,8 @@ class DoctrineTokenRepository implements TokenRepository {
 
 	public function getTokenById( int $id, AuthenticationBoundedContext $authenticationDomain ): AuthenticationToken {
 		$conn = $this->entityManager->getConnection();
+
+		/** @var array<string, int|string>[] $result */
 		$result = $conn->executeQuery( 'SELECT * FROM legacy_auth_tokens WHERE id=:id AND authentication_context=:context LIMIT 1', [
 			'id' => $id,
 			'context' => $authenticationDomain->value
@@ -29,9 +31,9 @@ class DoctrineTokenRepository implements TokenRepository {
 		return new AuthenticationToken(
 			(int)$result[0]['id'],
 			AuthenticationBoundedContext::from( $result[0]['authentication_context'] ),
-			$result[0]['access_token'],
-			$result[0]['update_token'],
-			$result[0]['update_token_expiry'] ? new \DateTimeImmutable( $result[0]['update_token_expiry'] ) : null
+			(string)$result[0]['access_token'],
+			(string)$result[0]['update_token'],
+			$result[0]['update_token_expiry'] ? new \DateTimeImmutable( (string)$result[0]['update_token_expiry'] ) : null
 		);
 	}
 }

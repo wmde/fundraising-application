@@ -38,7 +38,7 @@ class CampaignCollection implements IteratorAggregate {
 	}
 
 	/**
-	 * @return ArrayIterator<Campaign>
+	 * @return ArrayIterator<int, Campaign>
 	 */
 	public function getIterator(): ArrayIterator {
 		return new ArrayIterator( $this->campaigns );
