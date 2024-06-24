@@ -4,16 +4,16 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\AddCommentController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\AddCommentController
- */
+#[CoversClass( AddCommentController::class )]
 class AddCommentPostRouteTest extends WebRouteTestCase {
 
 	private const CORRECT_UPDATE_TOKEN = 'b5b249c8beefb986faf8d186a3f16e86ef509ab2';

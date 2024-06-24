@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\BankDataToIbanController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\BankDataToIbanController
- */
+#[CoversClass( BankDataToIbanController::class )]
 class BankDataToIbanControllerTest extends WebRouteTestCase {
 
 	private const PATH = '/generate-iban';

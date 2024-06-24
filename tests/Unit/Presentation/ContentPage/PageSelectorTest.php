@@ -4,13 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation\ContentPage;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageNotFoundException;
 use WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\ContentPage\PageSelector
- */
+#[CoversClass( PageSelector::class )]
 class PageSelectorTest extends TestCase {
 	private PageSelector $pageSelector;
 
@@ -39,9 +39,7 @@ class PageSelectorTest extends TestCase {
 		$this->assertSame( 'german', $this->pageSelector->getPageId( 'überraschung' ) );
 	}
 
-	/**
-	 * @dataProvider slugsProducingException
-	 */
+	#[DataProvider( 'slugsProducingException' )]
 	public function testASlugDoesNotExist_anExceptionIsThrown( string $slug ): void {
 		$this->expectException( PageNotFoundException::class );
 		$this->pageSelector->getPageId( $slug );

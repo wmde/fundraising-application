@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Validation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\NullDomainNameValidator;
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
@@ -11,10 +13,8 @@ use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\ValidationResult;
 use WMDE\FunValidators\Validators\EmailValidator;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Validation\GetInTouchValidator
- */
-class GetInTouchValidatorTest extends \PHPUnit\Framework\TestCase {
+#[CoversClass( GetInTouchValidator::class )]
+class GetInTouchValidatorTest extends TestCase {
 
 	public function testNameFieldsAreOptional(): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );

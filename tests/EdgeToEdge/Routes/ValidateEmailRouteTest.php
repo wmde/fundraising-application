@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidationController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidationController
- */
+#[CoversClass( ValidationController::class )]
 class ValidateEmailRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidEmail_successResponseIsReturned(): void {

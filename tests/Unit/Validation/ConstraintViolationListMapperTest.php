@@ -4,14 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Validation\ConstraintViolationListMapper
- */
+#[CoversClass( ConstraintViolationListMapper::class )]
 class ConstraintViolationListMapperTest extends TestCase {
 
 	public function testMultipleViolations_canByConvertedToArray(): void {

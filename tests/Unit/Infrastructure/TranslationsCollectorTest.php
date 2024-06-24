@@ -5,12 +5,12 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use FileFetcher\InMemoryFileFetcher;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\TranslationsCollector
- */
+#[CoversClass( TranslationsCollector::class )]
 class TranslationsCollectorTest extends TestCase {
 
 	public function testGivenOneFileItReturnsTheContents(): void {
@@ -46,9 +46,7 @@ class TranslationsCollectorTest extends TestCase {
 		$this->assertEquals( [], $actual );
 	}
 
-	/**
-	 * @dataProvider invalidJSONProvider
-	 */
+	#[DataProvider( 'invalidJSONProvider' )]
 	public function testGivenWrongJSONFormatThrowsException( string $testJSONs ): void {
 		$testFile = [ 'test.json' => $testJSONs ];
 

@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
@@ -16,10 +18,8 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\StartAndEndTimeRule;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\Rule\UniqueBucketRule;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignValidator
- */
-class CampaignValidatorTest extends \PHPUnit\Framework\TestCase {
+#[CoversClass( CampaignValidator::class )]
+class CampaignValidatorTest extends TestCase {
 
 	public function testWhenValidCampaignIsSupplied_validationPasses(): void {
 		$errorLogger = new CampaignErrorCollection();

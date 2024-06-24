@@ -4,14 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Factories\EnvironmentSetup;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup
- */
+#[CoversClass( DevelopmentEnvironmentSetup::class )]
 class DevelopmentEnvironmentSetupTest extends TestCase {
 	public function testEnvironmentSetsUpEnvironmentDependentServices(): void {
 		$expectedSetters = [

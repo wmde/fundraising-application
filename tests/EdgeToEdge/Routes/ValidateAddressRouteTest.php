@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateAddressController;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateAddressController
- */
+#[CoversClass( ValidateAddressController::class )]
 class ValidateAddressRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidAddress_validationReturnsSuccess(): void {

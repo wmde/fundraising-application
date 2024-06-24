@@ -3,13 +3,12 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation\Presenters;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\BankDataPresenter;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidPayments;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\BankDataPresenter
- */
+#[CoversClass( BankDataPresenter::class )]
 class BankDataPresenterTest extends TestCase {
 	public function testItReturnsOnlyModernBankData(): void {
 		$expectedBankData = [

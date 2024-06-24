@@ -4,14 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailSubjectRenderer
- */
+#[CoversClass( DonationConfirmationMailSubjectRenderer::class )]
 class DonationConfirmationMailSubjectRendererTest extends TestCase {
 
 	public function testGivenPaypalPayment_defaultSubjectLineIsPrinted(): void {

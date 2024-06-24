@@ -3,14 +3,13 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 use WMDE\Fundraising\Frontend\Presentation\CampaignPropertyExtractor;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\CampaignPropertyExtractor
- */
+#[CoversClass( CampaignPropertyExtractor::class )]
 class CampaignPropertyExtractorTest extends TestCase {
 	public function testListURLKeysWithNoCampaigns(): void {
 		$this->assertSame( [], CampaignPropertyExtractor::listURLKeys() );

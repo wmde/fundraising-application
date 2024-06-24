@@ -6,6 +6,8 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -14,17 +16,13 @@ use Symfony\Component\Cache\Psr16Cache;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalAdapterConfigLoader;
 use WMDE\Fundraising\PaymentContext\Services\PayPal\PayPalPaymentProviderAdapterConfigReader;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\PayPalAdapterConfigLoader
- */
+#[CoversClass( PayPalAdapterConfigLoader::class )]
 class PayPalAdapterConfigLoaderTest extends TestCase {
 	private const TEST_CONFIG_FILE = __DIR__ . '/../../Data/files/paypal_api.yml';
 	private const CACHE_KEY = "3a0212de40bd87d9c89b2e515af46836";
 	private vfsStreamDirectory $filesystem;
 
-	/**
-	 * @before
-	 */
+	#[Before]
 	public function filesystemSetUp(): void {
 		$this->filesystem = vfsStream::setup();
 	}

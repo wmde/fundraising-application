@@ -4,14 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeMembershipEvent;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\EventHandling\MembershipEventEmitter
- */
+#[CoversClass( MembershipEventEmitter::class )]
 class MembershipEventEmitterTest extends TestCase {
 
 	public function testEmitterDispatchesEvent(): void {

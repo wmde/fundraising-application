@@ -6,10 +6,15 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\MembershipApplicationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedPaymentDelayCalculator;
@@ -19,11 +24,9 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentDelayCalculator;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController
- *
- * @requires extension konto_check
- */
+#[CoversClass( ApplyForMembershipController::class )]
+#[CoversClass( ShowMembershipApplicationFormController::class )]
+#[CoversClass( MembershipApplicationFormPresenter::class )]
 class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;
@@ -35,10 +38,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 	private const APPLY_FOR_MEMBERSHIP_ROUTE = 'apply-for-membership';
 
-	/**
-	 * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController
-	 * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter
-	 */
 	public function testGivenGetRequestMembership_formIsShown(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
@@ -50,10 +49,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertTrue( $applicationVars->showMembershipTypeOption, 'By default, membership option should be shown' );
 	}
 
-	/**
-	 * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController
-	 * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter
-	 */
 	public function testGivenGetRequestSustainingMembership_formIsShown(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
@@ -65,10 +60,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$this->assertFalse( $applicationVars->showMembershipTypeOption, 'The "sustaining" parameters should hide the membership type option' );
 	}
 
-	/**
-	 * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController
-	 * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter
-	 */
 	public function testGivenGetRequestWithImpressionCounts_responseContainsImpressionCounts(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
@@ -86,10 +77,6 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		);
 	}
 
-	/**
-	 * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController
-	 * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter
-	 */
 	public function testGivenRequestWithDonationIdAndCorrespondingAccessCode_successResponseWithInitialFormValuesIsReturned(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
@@ -513,7 +500,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$em->flush();
 	}
 
-	private function assertResponseShowsForm( \Symfony\Component\DomCrawler\Crawler $crawler ): void {
+	private function assertResponseShowsForm( Crawler $crawler ): void {
 		$this->assertCount(
 			1,
 			$crawler->filter( 'script[src="/skins/laika/js/membership_application.js"]' ),

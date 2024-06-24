@@ -5,16 +5,16 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Autocomplete\DataAccess;
 
 use Doctrine\ORM\EntityManager;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\Autocomplete\Domain\DataAccess\DoctrineLocationRepository;
+use WMDE\Fundraising\Frontend\Autocomplete\Domain\Model\Location;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidLocation;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Autocomplete\Domain\DataAccess\DoctrineLocationRepository
- * @covers \WMDE\Fundraising\Frontend\Autocomplete\Domain\Model\Location
- */
+#[CoversClass( DoctrineLocationRepository::class )]
+#[CoversClass( Location::class )]
 class DoctrineLocationRepositoryTest extends KernelTestCase {
 
 	use RebuildDatabaseSchemaTrait;

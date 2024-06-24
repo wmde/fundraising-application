@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -14,9 +15,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\LoggingError;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\BestEffortBucketLogger
- */
+#[CoversClass( BestEffortBucketLogger::class )]
 class BestEffortBucketLoggerTest extends TestCase {
 
 	public function testGivenASuccessFulLogger_itWillPassOnEvents(): void {

@@ -4,13 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ListCommentsController;
 use WMDE\Fundraising\Frontend\Tests\Data\CommentsForTesting;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\ListCommentsController
- */
+#[CoversClass( ListCommentsController::class )]
 class ListCommentsJsonRouteTest extends WebRouteTestCase {
 
 	public function setUp(): void {

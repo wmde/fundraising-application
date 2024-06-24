@@ -4,13 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\EventHandlers\StoreBucketSelection;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\StoreBucketSelection
- */
+#[CoversClass( StoreBucketSelection::class )]
 class CampaignCookieTest extends WebRouteTestCase {
 
 	private const TEST_CAMPAIGN_CONFIG = [

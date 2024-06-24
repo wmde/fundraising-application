@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
@@ -12,9 +13,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationUrlAuthenticationLoaderStub;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter
- */
+#[CoversClass( DonationConfirmationHtmlPresenter::class )]
 class DonationConfirmationHtmlPresenterTest extends TestCase {
 
 	private const UPDATE_TOKEN = 'update_token';

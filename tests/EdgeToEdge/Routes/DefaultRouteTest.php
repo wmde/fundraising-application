@@ -3,11 +3,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController
- */
+#[CoversClass( NewDonationController::class )]
 class DefaultRouteTest extends WebRouteTestCase {
 
 	public function testItRendersTheDonationForm(): void {

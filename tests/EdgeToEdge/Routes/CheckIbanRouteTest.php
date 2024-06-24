@@ -4,14 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter
- *
- * @requires extension konto_check
- */
+#[CoversClass( IbanPresenter::class )]
 class CheckIbanRouteTest extends WebRouteTestCase {
 
 	private const PATH = '/check-iban';

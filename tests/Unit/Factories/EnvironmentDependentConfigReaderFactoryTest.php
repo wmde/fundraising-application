@@ -3,12 +3,11 @@
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Factories;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Factories\EnvironmentDependentConfigReaderFactory
- */
+#[CoversClass( EnvironmentDependentConfigReaderFactory::class )]
 class EnvironmentDependentConfigReaderFactoryTest extends TestCase {
 	private const CONFIGDIR = 'config';
 

@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Authentication\OldStyleTokens;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Clock\Clock;
 use WMDE\Clock\StubClock;
@@ -12,9 +13,7 @@ use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthorizationChecker
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\TokenRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryTokenRepository;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthorizationChecker
- */
+#[CoversClass( AuthorizationChecker::class )]
 class AuthorizationCheckerTest extends TestCase {
 	private const ACCESS_TOKEN = '123-access-token';
 	private const UPDATE_TOKEN = '456-update-token';

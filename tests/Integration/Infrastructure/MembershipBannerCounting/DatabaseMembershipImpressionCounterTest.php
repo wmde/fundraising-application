@@ -4,17 +4,15 @@ declare( strict_types=1 );
 namespace Integration\Infrastructure\MembershipBannerCounting;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\MembershipBannerCounting\DatabaseMembershipImpressionCounter;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\MembershipBannerCounting\DatabaseMembershipImpressionCounter
- */
+#[CoversClass( DatabaseMembershipImpressionCounter::class )]
 class DatabaseMembershipImpressionCounterTest extends KernelTestCase {
-	/**
-	 * @doesNotPerformAssertions This is a canary test to check if the feature is still in use
-	 */
+	#[DoesNotPerformAssertions]
 	public function testCanaryCheckForClassRemoval(): void {
 		if ( strtotime( '2024-07-01' ) < time() ) {
 			$this->fail( 'The Membership Impression Count feature was only for the 2023 thank you campaign and should be removed' );

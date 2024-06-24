@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ListCommentsController;
 use WMDE\Fundraising\Frontend\Tests\Data\CommentsForTesting;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\ListCommentsController
- */
+#[CoversClass( ListCommentsController::class )]
 class ListCommentsHtmlRouteTest extends WebRouteTestCase {
 
 	public function testWhenThereAreNoComments_rssFeedIsEmpty(): void {

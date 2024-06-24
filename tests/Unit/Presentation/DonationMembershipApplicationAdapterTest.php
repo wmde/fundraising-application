@@ -4,11 +4,18 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donor;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\Address\PostalAddress;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\AnonymousDonor;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\CompanyDonor;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\Name\CompanyName;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\Name\PersonName;
+use WMDE\Fundraising\DonationContext\Domain\Model\Donor\PersonDonor;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
@@ -21,9 +28,7 @@ use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentReferenceCode;
 use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter
- */
+#[CoversClass( DonationMembershipApplicationAdapter::class )]
 class DonationMembershipApplicationAdapterTest extends TestCase {
 
 	private const IBAN = 'DE49123455679923567800';
@@ -141,23 +146,23 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 
 	private function givenPrivateDonor( string $salutation, string $title, string $firstName, string $lastName,
 		string $street, string $postCode, string $city, string $countryCode, string $email
-	): Donor\PersonDonor {
-		return new Donor\PersonDonor(
-			new Donor\Name\PersonName( $firstName, $lastName, $salutation, $title ),
-			new Donor\Address\PostalAddress( $street, $postCode, $city, $countryCode ),
+	): PersonDonor {
+		return new PersonDonor(
+			new PersonName( $firstName, $lastName, $salutation, $title ),
+			new PostalAddress( $street, $postCode, $city, $countryCode ),
 		$email );
 	}
 
-	private function getCompanyDonor( string $companyname, string $street, string $postCode, string $city, string $countryCode, string $email ): Donor\CompanyDonor {
-		return new Donor\CompanyDonor(
-			new Donor\Name\CompanyName( $companyname ),
-			new Donor\Address\PostalAddress( $street, $postCode, $city, $countryCode ),
+	private function getCompanyDonor( string $companyname, string $street, string $postCode, string $city, string $countryCode, string $email ): CompanyDonor {
+		return new CompanyDonor(
+			new CompanyName( $companyname ),
+			new PostalAddress( $street, $postCode, $city, $countryCode ),
 			$email );
 	}
 
 	public function testDefaultValidationStateIsEmpty(): void {
 		$payment = $this->givenBankTransferPayment();
-		$donation = $this->givenDonation( new Donor\AnonymousDonor() );
+		$donation = $this->givenDonation( new AnonymousDonor() );
 		$adapter = $this->givenAdapter();
 
 		$this->assertEquals( [], $adapter->getInitialValidationState( $donation, $payment ) );

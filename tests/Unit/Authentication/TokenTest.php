@@ -3,12 +3,11 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Authentication;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Authentication\Token;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Authentication\Token
- */
+#[CoversClass( Token::class )]
 class TokenTest extends TestCase {
 	public function testStringRepresentationIsHexadecimal(): void {
 		$token = new Token( random_bytes( 16 ) );

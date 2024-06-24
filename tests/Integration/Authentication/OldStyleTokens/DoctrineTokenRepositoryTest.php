@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Authentication\OldStyleTokens;
 
 use Doctrine\ORM\EntityManager;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
@@ -12,9 +13,7 @@ use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\NullToken;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\SchemaCreator;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\DoctrineTokenRepository
- */
+#[CoversClass( DoctrineTokenRepository::class )]
 class DoctrineTokenRepositoryTest extends KernelTestCase {
 	private EntityManager $entityManager;
 	private SchemaCreator $schemaCreator;

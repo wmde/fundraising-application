@@ -4,15 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\ValidationResponse;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\ConfirmSubscriptionHtmlPresenter
- */
+#[CoversClass( ConfirmSubscriptionHtmlPresenter::class )]
 class ConfirmSubscriptionHtmlPresenterTest extends TestCase {
 
 	public function testGivenSuccessResponse_templateIsRenderedWithoutMessages(): void {

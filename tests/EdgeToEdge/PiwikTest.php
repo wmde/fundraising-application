@@ -4,11 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+
 /**
  * Check if basic tracking parameters are rendered inside the HTML
- *
- * @coversNothing
  */
+#[CoversNothing]
 class PiwikTest extends WebRouteTestCase {
 
 	public function testPiwikScriptGetsEmbedded(): void {

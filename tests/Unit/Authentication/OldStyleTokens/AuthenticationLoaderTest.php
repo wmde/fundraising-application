@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Authentication\OldStyleTokens;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationLoader;
@@ -11,9 +12,7 @@ use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\NullToken;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\TokenRepository;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryTokenRepository;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationLoader
- */
+#[CoversClass( AuthenticationLoader::class )]
 class AuthenticationLoaderTest extends TestCase {
 	private const DONATION_ID = 3;
 	private const MEMBERSHIP_ID = 6;

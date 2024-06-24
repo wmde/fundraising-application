@@ -4,10 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests
- * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\HandleExceptions
- */
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
+use WMDE\Fundraising\Frontend\App\EventHandlers\HandleExceptions;
+
+#[CoversClass( AddIndicatorAttributeForJsonRequests::class )]
+#[CoversClass( HandleExceptions::class )]
 class RouteNotFoundTest extends WebRouteTestCase {
 
 	public function testGivenUnknownRoute_404isReturned(): void {

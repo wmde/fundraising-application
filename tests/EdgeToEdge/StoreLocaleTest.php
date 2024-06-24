@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\Cookie as BrowserKitCookie;
 use WMDE\Fundraising\Frontend\App\CookieNames;
+use WMDE\Fundraising\Frontend\App\EventHandlers\StoreLocale;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\StoreLocale
- */
+#[CoversClass( StoreLocale::class )]
 class StoreLocaleTest extends WebRouteTestCase {
 
 	public function testWhenGivenSupportedCookieLocale_setsLocale(): void {

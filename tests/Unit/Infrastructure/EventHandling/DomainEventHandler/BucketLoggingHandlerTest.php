@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling\DomainEventHandler;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Domain\Event\DonationCreatedEvent;
@@ -24,9 +25,7 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\MembershipContext\Domain\Model\PhoneNumber;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\BucketLoggingHandler
- */
+#[CoversClass( BucketLoggingHandler::class )]
 class BucketLoggingHandlerTest extends TestCase {
 
 	private const DONATION_ID = 23;

@@ -4,6 +4,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\DataAccess\DoctrineBucketLogRepository;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
@@ -17,9 +18,7 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\DatabaseBucketLogger
- */
+#[CoversClass( DatabaseBucketLogger::class )]
 class DatabaseBucketLoggerTest extends KernelTestCase {
 
 	use RebuildDatabaseSchemaTrait;

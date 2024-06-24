@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\APIRoutes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation as DoctrineDonation;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDoctrineDonation;
+use WMDE\Fundraising\Frontend\App\Controllers\API\Donation\UpdateDonorController;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -20,9 +22,7 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\Frontend\Tests\RebuildDatabaseSchemaTrait;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\API\Donation\UpdateDonorController
- */
+#[CoversClass( UpdateDonorController::class )]
 class UpdateDonorControllerTest extends WebRouteTestCase {
 
 	use RebuildDatabaseSchemaTrait;

@@ -6,14 +6,13 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WMDE\Fundraising\Frontend\App\EventHandlers\PayPalRequestLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\PayPalRequestLogger
- */
+#[CoversClass( PayPalRequestLogger::class )]
 class PayPalRequestLoggerTest extends WebRouteTestCase {
 
 	private array $paypalRoutes = [

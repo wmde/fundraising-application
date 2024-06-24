@@ -4,19 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
 use WMDE\Fundraising\Frontend\Presentation\Salutations;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator
- */
+#[CoversClass( GreetingGenerator::class )]
 class GreetingGeneratorTest extends TestCase {
 
-	/**
-	 * @dataProvider formalGreetingProvider
-	 */
+	#[DataProvider( 'formalGreetingProvider' )]
 	public function testSpecificFormalGreetingIsGenerated( string $salutation, string $expected ): void {
 		$this->assertSame(
 			$expected,
@@ -38,9 +36,7 @@ class GreetingGeneratorTest extends TestCase {
 		);
 	}
 
-	/**
-	 * @dataProvider informalGreetingProvider
-	 */
+	#[DataProvider( 'informalGreetingProvider' )]
 	public function testSpecificInformalGreetingIsGenerated( string $salutation, string $expected ): void {
 		$this->assertSame(
 			$expected,
@@ -62,9 +58,7 @@ class GreetingGeneratorTest extends TestCase {
 		);
 	}
 
-	/**
-	 * @dataProvider informalLastnameGreetingProvider
-	 */
+	#[DataProvider( 'informalLastnameGreetingProvider' )]
 	public function testSpecificInformalLastNameGreetingIsGenerated( string $salutation, string $expected ): void {
 		$this->assertSame(
 			$expected,

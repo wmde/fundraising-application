@@ -4,14 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\MembershipConfirmationMailSubjectRenderer
- */
+#[CoversClass( MembershipConfirmationMailSubjectRenderer::class )]
 class MembershipConfirmationMailSubjectRendererTest extends TestCase {
 
 	public function testGivenActiveMembership_activeSubjectLineIsPrinted(): void {

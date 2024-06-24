@@ -5,18 +5,18 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\APIRoutes;
 
 use Doctrine\ORM\EntityManager;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressType;
+use WMDE\Fundraising\Frontend\App\Controllers\API\Donation\AddressChangeController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\API\Donation\AddressChangeController
- */
+#[CoversClass( AddressChangeController::class )]
 class AddressChangeControllerTest extends WebRouteTestCase {
 
 	private const DUMMY_DONATION_ID = 0;

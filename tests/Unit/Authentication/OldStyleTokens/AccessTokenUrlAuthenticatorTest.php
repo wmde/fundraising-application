@@ -3,6 +3,8 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Authentication\OldStyleTokens;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AccessTokenUrlAuthenticator;
@@ -12,9 +14,7 @@ use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\CreditCardURLGe
 use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\LegacyPayPalURLGenerator;
 use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\SofortURLGenerator;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AccessTokenUrlAuthenticator
- */
+#[CoversClass( AccessTokenUrlAuthenticator::class )]
 class AccessTokenUrlAuthenticatorTest extends TestCase {
 	public function testAddAuthenticationTokensToUrlWithoutParameters(): void {
 		$token = $this->makeToken();
@@ -95,8 +95,9 @@ class AccessTokenUrlAuthenticatorTest extends TestCase {
 	}
 
 	/**
-	 * @doesNotPerformAssertions (We're testing that no exception is thrown)
+	 * We're testing that no exception is thrown
 	 */
+	#[DoesNotPerformAssertions]
 	public function testGetAuthenticationTokenForPaymentProviderUrlWillPassWhenUrlGeneratorCreatesMoreParametersThanExpected(): void {
 		$token = $this->makeToken();
 		$authenticator = new AccessTokenUrlAuthenticator( $token );

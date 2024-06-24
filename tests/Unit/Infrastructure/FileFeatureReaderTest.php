@@ -5,15 +5,15 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
 use FileFetcher\InMemoryFileFetcher;
 use FileFetcher\ThrowingFileFetcher;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use WMDE\Fundraising\Frontend\FeatureToggle\Feature;
 use WMDE\Fundraising\Frontend\Infrastructure\FileFeatureReader;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\FileFeatureReader
- */
+#[CoversClass( FileFeatureReader::class )]
 class FileFeatureReaderTest extends TestCase {
 	public function testGivenErrorReadingFile_willReturnEmptyList(): void {
 		$logger = new LoggerSpy();
@@ -57,9 +57,7 @@ class FileFeatureReaderTest extends TestCase {
 		$logger->assertNoLoggingCallsWhereMade();
 	}
 
-	/**
-	 * @dataProvider invalidJsonProvider
-	 */
+	#[DataProvider( 'invalidJsonProvider' )]
 	public function testGivenInvalidJson_willReturnEmptyList( string $fileContents ): void {
 		$logger = new LoggerSpy();
 		$reader = new FileFeatureReader( new InMemoryFileFetcher( [ 'some_file.json' => $fileContents ] ), 'some_file.json', $logger );

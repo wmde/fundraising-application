@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationNotifier\TemplateArgumentsDonation;
@@ -10,9 +11,7 @@ use WMDE\Fundraising\DonationContext\Infrastructure\DonationNotifier\TemplateArg
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailerAdapter;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\DonationConfirmationMailerAdapter
- */
+#[CoversClass( DonationConfirmationMailerAdapter::class )]
 class DonationConfirmationMailerAdapterTest extends TestCase {
 	public function testAdapterConvertsObjectPropertiesToArray(): void {
 		$donation = new TemplateArgumentsDonation(

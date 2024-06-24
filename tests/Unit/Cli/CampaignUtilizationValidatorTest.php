@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
@@ -12,9 +13,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValidator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignUtilizationValidator
- */
+#[CoversClass( CampaignUtilizationValidator::class )]
 class CampaignUtilizationValidatorTest extends TestCase {
 
 	public function testWhenCampaignConfigurationMatchesChoiceFactory_validationPasses(): void {

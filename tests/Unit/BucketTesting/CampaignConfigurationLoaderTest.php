@@ -8,6 +8,8 @@ use FileFetcher\SimpleFileFetcher;
 use FileFetcher\ThrowingFileFetcher;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\NullAdapter;
@@ -16,9 +18,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Yaml\Exception\ParseException;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignConfigurationLoader
- */
+#[CoversClass( CampaignConfigurationLoader::class )]
 class CampaignConfigurationLoaderTest extends TestCase {
 
 	private const VALID_CONFIGURATION = <<<CFG
@@ -46,9 +46,7 @@ CFG;
 
 	private vfsStreamDirectory $filesystem;
 
-	/**
-	 * @before
-	 */
+	#[Before]
 	public function filesystemSetUp(): void {
 		$this->filesystem = vfsStream::setup();
 	}

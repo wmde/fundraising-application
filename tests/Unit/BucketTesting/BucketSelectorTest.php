@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignCollection;
@@ -13,9 +15,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\RandomBucketSelection;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketSelectionSpy;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\BucketSelector
- */
+#[CoversClass( BucketSelector::class )]
 class BucketSelectorTest extends TestCase {
 
 	private Bucket $defaultBucket;
@@ -150,11 +150,11 @@ class BucketSelectorTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider invalidParametersProvider
 	 *
 	 * @param string $description
 	 * @param array<string, int|string> $url
 	 */
+	#[DataProvider( 'invalidParametersProvider' )]
 	public function testGivenInvalidParams_bucketIsSelectedWithFallbackSelectionStrategy( string $description, array $url ): void {
 		$bucketSelector = new BucketSelector( $this->campaignCollection, $this->bucketSelectionStrategy );
 

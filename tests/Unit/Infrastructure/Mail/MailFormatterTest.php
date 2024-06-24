@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\MailFormatter
- */
-class MailFormatterTest extends \PHPUnit\Framework\TestCase {
+#[CoversClass( MailFormatter::class )]
+class MailFormatterTest extends TestCase {
 
 	public function testGivenLineWithLeadingSpaces_spacesAreTrimmed(): void {
 		$this->assertSame(

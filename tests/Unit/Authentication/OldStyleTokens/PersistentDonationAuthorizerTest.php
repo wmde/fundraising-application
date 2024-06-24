@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Authentication\OldStyleTokens;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -14,9 +15,7 @@ use WMDE\Fundraising\Frontend\Authentication\TokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FixedTokenGenerator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryTokenRepository;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\PersistentAuthorizer
- */
+#[CoversClass( PersistentAuthorizer::class )]
 class PersistentDonationAuthorizerTest extends TestCase {
 	private const DONATION_ID = 7;
 	private const MEMBERSHIP_ID = 9;

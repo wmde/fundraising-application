@@ -4,14 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationAcceptedController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationAcceptedController
- */
+#[CoversClass( DonationAcceptedController::class )]
 class DonationAcceptedRouteTest extends WebRouteTestCase {
 
 	private const WRONG_UPDATE_TOKEN = 'Wrong update token';

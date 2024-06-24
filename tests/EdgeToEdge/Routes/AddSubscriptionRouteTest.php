@@ -4,15 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Subscription\AddSubscriptionController;
 use WMDE\Fundraising\Frontend\App\CookieNames;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Tests\Fixtures\SubscriptionRepositorySpy;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Subscription\AddSubscriptionController
- * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter
- * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionHtmlPresenter
- */
+#[CoversClass( AddSubscriptionController::class )]
+#[CoversClass( AddSubscriptionJsonPresenter::class )]
+#[CoversClass( AddSubscriptionHtmlPresenter::class )]
 class AddSubscriptionRouteTest extends WebRouteTestCase {
 
 	/**

@@ -4,12 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController
- * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter
- */
+#[CoversClass( NewDonationController::class )]
+#[CoversClass( DonationFormPresenter::class )]
 class NewDonationRouteTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;
@@ -36,10 +38,11 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'person', $applicationVars->initialFormValues->addressType );
 	}
 
-	/** @dataProvider paymentInputProvider
+	/**
 	 * @param array<string, mixed> $validPaymentInput
 	 * @param array<string, mixed> $expected
 	 */
+	#[DataProvider( 'paymentInputProvider' )]
 	public function testGivenPaymentInput_paymentDataIsInitiallyValidated( array $validPaymentInput, array $expected ): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();

@@ -4,9 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData
- */
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\EventHandlers\RegisterTrackingData;
+
+#[CoversClass( RegisterTrackingData::class )]
 class TrackingDataTest extends WebRouteTestCase {
 
 	private const PARAM_NAME_CAMPAIGN = 'piwik_campaign';

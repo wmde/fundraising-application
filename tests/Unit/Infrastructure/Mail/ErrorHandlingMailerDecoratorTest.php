@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use WMDE\EmailAddress\EmailAddress;
@@ -12,9 +13,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\ErrorThrowingTemplateBasedMailer;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\ErrorHandlingMailerDecorator
- */
+#[CoversClass( ErrorHandlingMailerDecorator::class )]
 class ErrorHandlingMailerDecoratorTest extends TestCase {
 
 	public function testOnSendMail_sendsMail(): void {
