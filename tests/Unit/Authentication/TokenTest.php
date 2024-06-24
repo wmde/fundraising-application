@@ -20,7 +20,7 @@ class TokenTest extends TestCase {
 	public function testRawBytesAreReturned(): void {
 		$token = new Token( 'RANDOMLY_CHOSEN' );
 
-		$this->assertSame( 'RANDOMLY_CHOSEN',  $token->getRawBytes() );
+		$this->assertSame( 'RANDOMLY_CHOSEN', $token->getRawBytes() );
 	}
 
 	public function testFromHexConvertsToBytes(): void {
