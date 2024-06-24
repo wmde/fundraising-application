@@ -4,12 +4,11 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Salutations;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\Salutations
- */
+#[CoversClass( Salutations::class )]
 class SalutationsTest extends TestCase {
 	public function testGetListReturnsSalutations(): void {
 		$salutationsArray = [

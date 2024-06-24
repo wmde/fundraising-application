@@ -3,14 +3,13 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Factories;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\Frontend\Factories\ContextFactoryCollection;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Factories\ContextFactoryCollection
- */
+#[CoversClass( ContextFactoryCollection::class )]
 class ContextFactoryCollectionTest extends TestCase {
 	public function testGetDoctrineXMLMappingPathsCollectsPathsFromFactories(): void {
 		$contextFactory1 = $this->createStub( BucketTestingContextFactory::class );

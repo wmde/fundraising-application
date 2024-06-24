@@ -4,13 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Clock\StubClock;
 use WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\UserDataKeyGenerator
- */
+#[CoversClass( UserDataKeyGenerator::class )]
 class UserDataKeyGeneratorTest extends TestCase {
 
 	private string $masterKey;

@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling\Doma
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
@@ -25,9 +26,7 @@ use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantAddress;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\MembershipContext\Domain\Model\PhoneNumber;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\EventHandling\DomainEventHandler\CreateAddressChangeHandler
- */
+#[CoversClass( CreateAddressChangeHandler::class )]
 class CreateAddressChangeHandlerTest extends TestCase {
 
 	private const DONATION_ID = 23;

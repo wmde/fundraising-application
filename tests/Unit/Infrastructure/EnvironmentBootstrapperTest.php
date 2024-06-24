@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\DevelopmentEnvironmentSetup;
 use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\EnvironmentSetupException;
@@ -11,9 +12,7 @@ use WMDE\Fundraising\Frontend\Factories\EnvironmentSetup\ProductionEnvironmentSe
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeEnvironmentSetup;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper
- */
+#[CoversClass( EnvironmentBootstrapper::class )]
 class EnvironmentBootstrapperTest extends TestCase {
 
 	public function testGivenDefaultEnvironmentName_environmentSetupClassIsReturned(): void {

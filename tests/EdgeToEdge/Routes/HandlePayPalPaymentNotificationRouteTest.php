@@ -4,9 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingPayPalVerificationService;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FailingVerificationServiceFactory;
@@ -16,9 +19,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\SucceedingVerificationServiceFactor
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\PayPal\PayPalVerificationService;
 use WMDE\Fundraising\PaymentContext\Services\ExternalVerificationService\SucceedingVerificationService;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\PaypalNotificationController
- */
+#[CoversClass( PaypalNotificationController::class )]
 class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	private const EMAIL_ADDRESS = 'foerderpp@wikimedia.de';
@@ -165,10 +166,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	/**
-	 * @dataProvider unsupportedPaymentStatusProvider
-	 *
 	 * @param array<string, int|string> $params
 	 */
+	#[DataProvider( 'unsupportedPaymentStatusProvider' )]
 	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK( array $params ): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
@@ -185,11 +185,11 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	/**
-	 * @dataProvider unsupportedPaymentStatusProvider
 	 *
 	 * @param array<string, int|string> $params
 	 * @param string $paymentStatus
 	 */
+	#[DataProvider( 'unsupportedPaymentStatusProvider' )]
 	public function testGivenUnsupportedPaymentStatus_requestDataIsLogged( array $params, string $paymentStatus ): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();

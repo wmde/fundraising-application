@@ -4,15 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Translation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatablePaymentItemDescription;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryTranslator;
 use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Translation\TranslatablePaymentItemDescription
- */
+#[CoversClass( TranslatablePaymentItemDescription::class )]
 class TranslatablePaymentItemDescriptionTest extends TestCase {
 
 	public function testOnGetText_returnsTranslatedText(): void {

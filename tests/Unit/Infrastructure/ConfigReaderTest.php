@@ -7,13 +7,12 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 use FileFetcher\SimpleFileFetcher;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use WMDE\Fundraising\Frontend\Infrastructure\ConfigReader;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\ConfigReader
- */
+#[CoversClass( ConfigReader::class )]
 class ConfigReaderTest extends TestCase {
 
 	/**

@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GetInTouch;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
@@ -14,9 +15,7 @@ use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase;
 use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\FunValidators\ValidationResult;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchUseCase
- */
+#[CoversClass( GetInTouchUseCase::class )]
 class GetInTouchUseCaseTest extends TestCase {
 
 	private const INQUIRER_FIRST_NAME = 'Curious';

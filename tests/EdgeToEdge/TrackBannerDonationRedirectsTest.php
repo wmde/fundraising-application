@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,9 +13,7 @@ use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects
- */
+#[CoversClass( TrackBannerDonationRedirects::class )]
 class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 
 	private const CORRECT_ACCESS_TOKEN = 'KindlyAllowMeAccess';

@@ -6,11 +6,14 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\AddDonationController;
 use WMDE\Fundraising\Frontend\BucketTesting\Logging\Events\DonationCreated;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -20,10 +23,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\PayPalAPISpy;
 use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\Sofort\Response as SofortResponse;
 use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\Sofort\SofortClient;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\AddDonationController
- * @requires extension konto_check
- */
+#[CoversClass( AddDonationController::class )]
 class AddDonationRouteTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;
@@ -390,9 +390,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( 'item_name=Ihre+Spende', $response->getContent() ?: '' );
 	}
 
-	/**
-	 * @dataProvider provideLocaleAndSubscriptionIDForPayPal
-	 */
+	#[DataProvider( 'provideLocaleAndSubscriptionIDForPayPal' )]
 	public function testWhenRedirectingToPayPalLocaleDependantSubscriptionIdIsChosen( string $locale, string $expected ): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();

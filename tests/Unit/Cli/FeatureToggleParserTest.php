@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\FeatureToggleParser;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\Validation\FeatureToggleParser
- */
-class FeatureToggleParserTest extends \PHPUnit\Framework\TestCase {
+#[CoversClass( FeatureToggleParser::class )]
+class FeatureToggleParserTest extends TestCase {
 
 	private const CHOICE_FACTORY_LOCATION = 'tests/Fixtures/FakeChoiceFactory/FakeInconsistentChoiceFactory.php';
 

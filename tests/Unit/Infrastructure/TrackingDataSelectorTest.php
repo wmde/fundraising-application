@@ -4,19 +4,20 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector
- */
-class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
+#[CoversClass( TrackingDataSelector::class )]
+class TrackingDataSelectorTest extends TestCase {
 
 	/**
-	 * @dataProvider preferredValueProvider
 	 *
 	 * @param string $expectedResult
 	 * @param string[] $values
 	 */
+	#[DataProvider( 'preferredValueProvider' )]
 	public function testGetPreferredValueReturnsFirstSetElementOrEmptyString( string $expectedResult, array $values ): void {
 		$value = TrackingDataSelector::getFirstNonEmptyValue( $values );
 		$this->assertSame( $expectedResult, $value );
@@ -34,9 +35,7 @@ class TrackingDataSelectorTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider trackingVarProvider
-	 */
+	#[DataProvider( 'trackingVarProvider' )]
 	public function testConcatTrackingFromVarTuple( string $expectedResult, string $campaign, string $keyword ): void {
 		$value = TrackingDataSelector::getFirstNonEmptyValue( [
 			'',

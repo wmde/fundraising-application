@@ -4,17 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationEventLogException;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationEventLogger;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\DonationEventLoggerSpy;
 
-/**
- * @covers \WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger
- */
-class BestEffortDonationEventLoggerTest extends \PHPUnit\Framework\TestCase {
+#[CoversClass( BestEffortDonationEventLogger::class )]
+class BestEffortDonationEventLoggerTest extends TestCase {
 
 	private const DONATION_ID = 1337;
 	private const MESSAGE = 'a semi-important event has occured';

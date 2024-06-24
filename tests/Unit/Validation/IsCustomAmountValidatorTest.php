@@ -4,13 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Validation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Euro\Euro;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator
- */
+#[CoversClass( IsCustomAmountValidator::class )]
 class IsCustomAmountValidatorTest extends TestCase {
 
 	public function testValidate(): void {

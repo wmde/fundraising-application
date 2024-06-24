@@ -4,15 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder
- */
+#[CoversClass( CampaignBuilder::class )]
 class CampaignBuilderTest extends TestCase {
 
 	public function testCampaignsAreBuiltFromConfiguration(): void {

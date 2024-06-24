@@ -4,13 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes\GetApplicationVarsTrait;
 
 /**
  * Check if basic tracking parameters are rendered inside the HTML
- *
- * @covers \WMDE\Fundraising\Frontend\Factories\FunFunFactory::getDefaultTwigVariables
  */
+#[CoversClass( FunFunFactory::class )]
 class BucketVariableTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;

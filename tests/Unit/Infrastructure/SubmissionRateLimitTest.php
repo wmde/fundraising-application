@@ -2,13 +2,12 @@
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit
- */
+#[CoversClass( SubmissionRateLimit::class )]
 class SubmissionRateLimitTest extends TestCase {
 
 	public function testSubmissionAllowedWhenNoPreviousSubmissionInSession(): void {

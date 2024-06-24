@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Mailer;
@@ -14,9 +15,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailerException;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Message;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger
- */
+#[CoversClass( Messenger::class )]
 class MessengerTest extends TestCase {
 
 	public function testItWrapsTransportExceptions(): void {

@@ -4,18 +4,18 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeBuilder;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChangeId;
+use WMDE\Fundraising\Frontend\App\Controllers\AddressChange\ShowUpdateAddressController;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\AddressChange\ShowUpdateAddressController
- */
+#[CoversClass( ShowUpdateAddressController::class )]
 class ShowUpdateAddressFormRouteTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;

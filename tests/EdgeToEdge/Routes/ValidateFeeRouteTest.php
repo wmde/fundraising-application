@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateMembershipPaymentController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\ValidateMembershipPaymentController
- */
+#[CoversClass( ValidateMembershipPaymentController::class )]
 class ValidateFeeRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidParameters_successResponseIsReturned(): void {

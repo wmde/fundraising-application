@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Twig\Environment;
 use WMDE\Fundraising\Frontend\App\MailTemplateFixtures\MailTemplateFixtures;
@@ -17,9 +19,8 @@ use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
 /**
  * This is for testing the mail template output, no classes are covered
- *
- * @coversNothing
  */
+#[CoversNothing]
 class MailTemplatesTest extends KernelTestCase {
 
 	public static function setUpBeforeClass(): void {
@@ -83,9 +84,7 @@ class MailTemplatesTest extends KernelTestCase {
 		return __DIR__ . '/../Data/GeneratedMailTemplates/' . $id . '.txt';
 	}
 
-	/**
-	 * @dataProvider storedRenderedContentProvider
-	 */
+	#[DataProvider( 'storedRenderedContentProvider' )]
 	public function testCurrentRenderingMatchesStoredRendering( string $testFilePath, TemplateSettings $templateData ): void {
 		$mailerTwig = self::newFactory()->getMailerTwig();
 		$expectedContent = file_get_contents( $testFilePath );

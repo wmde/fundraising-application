@@ -3,13 +3,12 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Authentication\OldStyleTokens;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken
- */
+#[CoversClass( AuthenticationToken::class )]
 class AuthenticationTokenTest extends TestCase {
 	public function testTokenCanCheckExpiry(): void {
 		$token = new AuthenticationToken(

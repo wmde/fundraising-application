@@ -4,18 +4,18 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\CreditCardPaymentNotificationController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\CreditCardPaymentNotificationController
- */
+#[CoversClass( CreditCardPaymentNotificationController::class )]
 class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	private const FUNCTION = 'billing';

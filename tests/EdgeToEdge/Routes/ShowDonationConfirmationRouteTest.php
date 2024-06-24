@@ -4,21 +4,21 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\AbstractBrowser as Client;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\DonationContext\Tests\Data\ValidPayments;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\PaymentContext\Domain\Model\Payment;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Donation\ShowDonationConfirmationController
- */
+#[CoversClass( ShowDonationConfirmationController::class )]
 class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;

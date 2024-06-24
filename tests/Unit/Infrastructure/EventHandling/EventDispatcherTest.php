@@ -4,13 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\EventHandling;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeDonationEvent;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\EventHandling\EventDispatcher
- */
+#[CoversClass( EventDispatcher::class )]
 class EventDispatcherTest extends TestCase {
 
 	public function testDispatcherCallsAllListenersForEvent(): void {

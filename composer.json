@@ -121,7 +121,7 @@
 		"phpstan/phpstan-doctrine": "~1.4",
 
 		"wmde/psr-log-test-doubles": "~3.0",
-		"wmde/fundraising-phpcs": "~9.0",
+		"wmde/fundraising-phpcs": "~10.1",
 		"wmde/fundraising-frontend-content": "dev-test",
 
 		"symfony/css-selector": "^7.0",
@@ -144,7 +144,8 @@
 	"config": {
 		"discard-changes": true,
 		"allow-plugins": {
-			"composer/package-versions-deprecated": true
+			"composer/package-versions-deprecated": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true
 		},
 		"platform": {
 			"php": "8.3"

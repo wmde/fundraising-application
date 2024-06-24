@@ -3,20 +3,21 @@
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Factories;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Factories\MailerTemplatingFactory;
+use WMDE\Fundraising\Frontend\Factories\TwigFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\EnvironmentBootstrapper;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\CampaignFixture;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeTranslator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 use WMDE\Fundraising\Frontend\Tests\TestEnvironmentBootstrapper;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Factories\MailerTemplatingFactory
- * @covers \WMDE\Fundraising\Frontend\Factories\TwigFactory
- */
+#[CoversClass( MailerTemplatingFactory::class )]
+#[CoversClass( TwigFactory::class )]
 class MailerTemplatingFactoryTest extends KernelTestCase {
 
 	private const TEMPLATE_DIR = 'mail_templates';

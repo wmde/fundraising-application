@@ -3,16 +3,14 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Authentication;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Authentication\RandomTokenGenerator;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Authentication\RandomTokenGenerator
- */
+#[CoversClass( RandomTokenGenerator::class )]
 class RandomTokenGeneratorTest extends TestCase {
-	/**
-	 * @dataProvider provideLengths
-	 */
+	#[DataProvider( 'provideLengths' )]
 	public function testGenerateTokensWithTheRightLength( int $length ): void {
 		 $generator = new RandomTokenGenerator( $length );
 
@@ -31,9 +29,7 @@ class RandomTokenGeneratorTest extends TestCase {
 		yield [ 64 ];
 	}
 
-	/**
-	 * @dataProvider provideInvalidLengths
-	 */
+	#[DataProvider( 'provideInvalidLengths' )]
 	public function testTokenGeneratorHasMinimumLength( int $invalidLength ): void {
 		$this->expectException( \InvalidArgumentException::class );
 		new RandomTokenGenerator( $invalidLength );

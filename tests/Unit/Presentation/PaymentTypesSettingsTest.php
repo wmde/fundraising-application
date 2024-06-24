@@ -4,13 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings;
 use WMDE\Fundraising\PaymentContext\Domain\PaymentType;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\PaymentTypesSettings
- */
+#[CoversClass( PaymentTypesSettings::class )]
 class PaymentTypesSettingsTest extends TestCase {
 
 	public function testEnabledForDonation(): void {

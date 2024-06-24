@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Authentication\OldStyleTokens;
 
 use Doctrine\ORM\EntityManager;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
 use WMDE\Fundraising\DonationContext\DataAccess\DonationData;
@@ -20,9 +21,7 @@ use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineEntities\MembershipApp
 use WMDE\Fundraising\MembershipContext\DataAccess\MembershipApplicationData;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\FallbackTokenRepository
- */
+#[CoversClass( FallbackTokenRepository::class )]
 class FallbackTokenRepositoryTest extends KernelTestCase {
 	use RebuildDatabaseSchemaTrait;
 

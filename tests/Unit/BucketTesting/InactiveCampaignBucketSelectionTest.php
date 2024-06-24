@@ -4,15 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 use WMDE\Fundraising\Frontend\BucketTesting\InactiveCampaignBucketSelection;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\InactiveCampaignBucketSelection
- */
+#[CoversClass( InactiveCampaignBucketSelection::class )]
 class InactiveCampaignBucketSelectionTest extends TestCase {
 
 	private CampaignDate $now;

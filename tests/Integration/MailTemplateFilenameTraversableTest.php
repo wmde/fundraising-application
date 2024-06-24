@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Infrastructure\Mail\MailTemplateFilenameTraversable;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\MailTemplateFilenameTraversable
- */
+#[CoversClass( MailTemplateFilenameTraversable::class )]
 class MailTemplateFilenameTraversableTest extends KernelTestCase {
 
 	public function testTraversableContainsSomeEntriesInTheRightFormat(): void {

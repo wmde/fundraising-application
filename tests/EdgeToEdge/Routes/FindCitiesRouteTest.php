@@ -4,13 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Validation\FindCitiesController;
+use WMDE\Fundraising\Frontend\Autocomplete\UseCases\FindCitiesUseCase;
 use WMDE\Fundraising\Frontend\Tests\Data\ValidLocation;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Validation\FindCitiesController
- * @covers \WMDE\Fundraising\Frontend\Autocomplete\UseCases\FindCitiesUseCase
- */
+#[CoversClass( FindCitiesController::class )]
+#[CoversClass( FindCitiesUseCase::class )]
 class FindCitiesRouteTest extends WebRouteTestCase {
 
 	public function testGivenValidPostcode_endpointReturnsCities(): void {

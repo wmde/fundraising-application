@@ -4,16 +4,17 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use WMDE\Fundraising\Frontend\FeatureToggle\Feature;
 use WMDE\Fundraising\Frontend\Infrastructure\FileFeatureReader;
+use WMDE\Fundraising\Frontend\Presentation\ActiveFeatureRenderer;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes\GetApplicationVarsTrait;
 
 /**
  * Check if basic tracking parameters are rendered inside the HTML
- *
- * @covers \WMDE\Fundraising\Frontend\Presentation\ActiveFeatureRenderer
- * @covers \WMDE\Fundraising\Frontend\FeatureToggle\Feature
  */
+#[CoversClass( ActiveFeatureRenderer::class )]
+#[CoversClass( Feature::class )]
 class FeatureToggleTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;

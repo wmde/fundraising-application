@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Clock\Clock;
 use WMDE\Clock\StubClock;
@@ -14,9 +15,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeBucketLoggingEvent;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LogWriterSpy;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\Logging\JsonBucketLogger
- */
+#[CoversClass( JsonBucketLogger::class )]
 class JsonBucketLoggerTest extends TestCase {
 
 	private const STUB_TIME_VALUE = '2018-01-01T00:00:42.000+00:00';

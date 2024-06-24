@@ -4,16 +4,20 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use WMDE\Fundraising\Frontend\App\Controllers\PageNotFoundController;
 
+#[CoversClass( PageNotFoundController::class )]
 class LegacyRouteTest extends WebTestCase {
 
 	/**
 	 * Covers the fallback route in routes.yml
-	 *
-	 * @coversNothing
-	 * @dataProvider legacyRouteProvider
 	 */
+	#[DataProvider( 'legacyRouteProvider' )]
+	#[CoversNothing]
 	public function testGetRequestsToLegacyRoutesRedirectToMainPage( string $route ): void {
 		$client = static::createClient();
 
@@ -39,10 +43,7 @@ class LegacyRouteTest extends WebTestCase {
 		yield [ '/spenden/spenden/uebersicht' ];
 	}
 
-	/**
-	 * @covers \WMDE\Fundraising\Frontend\App\Controllers\PageNotFoundController
-	 * @dataProvider legacyRouteProvider
-	 */
+	#[DataProvider( 'legacyRouteProvider' )]
 	public function testPostRequestsToLegacyRoutesRedirectToMainPage( string $route ): void {
 		$client = static::createClient();
 

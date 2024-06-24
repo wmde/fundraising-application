@@ -3,15 +3,14 @@ declare( strict_types=1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\DonationContext\Infrastructure\DonationNotifier\TemplateArgumentsAdmin;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\AdminDonationModerationMailerAdapter;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\TemplateBasedMailerSpy;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Mail\AdminDonationModerationMailerAdapter
- */
+#[CoversClass( AdminDonationModerationMailerAdapter::class )]
 class AdminDonationModerationMailerAdapterTest extends TestCase {
 	public function testAdapterConvertsObjectPropertiesToArray(): void {
 		$mailerSpy = new TemplateBasedMailerSpy( $this );

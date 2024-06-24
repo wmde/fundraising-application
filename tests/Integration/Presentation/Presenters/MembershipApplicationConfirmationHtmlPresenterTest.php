@@ -4,14 +4,13 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Integration\Presentation\Presenters;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter
- */
+#[CoversClass( MembershipApplicationConfirmationHtmlPresenter::class )]
 class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 
 	public function testWhenPresenterPresents_itPassesParametersToTemplate(): void {

@@ -4,8 +4,10 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser as Client;
 use Symfony\Component\HttpFoundation\Request;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipConfirmationController;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationBoundedContext;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\AuthenticationToken;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -16,9 +18,7 @@ use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidPayments;
 use WMDE\Fundraising\MembershipContext\Tests\TestDoubles\FakeApplicationRepository;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipConfirmationController
- */
+#[CoversClass( ShowMembershipConfirmationController::class )]
 class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 
 	private const PATH = '/show-membership-confirmation';

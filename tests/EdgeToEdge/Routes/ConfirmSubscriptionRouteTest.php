@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Subscription\ConfirmSubscriptionController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\SubscriptionContext\Domain\Model\Subscription;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Subscription\ConfirmSubscriptionController
- */
+#[CoversClass( ConfirmSubscriptionController::class )]
 class ConfirmSubscriptionRouteTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;

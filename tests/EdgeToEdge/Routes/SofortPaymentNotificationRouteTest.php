@@ -4,19 +4,19 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\Tests\Fixtures\ThrowingDonationRepository;
+use WMDE\Fundraising\Frontend\App\Controllers\Payment\SofortNotificationController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 use WMDE\Fundraising\PaymentContext\Domain\Model\SofortPayment;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\App\Controllers\Payment\SofortNotificationController
- */
+#[CoversClass( SofortNotificationController::class )]
 class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	private const VALID_TOKEN = 'my-secret_token';

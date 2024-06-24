@@ -4,15 +4,14 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Presentation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Campaign;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 use WMDE\Fundraising\Frontend\Presentation\BucketPropertyExtractor;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Presentation\BucketPropertyExtractor
- */
+#[CoversClass( BucketPropertyExtractor::class )]
 class BucketPropertyExtractorTest extends TestCase {
 	private Campaign $campaign1;
 	private Campaign $campaign2;

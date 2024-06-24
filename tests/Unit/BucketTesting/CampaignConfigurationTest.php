@@ -5,13 +5,13 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignConfiguration;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\CampaignConfiguration
- */
+#[CoversClass( CampaignConfiguration::class )]
 class CampaignConfigurationTest extends TestCase {
 
 	use ConfigurationTestCaseTrait;
@@ -47,11 +47,11 @@ class CampaignConfigurationTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider invalidConfigurationProvider
 	 *
 	 * @param array<string, mixed> $invalidConfig
 	 * @param string $expectedReason
 	 */
+	#[DataProvider( 'invalidConfigurationProvider' )]
 	public function testGivenMissingConfigurationEntries_ValidationFails( array $invalidConfig, string $expectedReason ): void {
 		$this->assertConfigurationIsInvalid(
 			[

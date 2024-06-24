@@ -4,13 +4,12 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Validation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger
- */
+#[CoversClass( ValidationErrorLogger::class )]
 class ValidationErrorLoggerTest extends TestCase {
 
 	public function testGivenEmptyValues_doesNotLog(): void {

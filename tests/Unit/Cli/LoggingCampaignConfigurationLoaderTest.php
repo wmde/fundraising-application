@@ -5,18 +5,19 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 
 use FileFetcher\FileFetchingException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Yaml\Exception\ParseException;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\CampaignErrorCollection;
 use WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\ThrowingCampaignConfigurationLoader;
 
-/**
- * @covers \WMDE\Fundraising\Frontend\BucketTesting\Validation\LoggingCampaignConfigurationLoader
- */
-class LoggingCampaignConfigurationLoaderTest extends \PHPUnit\Framework\TestCase {
+#[CoversClass( LoggingCampaignConfigurationLoader::class )]
+class LoggingCampaignConfigurationLoaderTest extends TestCase {
 
-	/** @dataProvider throwablesDataProvider */
+	#[DataProvider( 'throwablesDataProvider' )]
 	public function testWhenCampaignConfigurationLoaderThrowsThrowable_exceptionIsProperlyHandled( \Throwable $throwable, string $expectedMessage ): void {
 		$errorLogger = new CampaignErrorCollection();
 		$loader = $this->newThrowingLoader( $throwable, $errorLogger );

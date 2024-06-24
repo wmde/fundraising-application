@@ -27,18 +27,20 @@ class ContextFactoryCollection {
 	 */
 	private array $contextFactories;
 
+	// phpcs:disable
 	public function __construct(
-		DonationContextFactory|
-		MembershipContextFactory|
-		SubscriptionContextFactory|
-		AddressChangeContextFactory|
-		BucketTestingContextFactory|
-		AutocompleteContextFactory|
-		PaymentContextFactory|
+		DonationContextFactory |
+		MembershipContextFactory |
+		SubscriptionContextFactory |
+		AddressChangeContextFactory |
+		BucketTestingContextFactory |
+		AutocompleteContextFactory |
+		PaymentContextFactory |
 		AuthenticationContextFactory ...$contextFactories
 	) {
 		$this->contextFactories = $contextFactories;
 	}
+	// phpcs:enable
 
 	/**
 	 * Paths that can be used for {@see ORMSetup::createXMLMetadataConfiguration()}
