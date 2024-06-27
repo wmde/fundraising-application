@@ -38,7 +38,7 @@ class ShowDonationConfirmationController {
 					Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() ),
 					[
 						'updateDonor' => $ffFactory->getUrlGenerator()->generateAbsoluteUrl(
-							Routes::UPDATE_DONOR,
+							Routes::API_UPDATE_DONOR_PUT,
 							[
 								'accessToken' => $accessToken
 							]
