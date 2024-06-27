@@ -16,9 +16,14 @@ class ShowAddressChangeSuccessController {
 		if ( $addressToken === '' ) {
 			throw new AccessDeniedException( 'address_change_no_token_in_request' );
 		}
+
+		$addressChangeRepository = $ffFactory->getAddressChangeRepository();
+		$addressChange = $addressChangeRepository->getAddressChangeByUuids( $addressToken, $addressToken );
+
 		return new Response( $ffFactory->getLayoutTemplate( 'AddressUpdateSuccess.html.twig' )->render( [
 			'message' => $request->attributes->get( 'successMessage' ),
 			'addressToken' => $addressToken,
+			'receipt' => $addressChange->isOptedIntoDonationReceipt()
 		] ) );
 	}
 }
