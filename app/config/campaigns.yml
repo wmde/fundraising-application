@@ -57,7 +57,8 @@ campaigns:
       end: "2024-12-31"
       buckets:
         - "legacy"
-        - "test_02"
+        - "test_02_a"
+        - "test_02_b"
       default_bucket: "legacy"
       url_key: ap
       active: true
