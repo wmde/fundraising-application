@@ -6,14 +6,16 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ContactRequestController;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 #[CoversClass( ContactRequestController::class )]
 class GetInTouchRouteTest extends WebRouteTestCase {
 
+	use GetApplicationVarsTrait;
+
 	public function testGivenValidRequest_contactRequestIsProperlyProcessed(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 		$client->followRedirects( false );
 
@@ -35,9 +37,10 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 	}
 
 	public function testGivenInvalidRequest_validationFails(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 
-		$crawler = $client->request(
+		$client->request(
 			'POST',
 			'/contact/get-in-touch',
 			[
@@ -49,23 +52,26 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) ?: '' );
+		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-		$this->assertCount(
-			3,
-			$crawler->filter( 'span.form-error' )
-		);
-		$this->assertCount(
-			1,
-			$crawler->filter( 'input[name="firstname"][value="Curious"]' )
-		);
-		$this->assertCount(
-			1,
-			$crawler->filter( 'input[name="lastname"][value="Guy"]' )
-		);
+		$this->assertEquals( [
+			'firstname' => 'Curious',
+			'lastname' => 'Guy',
+			'email' => 'no.email.format',
+			'subject' => '',
+			'messageBody' => '',
+		], (array)$applicationVars->submitted_form_data );
+
+		$this->assertEquals( [
+			'subject' => 'field_required',
+			'category' => 'field_required',
+			'messageBody' => 'field_required',
+			'email' => 'email_address_wrong_format',
+		], (array)$applicationVars->errors );
 	}
 
 	public function testGivenGetRequest_formShownWithoutErrors(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 
 		$crawler = $client->request(
@@ -73,26 +79,26 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 			'/contact/get-in-touch'
 		);
 
+		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
+
 		$this->assertStringContainsString( 'text/html', $client->getResponse()->headers->get( 'Content-Type' ) ?: '' );
-		$this->assertCount(
-			0,
-			$crawler->filter( 'span.form-error' )
-		);
+
+		$this->assertArrayNotHasKey( 'errors', (array)$applicationVars );
 	}
 
 	public function testOnException_errorPageIsRendered(): void {
-		$this->modifyEnvironment( function ( FunFunFactory $factory ): void {
-			$messenger = $this->getMockBuilder( Messenger::class )
-				->disableOriginalConstructor()
-				->getMock();
-
-			$messenger->expects( $this->any() )
-				->method( 'sendMessageToUser' )
-				->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
-
-			$factory->setContactMessenger( $messenger );
-		} );
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
+
+		$messenger = $this->getMockBuilder( Messenger::class )
+			->disableOriginalConstructor()
+			->getMock();
+
+		$messenger->expects( $this->any() )
+			->method( 'sendMessageToUser' )
+			->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
+
+		$this->getFactory()->setContactMessenger( $messenger );
 
 		$client->request(
 			'POST',
@@ -108,9 +114,8 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$response = $client->getResponse();
-		$content = $response->getContent();
+		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-		$this->assertStringContainsString( 'Internal Error: Something unexpected happened', $content ?: '' );
+		$this->assertSame( 'Something unexpected happened', $applicationVars->message );
 	}
 }
