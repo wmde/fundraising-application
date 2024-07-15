@@ -139,17 +139,4 @@ class ApplyForMembershipController {
 			$formattedConstraintViolations
 		);
 	}
-
-	/**
-	 * @deprecated Remove after 2023/2024 thank you campaign
-	 */
-	private function recordBannerImpressions( Request $httpRequest, FunFunFactory $ffFactory ): void {
-		$tracking = $httpRequest->attributes->get( 'trackingCode', '' );
-		if ( $tracking === '' ) {
-			return;
-		}
-		$overallImpressionCount = intval( $httpRequest->get( 'impCount' ) );
-		$bannerImpressionCount = intval( $httpRequest->get( 'bImpCount' ) );
-		$ffFactory->getMembershipImpressionCounter()->countImpressions( $bannerImpressionCount, $overallImpressionCount, $tracking );
-	}
 }

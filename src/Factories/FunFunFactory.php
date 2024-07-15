@@ -145,8 +145,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\Mail\Messenger;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\NullMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\TemplateBasedMailer;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipBannerCounting\MembershipImpressionCounter;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipBannerCounting\NullMembershipImpressionCounter;
 use WMDE\Fundraising\Frontend\Infrastructure\PayPalAdapterConfigLoader;
 use WMDE\Fundraising\Frontend\Infrastructure\SubmissionRateLimit;
 use WMDE\Fundraising\Frontend\Infrastructure\Translation\GreetingGenerator;
@@ -2149,22 +2147,6 @@ class FunFunFactory implements LoggerAwareInterface {
 			$blockList = $this->config['email-address-blacklist'] ?? [];
 		}
 		return $blockList;
-	}
-
-	/**
-	 * @deprecated Should be removed after the 2023/2024 thank you campaign
-	 */
-	public function getMembershipImpressionCounter(): MembershipImpressionCounter {
-		return $this->createSharedObject( MembershipImpressionCounter::class, static function (): MembershipImpressionCounter {
-			return new NullMembershipImpressionCounter();
-		} );
-	}
-
-	/**
-	 * @deprecated Should be removed after the 2023/2024 thank you campaign
-	 */
-	public function setMembershipImpressionCounter( MembershipImpressionCounter $membershipImpressionCounter ): void {
-		$this->sharedObjects[MembershipImpressionCounter::class] = $membershipImpressionCounter;
 	}
 
 }

@@ -13,7 +13,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Psr16Cache;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\Frontend\Infrastructure\MembershipBannerCounting\DatabaseMembershipImpressionCounter;
 use WMDE\Fundraising\PaymentContext\Services\PayPal\GuzzlePaypalAPI;
 
 class ProductionEnvironmentSetup implements EnvironmentSetup {
@@ -28,7 +27,6 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 		$this->initializeLoggers( $factory );
 		$this->setDoctrineConfiguration( $factory );
 		$this->setPayPalAPIClient( $factory );
-		$this->setMembershipImpressionCounter( $factory );
 	}
 
 	private function initializeLoggers( FunFunFactory $factory ): void {
@@ -89,14 +87,5 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 			$secret,
 			$this->createStreamLoggerForPayment( 'paypal_api_errors', $factory->getLoggingPath() )
 		) );
-	}
-
-	/**
-	 * @deprecated This is temporary for the 2023/2024 thank you banner campaign. It should be removed after the campaign (Feb 2024).
-	 */
-	private function setMembershipImpressionCounter( FunFunFactory $factory ): void {
-		$factory->setMembershipImpressionCounter(
-			new DatabaseMembershipImpressionCounter( $factory->getConnection() )
-		);
 	}
 }
