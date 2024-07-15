@@ -20,7 +20,6 @@ class ProductionEnvironmentSetupTest extends TestCase {
 			'setCreditCardLogger',
 			'setDoctrineConfiguration',
 			'setPayPalAPI',
-			'setMembershipImpressionCounter',
 		];
 		$supportingGetters = [
 			'getCachePath',
