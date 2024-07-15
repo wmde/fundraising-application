@@ -40,7 +40,6 @@ class ApplyForMembershipController {
 		}
 
 		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $session );
-		$this->recordBannerImpressions( $httpRequest, $ffFactory );
 		return new RedirectResponse( $responseModel->getPaymentCompletionUrl() );
 	}
 
