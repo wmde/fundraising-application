@@ -190,13 +190,13 @@ use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizationChecker;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizer;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracker;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipIdGenerator;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository as MembershipModerationReasonRepository;
-use WMDE\Fundraising\MembershipContext\Domain\Repositories\ApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\MembershipRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\PaymentServiceFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
 use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
@@ -1327,13 +1327,13 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	public function setMembershipApplicationRepository( ApplicationRepository $applicationRepository ): void {
-		$this->sharedObjects[ApplicationRepository::class] = $applicationRepository;
+	public function setMembershipApplicationRepository( MembershipRepository $applicationRepository ): void {
+		$this->sharedObjects[MembershipRepository::class] = $applicationRepository;
 	}
 
-	public function getMembershipApplicationRepository(): ApplicationRepository {
-		return $this->createSharedObject( ApplicationRepository::class, function () {
-			return new DoctrineApplicationRepository(
+	public function getMembershipApplicationRepository(): MembershipRepository {
+		return $this->createSharedObject( MembershipRepository::class, function () {
+			return new DoctrineMembershipRepository(
 				$this->getEntityManager(),
 				$this->newGetPaymentUseCase(),
 				$this->getModerationReasonRepositoryForMembership()
