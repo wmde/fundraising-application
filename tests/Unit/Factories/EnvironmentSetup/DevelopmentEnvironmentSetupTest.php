@@ -19,7 +19,6 @@ class DevelopmentEnvironmentSetupTest extends TestCase {
 			'setDoctrineConfiguration',
 			'setInternalErrorHtmlPresenter',
 			'setPayPalAPI',
-			'setMembershipImpressionCounter',
 		];
 		$supportingGetters = [
 			'getLogger',

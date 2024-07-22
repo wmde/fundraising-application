@@ -258,6 +258,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 			$donor,
 			1,
 			DonationTrackingInfo::newBlankTrackingInfo(),
+			new \DateTimeImmutable(),
 			null
 		);
 	}
