@@ -33,7 +33,7 @@ Payment data is used for instantiating subclasses of redirects/presenters
 
 ## Data access layer
 ```DoctrineDonationRepository.php
-DoctrineApplicationRepository.php
+DoctrineMembershipRepository.php
 ```
 Converting our Domain entities into ORM entities and back
 

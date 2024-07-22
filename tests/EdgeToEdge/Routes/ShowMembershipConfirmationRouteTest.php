@@ -16,7 +16,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\SuccessfulMembershipAuthorizer;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidPayments;
-use WMDE\Fundraising\MembershipContext\Tests\TestDoubles\FakeApplicationRepository;
+use WMDE\Fundraising\MembershipContext\Tests\TestDoubles\FakeMembershipRepository;
 
 #[CoversClass( ShowMembershipConfirmationController::class )]
 class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
@@ -104,7 +104,7 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 		$this->modifyEnvironment( static function ( FunFunFactory $factory ) use ( $membershipApplication ): void {
 			$factory->setMembershipApplicationAuthorizationChecker( new SuccessfulMembershipAuthorizer() );
 
-			$applicationRepository = new FakeApplicationRepository( $membershipApplication );
+			$applicationRepository = new FakeMembershipRepository( $membershipApplication );
 			$applicationRepository->throwOnRead();
 			$factory->setMembershipApplicationRepository( $applicationRepository );
 		} );
