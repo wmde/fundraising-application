@@ -62,3 +62,16 @@ campaigns:
       url_key: ap
       active: true
       param_only: true
+
+    address_field_order:
+      description: Change the order of the fields in the address group on the donation form
+      reference: "https://phabricator.wikimedia.org/T369152"
+      start: "2024-09-01"
+      end: "2024-12-31"
+      buckets:
+        - "legacy"
+        - "new_order" # https://www.youtube.com/watch?v=c1GxjzHm5us
+      default_bucket: "legacy"
+      url_key: afo
+      active: true
+      param_only: true

@@ -16,3 +16,8 @@ campaigns:
     start: "2023-01-01"
     default_bucket: "legacy"
     active: true
+
+  address_field_order:
+    start: "2024-01-01"
+    default_bucket: "legacy"
+    active: true
