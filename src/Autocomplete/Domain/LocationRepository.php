@@ -12,4 +12,11 @@ interface LocationRepository {
 	 * @return string[]
 	 */
 	public function getCitiesForPostcode( string $postcode ): array;
+
+	/**
+	 * @param string $postcode
+	 *
+	 * @return string[]
+	 */
+	public function getStreetsForPostcode( string $postcode ): array;
 }
