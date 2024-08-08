@@ -32,11 +32,11 @@ class DoctrineLocationRepositoryTest extends KernelTestCase {
 	}
 
 	public function testGivenPostcode_returnsDistinctCities(): void {
-		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wexford' ) );
-		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wexford' ) );
-		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Waterford' ) );
-		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '34567', 'Kildare' ) );
-		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wicklow' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Wexford', 'Sesame' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Wexford', 'Sesame' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Waterford', 'Sesame' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '34567', 'Kildare', 'Sesame' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Wicklow', 'Sesame' ) );
 		$this->entityManager->flush();
 
 		$locationRepository = new DoctrineLocationRepository( $this->entityManager );
@@ -46,28 +46,46 @@ class DoctrineLocationRepositoryTest extends KernelTestCase {
 		$this->assertSame( [ 'Waterford', 'Wexford', 'Wicklow' ], $cities );
 	}
 
-	public function testVeryMaliciousSQLInjectionInPostCodeDoesNothing(): void {
-		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wexford' ) );
-		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Waterford' ) );
+	public function testGivenPostcode_returnsDistinctStreets(): void {
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Wexford', 'Sesame' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Wexford', 'Sesame' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Waterford', 'Elm' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '34567', 'Kildare', 'Respectable' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Wicklow', 'Abbey Road' ) );
 		$this->entityManager->flush();
 
 		$locationRepository = new DoctrineLocationRepository( $this->entityManager );
 
-		$locationRepository->getCitiesForPostcode( '0; DELETE FROM geodaten_artikelnr_1001; --' );
+		$streets = $locationRepository->getStreetsForPostcode( '12345' );
 
-		$remainingRows = $this->entityManager->getConnection()->executeQuery( "SELECT COUNT(*) FROM geodaten_artikelnr_1001" )->fetchOne();
+		$this->assertSame( [ 'Abbey Road', 'Elm', 'Sesame' ], $streets );
+	}
+
+	public function testVeryMaliciousSQLInjectionInPostCodeDoesNothing(): void {
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Wexford', 'Sesame' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Waterford', 'Sesame' ) );
+		$this->entityManager->flush();
+
+		$locationRepository = new DoctrineLocationRepository( $this->entityManager );
+
+		$locationRepository->getCitiesForPostcode( '0; DELETE FROM geodaten_artikelnr_1050; --' );
+		$locationRepository->getStreetsForPostcode( '0; DELETE FROM geodaten_artikelnr_1050; --' );
+
+		$remainingRows = $this->entityManager->getConnection()->executeQuery( "SELECT COUNT(*) FROM geodaten_artikelnr_1050" )->fetchOne();
 		$this->assertEquals( 2, $remainingRows );
 	}
 
 	public function testMalformedSQLInjectionInPostCodeDoesNothing(): void {
-		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Wexford' ) );
-		$this->entityManager->persist( ValidLocation::validLocationForCommunity( '12345', 'Waterford' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Wexford', 'Sesame' ) );
+		$this->entityManager->persist( ValidLocation::newValidLocation( '12345', 'Waterford', 'Sesame' ) );
 		$this->entityManager->flush();
 
 		$locationRepository = new DoctrineLocationRepository( $this->entityManager );
 
 		$cities = $locationRepository->getCitiesForPostcode( '666 OR 1' );
+		$streets = $locationRepository->getStreetsForPostcode( '666 OR 1' );
 
 		$this->assertSame( [], $cities );
+		$this->assertSame( [], $streets );
 	}
 }

@@ -3,6 +3,11 @@ api_cities.json:
     methods: [POST]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Validation\FindCitiesController::index'
 
+api_streets.json:
+    path: /api/v1/streets.json
+    methods: [POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Validation\FindStreetsController::index'
+
 api_address_change_get:
     path: /api/v1/address_change/{identifier}/{previousIdentifier}
     methods: [GET]

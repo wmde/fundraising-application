@@ -9,46 +9,28 @@ namespace WMDE\Fundraising\Frontend\Autocomplete\Domain\Model;
  * It's mostly used in order for Doctrine to create and interact with the database table.
  */
 class Location {
-	private int $id;
-	private string $stateName;
-	private string $stateNutscode;
-	private string $regionName;
-	private string $regionNutscode;
-	private string $districtName;
-	private string $districtType;
-	private string $districtNutscode;
-	private string $communityName;
-	private string $communityType;
-	private string $communityKey;
-	private string $regionKey;
-	private float $communityLatitude;
-	private float $communityLongitude;
-	private string $cityId;
-	private string $cityName;
-	private float $cityLatitude;
-	private float $cityLongitude;
-	private string $postcode;
 
-	public function __construct( int $id, string $stateName, string $stateNutscode, string $regionName, string $regionNutscode, string $districtName, string $districtType, string $districtNutscode, string $communityName, string $communityType, string $communityKey, string $regionKey, float $communityLatitude, float $communityLongitude, string $cityId, string $cityName, float $cityLatitude, float $cityLongitude, string $postcode ) {
-		$this->id = $id;
-		$this->stateName = $stateName;
-		$this->stateNutscode = $stateNutscode;
-		$this->regionName = $regionName;
-		$this->regionNutscode = $regionNutscode;
-		$this->districtName = $districtName;
-		$this->districtType = $districtType;
-		$this->districtNutscode = $districtNutscode;
-		$this->communityName = $communityName;
-		$this->communityType = $communityType;
-		$this->communityKey = $communityKey;
-		$this->regionKey = $regionKey;
-		$this->communityLatitude = $communityLatitude;
-		$this->communityLongitude = $communityLongitude;
-		$this->cityId = $cityId;
-		$this->cityName = $cityName;
-		$this->cityLatitude = $cityLatitude;
-		$this->cityLongitude = $cityLongitude;
-		$this->postcode = $postcode;
+	public function __construct(
+		private int $id,
+		private string $stateName,
+		private string $stateNutscode,
+		private string $regionName,
+		private string $regionNutscode,
+		private string $districtName,
+		private string $districtType,
+		private string $districtNutscode,
+		private string $communityName,
+		private string $communityType,
+		private string $communityKey,
+		private string $regionKey,
+		private float $communityLatitude,
+		private float $communityLongitude,
+		private string $cityId,
+		private string $cityName,
+		private float $cityLatitude,
+		private float $cityLongitude,
+		private string $postcode,
+		private string $street ) {
 	}
 
 	public function getId(): int {
@@ -125,5 +107,9 @@ class Location {
 
 	public function getPostcode(): string {
 		return $this->postcode;
+	}
+
+	public function getStreet(): string {
+		return $this->street;
 	}
 }
