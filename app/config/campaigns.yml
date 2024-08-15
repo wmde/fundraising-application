@@ -66,7 +66,7 @@ campaigns:
     address_field_order:
       description: Change the order of the fields in the address group on the donation form
       reference: "https://phabricator.wikimedia.org/T369152"
-      start: "2024-09-01"
+      start: "2024-08-01"
       end: "2024-12-31"
       buckets:
         - "legacy"
