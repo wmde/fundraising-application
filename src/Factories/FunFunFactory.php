@@ -107,6 +107,7 @@ use WMDE\Fundraising\Frontend\Authentication\RandomTokenGenerator;
 use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
 use WMDE\Fundraising\Frontend\Autocomplete\Domain\DataAccess\DoctrineLocationRepository;
 use WMDE\Fundraising\Frontend\Autocomplete\UseCases\FindCitiesUseCase;
+use WMDE\Fundraising\Frontend\Autocomplete\UseCases\FindStreetsUseCase;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketSelector;
 use WMDE\Fundraising\Frontend\BucketTesting\BucketTestingContextFactory;
 use WMDE\Fundraising\Frontend\BucketTesting\CampaignBuilder;
@@ -1938,6 +1939,12 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	public function newFindCitiesUseCase(): FindCitiesUseCase {
 		return new FindCitiesUseCase(
+			new DoctrineLocationRepository( $this->getEntityManager() )
+		);
+	}
+
+	public function newFindStreetsUseCase(): FindStreetsUseCase {
+		return new FindStreetsUseCase(
 			new DoctrineLocationRepository( $this->getEntityManager() )
 		);
 	}

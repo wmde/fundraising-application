@@ -32,4 +32,24 @@ class DoctrineLocationRepository implements LocationRepository {
 
 		return $query->fetchFirstColumn();
 	}
+
+	/**
+	 * @return string[]
+	 */
+	public function getStreetsForPostcode( string $postcode ): array {
+		$queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
+		$metaData = $this->entityManager->getClassMetadata( Location::class );
+
+		$streetField = $metaData->getColumnName( 'street' );
+		$postcodeField = $metaData->getColumnName( 'postcode' );
+
+		$query = $queryBuilder->select( "DISTINCT $streetField" )
+			->from( $metaData->getTableName() )
+			->where( $queryBuilder->expr()->eq( $postcodeField, ':postcode' ) )
+			->orderBy( $streetField )
+			->setParameter( 'postcode', $postcode )
+			->executeQuery();
+
+		return $query->fetchFirstColumn();
+	}
 }
