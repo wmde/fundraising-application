@@ -27,12 +27,12 @@ Because the generated templates have been just created, these tests will then pa
 
 The directory `tests/data/GeneratedMailTemplates` contains the rendered templates, but without the actual content from the content repository. If you want to render the templates with actual content, you can use the `bin/console app:dump-mail-templates` command. It uses the same Fixtures as the `MailTemplatesTest` to generate the templates, but it also uses the actual content from the content repository and renders the templates with it. You can run `make update-php COMPOSER_FLAGS=wmde/fundraising-frontend-content` to update the content repository before running the command.
 
-Example command (using docker-compose):
+Example command (using `docker compose`):
 
 ```bash
-docker-compose exec app bin/console app:dump-mail-templates --locale=en_GB
+docker compose exec app bin/console app:dump-mail-templates --locale=en_GB
 ```
 By default, the templates will get rendered into the directory `rendered-mail-templates` in the application root. You can change the output directory with the `--output-path` option.
 
-If you're using `docker-compose` to run the command, the generated files and folders will have the wrong owner (`root`). You can fix this by running `sudo chown -R $USER:$USER rendered-mail-templates` in the application root.
+If you're using `docker compose` to run the command, the generated files and folders will have the wrong owner (`root`). You can fix this by running `sudo chown -R $USER:$USER rendered-mail-templates` in the application root.
 
