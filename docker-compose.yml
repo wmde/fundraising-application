@@ -34,7 +34,7 @@ services:
       - mailhog
 
   database:
-    image: mariadb:10.4
+    image: mariadb:10.6
     environment:
       - MARIADB_RANDOM_ROOT_PASSWORD=yes
       - MARIADB_USER=fundraising
