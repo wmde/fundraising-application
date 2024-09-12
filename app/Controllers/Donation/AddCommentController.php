@@ -11,11 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\UseCases\AddComment\AddCommentRequest;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
+/**
+ * @deprecated Use API\AddCommentController instead and delete this controller and its route when the frontend is no longer using it.
+ */
 class AddCommentController {
 
-	/**
-	 * @todo Expose this text as a public constant in AddCommentUseCase instead
-	 */
 	private const ACCESS_DENIED_MSG = 'comment_failure_access_denied';
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {

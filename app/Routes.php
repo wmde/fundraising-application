@@ -16,7 +16,7 @@ class Routes {
 
 	public const CONVERT_BANKDATA = 'generate_iban';
 	public const INDEX = '/';
-	public const POST_COMMENT = 'PostComment';
+	public const POST_COMMENT = 'api_donation_comment_post';
 	public const SHOW_DONATION_CONFIRMATION = 'show_donation_confirmation';
 	public const SHOW_MEMBERSHIP_CONFIRMATION = 'show_membership_confirmation';
 	public const API_UPDATE_ADDRESS_PUT = 'api_address_change_put';

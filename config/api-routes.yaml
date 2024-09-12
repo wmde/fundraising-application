@@ -24,3 +24,8 @@ api_update_donor_put:
     path: /api/v1/donation/update/{accessToken}
     methods: [PUT]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\API\Donation\UpdateDonorController::index'
+
+api_donation_comment_post:
+    path: /api/v1/donation/comment
+    methods: [PUT,POST]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\API\Donation\AddCommentController::index'
