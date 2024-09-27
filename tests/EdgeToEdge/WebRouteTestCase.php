@@ -207,6 +207,12 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		);
 	}
 
+	protected function assertAPIErrorJsonResponse( Response $response, string $expectedMessage ): void {
+		$responseData = $this->getJsonFromResponse( $response );
+		$this->assertArrayHasKey( 'ERR', $responseData );
+		$this->assertSame( $expectedMessage, $responseData['ERR'] );
+	}
+
 	protected function getJsonFromResponse( Response $response ): array {
 		$this->assertJson( $response->getContent(), 'response is json' );
 		$result = json_decode( $response->getContent(), true );
