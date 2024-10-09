@@ -61,7 +61,7 @@ You should see a list of migrations, none them applied. In the local environment
 To test / run the new migration, run the following command:
 
 ```shell
-docker-compose exec app vendor/bin/doctrine-migrations migrations:migrations:execute 'Your\\Migration\\Name'
+docker compose exec app vendor/bin/doctrine-migrations migrations:migrations:execute 'Your\\Migration\\Name'
 ```
 
 Replace the placeholder `Your\\Migration\\Name` with the namespace name of the actual migration, e.g. `'WMDE\\Fundraising\\MembershipContext\\DataAccess\\Migrations\\Version20240528122513'`. 
