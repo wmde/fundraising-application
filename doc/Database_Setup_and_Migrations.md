@@ -7,7 +7,7 @@ The Fundraising Application has two different database environments:
 
 The two environments have different strategies for initial setup and migration of existing database structure and data:
 
-- The local environment is a "throwaway" environment - When one developer on the team changes the database structure, they notify the rest of the team that they should throw away their docker container and docker volumes and restart the development environment. The mechanism we use is putting **SQL files** with structure and data into the directory `.docker/database/`. The `docker-compose.yml` file defines a database volume that we can throw away. When the docker container starts and has no volume from previous runs, MariaDB will execute the files (in alphabetical order).
+- The local environment is a "throwaway" environment - When one developer on the team changes the database structure, they notify the rest of the team that they should throw away their docker container and docker volumes and restart the development environment. The mechanism we use is putting **SQL files** with structure and data into the directory `.docker/database/`. The `docker-compose.yml` file defines a database volume that we can throw away. When the docker container starts and has no volume from previous runs, MariaDB will execute the SQL files (in alphabetical order).
 - The server environment needs to preserve the existing data (all donations since 2011, etc.), so we can't throw the database away when we want to make changes to the structure. Therefore we use **Database Migration Scripts** that modify the database structure (and copy or modify the existing data if it needs adaptation to the new structure).
 
 
