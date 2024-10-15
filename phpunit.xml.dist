@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.2/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
     backupGlobals="false"
     bootstrap="tests/bootstrap.php"
     colors="true"
@@ -10,7 +10,7 @@
     stopOnSkipped="false"
     cacheDirectory=".phpunit.cache"
     backupStaticProperties="false"
-    requireCoverageMetadata="true" 
+    requireCoverageMetadata="true"
 >
   <php>
     <server name="APP_ENV" value="test" force="true"/>
