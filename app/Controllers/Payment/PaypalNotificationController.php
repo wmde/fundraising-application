@@ -96,9 +96,8 @@ class PaypalNotificationController {
 	}
 
 	private function getDonationId( ParameterBag $postRequest ): int {
-		$itemId = $postRequest->getInt( 'item_number', 0 );
-		if ( $itemId ) {
-			return $itemId;
+		if ( $postRequest->has( 'item_number' ) && $postRequest->getInt( 'item_number' ) !== 0 ) {
+			return $postRequest->getInt( 'item_number' );
 		}
 
 		return (int)$this->getValueFromCustomVars( $postRequest->get( 'custom', '' ), 'sid' );
