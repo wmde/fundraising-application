@@ -25,12 +25,12 @@
   },
   "text-policies": {
     "fields": {
-      "whitewords": "vendor/wmde/fundraising-frontend-content/data/white_words.txt",
-      "badwords": "vendor/wmde/fundraising-frontend-content/data/bad_words.txt"
+      "allowed-terms": "vendor/wmde/fundraising-frontend-content/data/allowed_terms.txt",
+      "banned-terms": "vendor/wmde/fundraising-frontend-content/data/banned_terms.txt"
     },
     "comment": {
-      "whitewords": "vendor/wmde/fundraising-frontend-content/data/white_words.txt",
-      "badwords": "vendor/wmde/fundraising-frontend-content/data/bad_words.txt"
+      "allowed-terms": "vendor/wmde/fundraising-frontend-content/data/allowed_terms.txt",
+      "banned-terms": "vendor/wmde/fundraising-frontend-content/data/banned_terms.txt"
     }
   },
   "i18n-base-path": "vendor/wmde/fundraising-frontend-content/i18n",
