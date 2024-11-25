@@ -23,17 +23,16 @@ campaigns:
     # param_only: (Optional) Set to true if the campaign should return the default bucket when the url key is not in a request. This is for A/B tests triggered by banners
 
 
-    address_type_steps:
-      description: Test different kinds of address options, ask user whether they want receipt or just confirmation
-      reference: "https://phabricator.wikimedia.org/T342206"
-      start: "2023-08-08" # Banners start at 2023-08-10, earlier date is for testing the banners
-      end: "2023-12-31"
+    address_type_choice:
+      description: Test offering an "anonymous" choice (coming from a banner where the user donated less than 10 EUR)
+      reference: "https://phabricator.wikimedia.org/T380462"
+      start: "2024-11-25" 
+      end: "2024-12-31"
       buckets:
-        - "direct"
-        - "preselect"
-        - "full_or_email"
-      default_bucket: "direct"
-      url_key: ast
+        - "default"
+        - "choice"
+      default_bucket: "default"
+      url_key: xf
       active: true
       param_only: true
 
