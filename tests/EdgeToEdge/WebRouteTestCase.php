@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\BrowserKitAssertionsTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -229,7 +230,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 
 	/**
 	 * @param array<string, string> $expected
-	 * @param AbstractBrowser $client
+	 * @param AbstractBrowser<Request, Response> $client
 	 */
 	protected function assertInitialFormValues( array $expected, AbstractBrowser $client ): void {
 		$initialFormValues = $client->getCrawler()->filter( 'script[data-initial-form-values]' );
