@@ -160,7 +160,7 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 	}
 
 	/**
-	 * @param Client $client
+	 * @param Client<Request, Response> $client
 	 * @param array<string, bool|string> $data
 	 * @param int $donationId
 	 * @param string $accessToken
