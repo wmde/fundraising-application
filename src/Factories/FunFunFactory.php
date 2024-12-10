@@ -873,11 +873,11 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new TextPolicyValidator(
 			new WordListFileReader(
 				$fetcher,
-				$this->getTextPolicyPathWithFallback( $policyName, 'denied_words', 'badwords' )
+				$this->getTextPolicyPathWithFallback( $policyName, 'banned-terms', 'badwords' )
 			),
 			new WordListFileReader(
 				$fetcher,
-				$this->getTextPolicyPathWithFallback( $policyName, 'allowed_words', 'whitewords' )
+				$this->getTextPolicyPathWithFallback( $policyName, 'allowed-terms', 'whitewords' )
 			)
 		);
 	}

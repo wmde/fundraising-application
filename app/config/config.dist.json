@@ -45,12 +45,12 @@
 	},
 	"text-policies": {
 		"fields": {
-			"whitewords": "",
-			"badwords": ""
+			"allowed-terms": "",
+			"banned-terms": ""
 		},
 		"comment": {
-			"whitewords": "",
-			"badwords": ""
+			"allowed-terms": "",
+			"banned-terms": ""
 		}
 	},
 	"email-address-blacklist": [],
