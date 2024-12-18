@@ -298,11 +298,11 @@
               "title": "Path to allowed words list",
               "default": ""
             },
-            "allowed_words": {
+            "allowed-terms": {
               "type": "string",
               "minLength": 0,
               "title": "Path to allowed words list",
-              "description": "Allowed words allow the words that were previously denied in the denied_words list",
+              "description": "Allowed words allow the words that were previously denied in the banned_terms list",
               "default": ""
             },
             "badwords": {
@@ -312,11 +312,11 @@
               "title": "Badwords Page Name",
               "default": ""
             },
-            "denied_words": {
+            "banned-terms": {
               "type": "string",
               "minLength": 0,
               "title": "Path to denied words list",
-              "description": "Denied words can be overridden by the allowed_words list",
+              "description": "Denied words can be overridden by the allowed_terms list",
               "default": ""
             }
           },
@@ -334,11 +334,11 @@
               "title": "Path to allowed words list",
               "default": ""
             },
-            "allowed_words": {
+            "allowed-terms": {
               "type": "string",
               "minLength": 0,
               "title": "Path to allowed words list",
-              "description": "Allowed words allow the words that were previously denied in the denied_words list",
+              "description": "Allowed words allow the words that were previously denied in the banned_terms list",
               "default": ""
             },
             "badwords": {
@@ -348,11 +348,11 @@
               "title": "Badwords Page Name",
               "default": ""
             },
-            "denied_words": {
+            "banned-terms": {
               "type": "string",
               "minLength": 0,
               "title": "Path to denied words list",
-              "description": "Denied words can be overridden by the allowed_words list",
+              "description": "Denied words can be overridden by the allowed_terms list",
               "default": ""
             }
           },
