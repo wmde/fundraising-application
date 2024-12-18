@@ -180,4 +180,29 @@ class NewDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 12, $applicationVars->tracking->impressionCount );
 		$this->assertSame( 3, $applicationVars->tracking->bannerImpressionCount );
 	}
+
+	#[DataProvider( 'receiptInputProvider' )]
+	public function testPassesReceiptToPresenter( string $receipt, ?bool $expected ): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
+
+		$client->request(
+			'GET',
+			'/',
+			[ 'receipt' => $receipt ]
+		);
+		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
+
+		$this->assertSame( $expected, $applicationVars->initialFormValues->receipt );
+	}
+
+	/**
+	 * @return iterable<string,array{string,?bool}>
+	 */
+	public static function receiptInputProvider(): iterable {
+		yield 'receipt true' => [ 'true', true ];
+		yield 'receipt false' => [ 'false', false ];
+		yield 'receipt null' => [ 'null', null ];
+		yield 'receipt is any other string' => [ 'I am not a receipt', null ];
+	}
 }
