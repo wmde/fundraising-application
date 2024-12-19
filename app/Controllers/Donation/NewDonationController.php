@@ -21,6 +21,7 @@ class NewDonationController {
 		$amount = intval( $request->get( 'amount', 0 ) );
 		$paymentType = (string)$request->get( 'paymentType', '' );
 		$interval = $this->getIntervalFromRequest( $request );
+		$receipt = $this->getReceiptFromRequest( $request );
 
 		$validationResult = $ffFactory->newPaymentValidator()->validatePaymentData(
 			$amount,
@@ -39,6 +40,7 @@ class NewDonationController {
 				$amount,
 				$paymentType,
 				$interval,
+				$receipt,
 				$validationResult,
 				$trackingInfo,
 				$request->get( 'addressType' ),
@@ -55,5 +57,19 @@ class NewDonationController {
 		}
 
 		return $interval;
+	}
+
+	private function getReceiptFromRequest( Request $request ): ?bool {
+		$receipt = $request->get( 'receipt' );
+
+		if ( $receipt === 'true' ) {
+			return true;
+		}
+
+		if ( $receipt === 'false' ) {
+			return false;
+		}
+
+		return null;
 	}
 }

@@ -23,12 +23,13 @@ class DonationFormPresenter {
 	 * @param int $amount
 	 * @param string $paymentType
 	 * @param int|null $paymentInterval
+	 * @param bool|null $receipt
 	 * @param ValidationResponse $paymentValidationResult
 	 * @param ImpressionCounts $trackingInfo
 	 * @param string|null $addressType
 	 * @param array<string, string> $urlEndpoints
 	 */
-	public function present( int $amount, string $paymentType, ?int $paymentInterval, ValidationResponse $paymentValidationResult,
+	public function present( int $amount, string $paymentType, ?int $paymentInterval, ?bool $receipt, ValidationResponse $paymentValidationResult,
 							 ImpressionCounts $trackingInfo, ?string $addressType, array $urlEndpoints ): string {
 		try {
 			$euroAmount = Euro::newFromCents( $amount );
@@ -41,7 +42,8 @@ class DonationFormPresenter {
 				'paymentType' => $paymentType,
 				'paymentIntervalInMonths' => $paymentInterval,
 				'isCustomAmount' => $this->isCustomDonationAmountValidator->validate( $euroAmount ),
-				'addressType' => $addressType
+				'addressType' => $addressType,
+				'receipt' => $receipt
 			],
 			'validationResult' => [
 				'paymentErrorFields' => array_unique( array_map(
