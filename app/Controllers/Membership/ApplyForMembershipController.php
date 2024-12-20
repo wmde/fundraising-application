@@ -51,8 +51,8 @@ class ApplyForMembershipController {
 
 	private function createMembershipRequest( Request $httpRequest ): ApplyForMembershipRequest {
 		$trackingInfo = new MembershipApplicationTrackingInfo(
-			$httpRequest->request->get( 'templateCampaign', '' ),
-			$httpRequest->request->get( 'templateName', '' )
+			$httpRequest->get( 'piwik_campaign', '' ),
+			$httpRequest->get( 'piwik_kwd', '' )
 		);
 
 		if ( $httpRequest->request->get( 'adresstyp', '' ) === 'firma' ) {

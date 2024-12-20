@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d566ff1c0d65d7b06ec900de17ad663",
+    "content-hash": "a4894c02ae4bccbf1f77b0cafa3ddbfe",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6996,16 +6996,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v16.2.0",
+            "version": "dev-ouput-stored-tracking",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "d3e37db02c3518d1b371745ecfdff60f5ca2039f"
+                "reference": "1f7ac3a44db8412df2a8ed4e54d651a0c2adc96f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/d3e37db02c3518d1b371745ecfdff60f5ca2039f",
-                "reference": "d3e37db02c3518d1b371745ecfdff60f5ca2039f",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/1f7ac3a44db8412df2a8ed4e54d651a0c2adc96f",
+                "reference": "1f7ac3a44db8412df2a8ed4e54d651a0c2adc96f",
                 "shasum": ""
             },
             "require": {
@@ -7052,7 +7052,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2024-09-04T09:34:55+00:00"
+            "time": "2024-12-20T07:57:41+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -10341,6 +10341,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "wmde/fundraising-memberships": 20,
         "airbrake/phpbrake": 20,
         "remotelyliving/doorkeeper": 20,
         "wmde/fundraising-frontend-content": 20
@@ -10360,5 +10361,5 @@
     "platform-overrides": {
         "php": "8.3"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

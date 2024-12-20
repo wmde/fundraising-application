@@ -32,6 +32,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 				'bic' => 'I has BIC',
 				'bankname' => 'I has BANK',
 			],
+			'I has CAMPAIGN/I has KEYWORD'
 		);
 	}
 
@@ -66,7 +67,8 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 				'iban' => 'I has IBAN',
 				'bic' => 'I has BIC',
 				'bankname' => 'I has BANK',
-			]
+			],
+			'tracking' => 'I has CAMPAIGN/I has KEYWORD'
 		];
 	}
 
