@@ -1351,7 +1351,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			$presenter,
 			$this->getMembershipApplicationAuthorizer( '', $accessToken ),
 			$this->getMembershipApplicationRepository(),
-			$this->newGetPaymentUseCase()
+			$this->newGetPaymentUseCase(),
+			$this->newMembershipApplicationPiwikTracker()
 		);
 	}
 
