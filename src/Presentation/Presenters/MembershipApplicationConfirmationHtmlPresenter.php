@@ -24,12 +24,14 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	/**
 	 * @param MembershipApplication $application
 	 * @param array<string, scalar> $paymentData
+	 * @param string $tracking
 	 */
-	public function presentConfirmation( MembershipApplication $application, array $paymentData ): void {
+	public function presentConfirmation( MembershipApplication $application, array $paymentData, string $tracking ): void {
 		$this->html = $this->template->render(
 			$this->getConfirmationPageArguments(
 				$application,
 				$paymentData,
+				$tracking
 			)
 		);
 	}
@@ -49,10 +51,11 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	/**
 	 * @param MembershipApplication $membershipApplication
 	 * @param array<string, scalar> $paymentData
+	 * @param string $tracking
 	 *
 	 * @return array<string, mixed>
 	 */
-	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData ): array {
+	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData, string $tracking ): array {
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $paymentData ),
 			'address' => $this->getAddressArguments( $membershipApplication->getApplicant() ),
@@ -60,7 +63,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 				'iban' => $paymentData['iban'] ?? '',
 				'bic' => $paymentData['bic'] ?? '',
 				'bankname' => $paymentData['bankname'] ?? '',
-			]
+			],
+			'tracking' => $tracking
 		];
 	}
 
