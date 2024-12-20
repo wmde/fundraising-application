@@ -10191,12 +10191,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "0a0bbcae681dac29cb0f7b9f3b4de0a2f38db37e"
+                "reference": "3ffdd41d8216387e04dbda2d73b91da32fdfb441"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/0a0bbcae681dac29cb0f7b9f3b4de0a2f38db37e",
-                "reference": "0a0bbcae681dac29cb0f7b9f3b4de0a2f38db37e",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/3ffdd41d8216387e04dbda2d73b91da32fdfb441",
+                "reference": "3ffdd41d8216387e04dbda2d73b91da32fdfb441",
                 "shasum": ""
             },
             "require": {
@@ -10220,6 +10220,10 @@
                     "@lint",
                     "@test"
                 ],
+                "uof": [
+                    "php bin/extract_to_mediawiki de > mediawiki_use_of_funds.de.txt",
+                    "php bin/extract_to_mediawiki en > mediawiki_use_of_funds.en.txt"
+                ],
                 "test": [
                     "vendor/bin/phpunit"
                 ],
@@ -10236,14 +10240,14 @@
                     "find i18n/*/mail i18n/*/shared -type f -name '*.twig' | sed -E 's#/mail/|/shared/# #' | sed 's|.twig||' | cut -d' ' -f1,2 | xargs -n 2 bash -c './vendor/bin/lint_content $0 $1'"
                 ],
                 "lint-wordlists": [
-                    "if grep -oE '\\w+ {2,}\\w+' data/bad_words.txt data/white_words.txt; then echo 'Words must only be separated by 1 space'; false; fi"
+                    "if grep -oE '\\w+ {2,}\\w+' data/banned_terms.txt data/allowed_terms.txt; then echo 'Words must only be separated by 1 space'; false; fi"
                 ]
             },
             "license": [
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2024-11-06T11:55:00+00:00"
+            "time": "2024-12-17T10:33:26+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",

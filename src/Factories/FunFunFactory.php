@@ -437,7 +437,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function getApplicationOfFundsContent(): string {
-		return ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/use_of_funds_content.json' );
+		return ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/use_of_funds_2024.json' );
 	}
 
 	public function getApplicationOfFundsMessages(): string {
