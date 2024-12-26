@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tracking\MembershipTracking;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 
 class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationConfirmationPresenter {
@@ -24,9 +25,9 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	/**
 	 * @param MembershipApplication $application
 	 * @param array<string, scalar> $paymentData
-	 * @param string $tracking
+	 * @param MembershipTracking $tracking
 	 */
-	public function presentConfirmation( MembershipApplication $application, array $paymentData, string $tracking ): void {
+	public function presentConfirmation( MembershipApplication $application, array $paymentData, MembershipTracking $tracking ): void {
 		$this->html = $this->template->render(
 			$this->getConfirmationPageArguments(
 				$application,
@@ -51,11 +52,11 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	/**
 	 * @param MembershipApplication $membershipApplication
 	 * @param array<string, scalar> $paymentData
-	 * @param string $tracking
+	 * @param MembershipTracking $tracking
 	 *
 	 * @return array<string, mixed>
 	 */
-	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData, string $tracking ): array {
+	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData, MembershipTracking $tracking ): array {
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $paymentData ),
 			'address' => $this->getAddressArguments( $membershipApplication->getApplicant() ),
@@ -64,7 +65,7 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 				'bic' => $paymentData['bic'] ?? '',
 				'bankname' => $paymentData['bankname'] ?? '',
 			],
-			'tracking' => $tracking
+			'tracking' => $tracking->__toString()
 		];
 	}
 
