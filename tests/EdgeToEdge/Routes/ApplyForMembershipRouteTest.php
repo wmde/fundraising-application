@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
@@ -150,6 +151,9 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			'bic' => ValidMembershipApplication::PAYMENT_BIC,
 			'account_number' => ValidMembershipApplication::PAYMENT_BANK_ACCOUNT,
 			'bank_code' => ValidMembershipApplication::PAYMENT_BANK_CODE,
+
+			'piwik_campaign' => 'Are those',
+			'piwik_kwd' => 'my feet?',
 		];
 	}
 
@@ -293,6 +297,45 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$this->assertTrue( $response->isRedirect() );
 		$this->assertStringContainsString( 'show-membership-confirmation', $response->headers->get( 'Location' ) ?: '' );
+	}
+
+	public function testGivenValidRequest_confirmationPageContainsCorrectData(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+		$client = $this->createClient();
+		if ( $client instanceof KernelBrowser ) {
+			$client->disableReboot();
+		}
+		$client->followRedirects( true );
+
+		$parameters = $this->newValidHttpParameters();
+		$client->request(
+			'POST',
+			'apply-for-membership',
+			$parameters
+		);
+
+		$applicationVars = $this->getDataApplicationVars( $client->getCrawler() );
+
+		$this->assertTrue( $client->getResponse()->isOk() );
+		$this->assertSame( $parameters[ 'membership_type' ], $applicationVars->membershipApplication->membershipType );
+		$this->assertSame( $parameters[ 'payment_type' ], $applicationVars->membershipApplication->paymentType );
+		$this->assertSame( 'status-booked', $applicationVars->membershipApplication->status );
+		$this->assertSame( 10, $applicationVars->membershipApplication->membershipFee );
+		$this->assertSame( (int)$parameters[ 'membership_fee' ], $applicationVars->membershipApplication->membershipFeeInCents );
+		$this->assertSame( (int)$parameters[ 'membership_fee_interval' ], $applicationVars->membershipApplication->paymentIntervalInMonths );
+		$this->assertSame( $parameters[ 'anrede' ], $applicationVars->address->salutation );
+		$this->assertSame( $parameters[ 'titel' ], $applicationVars->address->title );
+		$this->assertSame( 'Potato The Great', $applicationVars->address->fullName );
+		$this->assertSame( $parameters[ 'strasse' ], $applicationVars->address->streetAddress );
+		$this->assertSame( $parameters[ 'postcode' ], $applicationVars->address->postalCode );
+		$this->assertSame( $parameters[ 'ort' ], $applicationVars->address->city );
+		$this->assertSame( $parameters[ 'email' ], $applicationVars->address->email );
+		$this->assertSame( $parameters[ 'country' ], $applicationVars->address->countryCode );
+		$this->assertSame( 'person', $applicationVars->address->applicantType );
+		$this->assertSame( $parameters[ 'iban' ], $applicationVars->bankData->iban );
+		$this->assertSame( $parameters[ 'bic' ], $applicationVars->bankData->bic );
+		$this->assertSame( $parameters[ 'bank_name' ], $applicationVars->bankData->bankname );
+		$this->assertSame( 'Are those/my feet?', $applicationVars->tracking );
 	}
 
 	public function testWhenApplicationGetsPersisted_timestampIsStoredInSession(): void {

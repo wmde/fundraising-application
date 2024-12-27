@@ -10,6 +10,7 @@ use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Domain\Model\Applicant;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ApplicantName;
 use WMDE\Fundraising\MembershipContext\Domain\Model\MembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tracking\MembershipTracking;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 
 class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationConfirmationPresenter {
@@ -24,12 +25,14 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	/**
 	 * @param MembershipApplication $application
 	 * @param array<string, scalar> $paymentData
+	 * @param MembershipTracking $tracking
 	 */
-	public function presentConfirmation( MembershipApplication $application, array $paymentData ): void {
+	public function presentConfirmation( MembershipApplication $application, array $paymentData, MembershipTracking $tracking ): void {
 		$this->html = $this->template->render(
 			$this->getConfirmationPageArguments(
 				$application,
 				$paymentData,
+				$tracking
 			)
 		);
 	}
@@ -49,10 +52,11 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 	/**
 	 * @param MembershipApplication $membershipApplication
 	 * @param array<string, scalar> $paymentData
+	 * @param MembershipTracking $tracking
 	 *
 	 * @return array<string, mixed>
 	 */
-	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData ): array {
+	private function getConfirmationPageArguments( MembershipApplication $membershipApplication, array $paymentData, MembershipTracking $tracking ): array {
 		return [
 			'membershipApplication' => $this->getApplicationArguments( $membershipApplication, $paymentData ),
 			'address' => $this->getAddressArguments( $membershipApplication->getApplicant() ),
@@ -60,7 +64,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 				'iban' => $paymentData['iban'] ?? '',
 				'bic' => $paymentData['bic'] ?? '',
 				'bankname' => $paymentData['bankname'] ?? '',
-			]
+			],
+			'tracking' => $tracking->__toString()
 		];
 	}
 

@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\ValidMembershipApplication;
+use WMDE\Fundraising\MembershipContext\Tracking\MembershipTracking;
 
 #[CoversClass( MembershipApplicationConfirmationHtmlPresenter::class )]
 class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
@@ -32,6 +33,7 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 				'bic' => 'I has BIC',
 				'bankname' => 'I has BANK',
 			],
+			new MembershipTracking( 'I has CAMPAIGN', 'I has KEYWORD' )
 		);
 	}
 
@@ -66,7 +68,8 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 				'iban' => 'I has IBAN',
 				'bic' => 'I has BIC',
 				'bankname' => 'I has BANK',
-			]
+			],
+			'tracking' => 'I has CAMPAIGN/I has KEYWORD'
 		];
 	}
 

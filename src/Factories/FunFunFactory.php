@@ -190,18 +190,16 @@ use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizationChecker;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizer;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationPiwikTracker;
-use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineApplicationTracker;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipIdGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipRepository;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipTrackingRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository as MembershipModerationReasonRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\MembershipRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\PaymentServiceFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
-use WMDE\Fundraising\MembershipContext\Tracking\ApplicationPiwikTracker;
-use WMDE\Fundraising\MembershipContext\Tracking\ApplicationTracker;
+use WMDE\Fundraising\MembershipContext\Tracking\MembershipTrackingRepository;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Moderation\ModerationService as MembershipModerationService;
@@ -1240,8 +1238,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
-			$this->newMembershipApplicationTracker(),
-			$this->newMembershipApplicationPiwikTracker(),
+			$this->newMembershipTrackingRepository(),
 			$this->getMembershipEventEmitter(),
 			$this->getIncentiveFinder(),
 			$this->newPaymentServiceFactory()
@@ -1300,12 +1297,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newMembershipApplicationTracker(): ApplicationTracker {
-		return new DoctrineApplicationTracker( $this->getEntityManager() );
-	}
-
-	private function newMembershipApplicationPiwikTracker(): ApplicationPiwikTracker {
-		return new DoctrineApplicationPiwikTracker( $this->getEntityManager() );
+	private function newMembershipTrackingRepository(): MembershipTrackingRepository {
+		return new DoctrineMembershipTrackingRepository( $this->getEntityManager() );
 	}
 
 	public function setPaymentDelayCalculator( PaymentDelayCalculator $paymentDelayCalculator ): void {
@@ -1351,7 +1344,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			$presenter,
 			$this->getMembershipApplicationAuthorizer( '', $accessToken ),
 			$this->getMembershipApplicationRepository(),
-			$this->newGetPaymentUseCase()
+			$this->newGetPaymentUseCase(),
+			$this->newMembershipTrackingRepository()
 		);
 	}
 

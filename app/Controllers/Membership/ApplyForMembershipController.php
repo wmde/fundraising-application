@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
-use WMDE\Fundraising\MembershipContext\Tracking\MembershipApplicationTrackingInfo;
+use WMDE\Fundraising\MembershipContext\Tracking\MembershipTracking;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
@@ -50,9 +50,9 @@ class ApplyForMembershipController {
 	}
 
 	private function createMembershipRequest( Request $httpRequest ): ApplyForMembershipRequest {
-		$trackingInfo = new MembershipApplicationTrackingInfo(
-			$httpRequest->request->get( 'templateCampaign', '' ),
-			$httpRequest->request->get( 'templateName', '' )
+		$membershipTracking = new MembershipTracking(
+			$httpRequest->get( 'piwik_campaign', '' ),
+			$httpRequest->get( 'piwik_kwd', '' )
 		);
 
 		if ( $httpRequest->request->get( 'adresstyp', '' ) === 'firma' ) {
@@ -67,7 +67,7 @@ class ApplyForMembershipController {
 				optsIntoDonationReceipt: $httpRequest->request->getBoolean( 'donationReceipt', true ),
 				incentives: array_filter( $httpRequest->request->all( 'incentives' ) ),
 				paymentParameters: $this->newPaymentParameters( $httpRequest ),
-				trackingInfo: $trackingInfo,
+				trackingInfo: $membershipTracking,
 			);
 		} else {
 			return ApplyForMembershipRequest::newPrivateApplyForMembershipRequest(
@@ -84,7 +84,7 @@ class ApplyForMembershipController {
 				optsIntoDonationReceipt: $httpRequest->request->getBoolean( 'donationReceipt', true ),
 				incentives: array_filter( $httpRequest->request->all( 'incentives' ) ),
 				paymentParameters: $this->newPaymentParameters( $httpRequest ),
-				trackingInfo: $trackingInfo,
+				trackingInfo: $membershipTracking,
 				applicantDateOfBirth: $httpRequest->request->get( 'dob', '' ),
 			);
 		}

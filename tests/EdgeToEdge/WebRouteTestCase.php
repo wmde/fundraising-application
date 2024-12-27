@@ -235,7 +235,8 @@ abstract class WebRouteTestCase extends KernelTestCase {
 		$initialFormValues = $client->getCrawler()->filter( 'script[data-initial-form-values]' );
 		$this->assertGreaterThan(
 			0,
-			$initialFormValues->count()
+			$initialFormValues->count(),
+			'HTML should contain initial values'
 		);
 		$json = $initialFormValues->attr( 'data-initial-form-values' ) ?? '';
 		$data = json_decode( $json, true );
