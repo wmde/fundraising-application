@@ -71,6 +71,26 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
 	}
 
+	public function testGivenRequestWithEmptyItemId_getsIdFromCustomArray(): void {
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+
+		$this->storedDonations()->newStoredIncompletePayPalDonation( self::UPDATE_TOKEN );
+
+		$request = $this->newHttpParamsForPayment();
+		$request['item_number'] = '';
+
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$request
+		);
+
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
+	}
+
 	public function testGivenValidRequestToLegacyPath_applicationIndicatesSuccess(): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
