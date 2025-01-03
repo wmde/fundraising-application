@@ -12,7 +12,7 @@ class FrameworkAddCommentRequest {
 		public readonly int $donationId,
 		public readonly string $updateToken = '',
 		public readonly bool $isPublic = false,
-		public readonly bool $isAnonymous = false,
+		public readonly bool $withName = false,
 	) {
 	}
 
@@ -20,7 +20,7 @@ class FrameworkAddCommentRequest {
 		return new AddCommentRequest(
 			commentText: $this->comment,
 			isPublic: $this->isPublic,
-			isAnonymous: $this->isAnonymous,
+			isAnonymous: !$this->withName,
 			donationId: $this->donationId,
 		);
 	}
