@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\BrowserKit\AbstractBrowser as Client;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
@@ -94,6 +95,12 @@ class ShowDonationConfirmationRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( 'anonym', $dataVars->addressType );
 	}
 
+	/**
+	 * @param Client<Request, Response> $client
+	 * @param int $donationId
+	 *
+	 * @return string
+	 */
 	private function retrieveDonationConfirmation( Client $client, int $donationId ): string {
 		$client->request(
 			'GET',

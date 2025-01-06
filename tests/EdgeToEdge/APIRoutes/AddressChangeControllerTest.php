@@ -200,7 +200,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 	}
 
 	/**
-	 * @param Client $client
+	 * @param Client<Request, Response> $client
 	 * @param string $identifier
 	 * @param array<string, bool|string> $requestBody
 	 */
@@ -216,6 +216,13 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 		return $response;
 	}
 
+	/**
+	 * @param Client<Request, Response> $client
+	 * @param string $identifier
+	 * @param string|null $previousIdentifier
+	 *
+	 * @return Response
+	 */
 	private function whenGetRequestIsSubmitted( Client $client, string $identifier, string $previousIdentifier = null ): Response {
 		$client->jsonRequest(
 			Request::METHOD_GET,
