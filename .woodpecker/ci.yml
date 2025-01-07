@@ -38,7 +38,6 @@ steps:
 
   - name: upload-coverage
     image: registry.gitlab.com/fun-tech/fundraising-frontend-docker:ci
-    environment:
     commands:
       # Upload coverage to Scrutinizer
       - ocular code-coverage:upload --no-interaction --format=php-clover coverage.xml
