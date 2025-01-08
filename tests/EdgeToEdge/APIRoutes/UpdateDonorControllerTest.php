@@ -160,11 +160,13 @@ class UpdateDonorControllerTest extends WebRouteTestCase {
 	}
 
 	/**
-	 * @param Client $client
+	 * @param Client<Request, Response> $client
 	 * @param array<string, bool|string> $data
 	 * @param int $donationId
 	 * @param string $accessToken
 	 * @param string $updateToken
+	 *
+	 * @return Crawler
 	 */
 	private function performRequest( Client $client, array $data, int $donationId, string $accessToken, string $updateToken ): Crawler {
 		return $client->jsonRequest(
