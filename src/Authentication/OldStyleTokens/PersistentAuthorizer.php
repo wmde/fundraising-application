@@ -28,7 +28,7 @@ class PersistentAuthorizer implements DonationAuthorizer, MembershipAuthorizer {
 		private readonly TokenGenerator $tokenGenerator,
 		private readonly LoggerInterface $logger,
 		private readonly \DateInterval $updateTokenExpiry,
-		Clock $clock = null
+		?Clock $clock = null
 	) {
 		if ( $clock === null ) {
 			$this->clock = new SystemClock();
