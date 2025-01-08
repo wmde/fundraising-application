@@ -11,7 +11,7 @@ use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\CampaignDate;
 class CampaignFixture {
 
 	public static function createBucket(
-		Campaign $campaign = null,
+		?Campaign $campaign = null,
 		string $bucketName = 'test',
 		bool $isDefault = Bucket::DEFAULT
 	): Bucket {

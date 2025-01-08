@@ -17,7 +17,7 @@ class AuthorizationChecker implements DonationAuthorizationChecker, MembershipAu
 		private readonly TokenRepository $repository,
 		private readonly string $updateToken = '',
 		private readonly string $accessToken = '',
-		Clock $clock = null
+		?Clock $clock = null
 	) {
 		$this->clock = $clock ?? new SystemClock();
 	}

@@ -223,7 +223,7 @@ class AddressChangeControllerTest extends WebRouteTestCase {
 	 *
 	 * @return Response
 	 */
-	private function whenGetRequestIsSubmitted( Client $client, string $identifier, string $previousIdentifier = null ): Response {
+	private function whenGetRequestIsSubmitted( Client $client, string $identifier, ?string $previousIdentifier = null ): Response {
 		$client->jsonRequest(
 			Request::METHOD_GET,
 			'/api/v1/address_change/' . $identifier . ( $previousIdentifier ? "/$previousIdentifier" : '' ),

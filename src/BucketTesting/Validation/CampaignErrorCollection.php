@@ -13,7 +13,7 @@ class CampaignErrorCollection {
 	 */
 	private array $errors = [];
 
-	public function addError( string $error, Campaign $campaign = null ): void {
+	public function addError( string $error, ?Campaign $campaign = null ): void {
 		if ( $campaign ) {
 			$error = $campaign->getName() . ': ' . $error;
 		}

@@ -23,12 +23,12 @@ class Messenger {
 		$this->sendMessage( $this->createMessage( $messageContent, $recipient ) );
 	}
 
-	public function sendMessageToOperator( Message $messageContent, EmailAddress $replyTo = null ): void {
+	public function sendMessageToOperator( Message $messageContent, ?EmailAddress $replyTo = null ): void {
 		$this->sendMessage( $this->createMessage( $messageContent, $this->operatorAddress, $replyTo ) );
 	}
 
 	private function createMessage( Message $messageContent, EmailAddress $recipient,
-									EmailAddress $replyTo = null ): Email {
+									?EmailAddress $replyTo = null ): Email {
 		$message = new Email();
 		$message
 			->text( $messageContent->getMessageBody() )
