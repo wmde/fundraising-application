@@ -46,7 +46,7 @@
 		"doctrine/dbal": "~4.0",
 		"guzzlehttp/guzzle": "^7.5",
 		"jeroen/file-fetcher": "~6.0",
-		"justinrainbow/json-schema": "^5.2",
+		"justinrainbow/json-schema": "^6.0",
 		"monolog/monolog": "^3.0",
 		"nikic/php-parser": "~4.0",
 		"psr/log": "~3.0",
