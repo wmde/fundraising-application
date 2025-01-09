@@ -117,7 +117,7 @@
 		"mikey179/vfsstream": "~1.6",
 		"phpmd/phpmd": "~2.10",
 		"phpstan/phpstan": "^1.11",
-		"phpunit/phpunit": "~10.4.1",
+		"phpunit/phpunit": "~11.4",
 		"phpstan/phpstan-phpunit": "^1.4",
 		"phpstan/phpstan-doctrine": "~1.4",
 
