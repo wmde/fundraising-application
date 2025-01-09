@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
+use PhpParser\PhpVersion;
 
 class FeatureToggleParser {
 
@@ -51,7 +52,7 @@ class FeatureToggleParser {
 	 * @return MethodCall[]
 	 */
 	private static function parseMethodCalls( string $choiceFactoryLocation ): array {
-		$parser = ( new ParserFactory() )->create( ParserFactory::PREFER_PHP7 );
+		$parser = ( new ParserFactory() )->createForVersion( PhpVersion::fromComponents( 8, 3 ) );
 		$nodeFinder = new NodeFinder();
 		$choiceFactoryCode = ( new SimpleFileFetcher() )->fetchFile( $choiceFactoryLocation );
 		$syntaxTree = $parser->parse( $choiceFactoryCode );
