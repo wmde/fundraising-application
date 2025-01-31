@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/wmde/fundraising-application.svg?branch=main)](https://travis-ci.org/wmde/fundraising-application)
-[![Code Coverage](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/?branch=main)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/wmde/FundraisingFrontend/?branch=main)
 
 User facing application for the [Wikimedia Deutschland](https://wikimedia.de) fundraising.
 
@@ -227,10 +224,9 @@ If you want to fix the code style violations, run
 
 We perform static code analysis with [PHPStan](https://github.com/phpstan/phpstan/) during runs of `make ci`.
 
-In the absence of dev-dependencies (i.e. to simulate the vendor/ code on production) you can run PHPStan with the commands
+In the absence of dev-dependencies (i.e. the `vendor/` directory contains no dev-dependencies), you can run PHPStan with the commands
 
-    docker build -t wmde/fundraising-frontend-phpstan build/phpstan
-    docker run -v $PWD:/app --rm wmde/fundraising-frontend-phpstan analyse -c phpstan.neon --level 1 --no-progress cli/ contexts/ src/
+    docker run -v $PWD:/app --rm registry.gitlab.com/fun-tech/fundraising-frontend-docker phpstan analyse --level=9 -c phpstan.neon cli/ src/ tests/
 
 These tasks are also performed during the [DroneCI](.drone.yml) runs.
 
@@ -392,7 +388,7 @@ To update only the messages in the application and emails, update the
 
 For updating an individual PHP dependency, use the command line
 
-    docker run --rm -it -v $(pwd):/app -u $(id -u):$(id -g) registry.gitlab.com/fun-tech/fundraising-frontend-docker:composer composer update PACKAGE_NAME
+    make update-php COMPOSER_FLAGS=PACKAGE_NAME
 
 and replace the `PACKAGE_NAME` placeholder with the name of your package.
 
