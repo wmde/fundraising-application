@@ -1385,11 +1385,15 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getMembershipApplicationFormTemplate(): TwigTemplate {
 		$validation = $this->getValidationRules();
-		$paymentIntervals = $this->getChoiceFactory()->getMembershipPaymentIntervals();
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
-			'paymentIntervals' => $paymentIntervals,
+			'paymentIntervals' => [
+				PaymentInterval::Monthly->value,
+				PaymentInterval::Quarterly->value,
+				PaymentInterval::HalfYearly->value,
+				PaymentInterval::Yearly->value,
+			],
 			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 			'countries' => $this->getCountries(),
 			'addressValidationPatterns' => $validation->address,
@@ -1708,6 +1712,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
+	/** @phpstan-ignore-next-line method.unused This method is used for server-side AB test bucket setups (See documentation on A/B testing).
+	 * Remove this ignore statement when you use this method for an AB test.
+	 */
 	private function getChoiceFactory(): ChoiceFactory {
 		return $this->createSharedObject( ChoiceFactory::class, function (): ChoiceFactory {
 			return new ChoiceFactory( $this->getFeatureToggle() );

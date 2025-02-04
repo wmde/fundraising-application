@@ -26,26 +26,13 @@ campaigns:
     address_type_choice:
       description: Test offering an "anonymous" choice (coming from a banner where the user donated less than 10 EUR)
       reference: "https://phabricator.wikimedia.org/T380462"
-      start: "2024-11-25" 
+      start: "2024-11-25"
       end: "2024-12-31"
       buckets:
         - "default"
         - "choice"
       default_bucket: "default"
       url_key: xf
-      active: true
-      param_only: true
-
-    membership_intervals:
-      description: Test offering only monthly and yearly payments in the membership form
-      reference: "https://phabricator.wikimedia.org/T326300"
-      start: "2023-01-05"
-      end: "2023-12-31"
-      buckets:
-        - "all_intervals"
-        - "some_intervals"
-      default_bucket: "all_intervals"
-      url_key: mbi
       active: true
       param_only: true
 
