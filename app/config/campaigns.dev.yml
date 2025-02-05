@@ -6,11 +6,6 @@ campaigns:
     start: "2024-11-21"
     end: "2024-12-31"
 
-  membership_intervals:
-    start: "2023-01-05"
-    default_bucket: "all_intervals"
-    active: true
-
   address_pages:
     start: "2023-01-01"
     default_bucket: "legacy"
