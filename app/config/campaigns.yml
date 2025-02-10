@@ -40,7 +40,7 @@ campaigns:
       description: Test different iterations of address pages
       reference: "https://phabricator.wikimedia.org/T366576"
       start: "2024-07-01"
-      end: "2024-12-31"
+      end: "2026-02-28"
       buckets:
         - "legacy"
         - "test_02"
