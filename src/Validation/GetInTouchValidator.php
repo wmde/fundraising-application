@@ -5,30 +5,48 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Validation;
 
 use WMDE\Fundraising\Frontend\UseCases\GetInTouch\GetInTouchRequest;
-use WMDE\FunValidators\CanValidateField;
+use WMDE\FunValidators\ConstraintViolation;
 use WMDE\FunValidators\ValidationResult;
 use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\FunValidators\Validators\IntegerValueValidator;
 use WMDE\FunValidators\Validators\RequiredFieldValidator;
 
 class GetInTouchValidator {
-	use CanValidateField;
 
 	public function __construct( private readonly EmailValidator $mailValidator ) {
 	}
 
-	public function validate( GetInTouchRequest $instance ): ValidationResult {
+	public function validate( GetInTouchRequest $request ): ValidationResult {
 		$requiredFieldValidator = new RequiredFieldValidator();
 		$integerValueValidator = new IntegerValueValidator();
 
-		return new ValidationResult( ...array_filter( [
-			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getSubject() ), 'subject' ),
-			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getCategory() ), 'category' ),
-			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getMessageBody() ), 'messageBody' ),
-			$this->getFieldViolation( $requiredFieldValidator->validate( $instance->getEmailAddress() ), 'email' ),
-			$this->getFieldViolation( $this->mailValidator->validate( $instance->getEmailAddress() ), 'email' ),
-			$instance->getDonationNumber() ? $this->getFieldViolation( $integerValueValidator->validate( $instance->getDonationNumber() ), 'donationNumber' ) : null,
-		] ) );
+		$allValidationResults = [
+			$requiredFieldValidator->validate( $request->getSubject() )->setSourceForAllViolations( 'subject' ),
+			$requiredFieldValidator->validate( $request->getCategory() )->setSourceForAllViolations( 'category' ),
+			$requiredFieldValidator->validate( $request->getMessageBody() )->setSourceForAllViolations( 'messageBody' ),
+			// Email is required and has to be valid, so we check it with two validators
+			$requiredFieldValidator->validate( $request->getEmailAddress() )->setSourceForAllViolations( 'email' ),
+			$this->mailValidator->validate( $request->getEmailAddress() )->setSourceForAllViolations( 'email' ),
+		];
+		// Donation number is optional, but has to be integer if set
+		if ( $request->getDonationNumber() ) {
+			$allValidationResults[] = $integerValueValidator->validate( $request->getDonationNumber() )->setSourceForAllViolations( 'donationNumber' );
+		}
+
+		return new ValidationResult( ...$this->getConstraintViolationsFromResults( $allValidationResults ) );
+	}
+
+	/**
+	 * @param ValidationResult[] $allValidationResults
+	 * @return ConstraintViolation[]
+	 */
+	private function getConstraintViolationsFromResults( array $allValidationResults ): array {
+		$constraintViolations = [];
+		foreach ( $allValidationResults as $validationResult ) {
+			$constraintViolations[] = $validationResult->getFirstViolation();
+		}
+		// Remove null values from validation results without errors (getFirstViolation returns null in that case)
+		return array_filter( $constraintViolations );
 	}
 
 }
