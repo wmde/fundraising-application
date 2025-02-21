@@ -83,8 +83,7 @@ download-assets:
 # Maintenance
 
 clear:
-	docker compose exec app sh -c "rm -rf /tmp/symfony/cache/*"
-	docker compose exec app chown -R www-data:www-data /tmp/symfony
+	docker compose run --rm --no-deps app sh -c "if [ -d /tmp/symfony/cache ]; then rm -rf /tmp/symfony/cache/*; chown -R www-data:www-data /tmp/symfony; fi"
 
 # an alias to avoid frequent typo
 clean: clear
