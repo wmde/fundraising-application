@@ -6896,25 +6896,25 @@
         },
         {
             "name": "wmde/fun-validators",
-            "version": "v4.1.0",
+            "version": "v4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators",
-                "reference": "99fc84bb4716f383a9eebbe693d95da9544bb781"
+                "reference": "71abd74a28047008e7a7213ed39abf98558ad87c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/99fc84bb4716f383a9eebbe693d95da9544bb781",
-                "reference": "99fc84bb4716f383a9eebbe693d95da9544bb781",
+                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/71abd74a28047008e7a7213ed39abf98558ad87c",
+                "reference": "71abd74a28047008e7a7213ed39abf98558ad87c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.3"
             },
             "require-dev": {
-                "phpstan/phpstan": "^1.0",
-                "phpunit/phpunit": "~10.0",
-                "wmde/fundraising-phpcs": "~9.0"
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "~11.0",
+                "wmde/fundraising-phpcs": "~12.0"
             },
             "type": "library",
             "extra": {
@@ -6936,7 +6936,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "General and shared validation services created as part of the WMDE fundraising software",
-            "time": "2023-11-28T09:47:22+00:00"
+            "time": "2025-02-21T17:33:47+00:00"
         },
         {
             "name": "wmde/fundraising-address-change",
