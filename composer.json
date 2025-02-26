@@ -22,7 +22,7 @@
 		"wmde/fundraising-subscriptions": "~5.0",
 		"wmde/fundraising-content-provider": "~6.1",
 		"wmde/fundraising-address-change": "~4.1",
-		"wmde/fun-validators": "~4.2",
+		"wmde/fun-validators": "~5.0",
 
 		"symfony/asset": "~7.0",
 		"symfony/config": "~7.0",
