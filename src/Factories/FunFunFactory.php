@@ -1207,7 +1207,6 @@ class FunFunFactory implements LoggerAwareInterface {
 					]
 				)
 			),
-			$this->getUrlGenerator(),
 			$this->getUrlAuthenticationLoader(),
 			$this->getCountries(),
 			$this->getValidationRules()->address,

@@ -8,7 +8,6 @@ use WMDE\Euro\Euro;
 use WMDE\Fundraising\DonationContext\Domain\Model\Donation;
 use WMDE\Fundraising\Frontend\Authentication\DonationUrlAuthenticationLoader;
 use WMDE\Fundraising\Frontend\Infrastructure\AddressType;
-use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\DonorDataFormatter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 
@@ -21,14 +20,12 @@ class DonationConfirmationHtmlPresenter {
 
 	/**
 	 * @param TwigTemplate $template
-	 * @param UrlGenerator $urlGenerator
 	 * @param DonationUrlAuthenticationLoader $authenticationLoader
 	 * @param array<string, mixed> $countries
 	 * @param \stdClass $validation
 	 */
 	public function __construct(
 		private readonly TwigTemplate $template,
-		private readonly UrlGenerator $urlGenerator,
 		private readonly DonationUrlAuthenticationLoader $authenticationLoader,
 		private readonly array $countries,
 		\stdClass $validation
@@ -89,20 +86,7 @@ class DonationConfirmationHtmlPresenter {
 			],
 			'urls' => [
 				...$urlEndpoints,
-				'addComment'  => $this->createUrlForAddingComment( $donation->getId() ),
 			]
 		];
-	}
-
-	private function createUrlForAddingComment( int $donationId ): string {
-		return $this->urlGenerator->generateRelativeUrl(
-			'AddCommentPage',
-			$this->authenticationLoader->addDonationAuthorizationParameters(
-				$donationId,
-				[
-					'donationId' => $donationId,
-				]
-			)
-		);
 	}
 }

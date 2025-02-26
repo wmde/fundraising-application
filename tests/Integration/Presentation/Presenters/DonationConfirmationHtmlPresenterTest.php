@@ -11,7 +11,6 @@ use WMDE\Fundraising\DonationContext\Tests\Data\ValidDonation;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\DonationUrlAuthenticationLoaderStub;
-use WMDE\Fundraising\Frontend\Tests\Fixtures\FakeUrlGenerator;
 
 #[CoversClass( DonationConfirmationHtmlPresenter::class )]
 class DonationConfirmationHtmlPresenterTest extends TestCase {
@@ -25,7 +24,6 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 
 		$presenter = new DonationConfirmationHtmlPresenter(
 			$this->newTwigTemplateMock( $expectedParameters ),
-			new FakeUrlGenerator(),
 			new DonationUrlAuthenticationLoaderStub( [
 				'updateToken' => self::UPDATE_TOKEN,
 				'accessToken' => self::ACCESS_TOKEN,
@@ -83,7 +81,6 @@ class DonationConfirmationHtmlPresenterTest extends TestCase {
 			],
 			'urls' => [
 				'testUrl' => 'https://example.com/',
-				'addComment' => '/such.a.url/AddCommentPage?donationId=42&updateToken=update_token&accessToken=access_token'
 			],
 			'countries' => [],
 			'addressValidationPatterns' => (object)[],

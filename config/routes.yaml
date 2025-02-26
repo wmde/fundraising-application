@@ -68,16 +68,6 @@ generate_iban:
     methods: [GET]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Payment\BankDataToIbanController::index'
 
-PostComment:
-    path: /add-comment
-    methods: [POST]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\AddCommentController::index'
-
-AddCommentPage:
-    path: /add-comment
-    methods: [GET]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\AddCommentController::index'
-
 POST_contact_get_in_touch:
     path: /contact/get-in-touch
     methods: [POST]
