@@ -1596,16 +1596,16 @@
         },
         {
             "name": "jeroen/file-fetcher",
-            "version": "6.1.0",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JeroenDeDauw/FileFetcher.git",
-                "reference": "d38fb0587b52b28bd24fda599f2da69ac8530453"
+                "reference": "d9fadc0486ef690ce7dd9c6d32d6e5f2857bfd80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JeroenDeDauw/FileFetcher/zipball/d38fb0587b52b28bd24fda599f2da69ac8530453",
-                "reference": "d38fb0587b52b28bd24fda599f2da69ac8530453",
+                "url": "https://api.github.com/repos/JeroenDeDauw/FileFetcher/zipball/d9fadc0486ef690ce7dd9c6d32d6e5f2857bfd80",
+                "reference": "d9fadc0486ef690ce7dd9c6d32d6e5f2857bfd80",
                 "shasum": ""
             },
             "require": {
@@ -1613,7 +1613,7 @@
                 "psr/log": "~3.0|~2.0|~1.0"
             },
             "require-dev": {
-                "jeroen/psr-log-test-doubles": "~3.1",
+                "jeroen/psr-log-test-doubles": "~3.0|~2.2",
                 "phpstan/phpstan": "~1.6.0",
                 "phpunit/phpunit": "~9.5",
                 "squizlabs/php_codesniffer": "~3.2",
@@ -1665,7 +1665,7 @@
             ],
             "support": {
                 "issues": "https://github.com/JeroenDeDauw/FileFetcher/issues",
-                "source": "https://github.com/JeroenDeDauw/FileFetcher/tree/6.1.0"
+                "source": "https://github.com/JeroenDeDauw/FileFetcher/tree/6.1.1"
             },
             "funding": [
                 {
@@ -1673,7 +1673,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-04-26T17:29:31+00:00"
+            "time": "2025-02-26T21:03:11+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
