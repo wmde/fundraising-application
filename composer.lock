@@ -7105,12 +7105,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "63447506a948f1ebc6a0a868660c54126ef4c9db"
+                "reference": "e88296d3deee78cf2424f4cb2070dab25f82eb3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/63447506a948f1ebc6a0a868660c54126ef4c9db",
-                "reference": "63447506a948f1ebc6a0a868660c54126ef4c9db",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/e88296d3deee78cf2424f4cb2070dab25f82eb3b",
+                "reference": "e88296d3deee78cf2424f4cb2070dab25f82eb3b",
                 "shasum": ""
             },
             "require": {
@@ -7157,7 +7157,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2025-03-07T08:10:34+00:00"
+            "time": "2025-03-07T09:34:18+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -10375,12 +10375,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "442263e023840ca0a5b402e6302a33177e1725cc"
+                "reference": "df26f2eeaf6b57e23610b4159c4bcd698cd7850e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/442263e023840ca0a5b402e6302a33177e1725cc",
-                "reference": "442263e023840ca0a5b402e6302a33177e1725cc",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/df26f2eeaf6b57e23610b4159c4bcd698cd7850e",
+                "reference": "df26f2eeaf6b57e23610b4159c4bcd698cd7850e",
                 "shasum": ""
             },
             "require": {
@@ -10431,7 +10431,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2025-03-04T08:52:20+00:00"
+            "time": "2025-03-07T08:53:01+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
@@ -10545,5 +10545,5 @@
     "platform-overrides": {
         "php": "8.3"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

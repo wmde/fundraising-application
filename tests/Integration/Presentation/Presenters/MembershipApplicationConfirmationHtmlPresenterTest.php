@@ -51,7 +51,8 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 				'membershipFeeInCents' => 1000,
 				'paymentIntervalInMonths' => 3,
 				'updateToken' => '',
-				'incentives' => []
+				'incentives' => [],
+				'isExported' => false
 			],
 			'address' => [
 				'salutation' => 'Herr',
