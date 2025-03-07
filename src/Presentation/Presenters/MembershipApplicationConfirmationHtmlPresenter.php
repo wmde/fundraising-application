@@ -89,7 +89,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'paymentIntervalInMonths' => $paymentData['interval'],
 			// TODO - this is deprecated, the template should not use the updateToken on its own and instead should use the provided URLs
 			'updateToken' => '',
-			'incentives' => iterator_to_array( $membershipApplication->getIncentives() )
+			'incentives' => iterator_to_array( $membershipApplication->getIncentives() ),
+			'isExported' => $membershipApplication->isExported()
 		];
 	}
 
