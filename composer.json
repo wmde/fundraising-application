@@ -113,7 +113,7 @@
 	"require-dev": {
 		"ext-pdo_sqlite": "*",
 
-		"matthiasnoback/symfony-config-test": "~5.0",
+		"matthiasnoback/symfony-config-test": "~6.0",
 		"mikey179/vfsstream": "~1.6",
 		"phpmd/phpmd": "~2.10",
 		"phpstan/phpstan": "^1.11",
