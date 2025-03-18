@@ -9,11 +9,16 @@ clone:
       depth: 10
       lfs: false
 
+matrix:
+  CONTAINER_IMAGE:
+    - registry.gitlab.com/fun-tech/fundraising-frontend-docker:latest
+    - registry.gitlab.com/fun-tech/fundraising-frontend-docker/php-8.4:latest
+
 steps:
   - name: build
     when:
       -   event: [ push, pull_request, cron, manual ]
-    image: registry.gitlab.com/fun-tech/fundraising-frontend-docker:latest
+    image: ${CONTAINER_IMAGE}
     environment:
       COMPOSER_CACHE_DIR: /composer_cache
       GITHUB_TOKEN:
