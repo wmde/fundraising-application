@@ -85,7 +85,8 @@ class WebTemplatingFactoryTest extends KernelTestCase {
 			'lorem.twig' => 'More Dragons!'
 		] );
 		$provider = $this->getMockContentProvider();
-		$provider->method( 'getWeb' )
+		$provider->expects( $this->once() )
+			->method( 'getWeb' )
 			->with( 'lorem', [ 'state' => 'fine' ] )
 			->willReturn( 'ipsum. all is <strong>fine</strong>.' );
 		$factory->setContentProvider( $provider );
@@ -101,7 +102,8 @@ class WebTemplatingFactoryTest extends KernelTestCase {
 			'template_with_content.html.twig' => '{$ web_content("lorem") $}',
 		] );
 		$provider = $this->getMockContentProvider();
-		$provider->method( 'getWeb' )
+		$provider->expects( $this->once() )
+			->method( 'getWeb' )
 			->with( 'lorem' )
 			->willThrowException( new ContentException( "An exception occurred rendering 'lorem'" ) );
 		$factory->setContentProvider( $provider );

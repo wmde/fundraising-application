@@ -82,7 +82,8 @@ class MailerTemplatingFactoryTest extends KernelTestCase {
 			'lorem.twig' => 'More Dragons!'
 		] );
 		$this->factory->setMailTemplateDirectory( vfsStream::url( self::TEMPLATE_DIR ) );
-		$this->contentProvider->method( 'getMail' )
+		$this->contentProvider->expects( $this->once() )
+			->method( 'getMail' )
 			->with( 'something', [ 'donation_id' => 45 ] )
 			->willReturn( 'you got mail' );
 
