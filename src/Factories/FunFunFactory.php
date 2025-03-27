@@ -53,12 +53,14 @@ use WMDE\Fundraising\AddressChangeContext\UseCases\ReadAddressChange\ReadAddress
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\ContentProvider\TwigContentProviderConfig;
 use WMDE\Fundraising\ContentProvider\TwigContentProviderFactory;
+use WMDE\Fundraising\DonationContext\DataAccess\DatabaseDonationAnonymizer;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineCommentFinder;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationEventLogger;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationExistsChecker;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationIdRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineDonationRepository;
 use WMDE\Fundraising\DonationContext\DataAccess\ModerationReasonRepository as DonationModerationReasonRepository;
+use WMDE\Fundraising\DonationContext\Domain\DonationAnonymizer;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationExistsChecker;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationIdRepository;
@@ -191,11 +193,13 @@ use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizationChecker;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizer;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipAnonymizer;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipIdGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipTrackingRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository as MembershipModerationReasonRepository;
+use WMDE\Fundraising\MembershipContext\Domain\MembershipAnonymizer;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\MembershipRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\PaymentServiceFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
@@ -2154,6 +2158,23 @@ class FunFunFactory implements LoggerAwareInterface {
 			$blockList = $this->config['email-address-blacklist'] ?? [];
 		}
 		return $blockList;
+	}
+
+	public function newMembershipAnonymizer(): MembershipAnonymizer {
+		return new DoctrineMembershipAnonymizer(
+			$this->getConnection(),
+			new SystemClock(),
+			new \DateInterval( 'P2D' )
+		);
+	}
+
+	public function newDonationAnonymizer(): DonationAnonymizer {
+		return new DatabaseDonationAnonymizer(
+			$this->getDonationRepository(),
+			$this->getEntityManager(),
+			new SystemClock(),
+			new \DateInterval( 'P2D' )
+		);
 	}
 
 }
