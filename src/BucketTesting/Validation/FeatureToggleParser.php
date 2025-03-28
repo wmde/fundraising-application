@@ -6,7 +6,6 @@ namespace WMDE\Fundraising\Frontend\BucketTesting\Validation;
 
 use FileFetcher\SimpleFileFetcher;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\NodeFinder;
@@ -31,10 +30,6 @@ class FeatureToggleParser {
 			}
 
 			$argument = $args[0];
-
-			if ( !$argument instanceof Arg ) {
-				throw new \LogicException( self::FEATURE_TOGGLE_METHOD_NAME . ' argument should be an instance of Arg.' );
-			}
 			$value = $argument->value;
 
 			if ( !( $value instanceof Node\Scalar\String_ ) ) {

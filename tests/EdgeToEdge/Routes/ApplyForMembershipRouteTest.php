@@ -7,7 +7,6 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
@@ -302,9 +301,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_confirmationPageContainsCorrectData(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
-		if ( $client instanceof KernelBrowser ) {
-			$client->disableReboot();
-		}
+		$client->disableReboot();
 		$client->followRedirects( true );
 
 		$parameters = $this->newValidHttpParameters();

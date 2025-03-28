@@ -99,7 +99,6 @@ class FileFeatureReaderTest extends TestCase {
 	 */
 	private function assertLogLevel( LoggerSpy $logger, $expectedLevel ): void {
 		$logEntry = $logger->getFirstLogCall();
-		$this->assertNotNull( $logEntry, 'Logger should contain log message' );
 		$this->assertSame( $expectedLevel, $logEntry->getLevel() );
 	}
 
