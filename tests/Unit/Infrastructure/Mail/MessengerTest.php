@@ -45,12 +45,12 @@ class MessengerTest extends TestCase {
 			new EmailAddress( 'hostmaster@thatoperator.com' )
 		);
 
+		$this->expectNotToPerformAssertions();
+
 		$messenger->sendMessageToUser(
 			new Message( 'Test message', 'Test content' ),
 			new EmailAddress( 'info@müllerrr.de' )
 		);
-
-		$this->assertTrue( true );
 	}
 
 }
