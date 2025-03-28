@@ -22,7 +22,10 @@ class ValidationErrorLoggerTest extends TestCase {
 
 		// The logger spy throws an assertion
 		$loggerSpy->assertNoLoggingCallsWhereMade();
-		// This is a hacky way of making phpunit happy
+		/**
+		 * This is a hacky way of making phpunit happy
+		 * @phpstan-ignore-next-line
+		 */
 		$this->assertTrue( true );
 	}
 

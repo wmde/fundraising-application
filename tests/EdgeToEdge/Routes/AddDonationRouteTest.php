@@ -9,7 +9,6 @@ use Monolog\Logger;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
@@ -140,9 +139,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	public function testGivenValidRequest_confirmationPageContainsEnteredData(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
-		if ( $client instanceof KernelBrowser ) {
-			$client->disableReboot();
-		}
+		$client->disableReboot();
 		$client->followRedirects( true );
 		$client->request(
 			'POST',
