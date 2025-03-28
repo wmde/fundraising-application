@@ -121,7 +121,7 @@ parameters:
 			path: src/Infrastructure/Translation/JsonTranslator.php
 
 		-
-			message: "#^Property WMDE\\\\Fundraising\\\\Frontend\\\\Infrastructure\\\\Translation\\\\JsonTranslator\\:\\:\\$messages \\(array\\<string, string\\>\\) does not accept array\\.$#"
+			message: "#^Property WMDE\\\\Fundraising\\\\Frontend\\\\Infrastructure\\\\Translation\\\\JsonTranslator\\:\\:\\$messages \\(array\\<string, string\\>\\) does not accept array\\<mixed, mixed\\>\\.$#"
 			count: 1
 			path: src/Infrastructure/Translation/JsonTranslator.php
 
@@ -141,7 +141,7 @@ parameters:
 			path: src/Infrastructure/Mail/AdminModerationMailRenderer.php
 
 		-
-			message: "#^Cannot access offset 'MEMBERSHIP_FEE_TOO…' on mixed\\.$#"
+			message: "#^Cannot access offset 'MEMBERSHIP_FEE_TOO_HIGH' on mixed\\.$#"
 			count: 1
 			path: src/Infrastructure/Mail/AdminModerationMailRenderer.php
 
@@ -176,17 +176,17 @@ parameters:
 			path: src/Factories/FunFunFactory.php
 
 		-
-			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\CampaignConfigurationLoader\\:\\:loadFiles\\(\\) should return array\\<string\\> but returns array\\<int\\<0, max\\>, mixed\\>\\.$#"
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\BucketTesting\\\\CampaignConfigurationLoader\\:\\:loadFiles\\(\\) should return array\\<string\\> but returns list\\<mixed\\>\\.$#"
 			count: 1
 			path: src/BucketTesting/CampaignConfigurationLoader.php
 
 		-
-			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Autocomplete\\\\Domain\\\\DataAccess\\\\DoctrineLocationRepository\\:\\:getCitiesForPostcode\\(\\) should return array\\<string\\> but returns array\\<int, mixed\\>\\.$#"
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Autocomplete\\\\Domain\\\\DataAccess\\\\DoctrineLocationRepository\\:\\:getCitiesForPostcode\\(\\) should return array\\<string\\> but returns list\\<mixed\\>\\.$#"
 			count: 1
 			path: src/Autocomplete/Domain/DataAccess/DoctrineLocationRepository.php
 
 		-
-			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Autocomplete\\\\Domain\\\\DataAccess\\\\DoctrineLocationRepository\\:\\:getStreetsForPostcode\\(\\) should return array\\<string\\> but returns array\\<int, mixed\\>\\.$#"
+			message: "#^Method WMDE\\\\Fundraising\\\\Frontend\\\\Autocomplete\\\\Domain\\\\DataAccess\\\\DoctrineLocationRepository\\:\\:getStreetsForPostcode\\(\\) should return array\\<string\\> but returns list\\<mixed\\>\\.$#"
 			count: 1
 			path: src/Autocomplete/Domain/DataAccess/DoctrineLocationRepository.php
 

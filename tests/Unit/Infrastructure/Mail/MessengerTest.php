@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Mail;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Mailer;
@@ -39,6 +40,7 @@ class MessengerTest extends TestCase {
 		$this->fail( 'Messenger did not throw MailerException' );
 	}
 
+	#[DoesNotPerformAssertions]
 	public function testSendToAddressWithInternationalCharacters_doesNotCauseException(): void {
 		$messenger = new Messenger(
 			new Mailer( new NullTransport() ),
@@ -49,8 +51,6 @@ class MessengerTest extends TestCase {
 			new Message( 'Test message', 'Test content' ),
 			new EmailAddress( 'info@müllerrr.de' )
 		);
-
-		$this->assertTrue( true );
 	}
 
 }
