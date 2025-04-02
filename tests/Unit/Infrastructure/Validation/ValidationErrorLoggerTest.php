@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Unit\Infrastructure\Validation;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Infrastructure\Validation\ValidationErrorLogger;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
@@ -12,6 +13,7 @@ use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
 #[CoversClass( ValidationErrorLogger::class )]
 class ValidationErrorLoggerTest extends TestCase {
 
+	#[DoesNotPerformAssertions]
 	public function testGivenEmptyValues_doesNotLog(): void {
 		$loggerSpy = new LoggerSpy();
 		$fields = [ 'first_name', 'last_name', 'email', 'postcode', 'country' ];
@@ -22,8 +24,6 @@ class ValidationErrorLoggerTest extends TestCase {
 
 		// The logger spy throws an assertion
 		$loggerSpy->assertNoLoggingCallsWhereMade();
-		// This is a hacky way of making phpunit happy
-		$this->assertTrue( true );
 	}
 
 	/**

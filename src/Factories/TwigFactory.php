@@ -35,6 +35,9 @@ abstract class TwigFactory {
 			is_array( $this->config['loaders'] ) &&
 			isset( $this->config['loaders']['filesystem'] )
 		) {
+			if ( !is_array( $this->config['loaders']['filesystem'] ) ) {
+				throw new \RuntimeException( "Filesystem list must be a valid array!" );
+			}
 			return new FilesystemLoader( $this->config['loaders']['filesystem'] );
 		}
 		throw new \UnexpectedValueException( 'Invalid Twig loader configuration - missing filesystem' );

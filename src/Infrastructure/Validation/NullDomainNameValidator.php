@@ -9,8 +9,6 @@ use WMDE\FunValidators\DomainNameValidator;
 class NullDomainNameValidator implements DomainNameValidator {
 
 	/**
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-	 *
 	 * @param string $domain
 	 * @return bool
 	 */

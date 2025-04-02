@@ -18,6 +18,7 @@ class InMemoryTranslator implements TranslatorInterface {
 		if ( !isset( $this->messages[$messageKey] ) ) {
 			throw new \InvalidArgumentException( "Unknown translation key: $messageKey" );
 		}
+		/** @phpstan-ignore-next-line argument.type */
 		return str_replace( array_keys( $parameters ), array_values( $parameters ), $this->messages[$messageKey] );
 	}
 

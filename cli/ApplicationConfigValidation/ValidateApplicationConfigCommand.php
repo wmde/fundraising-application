@@ -68,6 +68,7 @@ class ValidateApplicationConfigCommand extends Command {
 		if ( !is_array( $configFileName ) ) {
 			throw new \LogicException( "config_file name should be a string array" );
 		}
+		/** @phpstan-ignore-next-line argument.type */
 		return $this->loadConfigObjectFromFiles( $configFileName );
 	}
 

@@ -55,13 +55,35 @@ default-config:
 	-cp -i tests/Data/files/paypal_api.yml app/config/paypal_api.dev.yml || true
 
 install-php:
-	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume /tmp:/tmp --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):latest composer install $(COMPOSER_FLAGS)
+	docker run\
+		--rm $(DOCKER_FLAGS) \
+		--volume $(BUILD_DIR):/app \
+		-w /app \
+		--volume /tmp:/tmp \
+		--volume ~/.composer:/composer \
+		--user $(current_user):$(current_group) \
+		$(DOCKER_IMAGE):latest \
+		composer install $(COMPOSER_FLAGS)
 
 update-php:
-	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):latest composer update $(COMPOSER_FLAGS)
+	docker run\
+		--rm $(DOCKER_FLAGS) \
+		--volume $(BUILD_DIR):/app \
+		-w /app \
+		--volume ~/.composer:/composer \
+		--user $(current_user):$(current_group) \
+		$(DOCKER_IMAGE):latest \
+		composer update $(COMPOSER_FLAGS)
 
 update-content:
-	docker run --rm $(DOCKER_FLAGS) --volume $(BUILD_DIR):/app -w /app --volume ~/.composer:/composer --user $(current_user):$(current_group) $(DOCKER_IMAGE):latest composer update wmde/fundraising-frontend-content
+	docker run \
+		--rm $(DOCKER_FLAGS) \
+		--volume $(BUILD_DIR):/app \
+		-w /app \
+		--volume ~/.composer:/composer \
+		--user $(current_user):$(current_group) \
+		$(DOCKER_IMAGE):latest \
+		composer update wmde/fundraising-frontend-content
 
 
 generate-database-schema:
@@ -130,7 +152,13 @@ fix-cs:
 	-docker compose run --rm --no-deps app ./vendor/bin/phpcbf
 
 stan:
-	docker run --rm -it --volume $(BUILD_DIR):/app -w /app $(DOCKER_IMAGE):latest php -d memory_limit=1G vendor/bin/phpstan analyse --level=9 --no-progress cli/ src/ tests/
+	docker run \
+		--rm -it \
+		--volume $(BUILD_DIR):/app \
+		-w /app \
+		$(DOCKER_IMAGE):latest \
+		php -d memory_limit=1G \
+		vendor/bin/phpstan analyse --level=9 --no-progress cli/ src/ tests/
 
 phpmd:
 	docker compose run --rm --no-deps app ./vendor/bin/phpmd src/ text phpmd.xml
