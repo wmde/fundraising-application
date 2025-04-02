@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use WMDE\Clock\SystemClock;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipAnonymizer;
 use WMDE\Fundraising\MembershipContext\Domain\AnonymizationException;
 
 /**
@@ -27,16 +28,21 @@ class AnonymiseMemberCommand extends Command {
 		parent::__construct();
 	}
 
-	protected function configure(): void
-	{
-		$this->addArgument('id', InputArgument::REQUIRED, 'The id of the member you want to anonymize.');
+	protected function configure(): void {
+		$this->addArgument( 'id', InputArgument::REQUIRED, 'The id of the member you want to anonymize.' );
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
-		$membershipAnonymizer = $this->ffFactory->newMembershipAnonymizer();
+		$membershipAnonymizer = new DoctrineMembershipAnonymizer(
+			$this->ffFactory->getConnection(),
+			new SystemClock(),
+			new \DateInterval( 'P2D' )
+		);
 
 		try {
-			$memberId = intval( $input->getArgument( 'id' ) );
+			/** @var string $annoyingPhpStanWorkaroundThatMakesOurCodeWorseMemberId */
+			$annoyingPhpStanWorkaroundThatMakesOurCodeWorseMemberId = $input->getArgument( 'id' );
+			$memberId = intval( $annoyingPhpStanWorkaroundThatMakesOurCodeWorseMemberId );
 
 			$qb = $this->ffFactory->getEntityManager()->getConnection()->createQueryBuilder();
 			$qb->update( 'request' )
@@ -48,9 +54,8 @@ class AnonymiseMemberCommand extends Command {
 				->executeQuery();
 
 			$membershipAnonymizer->anonymizeWithIds( $memberId );
-		}
-		catch ( AnonymizationException|\InvalidArgumentException $e ) {
-			if ( gettype( $e ) == \InvalidArgumentException::class ) {
+		} catch ( AnonymizationException | \InvalidArgumentException $e ) {
+			if ( get_class( $e ) == \InvalidArgumentException::class ) {
 				return Command::INVALID;
 			}
 			return Command::FAILURE;

@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use WMDE\Clock\SystemClock;
+use WMDE\Fundraising\DonationContext\DataAccess\DatabaseDonationAnonymizer;
 use WMDE\Fundraising\DonationContext\Domain\AnonymizationException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
@@ -27,16 +28,22 @@ class AnonymiseDonationCommand extends Command {
 		parent::__construct();
 	}
 
-	protected function configure(): void
-	{
-		$this->addArgument('id', InputArgument::REQUIRED, 'The id of the donation you want to anonymize.');
+	protected function configure(): void {
+		$this->addArgument( 'id', InputArgument::REQUIRED, 'The id of the donation you want to anonymize.' );
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
-		$donationAnonymizer = $this->ffFactory->newDonationAnonymizer();
+		$donationAnonymizer = new DatabaseDonationAnonymizer(
+			$this->ffFactory->getDonationRepository(),
+			$this->ffFactory->getEntityManager(),
+			new SystemClock(),
+			new \DateInterval( 'P2D' )
+		);
 
 		try {
-			$donationId = intval( $input->getArgument( 'id' ) );
+			/** @var string $annoyingPhpStanWorkaroundThatMakesOurCodeWorseDonationId */
+			$annoyingPhpStanWorkaroundThatMakesOurCodeWorseDonationId = $input->getArgument( 'id' );
+			$donationId = intval( $annoyingPhpStanWorkaroundThatMakesOurCodeWorseDonationId );
 
 			$qb = $this->ffFactory->getEntityManager()->getConnection()->createQueryBuilder();
 			$qb->update( 'spenden' )
@@ -49,9 +56,8 @@ class AnonymiseDonationCommand extends Command {
 				->executeQuery();
 
 			$donationAnonymizer->anonymizeWithIds( $donationId );
-		}
-		catch ( AnonymizationException|\InvalidArgumentException $e ) {
-			if ( gettype( $e ) === \InvalidArgumentException::class ) {
+		} catch ( AnonymizationException | \InvalidArgumentException $e ) {
+			if ( get_class( $e ) == \InvalidArgumentException::class ) {
 				return Command::INVALID;
 			}
 			return Command::FAILURE;
