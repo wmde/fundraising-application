@@ -61,29 +61,6 @@ class ShowMembershipConfirmationRouteTest extends WebRouteTestCase {
 		} );
 	}
 
-	public function testCallOnAnonymizedRecord_deniedPageIsShown(): void {
-		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
-			$doctrineApplication = ValidMembershipApplication::newAnonymizedDoctrineEntity();
-			$token = new AuthenticationToken( $doctrineApplication->getId() ?? 0, AuthenticationBoundedContext::Membership, self::CORRECT_ACCESS_TOKEN, self::CORRECT_ACCESS_TOKEN );
-
-			$entityManager = $factory->getEntityManager();
-			$entityManager->persist( $doctrineApplication );
-			$entityManager->persist( $token );
-			$entityManager->flush();
-
-			$client->request(
-				Request::METHOD_GET,
-				self::PATH,
-				[
-					'id' => $doctrineApplication->getId(),
-					'accessToken' => self::CORRECT_ACCESS_TOKEN
-				]
-			);
-
-			$this->assertAccessIsDenied( 'access_denied_membership_confirmation_anonymized', $client );
-		} );
-	}
-
 	public function testCallOnUnknownApplicationId_deniedPageIsShown(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$client->request(

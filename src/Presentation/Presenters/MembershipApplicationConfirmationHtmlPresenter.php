@@ -113,10 +113,6 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 		];
 	}
 
-	public function presentApplicationWasAnonymized(): void {
-		$this->exception = new AccessDeniedException( 'access_denied_membership_confirmation_anonymized' );
-	}
-
 	public function presentAccessViolation(): void {
 		$this->exception = new AccessDeniedException( 'access_denied_membership_confirmation' );
 	}

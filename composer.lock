@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79713569755dc99980c46d2e9b350d72",
+    "content-hash": "fd22448662d75455d82b9f5715ceb502",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7101,16 +7101,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "dev-better-anonymised-handling",
+            "version": "dev-remove-scrubbed-error-page",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "e88296d3deee78cf2424f4cb2070dab25f82eb3b"
+                "reference": "c48616c348e8e9f4099a9db2666e9c2bc2019ca2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/e88296d3deee78cf2424f4cb2070dab25f82eb3b",
-                "reference": "e88296d3deee78cf2424f4cb2070dab25f82eb3b",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/c48616c348e8e9f4099a9db2666e9c2bc2019ca2",
+                "reference": "c48616c348e8e9f4099a9db2666e9c2bc2019ca2",
                 "shasum": ""
             },
             "require": {
@@ -7124,9 +7124,9 @@
                 "wmde/fundraising-payments": "~8.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "~1.2",
-                "phpstan/phpstan-doctrine": "~1.5.0",
-                "phpstan/phpstan-phpunit": "^1.3",
+                "phpstan/phpstan": "~2.1.11",
+                "phpstan/phpstan-doctrine": "~2.0.2",
+                "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "~12.0",
                 "symfony/cache": "^6.1|^7.0",
                 "wmde/clock": "^1.0",
@@ -7157,7 +7157,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2025-03-07T09:34:18+00:00"
+            "time": "2025-04-02T12:49:20+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
