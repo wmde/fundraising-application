@@ -43,7 +43,7 @@ querying of the tables to summarize, analyze and export the data.
 
 ## Decision Drivers
 
-* Performance (doing as much in SQL as possible, having as few PHP code
+* Performance (doing as much in SQL as possible, having as little PHP code
     as possible)
 * Storage space requirements. While disk drive space is not a big issue,
     copying the data (during backups or data migration) has bothered us in
