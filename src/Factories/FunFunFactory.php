@@ -2155,5 +2155,4 @@ class FunFunFactory implements LoggerAwareInterface {
 		}
 		return $blockList;
 	}
-
 }

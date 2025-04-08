@@ -89,7 +89,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'paymentIntervalInMonths' => $paymentData['interval'],
 			// TODO - this is deprecated, the template should not use the updateToken on its own and instead should use the provided URLs
 			'updateToken' => '',
-			'incentives' => iterator_to_array( $membershipApplication->getIncentives() )
+			'incentives' => iterator_to_array( $membershipApplication->getIncentives() ),
+			'isExported' => $membershipApplication->isExported()
 		];
 	}
 
@@ -110,10 +111,6 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'countryCode' => $applicant->getPhysicalAddress()->countryCode,
 			'applicantType' => $applicant->isPrivatePerson() ? ApplicantName::PERSON_PRIVATE : ApplicantName::PERSON_COMPANY
 		];
-	}
-
-	public function presentApplicationWasAnonymized(): void {
-		$this->exception = new AccessDeniedException( 'access_denied_membership_confirmation_anonymized' );
 	}
 
 	public function presentAccessViolation(): void {
