@@ -1,0 +1,65 @@
+erDiagram
+
+    SPENDEN ||--|| DONOR : has
+
+    DONOR {
+        string donor_type
+        bool receipt
+        bool mailing_list
+    }
+
+    COMPANY_DONOR {
+        string company_name
+        string email_address
+    }
+
+    COMPANY_WITH_CONTACT_DONOR {
+        string company_name
+        string email_address
+    }
+
+    PRIVATE_DONOR {
+        string email_address
+    }
+
+    EMAIL_ONLY_DONOR {
+        string email_address
+    }
+
+    SCRUBBED_DONOR {
+        string original_donor_type
+        string original_salutation
+    }
+
+    DONOR_NAME {
+        string firstname
+        string lastname
+        string salutation
+        string title
+    }
+
+    
+    DONOR |o--|| COMPANY_DONOR : inherits_from
+    DONOR |o--|| COMPANY_WITH_CONTACT_DONOR : inherits_from
+    DONOR |o--|| PRIVATE_DONOR : inherits_from
+    DONOR |o--|| EMAIL_ONLY_DONOR : inherits_from
+    DONOR |o--|| ANONYMOUS_DONOR : inherits_from
+    DONOR |o--|| SCRUBBED_DONOR : inherits_from
+
+    COMPANY_DONOR ||--|| DONOR_ADDRESS : has
+    COMPANY_WITH_CONTACT_DONOR ||--|| DONOR_ADDRESS : has
+    PRIVATE_DONOR ||--|| DONOR_ADDRESS : has
+    
+
+    PRIVATE_DONOR ||--|| DONOR_NAME : has
+    EMAIL_ONLY_DONOR ||--|| DONOR_NAME : has
+    COMPANY_WITH_CONTACT_DONOR ||--|| DONOR_NAME : has
+
+    DONOR_ADDRESS {
+        string street_name
+        string house_number
+        string postcode
+        string city
+        string country_code
+    }
+

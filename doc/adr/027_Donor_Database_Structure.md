@@ -68,6 +68,8 @@ querying of the tables to summarize, analyze and export the data.
 
 Uses [Doctrine Table Level inheritance](https://www.doctrine-project.org/projects/doctrine-orm/en/3.3/reference/inheritance-mapping.html#class-table-inheritance). This would create 9 new tables (a base donor table, one table for each donor type plus tables for names and addresses) 
 
+![Normalized Entity Relationship Diagram](images/ADR27_ER_Diagram.svg)
+
 - Pro: we could ditch lots of code, (converters, translators to DB code) by
       relying on Doctrine
 - Pro: address and donor name tables become really small
@@ -91,6 +93,8 @@ Uses [Doctrine Table Level inheritance](https://www.doctrine-project.org/project
 
 Instead of using Doctrine Table Inheritance, we would define custom
 entities that hold our data.
+
+![Custom Entity Relationship Diagram](images/ADR27_ER_Diagram_custom.svg)
 
 - Pro: Fewer tables
 - Pro: more flexible control over table layout   
