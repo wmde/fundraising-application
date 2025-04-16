@@ -12,7 +12,8 @@ clone:
 matrix:
   CONTAINER_IMAGE:
     - registry.gitlab.com/fun-tech/fundraising-frontend-docker:latest
-    - registry.gitlab.com/fun-tech/fundraising-frontend-docker/php-8.4:latest
+    # Use the following image in future (Jan/Feb 2026)
+    # - registry.gitlab.com/fun-tech/fundraising-frontend-docker:php-8.5
 
 steps:
   - name: build
