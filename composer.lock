@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c243b25bf5a900be7f4f4b90ae259e7",
+    "content-hash": "092c93712b238242b38765d79b8b5d7a",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7003,16 +7003,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v21.3.1",
+            "version": "v22.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "64e7fd1ec27c5c0b6991e6a9ac08e9f5c78cd138"
+                "reference": "14b4b5400081d143ce9ddf7b20e955112f65d589"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/64e7fd1ec27c5c0b6991e6a9ac08e9f5c78cd138",
-                "reference": "64e7fd1ec27c5c0b6991e6a9ac08e9f5c78cd138",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/14b4b5400081d143ce9ddf7b20e955112f65d589",
+                "reference": "14b4b5400081d143ce9ddf7b20e955112f65d589",
                 "shasum": ""
             },
             "require": {
@@ -7040,6 +7040,9 @@
                 "wmde/fundraising-phpcs": "~12.0",
                 "wmde/psr-log-test-doubles": "~3.0"
             },
+            "bin": [
+                "bin/migrate-donation-tracking-data"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -7057,7 +7060,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2025-04-14T10:12:30+00:00"
+            "time": "2025-04-15T12:46:37+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
