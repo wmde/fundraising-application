@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c243b25bf5a900be7f4f4b90ae259e7",
+    "content-hash": "c341a5344b92a656847edac854071ecb",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -1928,16 +1928,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.6.1",
+            "version": "5.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8"
+                "reference": "92dde6a5919e34835c506ac8c523ef095a95ed62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8",
-                "reference": "e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/92dde6a5919e34835c506ac8c523ef095a95ed62",
+                "reference": "92dde6a5919e34835c506ac8c523ef095a95ed62",
                 "shasum": ""
             },
             "require": {
@@ -1986,9 +1986,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.1"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.2"
             },
-            "time": "2024-12-07T09:39:29+00:00"
+            "time": "2025-04-13T19:20:35+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -10217,12 +10217,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "dec6e3e202264e5ee4d14956c32e09ca5e173c80"
+                "reference": "18bff4233a15a49cb323f55bdaaeaec1b4b83c6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/dec6e3e202264e5ee4d14956c32e09ca5e173c80",
-                "reference": "dec6e3e202264e5ee4d14956c32e09ca5e173c80",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/18bff4233a15a49cb323f55bdaaeaec1b4b83c6a",
+                "reference": "18bff4233a15a49cb323f55bdaaeaec1b4b83c6a",
                 "shasum": ""
             },
             "require": {
@@ -10273,7 +10273,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2025-04-07T08:46:32+00:00"
+            "time": "2025-04-10T12:42:14+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
@@ -10374,7 +10374,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.3",
+        "php": ">=8.4",
         "ext-intl": "*",
         "ext-curl": "*",
         "ext-json": "*",
@@ -10384,7 +10384,7 @@
         "ext-pdo_sqlite": "*"
     },
     "platform-overrides": {
-        "php": "8.3"
+        "php": "8.4"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
