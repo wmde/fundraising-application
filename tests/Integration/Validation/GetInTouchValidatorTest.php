@@ -31,6 +31,37 @@ class GetInTouchValidatorTest extends TestCase {
 		$this->assertTrue( $validator->validate( $request )->isSuccessful() );
 	}
 
+	public function testDonationNumberIsOptional(): void {
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
+		$validator = new GetInTouchValidator( $mailValidator );
+		$request = new GetInTouchRequest(
+			'Stinky',
+			'Pete',
+			'kh@meyer.net',
+			'',
+			'Hello there!',
+			'Change of address',
+			'I just wanted to say "Hi".'
+		);
+		$this->assertTrue( $validator->validate( $request )->isSuccessful() );
+	}
+
+	public function testDonationNumberIsValidated(): void {
+		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
+		$validator = new GetInTouchValidator( $mailValidator );
+		$request = new GetInTouchRequest(
+			'',
+			'',
+			'kh@meyer.net',
+			'invalid donation number',
+			'Hello there!',
+			'Change of address',
+			'I just wanted to say "Hi".'
+		);
+		$this->assertFalse( $validator->validate( $request )->isSuccessful() );
+		$this->assertConstraintWasViolated( $validator->validate( $request ), 'donationNumber' );
+	}
+
 	public function testEmailAddressIsValidated(): void {
 		$mailValidator = new EmailValidator( new NullDomainNameValidator() );
 		$validator = new GetInTouchValidator( $mailValidator );
