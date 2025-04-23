@@ -7176,21 +7176,21 @@
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "v5.0.2",
+            "version": "v5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "1648ece2688638125cf21d29e5ad57c4864a6988"
+                "reference": "289335ecbb9ef198a1f80c128b2b0541e0be56a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/1648ece2688638125cf21d29e5ad57c4864a6988",
-                "reference": "1648ece2688638125cf21d29e5ad57c4864a6988",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/289335ecbb9ef198a1f80c128b2b0541e0be56a3",
+                "reference": "289335ecbb9ef198a1f80c128b2b0541e0be56a3",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.18 | ~3.0",
-                "php": ">=8.3",
+                "php": ">=8.4",
                 "psr/log": "^1.0|^2.0|^3.0",
                 "wmde/email-address": "~1.0",
                 "wmde/fun-validators": "~5.0"
@@ -7222,7 +7222,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for fundraising subcriptions",
-            "time": "2025-02-25T09:12:02+00:00"
+            "time": "2025-04-22T10:26:45+00:00"
         }
     ],
     "packages-dev": [
