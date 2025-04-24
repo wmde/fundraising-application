@@ -6887,23 +6887,23 @@
         },
         {
             "name": "wmde/fundraising-address-change",
-            "version": "v4.1.1",
+            "version": "v4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-address-change",
-                "reference": "cdc05c43da8c4d50cc9965769955f878e8f79419"
+                "reference": "60640b4808ea7677e28150fcd25de9f1a5600f86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/cdc05c43da8c4d50cc9965769955f878e8f79419",
-                "reference": "cdc05c43da8c4d50cc9965769955f878e8f79419",
+                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/60640b4808ea7677e28150fcd25de9f1a5600f86",
+                "reference": "60640b4808ea7677e28150fcd25de9f1a5600f86",
                 "shasum": ""
             },
             "require": {
                 "doctrine/dbal": "~4.0",
                 "doctrine/migrations": "^3.7",
                 "doctrine/orm": "~3.0",
-                "php": ">=8.3",
+                "php": ">=8.4",
                 "ramsey/uuid": "^4.0"
             },
             "require-dev": {
@@ -6911,10 +6911,10 @@
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-doctrine": "~1.3.62",
                 "phpstan/phpstan-phpunit": "^1.3",
-                "phpunit/phpunit": "~11.0",
-                "symfony/cache": "^5.3",
-                "symfony/dotenv": "~6.4",
-                "wmde/fundraising-phpcs": "~10.1"
+                "phpunit/phpunit": "~12.0",
+                "symfony/cache": "^7.2",
+                "symfony/dotenv": "~7.2",
+                "wmde/fundraising-phpcs": "~12.0"
             },
             "type": "library",
             "autoload": {
@@ -6931,7 +6931,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Address change use case for fundraising application",
-            "time": "2024-11-20T16:04:28+00:00"
+            "time": "2025-04-22T10:21:02+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
