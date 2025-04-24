@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a27906a412738189dda3b0c12ec5ef8f",
+    "content-hash": "5d201a4044a4b909790269a7b859244f",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6999,22 +6999,22 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v21.3.1",
+            "version": "v22.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "64e7fd1ec27c5c0b6991e6a9ac08e9f5c78cd138"
+                "reference": "76fe34bbb5694d1abbef4eb8115cb49f7ee0f709"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/64e7fd1ec27c5c0b6991e6a9ac08e9f5c78cd138",
-                "reference": "64e7fd1ec27c5c0b6991e6a9ac08e9f5c78cd138",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/76fe34bbb5694d1abbef4eb8115cb49f7ee0f709",
+                "reference": "76fe34bbb5694d1abbef4eb8115cb49f7ee0f709",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~3.0",
                 "ext-curl": "*",
-                "php": ">=8.3",
+                "php": ">=8.4",
                 "psr/log": "^3.0",
                 "symfony/http-client": "^7.0",
                 "wmde/email-address": "~1.0",
@@ -7036,6 +7036,9 @@
                 "wmde/fundraising-phpcs": "~12.0",
                 "wmde/psr-log-test-doubles": "~3.0"
             },
+            "bin": [
+                "bin/migrate-donation-tracking-data"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -7053,7 +7056,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2025-04-14T10:12:30+00:00"
+            "time": "2025-04-22T10:21:28+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
