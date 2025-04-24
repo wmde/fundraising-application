@@ -207,11 +207,12 @@ class SofortPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	private function assertRequestVarsAreLogged( LoggerSpy $logger, ?string $logContent = null, ?string $token = null ): void {
 		$context = $logger->getFirstLogCall()->getContext();
+		$this->assertIsString( $context['request_content'] );
 		$this->assertStringContainsString(
 			$logContent ?? '<transaction>' . self::VALID_TRANSACTION_ID . '</transaction>',
 			$context['request_content']
 		);
-
+		$this->assertIsArray( $context['query_vars'] );
 		$this->assertEquals(
 			$token ?? self::VALID_TOKEN,
 			$context['query_vars']['updateToken']

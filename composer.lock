@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a27906a412738189dda3b0c12ec5ef8f",
+    "content-hash": "8f104ab364cfd42220a325ced3145041",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6887,23 +6887,23 @@
         },
         {
             "name": "wmde/fundraising-address-change",
-            "version": "v4.1.1",
+            "version": "v4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-address-change",
-                "reference": "cdc05c43da8c4d50cc9965769955f878e8f79419"
+                "reference": "60640b4808ea7677e28150fcd25de9f1a5600f86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/cdc05c43da8c4d50cc9965769955f878e8f79419",
-                "reference": "cdc05c43da8c4d50cc9965769955f878e8f79419",
+                "url": "https://api.github.com/repos/wmde/fundraising-address-change/zipball/60640b4808ea7677e28150fcd25de9f1a5600f86",
+                "reference": "60640b4808ea7677e28150fcd25de9f1a5600f86",
                 "shasum": ""
             },
             "require": {
                 "doctrine/dbal": "~4.0",
                 "doctrine/migrations": "^3.7",
                 "doctrine/orm": "~3.0",
-                "php": ">=8.3",
+                "php": ">=8.4",
                 "ramsey/uuid": "^4.0"
             },
             "require-dev": {
@@ -6911,10 +6911,10 @@
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-doctrine": "~1.3.62",
                 "phpstan/phpstan-phpunit": "^1.3",
-                "phpunit/phpunit": "~11.0",
-                "symfony/cache": "^5.3",
-                "symfony/dotenv": "~6.4",
-                "wmde/fundraising-phpcs": "~10.1"
+                "phpunit/phpunit": "~12.0",
+                "symfony/cache": "^7.2",
+                "symfony/dotenv": "~7.2",
+                "wmde/fundraising-phpcs": "~12.0"
             },
             "type": "library",
             "autoload": {
@@ -6931,7 +6931,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Address change use case for fundraising application",
-            "time": "2024-11-20T16:04:28+00:00"
+            "time": "2025-04-22T10:21:02+00:00"
         },
         {
             "name": "wmde/fundraising-content-provider",
@@ -6999,22 +6999,22 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v21.3.1",
+            "version": "v22.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "64e7fd1ec27c5c0b6991e6a9ac08e9f5c78cd138"
+                "reference": "76fe34bbb5694d1abbef4eb8115cb49f7ee0f709"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/64e7fd1ec27c5c0b6991e6a9ac08e9f5c78cd138",
-                "reference": "64e7fd1ec27c5c0b6991e6a9ac08e9f5c78cd138",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/76fe34bbb5694d1abbef4eb8115cb49f7ee0f709",
+                "reference": "76fe34bbb5694d1abbef4eb8115cb49f7ee0f709",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~3.0",
                 "ext-curl": "*",
-                "php": ">=8.3",
+                "php": ">=8.4",
                 "psr/log": "^3.0",
                 "symfony/http-client": "^7.0",
                 "wmde/email-address": "~1.0",
@@ -7036,6 +7036,9 @@
                 "wmde/fundraising-phpcs": "~12.0",
                 "wmde/psr-log-test-doubles": "~3.0"
             },
+            "bin": [
+                "bin/migrate-donation-tracking-data"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -7053,7 +7056,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2025-04-14T10:12:30+00:00"
+            "time": "2025-04-22T10:21:28+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -10221,16 +10224,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "deeffa2ba283c3fcd26dd27870a65d8c171208d2"
+                "reference": "7e4893736984a419a8c6de3e20706b67a7f253cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/deeffa2ba283c3fcd26dd27870a65d8c171208d2",
-                "reference": "deeffa2ba283c3fcd26dd27870a65d8c171208d2",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/7e4893736984a419a8c6de3e20706b67a7f253cb",
+                "reference": "7e4893736984a419a8c6de3e20706b67a7f253cb",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.3"
+                "php": ">=8.4"
             },
             "require-dev": {
                 "phpunit/phpunit": "~9.5.0",
@@ -10277,7 +10280,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2025-04-22T09:47:27+00:00"
+            "time": "2025-04-16T13:14:40+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
@@ -10305,26 +10308,25 @@
         },
         {
             "name": "wmde/psr-log-test-doubles",
-            "version": "v3.2.0",
+            "version": "v3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/PsrLogTestDoubles.git",
-                "reference": "bd8d677c72a7f107c2179fe1eeb830c59412d9bf"
+                "reference": "2c7bf0c352dc9a743aed4e6d0eb4d2fa3a9491b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/PsrLogTestDoubles/zipball/bd8d677c72a7f107c2179fe1eeb830c59412d9bf",
-                "reference": "bd8d677c72a7f107c2179fe1eeb830c59412d9bf",
+                "url": "https://api.github.com/repos/wmde/PsrLogTestDoubles/zipball/2c7bf0c352dc9a743aed4e6d0eb4d2fa3a9491b7",
+                "reference": "2c7bf0c352dc9a743aed4e6d0eb4d2fa3a9491b7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0",
-                "psr/log": "~3.0|~2.0"
+                "php": ">=8.2",
+                "psr/log": "~3.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "^1.4.2",
-                "phpunit/phpunit": "~9.5",
-                "vimeo/psalm": "^4.18.1"
+                "phpstan/phpstan": "^2.0.2",
+                "phpunit/phpunit": "~11.0"
             },
             "type": "library",
             "autoload": {
@@ -10337,6 +10339,10 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "Wikimedia Deutschland FUN Team",
+                    "email": "fundraising-tech-internal@wikimedia.de"
+                },
                 {
                     "name": "Jeroen De Dauw",
                     "email": "jeroendedauw@gmail.com",
@@ -10363,9 +10369,9 @@
             ],
             "support": {
                 "issues": "https://github.com/wmde/PsrLogTestDoubles/issues",
-                "source": "https://github.com/wmde/PsrLogTestDoubles/tree/v3.2.0"
+                "source": "https://github.com/wmde/PsrLogTestDoubles/tree/v3.3.0"
             },
-            "time": "2022-05-02T08:10:10+00:00"
+            "time": "2025-04-24T07:47:29+00:00"
         }
     ],
     "aliases": [],
@@ -10390,5 +10396,5 @@
     "platform-overrides": {
         "php": "8.4"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

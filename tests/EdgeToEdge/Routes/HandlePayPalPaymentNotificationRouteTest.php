@@ -229,9 +229,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$logger->getLogCalls()->getMessages()
 		);
 
-		$this->assertSame(
-			$paymentStatus,
-			$logger->getFirstLogCall()->getContext()['post_vars']['payment_status']
+		$postVars = $logger->getFirstLogCall()->getContext()['post_vars'];
+		$this->assertIsArray( $postVars );
+		$this->assertSame( $paymentStatus, $postVars['payment_status']
 		);
 	}
 
@@ -270,7 +270,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$logger->getLogCalls()->getMessages()
 		);
 
-		$loggedDataAsString = implode( $logger->getFirstLogCall()->getContext()['post_vars'] );
+		$postVars = $logger->getFirstLogCall()->getContext()['post_vars'];
+		$this->assertIsArray( $postVars );
+		$loggedDataAsString = implode( '', $postVars );
 
 		$this->assertStringNotContainsString( 'IshouldNotGetLogged@privatestuff.de', $loggedDataAsString );
 		$this->assertStringNotContainsString( '123456personalID', $loggedDataAsString );
@@ -337,10 +339,9 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$logger->getLogCalls()->getMessages()
 		);
 
-		$this->assertSame(
-			'subscr_modify',
-			$logger->getFirstLogCall()->getContext()['post_vars']['txn_type']
-		);
+		$postVars = $logger->getFirstLogCall()->getContext()['post_vars'];
+		$this->assertIsArray( $postVars );
+		$this->assertSame( 'subscr_modify', $postVars['txn_type'] );
 	}
 
 	/**

@@ -52,7 +52,9 @@ class ValidationErrorLoggerTest extends TestCase {
 		$firstCallContext = $loggerSpy->getFirstLogCall()->getContext();
 
 		$this->assertCount( 1, $loggerSpy->getLogCalls() );
-		$this->assertStringContainsString( 'first_name', $firstCallContext['validation_errors'][0] );
-		$this->assertStringContainsString( 'last_name', $firstCallContext['validation_errors'][1] );
+		/** @var string[] $firstCallContextValidationErrors */
+		$firstCallContextValidationErrors = $firstCallContext['validation_errors'];
+		$this->assertStringContainsString( 'first_name', $firstCallContextValidationErrors[0] );
+		$this->assertStringContainsString( 'last_name', $firstCallContextValidationErrors[1] );
 	}
 }
