@@ -10308,20 +10308,20 @@
         },
         {
             "name": "wmde/psr-log-test-doubles",
-            "version": "v3.3.0",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/PsrLogTestDoubles.git",
-                "reference": "2c7bf0c352dc9a743aed4e6d0eb4d2fa3a9491b7"
+                "reference": "738eca9021325e9960328fdcc28c97df1118f681"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/PsrLogTestDoubles/zipball/2c7bf0c352dc9a743aed4e6d0eb4d2fa3a9491b7",
-                "reference": "2c7bf0c352dc9a743aed4e6d0eb4d2fa3a9491b7",
+                "url": "https://api.github.com/repos/wmde/PsrLogTestDoubles/zipball/738eca9021325e9960328fdcc28c97df1118f681",
+                "reference": "738eca9021325e9960328fdcc28c97df1118f681",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2",
+                "php": ">=8.3",
                 "psr/log": "~3.0"
             },
             "require-dev": {
@@ -10369,9 +10369,9 @@
             ],
             "support": {
                 "issues": "https://github.com/wmde/PsrLogTestDoubles/issues",
-                "source": "https://github.com/wmde/PsrLogTestDoubles/tree/v3.3.0"
+                "source": "https://github.com/wmde/PsrLogTestDoubles/tree/v3.4.0"
             },
-            "time": "2025-04-24T07:47:29+00:00"
+            "time": "2025-04-24T08:44:30+00:00"
         }
     ],
     "aliases": [],
@@ -10396,5 +10396,5 @@
     "platform-overrides": {
         "php": "8.4"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
