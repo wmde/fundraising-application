@@ -2,11 +2,6 @@ clone:
   git:
     image: woodpeckerci/plugin-git
     settings:
-      # "partial: false" and depth will copy several commits from the source repo,
-      # enabling history checks for the ocular tool
-      # "lfs: false" disables downloading resources from LFS, which we don't use
-      partial: false
-      depth: 10
       lfs: false
 
 matrix:
@@ -41,13 +36,3 @@ steps:
       - php bin/console app:validate:config app/config/config.dist.json app/config/config.test.json
       - php bin/console app:validate:config app/config/config.dist.json .docker/app/config.dev.json
       - php bin/console app:validate:campaigns dev
-
-  - name: upload-coverage
-    image: registry.gitlab.com/fun-tech/fundraising-frontend-docker:ci
-    commands:
-      # Upload coverage to Scrutinizer
-      - ocular code-coverage:upload --no-interaction --format=php-clover coverage.xml
-    when:
-      event:
-        - push
-        - pull_request
