@@ -7058,16 +7058,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v17.3.0",
+            "version": "v17.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "849785cdce4fcfc1db4ee1f859e6067dd5f69f16"
+                "reference": "d84693a3a3450c7434833fe12ebd0492401573b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/849785cdce4fcfc1db4ee1f859e6067dd5f69f16",
-                "reference": "849785cdce4fcfc1db4ee1f859e6067dd5f69f16",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/d84693a3a3450c7434833fe12ebd0492401573b2",
+                "reference": "d84693a3a3450c7434833fe12ebd0492401573b2",
                 "shasum": ""
             },
             "require": {
@@ -7086,7 +7086,7 @@
                 "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "~12.0",
                 "symfony/cache": "^6.1|^7.0",
-                "wmde/clock": "^1.0",
+                "wmde/clock": "^2.0",
                 "wmde/fundraising-phpcs": "~12.0",
                 "wmde/psr-log-test-doubles": "~3.0"
             },
@@ -7114,7 +7114,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2025-04-22T10:25:23+00:00"
+            "time": "2025-05-14T15:55:48+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
