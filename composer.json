@@ -50,7 +50,7 @@
 		"monolog/monolog": "^3.0",
 		"nikic/php-parser": "~5.4",
 		"psr/log": "~3.0",
-		"psr/simple-cache": "~1.0",
+		"psr/simple-cache": "~3.0",
 		"remotelyliving/doorkeeper": "dev-php-8"
 	},
 	"repositories": [
