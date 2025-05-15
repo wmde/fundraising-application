@@ -168,6 +168,12 @@ index:
     # controller: 'WMDE\Fundraising\Frontend\App\Controllers\TestController::index'
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\NewDonationController::index'
 
+pattern_library:
+    path: /pattern-library/{pattern}
+    methods: [ GET ]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\StaticContent\ShowPatternLibraryController::index'
+    defaults:
+        pattern: index
 
 # Redirect links to the old donation app to the start page
 legacy_routes.php:
