@@ -65,28 +65,10 @@
 	{% endif %}
 
 	{$ mail_content('donation_confirmation/greetings', { 'day_of_the_week': day_of_the_week } ) $}
-{% else %}
-	{%  if donation.moderationFlags.AMOUNT_TOO_HIGH is defined %}
-		{$ mail_content('donation_confirmation/moderation_amount_too_high', {
-		'formatted_amount': formattedAmount,
-		'interval': donation.interval
-		}) $}
-	{% else %}
-		{$ mail_content('donation_confirmation/moderation_other_reason', {
-		'formatted_amount': formattedAmount,
-		'interval': donation.interval
-		}) $}
-	{% endif %}
-	{$ mail_content('donation_confirmation/greetings', { 'day_of_the_week': day_of_the_week } ) $}
 {% endif %}
 
-{% if donation.moderationFlags.AMOUNT_TOO_HIGH is defined %}
-	{$ mail_content('large_account_manager_name') $}
-	{$ mail_content('large_account_manager_department') $}
-{% else %}
-	{$ mail_content('name_head_of_organization') $}
-	{$ mail_content('title_head_of_organization') $}
-{% endif %}
+{$ mail_content('name_head_of_organization') $}
+{$ mail_content('title_head_of_organization') $}
 
 {% if donation.paymentType == 'MCP' and donation.interval > 0 %}
 	{$ mail_content('donation_confirmation/creditcard_interval_notice') $}
