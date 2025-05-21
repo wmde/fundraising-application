@@ -157,10 +157,10 @@ handle_creditcard_payment_notification:
     methods: [GET]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Payment\CreditCardPaymentNotificationController::index'
 
-donation_accepted:
-    path: /donation-accepted
+donation_was_approved:
+    path: /donation-was-approved
     methods: [GET]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationAcceptedController::index'
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationApprovedController::index'
 
 index:
     path: /

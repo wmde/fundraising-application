@@ -16,10 +16,10 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  *
  * We're tracking progress and ideas for improving the situation in https://phabricator.wikimedia.org/T254028
  */
-class DonationAcceptedController {
+class DonationApprovedController {
 
 	public function index( FunFunFactory $ffFactory, Request $request ): JsonResponse {
-		$eventHandler = $ffFactory->newDonationAcceptedEventHandler(
+		$eventHandler = $ffFactory->newDonationApprovedEventHandler(
 			$request->query->get( 'update_token', '' )
 		);
 		$result = $eventHandler->onDonationAccepted( (int)$request->query->get( 'donation_id', '' ) );
