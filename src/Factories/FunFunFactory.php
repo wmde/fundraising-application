@@ -63,7 +63,7 @@ use WMDE\Fundraising\DonationContext\Domain\Repositories\CommentFinder;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationExistsChecker;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationIdRepository;
 use WMDE\Fundraising\DonationContext\Domain\Repositories\DonationRepository;
-use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
+use WMDE\Fundraising\DonationContext\DonationApprovedEventHandler;
 use WMDE\Fundraising\DonationContext\DonationContextFactory;
 use WMDE\Fundraising\DonationContext\Infrastructure\AdminNotificationInterface;
 use WMDE\Fundraising\DonationContext\Infrastructure\BestEffortDonationEventLogger;
@@ -1542,8 +1542,8 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new IbanBlockList( $this->config['banned-ibans'] );
 	}
 
-	public function newDonationApprovedEventHandler( string $updateToken ): DonationAcceptedEventHandler {
-		return new DonationAcceptedEventHandler(
+	public function newDonationApprovedEventHandler( string $updateToken ): DonationApprovedEventHandler {
+		return new DonationApprovedEventHandler(
 			$this->newDonationAuthorizationChecker( $updateToken ),
 			$this->getDonationRepository(),
 			$this->newTemplateDonationNotifier()

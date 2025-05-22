@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
+use WMDE\Fundraising\DonationContext\DonationApprovedEventHandler;
 use WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationApprovedController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -32,7 +32,7 @@ class DonationApprovedRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertJsonSuccessResponse(
-			[ 'status' => 'ERR', 'message' => DonationAcceptedEventHandler::AUTHORIZATION_FAILED ],
+			[ 'status' => 'ERR', 'message' => DonationApprovedEventHandler::AUTHORIZATION_FAILED ],
 			$client->getResponse()
 		);
 	}

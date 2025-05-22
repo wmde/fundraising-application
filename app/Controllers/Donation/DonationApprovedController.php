@@ -22,7 +22,7 @@ class DonationApprovedController {
 		$eventHandler = $ffFactory->newDonationApprovedEventHandler(
 			$request->query->get( 'update_token', '' )
 		);
-		$result = $eventHandler->onDonationAccepted( (int)$request->query->get( 'donation_id', '' ) );
+		$result = $eventHandler->onDonationApproved( (int)$request->query->get( 'donation_id', '' ) );
 
 		return new JsonResponse(
 			$result === null ? [ 'status' => 'OK' ] : [ 'status' => 'ERR', 'message' => $result ]
