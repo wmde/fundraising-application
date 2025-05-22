@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\MailTemplateFixtures;
 
-use WMDE\Fundraising\DonationContext\Domain\Model\ModerationIdentifier as DonationModerationIdentifier;
 use WMDE\Fundraising\MembershipContext\Domain\Model\ModerationIdentifier as MembershipModerationIdentifier;
 
 /**
@@ -123,31 +122,6 @@ class MailTemplateFixtures {
 					'receiptOptIn' => false,
 				],
 			] ),
-			new TemplateVariant( 'moderated_amount_too_high', [
-				'donation' => [
-					'id' => 42,
-					'paymentType' => 'UEB',
-					'amount' => 99999.99,
-					'interval' => 1,
-					'moderationFlags' => [
-						DonationModerationIdentifier::AMOUNT_TOO_HIGH->name => true
-					],
-					'receiptOptIn' => false,
-				]
-			] ),
-			new TemplateVariant( 'moderated_other_reason', [
-				'donation' => [
-					'id' => 42,
-					'amount' => 12.34,
-					'paymentType' => 'PPL',
-					'interval' => 1,
-					'moderationFlags' => [
-						DonationModerationIdentifier::MANUALLY_FLAGGED_BY_ADMIN->name => true
-					],
-					'receiptOptIn' => false,
-				]
-
-			] )
 		);
 
 		yield new VariantSettingsGenerator( 'Membership_Application_Confirmation.txt.twig',
