@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f7f8ea81a0479e2f987340c992e4079",
+    "content-hash": "3beaf8ce2daf6827367e99858db4ba8c",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -6997,16 +6997,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v22.4.0",
+            "version": "v23.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "c99fcd1a37fc6fa56e969e813ab69d11f24f3bf6"
+                "reference": "fc34ac4bfa6c62d220e9b94d3bb4f83d43f74ec2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/c99fcd1a37fc6fa56e969e813ab69d11f24f3bf6",
-                "reference": "c99fcd1a37fc6fa56e969e813ab69d11f24f3bf6",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/fc34ac4bfa6c62d220e9b94d3bb4f83d43f74ec2",
+                "reference": "fc34ac4bfa6c62d220e9b94d3bb4f83d43f74ec2",
                 "shasum": ""
             },
             "require": {
@@ -7054,7 +7054,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2025-05-21T16:19:21+00:00"
+            "time": "2025-05-22T13:13:34+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
