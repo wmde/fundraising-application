@@ -5,14 +5,14 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use WMDE\Fundraising\DonationContext\DonationAcceptedEventHandler;
-use WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationAcceptedController;
+use WMDE\Fundraising\DonationContext\DonationApprovedEventHandler;
+use WMDE\Fundraising\Frontend\App\Controllers\Donation\DonationApprovedController;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\StoredDonations;
 
-#[CoversClass( DonationAcceptedController::class )]
-class DonationAcceptedRouteTest extends WebRouteTestCase {
+#[CoversClass( DonationApprovedController::class )]
+class DonationApprovedRouteTest extends WebRouteTestCase {
 
 	private const WRONG_UPDATE_TOKEN = 'Wrong update token';
 	private const CORRECT_UPDATE_TOKEN = 'Correct update token';
@@ -24,7 +24,7 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'GET',
-			'/donation-accepted',
+			'/donation-was-approved',
 			[
 				'update_token' => self::WRONG_UPDATE_TOKEN,
 				'donation_id' => (string)$existingDonationId,
@@ -32,7 +32,7 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 		);
 
 		$this->assertJsonSuccessResponse(
-			[ 'status' => 'ERR', 'message' => DonationAcceptedEventHandler::AUTHORIZATION_FAILED ],
+			[ 'status' => 'ERR', 'message' => DonationApprovedEventHandler::AUTHORIZATION_FAILED ],
 			$client->getResponse()
 		);
 	}
@@ -49,7 +49,7 @@ class DonationAcceptedRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'GET',
-			'/donation-accepted',
+			'/donation-was-approved',
 			[
 				'update_token' => self::CORRECT_UPDATE_TOKEN,
 				'donation_id' => (string)$existingDonationId,
