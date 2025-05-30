@@ -235,12 +235,6 @@ parameters:
 			path: src/Infrastructure/TranslationsCollector.php
 
 		-
-			message: '#^Method WMDE\\Fundraising\\Frontend\\Validation\\ConstraintViolationListMapper\:\:map\(\) should return array\<mixed\> but returns array\|object\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Validation/ConstraintViolationListMapper.php
-
-		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with DateTimeImmutable will always evaluate to true\.$#'
 			identifier: method.alreadyNarrowedType
 			count: 1
