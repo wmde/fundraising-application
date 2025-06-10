@@ -187,9 +187,11 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 	/**
 	 * @param array<string, int|string> $params
+	 * @param string $paymentStatus Unused in this test, but needed as a parameter because
+	 *                              PHPUnit calls this method with all parameters from the data provider
 	 */
 	#[DataProvider( 'unsupportedPaymentStatusProvider' )]
-	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK( array $params ): void {
+	public function testGivenUnsupportedPaymentStatus_applicationReturnsOK( array $params, string $paymentStatus ): void {
 		$client = $this->createClient();
 		$factory = $this->getFactory();
 		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
