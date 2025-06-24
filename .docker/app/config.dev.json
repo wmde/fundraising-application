@@ -109,10 +109,6 @@
     "PPL": {
       "donation-enabled": true,
       "membership-enabled": false
-    },
-    "SUB": {
-      "donation-enabled": true,
-      "membership-enabled": false
     }
   },
   "cookie": {
