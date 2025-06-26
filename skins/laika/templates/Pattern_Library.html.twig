@@ -1,0 +1,12 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block title %}Pattern Library - Wikimedia Deutschland{% endblock %}
+
+{% block scripts %}
+	{$ parent() $}
+	<script src="{$ asset( 'js/pattern_library.js', 'skin' ) $}"></script>
+{% endblock %}
+
+{% block styles %}
+	<link rel="stylesheet" href="{$ asset( 'pattern_library/styles.css', 'skin' ) $}">
+{% endblock %}
