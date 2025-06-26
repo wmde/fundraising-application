@@ -8,7 +8,6 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\DataAccess\DoctrineEntities\Donation;
@@ -19,8 +18,6 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\BucketLoggerSpy;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\InMemoryTranslator;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\PayPalAPISpy;
-use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\Sofort\Response as SofortResponse;
-use WMDE\Fundraising\PaymentContext\Services\PaymentUrlGenerator\Sofort\SofortClient;
 
 #[CoversClass( AddDonationController::class )]
 class AddDonationRouteTest extends WebRouteTestCase {
@@ -445,35 +442,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertStringContainsString( 'thatother.paymentprovider.com', $response->headers->get( 'Location' ) ?: '' );
 	}
 
-	public function testValidSofortInput_savesDonationAndRedirectsTo3rdPartyPage(): void {
-		$client = $this->createClient();
-		$response = new SofortResponse();
-		$response->setPaymentUrl( 'https://bankingpin.please' );
-
-		/** @var SofortClient&MockObject $sofortClient */
-		$sofortClient = $this->createMock( SofortClient::class );
-		$sofortClient
-			->method( 'get' )
-			->willReturn( $response );
-		$this->getFactory()->setSofortClient( $sofortClient );
-
-		$client->followRedirects( false );
-		$client->request(
-			'POST',
-			'/donation/add',
-			$this->newValidSofortInput()
-		);
-
-		$donation = $this->getDonationFromDatabase();
-
-		$this->assertSame( 'X', $donation->getStatus() );
-		$this->assertMatchesRegularExpression( '/^(XR)-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]{3}-[ACDEFKLMNPRTWXYZ349]/', $donation->getBankTransferCode() );
-
-		$response = $client->getResponse();
-		$this->assertTrue( $response->isRedirect() );
-		$this->assertSame( 'https://bankingpin.please', $response->headers->get( 'Location' ) );
-	}
-
 	/**
 	 * @return array<string, int|string>
 	 */
@@ -482,18 +450,6 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			'amount' => '1234',
 			'paymentType' => 'MCP',
 			'interval' => 3,
-			'addressType' => 'anonym',
-		];
-	}
-
-	/**
-	 * @return array<string, int|string>
-	 */
-	private function newValidSofortInput(): array {
-		return [
-			'amount' => '10000',
-			'paymentType' => 'SUB',
-			'interval' => 0,
 			'addressType' => 'anonym',
 		];
 	}
