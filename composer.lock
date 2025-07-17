@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3beaf8ce2daf6827367e99858db4ba8c",
+    "content-hash": "234359c9e66abd7b3fa82e09dd6062b5",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -10259,16 +10259,16 @@
         },
         {
             "name": "wmde/fundraising-frontend-content",
-            "version": "dev-test",
+            "version": "dev-fix-no-salutation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "108e19d88c96364b34a28296e0f33f7bb2411f52"
+                "reference": "157d187b5b2dd56833e4c3212d15605cc6a6b16d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/108e19d88c96364b34a28296e0f33f7bb2411f52",
-                "reference": "108e19d88c96364b34a28296e0f33f7bb2411f52",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/157d187b5b2dd56833e4c3212d15605cc6a6b16d",
+                "reference": "157d187b5b2dd56833e4c3212d15605cc6a6b16d",
                 "shasum": ""
             },
             "require": {
@@ -10279,7 +10279,6 @@
                 "seld/jsonlint": "^1.6",
                 "wmde/fundraising-content-provider": "^6.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload-dev": {
                 "psr-4": {
@@ -10319,7 +10318,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2025-05-08T19:21:25+00:00"
+            "time": "2025-07-17T08:56:00+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
@@ -10435,5 +10434,5 @@
     "platform-overrides": {
         "php": "8.4"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
