@@ -1387,12 +1387,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
-			'paymentIntervals' => [
-				PaymentInterval::Monthly->value,
-				PaymentInterval::Quarterly->value,
-				PaymentInterval::HalfYearly->value,
-				PaymentInterval::Yearly->value,
-			],
+			'paymentIntervals' => $this->getMembershipPaymentIntervals(),
 			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 			'countries' => $this->getCountries(),
 			'addressValidationPatterns' => $validation->address,
@@ -1400,6 +1395,18 @@ class FunFunFactory implements LoggerAwareInterface {
 			'incentives' => $this->getIncentives()
 		] );
 	}
+
+	/**
+	 * @return PaymentInterval[]
+	 */
+	public function getMembershipPaymentIntervals(): array {
+		return [
+				PaymentInterval::Monthly->value,
+				PaymentInterval::Quarterly->value,
+				PaymentInterval::HalfYearly->value,
+				PaymentInterval::Yearly->value,
+			];
+		}
 
 	public function newMembershipApplicationFormPresenter(): MembershipApplicationFormPresenter {
 		return new MembershipApplicationFormPresenter(
