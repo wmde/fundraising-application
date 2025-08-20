@@ -190,12 +190,14 @@ use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizationChecker;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizer;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineFeeChangeRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipIdGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipTrackingRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository as MembershipModerationReasonRepository;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\FeeChangeRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\MembershipRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\PaymentServiceFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
@@ -1334,6 +1336,10 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
+	public function getFeeChangeRepository(): FeeChangeRepository {
+		return new DoctrineFeeChangeRepository( $this->getEntityManager() );
+	}
+
 	public function setMembershipApplicationAuthorizationChecker( MembershipAuthorizationChecker $authorizer ): void {
 		$this->sharedObjects[MembershipAuthorizationChecker::class] = $authorizer;
 	}
@@ -1397,7 +1403,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	/**
-	 * @return PaymentInterval[]
+	 * @return array<PaymentInterval, int>
 	 */
 	public function getMembershipPaymentIntervals(): array {
 		return [
