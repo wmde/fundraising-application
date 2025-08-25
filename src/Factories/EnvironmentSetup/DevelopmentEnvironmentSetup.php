@@ -42,14 +42,13 @@ class DevelopmentEnvironmentSetup implements EnvironmentSetup {
 	}
 
 	private function setDoctrineConfiguration( FunFunFactory $factory ): void {
-		// Setup will use /tmp for proxies and ArrayCache for caching
-		$factory->setDoctrineConfiguration( ORMSetup::createXMLMetadataConfiguration(
+		// Setup will use ArrayCache for caching
+		$config = ORMSetup::createXMLMetadataConfig(
 			$factory->getDoctrineXMLMappingPaths(),
-			true,
-			null,
-			null,
 			true
-		) );
+		);
+		$config->enableNativeLazyObjects( true );
+		$factory->setDoctrineConfiguration( $config );
 	}
 
 	private function setPayPalAPIClient( FunFunFactory $factory ): void {

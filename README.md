@@ -37,7 +37,6 @@ This will
 
 - Install PHP dependencies
 - Copy a basic configuration file. See section [Configuration](#configuration) for more details on the configuration.
-- Generate the [Doctrine Proxy classes](https://www.doctrine-project.org/projects/doctrine-orm/en/2.9/reference/advanced-configuration.html#proxy-objects)
 - Download and install the frontend assets from
     [fundraising-app-frontend](https://gitlab.com/fun-tech/fundraising-app-frontend)
 
