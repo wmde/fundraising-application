@@ -4,14 +4,19 @@ declare( strict_types = 1 );
 
 namespace EdgeToEdge\Routes;
 
+use PhpParser\Node\Expr\Cast\Object_;
 use PHPUnit\Framework\Attributes\CoversClass;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipFeeUpgradeController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FeeChanges;
 
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes\GetApplicationVarsTrait;
+
 #[CoversClass( ShowMembershipFeeUpgradeController::class )]
 class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
+
+	use GetApplicationVarsTrait;
 
 	private const PATH = '/show-membership-confirmation';
 	private const INVALID_TEST_UUID = 'foorchbar';
@@ -20,19 +25,21 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 	private const INVALID_TEST_EMAIL = '';
 	private const VALID_TEST_EMAIL = FeeChanges::EMAIL;
 
+	public function setUp(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+	}
+
 	public function testNoUUIDInRequest_rendersErrorPageWithCustomMessage(): void {
 		//TODO test custom message
 		$client = $this->createClient();
 		$client->request(
 			'GET',
-			'show-membership-fee-upgrade',
-			[
-				'email' => self::VALID_TEST_EMAIL
-			]
+			'membership-fee-upgrade',
+			[]
 		);
 
-		$response = $client->getResponse();
-		$this->assertFalse();
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
+		$this->assertEquals( 'TODO proper error message!!!!!', $dataVars->message );
 	}
 
 	public function testInvalidUUIDInRequest_rendersErrorPageWithCustomMessage(): void {
@@ -40,15 +47,14 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 		$client->request(
 			'GET',
-			'show-membership-fee-upgrade',
+			'membership-fee-upgrade',
 			[
 				'uuid' => self::INVALID_TEST_UUID,
-				'email' => self::VALID_TEST_EMAIL
 			]
 		);
 
-		$response = $client->getResponse();
-		$this->assertFalse();
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
+		$this->assertEquals( 'TODO proper error message!!!!!', $dataVars->message );
 	}
 
 	public function testValidUUIDInRequest_rendersFeeUpgradeForm(): void {
@@ -58,16 +64,19 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'GET',
-			'show-membership-fee-upgrade',
+			'membership-fee-upgrade',
 			[
-				'uuid' => self::VALID_TEST_UUID,
-				'email' => self::VALID_TEST_EMAIL
+				'uuid' => self::VALID_TEST_UUID
 			]
 		);
 
 		$response = $client->getResponse();
 
-		$this->assertEquals(new Response(), $response);
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
+
+		//TODO maybe test if the dataVars contain the 4 extra fields (url, paymentinfo, uuid,..)
+
+		$this->assertEquals((object)[], $dataVars);
 	}
 
  private function givenStoredFeeChangeInRepository(): void {

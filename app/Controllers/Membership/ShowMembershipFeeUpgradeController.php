@@ -6,36 +6,35 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Membership;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\Frontend\App\Controllers\API\Donation\AbstractApiController;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FeeChanges;
 use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\FeeChangeUseCase;
-use WMDE\Fundraising\PaymentContext\Domain\Model\PaymentInterval;
 
-class ShowMembershipFeeUpgradeController extends AbstractApiController {
+class ShowMembershipFeeUpgradeController {
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
-		$ffFactory->getTranslationCollector()->addTranslationFile( $ffFactory->getI18nDirectory() . '/messages/paymentTypes.json' );
-
 		$uuidFromRequest = $request->query->get('uuid', '');
-		$memberEmailAddressFromRequest = $request->query->get('email', '');
 
 		$feeChangeUseCase = new FeeChangeUseCase( $ffFactory->getFeeChangeRepository() );
 
-		if( $feeChangeUseCase->feeChangeExists( $uuidFromRequest, $memberEmailAddressFromRequest) ) {
+		if( $feeChangeUseCase->feeChangeExists( $uuidFromRequest, FeeChanges::EMAIL) ) {
 			return new Response(
 				$ffFactory->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' )->render(
 					[
 						'urls' => Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() ),
 						'presetAmounts' => $ffFactory->getPresetAmountsSettings( 'membership' ),
 						'paymentIntervals' => $ffFactory->getMembershipPaymentIntervals(),
+						'uuid' => $uuidFromRequest
 					]
 				)
 			);
 		}
 
-		//TODO if validation fails: render error page
-		return $this->errorResponse( "Invalid fee change request", Response::HTTP_OK );
-		//return $ffFactory->getInternalErrorHtmlPresenter()->present();
+		//TODO proper message
+		return new Response(
+			$ffFactory->newErrorPageHtmlPresenter()->present( "TODO proper error message!!!!!" ),
+			Response::HTTP_NOT_FOUND
+		);
 	}
 }

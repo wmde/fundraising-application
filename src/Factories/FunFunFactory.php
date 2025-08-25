@@ -835,8 +835,8 @@ class FunFunFactory implements LoggerAwareInterface {
 	/**
 	 * The ExceptionHtmlPresenterInterface shows error pages when code threw an exception.
 	 *
-	 * It has different implementations for production and development. In development, it shows detailed information
-	 * about the error. The production implementation shows a generic error message.
+	 * It has different implementations for production and development. In development, it shows detailed exception stack trace
+	 * information about the error. The production implementation shows a generic error message.
 	 *
 	 * @return ExceptionHtmlPresenterInterface
 	 */
