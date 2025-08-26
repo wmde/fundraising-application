@@ -190,12 +190,14 @@ use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizationChecker;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizer;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineFeeChangeRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipIdGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipTrackingRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository as MembershipModerationReasonRepository;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\FeeChangeRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\MembershipRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\PaymentServiceFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
@@ -833,8 +835,8 @@ class FunFunFactory implements LoggerAwareInterface {
 	/**
 	 * The ExceptionHtmlPresenterInterface shows error pages when code threw an exception.
 	 *
-	 * It has different implementations for production and development. In development, it shows detailed information
-	 * about the error. The production implementation shows a generic error message.
+	 * It has different implementations for production and development. In development, it shows detailed exception stack trace
+	 * information about the error. The production implementation shows a generic error message.
 	 *
 	 * @return ExceptionHtmlPresenterInterface
 	 */
@@ -1334,6 +1336,10 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
+	public function getFeeChangeRepository(): FeeChangeRepository {
+		return new DoctrineFeeChangeRepository( $this->getEntityManager() );
+	}
+
 	public function setMembershipApplicationAuthorizationChecker( MembershipAuthorizationChecker $authorizer ): void {
 		$this->sharedObjects[MembershipAuthorizationChecker::class] = $authorizer;
 	}
@@ -1387,12 +1393,7 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
-			'paymentIntervals' => [
-				PaymentInterval::Monthly->value,
-				PaymentInterval::Quarterly->value,
-				PaymentInterval::HalfYearly->value,
-				PaymentInterval::Yearly->value,
-			],
+			'paymentIntervals' => $this->getMembershipPaymentIntervals(),
 			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 			'countries' => $this->getCountries(),
 			'addressValidationPatterns' => $validation->address,
@@ -1400,6 +1401,18 @@ class FunFunFactory implements LoggerAwareInterface {
 			'incentives' => $this->getIncentives()
 		] );
 	}
+
+	/**
+	 * @return array<PaymentInterval, int>
+	 */
+	public function getMembershipPaymentIntervals(): array {
+		return [
+				PaymentInterval::Monthly->value,
+				PaymentInterval::Quarterly->value,
+				PaymentInterval::HalfYearly->value,
+				PaymentInterval::Yearly->value,
+			];
+		}
 
 	public function newMembershipApplicationFormPresenter(): MembershipApplicationFormPresenter {
 		return new MembershipApplicationFormPresenter(
