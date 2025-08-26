@@ -94,7 +94,6 @@ validate-sql:
 
 setup-doctrine:
 	docker compose run --rm start_dependencies
-	docker compose run --rm app ./bin/doctrine orm:generate-proxies var/doctrine_proxies
 
 drop-db:
 	docker compose run --rm app ./bin/doctrine orm:schema-tool:drop --force

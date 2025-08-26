@@ -52,13 +52,9 @@ class ProductionEnvironmentSetup implements EnvironmentSetup {
 	}
 
 	private function setDoctrineConfiguration( FunFunFactory $factory ): void {
-		$factory->setDoctrineConfiguration( ORMSetup::createXMLMetadataConfiguration(
-			$factory->getDoctrineXMLMappingPaths(),
-			false,
-			$factory->getWritableApplicationDataPath() . '/doctrine_proxies',
-			null,
-			true
-		) );
+		$config = ORMSetup::createXMLMetadataConfig( $factory->getDoctrineXMLMappingPaths() );
+		$config->enableNativeLazyObjects( true );
+		$factory->setDoctrineConfiguration( $config );
 	}
 
 	private function setCreditCardLogger( FunFunFactory $factory ): void {

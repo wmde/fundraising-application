@@ -16,7 +16,12 @@ class TestEnvironmentSetup implements EnvironmentSetup {
 	public function setEnvironmentDependentInstances( FunFunFactory $factory ): void {
 		$factory->setNullMessengers();
 		$factory->setDomainNameValidator( new NullDomainNameValidator() );
-		$factory->setDoctrineConfiguration( ORMSetup::createXMLMetadataConfiguration( $factory->getDoctrineXMLMappingPaths(), true ) );
+		$config = ORMSetup::createXMLMetadataConfig(
+			$factory->getDoctrineXMLMappingPaths(),
+			true
+		);
+		$config->enableNativeLazyObjects( true );
+		$factory->setDoctrineConfiguration( $config );
 		$factory->setInternalErrorHtmlPresenter( new DevelopmentInternalErrorHtmlPresenter() );
 		$factory->setFeatureReader( new FeatureReaderStub() );
 		$factory->setPayPalAPI( new FakePayPalAPI() );
