@@ -12,6 +12,13 @@ use WMDE\Fundraising\Frontend\App\EventHandlers\HandleExceptions;
 #[CoversClass( HandleExceptions::class )]
 class RouteNotFoundTest extends WebRouteTestCase {
 
+	/**
+	 * Remove when https://phabricator.wikimedia.org/T163452 is done
+	 */
+	protected function setUp(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+	}
+
 	public function testGivenUnknownRoute_404isReturned(): void {
 		$client = $this->createClient();
 		$client->request( 'GET', '/kittens' );

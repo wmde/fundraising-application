@@ -28,6 +28,8 @@ class TrackBannerDonationRedirectsTest extends WebRouteTestCase {
 	private Donation $donation;
 
 	public function setUp(): void {
+		// Remove next line when https://phabricator.wikimedia.org/T163452 is done
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		/** @var KernelBrowser $client */
 		$client = $this->createClient();
 		$this->client = $client;

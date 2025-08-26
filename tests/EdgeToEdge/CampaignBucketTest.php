@@ -7,11 +7,10 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge;
 use PHPUnit\Framework\Attributes\CoversClass;
 use WMDE\Fundraising\Frontend\App\EventHandlers\StoreBucketSelection;
 use WMDE\Fundraising\Frontend\BucketTesting\Domain\Model\Bucket;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\OverridingCampaignConfigurationLoader;
 
 #[CoversClass( StoreBucketSelection::class )]
-class CampaignCookieTest extends WebRouteTestCase {
+class CampaignBucketTest extends WebRouteTestCase {
 
 	private const TEST_CAMPAIGN_CONFIG = [
 		'awesome_feature' => [
@@ -25,17 +24,19 @@ class CampaignCookieTest extends WebRouteTestCase {
 	];
 
 	public function testWhenUserVisitsWithBucketParams_bucketsAreSet(): void {
-		$this->modifyConfiguration( [ 'campaigns' => [ 'timezone' => 'UTC' ] ] );
-		$this->modifyEnvironment( static function ( FunFunFactory $ffactory ) {
-			$ffactory->setCampaignConfigurationLoader(
-				new OverridingCampaignConfigurationLoader(
-					$ffactory->getCampaignConfigurationLoader(),
-					self::TEST_CAMPAIGN_CONFIG
-				)
-			);
-		} );
-
+		$this->modifyConfiguration( [
+			'campaigns' => [ 'timezone' => 'UTC' ],
+			'skin' => 'laika'
+		] );
 		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$factory->setCampaignConfigurationLoader(
+			new OverridingCampaignConfigurationLoader(
+				$factory->getCampaignConfigurationLoader(),
+				self::TEST_CAMPAIGN_CONFIG
+			)
+		);
+
 		$client->request( 'get', '/', [ 'omg' => 1 ] );
 
 		$buckets = array_filter(

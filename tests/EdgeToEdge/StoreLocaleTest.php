@@ -12,6 +12,13 @@ use WMDE\Fundraising\Frontend\App\EventHandlers\StoreLocale;
 #[CoversClass( StoreLocale::class )]
 class StoreLocaleTest extends WebRouteTestCase {
 
+	/**
+	 * Remove when https://phabricator.wikimedia.org/T163452 is done
+	 */
+	protected function setUp(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+	}
+
 	public function testWhenGivenSupportedCookieLocale_setsLocale(): void {
 		$client = $this->createClient();
 		$client->getCookieJar()->set( new BrowserKitCookie( CookieNames::LOCALE, 'en_GB' ) );

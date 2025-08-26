@@ -32,6 +32,7 @@ class PayPalRequestLoggerTest extends WebRouteTestCase {
 		$this->filePath = vfsStream::url( self::LOG_DIR . '/' . self::LOG_FILENAME );
 		$this->logger = new LoggerSpy();
 
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		/** @var KernelBrowser $client */
 		$client = $this->createClient();
 		$this->client = $client;

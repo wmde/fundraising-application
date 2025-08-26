@@ -14,6 +14,7 @@ class TrackingDataTest extends WebRouteTestCase {
 	private const PARAM_NAME_KEYWORD = 'piwik_kwd';
 
 	public function testWhenTrackingParamsArePassed_trackingCodeIsAddedToRequest(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 		$client->request( 'get', '/', [
 			self::PARAM_NAME_CAMPAIGN => 'campaign',

@@ -6,11 +6,15 @@ namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use WMDE\Fundraising\Frontend\App\Controllers\PageNotFoundController;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 
 #[CoversClass( PageNotFoundController::class )]
-class LegacyRouteTest extends WebTestCase {
+class LegacyRouteTest extends WebRouteTestCase {
+
+	protected function setUp(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+	}
 
 	/**
 	 * Covers the fallback route in routes.yml
