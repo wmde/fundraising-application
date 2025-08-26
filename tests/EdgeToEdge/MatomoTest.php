@@ -10,12 +10,19 @@ use PHPUnit\Framework\Attributes\CoversNothing;
  * Check if basic tracking parameters are rendered inside the HTML
  */
 #[CoversNothing]
-class PiwikTest extends WebRouteTestCase {
+class MatomoTest extends WebRouteTestCase {
 
-	public function testPiwikScriptGetsEmbedded(): void {
+	/**
+	 * Remove when https://phabricator.wikimedia.org/T163452 is done
+	 */
+	protected function setUp(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
+	}
+
+	public function testMatomoScriptGetsEmbedded(): void {
 		$client = $this->createClient();
 		$client->request( 'GET', '/' );
-		$this->assertStringContainsString( '<!-- Piwik -->', $client->getResponse()->getContent() ?: '' );
+		$this->assertStringContainsString( '<!-- Matomo -->', $client->getResponse()->getContent() ?: '' );
 	}
 
 	public function testConfigParametersAreUsed(): void {
