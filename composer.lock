@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83405e77de884668793ff07041753343",
+    "content-hash": "7ea6bff4cd75b17ac156cfa640e90111",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -10377,16 +10377,16 @@
         },
         {
             "name": "wmde/fundraising-frontend-content",
-            "version": "dev-test",
+            "version": "dev-membership-summary",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "108e19d88c96364b34a28296e0f33f7bb2411f52"
+                "reference": "5cbe907abb321ec56baa1208d63bbfc5d7407320"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/108e19d88c96364b34a28296e0f33f7bb2411f52",
-                "reference": "108e19d88c96364b34a28296e0f33f7bb2411f52",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/5cbe907abb321ec56baa1208d63bbfc5d7407320",
+                "reference": "5cbe907abb321ec56baa1208d63bbfc5d7407320",
                 "shasum": ""
             },
             "require": {
@@ -10397,7 +10397,6 @@
                 "seld/jsonlint": "^1.6",
                 "wmde/fundraising-content-provider": "^6.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload-dev": {
                 "psr-4": {
@@ -10411,8 +10410,8 @@
                     "@test"
                 ],
                 "uof": [
-                    "php bin/extract_to_mediawiki de > mediawiki_use_of_funds.de.txt",
-                    "php bin/extract_to_mediawiki en > mediawiki_use_of_funds.en.txt"
+                    "php bin/extract_to_mediawiki de",
+                    "php bin/extract_to_mediawiki en"
                 ],
                 "test": [
                     "vendor/bin/phpunit"
@@ -10437,7 +10436,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2025-05-08T19:21:25+00:00"
+            "time": "2025-08-26T09:16:27+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
