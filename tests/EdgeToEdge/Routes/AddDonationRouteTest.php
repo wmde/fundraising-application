@@ -640,13 +640,13 @@ class AddDonationRouteTest extends WebRouteTestCase {
 	}
 
 	/**
-	 * We expect the transition to the PayPal API to be done in mid-2025
+	 * We expect the transition to the PayPal API to be done in mid-2026
 	 * Ticket: https://phabricator.wikimedia.org/T329159
 	 *
 	 * @todo remove when ticket is done
 	 */
 	public function canaryForRemovingLegacyPayPalURLGeneratorConfig(): void {
-		if ( time() > strtotime( '2025-08-30' ) ) {
+		if ( time() > strtotime( '2026-08-30' ) ) {
 			$this->fail( "----NOTE: These tests are failing because we've set an EOL date for them----" );
 		}
 	}
