@@ -17,6 +17,10 @@ DirectoryIndex index.php
     Options -MultiViews
 </IfModule>
 
+<IfModule mod_headers.c>
+    Header set Content-Security-Policy "default-src 'self'; connect-src https://tracking.wikimedia.de; script-src 'self' https://tracking.wikimedia.de; img-src 'self' https://tracking.wikimedia.de; style-src 'self'; frame-ancestors 'self'; frame-src 'self';"
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 

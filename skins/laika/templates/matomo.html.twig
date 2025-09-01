@@ -1,28 +1,9 @@
 <!-- Matomo -->
-<script>
-	var _paq = _paq || [];
-	_paq.push(['requireCookieConsent']);
-	{% if initialFormValues.paymentType != '' %}
-		_paq.push( [ 'setCustomDimension', 1, '{$ initialFormValues.paymentType $}' ] );
-	{% endif %}
-	_paq.push( ['setCustomDimension', 2, 'laika' ] );
-	_paq.push( [ 'trackPageView' ] );
-	_paq.push( [ 'enableLinkTracking' ] );
-	_paq.push( [ 'trackVisibleContentImpressions' ] );
-
-	( function () {
-		var u = "{$ piwik.baseUrl $}";
-		_paq.push( [ 'setTrackerUrl', u + 'piwik.php' ] );
-		_paq.push( [ 'setSiteId', {$ piwik.siteId $} ] );
-		var d = document,
-			g = d.createElement( 'script' ),
-			s = d.getElementsByTagName( 'script' )[ 0 ];
-		g.type = 'text/javascript';
-		g.async = true;
-		g.defer = true;
-		g.src = u + 'piwik.js';
-		s.parentNode.insertBefore( g, s );
-	} ) ();
-</script>
-<noscript><img src="{$ piwik.baseUrl $}piwik.php?idsite={$ piwik.siteId $}" style="border:0;width:1px" alt=""></noscript>
+<script src="/res/js/matomo-loader.js"
+        id="matomo-loader"
+        data-matomo-base-url="{$ piwik.baseUrl $}"
+        data-site-id="{$ piwik.siteId $}"
+        data-initial-payment-type="{$ initialFormValues.paymentType $}"
+></script>
+<noscript><img src="{$ piwik.baseUrl $}piwik.php?idsite={$ piwik.siteId $}" style="border:0;width:1px" alt="" aria-hidden="true"></noscript>
 <!-- End Matomo Code -->
