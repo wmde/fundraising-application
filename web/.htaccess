@@ -18,6 +18,13 @@ DirectoryIndex index.php
 </IfModule>
 
 <IfModule mod_headers.c>
+	# Disallow browsers to "guess" the content type based on the first bytes of content 
+	# and force them to accept the `Content-Type` header
+	Header set X-Content-Type-Options "nosniff"
+
+	# Limit the domains from which we can load additional content to the same domain and our Matomo server
+	# This is the last line of defense against XSS attacks that load external content
+	# The header also disables inline scripts and event handlers - all JavaScript should be loaded via files
     Header set Content-Security-Policy "default-src 'self'; connect-src https://tracking.wikimedia.de; script-src 'self' https://tracking.wikimedia.de; img-src 'self' https://tracking.wikimedia.de; style-src 'self'; frame-ancestors 'self'; frame-src 'self';"
 </IfModule>
 
