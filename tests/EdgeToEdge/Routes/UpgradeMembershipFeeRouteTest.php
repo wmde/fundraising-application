@@ -12,5 +12,5 @@ use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 
 	// TODO
-
+	// test different input values for the input params (int, string, invalid payment types)
 }

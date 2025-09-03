@@ -92,6 +92,7 @@ use WMDE\Fundraising\DonationContext\UseCases\HandlePaypalPaymentWithoutDonation
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeUpgradeHTMLPresenter;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationContextFactory;
 use WMDE\Fundraising\Frontend\Authentication\DonationUrlAuthenticationLoader;
@@ -206,6 +207,8 @@ use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembe
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Moderation\ModerationService as MembershipModerationService;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Notification\MailMembershipApplicationNotifier;
+use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\FeeChangeUseCase;
+use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\ShowFeeChangePresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
 use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentIdRepository;
@@ -1336,8 +1339,22 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
+	public function newMembershipFeeUpgradeHTMLPresenter(): MembershipFeeUpgradeHTMLPresenter {
+		return new MembershipFeeUpgradeHTMLPresenter( $this );
+	}
+
 	public function getFeeChangeRepository(): FeeChangeRepository {
 		return new DoctrineFeeChangeRepository( $this->getEntityManager() );
+	}
+
+	public function newMembershipFeeUpgradeUseCase( int $membershipID ): FeeChangeUseCase {
+		return new FeeChangeUseCase(
+			$this->getFeeChangeRepository(),
+			$this->newPaymentServiceFactory(),
+
+			//TODO change this parameter
+			$this->getUrlAuthenticationLoader()->getMembershipUrlAuthenticator( $membershipID ),
+		);
 	}
 
 	public function setMembershipApplicationAuthorizationChecker( MembershipAuthorizationChecker $authorizer ): void {
