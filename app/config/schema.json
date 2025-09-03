@@ -724,10 +724,10 @@
         "baseUrl": {
           "type": "string",
           "title": "Tracker URL",
-          "description": "Base URL for the Matomo installation. Make sure it starts with //, not with http:// or https://, that way the browser will automatically select the right transport when the URL is printed in a template",
+          "description": "Base URL for the Matomo installation.",
           "format": "url",
           "default": "//tracking.wikimedia.de/",
-          "pattern": "^(\\/){2}[a-zA-Z0-9.\\/]+$"
+          "pattern": "^(?:https?:)?\\/{2}[a-zA-Z0-9.\\/]+$"
         },
         "siteId": {
           "type": "integer",

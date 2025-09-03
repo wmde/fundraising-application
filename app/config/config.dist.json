@@ -104,7 +104,7 @@
 		"notification-url": ""
 	},
 	"piwik": {
-		"baseUrl": "//tracking.wikimedia.de/",
+		"baseUrl": "https://tracking.wikimedia.de/",
 		"siteId": 5,
 		"donationConfirmationGoalId": 1,
 		"membershipApplicationConfirmationGoalId": 2
