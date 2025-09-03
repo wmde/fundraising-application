@@ -4,26 +4,23 @@ declare( strict_types = 1 );
 
 namespace EdgeToEdge\Routes;
 
-use PhpParser\Node\Expr\Cast\Object_;
 use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeUpgradeHTMLPresenter;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipFeeUpgradeController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
-use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FeeChanges;
 
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes\GetApplicationVarsTrait;
 
 #[CoversClass( ShowMembershipFeeUpgradeController::class )]
+#[CoversClass( MembershipFeeUpgradeHTMLPresenter::class )]
 class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;
 
-	private const PATH = '/show-membership-confirmation';
-	private const INVALID_TEST_UUID = 'foorchbar';
-	private const VALID_TEST_UUID = FeeChanges::UUID_1;
-
-	private const INVALID_TEST_EMAIL = '';
-	private const VALID_TEST_EMAIL = FeeChanges::EMAIL;
+	private const string PATH = '/show-membership-confirmation';
+	private const string INVALID_TEST_UUID = 'foorchbar';
+	private const string VALID_TEST_UUID = FeeChanges::UUID_1;
 
 	public function setUp(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
@@ -34,12 +31,12 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 		$client->request(
 			'GET',
-			'membership-fee-upgrade',
+			'change-membership-fee',
 			[]
 		);
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
-		$this->assertEquals( 'TODO proper error message!!!!!', $dataVars->message );
+		$this->assertEquals( 'No token found for ID 0 and context Membership This should never happen, you forgot to call authorizeDonationAccess or authorizeMembershipAccess somewhere', $dataVars->message );
 	}
 
 	public function testInvalidUUIDInRequest_rendersErrorPageWithCustomMessage(): void {
@@ -47,14 +44,14 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		$client = $this->createClient();
 		$client->request(
 			'GET',
-			'membership-fee-upgrade',
+			'change-membership-fee',
 			[
 				'uuid' => self::INVALID_TEST_UUID,
 			]
 		);
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
-		$this->assertEquals( 'TODO proper error message!!!!!', $dataVars->message );
+		$this->assertEquals( 'No token found for ID 0 and context Membership This should never happen, you forgot to call authorizeDonationAccess or authorizeMembershipAccess somewhere', $dataVars->message );
 	}
 
 	public function testValidUUIDInRequest_rendersFeeUpgradeForm(): void {
@@ -64,7 +61,7 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 
 		$client->request(
 			'GET',
-			'membership-fee-upgrade',
+			'change-membership-fee',
 			[
 				'uuid' => self::VALID_TEST_UUID
 			]

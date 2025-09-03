@@ -132,13 +132,13 @@ show_membership_confirmation:
     methods: [GET]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipConfirmationController::index'
 
-show_membership_fee_upgrade_form:
-    path: /membership-fee-upgrade
+show_membership_fee_change_form:
+    path: /change-membership-fee
     methods: [ GET ]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipFeeUpgradeController::index'
 
-membership_fee_upgrade:
-    path: /membership-fee-upgrade
+membership_fee_change:
+    path: /change-membership-fee
     methods: [ POST ]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\Membership\UpgradeMembershipFeeController::index'
 
