@@ -36,7 +36,7 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		);
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
-		$this->assertEquals( 'No token found for ID 0 and context Membership This should never happen, you forgot to call authorizeDonationAccess or authorizeMembershipAccess somewhere', $dataVars->message );
+		$this->assertEquals( '', $dataVars->message );
 	}
 
 	public function testInvalidUUIDInRequest_rendersErrorPageWithCustomMessage(): void {
@@ -73,7 +73,7 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 
 		//TODO maybe test if the dataVars contain the 4 extra fields (url, paymentinfo, uuid,..)
 
-		$this->assertEquals((object)[], $dataVars);
+		$this->assertEquals(self::VALID_TEST_UUID, $dataVars->uuid);
 	}
 
  private function givenStoredFeeChangeInRepository(): void {
