@@ -105,6 +105,7 @@ use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\LenientAuthorization
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\PersistentAuthorizer;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\TokenRepository;
 use WMDE\Fundraising\Frontend\Authentication\RandomTokenGenerator;
+use WMDE\Fundraising\Frontend\Authentication\UrlAuthenticatorStub;
 use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
 use WMDE\Fundraising\Frontend\Autocomplete\Domain\DataAccess\DoctrineLocationRepository;
 use WMDE\Fundraising\Frontend\Autocomplete\UseCases\FindCitiesUseCase;
@@ -208,7 +209,6 @@ use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApp
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Moderation\ModerationService as MembershipModerationService;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Notification\MailMembershipApplicationNotifier;
 use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\FeeChangeUseCase;
-use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\ShowFeeChangePresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
 use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentIdRepository;
@@ -1347,13 +1347,11 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new DoctrineFeeChangeRepository( $this->getEntityManager() );
 	}
 
-	public function newMembershipFeeUpgradeUseCase( int $membershipID ): FeeChangeUseCase {
+	public function newMembershipFeeUpgradeUseCase(): FeeChangeUseCase {
 		return new FeeChangeUseCase(
 			$this->getFeeChangeRepository(),
 			$this->newPaymentServiceFactory(),
-
-			//TODO change this parameter
-			$this->getUrlAuthenticationLoader()->getMembershipUrlAuthenticator( $membershipID ),
+			new UrlAuthenticatorStub()
 		);
 	}
 
