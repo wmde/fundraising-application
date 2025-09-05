@@ -22,6 +22,7 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 	): void {
 		$this->responseString = $this->ffFactory->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' )->render(
 			[
+				'uuid' => 0, //TODO where do we get the correct UUID from
 				'externalMemberId' => $externalMemberId,
 				'currentAmountInCents' => $currentAmountInCents,
 				'suggestedAmountInCents' => $suggestedAmountInCents,
