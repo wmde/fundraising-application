@@ -21,6 +21,8 @@ class UpgradeMembershipFeeController {
 		$ibanFromRequest = $request->query->get('iban', '');
 		$bicFromRequest = $request->query->get('bic', '');
 
+		//TODO check if the iban is validated later in the usecases
+
 		if( !ctype_digit( $amountInEurocentsFromRequest ) ) {
 			//TODO return error
 		}
@@ -29,7 +31,6 @@ class UpgradeMembershipFeeController {
 			//TODO return error
 		}
 
-		//TODO build the DTO
 		$feeChangeRequest = new FeeChangeRequest(
 			uuid: $uuidFromRequest,
 			amountInEuroCents: $amountInEurocentsFromRequest,
@@ -41,9 +42,13 @@ class UpgradeMembershipFeeController {
 		$feeUpgradeUseCase = $ffFactory->newMembershipFeeUpgradeUseCase();
 		$feeChangeResponse = $feeUpgradeUseCase->changeFee( $feeChangeRequest );
 
-		if( $feeChangeResponse->success ){
+		if( $feeChangeResponse->success){
 			//api call?
+			//TODO json response: status=>ok (als array)
 		}
+		// todo logging (fehlerhafte uuids zB)
+		// $ffFactory->getLogger()->notice( 'UUID not found', [ 'addressChangeToken' => $identifier ] );
+		// todo else json response status=>error, zusätzlich validationresponse drin ist
 
 
 		//TODO if it errors: log the error and return a JSON error result

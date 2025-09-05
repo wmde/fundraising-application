@@ -15,6 +15,7 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 	}
 
 	public function showFeeChangeForm(
+		string $uuid,
 		int $externalMemberId,
 		int $currentAmountInCents,
 		int $suggestedAmountInCents,
@@ -22,12 +23,12 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 	): void {
 		$this->responseString = $this->ffFactory->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' )->render(
 			[
-				'uuid' => 0, //TODO where do we get the correct UUID from
+				'uuid' => $uuid,
 				'externalMemberId' => $externalMemberId,
 				'currentAmountInCents' => $currentAmountInCents,
 				'suggestedAmountInCents' => $suggestedAmountInCents,
 				'currentInterval' => $currentInterval,
-				'showErrorPageInstead' => false
+				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_FEE_CHANGE_FORM
 			]
 		);
 	}
@@ -40,14 +41,22 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 				'currentAmountInCents' => '',
 				'suggestedAmountInCents' => '',
 				'currentInterval' => '',
-				'showErrorPageInstead' => true
+				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE
 			]
 		);
 	}
 
 	public function showFeeChangeAlreadyFilled(): void {
-		// TODO: only show a simple "system message" html page  / static html page with a styled message
-		$this->responseString = '';
+		// displaying the info message will be handled by the frontend code
+		$this->responseString = $this->ffFactory->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' )->render(
+			[
+				'uuid' => '',
+				'currentAmountInCents' => '',
+				'suggestedAmountInCents' => '',
+				'currentInterval' => '',
+				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_FEE_ALREADY_CHANGED_PAGE
+			]
+		);
 	}
 
 	public function getHTMLResponse(): Response {

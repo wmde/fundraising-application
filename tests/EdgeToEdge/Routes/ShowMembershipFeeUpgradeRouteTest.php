@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace EdgeToEdge\Routes;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeUpgradeFrontendFlag;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeUpgradeHTMLPresenter;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipFeeUpgradeController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
@@ -18,7 +19,6 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;
 
-	private const string PATH = '/show-membership-confirmation';
 	private const string INVALID_TEST_UUID = 'foorchbar';
 	private const string VALID_TEST_UUID = FeeChanges::UUID_1;
 
@@ -26,8 +26,7 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 	}
 
-	public function testNoUUIDInRequest_rendersErrorPageWithCustomMessage(): void {
-		//TODO test custom message
+	public function testNoUUIDInRequest_rendersErrorPage(): void {
 		$client = $this->createClient();
 		$client->request(
 			'GET',
@@ -36,11 +35,10 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		);
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
-		$this->assertEquals( 'No token found for ID 0 and context Membership This should never happen, you forgot to call authorizeDonationAccess or authorizeMembershipAccess somewhere', $dataVars->message );
+		$this->assertEquals( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
 	}
 
-	public function testInvalidUUIDInRequest_rendersErrorPageWithCustomMessage(): void {
-		//TODO test custom message
+	public function testInvalidUUIDInRequest_rendersErrorPage(): void {
 		$client = $this->createClient();
 		$client->request(
 			'GET',
@@ -51,7 +49,25 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		);
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
-		$this->assertEquals( 'No token found for ID 0 and context Membership This should never happen, you forgot to call authorizeDonationAccess or authorizeMembershipAccess somewhere', $dataVars->message );
+		$this->assertEquals( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
+	}
+
+	public function testInvalidUUIDInRequest_errorPageContainsEmptyDataVars(): void {
+		$client = $this->createClient();
+		$client->request(
+			'GET',
+			'change-membership-fee',
+			[
+				'uuid' => self::INVALID_TEST_UUID,
+			]
+		);
+
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
+		$this->assertEquals( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
+		$this->assertEquals('', $dataVars->externalMemberId);
+		$this->assertEquals('', $dataVars->currentAmountInCents);
+		$this->assertEquals('', $dataVars->suggestedAmountInCents);
+		$this->assertEquals('', $dataVars->currentInterval);
 	}
 
 	public function testValidUUIDInRequest_rendersFeeUpgradeForm(): void {
@@ -71,9 +87,12 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-		//TODO maybe test if the dataVars contain the 4 extra fields (url, paymentinfo, uuid,..)
+		$this->assertEquals(self::VALID_TEST_UUID, $dataVars->uuid);
+		$this->assertEquals(FeeChanges::EXTERNAL_MEMBER_ID, $dataVars->externalMemberId);
+		$this->assertEquals(FeeChanges::AMOUNT, $dataVars->currentAmountInCents);
+		$this->assertEquals(FeeChanges::SUGGESTED_AMOUNT, $dataVars->suggestedAmountInCents);
+		$this->assertEquals(FeeChanges::INTERVAL, $dataVars->currentInterval);
 
-		$this->assertEquals((object)[], $dataVars);
 	}
 
  private function givenStoredFeeChangeInRepository(): void {

@@ -1340,7 +1340,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function newMembershipFeeUpgradeHTMLPresenter(): MembershipFeeUpgradeHTMLPresenter {
-		return new MembershipFeeUpgradeHTMLPresenter( $this );
+		return new MembershipFeeUpgradeHTMLPresenter( $this ); //pass in template instead
 	}
 
 	public function getFeeChangeRepository(): FeeChangeRepository {
