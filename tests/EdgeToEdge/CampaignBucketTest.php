@@ -41,7 +41,7 @@ class CampaignBucketTest extends WebRouteTestCase {
 
 		$buckets = array_filter(
 			$this->getFactory()->getSelectedBuckets(),
-			fn ( Bucket $bucket ) => $bucket->getCampaign()->getName() === 'awesome_feature'
+			static fn ( Bucket $bucket ) => $bucket->getCampaign()->getName() === 'awesome_feature'
 		);
 		$buckets = array_values( $buckets );
 

@@ -13,7 +13,6 @@ use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 class TrackingDataSelectorTest extends TestCase {
 
 	/**
-	 *
 	 * @param string $expectedResult
 	 * @param string[] $values
 	 */

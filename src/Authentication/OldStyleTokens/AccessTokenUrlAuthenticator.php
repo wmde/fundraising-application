@@ -61,8 +61,8 @@ class AccessTokenUrlAuthenticator implements URLAuthenticator {
 		if ( array_diff( $requestedParameters, $paramNames ) !== [] ) {
 			throw new \DomainException( sprintf(
 				'Requested parameters (%s) do not match generated parameters (%s)',
-				implode( ', ', array_map( fn ( $p ) => "'$p'", $requestedParameters ) ),
-				implode( ', ', array_map( fn ( $p ) => "'$p'", $paramNames ) ),
+				implode( ', ', array_map( static fn ( $p ) => "'$p'", $requestedParameters ) ),
+				implode( ', ', array_map( static fn ( $p ) => "'$p'", $paramNames ) ),
 			) );
 		}
 	}

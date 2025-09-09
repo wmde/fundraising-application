@@ -47,7 +47,7 @@ class DonationFormPresenter {
 			],
 			'validationResult' => [
 				'paymentErrorFields' => array_unique( array_map(
-					fn ( ConstraintViolation $violation ) => $violation->getSource(),
+					static fn ( ConstraintViolation $violation ) => $violation->getSource(),
 					$paymentValidationResult->getValidationErrors()
 				) ),
 				// deprecated, remove when frontend uses the 'paymentErrorFields' array
