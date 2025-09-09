@@ -47,7 +47,6 @@ class CampaignConfigurationTest extends TestCase {
 	}
 
 	/**
-	 *
 	 * @param array<string, mixed> $invalidConfig
 	 * @param string $expectedReason
 	 */

@@ -150,7 +150,6 @@ class BucketSelectorTest extends TestCase {
 	}
 
 	/**
-	 *
 	 * @param string $description
 	 * @param array<string, int|string> $url
 	 */

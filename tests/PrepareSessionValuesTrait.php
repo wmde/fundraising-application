@@ -19,7 +19,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * Future Symfony versions may introduce different ways to set values in the session before making a request,
  * see https://github.com/symfony/symfony/issues/44253
- *
  */
 trait PrepareSessionValuesTrait {
 

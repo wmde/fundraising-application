@@ -23,7 +23,7 @@ class Salutations {
 	 * @return array<string, string|array<string, string>>|null
 	 */
 	public function getSalutation( string $value ): ?array {
-		$data = array_filter( $this->salutations, fn ( $salutation ) => $salutation['value'] == $value );
+		$data = array_filter( $this->salutations, static fn ( $salutation ) => $salutation['value'] == $value );
 
 		if ( count( $data ) === 0 ) {
 			return null;

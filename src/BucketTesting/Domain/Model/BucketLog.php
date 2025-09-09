@@ -15,8 +15,8 @@ class BucketLog {
 	 * ID automagically set by Doctrine ORM
 	 *
 	 * @var int
-	 * @phpstan-ignore-next-line
 	 */
+	// @phpstan-ignore-next-line
 	private int $id;
 	/**
 	 * @var Collection<int, BucketLogBucket>

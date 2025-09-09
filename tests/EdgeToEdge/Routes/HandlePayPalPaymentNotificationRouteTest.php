@@ -207,7 +207,6 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	}
 
 	/**
-	 *
 	 * @param array<string, int|string> $params
 	 * @param string $paymentStatus
 	 */
