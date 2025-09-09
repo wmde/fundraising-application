@@ -25,7 +25,8 @@ DirectoryIndex index.php
 	# Limit the domains from which we can load additional content to the same domain and our Matomo server
 	# This is the last line of defense against XSS attacks that load external content
 	# The header also disables inline scripts and event handlers - all JavaScript should be loaded via files
-    Header set Content-Security-Policy "default-src 'self'; connect-src https://tracking.wikimedia.de; script-src 'self' https://tracking.wikimedia.de; img-src 'self' https://tracking.wikimedia.de; style-src 'self'; frame-ancestors 'self'; frame-src 'self';"
+	# 2025-09-09 Disabled because it breaks the application and needs tuning
+    # Header set Content-Security-Policy "default-src 'self'; connect-src https://tracking.wikimedia.de; script-src 'self' https://tracking.wikimedia.de; img-src 'self' https://tracking.wikimedia.de; style-src 'self'; frame-ancestors 'self'; frame-src 'self';"
 </IfModule>
 
 <IfModule mod_rewrite.c>
