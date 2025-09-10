@@ -29,3 +29,8 @@ api_donation_comment_post:
     path: /api/v1/donation/comment
     methods: [PUT,POST]
     controller: 'WMDE\Fundraising\Frontend\App\Controllers\API\Donation\AddCommentController::index'
+
+api_membership_fee_change:
+    path: /api/v1/membership/change-fee
+    methods: [ POST ]
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Membership\UpgradeMembershipFeeController::index'
