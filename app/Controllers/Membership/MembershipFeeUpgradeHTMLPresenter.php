@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\Controllers\Membership;
 
 use Symfony\Component\HttpFoundation\Response;
-use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\ShowFeeChangePresenter;
 

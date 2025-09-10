@@ -34,7 +34,7 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		);
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
-		$this->assertEquals( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
+		$this->assertSame( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
 	}
 
 	public function testInvalidUUIDInRequest_rendersErrorPage(): void {
@@ -48,7 +48,7 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		);
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
-		$this->assertEquals( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
+		$this->assertSame( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
 	}
 
 	public function testInvalidUUIDInRequest_errorPageContainsEmptyDataVars(): void {
@@ -62,8 +62,8 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		);
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
-		$this->assertEquals( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
-		$this->assertSame( '', $dataVars->externalMemberId );
+		$this->assertSame( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
+		$this->assertNull( $dataVars->externalMemberId );
 		$this->assertSame( '', $dataVars->currentAmountInCents );
 		$this->assertSame( '', $dataVars->suggestedAmountInCents );
 		$this->assertSame( '', $dataVars->currentInterval );
@@ -81,19 +81,44 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 			]
 		);
 
-		$response = $client->getResponse();
-
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-		$this->assertEquals( self::VALID_TEST_UUID, $dataVars->uuid );
-		$this->assertEquals( FeeChanges::EXTERNAL_MEMBER_ID, $dataVars->externalMemberId );
-		$this->assertEquals( FeeChanges::AMOUNT, $dataVars->currentAmountInCents );
-		$this->assertEquals( FeeChanges::SUGGESTED_AMOUNT, $dataVars->suggestedAmountInCents );
-		$this->assertEquals( FeeChanges::INTERVAL, $dataVars->currentInterval );
+		$this->assertSame( self::VALID_TEST_UUID, $dataVars->uuid );
+		$this->assertSame( FeeChanges::EXTERNAL_MEMBER_ID, $dataVars->externalMemberId );
+		$this->assertSame( FeeChanges::AMOUNT, $dataVars->currentAmountInCents );
+		$this->assertSame( FeeChanges::SUGGESTED_AMOUNT, $dataVars->suggestedAmountInCents );
+		$this->assertSame( FeeChanges::INTERVAL, $dataVars->currentInterval );
+	}
+
+	public function testValidButAlreadyUsedUUIDInRequest_rendersAlready(): void {
+		$client = $this->createClient();
+		$this->givenStoredAlreadyChangedFeeChangeInRepository();
+
+		$client->request(
+			'GET',
+			'change-membership-fee',
+			[
+				'uuid' => FeeChanges::UUID_2
+			]
+		);
+
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
+		$this->assertSame( MembershipFeeUpgradeFrontendFlag::SHOW_FEE_ALREADY_CHANGED_PAGE->value, $dataVars->feeChangeFrontendFlag );
+		$this->assertNull( $dataVars->externalMemberId );
+		$this->assertSame( '', $dataVars->currentAmountInCents );
+		$this->assertSame( '', $dataVars->suggestedAmountInCents );
+		$this->assertSame( '', $dataVars->currentInterval );
 	}
 
 	private function givenStoredFeeChangeInRepository(): void {
 		$feeChange = FeeChanges::newNewFeeChange( FeeChanges::UUID_1 );
+		$ffFactory = $this->getFactory();
+		$feeChangeRepository = $ffFactory->getFeeChangeRepository();
+		$feeChangeRepository->storeFeeChange( $feeChange );
+	}
+
+	private function givenStoredAlreadyChangedFeeChangeInRepository(): void {
+		$feeChange = FeeChanges::newFilledFeeChange( FeeChanges::UUID_2 );
 		$ffFactory = $this->getFactory();
 		$feeChangeRepository = $ffFactory->getFeeChangeRepository();
 		$feeChangeRepository->storeFeeChange( $feeChange );

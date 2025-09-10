@@ -972,6 +972,30 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	public function newCreatePaymentUseCaseForMembershipFeeChanges(): CreatePaymentUseCase {
+		return new CreatePaymentUseCase(
+			$this->getPaymentIdRepository(),
+			$this->getPaymentRepository(),
+			$this->newPaymentReferenceCodeGenerator(),
+			$this->newPaymentValidator(),
+			$this->newCheckIbanUseCase(),
+			new PaymentURLFactory(
+				$this->newCreditCardUrlGeneratorConfig(),
+				// We can pass the donation config in here, because it will never be used
+				$this->getLegacyPayPalUrlConfigForDonations(),
+				$this->getSofortUrlGeneratorConfigForDonations(),
+				$this->getSofortClient(),
+				$this->getUrlGenerator()->generateAbsoluteUrl( Routes::SHOW_MEMBERSHIP_FEE_CHANGE_FORM ),
+				useLegacyPayPalUrlGenerator: false
+			),
+			new PaymentProviderAdapterFactoryImplementation(
+				$this->getPayPalApiClient(),
+				$this->getPaymentAdapterConfigForMemberships(),
+				$this->getPaymentRepository()
+			)
+		);
+	}
+
 	private function newPaymentReferenceCodeGenerator(): PaymentReferenceCodeGenerator {
 		return new UniquePaymentReferenceCodeGenerator(
 			new CharacterPickerPaymentReferenceCodeGenerator( new RandomCharacterIndexGenerator() ),
@@ -1340,7 +1364,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function newMembershipFeeUpgradeHTMLPresenter(): MembershipFeeUpgradeHTMLPresenter {
-		return new MembershipFeeUpgradeHTMLPresenter( $this->getLayoutTemplate('Membership_Fee_Upgrade.html.twig') );
+		return new MembershipFeeUpgradeHTMLPresenter( $this->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' ) );
 	}
 
 	public function getFeeChangeRepository(): FeeChangeRepository {
@@ -1350,7 +1374,10 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function newMembershipFeeUpgradeUseCase(): FeeChangeUseCase {
 		return new FeeChangeUseCase(
 			$this->getFeeChangeRepository(),
-			$this->newPaymentServiceFactory(),
+			new PaymentServiceFactory(
+				$this->newCreatePaymentUseCaseForMembershipFeeChanges(),
+				$this->getPaymentTypesSettings()->getPaymentTypesForMembershipFeeChange()
+			),
 			new UrlAuthenticatorStub()
 		);
 	}

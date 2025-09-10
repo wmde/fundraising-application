@@ -4,6 +4,9 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers\Membership;
 
+/**
+ * @codeCoverageIgnore
+ */
 enum MembershipFeeUpgradeFrontendFlag: string {
 
 	case SHOW_FEE_CHANGE_FORM = 'SHOW_FEE_CHANGE_FORM';
