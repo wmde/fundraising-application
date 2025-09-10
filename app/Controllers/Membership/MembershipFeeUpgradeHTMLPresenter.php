@@ -6,12 +6,13 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Membership;
 
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\ShowFeeChangePresenter;
 
 class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 	private string $responseString = '';
 
-	public function __construct( private readonly FunFunFactory $ffFactory) {
+	public function __construct( private readonly TwigTemplate $twigTemplate ) {
 	}
 
 	public function showFeeChangeForm(
@@ -21,7 +22,7 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 		int $suggestedAmountInCents,
 		int $currentInterval
 	): void {
-		$this->responseString = $this->ffFactory->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' )->render(
+		$this->responseString = $this->twigTemplate->render(
 			[
 				'uuid' => $uuid,
 				'externalMemberId' => $externalMemberId,
@@ -35,7 +36,7 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 
 	public function showFeeChangeError(): void {
 		// displaying an error message will be handled by the frontend code
-		$this->responseString = $this->ffFactory->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' )->render(
+		$this->responseString = $this->twigTemplate->render(
 			[
 				'uuid' => '',
 				'currentAmountInCents' => '',
@@ -48,7 +49,7 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 
 	public function showFeeChangeAlreadyFilled(): void {
 		// displaying the info message will be handled by the frontend code
-		$this->responseString = $this->ffFactory->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' )->render(
+		$this->responseString = $this->twigTemplate->render(
 			[
 				'uuid' => '',
 				'currentAmountInCents' => '',

@@ -8,10 +8,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeUpgradeFrontendFlag;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeUpgradeHTMLPresenter;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipFeeUpgradeController;
+use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes\GetApplicationVarsTrait;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FeeChanges;
-
-use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes\GetApplicationVarsTrait;
 
 #[CoversClass( ShowMembershipFeeUpgradeController::class )]
 #[CoversClass( MembershipFeeUpgradeHTMLPresenter::class )]
@@ -64,16 +63,15 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 		$this->assertEquals( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
-		$this->assertEquals('', $dataVars->externalMemberId);
-		$this->assertEquals('', $dataVars->currentAmountInCents);
-		$this->assertEquals('', $dataVars->suggestedAmountInCents);
-		$this->assertEquals('', $dataVars->currentInterval);
+		$this->assertSame( '', $dataVars->externalMemberId );
+		$this->assertSame( '', $dataVars->currentAmountInCents );
+		$this->assertSame( '', $dataVars->suggestedAmountInCents );
+		$this->assertSame( '', $dataVars->currentInterval );
 	}
 
 	public function testValidUUIDInRequest_rendersFeeUpgradeForm(): void {
 		$client = $this->createClient();
 		$this->givenStoredFeeChangeInRepository();
-
 
 		$client->request(
 			'GET',
@@ -87,19 +85,18 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 
-		$this->assertEquals(self::VALID_TEST_UUID, $dataVars->uuid);
-		$this->assertEquals(FeeChanges::EXTERNAL_MEMBER_ID, $dataVars->externalMemberId);
-		$this->assertEquals(FeeChanges::AMOUNT, $dataVars->currentAmountInCents);
-		$this->assertEquals(FeeChanges::SUGGESTED_AMOUNT, $dataVars->suggestedAmountInCents);
-		$this->assertEquals(FeeChanges::INTERVAL, $dataVars->currentInterval);
-
+		$this->assertEquals( self::VALID_TEST_UUID, $dataVars->uuid );
+		$this->assertEquals( FeeChanges::EXTERNAL_MEMBER_ID, $dataVars->externalMemberId );
+		$this->assertEquals( FeeChanges::AMOUNT, $dataVars->currentAmountInCents );
+		$this->assertEquals( FeeChanges::SUGGESTED_AMOUNT, $dataVars->suggestedAmountInCents );
+		$this->assertEquals( FeeChanges::INTERVAL, $dataVars->currentInterval );
 	}
 
- private function givenStoredFeeChangeInRepository(): void {
+	private function givenStoredFeeChangeInRepository(): void {
 		$feeChange = FeeChanges::newNewFeeChange( FeeChanges::UUID_1 );
-	 	$ffFactory = $this->getFactory();
+		$ffFactory = $this->getFactory();
 		$feeChangeRepository = $ffFactory->getFeeChangeRepository();
 		$feeChangeRepository->storeFeeChange( $feeChange );
- }
+	}
 
 }

@@ -1340,7 +1340,7 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function newMembershipFeeUpgradeHTMLPresenter(): MembershipFeeUpgradeHTMLPresenter {
-		return new MembershipFeeUpgradeHTMLPresenter( $this ); //pass in template instead
+		return new MembershipFeeUpgradeHTMLPresenter( $this->getLayoutTemplate('Membership_Fee_Upgrade.html.twig') );
 	}
 
 	public function getFeeChangeRepository(): FeeChangeRepository {
@@ -1427,7 +1427,7 @@ class FunFunFactory implements LoggerAwareInterface {
 				PaymentInterval::HalfYearly->value,
 				PaymentInterval::Yearly->value,
 			];
-		}
+	}
 
 	public function newMembershipApplicationFormPresenter(): MembershipApplicationFormPresenter {
 		return new MembershipApplicationFormPresenter(
