@@ -33,7 +33,11 @@ class AddCommentPostRouteTest extends WebRouteTestCase {
 		);
 
 		$response = $client->getResponse();
+		$responseJson = json_decode( $response->getContent() ?: '', true, 512, JSON_THROW_ON_ERROR );
 		$this->assertSame( Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode() );
+		$this->assertIsArray( $responseJson );
+		// validationErrors is an indicator that Symfony could not validate the JSON body and turn it into a request object
+		$this->assertArrayHasKey( 'validationErrors', $responseJson );
 	}
 
 	public function testGivenRequestWithoutTokens_resultIsError(): void {
