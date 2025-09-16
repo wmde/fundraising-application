@@ -6,15 +6,17 @@ INSERT INTO last_generated_membership_id (membership_id) VALUES (0);
 INSERT INTO incentive (`id`, `name`) VALUES (1, 'tote_bag');
 
 INSERT INTO membership_fee_changes (
-                                    uuid,
-                                    external_member_id,
-                                    current_amount_in_cents,
-                                    suggested_amount_in_cents,
-                                    current_interval,
-                                    state,
-                                    export_date
+	uuid,
+	member_name,
+	external_member_id,
+	current_amount_in_cents,
+	suggested_amount_in_cents,
+	current_interval,
+	state,
+	export_date
 ) VALUES (
         '12345-abcde',
+		'name name',
         987654321,
         500,
         1000,
@@ -25,6 +27,7 @@ INSERT INTO membership_fee_changes (
 
 INSERT INTO membership_fee_changes (
 	uuid,
+	member_name,
 	external_member_id,
 	current_amount_in_cents,
 	suggested_amount_in_cents,
@@ -33,6 +36,7 @@ INSERT INTO membership_fee_changes (
 	export_date
 ) VALUES (
 			 '1234-abcd',
+          'name name',
 			 98765432,
 			 1000,
 			 2000,
@@ -43,6 +47,7 @@ INSERT INTO membership_fee_changes (
 
 INSERT INTO membership_fee_changes (
 	uuid,
+	member_name,
 	external_member_id,
 	current_amount_in_cents,
 	suggested_amount_in_cents,
@@ -51,6 +56,7 @@ INSERT INTO membership_fee_changes (
 	export_date
 ) VALUES (
 			 '123-abc',
+			 'name name',
 			 9876543,
 			 500,
 			 1000,
