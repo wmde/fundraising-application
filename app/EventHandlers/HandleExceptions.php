@@ -8,9 +8,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
@@ -76,15 +78,16 @@ class HandleExceptions implements EventSubscriberInterface {
 
 	private function createInternalErrorResponse( ExceptionEvent $event ): void {
 		$exception = $event->getThrowable();
+		$code = $exception instanceof HttpExceptionInterface ? $exception->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
 		if ( $this->isJsonRequest( $event ) ) {
-			$event->setResponse( new JsonResponse(
-				[ 'ERR' => $exception->getMessage() ],
-				// TODO check if we can return $code (see below) instead of 200
-			) );
+			$responseJSON = [ 'ERR' => $exception->getMessage() ];
+			$responseJSON = $this->modifyErrorResponseForSymfonyValidationErrors( $exception, $responseJSON );
+
+			// TODO check if all of our JavaScript API-call code can process return codes other than 200, if yes, pass $code as 2nd parameter
+			$event->setResponse( new JsonResponse( $responseJSON ) );
 			return;
 		}
 
-		$code = $exception instanceof HttpExceptionInterface ? $exception->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
 		$event->setResponse( new Response(
 			$this->presenterFactory->getInternalErrorHtmlPresenter()->present( $exception ),
 			$code
@@ -95,6 +98,31 @@ class HandleExceptions implements EventSubscriberInterface {
 		return $event->getRequest()
 			->attributes
 			->get( AddIndicatorAttributeForJsonRequests::REQUEST_IS_JSON_ATTRIBUTE, false );
+	}
+
+	/**
+	 * When using the `#[MapRequestPayload]` attribute, Symfony will throw a `ValidationFailedException` if the JSON
+	 * sent by the client does not match the expected class definition (e.g. missing field, fields of wrong
+	 * type, etc). This commit adds an `validationErrors` field to the resulting JSON with `field name => error` pairs
+	 * to help the developer debug the input.
+	 *
+	 * @param \Throwable $exception
+	 * @param array<string,string> $responseJSON
+	 * @return array<string,mixed>
+	 */
+	private function modifyErrorResponseForSymfonyValidationErrors( \Throwable $exception, array $responseJSON ) {
+		$previous = $exception->getPrevious();
+		if ( $exception instanceof HttpException && $previous instanceof ValidationFailedException ) {
+			$validationErrors = [];
+			$errorText = '';
+			foreach ( $previous->getViolations() as $violation ) {
+				$validationErrors[$violation->getPropertyPath()] = $violation->getMessage();
+				$errorText .= sprintf( "%s: %s\n", $violation->getPropertyPath(), $violation->getMessage() );
+			}
+			$responseJSON['ERR'] = $errorText;
+			$responseJSON['validationErrors'] = $validationErrors;
+		}
+		return $responseJSON;
 	}
 
 }
