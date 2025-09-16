@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa4d1e318eecffc2d8c2a681152e9ccc",
+    "content-hash": "a1f4cccccfc339622af4d38cbe22cbf7",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7243,16 +7243,16 @@
         },
         {
             "name": "wmde/fundraising-payments",
-            "version": "dev-fee-change-migration",
+            "version": "v8.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-payments",
-                "reference": "8ac2c2ab83a5f456b74b98cd5bb062ed47edd2f4"
+                "reference": "a2a90b99bbfa856af72e8db129977d3173e65b56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/8ac2c2ab83a5f456b74b98cd5bb062ed47edd2f4",
-                "reference": "8ac2c2ab83a5f456b74b98cd5bb062ed47edd2f4",
+                "url": "https://api.github.com/repos/wmde/fundraising-payments/zipball/a2a90b99bbfa856af72e8db129977d3173e65b56",
+                "reference": "a2a90b99bbfa856af72e8db129977d3173e65b56",
                 "shasum": ""
             },
             "require": {
@@ -7281,7 +7281,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "8.2.x-dev"
+                    "dev-main": "7.0.x-dev"
                 }
             },
             "autoload": {
@@ -7298,7 +7298,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising payment subdomain",
-            "time": "2025-09-16T18:23:18+00:00"
+            "time": "2025-09-12T13:26:18+00:00"
         },
         {
             "name": "wmde/fundraising-subscriptions",
@@ -10519,20 +10519,12 @@
             "time": "2025-04-24T08:44:30+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "wmde/fundraising-payments",
-            "version": "dev-fee-change-migration",
-            "alias": "8.2.2-dev",
-            "alias_normalized": "8.2.2.0-dev"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "airbrake/phpbrake": 20,
         "remotelyliving/doorkeeper": 20,
-        "wmde/fundraising-frontend-content": 20,
-        "wmde/fundraising-payments": 20
+        "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
