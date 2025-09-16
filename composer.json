@@ -18,7 +18,7 @@
 		"wmde/clock": "~2.0",
 		"wmde/fundraising-donations": "~25.0",
 		"wmde/fundraising-memberships": "~17.2",
-		"wmde/fundraising-payments": "~8.0",
+		"wmde/fundraising-payments": "dev-fee-change-migration as 8.2.2-dev",
 		"wmde/fundraising-subscriptions": "~5.0",
 		"wmde/fundraising-content-provider": "~6.1",
 		"wmde/fundraising-address-change": "~4.1",
