@@ -1364,7 +1364,10 @@ class FunFunFactory implements LoggerAwareInterface {
 	}
 
 	public function newMembershipFeeUpgradeHTMLPresenter(): MembershipFeeUpgradeHTMLPresenter {
-		return new MembershipFeeUpgradeHTMLPresenter( $this->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' ) );
+		return new MembershipFeeUpgradeHTMLPresenter(
+			$this->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' ),
+			$this->getUrlGenerator()
+		);
 	}
 
 	public function getFeeChangeRepository(): FeeChangeRepository {

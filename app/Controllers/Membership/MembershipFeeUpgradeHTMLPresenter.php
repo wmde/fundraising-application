@@ -5,13 +5,15 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\App\Controllers\Membership;
 
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\App\Routes;
+use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\ShowFeeChangePresenter;
 
 class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 	private string $responseString = '';
 
-	public function __construct( private readonly TwigTemplate $twigTemplate ) {
+	public function __construct( private readonly TwigTemplate $twigTemplate, private readonly UrlGenerator $urlGenerator ) {
 	}
 
 	public function showFeeChangeForm(
@@ -28,7 +30,8 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 				'currentAmountInCents' => $currentAmountInCents,
 				'suggestedAmountInCents' => $suggestedAmountInCents,
 				'currentInterval' => $currentInterval,
-				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_FEE_CHANGE_FORM
+				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_FEE_CHANGE_FORM,
+				'urls' => Routes::getNamedRouteUrls( $this->urlGenerator ),
 			]
 		);
 	}
@@ -41,7 +44,8 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 				'currentAmountInCents' => '',
 				'suggestedAmountInCents' => '',
 				'currentInterval' => '',
-				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE
+				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE,
+				'urls' => Routes::getNamedRouteUrls( $this->urlGenerator ),
 			]
 		);
 	}
@@ -54,7 +58,8 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 				'currentAmountInCents' => '',
 				'suggestedAmountInCents' => '',
 				'currentInterval' => '',
-				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_FEE_ALREADY_CHANGED_PAGE
+				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_FEE_ALREADY_CHANGED_PAGE,
+				'urls' => Routes::getNamedRouteUrls( $this->urlGenerator ),
 			]
 		);
 	}
