@@ -19,6 +19,8 @@ class Routes {
 	public const POST_COMMENT = 'api_donation_comment_post';
 	public const SHOW_DONATION_CONFIRMATION = 'show_donation_confirmation';
 	public const SHOW_MEMBERSHIP_CONFIRMATION = 'show_membership_confirmation';
+	public const SHOW_MEMBERSHIP_FEE_CHANGE_FORM = 'show_membership_fee_change_form';
+	public const API_MEMBERSHIP_FEE_CHANGE = 'api_membership_fee_change';
 	public const API_UPDATE_ADDRESS_PUT = 'api_address_change_put';
 	public const UPDATE_ADDRESS_ALREADY_UPDATED = 'update-address-already-updated';
 	public const API_UPDATE_DONOR_PUT = 'api_update_donor_put';
@@ -43,6 +45,7 @@ class Routes {
 			'validateMembershipFee' => $urlGenerator->generateAbsoluteUrl( self::VALIDATE_MEMBERSHIP_FEE ),
 			'convertBankData' => $urlGenerator->generateAbsoluteUrl( self::CONVERT_BANKDATA ),
 			'postComment' => $urlGenerator->generateAbsoluteUrl( self::POST_COMMENT ),
+			'putMembershipFeeChange' => $urlGenerator->generateAbsoluteUrl( self::API_MEMBERSHIP_FEE_CHANGE ),
 		];
 	}
 }

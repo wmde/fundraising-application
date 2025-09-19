@@ -15,6 +15,7 @@ Disallow: /check-iban
 Disallow: /generate-iban
 Disallow: /add-comment
 Disallow: /show-membership-confirmation
+Disallow: /change-membership-fee
 Disallow: /show-donation-confirmation
 Disallow: /cancel-membership-application
 Disallow: /sofort-payment-notification

@@ -66,6 +66,16 @@ class PaymentTypesSettings {
 	}
 
 	/**
+	 * @return PaymentType[]
+	 */
+	public function getPaymentTypesForMembershipFeeChange(): array {
+		return array_merge(
+			$this->getPaymentTypesForMembershipApplication(),
+			[ PaymentType::FeeChange ]
+		);
+	}
+
+	/**
 	 * @return string[]
 	 */
 	private function getPaymentTypesWhereSettingIsTrue( string $settingName ): array {
