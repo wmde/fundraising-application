@@ -64,9 +64,9 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 		$this->assertSame( MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE->value, $dataVars->feeChangeFrontendFlag );
 		$this->assertNull( $dataVars->externalMemberId );
-		$this->assertSame( '', $dataVars->currentAmountInCents );
-		$this->assertSame( '', $dataVars->suggestedAmountInCents );
-		$this->assertSame( '', $dataVars->currentInterval );
+		$this->assertSame( 0, $dataVars->currentAmountInCents );
+		$this->assertSame( 0, $dataVars->suggestedAmountInCents );
+		$this->assertSame( 0, $dataVars->currentInterval );
 	}
 
 	public function testValidUUIDInRequest_rendersFeeUpgradeForm(): void {
@@ -105,9 +105,9 @@ class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
 		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
 		$this->assertSame( MembershipFeeUpgradeFrontendFlag::SHOW_FEE_ALREADY_CHANGED_PAGE->value, $dataVars->feeChangeFrontendFlag );
 		$this->assertNull( $dataVars->externalMemberId );
-		$this->assertSame( '', $dataVars->currentAmountInCents );
-		$this->assertSame( '', $dataVars->suggestedAmountInCents );
-		$this->assertSame( '', $dataVars->currentInterval );
+		$this->assertSame( 0, $dataVars->currentAmountInCents );
+		$this->assertSame( 0, $dataVars->suggestedAmountInCents );
+		$this->assertSame( 0, $dataVars->currentInterval );
 	}
 
 	private function givenStoredFeeChangeInRepository(): void {

@@ -41,9 +41,9 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 		$this->responseString = $this->twigTemplate->render(
 			[
 				'uuid' => '',
-				'currentAmountInCents' => '',
-				'suggestedAmountInCents' => '',
-				'currentInterval' => '',
+				'currentAmountInCents' => 0,
+				'suggestedAmountInCents' => 0,
+				'currentInterval' => 0,
 				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_ERROR_PAGE,
 				'urls' => Routes::getNamedRouteUrls( $this->urlGenerator ),
 			]
@@ -55,9 +55,9 @@ class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
 		$this->responseString = $this->twigTemplate->render(
 			[
 				'uuid' => '',
-				'currentAmountInCents' => '',
-				'suggestedAmountInCents' => '',
-				'currentInterval' => '',
+				'currentAmountInCents' => 0,
+				'suggestedAmountInCents' => 0,
+				'currentInterval' => 0,
 				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_FEE_ALREADY_CHANGED_PAGE,
 				'urls' => Routes::getNamedRouteUrls( $this->urlGenerator ),
 			]
