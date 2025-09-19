@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "effe28218b5f6457bcb4485123c87875",
+    "content-hash": "e0890ae9da1acdc14e3a5c431ef82c0b",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7195,16 +7195,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "dev-fee-upgrade",
+            "version": "v18.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "de9b0f3de0b08225dd60a96a39d89e410a57e26e"
+                "reference": "5e25aa31abcd5822ade2bf2d16a3aedd1a43ee28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/de9b0f3de0b08225dd60a96a39d89e410a57e26e",
-                "reference": "de9b0f3de0b08225dd60a96a39d89e410a57e26e",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/5e25aa31abcd5822ade2bf2d16a3aedd1a43ee28",
+                "reference": "5e25aa31abcd5822ade2bf2d16a3aedd1a43ee28",
                 "shasum": ""
             },
             "require": {
@@ -7251,7 +7251,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2025-09-18T16:46:35+00:00"
+            "time": "2025-09-23T13:44:36+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -8492,16 +8492,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.27",
+            "version": "2.1.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "25da374959afa391992792691093550b3098ef1e"
+                "reference": "578fa296a166605d97b94091f724f1257185d278"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/25da374959afa391992792691093550b3098ef1e",
-                "reference": "25da374959afa391992792691093550b3098ef1e",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/578fa296a166605d97b94091f724f1257185d278",
+                "reference": "578fa296a166605d97b94091f724f1257185d278",
                 "shasum": ""
             },
             "require": {
@@ -8546,7 +8546,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-09-17T09:55:13+00:00"
+            "time": "2025-09-19T08:58:49+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
@@ -10552,8 +10552,7 @@
     "stability-flags": {
         "airbrake/phpbrake": 20,
         "remotelyliving/doorkeeper": 20,
-        "wmde/fundraising-frontend-content": 20,
-        "wmde/fundraising-memberships": 20
+        "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
