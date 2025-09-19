@@ -28,7 +28,7 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 
 	public function testControllerReceivesIncompleteRequestData_ThrowsInternalExceptionDueToParsingErrors(): void {
 		$this->client->jsonRequest(
-			method:'POST',
+			method:'PUT',
 			uri:'/api/v1/membership/change-fee',
 			parameters: []
 		);
@@ -56,7 +56,7 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 		$invalidAmount = -100;
 
 		$this->client->jsonRequest(
-			method:'POST',
+			method:'PUT',
 			uri:'/api/v1/membership/change-fee',
 			parameters: [
 				'uuid' => FeeChanges::UUID_1,
@@ -96,7 +96,7 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 		$this->givenStoredNewFeeChangeInRepository();
 
 		$this->client->jsonRequest(
-			method:'POST',
+			method:'PUT',
 			uri:'/api/v1/membership/change-fee',
 			parameters: [
 				'uuid' => FeeChanges::UUID_1,
@@ -133,7 +133,7 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 		$this->givenStoredExportedFeeChangeInRepository();
 
 		$this->client->jsonRequest(
-			method:'POST',
+			method:'PUT',
 			uri:'/api/v1/membership/change-fee',
 			parameters: [
 				'uuid' => $uuid,
