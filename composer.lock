@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9d125c9059c05ac95695524f8207fde",
+    "content-hash": "e0890ae9da1acdc14e3a5c431ef82c0b",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7195,16 +7195,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v17.5.0",
+            "version": "v18.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "a61c3c6e5320b95dee4dc676480772e8bbd0d1ab"
+                "reference": "5e25aa31abcd5822ade2bf2d16a3aedd1a43ee28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/a61c3c6e5320b95dee4dc676480772e8bbd0d1ab",
-                "reference": "a61c3c6e5320b95dee4dc676480772e8bbd0d1ab",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/5e25aa31abcd5822ade2bf2d16a3aedd1a43ee28",
+                "reference": "5e25aa31abcd5822ade2bf2d16a3aedd1a43ee28",
                 "shasum": ""
             },
             "require": {
@@ -7224,7 +7224,7 @@
                 "phpunit/phpunit": "~12.0",
                 "symfony/cache": "^6.1|^7.0",
                 "wmde/clock": "^2.0",
-                "wmde/fundraising-phpcs": "~12.0",
+                "wmde/fundraising-phpcs": "~13.0",
                 "wmde/psr-log-test-doubles": "~3.0"
             },
             "bin": [
@@ -7251,7 +7251,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2025-06-11T13:54:41+00:00"
+            "time": "2025-09-23T13:44:36+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
