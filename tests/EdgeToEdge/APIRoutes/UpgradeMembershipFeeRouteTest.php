@@ -7,6 +7,7 @@ namespace EdgeToEdge\APIRoutes;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\Controllers\API\Membership\UpgradeMembershipFeeController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\Frontend\Tests\Fixtures\LoggerSpy;
@@ -26,7 +27,7 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 		$this->getFactory()->setLogger( $this->loggerSpy );
 	}
 
-	public function testControllerReceivesIncompleteRequestData_ThrowsInternalExceptionDueToParsingErrors(): void {
+	public function testControllerReceivesIncompleteRequestData_returnsValidationErrorsFromErrorHandler(): void {
 		$this->client->jsonRequest(
 			method:'PUT',
 			uri:'/api/v1/membership/change-fee',
@@ -36,19 +37,20 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 		$this->loggerSpy->assertNoLoggingCallsWhereMade();
 
 		$response = $this->client->getResponse();
-		$this->assertEquals(
+		$responseJson = json_decode( $response->getContent() ?: '', true );
+		$this->assertIsArray( $responseJson );
+		$this->assertArrayHasKey( 'ERR', $responseJson );
+		$this->assertArrayHasKey( 'validationErrors', $responseJson );
+		$this->assertSame(
 			 [
-				 "ERR" => "uuid: This value should be of type string.\nmemberName: This value should be of type string.\namountInEuroCents: This value should be of type int.\npaymentType: This value should be of type string.\n",
-				 'validationErrors' => [
-					'uuid' => 'This value should be of type string.',
-					'memberName' => 'This value should be of type string.',
-					'amountInEuroCents' => 'This value should be of type int.',
-					'paymentType' => 'This value should be of type string.',
-				 ]
+				'uuid' => 'This value should be of type string.',
+				'memberName' => 'This value should be of type string.',
+				'amountInEuroCents' => 'This value should be of type int.',
+				'paymentType' => 'This value should be of type string.',
 			 ],
-			 json_decode( $response->getContent() ?: '', true )
+			 $responseJson[ 'validationErrors' ]
 		);
-		$this->assertEquals( 422, $response->getStatusCode() );
+		$this->assertEquals( Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode() );
 	}
 
 	public function testControllerReceivesInvalidValueFeeChangeData_returnsJSONErrorResponse(): void {
