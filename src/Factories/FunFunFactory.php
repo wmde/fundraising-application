@@ -92,6 +92,7 @@ use WMDE\Fundraising\DonationContext\UseCases\HandlePaypalPaymentWithoutDonation
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeChangeHTMLPresenter;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationContextFactory;
 use WMDE\Fundraising\Frontend\Authentication\DonationUrlAuthenticationLoader;
@@ -104,6 +105,7 @@ use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\LenientAuthorization
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\PersistentAuthorizer;
 use WMDE\Fundraising\Frontend\Authentication\OldStyleTokens\TokenRepository;
 use WMDE\Fundraising\Frontend\Authentication\RandomTokenGenerator;
+use WMDE\Fundraising\Frontend\Authentication\UrlAuthenticatorStub;
 use WMDE\Fundraising\Frontend\Autocomplete\AutocompleteContextFactory;
 use WMDE\Fundraising\Frontend\Autocomplete\Domain\DataAccess\DoctrineLocationRepository;
 use WMDE\Fundraising\Frontend\Autocomplete\UseCases\FindCitiesUseCase;
@@ -190,12 +192,14 @@ use WMDE\Fundraising\Frontend\Validation\GetInTouchValidator;
 use WMDE\Fundraising\Frontend\Validation\IsCustomAmountValidator;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizationChecker;
 use WMDE\Fundraising\MembershipContext\Authorization\MembershipAuthorizer;
+use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineFeeChangeRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineIncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipIdGenerator;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipTrackingRepository;
 use WMDE\Fundraising\MembershipContext\DataAccess\IncentiveFinder;
 use WMDE\Fundraising\MembershipContext\DataAccess\ModerationReasonRepository as MembershipModerationReasonRepository;
+use WMDE\Fundraising\MembershipContext\Domain\Repositories\FeeChangeRepository;
 use WMDE\Fundraising\MembershipContext\Domain\Repositories\MembershipRepository;
 use WMDE\Fundraising\MembershipContext\Infrastructure\PaymentServiceFactory;
 use WMDE\Fundraising\MembershipContext\MembershipContextFactory;
@@ -204,6 +208,7 @@ use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembe
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Moderation\ModerationService as MembershipModerationService;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Notification\MailMembershipApplicationNotifier;
+use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\FeeChangeUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
 use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentIdRepository;
@@ -833,8 +838,8 @@ class FunFunFactory implements LoggerAwareInterface {
 	/**
 	 * The ExceptionHtmlPresenterInterface shows error pages when code threw an exception.
 	 *
-	 * It has different implementations for production and development. In development, it shows detailed information
-	 * about the error. The production implementation shows a generic error message.
+	 * It has different implementations for production and development. In development, it shows detailed exception stack trace
+	 * information about the error. The production implementation shows a generic error message.
 	 *
 	 * @return ExceptionHtmlPresenterInterface
 	 */
@@ -957,6 +962,30 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->getSofortUrlGeneratorConfigForDonations(),
 				$this->getSofortClient(),
 				$this->getUrlGenerator()->generateAbsoluteUrl( Routes::SHOW_MEMBERSHIP_CONFIRMATION ),
+				useLegacyPayPalUrlGenerator: false
+			),
+			new PaymentProviderAdapterFactoryImplementation(
+				$this->getPayPalApiClient(),
+				$this->getPaymentAdapterConfigForMemberships(),
+				$this->getPaymentRepository()
+			)
+		);
+	}
+
+	public function newCreatePaymentUseCaseForMembershipFeeChanges(): CreatePaymentUseCase {
+		return new CreatePaymentUseCase(
+			$this->getPaymentIdRepository(),
+			$this->getPaymentRepository(),
+			$this->newPaymentReferenceCodeGenerator(),
+			$this->newPaymentValidator(),
+			$this->newCheckIbanUseCase(),
+			new PaymentURLFactory(
+				$this->newCreditCardUrlGeneratorConfig(),
+				// We can pass the donation config in here, because it will never be used
+				$this->getLegacyPayPalUrlConfigForDonations(),
+				$this->getSofortUrlGeneratorConfigForDonations(),
+				$this->getSofortClient(),
+				$this->getUrlGenerator()->generateAbsoluteUrl( Routes::SHOW_MEMBERSHIP_FEE_CHANGE_FORM ),
 				useLegacyPayPalUrlGenerator: false
 			),
 			new PaymentProviderAdapterFactoryImplementation(
@@ -1334,6 +1363,28 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
+	public function newMembershipFeeChangeHTMLPresenter(): MembershipFeeChangeHTMLPresenter {
+		return new MembershipFeeChangeHTMLPresenter(
+			$this->getLayoutTemplate( 'Membership_Fee_Change.html.twig' ),
+			$this->getUrlGenerator()
+		);
+	}
+
+	public function getFeeChangeRepository(): FeeChangeRepository {
+		return new DoctrineFeeChangeRepository( $this->getEntityManager() );
+	}
+
+	public function newMembershipFeeUpgradeUseCase(): FeeChangeUseCase {
+		return new FeeChangeUseCase(
+			$this->getFeeChangeRepository(),
+			new PaymentServiceFactory(
+				$this->newCreatePaymentUseCaseForMembershipFeeChanges(),
+				$this->getPaymentTypesSettings()->getPaymentTypesForMembershipFeeChange()
+			),
+			new UrlAuthenticatorStub()
+		);
+	}
+
 	public function setMembershipApplicationAuthorizationChecker( MembershipAuthorizationChecker $authorizer ): void {
 		$this->sharedObjects[MembershipAuthorizationChecker::class] = $authorizer;
 	}
@@ -1387,18 +1438,25 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->getLayoutTemplate( 'Membership_Application.html.twig', [
 			'presetAmounts' => $this->getPresetAmountsSettings( 'membership' ),
 			'paymentTypes' => $this->getPaymentTypesSettings()->getEnabledForMembershipApplication(),
-			'paymentIntervals' => [
-				PaymentInterval::Monthly->value,
-				PaymentInterval::Quarterly->value,
-				PaymentInterval::HalfYearly->value,
-				PaymentInterval::Yearly->value,
-			],
+			'paymentIntervals' => $this->getMembershipPaymentIntervals(),
 			'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 			'countries' => $this->getCountries(),
 			'addressValidationPatterns' => $validation->address,
 			'dateOfBirthValidationPattern' => $validation->dateOfBirth,
 			'incentives' => $this->getIncentives()
 		] );
+	}
+
+	/**
+	 * @return array<PaymentInterval, int>
+	 */
+	public function getMembershipPaymentIntervals(): array {
+		return [
+				PaymentInterval::Monthly->value,
+				PaymentInterval::Quarterly->value,
+				PaymentInterval::HalfYearly->value,
+				PaymentInterval::Yearly->value,
+			];
 	}
 
 	public function newMembershipApplicationFormPresenter(): MembershipApplicationFormPresenter {

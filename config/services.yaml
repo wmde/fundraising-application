@@ -115,3 +115,7 @@ services:
 
     WMDE\Fundraising\PaymentContext\Services\PayPal\PaypalAPI: '@WMDE\Fundraising\PaymentContext\Services\PayPal\GuzzlePaypalAPI'
 
+    WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeChangeHTMLPresenter:
+        class: WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeChangeHTMLPresenter
+        factory: [ '@WMDE\Fundraising\Frontend\Factories\FunFunFactory', 'newMembershipFeeChangeHTMLPresenter' ]
+

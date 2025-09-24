@@ -1,0 +1,8 @@
+{% extends 'Base_Layout.html.twig' %}
+
+{% block title %}{$ page_title( 'membership_fee_upgrade_page_title' ) $}{% endblock %}
+
+{% block scripts %}
+	{$ parent() $}
+	<script src="{$ asset( 'js/membership_fee_change.js', 'skin' ) $}"></script>
+{% endblock %}
