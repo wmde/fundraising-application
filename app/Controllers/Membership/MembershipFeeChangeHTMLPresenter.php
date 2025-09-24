@@ -10,7 +10,7 @@ use WMDE\Fundraising\Frontend\Infrastructure\UrlGenerator;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
 use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\ShowFeeChangePresenter;
 
-class MembershipFeeUpgradeHTMLPresenter implements ShowFeeChangePresenter {
+class MembershipFeeChangeHTMLPresenter implements ShowFeeChangePresenter {
 	private string $responseString = '';
 
 	public function __construct( private readonly TwigTemplate $twigTemplate, private readonly UrlGenerator $urlGenerator ) {

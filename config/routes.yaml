@@ -135,7 +135,7 @@ show_membership_confirmation:
 show_membership_fee_change_form:
     path: /change-membership-fee
     methods: [ GET ]
-    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipFeeUpgradeController::index'
+    controller: 'WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipFeeChangeController::index'
 
 show_donation_confirmation:
     path: /show-donation-confirmation

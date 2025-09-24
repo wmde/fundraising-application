@@ -2,19 +2,18 @@
 
 declare( strict_types = 1 );
 
-namespace EdgeToEdge\Routes;
+namespace WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeChangeHTMLPresenter;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeUpgradeFrontendFlag;
-use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeUpgradeHTMLPresenter;
-use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipFeeUpgradeController;
-use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\Routes\GetApplicationVarsTrait;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipFeeChangeController;
 use WMDE\Fundraising\Frontend\Tests\EdgeToEdge\WebRouteTestCase;
 use WMDE\Fundraising\MembershipContext\Tests\Fixtures\FeeChanges;
 
-#[CoversClass( ShowMembershipFeeUpgradeController::class )]
-#[CoversClass( MembershipFeeUpgradeHTMLPresenter::class )]
-class ShowMembershipFeeUpgradeRouteTest extends WebRouteTestCase {
+#[CoversClass( ShowMembershipFeeChangeController::class )]
+#[CoversClass( MembershipFeeChangeHTMLPresenter::class )]
+class ShowMembershipFeeUpgradeChangeTest extends WebRouteTestCase {
 
 	use GetApplicationVarsTrait;
 

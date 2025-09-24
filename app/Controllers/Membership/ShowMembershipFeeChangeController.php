@@ -12,12 +12,12 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
  * Serves the following feature: A user is asked if he/she wants to update their membership fee on an external form ( not
  * showing the regular membership form).
  */
-class ShowMembershipFeeUpgradeController {
+class ShowMembershipFeeChangeController {
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$uuidFromRequest = $request->query->get( 'uuid', '' );
 
-		$htmlPresenter = $ffFactory->newMembershipFeeUpgradeHTMLPresenter();
+		$htmlPresenter = $ffFactory->newMembershipFeeChangeHTMLPresenter();
 
 		$feeUpgradeUseCase = $ffFactory->newMembershipFeeUpgradeUseCase();
 		$feeUpgradeUseCase->showFeeChange( $uuidFromRequest, $htmlPresenter );

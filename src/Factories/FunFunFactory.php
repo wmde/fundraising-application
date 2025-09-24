@@ -92,7 +92,7 @@ use WMDE\Fundraising\DonationContext\UseCases\HandlePaypalPaymentWithoutDonation
 use WMDE\Fundraising\DonationContext\UseCases\ListComments\ListCommentsUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorUseCase;
 use WMDE\Fundraising\DonationContext\UseCases\UpdateDonor\UpdateDonorValidator;
-use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeUpgradeHTMLPresenter;
+use WMDE\Fundraising\Frontend\App\Controllers\Membership\MembershipFeeChangeHTMLPresenter;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Authentication\AuthenticationContextFactory;
 use WMDE\Fundraising\Frontend\Authentication\DonationUrlAuthenticationLoader;
@@ -1363,9 +1363,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		} );
 	}
 
-	public function newMembershipFeeUpgradeHTMLPresenter(): MembershipFeeUpgradeHTMLPresenter {
-		return new MembershipFeeUpgradeHTMLPresenter(
-			$this->getLayoutTemplate( 'Membership_Fee_Upgrade.html.twig' ),
+	public function newMembershipFeeChangeHTMLPresenter(): MembershipFeeChangeHTMLPresenter {
+		return new MembershipFeeChangeHTMLPresenter(
+			$this->getLayoutTemplate( 'Membership_Fee_Change.html.twig' ),
 			$this->getUrlGenerator()
 		);
 	}
