@@ -7133,16 +7133,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v25.0.0",
+            "version": "v25.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "f73b0ebdb82beaad26201b95981e7d57d722e756"
+                "reference": "ceb18f2bf5151810eb0e59ebe1d5df3fa7339a51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/f73b0ebdb82beaad26201b95981e7d57d722e756",
-                "reference": "f73b0ebdb82beaad26201b95981e7d57d722e756",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/ceb18f2bf5151810eb0e59ebe1d5df3fa7339a51",
+                "reference": "ceb18f2bf5151810eb0e59ebe1d5df3fa7339a51",
                 "shasum": ""
             },
             "require": {
@@ -7167,7 +7167,7 @@
                 "phpunit/phpunit": "~12.0",
                 "symfony/cache": "^6.0|^7.0",
                 "wmde/clock": "^2.0",
-                "wmde/fundraising-phpcs": "~12.0",
+                "wmde/fundraising-phpcs": "~13.0",
                 "wmde/psr-log-test-doubles": "~3.0"
             },
             "bin": [
@@ -7190,7 +7190,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2025-08-14T13:11:25+00:00"
+            "time": "2025-10-23T11:34:00+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",

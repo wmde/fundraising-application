@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Euro\Euro;
+use WMDE\Fundraising\DonationContext\Domain\Model\DonationTrackingInfo;
 use WMDE\Fundraising\DonationContext\Domain\Model\DonorType;
 use WMDE\Fundraising\DonationContext\UseCases\AddDonation\AddDonationRequest;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -57,10 +58,14 @@ class AddDonationController {
 		$donationRequest->setDonorCountryCode( $request->get( 'country', '' ) );
 		$donationRequest->setDonorEmailAddress( $request->get( 'email', '' ) );
 
-		$donationRequest->setTracking( $request->attributes->get( 'trackingCode', '' ) );
+		$donationRequest->setTrackingInfo( new DonationTrackingInfo(
+			$request->get( 'piwik_campaign', '' ),
+			$request->get( 'piwik_kwd', '' ),
+			intval( $request->get( 'impCount', 0 ) ),
+			intval( $request->get( 'bImpCount', 0 ) )
+
+		) );
 		$donationRequest->setOptsIntoNewsletter( (bool)$request->get( 'info', '' ) );
-		$donationRequest->setTotalImpressionCount( intval( $request->get( 'impCount', 0 ) ) );
-		$donationRequest->setSingleBannerImpressionCount( intval( $request->get( 'bImpCount', 0 ) ) );
 		$donationRequest->setOptsIntoDonationReceipt( $request->request->getBoolean( 'donationReceipt', true ) );
 
 		$donationRequest->setPaymentParameters( $this->createPaymentParameters( $request ) );
