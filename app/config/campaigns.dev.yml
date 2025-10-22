@@ -1,12 +1,8 @@
 # This file is used in the "dev" and "uat" environments to be able to test future and past campaigns
 campaigns:
 
-  address_type_choice:
-    active: true
-    start: "2024-11-21"
-    end: "2024-12-31"
-
   address_pages:
     start: "2023-01-01"
+    end: "2028-12-31"
     default_bucket: "legacy"
     active: true

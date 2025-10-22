@@ -22,20 +22,6 @@ campaigns:
     # url_key: URL parameter key used for assigning buckets to people
     # param_only: (Optional) Set to true if the campaign should return the default bucket when the url key is not in a request. This is for A/B tests triggered by banners
 
-
-    address_type_choice:
-      description: Test offering an "anonymous" choice (coming from a banner where the user donated less than 10 EUR)
-      reference: "https://phabricator.wikimedia.org/T380462"
-      start: "2024-11-25"
-      end: "2024-12-31"
-      buckets:
-        - "default"
-        - "choice"
-      default_bucket: "default"
-      url_key: xf
-      active: true
-      param_only: true
-
     address_pages:
       description: Test different iterations of address pages
       reference: "https://phabricator.wikimedia.org/T366576"
@@ -43,7 +29,8 @@ campaigns:
       end: "2026-02-28"
       buckets:
         - "legacy"
-        - "test_02"
+        - "test_02_no_anon"
+        - "test_03_compact_no_anon"
       default_bucket: "legacy"
       url_key: ap
       active: true
