@@ -1423,7 +1423,6 @@ class FunFunFactory implements LoggerAwareInterface {
 					PaymentInterval::OneTime->value,
 					PaymentInterval::Monthly->value,
 					PaymentInterval::Quarterly->value,
-					PaymentInterval::HalfYearly->value,
 					PaymentInterval::Yearly->value,
 				],
 				'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
