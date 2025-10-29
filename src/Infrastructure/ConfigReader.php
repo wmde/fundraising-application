@@ -78,7 +78,7 @@ class ConfigReader {
 		}
 
 		// This should never throw an exception, because we already read the configuration from JSON
-		return json_decode( json_encode( $config, JSON_THROW_ON_ERROR ), false, JSON_THROW_ON_ERROR );
+		return json_decode( json_encode( $config, JSON_THROW_ON_ERROR ), false, 512, JSON_THROW_ON_ERROR );
 	}
 
 }
