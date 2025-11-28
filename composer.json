@@ -33,7 +33,7 @@
 		"symfony/http-foundation": "~7.0",
 		"symfony/mailer": "~8.0",
 		"symfony/monolog-bundle": "^3.8",
-		"symfony/property-access": "~7.0",
+		"symfony/property-access": "~8.0",
 		"symfony/serializer-pack": "~v1.3.0",
 		"symfony/twig-bridge": "~7.0",
 		"symfony/validator": "~7.0",
