@@ -36,7 +36,7 @@
 		"symfony/property-access": "~8.0",
 		"symfony/serializer-pack": "~v1.3.0",
 		"symfony/twig-bridge": "~8.0",
-		"symfony/validator": "~7.0",
+		"symfony/validator": "~8.0",
 		"symfony/yaml": "~7.0",
 	"symfony/cache": "^7.0",
 
