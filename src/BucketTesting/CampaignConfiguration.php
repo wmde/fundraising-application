@@ -9,6 +9,9 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class CampaignConfiguration implements ConfigurationInterface {
 
+	/**
+	 * @return TreeBuilder<'array'>
+	 */
 	public function getConfigTreeBuilder(): TreeBuilder {
 		$treeBuilder = new TreeBuilder( 'bucket_tests' );
 		$rootNode = $treeBuilder->getRootNode();
