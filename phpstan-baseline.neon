@@ -19,12 +19,6 @@ parameters:
 			path: src/BucketTesting/CampaignBuilder.php
 
 		-
-			message: '#^Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition\:\:children\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/BucketTesting/CampaignConfiguration.php
-
-		-
 			message: '#^Method WMDE\\Fundraising\\Frontend\\BucketTesting\\CampaignConfigurationLoader\:\:loadCampaignConfiguration\(\) should return array\<string, mixed\> but returns mixed\.$#'
 			identifier: return.type
 			count: 1
