@@ -10423,12 +10423,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "5bb5b3106a264a9cc8966776d842beb2c3f960e2"
+                "reference": "0e911327bd45df85cf75051f0cd6ebc5cde9f655"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/5bb5b3106a264a9cc8966776d842beb2c3f960e2",
-                "reference": "5bb5b3106a264a9cc8966776d842beb2c3f960e2",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/0e911327bd45df85cf75051f0cd6ebc5cde9f655",
+                "reference": "0e911327bd45df85cf75051f0cd6ebc5cde9f655",
                 "shasum": ""
             },
             "require": {
@@ -10452,9 +10452,11 @@
                     "@lint",
                     "@test"
                 ],
-                "uof": [
-                    "php bin/extract_to_mediawiki de",
-                    "php bin/extract_to_mediawiki en"
+                "mediawiki": [
+                    "php bin/extract_to_mediawiki use_of_funds_content use-of-funds de",
+                    "php bin/extract_to_mediawiki use_of_funds_content use-of-funds en",
+                    "php bin/extract_to_mediawiki thank_you_content thank-you de",
+                    "php bin/extract_to_mediawiki thank_you_content thank-you en"
                 ],
                 "test": [
                     "vendor/bin/phpunit"
@@ -10479,7 +10481,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2025-11-28T14:40:35+00:00"
+            "time": "2025-12-18T11:55:22+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
