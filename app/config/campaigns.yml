@@ -35,3 +35,16 @@ campaigns:
       url_key: ap
       active: true
       param_only: true
+
+    membership_form:
+      description: Test different iterations of the membership form
+      reference: "https://phabricator.wikimedia.org/T411619"
+      start: "2025-12-15"
+      end: "2026-02-28"
+      buckets:
+        - "legacy"
+        - "test_01_more_info"
+      default_bucket: "legacy"
+      url_key: mf
+      active: true
+      param_only: true
