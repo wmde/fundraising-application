@@ -7,7 +7,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\Cli;
 use FileFetcher\FileFetcher;
 use FileFetcher\StubFileFetcher;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation\ConfigValidationException;
 use WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation\SchemaLoader;
@@ -16,8 +16,8 @@ use WMDE\Fundraising\Frontend\Cli\ApplicationConfigValidation\SchemaLoader;
 class SchemaLoaderTest extends TestCase {
 
 	public function testOnFileFetchingError_runtimeExceptionIsThrown(): void {
-		/** @var FileFetcher&MockObject $fileFetcher */
-		$fileFetcher = $this->createMock( FileFetcher::class );
+		/** @var FileFetcher&Stub $fileFetcher */
+		$fileFetcher = $this->createStub( FileFetcher::class );
 		$fileFetcher->method( 'fetchFile' )->willThrowException( new \RuntimeException() );
 		$loader = new SchemaLoader( $fileFetcher );
 		$this->expectException( \RuntimeException::class );

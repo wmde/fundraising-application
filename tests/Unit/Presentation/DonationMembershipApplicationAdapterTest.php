@@ -210,7 +210,7 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 	}
 
 	private function givenBankDataGeneratorForBankName( string $bankname ): BankDataGenerator {
-		$bankDataGenerator = $this->createMock( BankDataGenerator::class );
+		$bankDataGenerator = $this->createStub( BankDataGenerator::class );
 		$bankDataGenerator->method( 'getBankDataFromIban' )->willReturn(
 			new ExtendedBankData(
 				new Iban( self::IBAN ),

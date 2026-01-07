@@ -45,7 +45,7 @@ class BucketLoggingHandlerTest extends TestCase {
 
 	public function testOnDonationCreatedHandlerLogsDonationIdAndBucket(): void {
 		$logger = new BucketLoggerSpy();
-		$eventDispatcher = $this->createMock( EventDispatcher::class );
+		$eventDispatcher = $this->createStub( EventDispatcher::class );
 		$handler = $this->createBucketLoggingHandler( $eventDispatcher, $logger );
 
 		$handler->onDonationCreated( new DonationCreatedEvent( self::DONATION_ID, ValidDonation::newDonor() ) );
@@ -58,7 +58,7 @@ class BucketLoggingHandlerTest extends TestCase {
 
 	public function testOnMembershipCreatedHandlerLogsDonationIdAndBucket(): void {
 		$logger = new BucketLoggerSpy();
-		$eventDispatcher = $this->createMock( EventDispatcher::class );
+		$eventDispatcher = $this->createStub( EventDispatcher::class );
 		$handler = $this->createBucketLoggingHandler( $eventDispatcher, $logger );
 
 		$handler->onMembershipCreated(

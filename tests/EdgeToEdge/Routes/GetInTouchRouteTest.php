@@ -90,11 +90,8 @@ class GetInTouchRouteTest extends WebRouteTestCase {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 
-		$messenger = $this->getMockBuilder( Messenger::class )
-			->disableOriginalConstructor()
-			->getMock();
-
-		$messenger->expects( $this->any() )
+		$messenger = $this->createStub( Messenger::class );
+		$messenger
 			->method( 'sendMessageToUser' )
 			->willThrowException( new \RuntimeException( 'Something unexpected happened' ) );
 

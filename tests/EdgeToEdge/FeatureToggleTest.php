@@ -21,7 +21,7 @@ class FeatureToggleTest extends WebRouteTestCase {
 
 	public function testActiveFeaturesAreSet(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
-		$featureReader = $this->createMock( FileFeatureReader::class );
+		$featureReader = $this->createStub( FileFeatureReader::class );
 		$featureReader->method( 'getFeatures' )->willReturn( [
 			new Feature( 'feature_a', true ),
 			new Feature( 'feature_b', false ),
