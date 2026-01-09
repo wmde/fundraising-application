@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\Tests\Unit\BucketTesting;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -54,9 +55,11 @@ class BestEffortBucketLoggerTest extends TestCase {
 		$event = new FakeBucketLoggingEvent();
 		$buckets = [];
 		$exception = new LoggingError( 'Could not open bucket.log' );
-		/** @var BucketLogger&MockObject $bucketLogger */
-		$bucketLogger = $this->createMock( BucketLogger::class );
-		$bucketLogger->method( 'writeEvent' )->willThrowException( $exception );
+		/** @var BucketLogger&Stub $bucketLogger */
+		$bucketLogger = $this->createStub( BucketLogger::class );
+		$bucketLogger
+			->method( 'writeEvent' )
+			->willThrowException( $exception );
 		/** @var LoggerInterface&MockObject $errorLog */
 		$errorLog = $this->createMock( LoggerInterface::class );
 		$errorLog->expects( $this->once() )->method( 'error' )->with( 'Could not open bucket.log', $this->anything() );

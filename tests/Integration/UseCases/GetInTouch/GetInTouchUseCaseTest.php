@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GetInTouch;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Fundraising\Frontend\Infrastructure\Mail\OperatorMailer;
@@ -27,15 +27,12 @@ class GetInTouchUseCaseTest extends TestCase {
 	private const INQUIRY_MESSAGE = 'What is it you do?';
 
 	private GetInTouchValidator $validator;
-
-	/** @var OperatorMailer&MockObject */
 	private OperatorMailer $operatorMailer;
 
 	private TemplateBasedMailerSpy $userMailer;
 
 	public function setUp(): void {
 		$this->validator = $this->newSucceedingValidator();
-		$this->operatorMailer = $this->createMock( OperatorMailer::class );
 		$this->userMailer = new TemplateBasedMailerSpy( $this );
 	}
 
@@ -48,6 +45,7 @@ class GetInTouchUseCaseTest extends TestCase {
 	}
 
 	public function testGivenValidParameters_theyAreContainedInTheEmailToOperator(): void {
+		$this->operatorMailer = $this->createMock( OperatorMailer::class );
 		$this->operatorMailer->expects( $this->once() )
 			->method( 'sendMailToOperator' )
 			->with(
@@ -69,6 +67,7 @@ class GetInTouchUseCaseTest extends TestCase {
 	}
 
 	public function testGivenValidRequest_theUserIsNotified(): void {
+		$this->operatorMailer = $this->createStub( OperatorMailer::class );
 		$useCase = $this->newGetInTouchUseCase();
 		$useCase->processContactRequest( $this->newRequest() );
 
@@ -92,13 +91,15 @@ class GetInTouchUseCaseTest extends TestCase {
 	}
 
 	/**
-	 * @return GetInTouchValidator&MockObject
+	 * @return GetInTouchValidator&Stub
 	 */
 	private function newSucceedingValidator(): GetInTouchValidator {
-		$validator = $this->createMock( GetInTouchValidator::class );
-		$validator->method( 'validate' )->willReturn( new ValidationResult() );
-
-		return $validator;
+		return $this->createConfiguredStub(
+			GetInTouchValidator::class,
+			[
+				'validate' => new ValidationResult(),
+			]
+		);
 	}
 
 }

@@ -210,18 +210,18 @@ class DonationMembershipApplicationAdapterTest extends TestCase {
 	}
 
 	private function givenBankDataGeneratorForBankName( string $bankname ): BankDataGenerator {
-		$bankDataGenerator = $this->createMock( BankDataGenerator::class );
-		$bankDataGenerator->method( 'getBankDataFromIban' )->willReturn(
-			new ExtendedBankData(
-				new Iban( self::IBAN ),
-				self::BIC,
-				'any account',
-				'any code',
-				$bankname
-			)
+		return $this->createConfiguredStub(
+			BankDataGenerator::class,
+			[
+				'getBankDataFromIban' => new ExtendedBankData(
+					new Iban( self::IBAN ),
+					self::BIC,
+					'any account',
+					'any code',
+					$bankname
+				),
+			]
 		);
-
-		return $bankDataGenerator;
 	}
 
 	private function givenDirectDebitPayment(): Payment {

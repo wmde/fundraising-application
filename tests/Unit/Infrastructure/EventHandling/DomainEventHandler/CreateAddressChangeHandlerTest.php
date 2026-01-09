@@ -34,7 +34,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 
 	public function testConstructorInitializesEventListeners(): void {
 		$dispatcher = new EventDispatcherSpy();
-		$entityManager = $addressChangeRepo = $this->createMock( EntityManager::class );
+		$entityManager = $this->createStub( EntityManager::class );
 
 		new CreateAddressChangeHandler( $entityManager, $dispatcher );
 
@@ -45,7 +45,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 	}
 
 	public function testAnonymousDonor_doesNothing(): void {
-		$dispatcher = $this->createMock( EventDispatcher::class );
+		$dispatcher = $this->createStub( EventDispatcher::class );
 		$entityManager = new EntityManagerSpy( $this->createStub( EntityManagerInterface::class ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
@@ -55,7 +55,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 	}
 
 	public function testCreateDonationForPrivatePerson_createsAddressChange(): void {
-		$dispatcher = $this->createMock( EventDispatcher::class );
+		$dispatcher = $this->createStub( EventDispatcher::class );
 		$entityManager = $this->newMockEntityManager();
 
 		$entityManager->expects( $this->once() )
@@ -71,7 +71,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 	}
 
 	public function testCreateDonationForCompany_createsAddressChange(): void {
-		$dispatcher = $this->createMock( EventDispatcher::class );
+		$dispatcher = $this->createStub( EventDispatcher::class );
 		$entityManager = $this->newMockEntityManager();
 
 		$entityManager->expects( $this->once() )
@@ -87,7 +87,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 	}
 
 	public function testCreateMembershipForPrivatePerson_createsAddressChange(): void {
-		$dispatcher = $this->createMock( EventDispatcher::class );
+		$dispatcher = $this->createStub( EventDispatcher::class );
 		$entityManager = $this->newMockEntityManager();
 
 		$entityManager->expects( $this->once() )
@@ -108,7 +108,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 	}
 
 	public function testCreateMembershipForCompany_createsAddressChange(): void {
-		$dispatcher = $this->createMock( EventDispatcher::class );
+		$dispatcher = $this->createStub( EventDispatcher::class );
 		$entityManager = $this->newMockEntityManager();
 
 		$entityManager->expects( $this->once() )
@@ -129,7 +129,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 	}
 
 	public function testGivenAddressChangeAlreadyExists_noAddressChangeIsCreated(): void {
-		$dispatcher = $this->createMock( EventDispatcher::class );
+		$dispatcher = $this->createStub( EventDispatcher::class );
 		$addressChangeRepo = $this->createMock( EntityRepository::class );
 		$addressChangeRepo->expects( $this->once() )
 			->method( 'count' )
@@ -146,7 +146,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 	}
 
 	public function testUpdateDonor_createsAddressChange(): void {
-		$dispatcher = $this->createMock( EventDispatcher::class );
+		$dispatcher = $this->createStub( EventDispatcher::class );
 		$entityManager = $this->newMockEntityManager();
 
 		$entityManager->expects( $this->once() )
@@ -166,7 +166,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 	}
 
 	public function testUpdateDonor_andAddressChangeAlreadyExists_noAddressChangeIsCreated(): void {
-		$dispatcher = $this->createMock( EventDispatcher::class );
+		$dispatcher = $this->createStub( EventDispatcher::class );
 		$addressChangeRepo = $this->createMock( EntityRepository::class );
 		$addressChangeRepo->expects( $this->once() )
 			->method( 'count' )
@@ -187,7 +187,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 	}
 
 	public function testUpdateDonor_andPreviousHasAddress_doesNothing(): void {
-		$dispatcher = $this->createMock( EventDispatcher::class );
+		$dispatcher = $this->createStub( EventDispatcher::class );
 		$entityManager = new EntityManagerSpy( $this->createStub( EntityManagerInterface::class ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );
@@ -201,7 +201,7 @@ class CreateAddressChangeHandlerTest extends TestCase {
 	}
 
 	public function testUpdateDonor_andNewDoesNotHaveAddress_doesNothing(): void {
-		$dispatcher = $this->createMock( EventDispatcher::class );
+		$dispatcher = $this->createStub( EventDispatcher::class );
 		$entityManager = new EntityManagerSpy( $this->createStub( EntityManagerInterface::class ) );
 
 		$handler = new CreateAddressChangeHandler( $entityManager, $dispatcher );

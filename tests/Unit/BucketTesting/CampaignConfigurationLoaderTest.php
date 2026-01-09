@@ -133,7 +133,7 @@ CFG;
 	}
 
 	public function testWhenNoConfigurationFilesExist_cacheWillBeSkipped(): void {
-		$forbiddenCache = $this->createMock( Psr16Cache::class );
+		$forbiddenCache = $this->createStub( Psr16Cache::class );
 		$forbiddenCache->method( 'get' )->willThrowException( new \LogicException( 'Cache access is not allowed' ) );
 		$loader = new CampaignConfigurationLoader( new SimpleFileFetcher(), $forbiddenCache );
 

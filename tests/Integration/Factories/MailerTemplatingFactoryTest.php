@@ -4,7 +4,6 @@ namespace WMDE\Fundraising\Frontend\Tests\Integration\Factories;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WMDE\Fundraising\ContentProvider\ContentProvider;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
@@ -22,9 +21,6 @@ class MailerTemplatingFactoryTest extends KernelTestCase {
 
 	private const TEMPLATE_DIR = 'mail_templates';
 
-	/**
-	 * @var MockObject & ContentProvider
-	 */
 	private ContentProvider $contentProvider;
 
 	private FunFunFactory $factory;
@@ -34,7 +30,7 @@ class MailerTemplatingFactoryTest extends KernelTestCase {
 		$this->factory = $this->getFactory( [
 			'mailer-twig' => [ 'loaders' => [ 'filesystem' => [ 'template-dir' => vfsStream::url( self::TEMPLATE_DIR ) ] ] ]
 		] );
-		$this->contentProvider = $this->createMock( ContentProvider::class );
+		$this->contentProvider = $this->createStub( ContentProvider::class );
 		$this->factory->setContentProvider( $this->contentProvider );
 	}
 
@@ -82,6 +78,9 @@ class MailerTemplatingFactoryTest extends KernelTestCase {
 			'lorem.twig' => 'More Dragons!'
 		] );
 		$this->factory->setMailTemplateDirectory( vfsStream::url( self::TEMPLATE_DIR ) );
+
+		$this->contentProvider = $this->createMock( ContentProvider::class );
+		$this->factory->setContentProvider( $this->contentProvider );
 		$this->contentProvider->expects( $this->once() )
 			->method( 'getMail' )
 			->with( 'something', [ 'donation_id' => 45 ] )
