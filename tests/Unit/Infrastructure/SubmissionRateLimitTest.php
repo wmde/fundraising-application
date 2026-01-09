@@ -55,8 +55,12 @@ class SubmissionRateLimitTest extends TestCase {
 
 	public function testWhenSessionContainsNoTimestampItSetsTimestampToCurrent(): void {
 		$limit = new SubmissionRateLimit( 'donation_timestamp', new \DateInterval( 'PT1H' ) );
-		$session = $this->createStub( SessionInterface::class );
-		$session->method( 'get' )->willReturn( null );
+		$this->createConfiguredStub(
+			SessionInterface::class,
+			[
+				'get' => null,
+			]
+		);
 		$session = $this->createMock( SessionInterface::class );
 
 		$session->expects( $this->once() )
