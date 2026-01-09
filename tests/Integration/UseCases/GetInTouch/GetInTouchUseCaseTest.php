@@ -94,10 +94,12 @@ class GetInTouchUseCaseTest extends TestCase {
 	 * @return GetInTouchValidator&Stub
 	 */
 	private function newSucceedingValidator(): GetInTouchValidator {
-		$validator = $this->createStub( GetInTouchValidator::class );
-		$validator->method( 'validate' )->willReturn( new ValidationResult() );
-
-		return $validator;
+		return $this->createConfiguredStub(
+			GetInTouchValidator::class,
+			[
+				'validate' => new ValidationResult(),
+			]
+		);
 	}
 
 }

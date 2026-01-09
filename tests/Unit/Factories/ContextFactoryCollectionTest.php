@@ -12,10 +12,18 @@ use WMDE\Fundraising\Frontend\Factories\ContextFactoryCollection;
 #[CoversClass( ContextFactoryCollection::class )]
 class ContextFactoryCollectionTest extends TestCase {
 	public function testGetDoctrineXMLMappingPathsCollectsPathsFromFactories(): void {
-		$contextFactory1 = $this->createStub( BucketTestingContextFactory::class );
-		$contextFactory1->method( 'getDoctrineMappingPaths' )->willReturn( [ '/path/to/bucket_mapping' ] );
-		$contextFactory2 = $this->createStub( AutocompleteContextFactory::class );
-		$contextFactory2->method( 'getDoctrineMappingPaths' )->willReturn( [ '/path/to/autocomplete_mapping' ] );
+		$contextFactory1 = $this->createConfiguredStub(
+			BucketTestingContextFactory::class,
+			[
+				'getDoctrineMappingPaths' => [ '/path/to/bucket_mapping' ],
+			]
+		);
+		$contextFactory2 = $this->createConfiguredStub(
+			AutocompleteContextFactory::class,
+			[
+				'getDoctrineMappingPaths' => [ '/path/to/autocomplete_mapping' ],
+			]
+		);
 		$collection = new ContextFactoryCollection( $contextFactory1, $contextFactory2 );
 
 		$paths = $collection->getDoctrineXMLMappingPaths();
