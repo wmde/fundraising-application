@@ -227,7 +227,7 @@ abstract class WebRouteTestCase extends KernelTestCase {
 	}
 
 	/**
-	 * @param array<string, string> $expected
+	 * @param array<string, string|string[]> $expected
 	 * @param AbstractBrowser<Request, Response> $client
 	 */
 	protected function assertInitialFormValues( array $expected, AbstractBrowser $client ): void {
