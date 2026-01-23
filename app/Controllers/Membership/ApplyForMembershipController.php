@@ -4,14 +4,18 @@ declare( strict_types = 1 );
 
 namespace WMDE\Fundraising\Frontend\App\Controllers\Membership;
 
+use phpDocumentor\Reflection\Types\Scalar;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
 use WMDE\Fundraising\MembershipContext\Tracking\MembershipTracking;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplicationValidationResult;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipRequest;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembershipResponse;
+use WMDE\Fundraising\PaymentContext\Domain\Model\Iban;
 use WMDE\Fundraising\PaymentContext\UseCases\CreatePayment\PaymentParameters;
 
 class ApplyForMembershipController {
@@ -28,24 +32,25 @@ class ApplyForMembershipController {
 			return new Response( $this->ffFactory->newSystemMessageResponse( 'membership_application_rejected_limit' ) );
 		}
 
+		$applyForMembershipRequest = $this->createMembershipRequest( $httpRequest );
+
 		try {
-			$responseModel = $this->callUseCase( $httpRequest );
+			$responseModel = $this->callUseCase( $applyForMembershipRequest );
 		} catch ( \InvalidArgumentException $ex ) {
-			return $this->newFailureResponse( $httpRequest );
+			return $this->newFailureResponse( $ffFactory, $httpRequest, $applyForMembershipRequest, [ 'server_error' => 'something went wrong' ] );
 		}
 
 		if ( !$responseModel->isSuccessful() ) {
-			$this->logValidationErrors( $responseModel->getValidationResult(), $httpRequest );
-			return $this->newFailureResponse( $httpRequest );
+			$validationResult = $responseModel->getValidationResult();
+			$this->logValidationErrors( $validationResult, $httpRequest );
+			return $this->newFailureResponse( $ffFactory, $httpRequest, $applyForMembershipRequest, $validationResult->getViolations() );
 		}
 
 		$this->ffFactory->getMembershipSubmissionRateLimiter()->setRateLimitCookie( $session );
 		return new RedirectResponse( $responseModel->getPaymentCompletionUrl() );
 	}
 
-	private function callUseCase( Request $httpRequest ): ApplyForMembershipResponse {
-		$applyForMembershipRequest = $this->createMembershipRequest( $httpRequest );
-
+	private function callUseCase( ApplyForMembershipRequest $applyForMembershipRequest ): ApplyForMembershipResponse {
 		return $this->ffFactory->newApplyForMembershipUseCase()->applyForMembership( $applyForMembershipRequest );
 	}
 
@@ -101,11 +106,30 @@ class ApplyForMembershipController {
 		);
 	}
 
-	private function newFailureResponse( Request $httpRequest ): Response {
+	/**
+	 * @param FunFunFactory $ffFactory
+	 * @param Request $httpRequest
+	 * @param ApplyForMembershipRequest $applyForMembershipRequest
+	 * @param array<string, Scalar> $violations
+	 *
+	 * @return Response
+	 */
+	private function newFailureResponse( FunFunFactory $ffFactory, Request $httpRequest, ApplyForMembershipRequest $applyForMembershipRequest, array $violations ): Response {
+		$urls = Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() );
+		$showMembershipTypeOption = $httpRequest->request->get( 'showMembershipTypeOption' ) === 'true';
+
+		$trackingInfo = new ImpressionCounts(
+			intval( $httpRequest->get( 'impCount' ) ),
+			intval( $httpRequest->get( 'bImpCount' ) )
+		);
+
 		return new Response(
-			$this->ffFactory->newMembershipFormViolationPresenter()->present(
-				$this->createMembershipRequest( $httpRequest ),
-				$httpRequest->request->get( 'showMembershipTypeOption' ) === 'true'
+			$this->ffFactory->newMembershipApplicationFormPresenter()->present(
+				$urls,
+				$showMembershipTypeOption,
+				$this->getMembershipFormValues( $applyForMembershipRequest ),
+				$violations,
+				$trackingInfo
 			)
 		);
 	}
@@ -137,5 +161,34 @@ class ApplyForMembershipController {
 			array_keys( $violations ),
 			$formattedConstraintViolations
 		);
+	}
+
+	/**
+	 * @param ApplyForMembershipRequest $request
+	 *
+	 * @return array<string, string>
+	 */
+	private function getMembershipFormValues( ApplyForMembershipRequest $request ): array {
+		$paymentParameters = $request->paymentParameters;
+		$bankData = $this->ffFactory->newBankDataConverter()->getBankDataFromIban( new Iban( $paymentParameters->iban ) );
+
+		return [
+			'addressType' => $request->isCompanyApplication() ? 'firma' : 'person',
+			'salutation' => $request->applicantSalutation,
+			'title' => $request->applicantTitle,
+			'firstName' => $request->applicantFirstName,
+			'lastName' => $request->applicantLastName,
+			'companyName' => $request->applicantCompanyName,
+			'street' => $request->applicantStreetAddress,
+			'postcode' => $request->applicantPostalCode,
+			'city' => $request->applicantCity,
+			'country' => $request->applicantCountryCode,
+			'email' => $request->applicantEmailAddress,
+			'iban' => $paymentParameters->iban,
+			'bic' => $paymentParameters->bic,
+			'accountNumber' => $bankData->account,
+			'bankCode' => $bankData->bankCode,
+			'bankname' => $bankData->bankName
+		];
 	}
 }

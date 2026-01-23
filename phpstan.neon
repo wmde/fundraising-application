@@ -8,5 +8,4 @@ includes:
 parameters:
 	excludePaths:
 		- src/Presentation/DonationMembershipApplicationAdapter.php
-		- src/Presentation/Presenters/MembershipFormViolationPresenter.php
 		- tests/EdgeToEdge/PayPalRequestLoggerTest.php
