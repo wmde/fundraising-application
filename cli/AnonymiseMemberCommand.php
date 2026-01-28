@@ -33,11 +33,7 @@ class AnonymiseMemberCommand extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
-		$membershipAnonymizer = new DoctrineMembershipAnonymizer(
-			$this->ffFactory->getConnection(),
-			new SystemClock(),
-			new \DateInterval( 'P2D' )
-		);
+		$membershipAnonymizer = new DoctrineMembershipAnonymizer( $this->ffFactory->getConnection() );
 
 		try {
 			/** @var string $annoyingPhpStanWorkaroundThatMakesOurCodeWorseMemberId */
