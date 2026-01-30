@@ -23,20 +23,21 @@ class MembershipApplicationFormPresenter {
 	 * @param array<string, string> $urls
 	 * @param bool $showMembershipTypeOption
 	 * @param array<string, scalar> $initialDonationFormValues
-	 * @param array<string, scalar> $initialValidationResult
+	 * @param array<string, scalar> $validationResult
 	 * @param ImpressionCounts $impressionCounts
 	 */
-	public function present( array $urls,
-							bool $showMembershipTypeOption,
-							array $initialDonationFormValues,
-							array $initialValidationResult,
-							ImpressionCounts $impressionCounts
+	public function present(
+		array $urls,
+		bool $showMembershipTypeOption,
+		array $initialDonationFormValues,
+		array $validationResult,
+		ImpressionCounts $impressionCounts
 	): string {
 		return $this->template->render( [
 			'urls' => $urls,
 			'showMembershipTypeOption' => $showMembershipTypeOption,
 			'initialFormValues' => array_merge( $initialDonationFormValues, [ 'incentives' => $this->incentives ] ),
-			'initialValidationResult' => $initialValidationResult,
+			'validationResult' => $validationResult,
 			'tracking' => [
 				'bannerImpressionCount' => $impressionCounts->getSingleBannerImpressionCount(),
 				'impressionCount' => $impressionCounts->getTotalImpressionCount()

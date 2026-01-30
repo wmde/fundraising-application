@@ -183,7 +183,6 @@ use WMDE\Fundraising\Frontend\Presentation\Presenters\IbanPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\InternalErrorHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationConfirmationHtmlPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipApplicationFormPresenter;
-use WMDE\Fundraising\Frontend\Presentation\Presenters\MembershipFormViolationPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\PageNotFoundPresenter;
 use WMDE\Fundraising\Frontend\Presentation\Salutations;
 use WMDE\Fundraising\Frontend\Presentation\TwigTemplate;
@@ -1531,13 +1530,6 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function newMembershipApplicationConfirmationHtmlPresenter(): MembershipApplicationConfirmationHtmlPresenter {
 		return new MembershipApplicationConfirmationHtmlPresenter(
 			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig', [ 'countries' => $this->getCountries() ] )
-		);
-	}
-
-	public function newMembershipFormViolationPresenter(): MembershipFormViolationPresenter {
-		return new MembershipFormViolationPresenter(
-			$this->getMembershipApplicationFormTemplate(),
-			$this->newBankDataConverter()
 		);
 	}
 
