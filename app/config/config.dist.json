@@ -144,5 +144,6 @@
 	"campaigns": {
 		"timezone":  "Europe/Berlin",
 		"configurations": [ "campaigns.yml" ]
-	}
+	},
+	"membership-fee-change-active": true
 }

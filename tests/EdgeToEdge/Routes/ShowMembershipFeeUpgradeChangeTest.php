@@ -24,6 +24,25 @@ class ShowMembershipFeeUpgradeChangeTest extends WebRouteTestCase {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 	}
 
+	public function testFeatureIsInactive_rendersInactivePage(): void {
+		$this->modifyConfiguration( [ 'skin' => 'laika', 'membership-fee-change-active' => false ] );
+
+		$client = $this->createClient();
+		$this->givenStoredFeeChangeInRepository();
+
+		$client->request(
+			'GET',
+			'change-membership-fee',
+			[
+				'uuid' => self::VALID_TEST_UUID
+			]
+		);
+
+		$dataVars = $this->getDataApplicationVars( $client->getCrawler() );
+
+		$this->assertSame( MembershipFeeUpgradeFrontendFlag::SHOW_IS_INACTIVE->value, $dataVars->feeChangeFrontendFlag );
+	}
+
 	public function testNoUUIDInRequest_rendersErrorPage(): void {
 		$client = $this->createClient();
 		$client->request(
