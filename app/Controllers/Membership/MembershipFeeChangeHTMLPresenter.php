@@ -64,6 +64,20 @@ class MembershipFeeChangeHTMLPresenter implements ShowFeeChangePresenter {
 		);
 	}
 
+	public function showFeeChangeInactive(): void {
+		// displaying the info message will be handled by the frontend code
+		$this->responseString = $this->twigTemplate->render(
+			[
+				'uuid' => '',
+				'currentAmountInCents' => 0,
+				'suggestedAmountInCents' => 0,
+				'currentInterval' => 0,
+				'feeChangeFrontendFlag' => MembershipFeeUpgradeFrontendFlag::SHOW_IS_INACTIVE,
+				'urls' => Routes::getNamedRouteUrls( $this->urlGenerator ),
+			]
+		);
+	}
+
 	public function getHTMLResponse(): Response {
 		return new Response( $this->responseString );
 	}

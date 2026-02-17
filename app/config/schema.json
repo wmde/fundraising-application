@@ -865,6 +865,11 @@
       },
       "additionalProperties": false,
       "required": [ "donations", "membership" ]
+    },
+    "membership-fee-change-active": {
+      "type": "boolean",
+      "description": "If the membership fee change should be running",
+      "default": false
     }
   },
   "additionalProperties": false,
@@ -889,6 +894,7 @@
     "piwik",
     "payment-types",
     "cookie",
-    "preset-amounts"
+    "preset-amounts",
+    "membership-fee-change-active"
   ]
 }

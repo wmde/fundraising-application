@@ -20,7 +20,7 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 	private LoggerSpy $loggerSpy;
 	private KernelBrowser $client;
 
-	public function setUp(): void {
+	public function setUpClient(): void {
 		$this->client = $this->createClient();
 
 		$this->loggerSpy = new LoggerSpy();
@@ -28,6 +28,8 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 	}
 
 	public function testControllerReceivesIncompleteRequestData_returnsValidationErrorsFromErrorHandler(): void {
+		$this->setUpClient();
+
 		$this->client->jsonRequest(
 			method:'PUT',
 			uri:'/api/v1/membership/change-fee',
@@ -54,6 +56,8 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 	}
 
 	public function testControllerReceivesInvalidValueFeeChangeData_returnsJSONErrorResponse(): void {
+		$this->setUpClient();
+
 		$this->givenStoredNewFeeChangeInRepository();
 		$invalidAmount = -100;
 
@@ -95,6 +99,8 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 	}
 
 	public function testControllerReceivesValidChangeableFeeChangeData_returnsJSONStatusOKResponse(): void {
+		$this->setUpClient();
+
 		$this->givenStoredNewFeeChangeInRepository();
 
 		$this->client->jsonRequest(
@@ -121,6 +127,39 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 		$this->assertEquals( 200, $response->getStatusCode() );
 	}
 
+	public function testFeeChangeIsInactive_returnsJSONErrorResponse(): void {
+		$this->modifyConfiguration( [ 'membership-fee-change-active' => false ] );
+
+		$this->setUpClient();
+
+		$this->givenStoredNewFeeChangeInRepository();
+
+		$this->client->jsonRequest(
+			method:'PUT',
+			uri:'/api/v1/membership/change-fee',
+			parameters: [
+				'uuid' => FeeChanges::UUID_1,
+				'memberName' => FeeChanges::MEMBER_NAME,
+				'amountInEuroCents' => 5000,
+				'paymentType' => PaymentType::FeeChange->value,
+			]
+		);
+
+		$this->assertEquals( 'Fee change failed for UUID. ', $this->loggerSpy->getFirstLogCall()->getMessage() );
+
+		$response = $this->client->getResponse();
+		$this->assertEquals(
+			[
+				'status' => 'ERR',
+				'errors' => [
+					'fee_change_inactive' => 'This fee change (' . FeeChanges::UUID_1 . ') could not be changed because the fee change is inavtive'
+				]
+			],
+			json_decode( $response->getContent() ?: '', true )
+		);
+		$this->assertEquals( 200, $response->getStatusCode() );
+	}
+
 	/**
 	 * @return iterable<array{string}>
 	 */
@@ -131,6 +170,8 @@ class UpgradeMembershipFeeRouteTest extends WebRouteTestCase {
 
 	#[DataProvider( 'failingUUIDProvider' )]
 	public function testControllerReceivesAlreadyChangedFeeChangeData_returnsJSONErrorResponse( string $uuid ): void {
+		$this->setUpClient();
+
 		$this->givenStoredAlreadyChangedFeeChangeInRepository();
 		$this->givenStoredExportedFeeChangeInRepository();
 

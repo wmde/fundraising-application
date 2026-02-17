@@ -104,5 +104,6 @@
 			"campaigns.yml",
 			"campaigns.test.yml"
 		]
-	}
+	},
+	"membership-fee-change-active": true
 }

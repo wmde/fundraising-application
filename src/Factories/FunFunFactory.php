@@ -1380,7 +1380,8 @@ class FunFunFactory implements LoggerAwareInterface {
 				$this->newCreatePaymentUseCaseForMembershipFeeChanges(),
 				$this->getPaymentTypesSettings()->getPaymentTypesForMembershipFeeChange()
 			),
-			new UrlAuthenticatorStub()
+			new UrlAuthenticatorStub(),
+			$this->config[ 'membership-fee-change-active' ]
 		);
 	}
 

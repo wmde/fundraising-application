@@ -256,7 +256,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$parameters
 		);
 
-		$application = $factory->getMembershipApplicationRepository()->getUnexportedMembershipApplicationById( self::MEMBERSHIP_APPLICATION_ID );
+		$application = $factory->getMembershipApplicationRepository()->getUnexportedAndUnscrubbedMembershipApplicationById( self::MEMBERSHIP_APPLICATION_ID );
 
 		$this->assertNotNull( $application );
 
@@ -396,7 +396,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$params
 		);
 
-		$application = $factory->getMembershipApplicationRepository()->getUnexportedMembershipApplicationById( self::MEMBERSHIP_APPLICATION_ID );
+		$application = $factory->getMembershipApplicationRepository()->getUnexportedAndUnscrubbedMembershipApplicationById( self::MEMBERSHIP_APPLICATION_ID );
 
 		$this->assertNotNull( $application );
 
@@ -415,7 +415,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 			$params
 		);
 
-		$application = $factory->getMembershipApplicationRepository()->getUnexportedMembershipApplicationById( self::MEMBERSHIP_APPLICATION_ID );
+		$application = $factory->getMembershipApplicationRepository()->getUnexportedAndUnscrubbedMembershipApplicationById( self::MEMBERSHIP_APPLICATION_ID );
 
 		$this->assertNotNull( $application );
 
@@ -470,7 +470,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$client->request( Request::METHOD_POST, self::APPLY_FOR_MEMBERSHIP_ROUTE, $parameters );
 
-		$this->assertFalse( $factory->getMembershipApplicationRepository()->getUnexportedMembershipApplicationById( 1 )?->getDonationReceipt() );
+		$this->assertFalse( $factory->getMembershipApplicationRepository()->getUnexportedAndUnscrubbedMembershipApplicationById( 1 )?->getDonationReceipt() );
 	}
 
 	public function testGivenValidRequest_bucketsAreLogged(): void {
