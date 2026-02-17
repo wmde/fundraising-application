@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ead504e541460c2bb339e19cc315372",
+    "content-hash": "48382b917d31eb0ccf590c149ac79ed7",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -1560,16 +1560,16 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "6.6.4",
+            "version": "v6.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jsonrainbow/json-schema.git",
-                "reference": "2eeb75d21cf73211335888e7f5e6fd7440723ec7"
+                "reference": "6fea66c7204683af437864e7c4e7abf383d14bc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/2eeb75d21cf73211335888e7f5e6fd7440723ec7",
-                "reference": "2eeb75d21cf73211335888e7f5e6fd7440723ec7",
+                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/6fea66c7204683af437864e7c4e7abf383d14bc0",
+                "reference": "6fea66c7204683af437864e7c4e7abf383d14bc0",
                 "shasum": ""
             },
             "require": {
@@ -1629,9 +1629,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jsonrainbow/json-schema/issues",
-                "source": "https://github.com/jsonrainbow/json-schema/tree/6.6.4"
+                "source": "https://github.com/jsonrainbow/json-schema/tree/v6.7.2"
             },
-            "time": "2025-12-19T15:01:32+00:00"
+            "time": "2026-02-15T15:06:22+00:00"
         },
         {
             "name": "marc-mabe/php-enum",
@@ -6873,16 +6873,16 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "2.1.2",
+            "version": "2.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "ce6a2f100c404b2d32a1dd1270f9b59ad4f57649"
+                "reference": "b39f1870fc7c3e9e4a26106df5053354b9260a33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/ce6a2f100c404b2d32a1dd1270f9b59ad4f57649",
-                "reference": "ce6a2f100c404b2d32a1dd1270f9b59ad4f57649",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/b39f1870fc7c3e9e4a26106df5053354b9260a33",
+                "reference": "b39f1870fc7c3e9e4a26106df5053354b9260a33",
                 "shasum": ""
             },
             "require": {
@@ -6929,9 +6929,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/2.1.2"
+                "source": "https://github.com/webmozarts/assert/tree/2.1.4"
             },
-            "time": "2026-01-13T14:02:24+00:00"
+            "time": "2026-02-17T12:17:51+00:00"
         },
         {
             "name": "wmde/clock",
@@ -7281,16 +7281,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "dev-deactivate-membership-fee-upgrade",
+            "version": "v19.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "efb5e539d5b06eafa3906680a015d828f6cd5a49"
+                "reference": "4393d21f76db13e511dbbdc203551172046f41f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/efb5e539d5b06eafa3906680a015d828f6cd5a49",
-                "reference": "efb5e539d5b06eafa3906680a015d828f6cd5a49",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/4393d21f76db13e511dbbdc203551172046f41f0",
+                "reference": "4393d21f76db13e511dbbdc203551172046f41f0",
                 "shasum": ""
             },
             "require": {
@@ -7337,7 +7337,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2026-02-11T09:10:48+00:00"
+            "time": "2026-02-17T16:03:19+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -8640,16 +8640,16 @@
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "2.0.15",
+            "version": "2.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
-                "reference": "0f6ba8e22a3e919353a8f4615ea3cd2e91626c7f"
+                "reference": "6ab598e1bc106e6827fd346ae4a12b4a5d634c32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/0f6ba8e22a3e919353a8f4615ea3cd2e91626c7f",
-                "reference": "0f6ba8e22a3e919353a8f4615ea3cd2e91626c7f",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/6ab598e1bc106e6827fd346ae4a12b4a5d634c32",
+                "reference": "6ab598e1bc106e6827fd346ae4a12b4a5d634c32",
                 "shasum": ""
             },
             "require": {
@@ -8690,9 +8690,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
-                "source": "https://github.com/phpstan/phpstan-phpunit/tree/2.0.15"
+                "source": "https://github.com/phpstan/phpstan-phpunit/tree/2.0.16"
             },
-            "time": "2026-02-11T14:43:43+00:00"
+            "time": "2026-02-14T09:05:21+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -9042,16 +9042,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.11",
+            "version": "12.5.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9b518cb40f9474572c9f0178e96ff3dc1cf02bf1"
+                "reference": "418e06b3b46b0d54bad749ff4907fc7dfb530199"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9b518cb40f9474572c9f0178e96ff3dc1cf02bf1",
-                "reference": "9b518cb40f9474572c9f0178e96ff3dc1cf02bf1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/418e06b3b46b0d54bad749ff4907fc7dfb530199",
+                "reference": "418e06b3b46b0d54bad749ff4907fc7dfb530199",
                 "shasum": ""
             },
             "require": {
@@ -9120,7 +9120,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.11"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.12"
             },
             "funding": [
                 {
@@ -9144,7 +9144,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-10T12:32:02+00:00"
+            "time": "2026-02-16T08:34:36+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -10598,8 +10598,7 @@
     "stability-flags": {
         "airbrake/phpbrake": 20,
         "remotelyliving/doorkeeper": 20,
-        "wmde/fundraising-frontend-content": 20,
-        "wmde/fundraising-memberships": 20
+        "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
