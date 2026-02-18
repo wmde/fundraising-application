@@ -34,9 +34,7 @@ class AnonymiseMemberCommand extends Command {
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
 		$membershipAnonymizer = new DoctrineMembershipAnonymizer(
-			$this->ffFactory->getConnection(),
-			new SystemClock(),
-			new \DateInterval( 'P2D' )
+			$this->ffFactory->getConnection()
 		);
 
 		try {
