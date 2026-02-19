@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f095defb994c6d47f58d4b0956beb7a3",
+    "content-hash": "eb5e0d034d97833900d7c4fdc0d52d59",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7281,16 +7281,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "dev-add-filledon-field",
+            "version": "v20.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "5d0a78571ef6d6b45362392a2d6a9294ad59855d"
+                "reference": "054952fba40425f57bf09662d03f7dba9775978c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/5d0a78571ef6d6b45362392a2d6a9294ad59855d",
-                "reference": "5d0a78571ef6d6b45362392a2d6a9294ad59855d",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/054952fba40425f57bf09662d03f7dba9775978c",
+                "reference": "054952fba40425f57bf09662d03f7dba9775978c",
                 "shasum": ""
             },
             "require": {
@@ -7337,7 +7337,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2026-02-18T14:32:54+00:00"
+            "time": "2026-02-19T13:57:46+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
@@ -10598,8 +10598,7 @@
     "stability-flags": {
         "airbrake/phpbrake": 20,
         "remotelyliving/doorkeeper": 20,
-        "wmde/fundraising-frontend-content": 20,
-        "wmde/fundraising-memberships": 20
+        "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
