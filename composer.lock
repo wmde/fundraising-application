@@ -7850,21 +7850,21 @@
         },
         {
             "name": "matthiasnoback/symfony-config-test",
-            "version": "v6.1.0",
+            "version": "v6.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyTest/SymfonyConfigTest.git",
-                "reference": "3c4594145376f528a2954269ec10456164e99a44"
+                "reference": "7aa639dff84e51074db4f4f207cb4ae26c4eb1fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyTest/SymfonyConfigTest/zipball/3c4594145376f528a2954269ec10456164e99a44",
-                "reference": "3c4594145376f528a2954269ec10456164e99a44",
+                "url": "https://api.github.com/repos/SymfonyTest/SymfonyConfigTest/zipball/7aa639dff84e51074db4f4f207cb4ae26c4eb1fe",
+                "reference": "7aa639dff84e51074db4f4f207cb4ae26c4eb1fe",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1",
-                "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0",
+                "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0 || ^13.0",
                 "symfony/config": "^5.4 || ^6.4 || ^7.0 || ^8.0"
             },
             "type": "library",
@@ -7902,9 +7902,9 @@
             ],
             "support": {
                 "issues": "https://github.com/SymfonyTest/SymfonyConfigTest/issues",
-                "source": "https://github.com/SymfonyTest/SymfonyConfigTest/tree/v6.1.0"
+                "source": "https://github.com/SymfonyTest/SymfonyConfigTest/tree/v6.2.0"
             },
-            "time": "2025-08-13T18:34:21+00:00"
+            "time": "2026-02-09T13:25:41+00:00"
         },
         {
             "name": "mediawiki/mediawiki-codesniffer",
