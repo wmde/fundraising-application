@@ -273,6 +273,8 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 		$postVars = $logger->getFirstLogCall()->getContext()['post_vars'];
 		$this->assertIsArray( $postVars );
+
+		/** @var array<string, string> $postVars */
 		$loggedDataAsString = implode( '', $postVars );
 
 		$this->assertStringNotContainsString( 'IshouldNotGetLogged@privatestuff.de', $loggedDataAsString );
