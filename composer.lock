@@ -742,16 +742,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "3.9.6",
+            "version": "3.9.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "ffd8355cdd8505fc650d9604f058bf62aedd80a1"
+                "reference": "96cb2a89b56c9efb0bac38e606dc0b0f13e650ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/ffd8355cdd8505fc650d9604f058bf62aedd80a1",
-                "reference": "ffd8355cdd8505fc650d9604f058bf62aedd80a1",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/96cb2a89b56c9efb0bac38e606dc0b0f13e650ec",
+                "reference": "96cb2a89b56c9efb0bac38e606dc0b0f13e650ec",
                 "shasum": ""
             },
             "require": {
@@ -825,7 +825,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/migrations/issues",
-                "source": "https://github.com/doctrine/migrations/tree/3.9.6"
+                "source": "https://github.com/doctrine/migrations/tree/3.9.7"
             },
             "funding": [
                 {
@@ -841,7 +841,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-11T06:46:11+00:00"
+            "time": "2026-04-23T19:33:20+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -7262,16 +7262,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "v20.0.0",
+            "version": "v20.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "054952fba40425f57bf09662d03f7dba9775978c"
+                "reference": "5114abb80db75d5d0a94616e9da223cf5f7a98f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/054952fba40425f57bf09662d03f7dba9775978c",
-                "reference": "054952fba40425f57bf09662d03f7dba9775978c",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/5114abb80db75d5d0a94616e9da223cf5f7a98f6",
+                "reference": "5114abb80db75d5d0a94616e9da223cf5f7a98f6",
                 "shasum": ""
             },
             "require": {
@@ -7318,7 +7318,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2026-02-19T13:57:46+00:00"
+            "time": "2026-04-23T12:51:11+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
