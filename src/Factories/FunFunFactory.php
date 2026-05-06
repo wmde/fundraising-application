@@ -875,22 +875,17 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new TextPolicyValidator(
 			new WordListFileReader(
 				$fetcher,
-				$this->getTextPolicyPathWithFallback( $policyName, 'banned-terms', 'badwords' )
+				$this->getTextPolicyPath( $policyName, 'banned-terms' )
 			),
 			new WordListFileReader(
 				$fetcher,
-				$this->getTextPolicyPathWithFallback( $policyName, 'allowed-terms', 'whitewords' )
+				$this->getTextPolicyPath( $policyName, 'allowed-terms' )
 			)
 		);
 	}
 
-	private function getTextPolicyPathWithFallback( string $policyName, string $fileNameKey, string $fallbackNameKey = '' ): string {
+	private function getTextPolicyPath( string $policyName, string $fileNameKey ): string {
 		$fileName = $this->config['text-policies'][$policyName][$fileNameKey] ?? '';
-		// Remove this fallback (and the fallback parameter) when we have updated all configuration files
-		// See https://phabricator.wikimedia.org/T352788
-		if ( $fileName === '' && $fallbackNameKey !== '' ) {
-			$fileName = $this->config['text-policies'][$policyName][$fallbackNameKey] ?? '';
-		}
 		return $fileName ? $this->getAbsolutePath( $fileName ) : '';
 	}
 

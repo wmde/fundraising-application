@@ -291,25 +291,11 @@
           "title": "Address fields policy",
           "description": "Page names for allowed and denied words in form fields (name, street, city, etc.). Denied words lead to moderation of the donation/membership, not to blocking it",
           "properties": {
-            "whitewords": {
-              "deprecated": true,
-              "type": "string",
-              "minLength": 0,
-              "title": "Path to allowed words list",
-              "default": ""
-            },
             "allowed-terms": {
               "type": "string",
               "minLength": 0,
               "title": "Path to allowed words list",
               "description": "Allowed words allow the words that were previously denied in the banned_terms list",
-              "default": ""
-            },
-            "badwords": {
-              "deprecated": true,
-              "type": "string",
-              "minLength": 0,
-              "title": "Badwords Page Name",
               "default": ""
             },
             "banned-terms": {
@@ -327,25 +313,11 @@
           "title": "Comment policy.",
           "description": "Page names for denied and allowed words in comment texts. Denied words lead to the moderation of the comment",
           "properties": {
-            "whitewords": {
-              "deprecated": true,
-              "type": "string",
-              "minLength": 0,
-              "title": "Path to allowed words list",
-              "default": ""
-            },
             "allowed-terms": {
               "type": "string",
               "minLength": 0,
               "title": "Path to allowed words list",
               "description": "Allowed words allow the words that were previously denied in the banned_terms list",
-              "default": ""
-            },
-            "badwords": {
-              "deprecated": true,
-              "type": "string",
-              "minLength": 0,
-              "title": "Badwords Page Name",
               "default": ""
             },
             "banned-terms": {
