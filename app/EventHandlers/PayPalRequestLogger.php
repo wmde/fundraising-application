@@ -11,6 +11,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use WMDE\Fundraising\Frontend\App\RequestSearcher;
 
 class PayPalRequestLogger implements EventSubscriberInterface {
 
@@ -47,10 +48,10 @@ class PayPalRequestLogger implements EventSubscriberInterface {
 
 	private function getLogLine( Request $request ): string {
 		return implode( ',', [
-			$request->get( 'txn_type', '' ),
-			$request->get( 'txn_id', '' ),
-			$request->get( 'subscr_id', '' ),
-			$request->get( 'item_number', 0 )
+			RequestSearcher::get( $request, 'txn_type', '' ),
+			RequestSearcher::get( $request, 'txn_id', '' ),
+			RequestSearcher::get( $request, 'subscr_id', '' ),
+			RequestSearcher::get( $request, 'item_number', 0 )
 		] ) . PHP_EOL;
 	}
 }

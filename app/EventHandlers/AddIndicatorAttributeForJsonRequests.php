@@ -8,6 +8,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use WMDE\Fundraising\Frontend\App\RequestSearcher;
 
 /**
  * Add indicator attribute `request_stack.is_json` to request for JSON/JSONP requests,
@@ -42,6 +43,6 @@ class AddIndicatorAttributeForJsonRequests implements EventSubscriberInterface {
 
 	private function isJsonPRequest( Request $request ): bool {
 		return in_array( 'application/javascript', $request->getAcceptableContentTypes() )
-			&& $request->get( 'callback', null );
+			&& RequestSearcher::get( $request, 'callback', null );
 	}
 }

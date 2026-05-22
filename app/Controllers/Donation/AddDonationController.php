@@ -42,30 +42,30 @@ class AddDonationController {
 	private function createDonationRequest( Request $request ): AddDonationRequest {
 		$donationRequest = new AddDonationRequest();
 
-		if ( $request->get( 'addressType', '' ) === 'company_with_contact' ) {
+		if ( $request->request->get( 'addressType', '' ) === 'company_with_contact' ) {
 			$request->query->set( 'addressType', AddressType::LEGACY_COMPANY );
 		}
 
 		$donationRequest->setDonorType( $this->getSafeDonorType( $request ) );
-		$donationRequest->setDonorSalutation( $request->get( 'salutation', '' ) );
-		$donationRequest->setDonorTitle( $request->get( 'title', '' ) );
-		$donationRequest->setDonorCompany( $request->get( 'companyName', '' ) );
-		$donationRequest->setDonorFirstName( $request->get( 'firstName', '' ) );
-		$donationRequest->setDonorLastName( $request->get( 'lastName', '' ) );
-		$donationRequest->setDonorStreetAddress( $this->filterAutofillCommas( $request->get( 'street', '' ) ) );
-		$donationRequest->setDonorPostalCode( $request->get( 'postcode', '' ) );
-		$donationRequest->setDonorCity( $request->get( 'city', '' ) );
-		$donationRequest->setDonorCountryCode( $request->get( 'country', '' ) );
-		$donationRequest->setDonorEmailAddress( $request->get( 'email', '' ) );
+		$donationRequest->setDonorSalutation( $request->request->get( 'salutation', '' ) );
+		$donationRequest->setDonorTitle( $request->request->get( 'title', '' ) );
+		$donationRequest->setDonorCompany( $request->request->get( 'companyName', '' ) );
+		$donationRequest->setDonorFirstName( $request->request->get( 'firstName', '' ) );
+		$donationRequest->setDonorLastName( $request->request->get( 'lastName', '' ) );
+		$donationRequest->setDonorStreetAddress( $this->filterAutofillCommas( $request->request->get( 'street', '' ) ) );
+		$donationRequest->setDonorPostalCode( $request->request->get( 'postcode', '' ) );
+		$donationRequest->setDonorCity( $request->request->get( 'city', '' ) );
+		$donationRequest->setDonorCountryCode( $request->request->get( 'country', '' ) );
+		$donationRequest->setDonorEmailAddress( $request->request->get( 'email', '' ) );
 
 		$donationRequest->setTrackingInfo( new DonationTrackingInfo(
-			$request->get( 'piwik_campaign', '' ),
-			$request->get( 'piwik_kwd', '' ),
-			intval( $request->get( 'impCount', 0 ) ),
-			intval( $request->get( 'bImpCount', 0 ) )
+			$request->request->get( 'piwik_campaign', '' ),
+			$request->request->get( 'piwik_kwd', '' ),
+			intval( $request->request->get( 'impCount', 0 ) ),
+			intval( $request->request->get( 'bImpCount', 0 ) )
 
 		) );
-		$donationRequest->setOptsIntoNewsletter( (bool)$request->get( 'info', '' ) );
+		$donationRequest->setOptsIntoNewsletter( (bool)$request->request->get( 'info', '' ) );
 		$donationRequest->setOptsIntoDonationReceipt( $request->request->getBoolean( 'donationReceipt', true ) );
 
 		$donationRequest->setPaymentParameters( $this->createPaymentParameters( $request ) );
@@ -75,14 +75,14 @@ class AddDonationController {
 
 	private function createPaymentParameters( Request $request ): PaymentParameters {
 		$amount = $this->getEuroAmount( $this->getAmountFromRequest( $request ) );
-		$interval = intval( $request->get( 'interval', 0 ) );
-		$paymentType = $request->get( 'paymentType', '' );
+		$interval = intval( $request->request->get( 'interval', 0 ) );
+		$paymentType = $request->request->get( 'paymentType', '' );
 		$iban = '';
 		$bic = '';
 
 		if ( $paymentType === PaymentType::DirectDebit->value ) {
-			$iban = ( new Iban( trim( $request->get( 'iban', '' ) ) ) )->toString();
-			$bic = trim( $request->get( 'bic', '' ) );
+			$iban = ( new Iban( trim( $request->request->get( 'iban', '' ) ) ) )->toString();
+			$bic = trim( $request->request->get( 'bic', '' ) );
 		}
 
 		return new PaymentParameters( $amount->getEuroCents(), $interval, $paymentType, $iban, $bic );
@@ -98,7 +98,7 @@ class AddDonationController {
 
 	private function getAmountFromRequest( Request $request ): int {
 		if ( $request->request->has( 'amount' ) ) {
-			return intval( $request->get( 'amount' ) );
+			return intval( $request->request->get( 'amount' ) );
 		}
 		return 0;
 	}
@@ -153,7 +153,7 @@ class AddDonationController {
 	 */
 	private function getSafeDonorType( Request $request ): DonorType {
 		try {
-			return AddressType::presentationAddressTypeToDonorType( $request->get( 'addressType', '' ) );
+			return AddressType::presentationAddressTypeToDonorType( $request->request->get( 'addressType', '' ) );
 		} catch ( \UnexpectedValueException $e ) {
 			return DonorType::ANONYMOUS;
 		}

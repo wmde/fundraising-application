@@ -13,7 +13,7 @@ class FindCitiesController {
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$cities = $ffFactory->newFindCitiesUseCase()
-			->getCitiesForPostcode( $request->get( 'postcode', '' ) );
+			->getCitiesForPostcode( $request->request->get( 'postcode', '' ) );
 
 		return new JsonResponse( $cities );
 	}

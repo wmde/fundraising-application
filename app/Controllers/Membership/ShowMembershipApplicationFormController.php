@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Membership;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\DonationContext\UseCases\GetDonation\GetDonationRequest;
+use WMDE\Fundraising\Frontend\App\RequestSearcher;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\DonationMembershipApplicationAdapter;
@@ -41,8 +42,8 @@ class ShowMembershipApplicationFormController {
 		);
 
 		$trackingInfo = new ImpressionCounts(
-			intval( $httpRequest->get( 'impCount' ) ),
-			intval( $httpRequest->get( 'bImpCount' ) )
+			intval( RequestSearcher::get( $httpRequest, 'impCount' ) ),
+			intval( RequestSearcher::get( $httpRequest, 'bImpCount' ) )
 		);
 
 		return new Response( $ffFactory->newMembershipApplicationFormPresenter()->present(

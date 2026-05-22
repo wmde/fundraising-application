@@ -22,14 +22,14 @@ class ValidateAddressController {
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$this->addressValidator = $ffFactory->newAddressValidator();
 		$isCompanyWithContact = $this->handleCompanyWithContact( $request );
-		$addressType = $request->get( 'addressType', '' );
+		$addressType = $request->request->get( 'addressType', '' );
 
 		try {
 			$donorType = $this->getAddressType( $addressType );
 		} catch ( \UnexpectedValueException $e ) {
 			return $this->newErrorResponse(
 				new ConstraintViolation(
-					$request->get( 'addressType', '' ),
+					$request->request->get( 'addressType', '' ),
 					self::VIOLATION_UNKNOWN_ADDRESS_TYPE,
 					'addressType'
 				)
@@ -66,7 +66,7 @@ class ValidateAddressController {
 	}
 
 	private function handleCompanyWithContact( Request $request ): bool {
-		if ( $request->get( 'addressType', '' ) !== 'company_with_contact' ) {
+		if ( $request->request->get( 'addressType', '' ) !== 'company_with_contact' ) {
 			return false;
 		}
 
@@ -79,10 +79,10 @@ class ValidateAddressController {
 	 */
 	private function getPersonViolations( Request $request ): array {
 		return $this->addressValidator->validatePersonName(
-			$request->get( 'salutation', '' ),
-			$request->get( 'title', '' ),
-			$request->get( 'firstName', '' ),
-			$request->get( 'lastName', '' )
+			$request->request->get( 'salutation', '' ),
+			$request->request->get( 'title', '' ),
+			$request->request->get( 'firstName', '' ),
+			$request->request->get( 'lastName', '' )
 		)->getViolations();
 	}
 
@@ -91,7 +91,7 @@ class ValidateAddressController {
 	 */
 	private function getCompanyViolations( Request $request ): array {
 		return $this->addressValidator->validateCompanyName(
-			$request->get( 'companyName', '' )
+			$request->request->get( 'companyName', '' )
 		)->getViolations();
 	}
 
@@ -100,10 +100,10 @@ class ValidateAddressController {
 	 */
 	private function getAddressViolations( Request $request ): array {
 		return $this->addressValidator->validatePostalAddress(
-			$request->get( 'street', '' ),
-			$request->get( 'postcode', '' ),
-			$request->get( 'city', '' ),
-			$request->get( 'country', '' )
+			$request->request->get( 'street', '' ),
+			$request->request->get( 'postcode', '' ),
+			$request->request->get( 'city', '' ),
+			$request->request->get( 'country', '' )
 		)->getViolations();
 	}
 

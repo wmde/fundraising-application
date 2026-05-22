@@ -8,6 +8,7 @@ use phpDocumentor\Reflection\Types\Scalar;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\App\RequestSearcher;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
@@ -56,8 +57,8 @@ class ApplyForMembershipController {
 
 	private function createMembershipRequest( Request $httpRequest ): ApplyForMembershipRequest {
 		$membershipTracking = new MembershipTracking(
-			$httpRequest->get( 'piwik_campaign', '' ),
-			$httpRequest->get( 'piwik_kwd', '' )
+			RequestSearcher::get( $httpRequest, 'piwik_campaign', '' ),
+			RequestSearcher::get( $httpRequest, 'piwik_kwd', '' )
 		);
 
 		if ( $httpRequest->request->get( 'adresstyp', '' ) === 'firma' ) {
@@ -119,8 +120,8 @@ class ApplyForMembershipController {
 		$showMembershipTypeOption = $httpRequest->request->get( 'showMembershipTypeOption' ) === 'true';
 
 		$trackingInfo = new ImpressionCounts(
-			intval( $httpRequest->get( 'impCount' ) ),
-			intval( $httpRequest->get( 'bImpCount' ) )
+			intval( RequestSearcher::get( $httpRequest, 'impCount' ) ),
+			intval( RequestSearcher::get( $httpRequest, 'bImpCount' ) )
 		);
 
 		return new Response(

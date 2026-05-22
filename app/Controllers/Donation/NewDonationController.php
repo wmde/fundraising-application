@@ -6,6 +6,7 @@ namespace WMDE\Fundraising\Frontend\App\Controllers\Donation;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use WMDE\Fundraising\Frontend\App\RequestSearcher;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\DonationFormPresenter\ImpressionCounts;
@@ -18,8 +19,8 @@ class NewDonationController {
 			$ffFactory->getI18nDirectory() . '/messages/paymentTypes.json'
 		);
 
-		$amount = intval( $request->get( 'amount', 0 ) );
-		$paymentType = (string)$request->get( 'paymentType', '' );
+		$amount = intval( RequestSearcher::get( $request, 'amount', 0 ) );
+		$paymentType = (string)RequestSearcher::get( $request, 'paymentType', '' );
 		$interval = $this->getIntervalFromRequest( $request );
 		$receipt = $this->getReceiptFromRequest( $request );
 
@@ -31,8 +32,8 @@ class NewDonationController {
 		);
 
 		$trackingInfo = new ImpressionCounts(
-			intval( $request->get( 'impCount' ) ),
-			intval( $request->get( 'bImpCount' ) )
+			intval( RequestSearcher::get( $request, 'impCount' ) ),
+			intval( RequestSearcher::get( $request, 'bImpCount' ) )
 		);
 
 		return new Response(
@@ -43,14 +44,14 @@ class NewDonationController {
 				$receipt,
 				$validationResult,
 				$trackingInfo,
-				$request->get( 'addressType' ),
+				RequestSearcher::get( $request, 'addressType' ),
 				Routes::getNamedRouteUrls( $ffFactory->getUrlGenerator() )
 			)
 		);
 	}
 
 	private function getIntervalFromRequest( Request $request ): ?int {
-		$interval = $request->get( 'interval', null );
+		$interval = RequestSearcher::get( $request, 'interval', null );
 
 		if ( is_string( $interval ) ) {
 			return intval( $interval );
@@ -60,7 +61,7 @@ class NewDonationController {
 	}
 
 	private function getReceiptFromRequest( Request $request ): ?bool {
-		$receipt = $request->get( 'receipt' );
+		$receipt = RequestSearcher::get( $request, 'receipt' );
 
 		if ( $receipt === 'true' ) {
 			return true;

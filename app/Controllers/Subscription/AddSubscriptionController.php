@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\Frontend\App\EventHandlers\AddIndicatorAttributeForJsonRequests;
+use WMDE\Fundraising\Frontend\App\RequestSearcher;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\Frontend\Presentation\Presenters\AddSubscriptionJsonPresenter;
 use WMDE\Fundraising\SubscriptionContext\UseCases\AddSubscription\SubscriptionRequest;
@@ -38,8 +39,8 @@ class AddSubscriptionController {
 	private function createSubscriptionRequest( Request $request ): SubscriptionRequest {
 		$subscriptionRequest = new SubscriptionRequest();
 
-		$subscriptionRequest->setEmail( trim( $request->get( 'email', '' ) ) );
-		$subscriptionRequest->setSource( trim( $request->get( 'source', '' ) ) );
+		$subscriptionRequest->setEmail( trim( RequestSearcher::get( $request, 'email', '' ) ) );
+		$subscriptionRequest->setSource( trim( RequestSearcher::get( $request, 'source', '' ) ) );
 		$subscriptionRequest->setTrackingString( $request->attributes->get( 'trackingCode', '' ) );
 
 		return $subscriptionRequest;

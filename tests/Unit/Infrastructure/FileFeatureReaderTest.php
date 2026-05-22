@@ -93,11 +93,7 @@ class FileFeatureReaderTest extends TestCase {
 		yield 'array with non-objects' => [ json_encode( [ [ 'a' => 'b' ], 1, null ], JSON_THROW_ON_ERROR ) ];
 	}
 
-	/**
-	 * @param LoggerSpy $logger
-	 * @param LogLevel::NOTICE | LogLevel::WARNING $expectedLevel
-	 */
-	private function assertLogLevel( LoggerSpy $logger, $expectedLevel ): void {
+	private function assertLogLevel( LoggerSpy $logger, string $expectedLevel ): void {
 		$logEntry = $logger->getFirstLogCall();
 		$this->assertSame( $expectedLevel, $logEntry->getLevel() );
 	}

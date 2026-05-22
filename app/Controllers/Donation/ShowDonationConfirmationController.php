@@ -14,10 +14,10 @@ use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 class ShowDonationConfirmationController {
 
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
-		$accessToken = $request->get( 'accessToken', '' );
+		$accessToken = $request->query->get( 'accessToken', '' );
 		$useCase = $ffFactory->newGetDonationUseCase( $accessToken );
 		$responseModel = $useCase->showConfirmation( new GetDonationRequest(
-			(int)$request->get( 'id', '' )
+			(int)$request->query->get( 'id', '' )
 		) );
 
 		if ( !$responseModel->accessIsPermitted() ) {

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use WMDE\Fundraising\Frontend\App\RequestSearcher;
 
 /**
  * When a user makes an anonymous donation from a banner the data gets posted directly to
@@ -71,8 +72,8 @@ class TrackBannerDonationRedirects implements EventSubscriberInterface {
 		}
 
 		$session = $request->getSession();
-		$session->set( self::PIWIK_CAMPAIGN, $request->get( self::PIWIK_CAMPAIGN, '' ) );
-		$session->set( self::PIWIK_KWD, $request->get( self::PIWIK_KWD, '' ) );
+		$session->set( self::PIWIK_CAMPAIGN, RequestSearcher::get( $request, self::PIWIK_CAMPAIGN, '' ) );
+		$session->set( self::PIWIK_KWD, RequestSearcher::get( $request, self::PIWIK_KWD, '' ) );
 	}
 
 	private function restoreCampaignParameters( RequestEvent $event, Request $request ): void {
@@ -94,11 +95,11 @@ class TrackBannerDonationRedirects implements EventSubscriberInterface {
 	}
 
 	private function requestWasSubmittedFromBanner( Request $request ): bool {
-		return $request->get( $this->bannerSubmissionUrlParameter ) !== null;
+		return RequestSearcher::get( $request, $this->bannerSubmissionUrlParameter ) !== null;
 	}
 
 	private function hasQueryTracking( Request $request ): bool {
-		return $request->get( self::PIWIK_CAMPAIGN ) || $request->get( self::PIWIK_KWD );
+		return RequestSearcher::get( $request, self::PIWIK_CAMPAIGN ) || RequestSearcher::get( $request, self::PIWIK_KWD );
 	}
 
 	private function hasSessionCampaignParameters( SessionInterface $session ): bool {
