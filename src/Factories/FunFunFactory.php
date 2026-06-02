@@ -1058,6 +1058,16 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	public function newUpdateMembershipApplicationUseCase( string $updateToken, string $accessToken ): UpdateDonorUseCase {
+		return new UpdateDonorUseCase(
+			$this->newDonationAuthorizationChecker( $updateToken, $accessToken ),
+			$this->newUpdateDonorValidator(),
+			$this->getDonationRepository(),
+			$this->newDonationUpdatedMailer(),
+			$this->getDonationEventEmitter()
+		);
+	}
+
 	private function newUpdateDonorValidator(): UpdateDonorValidator {
 		return new UpdateDonorValidator( $this->newAddressValidator(), $this->getEmailValidator() );
 	}
