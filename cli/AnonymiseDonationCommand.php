@@ -34,10 +34,12 @@ class AnonymiseDonationCommand extends Command {
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
 		$donationAnonymizer = new DatabaseDonationAnonymizer(
-			$this->ffFactory->getDonationRepository(),
-			$this->ffFactory->getEntityManager(),
-			new SystemClock(),
-			new \DateInterval( 'P2D' )
+			donationRepository: $this->ffFactory->getDonationRepository(),
+			entityManager: $this->ffFactory->getEntityManager(),
+			clock: new SystemClock(),
+			exportGracePeriod: new \DateInterval( 'P2D' ),
+			moderationGracePeriod: new \DateInterval( 'P1M' )
+
 		);
 
 		try {
