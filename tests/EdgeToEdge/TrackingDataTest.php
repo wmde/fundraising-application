@@ -13,7 +13,7 @@ class TrackingDataTest extends WebRouteTestCase {
 	private const PARAM_NAME_CAMPAIGN = 'piwik_campaign';
 	private const PARAM_NAME_KEYWORD = 'piwik_kwd';
 
-	public function testWhenTrackingParamsArePassed_trackingCodeIsAddedToRequest(): void {
+	public function testWhenTrackingParamsArePassed_trackingCodeIsAddedToRequestAttributes(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
 		$client = $this->createClient();
 		$client->request( 'get', '/', [
@@ -21,7 +21,7 @@ class TrackingDataTest extends WebRouteTestCase {
 			self::PARAM_NAME_KEYWORD => 'keyword'
 		] );
 
-		$this->assertEquals( 'campaign/keyword', $client->getRequest()->get( 'trackingCode' ) );
+		$this->assertEquals( 'campaign/keyword', $client->getRequest()->attributes->get( 'trackingCode' ) );
 	}
 
 }

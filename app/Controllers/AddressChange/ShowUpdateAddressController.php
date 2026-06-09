@@ -9,13 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\Frontend\App\AccessDeniedException;
+use WMDE\Fundraising\Frontend\App\RequestSearcher;
 use WMDE\Fundraising\Frontend\App\Routes;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 
 class ShowUpdateAddressController {
 
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
-		$addressToken = (string)$request->get( 'addressToken', '' );
+		$addressToken = (string)RequestSearcher::get( $request, 'addressToken', '' );
 		if ( $addressToken === '' ) {
 			throw new AccessDeniedException( 'address_change_no_token_in_request' );
 		}

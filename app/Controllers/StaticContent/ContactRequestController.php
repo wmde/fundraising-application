@@ -12,13 +12,13 @@ class ContactRequestController {
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$contactFormRequest = new GetInTouchRequest(
-			$request->get( 'firstname', '' ),
-			$request->get( 'lastname', '' ),
-			$request->get( 'email', '' ),
-			$request->get( 'donationNumber', '' ),
-			$request->get( 'subject', '' ),
-			$request->get( 'category', '' ),
-			$request->get( 'messageBody', '' )
+			$request->request->get( 'firstname', '' ),
+			$request->request->get( 'lastname', '' ),
+			$request->request->get( 'email', '' ),
+			$request->request->get( 'donationNumber', '' ),
+			$request->request->get( 'subject', '' ),
+			$request->request->get( 'category', '' ),
+			$request->request->get( 'messageBody', '' )
 		);
 
 		$contactFormResponse = $ffFactory->newGetInTouchUseCase()->processContactRequest( $contactFormRequest );

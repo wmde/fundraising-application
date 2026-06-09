@@ -13,6 +13,7 @@ use WMDE\Clock\SystemClock;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
 use WMDE\Fundraising\MembershipContext\DataAccess\DoctrineMembershipAnonymizer;
 use WMDE\Fundraising\MembershipContext\Domain\AnonymizationException;
+use WMDE\Fundraising\PaymentContext\DataAccess\DatabasePaymentAnonymizer;
 
 /**
  * This is for anonymising a member in your local environment, to use it do the following:
@@ -34,7 +35,12 @@ class AnonymiseMemberCommand extends Command {
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
 		$membershipAnonymizer = new DoctrineMembershipAnonymizer(
-			$this->ffFactory->getConnection()
+			$this->ffFactory->getMembershipApplicationRepository(),
+			$this->ffFactory->getEntityManager(),
+			new DatabasePaymentAnonymizer(
+				paymentRepository: $this->ffFactory->getPaymentRepository(),
+				entityManager: $this->ffFactory->getEntityManager()
+			)
 		);
 
 		try {

@@ -7,6 +7,7 @@ namespace WMDE\Fundraising\Frontend\App\EventHandlers;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use WMDE\Fundraising\Frontend\App\RequestSearcher;
 use WMDE\Fundraising\Frontend\Infrastructure\TrackingDataSelector;
 
 /**
@@ -30,8 +31,8 @@ class RegisterTrackingData implements EventSubscriberInterface {
 		$request = $event->getRequest();
 
 		$request->attributes->set( 'trackingCode', TrackingDataSelector::concatTrackingFromVarTuple(
-			$request->get( 'piwik_campaign', '' ),
-			$request->get( 'piwik_kwd', '' )
+			RequestSearcher::get( $request, 'piwik_campaign', '' ),
+			RequestSearcher::get( $request, 'piwik_kwd', '' ),
 		) );
 	}
 

@@ -26,6 +26,7 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 	private const ITEM_NAME = 'My preciousss';
 	private const UPDATE_TOKEN = 'my_secret_token';
 	private const DONATION_ID = 1;
+	private const PAYMENT_ID = 3;
 	private const PATH = '/handle-paypal-payment-notification';
 	private const LEGACY_PATH = '/spenden/paypal_handler.php';
 
@@ -105,6 +106,39 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 		$this->assertPayPalDataGotPersisted( $this->newHttpParamsForPayment() );
+	}
+
+	public function testHandlesPaypalFollowUpDonationForScrubbedDonation(): void {
+		$client = $this->createClient();
+		$factory = $this->getFactory();
+		$factory->setVerificationServiceFactory( new SucceedingVerificationServiceFactory() );
+
+		$this->getFactory()->getConnection()->executeQuery( 'UPDATE last_generated_donation_id SET donation_id = 99' );
+		$this->getFactory()->getConnection()->executeQuery( 'UPDATE last_generated_payment_id SET payment_id = 199' );
+
+		$this->storedDonations()->newStoredCompletePayPalDonation( self::UPDATE_TOKEN );
+		$donation = $this->getFactory()->getDonationRepository()->getDonationById( self::DONATION_ID );
+		$this->assertNotNull( $donation );
+		$donation->markAsExported();
+		$donation->scrubPersonalData( new \DateTimeImmutable(), new \DateTimeImmutable() );
+		$this->getFactory()->getDonationRepository()->storeDonation( $donation );
+
+		$payload = $this->newHttpParamsForPayment();
+		$payload[ 'txn_id' ] = '61E67681CH3238417';
+
+		$client->request(
+			Request::METHOD_POST,
+			self::PATH,
+			$payload
+		);
+
+		$donation = $this->getFactory()->getConnection()
+			->executeQuery( "SELECT p.*, pp.*, s.id AS donation_id FROM spenden s LEFT JOIN payment p ON s.payment_id = p.id LEFT JOIN payment_paypal pp ON p.id = pp.id WHERE p.id = 200" )
+			->fetchAssociative();
+
+		$this->assertIsArray( $donation );
+		$this->assertEquals( $payload[ 'txn_id' ], $donation[ 'transaction_id' ] );
+		$this->assertEquals( self::PAYMENT_ID, $donation[ 'parent_payment_id' ] );
 	}
 
 	/**

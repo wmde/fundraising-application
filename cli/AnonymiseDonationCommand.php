@@ -13,6 +13,7 @@ use WMDE\Clock\SystemClock;
 use WMDE\Fundraising\DonationContext\DataAccess\DatabaseDonationAnonymizer;
 use WMDE\Fundraising\DonationContext\Domain\AnonymizationException;
 use WMDE\Fundraising\Frontend\Factories\FunFunFactory;
+use WMDE\Fundraising\PaymentContext\DataAccess\DatabasePaymentAnonymizer;
 
 /**
  * This is for anonymising a donation in your local environment, to use it do the following:
@@ -38,8 +39,11 @@ class AnonymiseDonationCommand extends Command {
 			entityManager: $this->ffFactory->getEntityManager(),
 			clock: new SystemClock(),
 			exportGracePeriod: new \DateInterval( 'P2D' ),
-			moderationGracePeriod: new \DateInterval( 'P1M' )
-
+			moderationGracePeriod: new \DateInterval( 'P1M' ),
+			paymentAnonymizer: new DatabasePaymentAnonymizer(
+				paymentRepository: $this->ffFactory->getPaymentRepository(),
+				entityManager: $this->ffFactory->getEntityManager()
+			)
 		);
 
 		try {

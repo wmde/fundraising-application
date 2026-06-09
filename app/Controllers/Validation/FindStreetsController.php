@@ -13,7 +13,7 @@ class FindStreetsController {
 
 	public function index( FunFunFactory $ffFactory, Request $request ): Response {
 		$streets = $ffFactory->newFindStreetsUseCase()
-			->getStreetsForPostcode( $request->get( 'postcode', '' ) );
+			->getStreetsForPostcode( $request->request->get( 'postcode', '' ) );
 
 		return new JsonResponse( $streets );
 	}
