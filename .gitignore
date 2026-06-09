@@ -33,6 +33,11 @@ web/skins
 deployment/deployment.retry
 
 tmp/
+*.bak
+
+# prevent accidental data uploads, we do not expect any sql files here except in the database folder
+*.sql
+*.sql.gz
 
 /.docker/database/*
 !/.docker/database/01.Database_Schema.sql
