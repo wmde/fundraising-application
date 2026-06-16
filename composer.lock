@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3bd78364017be0af0d1b2a69d3a71aa7",
+    "content-hash": "55ab782f2d4a8a643b3926a059e6af98",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -1155,16 +1155,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.11.1",
+            "version": "7.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "5af96f374e0ab4ebd747b8310888c99d3adb0a8c"
+                "reference": "bf5f35ad4b774b9d7c5766c02035e865e7e3fdab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/5af96f374e0ab4ebd747b8310888c99d3adb0a8c",
-                "reference": "5af96f374e0ab4ebd747b8310888c99d3adb0a8c",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/bf5f35ad4b774b9d7c5766c02035e865e7e3fdab",
+                "reference": "bf5f35ad4b774b9d7c5766c02035e865e7e3fdab",
                 "shasum": ""
             },
             "require": {
@@ -1263,7 +1263,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.11.1"
+                "source": "https://github.com/guzzle/guzzle/tree/7.11.2"
             },
             "funding": [
                 {
@@ -1279,7 +1279,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-07T22:54:06+00:00"
+            "time": "2026-06-12T21:49:57+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -1367,16 +1367,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.11.0",
+            "version": "2.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "bbb5e61349fa5cb822b3e87842b951088b76b81f"
+                "reference": "640e2897bbee822dbc8af761d49e1a29b1f2a6b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/bbb5e61349fa5cb822b3e87842b951088b76b81f",
-                "reference": "bbb5e61349fa5cb822b3e87842b951088b76b81f",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/640e2897bbee822dbc8af761d49e1a29b1f2a6b1",
+                "reference": "640e2897bbee822dbc8af761d49e1a29b1f2a6b1",
                 "shasum": ""
             },
             "require": {
@@ -1466,7 +1466,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.11.0"
+                "source": "https://github.com/guzzle/psr7/tree/2.11.1"
             },
             "funding": [
                 {
@@ -1482,7 +1482,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-02T12:30:48+00:00"
+            "time": "2026-06-12T21:50:12+00:00"
         },
         {
             "name": "jeroen/file-fetcher",
@@ -5092,16 +5092,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.38.1",
+            "version": "v1.38.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92"
+                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/14c5439eec4ccff081ac14eca2dc57feb2a66d92",
-                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
                 "shasum": ""
             },
             "require": {
@@ -5153,7 +5153,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.1"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.2"
             },
             "funding": [
                 {
@@ -5173,7 +5173,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-26T12:51:13+00:00"
+            "time": "2026-05-27T06:59:30+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
@@ -6817,16 +6817,16 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "2.4.0",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "9007ea6f45ecf352a9422b36644e4bfc039b9155"
+                "reference": "2ccb7c2e821038c03a3e6e1700c570c158c55f70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/9007ea6f45ecf352a9422b36644e4bfc039b9155",
-                "reference": "9007ea6f45ecf352a9422b36644e4bfc039b9155",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/2ccb7c2e821038c03a3e6e1700c570c158c55f70",
+                "reference": "2ccb7c2e821038c03a3e6e1700c570c158c55f70",
                 "shasum": ""
             },
             "require": {
@@ -6877,9 +6877,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/2.4.0"
+                "source": "https://github.com/webmozarts/assert/tree/2.4.1"
             },
-            "time": "2026-05-20T13:07:01+00:00"
+            "time": "2026-06-15T15:31:57+00:00"
         },
         {
             "name": "wmde/clock",
@@ -7168,16 +7168,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "dev-scrub-more-data",
+            "version": "v28.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "8ebf43fa1b369a91a7a9930a9dc252d0620864f3"
+                "reference": "cc29333ac6ef6413f3596296fa8941d3fd3e9304"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/8ebf43fa1b369a91a7a9930a9dc252d0620864f3",
-                "reference": "8ebf43fa1b369a91a7a9930a9dc252d0620864f3",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/cc29333ac6ef6413f3596296fa8941d3fd3e9304",
+                "reference": "cc29333ac6ef6413f3596296fa8941d3fd3e9304",
                 "shasum": ""
             },
             "require": {
@@ -7203,7 +7203,7 @@
                 "phpunit/phpunit": "~12.0",
                 "symfony/cache": "^8.0",
                 "wmde/clock": "^2.0",
-                "wmde/fundraising-phpcs": "~14.0",
+                "wmde/fundraising-phpcs": "~15.0",
                 "wmde/psr-log-test-doubles": "~3.4.0"
             },
             "bin": [
@@ -7226,7 +7226,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2026-05-22T09:51:27+00:00"
+            "time": "2026-06-09T08:36:29+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
@@ -8228,21 +8228,21 @@
         },
         {
             "name": "phpstan/phpstan-doctrine",
-            "version": "2.0.25",
+            "version": "2.0.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-doctrine.git",
-                "reference": "e20e8bf3223ae6eba9c4b5987c391d922e094b3c"
+                "reference": "39b4ca45a07cdd6366eeefa2f7a993cddf3b9f9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/e20e8bf3223ae6eba9c4b5987c391d922e094b3c",
-                "reference": "e20e8bf3223ae6eba9c4b5987c391d922e094b3c",
+                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/39b4ca45a07cdd6366eeefa2f7a993cddf3b9f9f",
+                "reference": "39b4ca45a07cdd6366eeefa2f7a993cddf3b9f9f",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4 || ^8.0",
-                "phpstan/phpstan": "^2.1.34"
+                "phpstan/phpstan": "^2.2.2"
             },
             "conflict": {
                 "doctrine/collections": "<1.0",
@@ -8299,9 +8299,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-doctrine/issues",
-                "source": "https://github.com/phpstan/phpstan-doctrine/tree/2.0.25"
+                "source": "https://github.com/phpstan/phpstan-doctrine/tree/2.0.27"
             },
-            "time": "2026-06-02T20:27:36+00:00"
+            "time": "2026-06-10T10:39:35+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -8706,16 +8706,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.29",
+            "version": "12.5.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9aa66a47db3ea70f1a468e66dd969f67e594945a"
+                "reference": "900400a5b616d6fb306f9549f6da33ba615d3fbb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9aa66a47db3ea70f1a468e66dd969f67e594945a",
-                "reference": "9aa66a47db3ea70f1a468e66dd969f67e594945a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/900400a5b616d6fb306f9549f6da33ba615d3fbb",
+                "reference": "900400a5b616d6fb306f9549f6da33ba615d3fbb",
                 "shasum": ""
             },
             "require": {
@@ -8784,7 +8784,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.29"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.30"
             },
             "funding": [
                 {
@@ -8792,7 +8792,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-06-04T06:14:42+00:00"
+            "time": "2026-06-15T13:12:30+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -10258,7 +10258,6 @@
     "stability-flags": {
         "airbrake/phpbrake": 20,
         "remotelyliving/doorkeeper": 20,
-        "wmde/fundraising-donations": 20,
         "wmde/fundraising-frontend-content": 20
     },
     "prefer-stable": false,
