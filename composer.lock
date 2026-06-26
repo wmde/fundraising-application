@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55ab782f2d4a8a643b3926a059e6af98",
+    "content-hash": "0f37cc974a6bba81d0381cc59cdd8234",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -70,23 +70,22 @@
         },
         {
             "name": "brick/math",
-            "version": "0.14.8",
+            "version": "0.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/math.git",
-                "reference": "63422359a44b7f06cae63c3b429b59e8efcc0629"
+                "reference": "82944324d1c1bdb2c2618e89978d4e2ad78d69ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/63422359a44b7f06cae63c3b429b59e8efcc0629",
-                "reference": "63422359a44b7f06cae63c3b429b59e8efcc0629",
+                "url": "https://api.github.com/repos/brick/math/zipball/82944324d1c1bdb2c2618e89978d4e2ad78d69ad",
+                "reference": "82944324d1c1bdb2c2618e89978d4e2ad78d69ad",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2"
             },
             "require-dev": {
-                "php-coveralls/php-coveralls": "^2.2",
                 "phpstan/phpstan": "2.1.22",
                 "phpunit/phpunit": "^11.5"
             },
@@ -118,7 +117,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/math/issues",
-                "source": "https://github.com/brick/math/tree/0.14.8"
+                "source": "https://github.com/brick/math/tree/0.18.0"
             },
             "funding": [
                 {
@@ -126,7 +125,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-10T14:33:43+00:00"
+            "time": "2026-06-14T18:21:03+00:00"
         },
         {
             "name": "cash/lrucache",
@@ -2632,20 +2631,20 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "4.9.2",
+            "version": "4.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "8429c78ca35a09f27565311b98101e2826affde0"
+                "reference": "1df15849d00943a67d677dc9cfd80795f038c9f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/8429c78ca35a09f27565311b98101e2826affde0",
-                "reference": "8429c78ca35a09f27565311b98101e2826affde0",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/1df15849d00943a67d677dc9cfd80795f038c9f8",
+                "reference": "1df15849d00943a67d677dc9cfd80795f038c9f8",
                 "shasum": ""
             },
             "require": {
-                "brick/math": "^0.8.16 || ^0.9 || ^0.10 || ^0.11 || ^0.12 || ^0.13 || ^0.14",
+                "brick/math": ">=0.8.16 <=0.18",
                 "php": "^8.0",
                 "ramsey/collection": "^1.2 || ^2.0"
             },
@@ -2704,9 +2703,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/uuid/issues",
-                "source": "https://github.com/ramsey/uuid/tree/4.9.2"
+                "source": "https://github.com/ramsey/uuid/tree/4.9.3"
             },
-            "time": "2025-12-14T04:43:48+00:00"
+            "time": "2026-06-18T03:57:49+00:00"
         },
         {
             "name": "remotelyliving/doorkeeper",
@@ -7349,19 +7348,20 @@
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "v5.1.0",
+            "version": "dev-anonymizer",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "289335ecbb9ef198a1f80c128b2b0541e0be56a3"
+                "reference": "c63097206cf58e2190667c92f85cc6dc832f932a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/289335ecbb9ef198a1f80c128b2b0541e0be56a3",
-                "reference": "289335ecbb9ef198a1f80c128b2b0541e0be56a3",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/c63097206cf58e2190667c92f85cc6dc832f932a",
+                "reference": "c63097206cf58e2190667c92f85cc6dc832f932a",
                 "shasum": ""
             },
             "require": {
+                "doctrine/migrations": "^3.9",
                 "doctrine/orm": "~2.18 | ~3.0",
                 "php": ">=8.4",
                 "psr/log": "^1.0|^2.0|^3.0",
@@ -7369,11 +7369,11 @@
                 "wmde/fun-validators": "~5.0"
             },
             "require-dev": {
+                "deptrac/deptrac": "^4.0",
                 "phpstan/phpstan": "~2.1",
                 "phpunit/phpunit": "~12.0",
-                "qossmic/deptrac-shim": "^1.0",
-                "symfony/cache": "^7.2",
-                "wmde/fundraising-phpcs": "~12.0"
+                "symfony/cache": "^8.0",
+                "wmde/fundraising-phpcs": "~15.0"
             },
             "type": "library",
             "extra": {
@@ -7394,8 +7394,8 @@
             "license": [
                 "GPL-2.0-or-later"
             ],
-            "description": "Bounded Context for fundraising subcriptions",
-            "time": "2025-04-22T10:26:45+00:00"
+            "description": "Bounded Context for fundraising subscriptions",
+            "time": "2026-06-26T16:30:47+00:00"
         }
     ],
     "packages-dev": [
@@ -10258,7 +10258,8 @@
     "stability-flags": {
         "airbrake/phpbrake": 20,
         "remotelyliving/doorkeeper": 20,
-        "wmde/fundraising-frontend-content": 20
+        "wmde/fundraising-frontend-content": 20,
+        "wmde/fundraising-subscriptions": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -10275,5 +10276,5 @@
     "platform-overrides": {
         "php": "8.4"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
