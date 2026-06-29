@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55ab782f2d4a8a643b3926a059e6af98",
+    "content-hash": "0f37cc974a6bba81d0381cc59cdd8234",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7348,19 +7348,20 @@
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "v5.1.0",
+            "version": "dev-anonymizer",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "289335ecbb9ef198a1f80c128b2b0541e0be56a3"
+                "reference": "c63097206cf58e2190667c92f85cc6dc832f932a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/289335ecbb9ef198a1f80c128b2b0541e0be56a3",
-                "reference": "289335ecbb9ef198a1f80c128b2b0541e0be56a3",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/c63097206cf58e2190667c92f85cc6dc832f932a",
+                "reference": "c63097206cf58e2190667c92f85cc6dc832f932a",
                 "shasum": ""
             },
             "require": {
+                "doctrine/migrations": "^3.9",
                 "doctrine/orm": "~2.18 | ~3.0",
                 "php": ">=8.4",
                 "psr/log": "^1.0|^2.0|^3.0",
@@ -7368,11 +7369,11 @@
                 "wmde/fun-validators": "~5.0"
             },
             "require-dev": {
+                "deptrac/deptrac": "^4.0",
                 "phpstan/phpstan": "~2.1",
                 "phpunit/phpunit": "~12.0",
-                "qossmic/deptrac-shim": "^1.0",
-                "symfony/cache": "^7.2",
-                "wmde/fundraising-phpcs": "~12.0"
+                "symfony/cache": "^8.0",
+                "wmde/fundraising-phpcs": "~15.0"
             },
             "type": "library",
             "extra": {
@@ -7393,8 +7394,8 @@
             "license": [
                 "GPL-2.0-or-later"
             ],
-            "description": "Bounded Context for fundraising subcriptions",
-            "time": "2025-04-22T10:26:45+00:00"
+            "description": "Bounded Context for fundraising subscriptions",
+            "time": "2026-06-26T16:30:47+00:00"
         }
     ],
     "packages-dev": [
@@ -10257,7 +10258,8 @@
     "stability-flags": {
         "airbrake/phpbrake": 20,
         "remotelyliving/doorkeeper": 20,
-        "wmde/fundraising-frontend-content": 20
+        "wmde/fundraising-frontend-content": 20,
+        "wmde/fundraising-subscriptions": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
