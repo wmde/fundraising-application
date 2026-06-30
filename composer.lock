@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55ab782f2d4a8a643b3926a059e6af98",
+    "content-hash": "6b8ff8592e76eaf1b1e98e3c83ddbbac",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -1154,16 +1154,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.13.0",
+            "version": "7.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "a4decaa9745dc567467970e43f183e260cfa51fd"
+                "reference": "55901a76dfd2006a0cc012b9e3c5b487f796478d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/a4decaa9745dc567467970e43f183e260cfa51fd",
-                "reference": "a4decaa9745dc567467970e43f183e260cfa51fd",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/55901a76dfd2006a0cc012b9e3c5b487f796478d",
+                "reference": "55901a76dfd2006a0cc012b9e3c5b487f796478d",
                 "shasum": ""
             },
             "require": {
@@ -1262,7 +1262,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.13.0"
+                "source": "https://github.com/guzzle/guzzle/tree/7.13.1"
             },
             "funding": [
                 {
@@ -1278,7 +1278,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-29T13:31:06+00:00"
+            "time": "2026-06-29T20:14:18+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -7167,16 +7167,16 @@
         },
         {
             "name": "wmde/fundraising-donations",
-            "version": "v28.0.1",
+            "version": "v29.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-donations",
-                "reference": "9ba4e21656d95465a426c4cfa45107c52909e68a"
+                "reference": "e0efe134718bbe4aa2a254011b9e2be1a8633fb0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/9ba4e21656d95465a426c4cfa45107c52909e68a",
-                "reference": "9ba4e21656d95465a426c4cfa45107c52909e68a",
+                "url": "https://api.github.com/repos/wmde/fundraising-donations/zipball/e0efe134718bbe4aa2a254011b9e2be1a8633fb0",
+                "reference": "e0efe134718bbe4aa2a254011b9e2be1a8633fb0",
                 "shasum": ""
             },
             "require": {
@@ -7225,7 +7225,7 @@
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising donation subdomain",
             "homepage": "https://github.com/wmde/fundraising-donations",
-            "time": "2026-06-24T13:37:40+00:00"
+            "time": "2026-06-30T09:49:07+00:00"
         },
         {
             "name": "wmde/fundraising-memberships",
