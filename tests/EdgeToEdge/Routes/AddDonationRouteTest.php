@@ -40,6 +40,24 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertIsExpectedDonation( $this->getDonationFromDatabase() );
 	}
 
+	public function testGivenValidCompanyWithContactRequest_donationGetsPersistedAsCompany(): void {
+		$client = $this->createClient();
+		$client->setServerParameter( 'HTTP_REFERER', 'https://en.wikipedia.org/wiki/Karla_Kennichnich' );
+		$client->followRedirects( false );
+
+		$formInput = $this->newValidFormInput();
+		$formInput[ 'addressType' ] = 'company_with_contact';
+		$formInput[ 'companyName' ] = 'ACME';
+
+		$client->request(
+			'POST',
+			'/donation/add',
+			$formInput
+		);
+
+		$this->assertIsExpectedCompanyDonation( $this->getDonationFromDatabase() );
+	}
+
 	public function testWhenMultipleDonationFormSubmissions_requestGetsRejected(): void {
 		$client = $this->createClient();
 		$this->prepareSessionValues( [ FunFunFactory::DONATION_RATE_LIMIT_SESSION_KEY => new \DateTimeImmutable() ] );
@@ -118,6 +136,38 @@ class AddDonationRouteTest extends WebRouteTestCase {
 		$this->assertSame( 'Karla', $data['vorname'] );
 		$this->assertSame( 'Kennichnich', $data['nachname'] );
 		$this->assertSame( 'Prof. Dr. Karla Kennichnich', $donation->getDonorFullName() );
+		$this->assertSame( 'Lehmgasse 12', $data['strasse'] );
+		$this->assertSame( '12345', $data['plz'] );
+		$this->assertSame( 'Einort', $data['ort'] );
+		$this->assertSame( 'Einort', $donation->getDonorCity() );
+		$this->assertSame( 'DE', $data['country'] );
+		$this->assertSame( 'karla@kennichnich.de', $data['email'] );
+		$this->assertSame( 'karla@kennichnich.de', $donation->getDonorEmail() );
+		$this->assertSame( 'test/gelb', $data['tracking'] );
+		$this->assertSame( 3, $data['impCount'] );
+		$this->assertSame( 1, $data['bImpCount'] );
+		$this->assertSame( 'N', $donation->getStatus() );
+		$this->assertTrue( $donation->getDonorOptsIntoNewsletter() );
+		$this->assertTrue( $donation->getDonationReceipt() );
+	}
+
+	private function assertIsExpectedCompanyDonation( Donation $donation ): void {
+		$data = $donation->getDecodedData();
+		$this->assertSame( '5.51', $donation->getAmount() );
+		$this->assertSame( 'BEZ', $donation->getPaymentType() );
+		$this->assertSame( 0, $donation->getPaymentIntervalInMonths() );
+		$this->assertSame( 'DE12500105170648489890', $data['iban'] );
+		$this->assertSame( 'INGDDEFFXXX', $data['bic'] );
+		$this->assertSame( '0648489890', $data['konto'] );
+		$this->assertSame( '50010517', $data['blz'] );
+		$this->assertSame( 'ING-DiBa', $data['bankname'] );
+		$this->assertSame( 'firma', $data['adresstyp'] );
+		$this->assertSame( 'ACME', $data['firma'] );
+		$this->assertSame( 'Frau', $data['anrede'] );
+		$this->assertSame( 'Prof. Dr.', $data['titel'] );
+		$this->assertSame( 'Karla', $data['vorname'] );
+		$this->assertSame( 'Kennichnich', $data['nachname'] );
+		$this->assertSame( 'ACME - Prof. Dr. Karla Kennichnich', $donation->getDonorFullName() );
 		$this->assertSame( 'Lehmgasse 12', $data['strasse'] );
 		$this->assertSame( '12345', $data['plz'] );
 		$this->assertSame( 'Einort', $data['ort'] );

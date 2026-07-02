@@ -70,7 +70,7 @@ class ValidateAddressController {
 			return false;
 		}
 
-		$request->query->set( 'addressType', AddressType::LEGACY_COMPANY );
+		$request->request->set( 'addressType', AddressType::LEGACY_COMPANY );
 		return true;
 	}
 
