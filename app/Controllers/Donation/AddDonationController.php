@@ -43,7 +43,7 @@ class AddDonationController {
 		$donationRequest = new AddDonationRequest();
 
 		if ( $request->request->get( 'addressType', '' ) === 'company_with_contact' ) {
-			$request->query->set( 'addressType', AddressType::LEGACY_COMPANY );
+			$request->request->set( 'addressType', AddressType::LEGACY_COMPANY );
 		}
 
 		$donationRequest->setDonorType( $this->getSafeDonorType( $request ) );

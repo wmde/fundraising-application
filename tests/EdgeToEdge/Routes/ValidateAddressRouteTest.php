@@ -63,6 +63,21 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 		$this->assertJsonSuccessResponse( [ 'status' => 'OK' ], $response );
 	}
 
+	public function testGivenCompanyWithContact_validationReturnsSuccess(): void {
+		$client = $this->createClient();
+		$client->followRedirects( false );
+
+		$client->request(
+			'POST',
+			'/validate-address',
+			$this->newCompanyWithContactFormInput()
+		);
+
+		$response = $client->getResponse();
+
+		$this->assertJsonSuccessResponse( [ 'status' => 'OK' ], $response );
+	}
+
 	/**
 	 * @return array<string, string>
 	 */
@@ -91,6 +106,25 @@ class ValidateAddressRouteTest extends WebRouteTestCase {
 			'salutation' => 'Frau',
 			'title' => 'Prof. Dr.',
 			'company' => '',
+			'firstName' => 'Karla',
+			'lastName' => 'Kennichnich',
+			'street' => 'Lehmgasse 12',
+			'postcode' => '12345',
+			'city' => 'Einort',
+			'country' => 'DE',
+			'email' => 'karla@kennichnich.de',
+		];
+	}
+
+	/**
+	 * @return array<string, string>
+	 */
+	private function newCompanyWithContactFormInput(): array {
+		return [
+			'addressType' => 'company_with_contact',
+			'salutation' => 'Frau',
+			'title' => 'Prof. Dr.',
+			'companyName' => 'ACME',
 			'firstName' => 'Karla',
 			'lastName' => 'Kennichnich',
 			'street' => 'Lehmgasse 12',
