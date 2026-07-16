@@ -132,13 +132,21 @@ class HandlePayPalPaymentNotificationRouteTest extends WebRouteTestCase {
 			$payload
 		);
 
+		$paymentAndDonationQuery = <<<SQL
+            SELECT p.*, pp.*, s.id AS donation_id, s.is_scrubbed
+            FROM spenden s
+            LEFT JOIN payment p ON s.payment_id = p.id
+            LEFT JOIN payment_paypal pp ON p.id = pp.id
+            WHERE p.id = 200
+SQL;
 		$donation = $this->getFactory()->getConnection()
-			->executeQuery( "SELECT p.*, pp.*, s.id AS donation_id FROM spenden s LEFT JOIN payment p ON s.payment_id = p.id LEFT JOIN payment_paypal pp ON p.id = pp.id WHERE p.id = 200" )
+			->executeQuery( $paymentAndDonationQuery )
 			->fetchAssociative();
 
 		$this->assertIsArray( $donation );
-		$this->assertEquals( $payload[ 'txn_id' ], $donation[ 'transaction_id' ] );
+		$this->assertSame( $payload[ 'txn_id' ], $donation[ 'transaction_id' ] );
 		$this->assertEquals( self::PAYMENT_ID, $donation[ 'parent_payment_id' ] );
+		$this->assertFalse( (bool)$donation[ 'is_scrubbed' ], 'Followup donation should not be scrubbed because it\'s unexported and payment info contains transaction id' );
 	}
 
 	/**
