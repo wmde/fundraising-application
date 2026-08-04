@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b8ff8592e76eaf1b1e98e3c83ddbbac",
+    "content-hash": "145181d25b34b04fc7aa3406a128bba0",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -2050,16 +2050,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "2.3.2",
+            "version": "2.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "a004701b11273a26cd7955a61d67a7f1e525a45a"
+                "reference": "fb19eedd2bb67ff8cf7a5502ad329e701d6398a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/a004701b11273a26cd7955a61d67a7f1e525a45a",
-                "reference": "a004701b11273a26cd7955a61d67a7f1e525a45a",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/fb19eedd2bb67ff8cf7a5502ad329e701d6398a3",
+                "reference": "fb19eedd2bb67ff8cf7a5502ad329e701d6398a3",
                 "shasum": ""
             },
             "require": {
@@ -2091,9 +2091,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.2"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.3"
             },
-            "time": "2026-01-25T14:56:51+00:00"
+            "time": "2026-07-08T07:01:06+00:00"
         },
         {
             "name": "psr/cache",
@@ -3980,16 +3980,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v8.0.14",
+            "version": "v8.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "4f7a48437beaad45849f9b94b7fb57b3da6aed6e"
+                "reference": "3cc1f7586323cf514a97c139e3f475de4291c209"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/4f7a48437beaad45849f9b94b7fb57b3da6aed6e",
-                "reference": "4f7a48437beaad45849f9b94b7fb57b3da6aed6e",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/3cc1f7586323cf514a97c139e3f475de4291c209",
+                "reference": "3cc1f7586323cf514a97c139e3f475de4291c209",
                 "shasum": ""
             },
             "require": {
@@ -4052,7 +4052,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v8.0.14"
+                "source": "https://github.com/symfony/http-client/tree/v8.0.16"
             },
             "funding": [
                 {
@@ -4072,7 +4072,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-16T12:45:11+00:00"
+            "time": "2026-07-29T16:27:17+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -4597,16 +4597,16 @@
         },
         {
             "name": "symfony/monolog-bridge",
-            "version": "v8.0.12",
+            "version": "v8.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bridge.git",
-                "reference": "fc53ae60b2d01d3086d28aea876cfef9bcf75f1e"
+                "reference": "d8c658c6046bb2bc875857511f7c44ace1e073ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bridge/zipball/fc53ae60b2d01d3086d28aea876cfef9bcf75f1e",
-                "reference": "fc53ae60b2d01d3086d28aea876cfef9bcf75f1e",
+                "url": "https://api.github.com/repos/symfony/monolog-bridge/zipball/d8c658c6046bb2bc875857511f7c44ace1e073ac",
+                "reference": "d8c658c6046bb2bc875857511f7c44ace1e073ac",
                 "shasum": ""
             },
             "require": {
@@ -4650,7 +4650,7 @@
             "description": "Provides integration for Monolog with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/monolog-bridge/tree/v8.0.12"
+                "source": "https://github.com/symfony/monolog-bridge/tree/v8.0.15"
             },
             "funding": [
                 {
@@ -4670,7 +4670,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-20T07:22:03+00:00"
+            "time": "2026-07-27T13:52:45+00:00"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -5500,16 +5500,16 @@
         },
         {
             "name": "symfony/property-info",
-            "version": "v8.0.8",
+            "version": "v8.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
-                "reference": "c21711980653360d6ef5c26d0f9ca6f58a1135c6"
+                "reference": "8899ae3a3dd858ac58d66dc168fb953ca3548c74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/c21711980653360d6ef5c26d0f9ca6f58a1135c6",
-                "reference": "c21711980653360d6ef5c26d0f9ca6f58a1135c6",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/8899ae3a3dd858ac58d66dc168fb953ca3548c74",
+                "reference": "8899ae3a3dd858ac58d66dc168fb953ca3548c74",
                 "shasum": ""
             },
             "require": {
@@ -5562,7 +5562,7 @@
                 "validator"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-info/tree/v8.0.8"
+                "source": "https://github.com/symfony/property-info/tree/v8.0.15"
             },
             "funding": [
                 {
@@ -5582,7 +5582,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-30T15:14:47+00:00"
+            "time": "2026-07-22T15:20:43+00:00"
         },
         {
             "name": "symfony/routing",
@@ -5666,16 +5666,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v8.0.14",
+            "version": "v8.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "33d395158f1c3b6038738fbb8656e05ae7d2bf0d"
+                "reference": "2b3155cdb33e719d3f2d28c91d6e59aa888c35f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/33d395158f1c3b6038738fbb8656e05ae7d2bf0d",
-                "reference": "33d395158f1c3b6038738fbb8656e05ae7d2bf0d",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/2b3155cdb33e719d3f2d28c91d6e59aa888c35f2",
+                "reference": "2b3155cdb33e719d3f2d28c91d6e59aa888c35f2",
                 "shasum": ""
             },
             "require": {
@@ -5686,7 +5686,7 @@
                 "phpdocumentor/reflection-docblock": "<5.2|>=7",
                 "phpdocumentor/type-resolver": "<1.5.1",
                 "symfony/property-access": "<7.4.2|>=8.0,<8.0.2",
-                "symfony/property-info": "<7.4",
+                "symfony/property-info": "<7.4.15",
                 "symfony/type-info": "<7.4"
             },
             "require-dev": {
@@ -5705,7 +5705,7 @@
                 "symfony/messenger": "^7.4|^8.0",
                 "symfony/mime": "^7.4|^8.0",
                 "symfony/property-access": "^7.4.2|^8.0.2",
-                "symfony/property-info": "^7.4|^8.0",
+                "symfony/property-info": "^7.4.15|~8.0.15|^8.1.2",
                 "symfony/translation-contracts": "^2.5|^3",
                 "symfony/type-info": "^7.4|^8.0",
                 "symfony/uid": "^7.4|^8.0",
@@ -5740,7 +5740,7 @@
             "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/serializer/tree/v8.0.14"
+                "source": "https://github.com/symfony/serializer/tree/v8.0.15"
             },
             "funding": [
                 {
@@ -5760,7 +5760,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-27T08:56:37+00:00"
+            "time": "2026-07-29T08:00:21+00:00"
         },
         {
             "name": "symfony/serializer-pack",
@@ -7347,19 +7347,20 @@
         },
         {
             "name": "wmde/fundraising-subscriptions",
-            "version": "v5.1.0",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-subscriptions",
-                "reference": "289335ecbb9ef198a1f80c128b2b0541e0be56a3"
+                "reference": "8324c1c274f063667f83cd53984ea125437ae288"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/289335ecbb9ef198a1f80c128b2b0541e0be56a3",
-                "reference": "289335ecbb9ef198a1f80c128b2b0541e0be56a3",
+                "url": "https://api.github.com/repos/wmde/fundraising-subscriptions/zipball/8324c1c274f063667f83cd53984ea125437ae288",
+                "reference": "8324c1c274f063667f83cd53984ea125437ae288",
                 "shasum": ""
             },
             "require": {
+                "doctrine/migrations": "^3.9",
                 "doctrine/orm": "~2.18 | ~3.0",
                 "php": ">=8.4",
                 "psr/log": "^1.0|^2.0|^3.0",
@@ -7367,11 +7368,12 @@
                 "wmde/fun-validators": "~5.0"
             },
             "require-dev": {
+                "deptrac/deptrac": "^4.0",
                 "phpstan/phpstan": "~2.1",
                 "phpunit/phpunit": "~12.0",
-                "qossmic/deptrac-shim": "^1.0",
-                "symfony/cache": "^7.2",
-                "wmde/fundraising-phpcs": "~12.0"
+                "symfony/cache": "^8.0",
+                "wmde/clock": "^2.0",
+                "wmde/fundraising-phpcs": "~15.0"
             },
             "type": "library",
             "extra": {
@@ -7392,8 +7394,8 @@
             "license": [
                 "GPL-2.0-or-later"
             ],
-            "description": "Bounded Context for fundraising subcriptions",
-            "time": "2025-04-22T10:26:45+00:00"
+            "description": "Bounded Context for fundraising subscriptions",
+            "time": "2026-08-04T12:13:38+00:00"
         }
     ],
     "packages-dev": [
@@ -8069,16 +8071,16 @@
         },
         {
             "name": "phpcsstandards/phpcsutils",
-            "version": "1.2.2",
+            "version": "1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHPCSUtils.git",
-                "reference": "c216317e96c8b3f5932808f9b0f1f7a14e3bbf55"
+                "reference": "5f35d9408c54d7b529501f3c688b6eae562aea1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/c216317e96c8b3f5932808f9b0f1f7a14e3bbf55",
-                "reference": "c216317e96c8b3f5932808f9b0f1f7a14e3bbf55",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/5f35d9408c54d7b529501f3c688b6eae562aea1f",
+                "reference": "5f35d9408c54d7b529501f3c688b6eae562aea1f",
                 "shasum": ""
             },
             "require": {
@@ -8158,7 +8160,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-12-08T14:27:58+00:00"
+            "time": "2026-07-27T10:28:41+00:00"
         },
         {
             "name": "phpstan/phpstan",
@@ -10101,12 +10103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "bbd34b7ba4e4b63835a01075f061766136e72397"
+                "reference": "d70da5b605d6076756d181e40b3a03464255af36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/bbd34b7ba4e4b63835a01075f061766136e72397",
-                "reference": "bbd34b7ba4e4b63835a01075f061766136e72397",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/d70da5b605d6076756d181e40b3a03464255af36",
+                "reference": "d70da5b605d6076756d181e40b3a03464255af36",
                 "shasum": ""
             },
             "require": {
@@ -10159,7 +10161,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2026-04-16T14:08:25+00:00"
+            "time": "2026-07-23T09:19:59+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",
@@ -10275,5 +10277,5 @@
     "platform-overrides": {
         "php": "8.4"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
