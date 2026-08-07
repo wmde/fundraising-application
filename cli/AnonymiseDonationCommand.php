@@ -43,7 +43,8 @@ class AnonymiseDonationCommand extends Command {
 			paymentAnonymizer: new DatabasePaymentAnonymizer(
 				paymentRepository: $this->ffFactory->getPaymentRepository(),
 				entityManager: $this->ffFactory->getEntityManager()
-			)
+			),
+			ouput: $output
 		);
 
 		try {
