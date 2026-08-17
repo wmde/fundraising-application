@@ -13,7 +13,10 @@ class ValidateIbanController {
 
 	public function index( Request $request, FunFunFactory $ffFactory ): Response {
 		$useCase = $ffFactory->newCheckIbanUseCase();
-		$checkIbanResponse = $useCase->ibanIsValid( $request->query->get( 'iban', '' ) );
+		$checkIbanResponse = $useCase->ibanIsValid(
+			$request->query->get( 'iban', '' ),
+			$request->query->get( 'bic', '' )
+		);
 		return new JsonResponse( $ffFactory->newIbanPresenter()->present( $checkIbanResponse ) );
 	}
 }

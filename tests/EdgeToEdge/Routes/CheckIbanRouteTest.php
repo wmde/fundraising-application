@@ -80,12 +80,14 @@ class CheckIbanRouteTest extends WebRouteTestCase {
 			self::PATH,
 			[
 				'iban' => 'AT022050302101023600',
+				'bic' => 'GIBAATWWXXX',
 			]
 		);
 
 		$this->assertJsonSuccessResponse(
 			[
 				'status' => 'OK',
+				'bic' => 'GIBAATWWXXX',
 				'iban' => 'AT022050302101023600',
 			],
 			$client->getResponse()

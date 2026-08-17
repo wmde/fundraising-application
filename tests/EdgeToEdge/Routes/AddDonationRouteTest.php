@@ -366,6 +366,7 @@ class AddDonationRouteTest extends WebRouteTestCase {
 			'paymentType' => 'BEZ',
 			'interval' => 0,
 			'iban' => 'FR7630066100410001057380116',
+			'bic' => 'AWFAFRP1XXX',
 			'addressType' => 'person',
 			'salutation' => 'Frau',
 			'title' => '',

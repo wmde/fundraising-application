@@ -259,6 +259,7 @@ use WMDE\Fundraising\SubscriptionContext\Validation\SubscriptionValidator;
 use WMDE\FunValidators\DomainNameValidator;
 use WMDE\FunValidators\Validators\AddressValidator;
 use WMDE\FunValidators\Validators\AmountPolicyValidator;
+use WMDE\FunValidators\Validators\BankDataValidator;
 use WMDE\FunValidators\Validators\EmailValidator;
 use WMDE\FunValidators\Validators\TextPolicyValidator;
 
@@ -639,7 +640,8 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function newCheckIbanUseCase(): ValidateIbanUseCase {
 		return new ValidateIbanUseCase(
 			$this->newIbanBlockList(),
-			$this->newBankDataConverter()
+			$this->newBankDataConverter(),
+			new BankDataValidator()
 		);
 	}
 
