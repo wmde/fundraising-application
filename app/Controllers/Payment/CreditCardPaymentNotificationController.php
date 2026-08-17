@@ -55,7 +55,7 @@ class CreditCardPaymentNotificationController {
 			$response = $ffFactory->newBookDonationUseCase( $queryParams->get( 'utoken', '' ) )
 				->handleNotification( new NotificationRequest( $queryParams->all(), intval( $donationId ) ) );
 		} catch ( \Exception $e ) {
-			$ffFactory->getLogger()->critical(
+			$ffFactory->getCreditCardLogger()->critical(
 				sprintf( self::MSG_CRITICAL, $e->getMessage() ),
 				[ 'stacktrace' => $e->getTraceAsString() ]
 			);
@@ -63,7 +63,7 @@ class CreditCardPaymentNotificationController {
 		}
 
 		if ( $response->hasErrors() ) {
-			$ffFactory->getLogger()->error(
+			$ffFactory->getCreditCardLogger()->error(
 				sprintf( self::MSG_ERROR, $response->getMessage() ),
 				[ 'queryParams' => $queryParams->all(), 'clientIP' => $clientIp ]
 			);

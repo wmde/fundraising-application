@@ -128,7 +128,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testGivenRequestForMissingDonation_applicationLogsRequest(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$logger = new LoggerSpy();
-			$factory->setLogger( $logger );
+			$factory->setCreditCardLogger( $logger );
 			$requestData = $this->newDefaultRequestParametersFromMCP();
 
 			$client->request(
@@ -165,7 +165,7 @@ class CreditCardPaymentNotificationRouteTest extends WebRouteTestCase {
 	public function testOnInternalError_applicationLogsError(): void {
 		$this->createEnvironment( function ( Client $client, FunFunFactory $factory ): void {
 			$logger = new LoggerSpy();
-			$factory->setLogger( $logger );
+			$factory->setCreditCardLogger( $logger );
 
 			$repository = new ThrowingDonationRepository();
 			$repository->throwOnGetDonationById();
