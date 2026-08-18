@@ -7102,16 +7102,16 @@
         },
         {
             "name": "wmde/fundraising-content-provider",
-            "version": "v6.4.0",
+            "version": "v6.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-content-provider",
-                "reference": "d10580a5c6944df2b2fa34726f1a1097b39cc334"
+                "reference": "dbe40c9f6f57b7e1aaa7ea2a0e18d8865e2b809d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/d10580a5c6944df2b2fa34726f1a1097b39cc334",
-                "reference": "d10580a5c6944df2b2fa34726f1a1097b39cc334",
+                "url": "https://api.github.com/repos/wmde/fundraising-content-provider/zipball/dbe40c9f6f57b7e1aaa7ea2a0e18d8865e2b809d",
+                "reference": "dbe40c9f6f57b7e1aaa7ea2a0e18d8865e2b809d",
                 "shasum": ""
             },
             "require": {
@@ -7123,7 +7123,7 @@
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
                 "phpunit/phpunit": "~12.1",
-                "wmde/fundraising-phpcs": "~14.0"
+                "wmde/fundraising-phpcs": "~15.0"
             },
             "bin": [
                 "bin/lint_content"
@@ -7162,7 +7162,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "WMDE fundraising application content provider and filter",
-            "time": "2026-05-21T06:18:16+00:00"
+            "time": "2026-08-03T06:49:39+00:00"
         },
         {
             "name": "wmde/fundraising-donations",
@@ -10277,5 +10277,5 @@
     "platform-overrides": {
         "php": "8.4"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
