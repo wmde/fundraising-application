@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "145181d25b34b04fc7aa3406a128bba0",
+    "content-hash": "34fa717b477e33fa0d9d5cc203fc301c",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -7708,25 +7708,25 @@
         },
         {
             "name": "mediawiki/mediawiki-codesniffer",
-            "version": "v51.0.0",
+            "version": "v52.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/mediawiki-tools-codesniffer.git",
-                "reference": "d9f3595b7e9c73b1f725b0074ac04670c707211e"
+                "reference": "940b65ca196ec6ce0d2728a6fc1d69465a4b8ba6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/mediawiki-tools-codesniffer/zipball/d9f3595b7e9c73b1f725b0074ac04670c707211e",
-                "reference": "d9f3595b7e9c73b1f725b0074ac04670c707211e",
+                "url": "https://api.github.com/repos/wikimedia/mediawiki-tools-codesniffer/zipball/940b65ca196ec6ce0d2728a6fc1d69465a4b8ba6",
+                "reference": "940b65ca196ec6ce0d2728a6fc1d69465a4b8ba6",
                 "shasum": ""
             },
             "require": {
                 "composer/semver": "^3.4.2",
-                "composer/spdx-licenses": "~1.5.2 || ~1.6.0",
+                "composer/spdx-licenses": "~1.6.0",
                 "ext-mbstring": "*",
-                "php": ">=8.2.0",
-                "phpcsstandards/phpcsextra": "1.5.0",
-                "squizlabs/php_codesniffer": "3.13.5"
+                "php": ">=8.3.0",
+                "phpcsstandards/phpcsextra": "1.5.1",
+                "squizlabs/php_codesniffer": "3.13.6"
             },
             "require-dev": {
                 "ext-dom": "*",
@@ -7753,9 +7753,9 @@
                 "mediawiki"
             ],
             "support": {
-                "source": "https://github.com/wikimedia/mediawiki-tools-codesniffer/tree/v51.0.0"
+                "source": "https://github.com/wikimedia/mediawiki-tools-codesniffer/tree/v52.0.1"
             },
-            "time": "2026-05-03T06:29:24+00:00"
+            "time": "2026-08-14T15:19:36+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -7989,21 +7989,21 @@
         },
         {
             "name": "phpcsstandards/phpcsextra",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHPCSExtra.git",
-                "reference": "b598aa890815b8df16363271b659d73280129101"
+                "reference": "39467533fdb742446d68c1d10ac33d625ee0311c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSExtra/zipball/b598aa890815b8df16363271b659d73280129101",
-                "reference": "b598aa890815b8df16363271b659d73280129101",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSExtra/zipball/39467533fdb742446d68c1d10ac33d625ee0311c",
+                "reference": "39467533fdb742446d68c1d10ac33d625ee0311c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4",
-                "phpcsstandards/phpcsutils": "^1.2.0",
+                "phpcsstandards/phpcsutils": "^1.2.3",
                 "squizlabs/php_codesniffer": "^3.13.5 || ^4.0.1"
             },
             "require-dev": {
@@ -8067,7 +8067,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-11-12T23:06:57+00:00"
+            "time": "2026-07-27T11:13:17+00:00"
         },
         {
             "name": "phpcsstandards/phpcsutils",
@@ -9707,16 +9707,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.13.5",
+            "version": "3.13.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "0ca86845ce43291e8f5692c7356fccf3bcf02bf4"
+                "reference": "4c378e1a528ea066890fc2397cbdd2f94eb2fc91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/0ca86845ce43291e8f5692c7356fccf3bcf02bf4",
-                "reference": "0ca86845ce43291e8f5692c7356fccf3bcf02bf4",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/4c378e1a528ea066890fc2397cbdd2f94eb2fc91",
+                "reference": "4c378e1a528ea066890fc2397cbdd2f94eb2fc91",
                 "shasum": ""
             },
             "require": {
@@ -9782,7 +9782,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-11-04T16:30:35+00:00"
+            "time": "2026-08-06T00:17:32+00:00"
         },
         {
             "name": "staabm/side-effects-detector",
@@ -10165,27 +10165,27 @@
         },
         {
             "name": "wmde/fundraising-phpcs",
-            "version": "v15.0.0",
+            "version": "v16.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-phpcs",
-                "reference": "d2ea71053199b85077b69a19ede57be42a6739ed"
+                "reference": "a47361031bc9454368d19dc812ecacbc1a6095c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-phpcs/zipball/d2ea71053199b85077b69a19ede57be42a6739ed",
-                "reference": "d2ea71053199b85077b69a19ede57be42a6739ed",
+                "url": "https://api.github.com/repos/wmde/fundraising-phpcs/zipball/a47361031bc9454368d19dc812ecacbc1a6095c8",
+                "reference": "a47361031bc9454368d19dc812ecacbc1a6095c8",
                 "shasum": ""
             },
             "require": {
-                "mediawiki/mediawiki-codesniffer": "~51.0"
+                "mediawiki/mediawiki-codesniffer": "~52.0"
             },
             "type": "library",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "description": "PHP coding style for the WMDE FUN team",
-            "time": "2026-05-26T10:21:20+00:00"
+            "time": "2026-08-11T09:49:11+00:00"
         },
         {
             "name": "wmde/psr-log-test-doubles",
