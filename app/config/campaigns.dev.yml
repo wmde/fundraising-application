@@ -6,3 +6,9 @@ campaigns:
     end: "2028-12-31"
     default_bucket: "legacy"
     active: true
+
+  new_newsletter:
+    start: "2023-01-01"
+    end: "2028-12-31"
+    default_bucket: "legacy"
+    active: true
