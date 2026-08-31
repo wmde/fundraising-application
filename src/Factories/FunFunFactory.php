@@ -42,6 +42,7 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport\NullTransport;
 use Twig\Environment;
+use WMDE\Clock\Clock;
 use WMDE\Clock\SystemClock;
 use WMDE\EmailAddress\EmailAddress;
 use WMDE\Euro\Euro;
@@ -1263,7 +1264,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newMembershipTrackingRepository(),
 			$this->getMembershipEventEmitter(),
 			$this->getIncentiveFinder(),
-			$this->newPaymentServiceFactory()
+			$this->newPaymentServiceFactory(),
+			$this->getClock()
 		);
 	}
 
@@ -1377,7 +1379,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			),
 			new UrlAuthenticatorStub(),
 			$this->config[ 'membership-fee-change-active' ],
-			new SystemClock()
+			$this->getClock()
 		);
 	}
 
@@ -1855,7 +1857,7 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	private function getUserDataKeyGenerator(): UserDataKeyGenerator {
 		return $this->createSharedObject( UserDataKeyGenerator::class, function (): UserDataKeyGenerator {
-			return new UserDataKeyGenerator( $this->config['user-data-key'], new SystemClock() );
+			return new UserDataKeyGenerator( $this->config['user-data-key'], $this->getClock() );
 		} );
 	}
 
@@ -2200,5 +2202,16 @@ class FunFunFactory implements LoggerAwareInterface {
 			$blockList = $this->config['email-address-blacklist'] ?? [];
 		}
 		return $blockList;
+	}
+
+	private function getClock(): Clock {
+		return $this->createSharedObject( Clock::class, static function (): Clock {
+			return new SystemClock();
+		} );
+	}
+
+	public function setClock( Clock $clock ): self {
+		$this->sharedObjects[ Clock::class ] = $clock;
+		return $this;
 	}
 }
