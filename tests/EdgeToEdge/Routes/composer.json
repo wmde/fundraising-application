@@ -1,0 +1,14 @@
+{
+	"name": "vendor_name/Routes",
+	"description": "description",
+	"minimum-stability": "stable",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "tado",
+			"email": "email@example.com"
+		}
+	],
+	"require": {
+	}
+}
