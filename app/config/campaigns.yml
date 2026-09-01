@@ -48,3 +48,16 @@ campaigns:
       url_key: mf
       active: true
       param_only: true
+
+    new_newsletter:
+      description: Test a new version of the newsletter field
+      reference: "https://phabricator.wikimedia.org/T436327"
+      start: "2026-09-21"
+      end: "2026-12-31"
+      buckets:
+        - "legacy"
+        - "new"
+      default_bucket: "legacy"
+      url_key: nsl
+      active: true
+      param_only: true
