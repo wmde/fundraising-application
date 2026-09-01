@@ -9,6 +9,7 @@ use Monolog\Logger;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
+use WMDE\Clock\StubClock;
 use WMDE\Fundraising\AddressChangeContext\Domain\Model\AddressChange;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ApplyForMembershipController;
 use WMDE\Fundraising\Frontend\App\Controllers\Membership\ShowMembershipApplicationFormController;
@@ -37,6 +38,13 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	private const CORRECT_ACCESS_TOKEN = '4711abc';
 
 	private const APPLY_FOR_MEMBERSHIP_ROUTE = 'apply-for-membership';
+
+	private StubClock $clock;
+
+	protected function setUp(): void {
+		parent::setUp();
+		$this->clock = new StubClock( new \DateTimeImmutable() );
+	}
 
 	public function testGivenGetRequestMembership_formIsShown(): void {
 		$this->modifyConfiguration( [ 'skin' => 'laika' ] );
@@ -379,7 +387,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 	}
 
 	private function givenConfirmedMembershipApplication( int $id ): MembershipApplication {
-		$application = ValidMembershipApplication::newDomainEntity( $id );
+		$application = ValidMembershipApplication::newDomainEntity( $id, $this->clock->now() );
 		$application->confirm();
 		return $application;
 	}
@@ -419,7 +427,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 
 		$this->assertNotNull( $application );
 
-		$expectedApplication = ValidMembershipApplication::newCompanyApplication( self::MEMBERSHIP_APPLICATION_ID );
+		$expectedApplication = ValidMembershipApplication::newCompanyApplication( self::MEMBERSHIP_APPLICATION_ID, $this->clock->now() );
 		$expectedApplication->confirm();
 
 		$this->assertEquals( $expectedApplication, $application );
@@ -529,6 +537,7 @@ class ApplyForMembershipRouteTest extends WebRouteTestCase {
 		$incentive = new Incentive( ValidMembershipApplication::INCENTIVE_NAME );
 		$this->insertIncentives( $factory, $incentive );
 		$factory->getConnection()->executeStatement( 'UPDATE last_generated_membership_id SET membership_id = ' . ( self::MEMBERSHIP_APPLICATION_ID - 1 ) );
+		$factory->setClock( $this->clock );
 
 		return $incentive;
 	}

@@ -40,7 +40,9 @@ class AnonymiseMemberCommand extends Command {
 			new DatabasePaymentAnonymizer(
 				paymentRepository: $this->ffFactory->getPaymentRepository(),
 				entityManager: $this->ffFactory->getEntityManager()
-			)
+			),
+			new SystemClock(),
+			new \DateInterval( 'P2D' )
 		);
 
 		try {
