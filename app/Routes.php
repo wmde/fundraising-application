@@ -24,6 +24,7 @@ class Routes {
 	public const API_UPDATE_ADDRESS_PUT = 'api_address_change_put';
 	public const UPDATE_ADDRESS_ALREADY_UPDATED = 'update-address-already-updated';
 	public const API_UPDATE_DONOR_PUT = 'api_update_donor_put';
+	public const API_UPDATE_MEMBERSHIP_APPLICATION_PUT = 'api_update_membership_application_put';
 	public const VALIDATE_ADDRESS = 'validate-donor-address';
 	public const VALIDATE_EMAIL = 'validate-email';
 	public const VALIDATE_MEMBERSHIP_FEE = 'validate-fee';

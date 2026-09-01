@@ -208,9 +208,12 @@ use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\ApplyForMembe
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\MembershipApplicationValidator;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Moderation\ModerationService as MembershipModerationService;
 use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Notification\MailMembershipApplicationNotifier;
+use WMDE\Fundraising\MembershipContext\UseCases\ApplyForMembership\Notification\MembershipNotifier;
 use WMDE\Fundraising\MembershipContext\UseCases\FeeChange\FeeChangeUseCase;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationPresenter;
 use WMDE\Fundraising\MembershipContext\UseCases\ShowApplicationConfirmation\ShowApplicationConfirmationUseCase;
+use WMDE\Fundraising\MembershipContext\UseCases\UpdateMembershipApplication\UpdateMembershipApplicationUseCase;
+use WMDE\Fundraising\MembershipContext\UseCases\UpdateMembershipApplication\UpdateMembershipApplicationValidator;
 use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentIdRepository;
 use WMDE\Fundraising\PaymentContext\DataAccess\DoctrinePaymentRepository;
 use WMDE\Fundraising\PaymentContext\Domain\BankDataGenerator;
@@ -894,6 +897,10 @@ class FunFunFactory implements LoggerAwareInterface {
 		return $this->newTextPolicyValidator( 'comment' );
 	}
 
+	private function newUpdateMembershipApplicationValidator(): UpdateMembershipApplicationValidator {
+		return new UpdateMembershipApplicationValidator( $this->newAddressValidator(), $this->getEmailValidator() );
+	}
+
 	public function newAddDonationUseCase(): AddDonationUseCase {
 		return new AddDonationUseCase(
 			$this->getDonationIdRepository(),
@@ -1007,6 +1014,15 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	private function newMembershipApplicationNotifier(): MembershipNotifier {
+		return new MailMembershipApplicationNotifier(
+			$this->newApplyForMembershipMailer(),
+			$this->newApplyForMembershipAdminMailer(),
+			$this->newGetPaymentUseCase(),
+			adminEmailAddress: $this->config['contact-info']['admin']['email']
+		);
+	}
+
 	private function newDonationUpdatedMailer(): TemplateDonationNotifier {
 		return new TemplateDonationNotifier(
 			$this->newDonationUpdatedTemplateMailer(),
@@ -1051,6 +1067,16 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getDonationRepository(),
 			$this->newDonationUpdatedMailer(),
 			$this->getDonationEventEmitter()
+		);
+	}
+
+	public function newUpdateMembershipApplicationUseCase( string $updateToken, string $accessToken ): UpdateMembershipApplicationUseCase {
+		return new UpdateMembershipApplicationUseCase(
+			$this->newMembershipApplicationAuthorizationChecker( $updateToken, $accessToken ),
+			$this->newUpdateMembershipApplicationValidator(),
+			$this->getMembershipApplicationRepository(),
+			$this->newMembershipApplicationNotifier(),
+			$this->getMembershipEventEmitter()
 		);
 	}
 
@@ -1220,6 +1246,10 @@ class FunFunFactory implements LoggerAwareInterface {
 		return new AuthorizationChecker( $this->getTokenRepositoryWithLegacyFallback(), $updateToken, $accessToken );
 	}
 
+	private function newMembershipApplicationAuthorizationChecker( string $updateToken = '', string $accessToken = '' ): MembershipAuthorizationChecker {
+		return new AuthorizationChecker( $this->getTokenRepositoryWithLegacyFallback(), $updateToken, $accessToken );
+	}
+
 	public function newDonationConfirmationPresenter(): DonationConfirmationHtmlPresenter {
 		return new DonationConfirmationHtmlPresenter(
 			new TwigTemplate(
@@ -1253,12 +1283,7 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getMembershipApplicationRepository(),
 			new DoctrineMembershipIdGenerator( $this->getEntityManager() ),
 			$this->newMembershipAuthorizer(),
-			new MailMembershipApplicationNotifier(
-				$this->newApplyForMembershipMailer(),
-				$this->newApplyForMembershipAdminMailer(),
-				$this->newGetPaymentUseCase(),
-				adminEmailAddress: $this->config['contact-info']['admin']['email']
-			),
+			$this->newMembershipApplicationNotifier(),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
 			$this->newMembershipTrackingRepository(),
@@ -1526,9 +1551,14 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	public function newMembershipApplicationConfirmationHtmlPresenter(): MembershipApplicationConfirmationHtmlPresenter {
+	/**
+	 * @param array<string,string> $urls
+	 * @return MembershipApplicationConfirmationHtmlPresenter
+	 */
+	public function newMembershipApplicationConfirmationHtmlPresenter( array $urls = [] ): MembershipApplicationConfirmationHtmlPresenter {
 		return new MembershipApplicationConfirmationHtmlPresenter(
-			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig', [ 'countries' => $this->getCountries() ] )
+			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig', [ 'countries' => $this->getCountries() ] ),
+			$urls
 		);
 	}
 

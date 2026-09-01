@@ -19,7 +19,11 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 
 	private ?\Exception $exception = null;
 
-	public function __construct( private readonly TwigTemplate $template ) {
+	/**
+	 * @param TwigTemplate $template
+	 * @param array<string, string> $urls
+	 */
+	public function __construct( private readonly TwigTemplate $template, private readonly array $urls = [] ) {
 	}
 
 	/**
@@ -65,7 +69,8 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 				'bic' => $paymentData['bic'] ?? '',
 				'bankname' => $paymentData['bankname'] ?? '',
 			],
-			'tracking' => $tracking->__toString()
+			'tracking' => $tracking->__toString(),
+			'urls' => $this->urls
 		];
 	}
 
