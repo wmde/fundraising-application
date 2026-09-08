@@ -63,7 +63,10 @@ class MembershipApplicationConfirmationHtmlPresenterTest extends TestCase {
 				'city' => 'Berlin',
 				'email' => 'jeroendedauw@gmail.com',
 				'countryCode' => 'DE',
-				'applicantType' => 'person'
+				'applicantType' => 'person',
+				'firstName' => 'Potato',
+				'lastName' => 'The Great',
+				'companyName' => '',
 			],
 			'bankData' => [
 				'iban' => 'I has IBAN',

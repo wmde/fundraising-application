@@ -1557,7 +1557,12 @@ class FunFunFactory implements LoggerAwareInterface {
 	 */
 	public function newMembershipApplicationConfirmationHtmlPresenter( array $urls = [] ): MembershipApplicationConfirmationHtmlPresenter {
 		return new MembershipApplicationConfirmationHtmlPresenter(
-			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig', [ 'countries' => $this->getCountries() ] ),
+			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig',
+				[
+					'countries' => $this->getCountries(),
+					'addressValidationPatterns' => $this->getValidationRules()->address,
+				]
+			),
 			$urls
 		);
 	}
