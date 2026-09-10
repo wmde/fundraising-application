@@ -1412,10 +1412,10 @@ class FunFunFactory implements LoggerAwareInterface {
 		$this->sharedObjects[MembershipAuthorizationChecker::class] = $authorizer;
 	}
 
-	public function newMembershipApplicationConfirmationUseCase( ShowApplicationConfirmationPresenter $presenter, string $accessToken ): ShowApplicationConfirmationUseCase {
+	public function newMembershipApplicationConfirmationUseCase( ShowApplicationConfirmationPresenter $presenter, string $accessToken, string $updateToken ): ShowApplicationConfirmationUseCase {
 		return new ShowApplicationConfirmationUseCase(
 			$presenter,
-			$this->getMembershipApplicationAuthorizer( '', $accessToken ),
+			$this->getMembershipApplicationAuthorizer( $updateToken, $accessToken ),
 			$this->getMembershipApplicationRepository(),
 			$this->newGetPaymentUseCase(),
 			$this->newMembershipTrackingRepository()
@@ -1553,14 +1553,17 @@ class FunFunFactory implements LoggerAwareInterface {
 
 	/**
 	 * @param array<string,string> $urls
+	 * @param string $updateToken
+	 *
 	 * @return MembershipApplicationConfirmationHtmlPresenter
 	 */
-	public function newMembershipApplicationConfirmationHtmlPresenter( array $urls = [] ): MembershipApplicationConfirmationHtmlPresenter {
+	public function newMembershipApplicationConfirmationHtmlPresenter( array $urls = [], string $updateToken = '' ): MembershipApplicationConfirmationHtmlPresenter {
 		return new MembershipApplicationConfirmationHtmlPresenter(
 			$this->getLayoutTemplate( 'Membership_Application_Confirmation.html.twig',
 				[
 					'countries' => $this->getCountries(),
 					'addressValidationPatterns' => $this->getValidationRules()->address,
+					'updateToken' => $updateToken,
 				]
 			),
 			$urls
