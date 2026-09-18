@@ -114,7 +114,10 @@ class MembershipApplicationConfirmationHtmlPresenter implements ShowApplicationC
 			'city' => $applicant->getPhysicalAddress()->city,
 			'email' => $applicant->getEmailAddress()->getFullAddress(),
 			'countryCode' => $applicant->getPhysicalAddress()->countryCode,
-			'applicantType' => $applicant->isPrivatePerson() ? ApplicantName::PERSON_PRIVATE : ApplicantName::PERSON_COMPANY
+			'applicantType' => $applicant->isPrivatePerson() ? ApplicantName::PERSON_PRIVATE : ApplicantName::PERSON_COMPANY,
+			'firstName' => $applicant->getName()->firstName,
+			'lastName' => $applicant->getName()->lastName,
+			'companyName' => $applicant->getName()->companyName,
 		];
 	}
 
