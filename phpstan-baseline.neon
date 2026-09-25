@@ -103,6 +103,12 @@ parameters:
 			path: src/Factories/FunFunFactory.php
 
 		-
+			message: '#^Method WMDE\\Fundraising\\Frontend\\Factories\\FunFunFactory\:\:getCancellationReasons\(\) should return array\<string\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Factories/FunFunFactory.php
+
+		-
 			message: '#^Offset ''salutations'' might not exist on array\{salutations\?\: array\<array\<string, array\<string, string\>\|string\>\>\}\.$#'
 			identifier: offsetAccess.notFound
 			count: 1
