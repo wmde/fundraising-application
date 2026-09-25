@@ -13,6 +13,7 @@ class ShowContactFormController {
 		$template = $ffFactory->getLayoutTemplate( 'Contact_Form.html.twig' );
 		$templateContext = [
 			'contact_categories' => $ffFactory->getGetInTouchCategories(),
+			'cancellation_reasons' => $ffFactory->getCancellationReasons(),
 			'contactFormValidationPatterns' => $ffFactory->getValidationRules()->contactForm,
 		];
 		return new Response( $template->render( $templateContext ) );
