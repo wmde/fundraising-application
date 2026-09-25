@@ -664,27 +664,25 @@
         },
         {
             "name": "doctrine/lexer",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/lexer.git",
-                "reference": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd"
+                "reference": "e96fe45e92a54233726014a7cc7340abf29bb14c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd",
-                "reference": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/e96fe45e92a54233726014a7cc7340abf29bb14c",
+                "reference": "e96fe45e92a54233726014a7cc7340abf29bb14c",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^12",
-                "phpstan/phpstan": "^1.10",
-                "phpunit/phpunit": "^10.5",
-                "psalm/plugin-phpunit": "^0.18.3",
-                "vimeo/psalm": "^5.21"
+                "doctrine/coding-standard": "^14",
+                "phpstan/phpstan": "^2",
+                "phpunit/phpunit": "^10.5.58 || ^12.5.4"
             },
             "type": "library",
             "autoload": {
@@ -721,7 +719,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/lexer/issues",
-                "source": "https://github.com/doctrine/lexer/tree/3.0.1"
+                "source": "https://github.com/doctrine/lexer/tree/3.0.2"
             },
             "funding": [
                 {
@@ -737,7 +735,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-05T11:56:58+00:00"
+            "time": "2026-06-14T20:44:06+00:00"
         },
         {
             "name": "doctrine/migrations",
@@ -844,16 +842,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "3.7.0",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "f25c5e5385d3a0bca2dc364d556d3b83a06559ed"
+                "reference": "037807a39697890dcede8b766c5efe8a1b4855fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/f25c5e5385d3a0bca2dc364d556d3b83a06559ed",
-                "reference": "f25c5e5385d3a0bca2dc364d556d3b83a06559ed",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/037807a39697890dcede8b766c5efe8a1b4855fe",
+                "reference": "037807a39697890dcede8b766c5efe8a1b4855fe",
                 "shasum": ""
             },
             "require": {
@@ -928,9 +926,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/3.7.0"
+                "source": "https://github.com/doctrine/orm/tree/3.7.1"
             },
-            "time": "2026-09-07T19:35:17+00:00"
+            "time": "2026-09-14T05:45:59+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -7084,16 +7082,16 @@
         },
         {
             "name": "wmde/fun-validators",
-            "version": "v5.1.0",
+            "version": "v5.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fun-validators",
-                "reference": "255ad85d10aa9fa4c4db58fe518e2d4bdc8d53b6"
+                "reference": "a1c65c5aa89bf79025219cdea19b523ec1b614a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/255ad85d10aa9fa4c4db58fe518e2d4bdc8d53b6",
-                "reference": "255ad85d10aa9fa4c4db58fe518e2d4bdc8d53b6",
+                "url": "https://api.github.com/repos/wmde/fun-validators/zipball/a1c65c5aa89bf79025219cdea19b523ec1b614a5",
+                "reference": "a1c65c5aa89bf79025219cdea19b523ec1b614a5",
                 "shasum": ""
             },
             "require": {
@@ -7102,7 +7100,7 @@
             "require-dev": {
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "~12.0",
-                "wmde/fundraising-phpcs": "~12.0"
+                "wmde/fundraising-phpcs": "~16.0"
             },
             "type": "library",
             "extra": {
@@ -7124,7 +7122,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "General and shared validation services created as part of the WMDE fundraising software",
-            "time": "2025-04-22T10:41:14+00:00"
+            "time": "2026-09-22T04:36:13+00:00"
         },
         {
             "name": "wmde/fundraising-address-change",
@@ -7302,16 +7300,16 @@
         },
         {
             "name": "wmde/fundraising-memberships",
-            "version": "21.1.0",
+            "version": "v21.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-memberships",
-                "reference": "849181469a2149d3110f9b340907d917f8ddfeed"
+                "reference": "1ac1df607c527c729a165fcccf562ce93e7257ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/849181469a2149d3110f9b340907d917f8ddfeed",
-                "reference": "849181469a2149d3110f9b340907d917f8ddfeed",
+                "url": "https://api.github.com/repos/wmde/fundraising-memberships/zipball/1ac1df607c527c729a165fcccf562ce93e7257ab",
+                "reference": "1ac1df607c527c729a165fcccf562ce93e7257ab",
                 "shasum": ""
             },
             "require": {
@@ -7358,7 +7356,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Bounded Context for the Wikimedia Deutschland fundraising membership subdomain",
-            "time": "2026-09-01T11:43:00+00:00"
+            "time": "2026-09-22T04:38:22+00:00"
         },
         {
             "name": "wmde/fundraising-payments",
