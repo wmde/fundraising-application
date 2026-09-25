@@ -458,6 +458,14 @@ class FunFunFactory implements LoggerAwareInterface {
 		return ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/supporters.json' );
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public function getCancellationReasons(): array {
+		$json = ( new SimpleFileFetcher() )->fetchFile( $this->getI18nDirectory() . '/data/cancellation_reasons.json' );
+		return json_decode( $json, true );
+	}
+
 	private function getLanguageFromLocale(): string {
 		$locale = Locale::getPrimaryLanguage( $this->getLocale() );
 		return $locale ?? 'de';

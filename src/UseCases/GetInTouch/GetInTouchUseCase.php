@@ -56,6 +56,7 @@ class GetInTouchUseCase {
 			'donationNumber' => $request->getDonationNumber(),
 			'subject' => $request->getSubject(),
 			'category' => $request->getCategory(),
+			'cancellationReason' => $request->getCancellationReason(),
 			'message' => $request->getMessageBody()
 		];
 	}

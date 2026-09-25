@@ -24,6 +24,7 @@ class GetInTouchUseCaseTest extends TestCase {
 	private const INQUIRER_DONATION_NUMBER = '123456';
 	private const INQUIRY_SUBJECT = 'Please let me know';
 	private const INQUIRY_CATEGORY = 'Other';
+	private const INQUIRY_CANCELLATION_REASON = '';
 	private const INQUIRY_MESSAGE = 'What is it you do?';
 
 	private GetInTouchValidator $validator;
@@ -58,6 +59,7 @@ class GetInTouchUseCaseTest extends TestCase {
 					'donationNumber' => self::INQUIRER_DONATION_NUMBER,
 					'subject' => self::INQUIRY_SUBJECT,
 					'category' => self::INQUIRY_CATEGORY,
+					'cancellationReason' => self::INQUIRY_CANCELLATION_REASON,
 					'message' => self::INQUIRY_MESSAGE
 				] )
 			);
@@ -86,6 +88,7 @@ class GetInTouchUseCaseTest extends TestCase {
 			self::INQUIRER_DONATION_NUMBER,
 			self::INQUIRY_SUBJECT,
 			self::INQUIRY_CATEGORY,
+			self::INQUIRY_CANCELLATION_REASON,
 			self::INQUIRY_MESSAGE
 		);
 	}
