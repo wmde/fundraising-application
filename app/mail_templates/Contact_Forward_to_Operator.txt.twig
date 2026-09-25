@@ -7,4 +7,6 @@ E-Mail-Adresse: {$ emailAddress $}
 Betreff: {$ subject $}
 Referenz: {$ donationNumber $}
 Thema: {$ category $}
+{% if cancellationReason %}Kündigungsgrund: {$ cancellationReason $}
+{% endif %}
 Anfrage: {$ message $}

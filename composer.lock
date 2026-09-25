@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0c7d397d2da50807aeceb19cf64206f",
+    "content-hash": "56ad9b0ef05b899b13880f27ce068bed",
     "packages": [
         {
             "name": "airbrake/phpbrake",
@@ -10183,16 +10183,16 @@
         },
         {
             "name": "wmde/fundraising-frontend-content",
-            "version": "dev-test",
+            "version": "dev-reason",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wmde/fundraising-frontend-content",
-                "reference": "475038d124ef236ba480a69cf731606567a21e47"
+                "reference": "f2be769b4ea0b6b9a8871221feeb421f8fc7b678"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/475038d124ef236ba480a69cf731606567a21e47",
-                "reference": "475038d124ef236ba480a69cf731606567a21e47",
+                "url": "https://api.github.com/repos/wmde/fundraising-frontend-content/zipball/f2be769b4ea0b6b9a8871221feeb421f8fc7b678",
+                "reference": "f2be769b4ea0b6b9a8871221feeb421f8fc7b678",
                 "shasum": ""
             },
             "require": {
@@ -10203,7 +10203,6 @@
                 "seld/jsonlint": "^1.6",
                 "wmde/fundraising-content-provider": "^6.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload-dev": {
                 "psr-4": {
@@ -10245,7 +10244,7 @@
                 "CC0-1.0"
             ],
             "description": "i18n for FundraisingFrontend",
-            "time": "2026-09-01T06:23:09+00:00"
+            "time": "2026-09-25T15:29:35+00:00"
         },
         {
             "name": "wmde/fundraising-phpcs",

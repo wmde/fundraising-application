@@ -122,7 +122,7 @@
 
 		"wmde/psr-log-test-doubles": "~3.0",
 		"wmde/fundraising-phpcs": "~16.0",
-		"wmde/fundraising-frontend-content": "dev-test",
+		"wmde/fundraising-frontend-content": "dev-reason",
 
 		"symfony/css-selector": "^8.0",
 		"symfony/browser-kit": "^8.0"

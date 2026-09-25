@@ -13,6 +13,8 @@ class GetInTouchRequest {
 		private readonly string $donationNumber,
 		private readonly string $subject,
 		private readonly string $category,
+		private readonly string $cancellationReason,
+		private readonly string $cancellationReasonOther,
 		private readonly string $messageBody
 	) {
 	}
@@ -39,6 +41,14 @@ class GetInTouchRequest {
 
 	public function getCategory(): string {
 		return $this->category;
+	}
+
+	public function getCancellationReason(): string {
+		return $this->cancellationReason;
+	}
+
+	public function getCancellationReasonOther(): string {
+		return $this->cancellationReasonOther;
 	}
 
 	public function getMessageBody(): string {

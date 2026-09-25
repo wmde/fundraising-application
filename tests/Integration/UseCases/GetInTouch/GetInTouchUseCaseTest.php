@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace WMDE\Fundraising\Frontend\Tests\Integration\UseCases\GetInTouch;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use WMDE\EmailAddress\EmailAddress;
@@ -24,6 +25,8 @@ class GetInTouchUseCaseTest extends TestCase {
 	private const INQUIRER_DONATION_NUMBER = '123456';
 	private const INQUIRY_SUBJECT = 'Please let me know';
 	private const INQUIRY_CATEGORY = 'Other';
+	private const INQUIRY_CANCELLATION_REASON = '';
+	private const INQUIRY_CANCELLATION_REASON_OTHER = '';
 	private const INQUIRY_MESSAGE = 'What is it you do?';
 
 	private GetInTouchValidator $validator;
@@ -58,12 +61,68 @@ class GetInTouchUseCaseTest extends TestCase {
 					'donationNumber' => self::INQUIRER_DONATION_NUMBER,
 					'subject' => self::INQUIRY_SUBJECT,
 					'category' => self::INQUIRY_CATEGORY,
+					'cancellationReason' => self::INQUIRY_CANCELLATION_REASON,
 					'message' => self::INQUIRY_MESSAGE
 				] )
 			);
 
 		$useCase = $this->newGetInTouchUseCase();
 		$useCase->processContactRequest( $this->newRequest() );
+	}
+
+	#[DataProvider( 'cancellationReasonProvider' )]
+	public function testGivenCancellation_combinesReasonsInTheEmailToOperator(
+		string $cancellationReason,
+		string $cancellationReasonOther,
+		string $expectedCancellationReason,
+	): void {
+		$this->operatorMailer = $this->createMock( OperatorMailer::class );
+		$this->operatorMailer->expects( $this->once() )
+			->method( 'sendMailToOperator' )
+			->with(
+				new EmailAddress( self::INQUIRER_EMAIL_ADDRESS ),
+				self::INQUIRY_SUBJECT,
+				$this->equalTo( [
+					'firstName' => self::INQUIRER_FIRST_NAME,
+					'lastName' => self::INQUIRER_LAST_NAME,
+					'emailAddress' => self::INQUIRER_EMAIL_ADDRESS,
+					'donationNumber' => self::INQUIRER_DONATION_NUMBER,
+					'subject' => self::INQUIRY_SUBJECT,
+					'category' => self::INQUIRY_CATEGORY,
+					'cancellationReason' => $expectedCancellationReason,
+					'message' => self::INQUIRY_MESSAGE
+				] )
+			);
+
+		$useCase = $this->newGetInTouchUseCase();
+		$useCase->processContactRequest( new GetInTouchRequest(
+			self::INQUIRER_FIRST_NAME,
+			self::INQUIRER_LAST_NAME,
+			self::INQUIRER_EMAIL_ADDRESS,
+			self::INQUIRER_DONATION_NUMBER,
+			self::INQUIRY_SUBJECT,
+			self::INQUIRY_CATEGORY,
+			$cancellationReason,
+			$cancellationReasonOther,
+			self::INQUIRY_MESSAGE
+		) );
+	}
+
+	/**
+	 * @return iterable<array{cancellationReason: string, cancellationReasonOther: string, expectedCancellationReason: string}>
+	 */
+	public static function cancellationReasonProvider(): iterable {
+		yield 'regular cancellation reason' => [
+			'cancellationReason' => 'some reason',
+			'cancellationReasonOther' => '',
+			'expectedCancellationReason' => 'some reason',
+		];
+
+		yield 'other cancellation reason' => [
+			'cancellationReason' => '',
+			'cancellationReasonOther' => 'some reason',
+			'expectedCancellationReason' => 'some reason',
+		];
 	}
 
 	public function testGivenValidRequest_theUserIsNotified(): void {
@@ -86,6 +145,8 @@ class GetInTouchUseCaseTest extends TestCase {
 			self::INQUIRER_DONATION_NUMBER,
 			self::INQUIRY_SUBJECT,
 			self::INQUIRY_CATEGORY,
+			self::INQUIRY_CANCELLATION_REASON,
+			self::INQUIRY_CANCELLATION_REASON_OTHER,
 			self::INQUIRY_MESSAGE
 		);
 	}
