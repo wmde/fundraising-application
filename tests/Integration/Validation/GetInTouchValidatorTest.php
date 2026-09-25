@@ -27,6 +27,7 @@ class GetInTouchValidatorTest extends TestCase {
 			'Hello there!',
 			'Change of address',
 			'',
+			'',
 			'I just wanted to say "Hi".'
 		);
 		$this->assertTrue( $validator->validate( $request )->isSuccessful() );
@@ -42,6 +43,7 @@ class GetInTouchValidatorTest extends TestCase {
 			'',
 			'Hello there!',
 			'Change of address',
+			'',
 			'',
 			'I just wanted to say "Hi".'
 		);
@@ -59,6 +61,7 @@ class GetInTouchValidatorTest extends TestCase {
 			'Hello there!',
 			'Change of address',
 			'',
+			'',
 			'I just wanted to say "Hi".'
 		);
 		$this->assertFalse( $validator->validate( $request )->isSuccessful() );
@@ -75,6 +78,7 @@ class GetInTouchValidatorTest extends TestCase {
 			'123456',
 			'Hello there!',
 			'Change of address',
+			'',
 			'',
 			'I just wanted to say "Hi".'
 		);
@@ -110,6 +114,7 @@ class GetInTouchValidatorTest extends TestCase {
 			'',
 			'Change of address',
 			'',
+			'',
 			'I just wanted to say "Hi".'
 		);
 		$this->assertFalse( $validator->validate( $request )->isSuccessful() );
@@ -126,6 +131,7 @@ class GetInTouchValidatorTest extends TestCase {
 			'123456',
 			'Hello there!',
 			'Change of address',
+			'',
 			'',
 			''
 		);

@@ -49,6 +49,11 @@ class GetInTouchUseCase {
 	 * @return array<string, string>
 	 */
 	private function getTemplateParams( GetInTouchRequest $request ): array {
+		$cancellationReason = $request->getCancellationReasonOther();
+		if ( !$cancellationReason ) {
+			$cancellationReason = $request->getCancellationReason();
+		}
+
 		return [
 			'firstName' => $request->getFirstName(),
 			'lastName' => $request->getLastName(),
@@ -56,7 +61,7 @@ class GetInTouchUseCase {
 			'donationNumber' => $request->getDonationNumber(),
 			'subject' => $request->getSubject(),
 			'category' => $request->getCategory(),
-			'cancellationReason' => $request->getCancellationReason(),
+			'cancellationReason' => $cancellationReason,
 			'message' => $request->getMessageBody()
 		];
 	}

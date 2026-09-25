@@ -19,6 +19,7 @@ class ContactRequestController {
 			$request->request->get( 'subject', '' ),
 			$request->request->get( 'category', '' ),
 			$request->request->get( 'cancellationReason', '' ),
+			$request->request->get( 'cancellationReasonOther', '' ),
 			$request->request->get( 'messageBody', '' )
 		);
 
