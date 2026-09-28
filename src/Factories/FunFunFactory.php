@@ -1119,6 +1119,23 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	private function newMembershipApplicationUpdatedTemplateMailer(): DonorNotificationInterface {
+		return new DonationConfirmationMailerAdapter(
+			$this->newErrorHandlingTemplateMailer(
+				$this->getDonationMessenger(),
+				new TwigTemplate(
+					$this->getMailerTwig(),
+					'Donation_Confirmation.txt.twig',
+					[ 'greeting_generator' => $this->getGreetingGenerator() ]
+				),
+				new BasicMailSubjectRenderer(
+					$this->getMailTranslator(),
+					'mail_subject_update_donation'
+				)
+			)
+		);
+	}
+
 	private function newDonationModerationAdminNotifier(): AdminNotificationInterface {
 		return new AdminDonationModerationMailerAdapter(
 			new ErrorHandlingMailerDecorator(
