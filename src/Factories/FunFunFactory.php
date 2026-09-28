@@ -1014,9 +1014,9 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newMembershipApplicationNotifier(): MembershipNotifier {
+	private function newMembershipApplicationNotifier( MailSubjectRendererInterface $subjectRenderer ): MembershipNotifier {
 		return new MailMembershipApplicationNotifier(
-			$this->newApplyForMembershipMailer(),
+			$this->newApplyForMembershipMailer( $subjectRenderer ),
 			$this->newApplyForMembershipAdminMailer(),
 			$this->newGetPaymentUseCase(),
 			adminEmailAddress: $this->config['contact-info']['admin']['email']
@@ -1075,7 +1075,12 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->newMembershipApplicationAuthorizationChecker( $updateToken, $accessToken ),
 			$this->newUpdateMembershipApplicationValidator(),
 			$this->getMembershipApplicationRepository(),
-			$this->newMembershipApplicationNotifier(),
+			$this->newMembershipApplicationNotifier(
+				new BasicMailSubjectRenderer(
+					$this->getMailTranslator(),
+					'mail_subject_update_membership'
+				)
+			),
 			$this->getMembershipEventEmitter()
 		);
 	}
@@ -1283,7 +1288,13 @@ class FunFunFactory implements LoggerAwareInterface {
 			$this->getMembershipApplicationRepository(),
 			new DoctrineMembershipIdGenerator( $this->getEntityManager() ),
 			$this->newMembershipAuthorizer(),
-			$this->newMembershipApplicationNotifier(),
+			$this->newMembershipApplicationNotifier(
+				new MembershipConfirmationMailSubjectRenderer(
+					$this->getMailTranslator(),
+					'mail_subject_confirm_membership_application_active',
+					'mail_subject_confirm_membership_application_sustaining'
+				)
+			),
 			$this->newMembershipApplicationValidator(),
 			$this->newApplyForMembershipPolicyValidator(),
 			$this->newMembershipTrackingRepository(),
@@ -1309,20 +1320,16 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
-	private function newApplyForMembershipMailer(): MembershipMailerAdapter {
+	private function newApplyForMembershipMailer( MailSubjectRendererInterface $subjectRenderer ): MembershipMailerAdapter {
 		return new MembershipMailerAdapter(
 			$this->newErrorHandlingTemplateMailer(
-					$this->getMembershipMessenger(),
-					new TwigTemplate(
-						$this->getMailerTwig(),
-						'Membership_Application_Confirmation.txt.twig',
-						[ 'greeting_generator' => $this->getGreetingGenerator() ]
-					),
-					new MembershipConfirmationMailSubjectRenderer(
-						$this->getMailTranslator(),
-						'mail_subject_confirm_membership_application_active',
-						'mail_subject_confirm_membership_application_sustaining'
-					)
+				$this->getMembershipMessenger(),
+				new TwigTemplate(
+					$this->getMailerTwig(),
+					'Membership_Application_Confirmation.txt.twig',
+					[ 'greeting_generator' => $this->getGreetingGenerator() ]
+				),
+				$subjectRenderer
 			)
 		);
 	}
