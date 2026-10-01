@@ -348,29 +348,6 @@
       "title": "List of blocked e-mail addresses",
       "description": "List of e-mail addresses that automatically mark data sets as deleted"
     },
-    "referrer-generalization": {
-      "type": "object",
-      "title": "Referrer normalization",
-      "description": "Configuration for normalizing the HTTP referrer URL into a manageable string for the donation tracking information",
-      "properties": {
-        "default": {
-          "type": "string",
-          "title": "Default referrer",
-          "description": "What referrer to use when no host name from domain-map matches.",
-          "default": "web"
-        },
-        "domain-map": {
-          "type": "object",
-          "title": "Referrer domain map",
-          "description": "Map several subdomains to one domain, e.g. www.wikipedia.org to en.wikipedia.org, etc"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "default",
-        "domain-map"
-      ]
-    },
     "donation-minimum-amount": {
       "type": "integer",
       "title": "Minimum donation amount",
@@ -852,7 +829,6 @@
     "contact-info",
     "text-policies",
     "subscription-interval",
-    "referrer-generalization",
     "donation-timeframe-limit",
     "membership-application-timeframe-limit",
     "token-length",
