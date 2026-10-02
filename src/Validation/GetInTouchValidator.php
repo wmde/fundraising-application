@@ -21,7 +21,6 @@ class GetInTouchValidator {
 		$integerValueValidator = new IntegerValueValidator();
 
 		$allValidationResults = [
-			$requiredFieldValidator->validate( $request->getSubject() )->setSourceForAllViolations( 'subject' ),
 			$requiredFieldValidator->validate( $request->getCategory() )->setSourceForAllViolations( 'category' ),
 			$requiredFieldValidator->validate( $request->getMessageBody() )->setSourceForAllViolations( 'messageBody' ),
 			// Email is required and has to be valid, so we check it with two validators
@@ -31,6 +30,10 @@ class GetInTouchValidator {
 		// Donation number is optional, but has to be integer if set
 		if ( $request->getDonationNumber() ) {
 			$allValidationResults[] = $integerValueValidator->validate( $request->getDonationNumber() )->setSourceForAllViolations( 'donationNumber' );
+		}
+		// Subject is required if cancellation reason is not set
+		if ( !$request->getCancellationReason() ) {
+			$allValidationResults[] = $requiredFieldValidator->validate( $request->getSubject() )->setSourceForAllViolations( 'subject' );
 		}
 
 		return new ValidationResult( ...$this->getConstraintViolationsFromResults( $allValidationResults ) );
