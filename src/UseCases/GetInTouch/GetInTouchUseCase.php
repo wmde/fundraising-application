@@ -34,7 +34,7 @@ class GetInTouchUseCase {
 	private function sendContactRequestToOperator( GetInTouchRequest $request ): void {
 		$this->operatorMailer->sendMailToOperator(
 			new EmailAddress( $request->getEmailAddress() ),
-			$request->getSubject(),
+			$this->getSubject( $request ),
 			$this->getTemplateParams( $request )
 		);
 	}
@@ -54,10 +54,19 @@ class GetInTouchUseCase {
 			'lastName' => $request->getLastName(),
 			'emailAddress' => $request->getEmailAddress(),
 			'donationNumber' => $request->getDonationNumber(),
-			'subject' => $request->getSubject(),
+			'subject' => $this->getSubject( $request ),
 			'category' => $request->getCategory(),
+			'cancellationReason' => $request->getCancellationReason(),
 			'message' => $request->getMessageBody()
 		];
+	}
+
+	private function getSubject( GetInTouchRequest $request ): string {
+		$reason = $request->getCancellationReason();
+		if ( $reason ) {
+			return $request->getCategory() . ': ' . $reason;
+		}
+		return $request->getSubject();
 	}
 
 }
