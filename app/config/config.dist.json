@@ -55,13 +55,6 @@
 	},
 	"email-address-blacklist": [],
 	"subscription-interval": "PT30M",
-	"referrer-generalization": {
-		"default": "",
-		"domain-map": {
-			"wikimedia.de": "wikimedia.de",
-			"www.wikimedia.de": "wikimedia.de"
-		}
-	},
 	"donation-minimum-amount": 1,
 	"donation-maximum-amount": 100000,
 	"donation-timeframe-limit": "PT30M",
