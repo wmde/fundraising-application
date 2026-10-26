@@ -13,6 +13,8 @@ updates:
 
     schedule:
       interval: "daily"
+    # Turn off dependabot for fundraising campaign 2026
+    open-pull-requests-limit: 0
     groups:
       minor-version-updates:
         update-types:
@@ -27,6 +29,8 @@ updates:
     schedule:
       interval: "monthly"
       day: "tuesday"
+    # Turn off dependabot for fundraising campaign 2026
+    open-pull-requests-limit: 0
     groups:
       patch-updates:
         update-types:
