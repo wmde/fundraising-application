@@ -332,7 +332,7 @@ The database container will be the one ending in `_database_1`. The prefix is pr
 Copy the full network name and container name and use them instead of the placeholders `__CONTAINER_NAME__` and
 `__NETWORK_NAME__` in the following command to run PHPMyAdmin, port 8099:
 
-    docker run -it --link __CONTAINER_NAME__:db --net __NETWORK_NAME__ -p 8099:80 phpmyadmin/phpmyadmin
+    docker run -it --link __CONTAINER_NAME__:db --net __NETWORK_NAME__ -p 8099:80 phpmyadmin
 
 ### Importing the address completion data
 
