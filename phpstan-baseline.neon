@@ -121,7 +121,7 @@ parameters:
 			path: src/Factories/FunFunFactory.php
 
 		-
-			message: '#^Parameter \#1 \$config of static method WMDE\\Fundraising\\PaymentContext\\Services\\PaymentUrlGenerator\\CreditCardURLGeneratorConfig\:\:newFromConfig\(\) expects array\{base\-url\: string, project\-id\: string, locale\: string, background\-color\: string, logo\: string, theme\: string, testmode\: bool\}, non\-empty\-array given\.$#'
+			message: '#^Parameter \#1 \$config of static method WMDE\\Fundraising\\PaymentContext\\Services\\PaymentUrlGenerator\\CreditCardURLGeneratorConfig\:\:newFromConfig\(\) expects array\{access\-key\: string, base\-url\: string, project\-id\: string, locale\: string, background\-color\: string, logo\: string, theme\: string, testmode\: bool\}, non\-empty\-array given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Factories/FunFunFactory.php
