@@ -16,29 +16,29 @@
 		"wmde/email-address": "~1.0",
 		"wmde/euro": "~1.0",
 		"wmde/clock": "~2.0",
-		"wmde/fundraising-donations": "~29.0",
-		"wmde/fundraising-memberships": "~21.1",
-		"wmde/fundraising-payments": "~8.4",
+		"wmde/fundraising-donations": "~30.1",
+		"wmde/fundraising-memberships": "~22.0",
+		"wmde/fundraising-payments": "~9.0",
 		"wmde/fundraising-subscriptions": "6.0",
 		"wmde/fundraising-content-provider": "~6.4",
 		"wmde/fundraising-address-change": "~4.1",
 		"wmde/fun-validators": "~5.0",
 
-		"symfony/asset": "~8.0",
-		"symfony/config": "~8.0",
-		"symfony/console": "~8.0",
-		"symfony/dotenv": "~8.0",
-		"symfony/filesystem": "~8.0",
-		"symfony/framework-bundle": "~8.0",
-		"symfony/http-foundation": "~8.0",
-		"symfony/mailer": "~8.0",
+		"symfony/asset": "~8.1",
+		"symfony/config": "~8.1",
+		"symfony/console": "~8.1",
+		"symfony/dotenv": "~8.1",
+		"symfony/filesystem": "~8.1",
+		"symfony/framework-bundle": "~8.1",
+		"symfony/http-foundation": "~8.1",
+		"symfony/mailer": "~8.1",
 		"symfony/monolog-bundle": "^4.0",
-		"symfony/property-access": "~8.0",
+		"symfony/property-access": "~8.1",
 		"symfony/serializer-pack": "~v1.4.0",
-		"symfony/twig-bridge": "~8.0",
-		"symfony/validator": "~8.0",
-		"symfony/yaml": "~8.0",
-		"symfony/cache": "~8.0",
+		"symfony/twig-bridge": "~8.1",
+		"symfony/validator": "~8.1",
+		"symfony/yaml": "~8.1",
+		"symfony/cache": "~8.1",
 
 		"airbrake/phpbrake": "dev-update-monolog",
 		"doctrine/migrations": "~3.0",
@@ -146,9 +146,6 @@
 		"allow-plugins": {
 			"composer/package-versions-deprecated": true,
 			"dealerdirect/phpcodesniffer-composer-installer": true
-		},
-		"platform": {
-			"php": "8.4"
 		}
 	}
 }
