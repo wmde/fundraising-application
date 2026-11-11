@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.allowed_locales: [ 'de_DE', 'en_GB' ]
+    app.allowed_themes: [ 'default', 'green' ]
 
 services:
     # default configuration for services in *this* file
@@ -60,6 +61,13 @@ services:
         arguments:
             - '@WMDE\Fundraising\Frontend\Factories\FunFunFactory'
             - "%app.allowed_locales%"
+
+    WMDE\Fundraising\Frontend\App\EventHandlers\StoreTheme:
+        class: WMDE\Fundraising\Frontend\App\EventHandlers\StoreTheme
+        public: true
+        arguments:
+            - '@WMDE\Fundraising\Frontend\Factories\FunFunFactory'
+            - "%app.allowed_themes%"
 
     # Inject the allowed routes and url parameter into the Banner Tracker
     WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects:
