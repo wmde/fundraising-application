@@ -35,14 +35,16 @@ class AnonymiseMemberCommand extends Command {
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
 		$membershipAnonymizer = new DoctrineMembershipAnonymizer(
-			$this->ffFactory->getMembershipApplicationRepository(),
-			$this->ffFactory->getEntityManager(),
-			new DatabasePaymentAnonymizer(
+			membershipRepository: $this->ffFactory->getMembershipApplicationRepository(),
+			entityManager: $this->ffFactory->getEntityManager(),
+			paymentAnonymizer: new DatabasePaymentAnonymizer(
 				paymentRepository: $this->ffFactory->getPaymentRepository(),
-				entityManager: $this->ffFactory->getEntityManager()
+				entityManager: $this->ffFactory->getEntityManager(),
+				output: $output
 			),
-			new SystemClock(),
-			new \DateInterval( 'P2D' )
+			clock: new SystemClock(),
+			gracePeriod: new \DateInterval( 'P2D' ),
+			output: $output
 		);
 
 		try {

@@ -16,7 +16,7 @@
 		"wmde/email-address": "~1.0",
 		"wmde/euro": "~1.0",
 		"wmde/clock": "~2.0",
-		"wmde/fundraising-donations": "dev-update-11-2026",
+		"wmde/fundraising-donations": "~30.1",
 		"wmde/fundraising-memberships": "~22.0",
 		"wmde/fundraising-payments": "~9.0",
 		"wmde/fundraising-subscriptions": "6.0",
@@ -146,9 +146,6 @@
 		"allow-plugins": {
 			"composer/package-versions-deprecated": true,
 			"dealerdirect/phpcodesniffer-composer-installer": true
-		},
-		"platform": {
-			"php": "8.4.26"
 		}
 	}
 }

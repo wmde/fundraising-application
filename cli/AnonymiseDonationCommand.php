@@ -42,9 +42,10 @@ class AnonymiseDonationCommand extends Command {
 			moderationGracePeriod: new \DateInterval( 'P1M' ),
 			paymentAnonymizer: new DatabasePaymentAnonymizer(
 				paymentRepository: $this->ffFactory->getPaymentRepository(),
-				entityManager: $this->ffFactory->getEntityManager()
+				entityManager: $this->ffFactory->getEntityManager(),
+				output: $output
 			),
-			ouput: $output
+			output: $output
 		);
 
 		try {
