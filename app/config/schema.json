@@ -553,7 +553,7 @@
           "type": "string",
           "minLength": 1,
           "title": "Base URL",
-          "description": "Base URL for the MCP checkout page. The fundraising application will add various parameters to the URL, some of them defined in this section.",
+          "description": "Base URL for the MCP checkout page. The fundraising application will add various parameters to the URL, some of them defined in this section. The base URL must end in '?' (it cannot contain any hard-coded URL parameters).",
           "default": "https://credit-card.micropayment.de/creditcard/event/index.php?",
           "format": "url"
         },
