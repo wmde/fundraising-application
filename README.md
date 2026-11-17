@@ -240,6 +240,8 @@ You can find more information on how we test the email templates and how
 to render them without using the application in the [Email
 Templates](doc/Email_Templates.md) document.
 
+For the email setup in production, see the [infrastructure documentation](https://github.com/wmde/fundraising-infrastructure/blob/master/docs/Email.md)
+
 ## Database
 
 ### Resetting the database in your local environment
