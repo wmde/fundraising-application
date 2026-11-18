@@ -1466,6 +1466,7 @@ class FunFunFactory implements LoggerAwareInterface {
 				'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 				'countries' => $this->getCountries(),
 				'addressValidationPatterns' => $this->getValidationRules()->address,
+				'anon' => $this->sharedObjects[ 'anon' ] ?? false,
 			]
 		);
 	}
@@ -2266,5 +2267,9 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function setClock( Clock $clock ): self {
 		$this->sharedObjects[ Clock::class ] = $clock;
 		return $this;
+	}
+
+	public function setAnon(): void {
+		$this->sharedObjects[ 'anon' ] = true;
 	}
 }
