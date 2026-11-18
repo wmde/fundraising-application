@@ -552,7 +552,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			'site_metadata' => $this->getSiteMetaData(),
 			'selectedBuckets' => BucketPropertyExtractor::listBucketIds( ...$this->getSelectedBuckets() ),
 			'allowedCampaignParameters' => CampaignPropertyExtractor::listURLKeys( ...$this->getCampaigns() ),
-			'activeFeatures' => ActiveFeatureRenderer::renderActiveFeatureIds( ...$this->getFeatureReader()->getFeatures() )
+			'activeFeatures' => ActiveFeatureRenderer::renderActiveFeatureIds( ...$this->getFeatureReader()->getFeatures() ),
+			'urlFeatures' => $this->sharedObjects[ 'features' ] ?? []
 		];
 	}
 
@@ -1465,7 +1466,7 @@ class FunFunFactory implements LoggerAwareInterface {
 				],
 				'userDataKey' => $this->getUserDataKeyGenerator()->getDailyKey(),
 				'countries' => $this->getCountries(),
-				'addressValidationPatterns' => $this->getValidationRules()->address,
+				'addressValidationPatterns' => $this->getValidationRules()->address
 			]
 		);
 	}
@@ -2266,5 +2267,12 @@ class FunFunFactory implements LoggerAwareInterface {
 	public function setClock( Clock $clock ): self {
 		$this->sharedObjects[ Clock::class ] = $clock;
 		return $this;
+	}
+
+	/**
+	 * @param string[] $features
+	 */
+	public function setFeatures( array $features ): void {
+		$this->sharedObjects[ 'features' ] = $features;
 	}
 }
