@@ -61,6 +61,12 @@ services:
             - '@WMDE\Fundraising\Frontend\Factories\FunFunFactory'
             - "%app.allowed_locales%"
 
+    WMDE\Fundraising\Frontend\App\EventHandlers\StoreAnon:
+        class: WMDE\Fundraising\Frontend\App\EventHandlers\StoreAnon
+        public: true
+        arguments:
+            - '@WMDE\Fundraising\Frontend\Factories\FunFunFactory'
+
     # Inject the allowed routes and url parameter into the Banner Tracker
     WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects:
         class: WMDE\Fundraising\Frontend\App\EventHandlers\TrackBannerDonationRedirects
