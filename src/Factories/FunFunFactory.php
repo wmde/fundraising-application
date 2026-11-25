@@ -541,6 +541,10 @@ class FunFunFactory implements LoggerAwareInterface {
 		);
 	}
 
+	public function setTheme( ?string $theme ): void {
+		$this->sharedObjects[ 'theme' ] = $theme;
+	}
+
 	/**
 	 * @return array<string, mixed>
 	 */
@@ -552,7 +556,8 @@ class FunFunFactory implements LoggerAwareInterface {
 			'site_metadata' => $this->getSiteMetaData(),
 			'selectedBuckets' => BucketPropertyExtractor::listBucketIds( ...$this->getSelectedBuckets() ),
 			'allowedCampaignParameters' => CampaignPropertyExtractor::listURLKeys( ...$this->getCampaigns() ),
-			'activeFeatures' => ActiveFeatureRenderer::renderActiveFeatureIds( ...$this->getFeatureReader()->getFeatures() )
+			'activeFeatures' => ActiveFeatureRenderer::renderActiveFeatureIds( ...$this->getFeatureReader()->getFeatures() ),
+			'theme' => $this->sharedObjects[ 'theme' ]
 		];
 	}
 
